@@ -69,34 +69,46 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)build\$(Configuration)\$(PlatformTarget)</OutDir>
-    <IntDir>$(SolutionDir)artifacts\$(Configuration)\$(PlatformTarget)\$(ProjectName)</IntDir>
+    <OutDir>$(SolutionDir)build\$(Configuration)\$(PlatformTarget)\</OutDir>
+    <IntDir>$(SolutionDir)artifacts\$(Configuration)\$(PlatformTarget)\$(ProjectName)\</IntDir>
+    <IncludePath>$(SolutionDir)external\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)build\$(Configuration)\$(PlatformTarget)</OutDir>
-    <IntDir>$(SolutionDir)artifacts\$(Configuration)\$(PlatformTarget)\$(ProjectName)</IntDir>
+    <OutDir>$(SolutionDir)build\$(Configuration)\$(PlatformTarget)\</OutDir>
+    <IntDir>$(SolutionDir)artifacts\$(Configuration)\$(PlatformTarget)\$(ProjectName)\</IntDir>
+    <IncludePath>$(SolutionDir)external\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)build\$(Configuration)\$(PlatformTarget)</OutDir>
-    <IntDir>$(SolutionDir)artifacts\$(Configuration)\$(PlatformTarget)\$(ProjectName)</IntDir>
+    <OutDir>$(SolutionDir)build\$(Configuration)\$(PlatformTarget)\</OutDir>
+    <IntDir>$(SolutionDir)artifacts\$(Configuration)\$(PlatformTarget)\$(ProjectName)\</IntDir>
+    <IncludePath>$(SolutionDir)external\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)build\$(Configuration)\$(PlatformTarget)</OutDir>
-    <IntDir>$(SolutionDir)artifacts\$(Configuration)\$(PlatformTarget)\$(ProjectName)</IntDir>
+    <OutDir>$(SolutionDir)build\$(Configuration)\$(PlatformTarget)\</OutDir>
+    <IntDir>$(SolutionDir)artifacts\$(Configuration)\$(PlatformTarget)\$(ProjectName)\</IntDir>
+    <IncludePath>$(SolutionDir)external\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;CRT_SECURE_NO_WARNINGS;SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;CRT_SECURE_NO_WARNINGS;SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -105,10 +117,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;CRT_SECURE_NO_WARNINGS;SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -118,10 +132,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;CRT_SECURE_NO_WARNINGS;SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -129,6 +145,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="main.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
