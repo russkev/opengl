@@ -6,7 +6,6 @@
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
-#include "main.h"
 
 static SDL_Window*		st_window = nullptr;
 static SDL_GLContext	st_opengl = nullptr;
