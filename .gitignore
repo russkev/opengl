@@ -1,0 +1,8 @@
+﻿/.vs
+/artifacts
+/build
+/packages
+*.VC.VC.opendb
+*.VC.db
+*.db
+/data/shaders
