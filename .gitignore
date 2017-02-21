@@ -6,3 +6,4 @@
 *.VC.db
 *.db
 /data/shaders
+*.VC.opendb

@@ -43,7 +43,7 @@ opengl_attr_pair st_config [] =
     {SDL_GL_FRAMEBUFFER_SRGB_CAPABLE,	1}
 };
 
-void init () 
+GLuint init () 
 {
 #ifdef _DEBUG
 	SDL_LogSetAllPriority (SDL_LOG_PRIORITY_VERBOSE);
@@ -69,6 +69,29 @@ void init ()
 	glewExperimental = true;
 	auto loc_glewok = glewInit ();
 	assert (loc_glewok == GLEW_OK);
+
+	// // --- Create the VAO (Vertex Array Object) --- // //
+	GLuint VertexArray1D;
+	glGenVertexArrays(1, &VertexArray1D);
+	glBindVertexArray(VertexArray1D);
+
+	// // Array of three vectors which represent the three vertices // //
+	static const GLfloat g_vertex_buffer_data[] = {
+		0.0f,   1.0f,  0.0f,
+		-1.0f,  -1.0f,  0.0f,
+		1.0f,  -1.0f,  0.0f,
+	};
+
+	// // Identify vertex buffer // //
+	GLuint VertexBuffer;
+	// // Generate one buffer, put the resulting identifier in vertex buffer // //
+	glGenBuffers(1, &VertexBuffer);
+	// // The following commands will talk about our 'vertexbuffer' buffer // //
+	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
+	// // Give our vertices to OpenGL
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+
+	return VertexBuffer;
 }
 
 void finish_frame () 
@@ -76,10 +99,28 @@ void finish_frame ()
 	SDL_GL_SwapWindow (st_window);
 }
 
-void render_frame () 
+void render_frame (const GLuint& VertexBuffer) 
 {
-	glClearColor (1.0f, 0.0f, 0.0f, 1.0f);
-	glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+	// // First attribut buffer: vertices // //
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
+	glVertexAttribPointer(
+		0,			// // attribute 0, could be any number but must match the layout in shader // //
+		3,			// // size // //
+		GL_FLOAT,	// // type // //
+		GL_FALSE,	// // normalised  // //
+		0,			// // stride // //
+		(void*)0	// // array buffer offset // //
+		);
+	
+	// // Draw the triangle! // //
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDisableVertexAttribArray(0);
+
+
+	// // Tutorial from http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/ // //
+	// glClearColor (1.0f, 0.0f, 0.0f, 1.0f);
+	// glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 }
 
 bool poll_events () 
@@ -95,11 +136,11 @@ bool poll_events ()
 
 int main(int, char**)
 {
-	init ();
+	GLuint VertexBuffer = init ();
 
 	while (poll_events ())
 	{
-		render_frame ();	
+		render_frame (VertexBuffer);	
 		finish_frame ();
 	}
 
