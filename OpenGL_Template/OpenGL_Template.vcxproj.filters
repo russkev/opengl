@@ -24,5 +24,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="..\SimpleFragmentShader.fragmentshader">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\SimpleVertexShader.vertexshader">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
