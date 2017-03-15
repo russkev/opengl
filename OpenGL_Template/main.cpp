@@ -7,6 +7,8 @@
 #include <cstdlib>
 #include <iostream>
 
+#include "loadShader.hpp"
+
 static SDL_Window*		st_window = nullptr;
 static SDL_GLContext	st_opengl = nullptr;
 
