@@ -1,15 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_Template", "OpenGL_Template\OpenGL_Template.vcxproj", "{458F2DC3-55FF-4465-9D45-C570758B098F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{703E0FFE-91EC-4E41-8807-DEB0DF0C6DEC}"
-	ProjectSection(SolutionItems) = preProject
-		SimpleFragmentShader.fragmentshader = SimpleFragmentShader.fragmentshader
-		SimpleVertexShader.vertexshader = SimpleVertexShader.vertexshader
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

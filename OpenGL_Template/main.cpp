@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "loadShader.hpp"
+//#include "glad/glad.h"
 
 static SDL_Window*		st_window = nullptr;
 static SDL_GLContext	st_opengl = nullptr;
@@ -45,6 +46,28 @@ opengl_attr_pair st_config [] =
     {SDL_GL_FRAMEBUFFER_SRGB_CAPABLE,	1}
 };
 
+// // Calling custom debug // //
+// // https://bcmpinc.wordpress.com/2015/08/21/debugging-since-opengl-4-3/ // //
+// // More info at above website // //
+static void APIENTRY openglCallbackFunction(
+	GLenum source,
+	GLenum type,
+	GLuint id,
+	GLenum severity,
+	GLsizei length,
+	const GLchar* message,
+	const void* userParam
+) {
+	(void)source; (void)type; (void)id; (void)severity; (void)length; (void)userParam;
+	fprintf(stderr, "%s\n", message);
+	if (severity == GL_DEBUG_SEVERITY_HIGH) {
+		fprintf(stderr, "Aborting...\n");
+		abort();
+	}
+}
+
+
+
 GLuint init () 
 {
 #ifdef _DEBUG
@@ -63,10 +86,30 @@ GLuint init ()
 		SDL_GL_SetAttribute(it.key, it.value);
 	}
 
+	// // Request a debug context // //
+	SDL_GL_SetAttribute(
+		SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG
+	);
+
 	st_window = SDL_CreateWindow (nullptr, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280u, 720u, SDL_WINDOW_OPENGL);
 	assert (st_window != nullptr);
 	st_opengl = SDL_GL_CreateContext (st_window);
 	assert (st_opengl != nullptr);
+
+	// // Check OpenGL properties // //
+	printf("OpenGL loaded\n");
+	gladLoadGLLoader(SDL_GL_GetProcAddress);
+	printf("Vendor:   %s\n", glGetString(GL_VENDOR));
+	printf("Renderer: %s\n", glGetString(GL_RENDERER));
+	printf("Version:  %s\n", glGetString(GL_VERSION));
+
+	// // Enable the debug callback // //
+	glEnable(GL_DEBUG_OUTPUT);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	glDebugMessageCallback(openglCallbackFunction, nullptr);
+	glDebugMessageControl(
+		GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, true
+	);
 
 	glewExperimental = true;
 	auto loc_glewok = glewInit ();
@@ -98,7 +141,7 @@ GLuint init ()
 
 
 
-	return VertexBuffer;
+	return programID;
 }
 
 void finish_frame () 
@@ -106,28 +149,30 @@ void finish_frame ()
 	SDL_GL_SwapWindow (st_window);
 }
 
-void render_frame (const GLuint& VertexBuffer) 
+void render_frame (const GLuint& programID) 
 {
-	// // First attribut buffer: vertices // //
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
-	glVertexAttribPointer(
-		0,			// // attribute 0, could be any number but must match the layout in shader // //
-		3,			// // size // //
-		GL_FLOAT,	// // type // //
-		GL_FALSE,	// // normalised  // //
-		0,			// // stride // //
-		(void*)0	// // array buffer offset // //
-		);
-	
-	// // Draw the triangle! // //
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glDisableVertexAttribArray(0);
+	//// // First attribut buffer: vertices // //
+	//glEnableVertexAttribArray(0);
+	//glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
+	//glVertexAttribPointer(
+	//	0,			// // attribute 0, could be any number but must match the layout in shader // //
+	//	3,			// // size // //
+	//	GL_FLOAT,	// // type // //
+	//	GL_FALSE,	// // normalised  // //
+	//	0,			// // stride // //
+	//	(void*)0	// // array buffer offset // //
+	//	);
+	//
+	//// // Draw the triangle! // //
+	//glDrawArrays(GL_TRIANGLES, 0, 3);
+	//glDisableVertexAttribArray(0);
 
 
 	// // Tutorial from http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/ // //
-	// glClearColor (1.0f, 0.0f, 0.0f, 1.0f);
-	// glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+	 glClearColor (1.0f, 0.0f, 0.0f, 1.0f);
+	 glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+	 glUseProgram(programID);
 }
 
 bool poll_events () 
@@ -143,11 +188,11 @@ bool poll_events ()
 
 int main(int, char**)
 {
-	GLuint VertexBuffer = init ();
+	GLuint programID = init ();
 
 	while (poll_events ())
 	{
-		render_frame (VertexBuffer);	
+		render_frame (programID);	
 		finish_frame ();
 	}
 
