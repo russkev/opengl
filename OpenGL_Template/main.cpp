@@ -49,7 +49,7 @@ opengl_attr_pair st_config [] =
 // // Calling custom debug // //
 // // https://bcmpinc.wordpress.com/2015/08/21/debugging-since-opengl-4-3/ // //
 // // More info at above website // //
-static void APIENTRY openglCallbackFunction(
+static void __stdcall openglCallbackFunction(
 	GLenum source,
 	GLenum type,
 	GLuint id,
@@ -68,7 +68,7 @@ static void APIENTRY openglCallbackFunction(
 
 
 
-GLuint init () 
+GLuint init (GLuint& VertexBuffer) 
 {
 #ifdef _DEBUG
 	SDL_LogSetAllPriority (SDL_LOG_PRIORITY_VERBOSE);
@@ -91,14 +91,20 @@ GLuint init ()
 		SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG
 	);
 
-	st_window = SDL_CreateWindow (nullptr, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280u, 720u, SDL_WINDOW_OPENGL);
+	// // Create window // //
+	st_window = SDL_CreateWindow ("Tutorial 02 - Red Triangle", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280u, 720u, SDL_WINDOW_OPENGL);
 	assert (st_window != nullptr);
 	st_opengl = SDL_GL_CreateContext (st_window);
 	assert (st_opengl != nullptr);
 
+	// // Initialise GLEW // //
+	glewExperimental = true;
+	auto loc_glewok = glewInit ();
+	assert (loc_glewok == GLEW_OK);
+
 	// // Check OpenGL properties // //
 	printf("OpenGL loaded\n");
-	gladLoadGLLoader(SDL_GL_GetProcAddress);
+	//gladLoadGLLoader(SDL_GL_GetProcAddress);
 	printf("Vendor:   %s\n", glGetString(GL_VENDOR));
 	printf("Renderer: %s\n", glGetString(GL_RENDERER));
 	printf("Version:  %s\n", glGetString(GL_VERSION));
@@ -108,17 +114,19 @@ GLuint init ()
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 	glDebugMessageCallback(openglCallbackFunction, nullptr);
 	glDebugMessageControl(
-		GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, true
+		GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE
 	);
 
-	glewExperimental = true;
-	auto loc_glewok = glewInit ();
-	assert (loc_glewok == GLEW_OK);
+	// // Dark blue background // //
+	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
 	// // --- Create the VAO (Vertex Array Object) --- // //
 	GLuint VertexArray1D;
 	glGenVertexArrays(1, &VertexArray1D);
 	glBindVertexArray(VertexArray1D);
+
+	// // Create and compile our GLSL program from the shaders
+	GLuint programID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
 
 	// // Array of three vectors which represent the three vertices // //
 	static const GLfloat g_vertex_buffer_data[] = {
@@ -128,18 +136,13 @@ GLuint init ()
 	};
 
 	// // Identify vertex buffer // //
-	GLuint VertexBuffer;
+	//GLuint VertexBuffer;
 	// // Generate one buffer, put the resulting identifier in vertex buffer // //
 	glGenBuffers(1, &VertexBuffer);
 	// // The following commands will talk about our 'vertexbuffer' buffer // //
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
 	// // Give our vertices to OpenGL
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-
-	// // Create and compile our GLSL program from the shaders
-	GLuint programID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
-
-
 
 	return programID;
 }
@@ -149,30 +152,37 @@ void finish_frame ()
 	SDL_GL_SwapWindow (st_window);
 }
 
-void render_frame (const GLuint& programID) 
+void render_frame (const GLuint& programID, const GLuint& VertexBuffer) 
 {
-	//// // First attribut buffer: vertices // //
-	//glEnableVertexAttribArray(0);
-	//glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
-	//glVertexAttribPointer(
-	//	0,			// // attribute 0, could be any number but must match the layout in shader // //
-	//	3,			// // size // //
-	//	GL_FLOAT,	// // type // //
-	//	GL_FALSE,	// // normalised  // //
-	//	0,			// // stride // //
-	//	(void*)0	// // array buffer offset // //
-	//	);
-	//
-	//// // Draw the triangle! // //
-	//glDrawArrays(GL_TRIANGLES, 0, 3);
-	//glDisableVertexAttribArray(0);
+
 
 
 	// // Tutorial from http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/ // //
-	 glClearColor (1.0f, 0.0f, 0.0f, 1.0f);
+	// // Clear the screen // //
 	 glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
+	 // // Use our shader // //
 	 glUseProgram(programID);
+
+	 // // 1st attribute buffer : vertices // //
+	 glEnableVertexAttribArray(0);
+
+	 // // First attribut buffer: vertices // //
+	 glEnableVertexAttribArray(0);
+	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
+	 glVertexAttribPointer(
+	 	0,			// // attribute 0, could be any number but must match the layout in shader // //
+	 	3,			// // size // //
+	 	GL_FLOAT,	// // type // //
+	 	GL_FALSE,	// // normalised  // //
+	 	0,			// // stride // //
+	 	(void*)0	// // array buffer offset // //
+	 	);
+	 
+	 // // Draw the triangle! // //
+	 glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indeces starting at 0 -> 1 triangle
+
+	 glDisableVertexAttribArray(0);
 }
 
 bool poll_events () 
@@ -188,11 +198,12 @@ bool poll_events ()
 
 int main(int, char**)
 {
-	GLuint programID = init ();
+	GLuint VertexBuffer;
+	GLuint programID = init (VertexBuffer);
 
 	while (poll_events ())
 	{
-		render_frame (programID);	
+		render_frame (programID, VertexBuffer);	
 		finish_frame ();
 	}
 
