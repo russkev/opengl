@@ -3,12 +3,16 @@
 #include <glm/glm.hpp>
 #include <glm/matrix.hpp>
 
+
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
 
 #include "loadShader.hpp"
-//#include "glad/glad.h"
+
+#define GLM_ENABLE_EXPERIMENTAL
+//#include <glm/gtx/transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 static SDL_Window*		st_window = nullptr;
 static SDL_GLContext	st_opengl = nullptr;
@@ -68,7 +72,7 @@ static void __stdcall openglCallbackFunction(
 
 
 
-GLuint init (GLuint& VertexBuffer) 
+glm::mat4 init (GLuint& programID, GLuint& matrixID, GLuint& VertexBuffer)
 {
 #ifdef _DEBUG
 	SDL_LogSetAllPriority (SDL_LOG_PRIORITY_VERBOSE);
@@ -92,7 +96,8 @@ GLuint init (GLuint& VertexBuffer)
 	);
 
 	// // Create window // //
-	st_window = SDL_CreateWindow ("Tutorial 02 - Red Triangle", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280u, 720u, SDL_WINDOW_OPENGL);
+	auto width = 1280u, height = 720u;
+	st_window = SDL_CreateWindow ("Tutorial 02 - Red Triangle", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
 	assert (st_window != nullptr);
 	st_opengl = SDL_GL_CreateContext (st_window);
 	assert (st_opengl != nullptr);
@@ -125,8 +130,38 @@ GLuint init (GLuint& VertexBuffer)
 	glGenVertexArrays(1, &VertexArray1D);
 	glBindVertexArray(VertexArray1D);
 
-	// // Create and compile our GLSL program from the shaders
-	GLuint programID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
+	// // Create and compile our GLSL program from the shaders // //
+	programID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
+
+	// // Get handle for out "MVP" uniform. MVP = Model View Projection // //
+	// // Only during initialization // //
+	matrixID = glGetUniformLocation(programID, "MVP");
+
+
+	// // Projection matrix : 45 degree Field of View, display range : 0.1 <-> 100 units // //
+	glm::mat4 Projection = glm::perspective(glm::radians(30.0f), float(width) / float(height), 0.1f, 100.0f);
+	// // Orthographic projection // //
+	//glm::mat4 Projection = glm::ortho(-2.0f, 2.0f, -2.0f, 1.556f, 0.1f, 100.0f);
+
+	// // Camera Matrix // //
+	glm::mat4 View = glm::lookAt(
+		glm::vec3(4, 4, 3),
+		glm::vec3(0, 0, 0),
+		glm::vec3(0, 1, 0)
+	);
+	
+	// // Model matrix : an identity matrix (wil be at the origin) // //
+	glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
+	glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
+	glm::mat4 modelScale     = glm::scale    (glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+	glm::mat4 modelRotate	 = glm::rotate   (glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	//glm::mat4 Model = modelScale * modelTranslate;
+	glm::mat4 Model = modelTranslate * modelRotate * modelScale;
+
+	// // Our ModelViewProjection : multiplication of our three matrices
+	glm::mat4 MVP = Projection * View * Model;
+
 
 	// // Array of three vectors which represent the three vertices // //
 	static const GLfloat g_vertex_buffer_data[] = {
@@ -135,8 +170,23 @@ GLuint init (GLuint& VertexBuffer)
 		1.0f,  -1.0f,  0.0f,
 	};
 
-	// // Identify vertex buffer // //
-	//GLuint VertexBuffer;
+	// // TEST // //
+
+	//glm::mat4 CameraMatrix = glm::lookAt(glm::vec3(10, 10, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	//glm::mat4 myMatrix = { {1,0,0,0},{0,1,0,0},{0,0,1,0},{2,0,0,1} };
+	//glm::vec4 myVector = { 0,1,0,1 };
+	//glm::vec4 transformedVector = myMatrix*myVector;
+
+	//// // Generate a really hard to read matrix but a 4x4 matrix nonetheless
+	//glm::mat4 projectionMatrix = glm::perspective(
+	//	90.0f,			//Horizontal field of view
+	//	16.0f / 9.0f,	//Aspect ratio
+	//	0.1f,			//Near clipping plane
+	//	100.0f			//far clipping plane
+	//);
+
+	// // END TEST // //
+
 	// // Generate one buffer, put the resulting identifier in vertex buffer // //
 	glGenBuffers(1, &VertexBuffer);
 	// // The following commands will talk about our 'vertexbuffer' buffer // //
@@ -144,7 +194,7 @@ GLuint init (GLuint& VertexBuffer)
 	// // Give our vertices to OpenGL
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
-	return programID;
+	return MVP;
 }
 
 void finish_frame () 
@@ -152,7 +202,7 @@ void finish_frame ()
 	SDL_GL_SwapWindow (st_window);
 }
 
-void render_frame (const GLuint& programID, const GLuint& VertexBuffer) 
+void render_frame (const GLuint& programID, const GLuint& matrixID, const GLuint& VertexBuffer, const glm::mat4 MVP)
 {
 
 
@@ -163,6 +213,10 @@ void render_frame (const GLuint& programID, const GLuint& VertexBuffer)
 
 	 // // Use our shader // //
 	 glUseProgram(programID);
+
+	 // // Send our transformation matrix to the currently bound shader, in the "MVP" uniform
+	 // // This is done in the main loop since each model will have a different MVP matrix (at least for the M part)
+	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
 
 	 // // 1st attribute buffer : vertices // //
 	 glEnableVertexAttribArray(0);
@@ -198,12 +252,13 @@ bool poll_events ()
 
 int main(int, char**)
 {
-	GLuint VertexBuffer;
-	GLuint programID = init (VertexBuffer);
+	GLuint programID, matrixID, VertexBuffer;
+	glm::mat4 MVP = init(programID, matrixID, VertexBuffer);
+
 
 	while (poll_events ())
 	{
-		render_frame (programID, VertexBuffer);	
+		render_frame (programID, matrixID, VertexBuffer, MVP);
 		finish_frame ();
 	}
 
