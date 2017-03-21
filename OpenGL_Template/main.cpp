@@ -72,7 +72,7 @@ static void __stdcall openglCallbackFunction(
 
 
 
-glm::mat4 init (GLuint& programID, GLuint& matrixID, GLuint& VertexBuffer)
+glm::mat4 init (GLuint& programID, GLuint& matrixID, GLuint& VertexBuffer, GLuint& ColorBuffer)
 {
 #ifdef _DEBUG
 	SDL_LogSetAllPriority (SDL_LOG_PRIORITY_VERBOSE);
@@ -125,13 +125,18 @@ glm::mat4 init (GLuint& programID, GLuint& matrixID, GLuint& VertexBuffer)
 	// // Dark blue background // //
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
+	// // Enable depth test // //
+	glEnable(GL_DEPTH_TEST);
+	// // Accept fragment shader if it closer to the camera than the previous one
+	glDepthFunc(GL_LESS);
+
 	// // --- Create the VAO (Vertex Array Object) --- // //
 	GLuint VertexArray1D;
 	glGenVertexArrays(1, &VertexArray1D);
 	glBindVertexArray(VertexArray1D);
 
 	// // Create and compile our GLSL program from the shaders // //
-	programID = LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
+	programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
 
 	// // Get handle for out "MVP" uniform. MVP = Model View Projection // //
 	// // Only during initialization // //
@@ -150,14 +155,16 @@ glm::mat4 init (GLuint& programID, GLuint& matrixID, GLuint& VertexBuffer)
 		glm::vec3(0, 1, 0)
 	);
 	
-	// // Model matrix : an identity matrix (wil be at the origin) // //
-	glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
-	glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
-	glm::mat4 modelScale     = glm::scale    (glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
-	glm::mat4 modelRotate	 = glm::rotate   (glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	//// // Model matrix : an identity matrix (wil be at the origin) // //
+	//glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
+	//glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
+	//glm::mat4 modelScale     = glm::scale    (glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+	//glm::mat4 modelRotate	 = glm::rotate   (glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-	//glm::mat4 Model = modelScale * modelTranslate;
-	glm::mat4 Model = modelTranslate * modelRotate * modelScale;
+	////glm::mat4 Model = modelScale * modelTranslate;
+	//glm::mat4 Model = modelTranslate * modelRotate * modelScale;
+
+	glm::mat4 Model = glm::mat4(1.0f);
 
 	// // Our ModelViewProjection : multiplication of our three matrices
 	glm::mat4 MVP = Projection * View * Model;
@@ -165,34 +172,100 @@ glm::mat4 init (GLuint& programID, GLuint& matrixID, GLuint& VertexBuffer)
 
 	// // Array of three vectors which represent the three vertices // //
 	static const GLfloat g_vertex_buffer_data[] = {
-		0.0f,   1.0f,  0.0f,
-		-1.0f,  -1.0f,  0.0f,
-		1.0f,  -1.0f,  0.0f,
+		-1.0f,-1.0f,-1.0f, 
+		-1.0f,-1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f, 
+		1.0f,  1.0f,-1.0f,
+		-1.0f,-1.0f,-1.0f,
+		-1.0f, 1.0f,-1.0f,
+		1.0f, -1.0f, 1.0f,
+		-1.0f,-1.0f,-1.0f,
+		1.0f, -1.0f,-1.0f,
+		1.0f,  1.0f,-1.0f,
+		1.0f, -1.0f,-1.0f,
+		-1.0f,-1.0f,-1.0f,
+		-1.0f,-1.0f,-1.0f,
+		-1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f,-1.0f,
+		1.0f,-1.0f, 1.0f,
+		-1.0f,-1.0f, 1.0f,
+		-1.0f,-1.0f,-1.0f,
+		-1.0f, 1.0f, 1.0f,
+		-1.0f,-1.0f, 1.0f,
+		1.0f,-1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f,-1.0f,-1.0f,
+		1.0f, 1.0f,-1.0f,
+		1.0f,-1.0f,-1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f,-1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f,-1.0f,
+		-1.0f, 1.0f,-1.0f,
+		1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f,-1.0f,
+		-1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f,
+		1.0f,-1.0f, 1.0f
+	};
+
+	// // Array of cololurs // //
+	static const GLfloat g_color_buffer_data[] = {
+		0.583f,  0.771f,  0.014f,
+		0.609f,  0.115f,  0.436f,
+		0.327f,  0.483f,  0.844f,
+		0.822f,  0.569f,  0.201f,
+		0.435f,  0.602f,  0.223f,
+		0.310f,  0.747f,  0.185f,
+		0.597f,  0.770f,  0.761f,
+		0.559f,  0.436f,  0.730f,
+		0.359f,  0.583f,  0.152f,
+		0.483f,  0.596f,  0.789f,
+		0.559f,  0.861f,  0.639f,
+		0.195f,  0.548f,  0.859f,
+		0.014f,  0.184f,  0.576f,
+		0.771f,  0.328f,  0.970f,
+		0.406f,  0.615f,  0.116f,
+		0.676f,  0.977f,  0.133f,
+		0.971f,  0.572f,  0.833f,
+		0.140f,  0.616f,  0.489f,
+		0.997f,  0.513f,  0.064f,
+		0.945f,  0.719f,  0.592f,
+		0.543f,  0.021f,  0.978f,
+		0.279f,  0.317f,  0.505f,
+		0.167f,  0.620f,  0.077f,
+		0.347f,  0.857f,  0.137f,
+		0.055f,  0.953f,  0.042f,
+		0.714f,  0.505f,  0.345f,
+		0.783f,  0.290f,  0.734f,
+		0.722f,  0.645f,  0.174f,
+		0.302f,  0.455f,  0.848f,
+		0.225f,  0.587f,  0.040f,
+		0.517f,  0.713f,  0.338f,
+		0.053f,  0.959f,  0.120f,
+		0.393f,  0.621f,  0.362f,
+		0.673f,  0.211f,  0.457f,
+		0.820f,  0.883f,  0.371f,
+		0.982f,  0.099f,  0.879f
 	};
 
 	// // TEST // //
 
-	//glm::mat4 CameraMatrix = glm::lookAt(glm::vec3(10, 10, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	//glm::mat4 myMatrix = { {1,0,0,0},{0,1,0,0},{0,0,1,0},{2,0,0,1} };
-	//glm::vec4 myVector = { 0,1,0,1 };
-	//glm::vec4 transformedVector = myMatrix*myVector;
-
-	//// // Generate a really hard to read matrix but a 4x4 matrix nonetheless
-	//glm::mat4 projectionMatrix = glm::perspective(
-	//	90.0f,			//Horizontal field of view
-	//	16.0f / 9.0f,	//Aspect ratio
-	//	0.1f,			//Near clipping plane
-	//	100.0f			//far clipping plane
-	//);
-
 	// // END TEST // //
 
 	// // Generate one buffer, put the resulting identifier in vertex buffer // //
-	glGenBuffers(1, &VertexBuffer);
 	// // The following commands will talk about our 'vertexbuffer' buffer // //
-	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
 	// // Give our vertices to OpenGL
+	// // All this code needs to be in blocks of the three lines
+
+	glGenBuffers(1, &VertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &ColorBuffer);	
+	glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer);	
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data),  g_color_buffer_data,  GL_STATIC_DRAW);
 
 	return MVP;
 }
@@ -202,7 +275,7 @@ void finish_frame ()
 	SDL_GL_SwapWindow (st_window);
 }
 
-void render_frame (const GLuint& programID, const GLuint& matrixID, const GLuint& VertexBuffer, const glm::mat4 MVP)
+void render_frame (const GLuint& programID, const GLuint& matrixID, const GLuint& VertexBuffer, const GLuint& ColorBuffer, const glm::mat4 MVP)
 {
 
 
@@ -220,9 +293,6 @@ void render_frame (const GLuint& programID, const GLuint& matrixID, const GLuint
 
 	 // // 1st attribute buffer : vertices // //
 	 glEnableVertexAttribArray(0);
-
-	 // // First attribut buffer: vertices // //
-	 glEnableVertexAttribArray(0);
 	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
 	 glVertexAttribPointer(
 	 	0,			// // attribute 0, could be any number but must match the layout in shader // //
@@ -232,11 +302,24 @@ void render_frame (const GLuint& programID, const GLuint& matrixID, const GLuint
 	 	0,			// // stride // //
 	 	(void*)0	// // array buffer offset // //
 	 	);
+
+	 // // 2nd attribute buffer : colours // //
+	 glEnableVertexAttribArray(1);
+	 glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer);
+	 glVertexAttribPointer(
+		 1,
+		 3,
+		 GL_FLOAT,
+		 GL_FALSE,
+		 0,
+		 (void*)0
+	 );
 	 
 	 // // Draw the triangle! // //
-	 glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indeces starting at 0 -> 1 triangle
+	 glDrawArrays(GL_TRIANGLES, 0, 12*3); // 12*3 indeces starting at 0 -> 12 triangles -> 6 squares
 
 	 glDisableVertexAttribArray(0);
+	 glDisableVertexAttribArray(1);
 }
 
 bool poll_events () 
@@ -252,13 +335,13 @@ bool poll_events ()
 
 int main(int, char**)
 {
-	GLuint programID, matrixID, VertexBuffer;
-	glm::mat4 MVP = init(programID, matrixID, VertexBuffer);
+	GLuint programID, matrixID, VertexBuffer, ColorBuffer;
+	glm::mat4 MVP = init(programID, matrixID, VertexBuffer, ColorBuffer);
 
 
 	while (poll_events ())
 	{
-		render_frame (programID, matrixID, VertexBuffer, MVP);
+		render_frame (programID, matrixID, VertexBuffer, ColorBuffer, MVP);
 		finish_frame ();
 	}
 
