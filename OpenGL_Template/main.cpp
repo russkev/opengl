@@ -7,6 +7,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
+#include <vector>
 
 #include "loadShader.hpp"
 
@@ -72,7 +73,7 @@ static void __stdcall openglCallbackFunction(
 
 
 
-glm::mat4 init (GLuint& programID, GLuint& matrixID, GLuint& VertexBuffer, GLuint& ColorBuffer)
+std::vector<glm::mat4> init (GLuint& programID, GLuint& matrixID, GLuint& VertexBuffer, GLuint& ColorBuffer)
 {
 #ifdef _DEBUG
 	SDL_LogSetAllPriority (SDL_LOG_PRIORITY_VERBOSE);
@@ -97,7 +98,7 @@ glm::mat4 init (GLuint& programID, GLuint& matrixID, GLuint& VertexBuffer, GLuin
 
 	// // Create window // //
 	auto width = 1280u, height = 720u;
-	st_window = SDL_CreateWindow ("Tutorial 02 - Red Triangle", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
+	st_window = SDL_CreateWindow ("Tutorial 04 - A Cloured Cube", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
 	assert (st_window != nullptr);
 	st_opengl = SDL_GL_CreateContext (st_window);
 	assert (st_opengl != nullptr);
@@ -155,23 +156,24 @@ glm::mat4 init (GLuint& programID, GLuint& matrixID, GLuint& VertexBuffer, GLuin
 		glm::vec3(0, 1, 0)
 	);
 	
-	//// // Model matrix : an identity matrix (wil be at the origin) // //
-	//glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
-	//glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
-	//glm::mat4 modelScale     = glm::scale    (glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
-	//glm::mat4 modelRotate	 = glm::rotate   (glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	// // Model matrix : an identity matrix (wil be at the origin) // //
+	glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
+	glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
+	glm::mat4 modelScale     = glm::scale    (glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+	glm::mat4 modelRotate	 = glm::rotate   (glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-	////glm::mat4 Model = modelScale * modelTranslate;
-	//glm::mat4 Model = modelTranslate * modelRotate * modelScale;
+	//glm::mat4 Model = modelScale * modelTranslate;
+	glm::mat4 Model_cube = modelTranslate * modelRotate * modelScale;
+	glm::mat4 Model_triangle = glm::mat4(1.0f);
 
-	glm::mat4 Model = glm::mat4(1.0f);
+	//glm::mat4 Model = glm::mat4(1.0f);
 
 	// // Our ModelViewProjection : multiplication of our three matrices
-	glm::mat4 MVP = Projection * View * Model;
+	std::vector<glm::mat4> MVP = { Projection * View * Model_cube,  Projection * View * Model_triangle };
 
 
 	// // Array of three vectors which represent the three vertices // //
-	static const GLfloat g_vertex_buffer_data[] = {
+	static const GLfloat g_vertex_buffer_data_cube[] = {
 		-1.0f,-1.0f,-1.0f, 
 		-1.0f,-1.0f, 1.0f,
 		-1.0f, 1.0f, 1.0f, 
@@ -210,8 +212,14 @@ glm::mat4 init (GLuint& programID, GLuint& matrixID, GLuint& VertexBuffer, GLuin
 		1.0f,-1.0f, 1.0f
 	};
 
+	static const GLfloat g_vertex_buffer_data_triangle[] = {
+		0.0f, 1.0f, 0.0f,
+		-0.5f, 0.0f, 0.0f,
+		0.5f, 0.0f, 0.0f
+	};
+
 	// // Array of cololurs // //
-	static const GLfloat g_color_buffer_data[] = {
+	static const GLfloat g_color_buffer_data_cube[] = {
 		0.583f,  0.771f,  0.014f,
 		0.609f,  0.115f,  0.436f,
 		0.327f,  0.483f,  0.844f,
@@ -250,6 +258,12 @@ glm::mat4 init (GLuint& programID, GLuint& matrixID, GLuint& VertexBuffer, GLuin
 		0.982f,  0.099f,  0.879f
 	};
 
+	static const GLfloat g_color_buffer_data_triangle[] = {
+		1.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 1.0f
+	};
+
 	// // TEST // //
 
 	// // END TEST // //
@@ -261,11 +275,19 @@ glm::mat4 init (GLuint& programID, GLuint& matrixID, GLuint& VertexBuffer, GLuin
 
 	glGenBuffers(1, &VertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_cube), g_vertex_buffer_data_cube, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &ColorBuffer);	
 	glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer);	
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data),  g_color_buffer_data,  GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_cube),  g_color_buffer_data_cube,  GL_STATIC_DRAW);
+
+	//glGenBuffers(1, &VertexBuffer);
+	//glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_triangle), g_vertex_buffer_data_triangle, GL_STATIC_DRAW);
+
+	//glGenBuffers(1, &VertexBuffer);
+	//glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_triangle), g_color_buffer_data_triangle, GL_STATIC_DRAW);
 
 	return MVP;
 }
@@ -336,12 +358,12 @@ bool poll_events ()
 int main(int, char**)
 {
 	GLuint programID, matrixID, VertexBuffer, ColorBuffer;
-	glm::mat4 MVP = init(programID, matrixID, VertexBuffer, ColorBuffer);
+	std::vector<glm::mat4> MVP = init(programID, matrixID, VertexBuffer, ColorBuffer);
 
 
 	while (poll_events ())
 	{
-		render_frame (programID, matrixID, VertexBuffer, ColorBuffer, MVP);
+		render_frame (programID, matrixID, VertexBuffer, ColorBuffer, MVP[0]);
 		finish_frame ();
 	}
 
