@@ -27,10 +27,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="..\data\SimpleFragmentShader.fragmentshader">
+    <None Include="..\data\SimpleFragmentShader.frag">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="..\data\SimpleVertexShader.vertexshader">
+    <None Include="..\data\SimpleVertexShader.vert">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
