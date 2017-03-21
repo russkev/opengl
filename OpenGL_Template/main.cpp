@@ -73,7 +73,7 @@ static void __stdcall openglCallbackFunction(
 
 
 
-std::vector<glm::mat4> init (GLuint& programID, GLuint& matrixID, GLuint& VertexBuffer, GLuint& ColorBuffer)
+std::vector<glm::mat4> init (GLuint& programID, GLuint& matrixID, std::vector<GLuint>& VertexBuffer, std::vector<GLuint>& ColorBuffer)
 {
 #ifdef _DEBUG
 	SDL_LogSetAllPriority (SDL_LOG_PRIORITY_VERBOSE);
@@ -273,21 +273,21 @@ std::vector<glm::mat4> init (GLuint& programID, GLuint& matrixID, GLuint& Vertex
 	// // Give our vertices to OpenGL
 	// // All this code needs to be in blocks of the three lines
 
-	glGenBuffers(1, &VertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
+	glGenBuffers(1, &VertexBuffer[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_cube), g_vertex_buffer_data_cube, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &ColorBuffer);	
-	glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer);	
+	glGenBuffers(1, &ColorBuffer[0]);	
+	glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);	
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_cube),  g_color_buffer_data_cube,  GL_STATIC_DRAW);
 
-	//glGenBuffers(1, &VertexBuffer);
-	//glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_triangle), g_vertex_buffer_data_triangle, GL_STATIC_DRAW);
+	glGenBuffers(1, &VertexBuffer[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_triangle), g_vertex_buffer_data_triangle, GL_STATIC_DRAW);
 
-	//glGenBuffers(1, &VertexBuffer);
-	//glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_triangle), g_color_buffer_data_triangle, GL_STATIC_DRAW);
+	glGenBuffers(1, &VertexBuffer[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_triangle), g_color_buffer_data_triangle, GL_STATIC_DRAW);
 
 	return MVP;
 }
@@ -297,7 +297,12 @@ void finish_frame ()
 	SDL_GL_SwapWindow (st_window);
 }
 
-void render_frame (const GLuint& programID, const GLuint& matrixID, const GLuint& VertexBuffer, const GLuint& ColorBuffer, const glm::mat4 MVP)
+void render_frame (
+	const GLuint& programID, 
+	const GLuint& matrixID, 
+	const std::vector<GLuint>& VertexBuffer, 
+	const std::vector<GLuint>& ColorBuffer, 
+	const std::vector<glm::mat4> MVP)
 {
 
 
@@ -311,11 +316,11 @@ void render_frame (const GLuint& programID, const GLuint& matrixID, const GLuint
 
 	 // // Send our transformation matrix to the currently bound shader, in the "MVP" uniform
 	 // // This is done in the main loop since each model will have a different MVP matrix (at least for the M part)
-	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
+	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0][0]);
 
 	 // // 1st attribute buffer : vertices // //
 	 glEnableVertexAttribArray(0);
-	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
+	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
 	 glVertexAttribPointer(
 	 	0,			// // attribute 0, could be any number but must match the layout in shader // //
 	 	3,			// // size // //
@@ -327,7 +332,7 @@ void render_frame (const GLuint& programID, const GLuint& matrixID, const GLuint
 
 	 // // 2nd attribute buffer : colours // //
 	 glEnableVertexAttribArray(1);
-	 glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer);
+	 glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
 	 glVertexAttribPointer(
 		 1,
 		 3,
@@ -337,6 +342,34 @@ void render_frame (const GLuint& programID, const GLuint& matrixID, const GLuint
 		 (void*)0
 	 );
 	 
+	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[1][0][0]);
+
+	 // // 1st attribute buffer : vertices // //
+	 glEnableVertexAttribArray(0);
+	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
+	 glVertexAttribPointer(
+		 0,			
+		 3,			
+		 GL_FLOAT,	
+		 GL_FALSE,	
+		 0,			
+		 (void*)0	
+	 );
+
+	 // // 2nd attribute buffer : colours // //
+	 glEnableVertexAttribArray(1);
+	 glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[1]);
+	 glVertexAttribPointer(
+		 1,
+		 3,
+		 GL_FLOAT,
+		 GL_FALSE,
+		 0,
+		 (void*)0
+	 );
+
+
+
 	 // // Draw the triangle! // //
 	 glDrawArrays(GL_TRIANGLES, 0, 12*3); // 12*3 indeces starting at 0 -> 12 triangles -> 6 squares
 
@@ -357,13 +390,14 @@ bool poll_events ()
 
 int main(int, char**)
 {
-	GLuint programID, matrixID, VertexBuffer, ColorBuffer;
+	GLuint programID, matrixID;
+	std::vector<GLuint> VertexBuffer, ColorBuffer;
 	std::vector<glm::mat4> MVP = init(programID, matrixID, VertexBuffer, ColorBuffer);
 
 
 	while (poll_events ())
 	{
-		render_frame (programID, matrixID, VertexBuffer, ColorBuffer, MVP[0]);
+		render_frame (programID, matrixID, VertexBuffer, ColorBuffer, MVP);
 		finish_frame ();
 	}
 
