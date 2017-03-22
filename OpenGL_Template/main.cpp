@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <vector>
+#include <math.h>
 
 #include "loadShader.hpp"
 
@@ -73,7 +74,13 @@ static void __stdcall openglCallbackFunction(
 
 
 
-std::vector<glm::mat4> init (GLuint& programID, GLuint& matrixID, std::vector<GLuint>& VertexBuffer, std::vector<GLuint>& ColorBuffer)
+std::vector<glm::mat4> init (
+	GLuint& programID, 
+	GLuint& matrixID, 
+	std::vector<GLuint>& VertexBuffer, 
+	std::vector<GLuint>& ColorBuffer, 
+	double& time,
+	double &freqMultiplier)
 {
 #ifdef _DEBUG
 	SDL_LogSetAllPriority (SDL_LOG_PRIORITY_VERBOSE);
@@ -102,6 +109,12 @@ std::vector<glm::mat4> init (GLuint& programID, GLuint& matrixID, std::vector<GL
 	assert (st_window != nullptr);
 	st_opengl = SDL_GL_CreateContext (st_window);
 	assert (st_opengl != nullptr);
+
+	// High precision clock interval
+	freqMultiplier = 1.0 / SDL_GetPerformanceFrequency();
+
+	// Initial time in clock ticks
+	time = freqMultiplier * SDL_GetPerformanceCounter();
 
 	// // Initialise GLEW // //
 	glewExperimental = true;
@@ -166,111 +179,15 @@ std::vector<glm::mat4> init (GLuint& programID, GLuint& matrixID, std::vector<GL
 	glm::mat4 Model_cube     = modelTranslate * modelRotate * modelScale;
 	glm::mat4 Model_triangle = glm::mat4(1.0f);
 
-	//glm::mat4 Model = glm::mat4(1.0f);
-
 	// // Our ModelViewProjection : multiplication of our three matrices
 	std::vector<glm::mat4> MVP;
 	MVP.push_back(Projection * View * Model_cube);
 	MVP.push_back(Projection * View * Model_triangle);
 
-
-
-	// // Array of three vectors which represent the three vertices // //
-	static const GLfloat g_vertex_buffer_data_cube[] = {
-		-1.0f,-1.0f,-1.0f, 
-		-1.0f,-1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f, 
-		1.0f,  1.0f,-1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f, 1.0f,-1.0f,
-		1.0f, -1.0f, 1.0f,
-		-1.0f,-1.0f,-1.0f,
-		1.0f, -1.0f,-1.0f,
-		1.0f,  1.0f,-1.0f,
-		1.0f, -1.0f,-1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f,-1.0f,
-		1.0f,-1.0f, 1.0f,
-		-1.0f,-1.0f, 1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f,-1.0f, 1.0f,
-		1.0f,-1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f,-1.0f,-1.0f,
-		1.0f, 1.0f,-1.0f,
-		1.0f,-1.0f,-1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f,-1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f,-1.0f,
-		-1.0f, 1.0f,-1.0f,
-		1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f,-1.0f,
-		-1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f,
-		1.0f,-1.0f, 1.0f
-	};
-
 	static const GLfloat g_vertex_buffer_data_triangle[] = {
 		0.0f, 1.0f, 0.0f,
 		-0.5f, 0.0f, 0.0f,
 		0.5f, 0.0f, 0.0f
-	};
-
-	//// // Array of colours // //
-	//static const GLfloat g_color_buffer_data_cube[] = {
-	//	0.583f,  0.771f,  0.014f,
-	//	0.609f,  0.115f,  0.436f,
-	//	0.327f,  0.483f,  0.844f,
-	//	0.822f,  0.569f,  0.201f,
-	//	0.435f,  0.602f,  0.223f,
-	//	0.310f,  0.747f,  0.185f,
-	//	0.597f,  0.770f,  0.761f,
-	//	0.559f,  0.436f,  0.730f,
-	//	0.359f,  0.583f,  0.152f,
-	//	0.483f,  0.596f,  0.789f,
-	//	0.559f,  0.861f,  0.639f,
-	//	0.195f,  0.548f,  0.859f,
-	//	0.014f,  0.184f,  0.576f,
-	//	0.771f,  0.328f,  0.970f,
-	//	0.406f,  0.615f,  0.116f,
-	//	0.676f,  0.977f,  0.133f,
-	//	0.971f,  0.572f,  0.833f,
-	//	0.140f,  0.616f,  0.489f,
-	//	0.997f,  0.513f,  0.064f,
-	//	0.945f,  0.719f,  0.592f,
-	//	0.543f,  0.021f,  0.978f,
-	//	0.279f,  0.317f,  0.505f,
-	//	0.167f,  0.620f,  0.077f,
-	//	0.347f,  0.857f,  0.137f,
-	//	0.055f,  0.953f,  0.042f,
-	//	0.714f,  0.505f,  0.345f,
-	//	0.783f,  0.290f,  0.734f,
-	//	0.722f,  0.645f,  0.174f,
-	//	0.302f,  0.455f,  0.848f,
-	//	0.225f,  0.587f,  0.040f,
-	//	0.517f,  0.713f,  0.338f,
-	//	0.053f,  0.959f,  0.120f,
-	//	0.393f,  0.621f,  0.362f,
-	//	0.673f,  0.211f,  0.457f,
-	//	0.820f,  0.883f,  0.371f,
-	//	0.982f,  0.099f,  0.879f
-	//};
-	static GLfloat g_color_buffer_data_cube[12 * 3 * 3];
-	for (int i = 0; i < 12 * 3 * 3; ++i) {
-		if (g_vertex_buffer_data_cube[i] == 1) {
-			g_color_buffer_data_cube[i] = 1;
-		}
-		else {
-			g_color_buffer_data_cube[i] = 0;
-		}
-		//g_color_buffer_data_cube[3 * i + 0] = 1 
-		//g_color_buffer_data_cube[3 * i + 1] = 0;
-		//g_color_buffer_data_cube[3 * i + 2] = 1;
 	};
 
 	static const GLfloat g_color_buffer_data_triangle[] = {
@@ -287,14 +204,6 @@ std::vector<glm::mat4> init (GLuint& programID, GLuint& matrixID, std::vector<GL
 	// // The following commands will talk about our 'vertexbuffer' buffer // //
 	// // Give our vertices to OpenGL
 	// // All this code needs to be in blocks of the three lines
-
-	glGenBuffers(1, &VertexBuffer[0]);
-	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_cube), g_vertex_buffer_data_cube, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &ColorBuffer[0]);	
-	glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);	
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_cube),  g_color_buffer_data_cube,  GL_STATIC_DRAW);
 
 	glGenBuffers(1, &VertexBuffer[1]);
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
@@ -315,9 +224,11 @@ void finish_frame ()
 void render_frame (
 	const GLuint& programID, 
 	const GLuint& matrixID, 
-	const std::vector<GLuint>& VertexBuffer, 
-	const std::vector<GLuint>& ColorBuffer, 
-	const std::vector<glm::mat4> MVP)
+	std::vector<GLuint>& VertexBuffer, 
+	std::vector<GLuint>& ColorBuffer, 
+	const std::vector<glm::mat4> MVP,
+	double& time,
+	const double& freqMultiplier)
 {
 
 
@@ -328,6 +239,66 @@ void render_frame (
 
 	 // // Use our shader // //
 	 glUseProgram(programID);
+
+	 // // Array of three vectors which represent the three vertices // //
+	 static const GLfloat g_vertex_buffer_data_cube[] = {
+		 -1.0f,-1.0f,-1.0f,
+		 -1.0f,-1.0f, 1.0f,
+		 -1.0f, 1.0f, 1.0f,
+		 1.0f,  1.0f,-1.0f,
+		 -1.0f,-1.0f,-1.0f,
+		 -1.0f, 1.0f,-1.0f,
+		 1.0f, -1.0f, 1.0f,
+		 -1.0f,-1.0f,-1.0f,
+		 1.0f, -1.0f,-1.0f,
+		 1.0f,  1.0f,-1.0f,
+		 1.0f, -1.0f,-1.0f,
+		 -1.0f,-1.0f,-1.0f,
+		 -1.0f,-1.0f,-1.0f,
+		 -1.0f, 1.0f, 1.0f,
+		 -1.0f, 1.0f,-1.0f,
+		 1.0f,-1.0f, 1.0f,
+		 -1.0f,-1.0f, 1.0f,
+		 -1.0f,-1.0f,-1.0f,
+		 -1.0f, 1.0f, 1.0f,
+		 -1.0f,-1.0f, 1.0f,
+		 1.0f,-1.0f, 1.0f,
+		 1.0f, 1.0f, 1.0f,
+		 1.0f,-1.0f,-1.0f,
+		 1.0f, 1.0f,-1.0f,
+		 1.0f,-1.0f,-1.0f,
+		 1.0f, 1.0f, 1.0f,
+		 1.0f,-1.0f, 1.0f,
+		 1.0f, 1.0f, 1.0f,
+		 1.0f, 1.0f,-1.0f,
+		 -1.0f, 1.0f,-1.0f,
+		 1.0f, 1.0f, 1.0f,
+		 -1.0f, 1.0f,-1.0f,
+		 -1.0f, 1.0f, 1.0f,
+		 1.0f, 1.0f, 1.0f,
+		 -1.0f, 1.0f, 1.0f,
+		 1.0f,-1.0f, 1.0f
+	 };
+
+	 time = freqMultiplier * SDL_GetPerformanceCounter();
+	 static GLfloat g_color_buffer_data_cube[12 * 3 * 3];
+	 for (int i = 0; i < 12 * 3 * 3; ++i) {
+		 if (g_vertex_buffer_data_cube[i] == 1) {
+			 g_color_buffer_data_cube[i] = fmod(time, 1);
+		 }
+		 else {
+			 g_color_buffer_data_cube[i] = 0;
+		 }
+	 };
+
+	 glGenBuffers(1, &VertexBuffer[0]);
+	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
+	 glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_cube), g_vertex_buffer_data_cube, GL_STATIC_DRAW);
+
+	 glGenBuffers(1, &ColorBuffer[0]);
+	 glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
+	 glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_cube), g_color_buffer_data_cube, GL_STATIC_DRAW);
+
 
 	 // // Send our transformation matrix to the currently bound shader, in the "MVP" uniform
 	 // // This is done in the main loop since each model will have a different MVP matrix (at least for the M part)
@@ -401,14 +372,17 @@ bool poll_events ()
 int main(int, char**)
 {
 	GLuint programID, matrixID;
+	double time, freqMultiplier;
 	std::vector<GLuint> VertexBuffer, ColorBuffer;
 	VertexBuffer.resize(2); ColorBuffer.resize(2);
-	std::vector<glm::mat4> MVP = init(programID, matrixID, VertexBuffer, ColorBuffer);
+
+
+	std::vector<glm::mat4> MVP = init(programID, matrixID, VertexBuffer, ColorBuffer, time, freqMultiplier);
 
 
 	while (poll_events ())
 	{
-		render_frame (programID, matrixID, VertexBuffer, ColorBuffer, MVP);
+		render_frame (programID, matrixID, VertexBuffer, ColorBuffer, MVP, time, freqMultiplier);
 		finish_frame ();
 	}
 
