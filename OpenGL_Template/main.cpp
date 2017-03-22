@@ -163,13 +163,16 @@ std::vector<glm::mat4> init (GLuint& programID, GLuint& matrixID, std::vector<GL
 	glm::mat4 modelRotate	 = glm::rotate   (glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	//glm::mat4 Model = modelScale * modelTranslate;
-	glm::mat4 Model_cube = modelTranslate * modelRotate * modelScale;
+	glm::mat4 Model_cube     = modelTranslate * modelRotate * modelScale;
 	glm::mat4 Model_triangle = glm::mat4(1.0f);
 
 	//glm::mat4 Model = glm::mat4(1.0f);
 
 	// // Our ModelViewProjection : multiplication of our three matrices
-	std::vector<glm::mat4> MVP = { Projection * View * Model_cube,  Projection * View * Model_triangle };
+	std::vector<glm::mat4> MVP;
+	MVP.push_back(Projection * View * Model_cube);
+	MVP.push_back(Projection * View * Model_triangle);
+
 
 
 	// // Array of three vectors which represent the three vertices // //
@@ -218,7 +221,7 @@ std::vector<glm::mat4> init (GLuint& programID, GLuint& matrixID, std::vector<GL
 		0.5f, 0.0f, 0.0f
 	};
 
-	// // Array of cololurs // //
+	// // Array of colours // //
 	static const GLfloat g_color_buffer_data_cube[] = {
 		0.583f,  0.771f,  0.014f,
 		0.609f,  0.115f,  0.436f,
@@ -285,8 +288,8 @@ std::vector<glm::mat4> init (GLuint& programID, GLuint& matrixID, std::vector<GL
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_triangle), g_vertex_buffer_data_triangle, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &VertexBuffer[1]);
-	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
+	glGenBuffers(1, &ColorBuffer[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_triangle), g_color_buffer_data_triangle, GL_STATIC_DRAW);
 
 	return MVP;
@@ -341,11 +344,12 @@ void render_frame (
 		 0,
 		 (void*)0
 	 );
-	 
-	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[1][0][0]);
+	 // // Draw the triangle! // //
+	 glDrawArrays(GL_TRIANGLES, 0, 12*3);
+ 
 
+	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[1][0][0]);
 	 // // 1st attribute buffer : vertices // //
-	 glEnableVertexAttribArray(0);
 	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
 	 glVertexAttribPointer(
 		 0,			
@@ -355,9 +359,7 @@ void render_frame (
 		 0,			
 		 (void*)0	
 	 );
-
 	 // // 2nd attribute buffer : colours // //
-	 glEnableVertexAttribArray(1);
 	 glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[1]);
 	 glVertexAttribPointer(
 		 1,
@@ -367,11 +369,7 @@ void render_frame (
 		 0,
 		 (void*)0
 	 );
-
-
-
-	 // // Draw the triangle! // //
-	 glDrawArrays(GL_TRIANGLES, 0, 12*3); // 12*3 indeces starting at 0 -> 12 triangles -> 6 squares
+	 glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	 glDisableVertexAttribArray(0);
 	 glDisableVertexAttribArray(1);
@@ -392,6 +390,7 @@ int main(int, char**)
 {
 	GLuint programID, matrixID;
 	std::vector<GLuint> VertexBuffer, ColorBuffer;
+	VertexBuffer.resize(2); ColorBuffer.resize(2);
 	std::vector<glm::mat4> MVP = init(programID, matrixID, VertexBuffer, ColorBuffer);
 
 
