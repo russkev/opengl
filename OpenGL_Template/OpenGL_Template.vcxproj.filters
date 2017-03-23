@@ -41,5 +41,13 @@
     <ClInclude Include="glad\glad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="loadBMP_custom.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\data\uvtemplate.bmp">
+      <Filter>Source Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
