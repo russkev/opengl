@@ -11,6 +11,7 @@
 #include <math.h>
 
 #include "loadShader.hpp"
+#include "loadBMP_custom.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 //#include <glm/gtx/transform.hpp>
@@ -197,7 +198,7 @@ std::vector<glm::mat4> init (
 	};
 
 	// // TEST // //
-
+	loadBMP_custom BMP1 ("uvtemplate.bmp");
 	// // END TEST // //
 
 	// // Generate one buffer, put the resulting identifier in vertex buffer // //
