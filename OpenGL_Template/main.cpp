@@ -231,9 +231,8 @@ void render_frame (
 	double& time,
 	const double& freqMultiplier)
 {
-
-
-
+	time = freqMultiplier * SDL_GetPerformanceCounter();
+	
 	// // Tutorial from http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/ // //
 	// // Clear the screen // //
 	 glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -241,130 +240,127 @@ void render_frame (
 	 // // Use our shader // //
 	 glUseProgram(programID);
 
-	 // // Array of three vectors which represent the three vertices // //
+	 // // Vertices // //
 	 static const GLfloat g_vertex_buffer_data_cube[] = {
-		 -1.0f,-1.0f,-1.0f,
-		 -1.0f,-1.0f, 1.0f,
-		 -1.0f, 1.0f, 1.0f,
-		 1.0f,  1.0f,-1.0f,
-		 -1.0f,-1.0f,-1.0f,
-		 -1.0f, 1.0f,-1.0f,
-		 1.0f, -1.0f, 1.0f,
-		 -1.0f,-1.0f,-1.0f,
-		 1.0f, -1.0f,-1.0f,
-		 1.0f,  1.0f,-1.0f,
-		 1.0f, -1.0f,-1.0f,
-		 -1.0f,-1.0f,-1.0f,
-		 -1.0f,-1.0f,-1.0f,
-		 -1.0f, 1.0f, 1.0f,
-		 -1.0f, 1.0f,-1.0f,
-		 1.0f,-1.0f, 1.0f,
-		 -1.0f,-1.0f, 1.0f,
-		 -1.0f,-1.0f,-1.0f,
-		 -1.0f, 1.0f, 1.0f,
-		 -1.0f,-1.0f, 1.0f,
-		 1.0f,-1.0f, 1.0f,
-		 1.0f, 1.0f, 1.0f,
-		 1.0f,-1.0f,-1.0f,
-		 1.0f, 1.0f,-1.0f,
-		 1.0f,-1.0f,-1.0f,
-		 1.0f, 1.0f, 1.0f,
-		 1.0f,-1.0f, 1.0f,
-		 1.0f, 1.0f, 1.0f,
-		 1.0f, 1.0f,-1.0f,
-		 -1.0f, 1.0f,-1.0f,
-		 1.0f, 1.0f, 1.0f,
-		 -1.0f, 1.0f,-1.0f,
-		 -1.0f, 1.0f, 1.0f,
-		 1.0f, 1.0f, 1.0f,
-		 -1.0f, 1.0f, 1.0f,
-		 1.0f,-1.0f, 1.0f
-	 };
-
-	 time = freqMultiplier * SDL_GetPerformanceCounter();
-	 static GLfloat g_color_buffer_data_cube[12 * 3 * 3];
-	 for (int i = 0; i < 12 * 3 * 3; ++i) {
-		 if (g_vertex_buffer_data_cube[i] == 1) {
-			 if (fmod(GLfloat(time), 2) < 1) {
-				 g_color_buffer_data_cube[i] = fmod(GLfloat(time), 1);
-			 }
-			 else {
-				 g_color_buffer_data_cube[i] = 2 - fmod(GLfloat(time), 2);
-			 }
-		 }
-		 else {
-			 g_color_buffer_data_cube[i] = 0;
-		 }
+		 // Front //
+		-1.0f, +1.0f, +1.0f,
+		+1.0f, -1.0f, +1.0f,
+		+1.0f, +1.0f, +1.0f,
+		-1.0f, +1.0f, +1.0f,
+		
+		// Back //
+		-1.0f, -1.0f, -1.0f,
+		+1.0f, -1.0f, -1.0f,
+		+1.0f, +1.0f, -1.0f,
+		-1.0f, +1.0f, -1.0f
 	 };
 
 	 glGenBuffers(1, &VertexBuffer[0]);
 	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
 	 glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_cube), g_vertex_buffer_data_cube, GL_STATIC_DRAW);
 
-	 glGenBuffers(1, &ColorBuffer[0]);
-	 glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
-	 glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_cube), g_color_buffer_data_cube, GL_STATIC_DRAW);
+
+	 glEnableVertexAttribArray(0);
+	 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+
+	 // // Vertices index to draw triangle // //
+	 GLushort indicesCube[] = {
+		 // front
+		 0, 1, 2,	2, 3, 0,
+		 // top
+		 1, 5, 6,	6, 2, 1,
+		 // back
+		 7, 6, 5,	5, 4, 7,
+		 // bottom
+		 4, 0, 3,	3, 7, 4,
+		 // left
+		 4, 5, 1,	1, 0, 4,
+		 // right
+		 3, 2, 6,	6, 7, 3,
+	 };
+
+	 // // Vertex colours // //
+	 static GLfloat g_color_buffer_data_cube[8 * 3];
+	 for (int i = 0; i < 8 * 3; ++i) {
+		 if (g_vertex_buffer_data_cube[i] == 1) {
+			 g_color_buffer_data_cube[i] = 1;
+		 }
+		 else {
+			 g_color_buffer_data_cube[i] = 0;
+		 }
+	 }
+
+	 GLuint indexBufferID;
+	 glGenBuffers(1, &indexBufferID);
+	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
+	 glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesCube), indicesCube, GL_STATIC_DRAW);
+
+
+	 //glGenBuffers(1, &indexBufferID);
+	 //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
+	 //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_color_buffer_data_cube), g_color_buffer_data_cube, GL_STATIC_DRAW);
 
 
 	 // // Send our transformation matrix to the currently bound shader, in the "MVP" uniform
 	 // // This is done in the main loop since each model will have a different MVP matrix (at least for the M part)
-	 glm::mat4 rotationOffset = glm::rotate(glm::mat4(1.0f), glm::radians(float(time*100)), glm::vec3(0.0f, 1.0f, 1.0f));
-	 MVP.at(0) = MVP.at(0)*rotationOffset;
-	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0][0]);
+	 //glm::mat4 rotationOffset = glm::rotate(glm::mat4(1.0f), glm::radians(float(time*100)), glm::vec3(0.0f, 1.0f, 1.0f));
+	 //MVP.at(0) = MVP.at(0)*rotationOffset;
+	 //glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0][0]);
 
 
 	 // // 1st attribute buffer : vertices // //
-	 glEnableVertexAttribArray(0);
-	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
-	 glVertexAttribPointer(
-	 	0,			// // attribute 0, could be any number but must match the layout in shader // //
-	 	3,			// // size // //
-	 	GL_FLOAT,	// // type // //
-	 	GL_FALSE,	// // normalised  // //
-	 	0,			// // stride // //
-	 	(void*)0	// // array buffer offset // //
-	 	);
+	 //glEnableVertexAttribArray(0);
+	 //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
+	 //glVertexAttribPointer(
+	 //	0,					// // attribute 0, could be any number but must match the layout in shader // //
+	 //	3,					// // size of each element (1,2,3 or 4) // //
+	 //	GL_UNSIGNED_INT,	// // type // //
+	 //	GL_FALSE,			// // normalised  // //
+	 //	0,					// // stride // //
+	 //	(void*)0			// // array buffer offset // //
+	 //);
 
-	 // // 2nd attribute buffer : colours // //
-	 glEnableVertexAttribArray(1);
-	 glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
-	 glVertexAttribPointer(
-		 1,
-		 3,
-		 GL_FLOAT,
-		 GL_FALSE,
-		 0,
-		 (void*)0
-	 );
+	 //// // 2nd attribute buffer : colours // //
+	 //glEnableVertexAttribArray(1);
+	 //glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
+	 //glVertexAttribPointer(
+		// 1,
+		// 3,
+		// GL_FLOAT,
+		// GL_FALSE,
+		// 0,
+		// (void*)0
+	 //);
 	 // // Draw the triangle! // //
-	 glDrawArrays(GL_TRIANGLES, 0, 12*3);
+	 glDrawElements(GL_TRIANGLES, 8*3, GL_UNSIGNED_INT, 0);
  
 
-	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[1][0][0]);
-	 // // 1st attribute buffer : vertices // //
-	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
-	 glVertexAttribPointer(
-		 0,			
-		 3,			
-		 GL_FLOAT,	
-		 GL_FALSE,	
-		 0,			
-		 (void*)0	
-	 );
-	 // // 2nd attribute buffer : colours // //
-	 glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[1]);
-	 glVertexAttribPointer(
-		 1,
-		 3,
-		 GL_FLOAT,
-		 GL_FALSE,
-		 0,
-		 (void*)0
-	 );
-	 glDrawArrays(GL_TRIANGLES, 0, 3);
+	 //glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[1][0][0]);
+	 //// // 1st attribute buffer : vertices // //
+	 //glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
+	 //glVertexAttribPointer(
+		// 0,			
+		// 3,			
+		// GL_FLOAT,	
+		// GL_FALSE,	
+		// 0,			
+		// (void*)0	
+	 //);
+	 //// // 2nd attribute buffer : colours // //
+	 //glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[1]);
+	 //glVertexAttribPointer(
+		// 1,
+		// 3,
+		// GL_FLOAT,
+		// GL_FALSE,
+		// 0,
+		// (void*)0
+	 //);
+	 //glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	 glDisableVertexAttribArray(0);
-	 glDisableVertexAttribArray(1);
+	 //glDisableVertexAttribArray(1);
 }
 
 bool poll_events () 
