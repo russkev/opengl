@@ -227,7 +227,7 @@ void render_frame (
 	const GLuint& matrixID, 
 	std::vector<GLuint>& VertexBuffer, 
 	std::vector<GLuint>& ColorBuffer, 
-	const std::vector<glm::mat4> MVP,
+	std::vector<glm::mat4> MVP,
 	double& time,
 	const double& freqMultiplier)
 {
@@ -285,7 +285,12 @@ void render_frame (
 	 static GLfloat g_color_buffer_data_cube[12 * 3 * 3];
 	 for (int i = 0; i < 12 * 3 * 3; ++i) {
 		 if (g_vertex_buffer_data_cube[i] == 1) {
-			 g_color_buffer_data_cube[i] = fmod(time, 1);
+			 if (fmod(GLfloat(time), 2) < 1) {
+				 g_color_buffer_data_cube[i] = fmod(GLfloat(time), 1);
+			 }
+			 else {
+				 g_color_buffer_data_cube[i] = 2 - fmod(GLfloat(time), 2);
+			 }
 		 }
 		 else {
 			 g_color_buffer_data_cube[i] = 0;
@@ -303,7 +308,10 @@ void render_frame (
 
 	 // // Send our transformation matrix to the currently bound shader, in the "MVP" uniform
 	 // // This is done in the main loop since each model will have a different MVP matrix (at least for the M part)
+	 glm::mat4 rotationOffset = glm::rotate(glm::mat4(1.0f), glm::radians(float(time*100)), glm::vec3(0.0f, 1.0f, 1.0f));
+	 MVP.at(0) = MVP.at(0)*rotationOffset;
 	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0][0]);
+
 
 	 // // 1st attribute buffer : vertices // //
 	 glEnableVertexAttribArray(0);
