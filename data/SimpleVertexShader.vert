@@ -1,9 +1,9 @@
 #version 330 core
 
 // // Input vertex data, different for all executions of this shader.
-layout(location = 0) in vec3 vertexPosition_modelspace;
+in layout(location = 0) vec3 vertexPosition_modelspace;
 // // Notice that the "1" here matches the "1" in glVertexAttribPointer
-layout(location = 1) in vec3 vertexColor;
+in layout(location = 1) vec3 vertexColor;
 
 // // Output data ; will be interpolated for each fragment
 out vec3 fragmentColor;

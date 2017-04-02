@@ -74,9 +74,8 @@ static void __stdcall openglCallbackFunction(
 }
 
 
-
-std::vector<glm::mat4> init (
-	GLuint& programID, 
+//// -----INIT----- ////
+void init (
 	GLuint& matrixID, 
 	std::vector<GLuint>& VertexBuffer, 
 	std::vector<GLuint>& ColorBuffer, 
@@ -151,39 +150,14 @@ std::vector<glm::mat4> init (
 	glBindVertexArray(VertexArray1D);
 
 	// // Create and compile our GLSL program from the shaders // //
-	programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
+	GLuint programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
+
+	// // Use our shader // //
+	glUseProgram(programID);
 
 	// // Get handle for out "MVP" uniform. MVP = Model View Projection // //
 	// // Only during initialization // //
 	matrixID = glGetUniformLocation(programID, "MVP");
-
-
-	// // Projection matrix : 45 degree Field of View, display range : 0.1 <-> 100 units // //
-	glm::mat4 Projection = glm::perspective(glm::radians(30.0f), float(width) / float(height), 0.1f, 100.0f);
-	// // Orthographic projection // //
-	//glm::mat4 Projection = glm::ortho(-2.0f, 2.0f, -2.0f, 1.556f, 0.1f, 100.0f);
-
-	// // Camera Matrix // //
-	glm::mat4 View = glm::lookAt(
-		glm::vec3(4, 4, 3),
-		glm::vec3(0, 0, 0),
-		glm::vec3(0, 1, 0)
-	);
-	
-	// // Model matrix : an identity matrix (wil be at the origin) // //
-	glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
-	glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
-	glm::mat4 modelScale     = glm::scale    (glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
-	glm::mat4 modelRotate	 = glm::rotate   (glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-
-	//glm::mat4 Model = modelScale * modelTranslate;
-	glm::mat4 Model_cube     = modelTranslate * modelRotate * modelScale;
-	glm::mat4 Model_triangle = glm::mat4(1.0f);
-
-	// // Our ModelViewProjection : multiplication of our three matrices
-	std::vector<glm::mat4> MVP;
-	MVP.push_back(Projection * View * Model_cube);
-	MVP.push_back(Projection * View * Model_triangle);
 
 	static const GLfloat g_vertex_buffer_data_triangle[] = {
 		0.0f, 1.0f, 0.0f,
@@ -214,7 +188,7 @@ std::vector<glm::mat4> init (
 	glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_triangle), g_color_buffer_data_triangle, GL_STATIC_DRAW);
 
-	return MVP;
+	return;
 }
 
 void finish_frame () 
@@ -223,11 +197,9 @@ void finish_frame ()
 }
 
 void render_frame (
-	const GLuint& programID, 
 	const GLuint& matrixID, 
 	std::vector<GLuint>& VertexBuffer, 
 	std::vector<GLuint>& ColorBuffer, 
-	std::vector<glm::mat4> MVP,
 	double& time,
 	const double& freqMultiplier)
 {
@@ -238,8 +210,7 @@ void render_frame (
 	// // Clear the screen // //
 	 glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
-	 // // Use our shader // //
-	 glUseProgram(programID);
+
 
 	 // // Array of three vectors which represent the three vertices // //
 	 static const GLfloat g_vertex_buffer_data_cube[] = {
@@ -283,6 +254,8 @@ void render_frame (
 
 	 time = freqMultiplier * SDL_GetPerformanceCounter();
 	 static GLfloat g_color_buffer_data_cube[12 * 3 * 3];
+
+	 // // Change colours of cube over time // //
 	 for (int i = 0; i < 12 * 3 * 3; ++i) {
 		 if (g_vertex_buffer_data_cube[i] == 1) {
 			 if (fmod(GLfloat(time), 2) < 1) {
@@ -305,12 +278,35 @@ void render_frame (
 	 glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
 	 glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_cube), g_color_buffer_data_cube, GL_STATIC_DRAW);
 
+	 int temp = SDL_GetWindowSurface(st_window)->w;
+	 // // Projection matrix : 45 degree Field of View, display range : 0.1 <-> 100 units // //
+	 glm::mat4 Projection = glm::perspective(glm::radians(30.0f), float(SDL_GetWindowSurface(st_window)->w) / SDL_GetWindowSurface(st_window)->h, 0.1f, 100.0f);
+	 // // Orthographic projection // //
+	 //glm::mat4 Projection = glm::ortho(-2.0f, 2.0f, -2.0f, 1.556f, 0.1f, 100.0f);
+
+	 // // Camera Matrix // //
+	 glm::mat4 View = glm::lookAt(
+		 glm::vec3(4, 4, 3),
+		 glm::vec3(0, 0, 0),
+		 glm::vec3(0, 1, 0)
+	 );
+
+	 // // Model matrix : an identity matrix (wil be at the origin) // //
+	 glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
+	 glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
+	 glm::mat4 modelScale = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+	 glm::mat4 modelRotate = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	 //glm::mat4 Model = modelScale * modelTranslate;
+	 glm::mat4 Model_cube = modelTranslate * modelRotate * modelScale;
+	 glm::mat4 Model_triangle = glm::mat4(1.0f);
+
 
 	 // // Send our transformation matrix to the currently bound shader, in the "MVP" uniform
 	 // // This is done in the main loop since each model will have a different MVP matrix (at least for the M part)
 	 glm::mat4 rotationOffset = glm::rotate(glm::mat4(1.0f), glm::radians(float(time*100)), glm::vec3(0.0f, 1.0f, 1.0f));
-	 MVP.at(0) = MVP.at(0)*rotationOffset;
-	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0][0]);
+	 glm::mat4 MVP = Projection*View*Model_cube*rotationOffset;
+	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
 
 
 	 // // 1st attribute buffer : vertices // //
@@ -339,8 +335,8 @@ void render_frame (
 	 // // Draw the triangle! // //
 	 glDrawArrays(GL_TRIANGLES, 0, 12*3);
  
-
-	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[1][0][0]);
+	 MVP = Projection*View*Model_triangle;
+	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
 	 // // 1st attribute buffer : vertices // //
 	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
 	 glVertexAttribPointer(
@@ -380,18 +376,18 @@ bool poll_events ()
 
 int main(int, char**)
 {
-	GLuint programID, matrixID;
+	GLuint matrixID;
 	double time, freqMultiplier;
 	std::vector<GLuint> VertexBuffer, ColorBuffer;
 	VertexBuffer.resize(2); ColorBuffer.resize(2);
 
 
-	std::vector<glm::mat4> MVP = init(programID, matrixID, VertexBuffer, ColorBuffer, time, freqMultiplier);
+	init(matrixID, VertexBuffer, ColorBuffer, time, freqMultiplier);
 
 
 	while (poll_events ())
 	{
-		render_frame (programID, matrixID, VertexBuffer, ColorBuffer, MVP, time, freqMultiplier);
+		render_frame (matrixID, VertexBuffer, ColorBuffer, time, freqMultiplier);
 		finish_frame ();
 	}
 
