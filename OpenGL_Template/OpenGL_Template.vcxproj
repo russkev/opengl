@@ -154,6 +154,7 @@
     <ClInclude Include="glad\glad.h" />
     <ClInclude Include="loadBMP_custom.h" />
     <ClInclude Include="loadShader.hpp" />
+    <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\data\uvtemplate.bmp" />
