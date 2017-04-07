@@ -12,6 +12,7 @@
 
 #include "loadShader.hpp"
 #include "loadBMP_custom.h"
+#include "Vertex.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 //#include <glm/gtx/transform.hpp>
@@ -159,16 +160,22 @@ void init (
 	// // Only during initialization // //
 	matrixID = glGetUniformLocation(programID, "MVP");
 
-	static const GLfloat g_vertex_buffer_data_triangle[] = {
-		0.0f, 1.0f, 0.0f,
-		-0.5f, 0.0f, 0.0f,
-		0.5f, 0.0f, 0.0f
+	static const glm::tvec3<GLfloat> g_vertex_buffer_data_triangle[] = {
+		glm::vec3(0.0f, 1.0f,  0.0f),
+		glm::vec3(-0.5f, 0.0f, 0.0f),
+		glm::vec3(0.5f, 0.0f,  0.0f)
 	};
 
-	static const GLfloat g_color_buffer_data_triangle[] = {
-		1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 1.0f
+	static const glm::tvec3<GLfloat> g_color_buffer_data_triangle[] = {
+		glm::vec3(1.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 1.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 1.0f)
+	};
+
+	static const Vertex g_buffer_data_triangle[] = {
+		{ glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f) },
+		{ glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) },
+		{ glm::vec3(0.5f, 0.0f,  0.0f), glm::vec3(0.0f, 0.0f, 1.0f) }
 	};
 
 	// // TEST // //
@@ -182,7 +189,9 @@ void init (
 
 	glGenBuffers(1, &VertexBuffer[1]);
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_triangle), g_vertex_buffer_data_triangle, GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_triangle), g_vertex_buffer_data_triangle, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_buffer_data_triangle), g_buffer_data_triangle, GL_STATIC_DRAW);
+
 
 	glGenBuffers(1, &ColorBuffer[1]);
 	glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[1]);
@@ -208,66 +217,70 @@ void render_frame (
 
 	// // Tutorial from http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/ // //
 	// // Clear the screen // //
+	// // This clears both the colour buffer and the depth buffer at the same time
+	// // 
 	 glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
-
+	 
 
 	 // // Array of three vectors which represent the three vertices // //
-	 static const GLfloat g_vertex_buffer_data_cube[] = {
-		 -1.0f,-1.0f,-1.0f,
-		 -1.0f,-1.0f, 1.0f,
-		 -1.0f, 1.0f, 1.0f,
-		 1.0f,  1.0f,-1.0f,
-		 -1.0f,-1.0f,-1.0f,
-		 -1.0f, 1.0f,-1.0f,
-		 1.0f, -1.0f, 1.0f,
-		 -1.0f,-1.0f,-1.0f,
-		 1.0f, -1.0f,-1.0f,
-		 1.0f,  1.0f,-1.0f,
-		 1.0f, -1.0f,-1.0f,
-		 -1.0f,-1.0f,-1.0f,
-		 -1.0f,-1.0f,-1.0f,
-		 -1.0f, 1.0f, 1.0f,
-		 -1.0f, 1.0f,-1.0f,
-		 1.0f,-1.0f, 1.0f,
-		 -1.0f,-1.0f, 1.0f,
-		 -1.0f,-1.0f,-1.0f,
-		 -1.0f, 1.0f, 1.0f,
-		 -1.0f,-1.0f, 1.0f,
-		 1.0f,-1.0f, 1.0f,
-		 1.0f, 1.0f, 1.0f,
-		 1.0f,-1.0f,-1.0f,
-		 1.0f, 1.0f,-1.0f,
-		 1.0f,-1.0f,-1.0f,
-		 1.0f, 1.0f, 1.0f,
-		 1.0f,-1.0f, 1.0f,
-		 1.0f, 1.0f, 1.0f,
-		 1.0f, 1.0f,-1.0f,
-		 -1.0f, 1.0f,-1.0f,
-		 1.0f, 1.0f, 1.0f,
-		 -1.0f, 1.0f,-1.0f,
-		 -1.0f, 1.0f, 1.0f,
-		 1.0f, 1.0f, 1.0f,
-		 -1.0f, 1.0f, 1.0f,
-		 1.0f,-1.0f, 1.0f
+	 static const glm::tvec3<GLfloat> g_vertex_buffer_data_cube[] = {
+		 glm::vec3(-1.0f,-1.0f,-1.0f),
+		 glm::vec3(-1.0f,-1.0f, 1.0f),
+		 glm::vec3(-1.0f, 1.0f, 1.0f),
+		 glm::vec3(1.0f,  1.0f,-1.0f),
+		 glm::vec3(-1.0f,-1.0f,-1.0f),
+		 glm::vec3(-1.0f, 1.0f,-1.0f),
+		 glm::vec3(1.0f, -1.0f, 1.0f),
+		 glm::vec3(-1.0f,-1.0f,-1.0f),
+		 glm::vec3(1.0f, -1.0f,-1.0f),
+		 glm::vec3(1.0f,  1.0f,-1.0f),
+		 glm::vec3(1.0f, -1.0f,-1.0f),
+		 glm::vec3(-1.0f,-1.0f,-1.0f),
+		 glm::vec3(-1.0f,-1.0f,-1.0f),
+		 glm::vec3(-1.0f, 1.0f, 1.0f),
+		 glm::vec3(-1.0f, 1.0f,-1.0f),
+		 glm::vec3(1.0f,-1.0f,  1.0f),
+		 glm::vec3(-1.0f,-1.0f, 1.0f),
+		 glm::vec3(-1.0f,-1.0f,-1.0f),
+		 glm::vec3(-1.0f, 1.0f, 1.0f),
+		 glm::vec3(-1.0f,-1.0f, 1.0f),
+		 glm::vec3(1.0f,-1.0f,  1.0f),
+		 glm::vec3(1.0f, 1.0f,  1.0f),
+		 glm::vec3(1.0f,-1.0f, -1.0f),
+		 glm::vec3(1.0f, 1.0f, -1.0f),
+		 glm::vec3(1.0f,-1.0f, -1.0f),
+		 glm::vec3(1.0f, 1.0f,  1.0f),
+		 glm::vec3(1.0f,-1.0f,  1.0f),
+		 glm::vec3(1.0f, 1.0f,  1.0f),
+		 glm::vec3(1.0f, 1.0f, -1.0f),
+		 glm::vec3(-1.0f, 1.0f,-1.0f),
+		 glm::vec3(1.0f, 1.0f,  1.0f),
+		 glm::vec3(-1.0f, 1.0f,-1.0f),
+		 glm::vec3(-1.0f, 1.0f, 1.0f),
+		 glm::vec3(1.0f, 1.0f,  1.0f),
+		 glm::vec3(-1.0f, 1.0f, 1.0f),
+		 glm::vec3(1.0f,-1.0f,  1.0f)
 	 };
 
 	 time = freqMultiplier * SDL_GetPerformanceCounter();
-	 static GLfloat g_color_buffer_data_cube[12 * 3 * 3];
+	 static glm::tvec3<GLfloat> g_color_buffer_data_cube[12 * 3 * 3];
 
 	 // // Change colours of cube over time // //
 	 for (int i = 0; i < 12 * 3 * 3; ++i) {
-		 if (g_vertex_buffer_data_cube[i] == 1) {
-			 if (fmod(GLfloat(time), 2) < 1) {
-				 g_color_buffer_data_cube[i] = fmod(GLfloat(time), 1);
+		 for (int j = 0; j < 3; ++j) {
+			 if (g_vertex_buffer_data_cube[i][j] == 1) {
+				 if (fmod(GLfloat(time), 2) < 1) {
+					 g_color_buffer_data_cube[i][j] = fmod(GLfloat(time), 1);
+				 }
+				 else {
+					 g_color_buffer_data_cube[i][j] = 2 - fmod(GLfloat(time), 2);
+				 }
 			 }
 			 else {
-				 g_color_buffer_data_cube[i] = 2 - fmod(GLfloat(time), 2);
+				 g_color_buffer_data_cube[i][j] = 0;
 			 }
-		 }
-		 else {
-			 g_color_buffer_data_cube[i] = 0;
-		 }
+		}
 	 };
 
 	 glGenBuffers(1, &VertexBuffer[0]);
@@ -344,18 +357,18 @@ void render_frame (
 		 3,			
 		 GL_FLOAT,	
 		 GL_FALSE,	
-		 0,			
+		 sizeof(Vertex),			
 		 (void*)0	
 	 );
 	 // // 2nd attribute buffer : colours // //
-	 glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[1]);
+	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
 	 glVertexAttribPointer(
 		 1,
 		 3,
 		 GL_FLOAT,
 		 GL_FALSE,
-		 0,
-		 (void*)0
+		 sizeof(Vertex),
+		 (char*)(sizeof(glm::vec3))
 	 );
 	 glDrawArrays(GL_TRIANGLES, 0, 3);
 
