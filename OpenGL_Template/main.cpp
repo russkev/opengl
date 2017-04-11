@@ -13,6 +13,7 @@
 #include "loadShader.hpp"
 #include "loadBMP_custom.h"
 #include "Vertex.h"
+#include "ShapeData.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 //#include <glm/gtx/transform.hpp>
@@ -160,25 +161,22 @@ void init (
 	// // Only during initialization // //
 	matrixID = glGetUniformLocation(programID, "MVP");
 
-	static const glm::tvec3<GLfloat> g_vertex_buffer_data_triangle[] = {
-		glm::vec3(0.0f, 1.0f,  0.0f),
-		glm::vec3(-0.5f, 0.0f, 0.0f),
-		glm::vec3(0.5f, 0.0f,  0.0f)
-	};
-
-	static const glm::tvec3<GLfloat> g_color_buffer_data_triangle[] = {
-		glm::vec3(1.0f, 0.0f, 0.0f),
-		glm::vec3(0.0f, 1.0f, 0.0f),
-		glm::vec3(0.0f, 0.0f, 1.0f)
-	};
-
-	static const Vertex g_buffer_data_triangle[] = {
+	static Vertex g_buffer_data_triangle[] = {
 		{ glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f) },
 		{ glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) },
 		{ glm::vec3(0.5f, 0.0f,  0.0f), glm::vec3(0.0f, 0.0f, 1.0f) }
 	};
 
+	static GLushort g_buffer_indeces_triangle[] = {
+		0,1,2
+	};
+
 	// // TEST // //
+	ShapeData shape1;
+	shape1.vertices = &g_buffer_data_triangle[0];
+	shape1.numVertices = 3;
+	shape1.indeces = &g_buffer_indeces_triangle[0];
+	shape1.numIndeces = 3;
 	loadBMP_custom BMP1 ("uvtemplate.bmp");
 	// // END TEST // //
 
@@ -189,13 +187,7 @@ void init (
 
 	glGenBuffers(1, &VertexBuffer[1]);
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_triangle), g_vertex_buffer_data_triangle, GL_STATIC_DRAW);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_buffer_data_triangle), g_buffer_data_triangle, GL_STATIC_DRAW);
-
-
-	glGenBuffers(1, &ColorBuffer[1]);
-	glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_triangle), g_color_buffer_data_triangle, GL_STATIC_DRAW);
 
 	return;
 }
@@ -224,7 +216,7 @@ void render_frame (
 	 
 
 	 // // Array of three vectors which represent the three vertices // //
-	 static const glm::tvec3<GLfloat> g_vertex_buffer_data_cube[] = {
+	 static const glm::vec3 g_vertex_buffer_data_cube[] = {
 		 glm::vec3(-1.0f,-1.0f,-1.0f),
 		 glm::vec3(-1.0f,-1.0f, 1.0f),
 		 glm::vec3(-1.0f, 1.0f, 1.0f),
@@ -282,6 +274,8 @@ void render_frame (
 			 }
 		}
 	 };
+
+	 //for (int i = 0; i < )
 
 	 glGenBuffers(1, &VertexBuffer[0]);
 	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);

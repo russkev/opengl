@@ -50,6 +50,12 @@
     <ClInclude Include="Vertex.h">
       <Filter>Primitives</Filter>
     </ClInclude>
+    <ClInclude Include="ShapeData.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeGenerator.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\data\uvtemplate.bmp">
