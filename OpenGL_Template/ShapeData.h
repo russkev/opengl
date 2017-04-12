@@ -1,18 +1,23 @@
 #pragma once
 #include "Vertex.h"
 #include <GL\glew.h>
+#include <memory>
 
 struct ShapeData {
 
 	// // ----- Member Variables ----- // //
-	Vertex* vertices;
+	std::unique_ptr<Vertex[]> vertices;
 	GLuint numVertices;
 	GLushort* indeces;
 	GLuint numIndeces;
 
 	// // ----- Constructor ----- // //
-	ShapeData() :
-		vertices(0), numVertices(0), indeces(0), numIndeces(0) {};
+	ShapeData(GLuint s_numVertices, Vertex s_vertex, GLuint s_numIndeces) :
+		//vertices(std::make_unique<Vertex[]>(s_vertex)), 
+		numVertices(s_numVertices), 
+		indeces(0), 
+		numIndeces(s_numIndeces) 
+	{};
 
 	// // ----- Size Getters ----- // //
 	GLsizeiptr sizeVertices() {
@@ -24,7 +29,6 @@ struct ShapeData {
 
 	// // ----- Cleanup ----- //
 	void cleanup() {
-		delete[] vertices;
 		delete[] indeces;
 		numVertices = numIndeces = 0;
 	}

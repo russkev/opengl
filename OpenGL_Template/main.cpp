@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include <memory>
 
 #include "loadShader.hpp"
 #include "loadBMP_custom.h"
@@ -167,16 +168,17 @@ void init (
 		{ glm::vec3(0.5f, 0.0f,  0.0f), glm::vec3(0.0f, 0.0f, 1.0f) }
 	};
 
+
+
 	static GLushort g_buffer_indeces_triangle[] = {
 		0,1,2
 	};
 
 	// // TEST // //
-	ShapeData shape1;
-	shape1.vertices = &g_buffer_data_triangle[0];
-	shape1.numVertices = 3;
-	shape1.indeces = &g_buffer_indeces_triangle[0];
-	shape1.numIndeces = 3;
+	//ShapeData shape1(3, { glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, 3);
+	//shape1.vertices = std::make_unique<vertex[3]>(g_buffer_data_triangle);
+
+
 	loadBMP_custom BMP1 ("uvtemplate.bmp");
 	// // END TEST // //
 
@@ -340,9 +342,9 @@ void render_frame (
 		 (void*)0
 	 );
 	 // // Draw the triangle! // //
-	 glDrawArrays(GL_TRIANGLES, 0, 12*3);
+	 //glDrawArrays(GL_TRIANGLES, 0, 12*3);
  
-	 MVP = Projection*View*Model_triangle;
+	 MVP = Projection*View*rotationOffset;
 	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
 	 // // 1st attribute buffer : vertices // //
 	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
