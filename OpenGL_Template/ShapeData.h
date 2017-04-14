@@ -12,11 +12,11 @@ struct ShapeData {
 	GLuint numIndeces;
 
 	// // ----- Constructor ----- // //
-	ShapeData(GLuint s_numVertices, Vertex s_vertex, GLuint s_numIndeces) :
-		//vertices(std::make_unique<Vertex[]>(s_vertex)), 
-		numVertices(s_numVertices), 
+	ShapeData() :
+		vertices(nullptr), 
+		numVertices(0), 
 		indeces(0), 
-		numIndeces(s_numIndeces) 
+		numIndeces(0) 
 	{};
 
 	// // ----- Size Getters ----- // //
