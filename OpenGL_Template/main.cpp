@@ -15,6 +15,7 @@
 #include "loadBMP_custom.h"
 #include "Vertex.h"
 #include "ShapeData.h"
+#include "ShapeGenerator.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 //#include <glm/gtx/transform.hpp>
@@ -162,26 +163,14 @@ void init (
 	// // Only during initialization // //
 	matrixID = glGetUniformLocation(programID, "MVP");
 
-	static Vertex g_buffer_data_triangle[] = {
-		{ glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f) },
-		{ glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) },
-		{ glm::vec3(0.5f, 0.0f,  0.0f), glm::vec3(0.0f, 0.0f, 1.0f) }
-	};
-
-
+	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
+	static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
 
 	static GLushort g_buffer_indeces_triangle[] = {
 		0,1,2
 	};
 
 	// // TEST // //
-	//ShapeData shape1(3, { glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, 3);
-	ShapeData shape1;
-	shape1.vertices = std::make_unique<Vertex[]>(3);
-	//for (int i = 0; i < 3; ++i) {
-	//	shape1.vertices[i] = g_buffer_data_triangle[i];
-	//}
-	
 
 	loadBMP_custom BMP1 ("uvtemplate.bmp");
 	// // END TEST // //
@@ -193,7 +182,11 @@ void init (
 
 	glGenBuffers(1, &VertexBuffer[1]);
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_buffer_data_triangle), g_buffer_data_triangle, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_triangle.sizeVertices(), &g_buffer_data_triangle.vertices.front(), GL_STATIC_DRAW);
+
+	//glGenBuffers(1, &VertexBuffer[0]);
+	//glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
+	//glBufferData(GL_ARRAY_BUFFER, g_buffer_data_cube.sizeVertices(), &g_buffer_data_cube.vertices.front(), GL_STATIC_DRAW);
 
 	return;
 }
@@ -262,17 +255,18 @@ void render_frame (
 	 };
 
 	 time = freqMultiplier * SDL_GetPerformanceCounter();
+	
 	 static glm::tvec3<GLfloat> g_color_buffer_data_cube[12 * 3 * 3];
 
 	 // // Change colours of cube over time // //
 	 for (int i = 0; i < 12 * 3 * 3; ++i) {
 		 for (int j = 0; j < 3; ++j) {
 			 if (g_vertex_buffer_data_cube[i][j] == 1) {
-				 if (fmod(GLfloat(time), 2) < 1) {
-					 g_color_buffer_data_cube[i][j] = fmod(GLfloat(time), 1);
+				 if (fmod(GLfloat(time), 2.0f) < 1) {
+					 g_color_buffer_data_cube[i][j] = fmod(GLfloat(time), 1.0f);
 				 }
 				 else {
-					 g_color_buffer_data_cube[i][j] = 2 - fmod(GLfloat(time), 2);
+					 g_color_buffer_data_cube[i][j] = 2 - fmod(GLfloat(time), 2.0f);
 				 }
 			 }
 			 else {
@@ -336,7 +330,7 @@ void render_frame (
 
 	 // // 2nd attribute buffer : colours // //
 	 glEnableVertexAttribArray(1);
-	 glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
+	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
 	 glVertexAttribPointer(
 		 1,
 		 3,
@@ -346,7 +340,7 @@ void render_frame (
 		 (void*)0
 	 );
 	 // // Draw the triangle! // //
-	 //glDrawArrays(GL_TRIANGLES, 0, 12*3);
+	 glDrawArrays(GL_TRIANGLES, 0, 12*3);
  
 	 MVP = Projection*View*rotationOffset;
 	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
