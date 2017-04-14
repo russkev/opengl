@@ -176,8 +176,12 @@ void init (
 
 	// // TEST // //
 	//ShapeData shape1(3, { glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, 3);
-	//shape1.vertices = std::make_unique<vertex[3]>(g_buffer_data_triangle);
-
+	ShapeData shape1;
+	shape1.vertices = std::make_unique<Vertex[]>(3);
+	//for (int i = 0; i < 3; ++i) {
+	//	shape1.vertices[i] = g_buffer_data_triangle[i];
+	//}
+	
 
 	loadBMP_custom BMP1 ("uvtemplate.bmp");
 	// // END TEST // //
