@@ -1,35 +1,30 @@
 #pragma once
 #include "Vertex.h"
 #include <GL\glew.h>
-#include <memory>
+#include <vector>
 
 struct ShapeData {
 
 	// // ----- Member Variables ----- // //
-	std::unique_ptr<Vertex[]> vertices;
-	GLuint numVertices;
-	GLushort* indeces;
-	GLuint numIndeces;
+	std::vector<Vertex> vertices;
+	std::vector<GLushort> indeces;
+
 
 	// // ----- Constructor ----- // //
 	ShapeData() :
-		vertices(nullptr), 
-		numVertices(0), 
-		indeces(0), 
-		numIndeces(0) 
+		vertices(), 
+		indeces(NULL)
+	{};
+	ShapeData(const std::vector<Vertex> s_vertices, const std::vector<GLushort> s_indeces) :
+		vertices(s_vertices),
+		indeces(s_indeces)
 	{};
 
 	// // ----- Size Getters ----- // //
 	GLsizeiptr sizeVertices() {
-		return numVertices * sizeof(Vertex);
+		return vertices.size() * sizeof(Vertex);
 	}
 	GLsizeiptr sizeIndeces() {
-		return numIndeces * sizeof(GLushort);
-	}
-
-	// // ----- Cleanup ----- //
-	void cleanup() {
-		delete[] indeces;
-		numVertices = numIndeces = 0;
+		return indeces.size() * sizeof(GLushort);
 	}
 };
