@@ -149,9 +149,9 @@ void init (
 	glDepthFunc(GL_LESS);
 
 	// // --- Create the VAO (Vertex Array Object) --- // //
-	GLuint VertexArray1D;
-	glGenVertexArrays(1, &VertexArray1D);
-	glBindVertexArray(VertexArray1D);
+	GLuint VertexArrayID;
+	glGenVertexArrays(1, &VertexArrayID);
+	glBindVertexArray(VertexArrayID);
 
 	// // Create and compile our GLSL program from the shaders // //
 	GLuint programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
@@ -163,11 +163,21 @@ void init (
 	// // Only during initialization // //
 	matrixID = glGetUniformLocation(programID, "MVP");
 
-	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
-	static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
+	//static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
+	//static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
 
-	static GLushort g_buffer_indeces_triangle[] = {
-		0,1,2
+
+	GLfloat verts[] =
+	{
+		+0.0f, +0.0f,
+		+1.0f, +1.0f,
+		-1.0f, +1.0f,
+		-1.0f, -1.0f,
+		+1.0f, -1.0f,
+	};
+
+	static GLushort indeces[] = {
+		0,1,2, 0,3,4
 	};
 
 	// // TEST // //
@@ -180,13 +190,27 @@ void init (
 	// // Give our vertices to OpenGL
 	// // All this code needs to be in blocks of the three lines
 
+	//glGenBuffers(1, &VertexBuffer[1]);
+	//glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
+	//glBufferData(GL_ARRAY_BUFFER, g_buffer_data_triangle.sizeVertices(), &g_buffer_data_triangle.vertices.front(), GL_STATIC_DRAW);
+
 	glGenBuffers(1, &VertexBuffer[1]);
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
-	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_triangle.sizeVertices(), &g_buffer_data_triangle.vertices.front(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(
+		 0,			
+		 2,			
+		 GL_FLOAT,	
+		 GL_FALSE,	
+		 0,			
+		 0	
+	 );
 
-	//glGenBuffers(1, &VertexBuffer[0]);
-	//glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
-	//glBufferData(GL_ARRAY_BUFFER, g_buffer_data_cube.sizeVertices(), &g_buffer_data_cube.vertices.front(), GL_STATIC_DRAW);
+	GLuint indexBufferID;
+	glGenBuffers(1, &indexBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, indexBufferID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indeces), indeces, GL_STATIC_DRAW);
 
 	return;
 }
@@ -214,160 +238,163 @@ void render_frame (
 
 	 
 
-	 // // Array of three vectors which represent the three vertices // //
-	 static const glm::vec3 g_vertex_buffer_data_cube[] = {
-		 glm::vec3(-1.0f,-1.0f,-1.0f),
-		 glm::vec3(-1.0f,-1.0f, 1.0f),
-		 glm::vec3(-1.0f, 1.0f, 1.0f),
-		 glm::vec3(1.0f,  1.0f,-1.0f),
-		 glm::vec3(-1.0f,-1.0f,-1.0f),
-		 glm::vec3(-1.0f, 1.0f,-1.0f),
-		 glm::vec3(1.0f, -1.0f, 1.0f),
-		 glm::vec3(-1.0f,-1.0f,-1.0f),
-		 glm::vec3(1.0f, -1.0f,-1.0f),
-		 glm::vec3(1.0f,  1.0f,-1.0f),
-		 glm::vec3(1.0f, -1.0f,-1.0f),
-		 glm::vec3(-1.0f,-1.0f,-1.0f),
-		 glm::vec3(-1.0f,-1.0f,-1.0f),
-		 glm::vec3(-1.0f, 1.0f, 1.0f),
-		 glm::vec3(-1.0f, 1.0f,-1.0f),
-		 glm::vec3(1.0f,-1.0f,  1.0f),
-		 glm::vec3(-1.0f,-1.0f, 1.0f),
-		 glm::vec3(-1.0f,-1.0f,-1.0f),
-		 glm::vec3(-1.0f, 1.0f, 1.0f),
-		 glm::vec3(-1.0f,-1.0f, 1.0f),
-		 glm::vec3(1.0f,-1.0f,  1.0f),
-		 glm::vec3(1.0f, 1.0f,  1.0f),
-		 glm::vec3(1.0f,-1.0f, -1.0f),
-		 glm::vec3(1.0f, 1.0f, -1.0f),
-		 glm::vec3(1.0f,-1.0f, -1.0f),
-		 glm::vec3(1.0f, 1.0f,  1.0f),
-		 glm::vec3(1.0f,-1.0f,  1.0f),
-		 glm::vec3(1.0f, 1.0f,  1.0f),
-		 glm::vec3(1.0f, 1.0f, -1.0f),
-		 glm::vec3(-1.0f, 1.0f,-1.0f),
-		 glm::vec3(1.0f, 1.0f,  1.0f),
-		 glm::vec3(-1.0f, 1.0f,-1.0f),
-		 glm::vec3(-1.0f, 1.0f, 1.0f),
-		 glm::vec3(1.0f, 1.0f,  1.0f),
-		 glm::vec3(-1.0f, 1.0f, 1.0f),
-		 glm::vec3(1.0f,-1.0f,  1.0f)
-	 };
+	  // Array of three vectors which represent the three vertices // //
+	 //static const glm::vec3 g_vertex_buffer_data_cube[] = {
+		// glm::vec3(-1.0f,-1.0f,-1.0f),
+		// glm::vec3(-1.0f,-1.0f, 1.0f),
+		// glm::vec3(-1.0f, 1.0f, 1.0f),
+		// glm::vec3(1.0f,  1.0f,-1.0f),
+		// glm::vec3(-1.0f,-1.0f,-1.0f),
+		// glm::vec3(-1.0f, 1.0f,-1.0f),
+		// glm::vec3(1.0f, -1.0f, 1.0f),
+		// glm::vec3(-1.0f,-1.0f,-1.0f),
+		// glm::vec3(1.0f, -1.0f,-1.0f),
+		// glm::vec3(1.0f,  1.0f,-1.0f),
+		// glm::vec3(1.0f, -1.0f,-1.0f),
+		// glm::vec3(-1.0f,-1.0f,-1.0f),
+		// glm::vec3(-1.0f,-1.0f,-1.0f),
+		// glm::vec3(-1.0f, 1.0f, 1.0f),
+		// glm::vec3(-1.0f, 1.0f,-1.0f),
+		// glm::vec3(1.0f,-1.0f,  1.0f),
+		// glm::vec3(-1.0f,-1.0f, 1.0f),
+		// glm::vec3(-1.0f,-1.0f,-1.0f),
+		// glm::vec3(-1.0f, 1.0f, 1.0f),
+		// glm::vec3(-1.0f,-1.0f, 1.0f),
+		// glm::vec3(1.0f,-1.0f,  1.0f),
+		// glm::vec3(1.0f, 1.0f,  1.0f),
+		// glm::vec3(1.0f,-1.0f, -1.0f),
+		// glm::vec3(1.0f, 1.0f, -1.0f),
+		// glm::vec3(1.0f,-1.0f, -1.0f),
+		// glm::vec3(1.0f, 1.0f,  1.0f),
+		// glm::vec3(1.0f,-1.0f,  1.0f),
+		// glm::vec3(1.0f, 1.0f,  1.0f),
+		// glm::vec3(1.0f, 1.0f, -1.0f),
+		// glm::vec3(-1.0f, 1.0f,-1.0f),
+		// glm::vec3(1.0f, 1.0f,  1.0f),
+		// glm::vec3(-1.0f, 1.0f,-1.0f),
+		// glm::vec3(-1.0f, 1.0f, 1.0f),
+		// glm::vec3(1.0f, 1.0f,  1.0f),
+		// glm::vec3(-1.0f, 1.0f, 1.0f),
+		// glm::vec3(1.0f,-1.0f,  1.0f)
+	 //};
 
 	 time = freqMultiplier * SDL_GetPerformanceCounter();
 	
-	 static glm::tvec3<GLfloat> g_color_buffer_data_cube[12 * 3 * 3];
+	 //static glm::tvec3<GLfloat> g_color_buffer_data_cube[12 * 3 * 3];
 
 	 // // Change colours of cube over time // //
-	 for (int i = 0; i < 12 * 3 * 3; ++i) {
-		 for (int j = 0; j < 3; ++j) {
-			 if (g_vertex_buffer_data_cube[i][j] == 1) {
-				 if (fmod(GLfloat(time), 2.0f) < 1) {
-					 g_color_buffer_data_cube[i][j] = fmod(GLfloat(time), 1.0f);
-				 }
-				 else {
-					 g_color_buffer_data_cube[i][j] = 2 - fmod(GLfloat(time), 2.0f);
-				 }
-			 }
-			 else {
-				 g_color_buffer_data_cube[i][j] = 0;
-			 }
-		}
-	 };
+	 //for (int i = 0; i < 12 * 3 * 3; ++i) {
+		// for (int j = 0; j < 3; ++j) {
+		//	 if (g_vertex_buffer_data_cube[i][j] == 1) {
+		//		 if (fmod(GLfloat(time), 2.0f) < 1) {
+		//			 g_color_buffer_data_cube[i][j] = fmod(GLfloat(time), 1.0f);
+		//		 }
+		//		 else {
+		//			 g_color_buffer_data_cube[i][j] = 2 - fmod(GLfloat(time), 2.0f);
+		//		 }
+		//	 }
+		//	 else {
+		//		 g_color_buffer_data_cube[i][j] = 0;
+		//	 }
+		//}
+	 //};
 
-	 //for (int i = 0; i < )
+	 //glGenBuffers(1, &VertexBuffer[0]);
+	 //glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
+	 //glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_cube), g_vertex_buffer_data_cube, GL_STATIC_DRAW);
 
-	 glGenBuffers(1, &VertexBuffer[0]);
-	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
-	 glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_cube), g_vertex_buffer_data_cube, GL_STATIC_DRAW);
+	 //glGenBuffers(1, &ColorBuffer[0]);
+	 //glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
+	 //glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_cube), g_color_buffer_data_cube, GL_STATIC_DRAW);
 
-	 glGenBuffers(1, &ColorBuffer[0]);
-	 glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
-	 glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_cube), g_color_buffer_data_cube, GL_STATIC_DRAW);
+	 ////int temp = SDL_GetWindowSurface(st_window)->w;
+	 //// // Projection matrix : 45 degree Field of View, display range : 0.1 <-> 100 units // //
+	 //glm::mat4 Projection = glm::perspective(glm::radians(30.0f), float(SDL_GetWindowSurface(st_window)->w) / SDL_GetWindowSurface(st_window)->h, 0.1f, 100.0f);
+	 //// // Orthographic projection // //
+	 ////glm::mat4 Projection = glm::ortho(-2.0f, 2.0f, -2.0f, 1.556f, 0.1f, 100.0f);
 
-	 int temp = SDL_GetWindowSurface(st_window)->w;
-	 // // Projection matrix : 45 degree Field of View, display range : 0.1 <-> 100 units // //
-	 glm::mat4 Projection = glm::perspective(glm::radians(30.0f), float(SDL_GetWindowSurface(st_window)->w) / SDL_GetWindowSurface(st_window)->h, 0.1f, 100.0f);
-	 // // Orthographic projection // //
-	 //glm::mat4 Projection = glm::ortho(-2.0f, 2.0f, -2.0f, 1.556f, 0.1f, 100.0f);
+	 //// // Camera Matrix // //
+	 //glm::mat4 View = glm::lookAt(
+		// glm::vec3(4, 4, 3),
+		// glm::vec3(0, 0, 0),
+		// glm::vec3(0, 1, 0)
+	 //);
 
-	 // // Camera Matrix // //
-	 glm::mat4 View = glm::lookAt(
-		 glm::vec3(4, 4, 3),
-		 glm::vec3(0, 0, 0),
-		 glm::vec3(0, 1, 0)
-	 );
+	 //// // Model matrix : an identity matrix (wil be at the origin) // //
+	 //glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
+	 //glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
+	 //glm::mat4 modelScale = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+	 //glm::mat4 modelRotate = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-	 // // Model matrix : an identity matrix (wil be at the origin) // //
-	 glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
-	 glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
-	 glm::mat4 modelScale = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
-	 glm::mat4 modelRotate = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-
-	 //glm::mat4 Model = modelScale * modelTranslate;
-	 glm::mat4 Model_cube = modelTranslate * modelRotate * modelScale;
-	 glm::mat4 Model_triangle = glm::mat4(1.0f);
+	 ////glm::mat4 Model = modelScale * modelTranslate;
+	 //glm::mat4 Model_cube = modelTranslate * modelRotate * modelScale;
+	 //glm::mat4 Model_triangle = glm::mat4(1.0f);
 
 
-	 // // Send our transformation matrix to the currently bound shader, in the "MVP" uniform
-	 // // This is done in the main loop since each model will have a different MVP matrix (at least for the M part)
-	 glm::mat4 rotationOffset = glm::rotate(glm::mat4(1.0f), glm::radians(float(time*100)), glm::vec3(0.0f, 1.0f, 1.0f));
-	 glm::mat4 MVP = Projection*View*Model_cube*rotationOffset;
-	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
+	 //// // Send our transformation matrix to the currently bound shader, in the "MVP" uniform
+	 //// // This is done in the main loop since each model will have a different MVP matrix (at least for the M part)
+	 //glm::mat4 rotationOffset = glm::rotate(glm::mat4(1.0f), glm::radians(float(time*100)), glm::vec3(0.0f, 1.0f, 1.0f));
+	 //glm::mat4 MVP = Projection*View*Model_cube*rotationOffset;
+	 ////glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
+
+	 //// // Enable the appropriate attributes in the vertex shader
+	 ////glEnableVertexAttribArray(0);
+	 ////glEnableVertexAttribArray(1);
 
 
-	 // // 1st attribute buffer : vertices // //
-	 glEnableVertexAttribArray(0);
-	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
-	 glVertexAttribPointer(
-	 	0,			// // attribute 0, could be any number but must match the layout in shader // //
-	 	3,			// // size // //
-	 	GL_FLOAT,	// // type // //
-	 	GL_FALSE,	// // normalised  // //
-	 	0,			// // stride // //
-	 	(void*)0	// // array buffer offset // //
-	 	);
+	 //// // 1st attribute buffer : vertices // //
+	 ////glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
+	 ////glVertexAttribPointer(
+	 ////	0,			// // attribute 0, could be any number but must match the layout in shader // //
+	 ////	3,			// // size // //
+	 ////	GL_FLOAT,	// // type // //
+	 ////	GL_FALSE,	// // normalised  // //
+	 ////	0,			// // stride // //
+	 ////	(void*)0	// // array buffer offset // //
+	 ////	);
 
-	 // // 2nd attribute buffer : colours // //
-	 glEnableVertexAttribArray(1);
-	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
-	 glVertexAttribPointer(
-		 1,
-		 3,
-		 GL_FLOAT,
-		 GL_FALSE,
-		 0,
-		 (void*)0
-	 );
-	 // // Draw the triangle! // //
-	 glDrawArrays(GL_TRIANGLES, 0, 12*3);
+	 //// // 2nd attribute buffer : colours // //
+	 //
+	 ////glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
+	 ////glVertexAttribPointer(
+		//// 1,
+		//// 3,
+		//// GL_FLOAT,
+		//// GL_FALSE,
+		//// 0,
+		//// (void*)0
+	 ////);
+	 //// // Draw the triangle! // //
+	 ////glDrawArrays(GL_TRIANGLES, 0, 12*3);
  
-	 MVP = Projection*View*rotationOffset;
-	 glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
-	 // // 1st attribute buffer : vertices // //
-	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
-	 glVertexAttribPointer(
-		 0,			
-		 3,			
-		 GL_FLOAT,	
-		 GL_FALSE,	
-		 sizeof(Vertex),			
-		 (void*)0	
-	 );
+	 //MVP = Projection*View*rotationOffset;
+	 //glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
+	 //// // 1st attribute buffer : vertices // //
+	 ////glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
+	 //glVertexAttribPointer(
+		// 0,			
+		// 3,			
+		// GL_FLOAT,	
+		// GL_FALSE,	
+		// sizeof(Vertex),			
+		// (void*)0	
+	 //);
 	 // // 2nd attribute buffer : colours // //
-	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
-	 glVertexAttribPointer(
-		 1,
-		 3,
-		 GL_FLOAT,
-		 GL_FALSE,
-		 sizeof(Vertex),
-		 (char*)(sizeof(glm::vec3))
-	 );
-	 glDrawArrays(GL_TRIANGLES, 0, 3);
+	 //glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
+	 //glVertexAttribPointer(
+		// 1,
+		// 3,
+		// GL_FLOAT,
+		// GL_FALSE,
+		// sizeof(Vertex),
+		// (char*)(sizeof(glm::vec3))
+	 //);
+	 //glDrawArrays(GL_TRIANGLES, 0, 3*12);
+
+	 glDrawElements(GL_ELEMENT_ARRAY_BUFFER, 3, GL_UNSIGNED_SHORT, 0);
 
 	 glDisableVertexAttribArray(0);
-	 glDisableVertexAttribArray(1);
+	 //glDisableVertexAttribArray(1);
 }
 
 bool poll_events () 

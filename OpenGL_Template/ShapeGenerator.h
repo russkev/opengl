@@ -26,51 +26,51 @@ namespace ShapeGenerator {
 		ShapeData m_cube;
 
 		// // Set vertices for cube from -1, -1, -1 to 1, 1, 1 
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, 1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, 1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, 1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f, -1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  -1.0f ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
-		//m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, 1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, 1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, 1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f, -1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  -1.0f ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
+		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
 
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f) }); //0
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f) }); //1
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f) }); //2
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f) }); //3
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f) }); //4
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f) }); //5
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f) }); //6
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f) }); //7
+		//m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f) }); //0
+		//m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f) }); //1
+		//m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f) }); //2
+		//m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f) }); //3
+		//m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f) }); //4
+		//m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f) }); //5
+		//m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f) }); //6
+		//m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f) }); //7
 
 
 
