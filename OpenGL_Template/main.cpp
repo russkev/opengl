@@ -26,6 +26,7 @@ struct ApplicationState {
 	GLuint matrixID = 0;
 
 	GLuint VertexBufferID = 0;
+	GLuint VertexArrayID = 0;
 	GLuint ColorBufferID = 0;
 	GLuint IndexBufferID = 0;
 
@@ -143,6 +144,7 @@ void init (ApplicationState& _State)
 	printf("Renderer: %s\n", glGetString(GL_RENDERER));
 	printf("Version:  %s\n", glGetString(GL_VERSION));
 
+#ifdef DEBUG
 	// // Enable the debug callback // //
 	glEnable(GL_DEBUG_OUTPUT);
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -150,6 +152,7 @@ void init (ApplicationState& _State)
 	glDebugMessageControl(
 		GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE
 	);
+#endif // DEBUG
 
 	// // Dark blue background // //
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
@@ -160,19 +163,19 @@ void init (ApplicationState& _State)
 	glDepthFunc(GL_LESS);
 
 	// // --- Create the VAO (Vertex Array Object) --- // //
-	GLuint VertexArrayID;
-	glGenVertexArrays(1, &VertexArrayID);
-	glBindVertexArray(VertexArrayID);
+	//GLuint VertexArrayID;
+	//glGenVertexArrays(1, &VertexArrayID);
+	//glBindVertexArray(VertexArrayID);
 
 	// // Create and compile our GLSL program from the shaders // //
-	GLuint programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
+	_State.programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
 
 	// // Use our shader // //
-	glUseProgram(programID);
+	//glUseProgram(_State.programID);
 
 	// // Get handle for out "MVP" uniform. MVP = Model View Projection // //
 	// // Only during initialization // //
-	_State.matrixID = glGetUniformLocation(programID, "MVP");
+	_State.matrixID = glGetUniformLocation(_State.programID, "MVP");
 
 	//static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
 	//static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
@@ -180,11 +183,20 @@ void init (ApplicationState& _State)
 
 	GLfloat verts[] =
 	{
-		+0.0f, +0.0f,
-		+1.0f, +1.0f,
-		-1.0f, +1.0f,
-		-1.0f, -1.0f,
-		+1.0f, -1.0f,
+		+0.0f, +0.0f, +0.0f,
+		+1.0f, +1.0f, +0.0f,
+		-1.0f, +1.0f, +0.0f,
+		-1.0f, -1.0f, +0.0f,
+		+1.0f, -1.0f, +0.0f,
+	};
+
+	GLfloat verts2[] =
+	{
+		+0.3f, +0.3f, +0.0f,
+		+0.7f, +0.7f, +0.0f,
+		-0.7f, +0.7f, +0.0f,
+		-0.7f, -0.7f, +0.0f,
+		+0.7f, -0.7f, +0.0f,
 	};
 
 	static GLushort indeces[] = {
@@ -205,25 +217,32 @@ void init (ApplicationState& _State)
 	//glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
 	//glBufferData(GL_ARRAY_BUFFER, g_buffer_data_triangle.sizeVertices(), &g_buffer_data_triangle.vertices.front(), GL_STATIC_DRAW);
 
-	// // Push triangle vertices:
+	// // Push triangle vertices graphics card memory (location: VertexBufferID):
 	glGenBuffers(1, &_State.VertexBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 
-	// // Rig up vertex array:
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	// // TEST // // 
+	GLuint testID;
+	glGenBuffers(1, &testID);
+	glBindBuffer(GL_ARRAY_BUFFER, testID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verts2), verts2, GL_STATIC_DRAW);
+	// // TEST // // 
 
-
-	// // Push triangle indeces:
+	// // Push triangle indeces to graphics card memory (location: IndexBufferID):
 	glGenBuffers(1, &_State.IndexBufferID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indeces), indeces, GL_STATIC_DRAW);
 
+	// // Generate the Vertex Aray Object (VAO)
+	// // This will later store all the information about the what is actually in the vertex buffer
+	glGenVertexArrays(1, &_State.VertexArrayID);
+	glBindVertexArray(_State.VertexArrayID);
 
-
-
-
+	// // Open the VAO in order for it to be written to
+	glEnableVertexArrayAttrib(_State.VertexArrayID, 0);
+	// // Store information about the buffer using the latest GL_ARRAY_BUFFER to be called.
+	glVertexAttribPointer(0, 3u, GL_FLOAT, GL_FALSE, 0, 0);
 
 	return;
 }
@@ -243,69 +262,9 @@ void render_frame (ApplicationState& _State)
 	// // This clears both the colour buffer and the depth buffer at the same time
 	// // 
 	 glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
-	 
-
-	  // Array of three vectors which represent the three vertices // //
-	 //static const glm::vec3 g_vertex_buffer_data_cube[] = {
-		// glm::vec3(-1.0f,-1.0f,-1.0f),
-		// glm::vec3(-1.0f,-1.0f, 1.0f),
-		// glm::vec3(-1.0f, 1.0f, 1.0f),
-		// glm::vec3(1.0f,  1.0f,-1.0f),
-		// glm::vec3(-1.0f,-1.0f,-1.0f),
-		// glm::vec3(-1.0f, 1.0f,-1.0f),
-		// glm::vec3(1.0f, -1.0f, 1.0f),
-		// glm::vec3(-1.0f,-1.0f,-1.0f),
-		// glm::vec3(1.0f, -1.0f,-1.0f),
-		// glm::vec3(1.0f,  1.0f,-1.0f),
-		// glm::vec3(1.0f, -1.0f,-1.0f),
-		// glm::vec3(-1.0f,-1.0f,-1.0f),
-		// glm::vec3(-1.0f,-1.0f,-1.0f),
-		// glm::vec3(-1.0f, 1.0f, 1.0f),
-		// glm::vec3(-1.0f, 1.0f,-1.0f),
-		// glm::vec3(1.0f,-1.0f,  1.0f),
-		// glm::vec3(-1.0f,-1.0f, 1.0f),
-		// glm::vec3(-1.0f,-1.0f,-1.0f),
-		// glm::vec3(-1.0f, 1.0f, 1.0f),
-		// glm::vec3(-1.0f,-1.0f, 1.0f),
-		// glm::vec3(1.0f,-1.0f,  1.0f),
-		// glm::vec3(1.0f, 1.0f,  1.0f),
-		// glm::vec3(1.0f,-1.0f, -1.0f),
-		// glm::vec3(1.0f, 1.0f, -1.0f),
-		// glm::vec3(1.0f,-1.0f, -1.0f),
-		// glm::vec3(1.0f, 1.0f,  1.0f),
-		// glm::vec3(1.0f,-1.0f,  1.0f),
-		// glm::vec3(1.0f, 1.0f,  1.0f),
-		// glm::vec3(1.0f, 1.0f, -1.0f),
-		// glm::vec3(-1.0f, 1.0f,-1.0f),
-		// glm::vec3(1.0f, 1.0f,  1.0f),
-		// glm::vec3(-1.0f, 1.0f,-1.0f),
-		// glm::vec3(-1.0f, 1.0f, 1.0f),
-		// glm::vec3(1.0f, 1.0f,  1.0f),
-		// glm::vec3(-1.0f, 1.0f, 1.0f),
-		// glm::vec3(1.0f,-1.0f,  1.0f)
-	 //};
+	 glUseProgram(_State.programID);
 
 	 _State.time = _State.freqMultiplier * SDL_GetPerformanceCounter();
-	
-	 //static glm::tvec3<GLfloat> g_color_buffer_data_cube[12 * 3 * 3];
-
-	 // // Change colours of cube over time // //
-	 //for (int i = 0; i < 12 * 3 * 3; ++i) {
-		// for (int j = 0; j < 3; ++j) {
-		//	 if (g_vertex_buffer_data_cube[i][j] == 1) {
-		//		 if (fmod(GLfloat(time), 2.0f) < 1) {
-		//			 g_color_buffer_data_cube[i][j] = fmod(GLfloat(time), 1.0f);
-		//		 }
-		//		 else {
-		//			 g_color_buffer_data_cube[i][j] = 2 - fmod(GLfloat(time), 2.0f);
-		//		 }
-		//	 }
-		//	 else {
-		//		 g_color_buffer_data_cube[i][j] = 0;
-		//	 }
-		//}
-	 //};
 
 	 //glGenBuffers(1, &VertexBuffer[0]);
 	 //glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
@@ -315,38 +274,38 @@ void render_frame (ApplicationState& _State)
 	 //glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
 	 //glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_cube), g_color_buffer_data_cube, GL_STATIC_DRAW);
 
-	 ////int temp = SDL_GetWindowSurface(_State.st_window)->w;
-	 //// // Projection matrix : 45 degree Field of View, display range : 0.1 <-> 100 units // //
-	 //glm::mat4 Projection = glm::perspective(glm::radians(30.0f), float(SDL_GetWindowSurface(_State.st_window)->w) / SDL_GetWindowSurface(_State.st_window)->h, 0.1f, 100.0f);
-	 //// // Orthographic projection // //
-	 ////glm::mat4 Projection = glm::ortho(-2.0f, 2.0f, -2.0f, 1.556f, 0.1f, 100.0f);
+	 //int temp = SDL_GetWindowSurface(_State.st_window)->w;
+	 // // Projection matrix : 45 degree Field of View, display range : 0.1 <-> 100 units // //
+	 glm::mat4 Projection = glm::perspective(glm::radians(30.0f), float(SDL_GetWindowSurface(_State.st_window)->w) / SDL_GetWindowSurface(_State.st_window)->h, 0.1f, 100.0f);
+	 // // Orthographic projection // //
+	 //glm::mat4 Projection = glm::ortho(-2.0f, 2.0f, -2.0f, 1.556f, 0.1f, 100.0f);
 
-	 //// // Camera Matrix // //
-	 //glm::mat4 View = glm::lookAt(
-		// glm::vec3(4, 4, 3),
-		// glm::vec3(0, 0, 0),
-		// glm::vec3(0, 1, 0)
-	 //);
+	 // // Camera Matrix // //
+	 glm::mat4 View = glm::lookAt(
+		 glm::vec3(4, 4, 3),
+		 glm::vec3(0, 0, 0),
+		 glm::vec3(0, 1, 0)
+	 );
 
-	 //// // Model matrix : an identity matrix (wil be at the origin) // //
-	 //glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
-	 //glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
-	 //glm::mat4 modelScale = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
-	 //glm::mat4 modelRotate = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	 // // Model matrix : an identity matrix (wil be at the origin) // //
+	 glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
+	 glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
+	 glm::mat4 modelScale = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+	 glm::mat4 modelRotate = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-	 ////glm::mat4 Model = modelScale * modelTranslate;
-	 //glm::mat4 Model_cube = modelTranslate * modelRotate * modelScale;
-	 //glm::mat4 Model_triangle = glm::mat4(1.0f);
+	 //glm::mat4 Model = modelScale * modelTranslate;
+	 glm::mat4 Model_cube = modelTranslate * modelRotate * modelScale;
+	 glm::mat4 Model_triangle = glm::mat4(1.0f);
 
 
 	 //// // Send our transformation matrix to the currently bound shader, in the "MVP" uniform
 	 //// // This is done in the main loop since each model will have a different MVP matrix (at least for the M part)
-	 //glm::mat4 rotationOffset = glm::rotate(glm::mat4(1.0f), glm::radians(float(time*100)), glm::vec3(0.0f, 1.0f, 1.0f));
+	 glm::mat4 rotationOffset = glm::rotate(glm::mat4(1.0f), glm::radians(float(_State.time*100)), glm::vec3(0.0f, 1.0f, 1.0f));
 	 //glm::mat4 MVP = Projection*View*Model_cube*rotationOffset;
 	 ////glUniformMatrix4fv(_State.matrixID, 1, GL_FALSE, &MVP[0][0]);
 
-	 //// // Enable the appropriate attributes in the vertex shader
-	 ////glEnableVertexAttribArray(0);
+	 // // Enable the appropriate attributes in the vertex shader
+	 //glEnableVertexAttribArray(0);
 	 ////glEnableVertexAttribArray(1);
 
 
@@ -375,7 +334,9 @@ void render_frame (ApplicationState& _State)
 	 //// // Draw the triangle! // //
 	 ////glDrawArrays(GL_TRIANGLES, 0, 12*3);
  
-	 //MVP = Projection*View*rotationOffset;
+	 //glm::mat4 MVP = Projection*View*rotationOffset;
+	 //glBindVertexArray(_State.VertexBufferID);
+	 //
 	 //glUniformMatrix4fv(_State.matrixID, 1, GL_FALSE, &MVP[0][0]);
 	 //// // 1st attribute buffer : vertices // //
 	 ////glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
@@ -388,22 +349,31 @@ void render_frame (ApplicationState& _State)
 		// (void*)0	
 	 //);
 	 // // 2nd attribute buffer : colours // //
-	 //glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
+	 //glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
 	 //glVertexAttribPointer(
-		// 1,
-		// 3,
+		// 0,
+		// 2,
 		// GL_FLOAT,
 		// GL_FALSE,
-		// sizeof(Vertex),
-		// (char*)(sizeof(glm::vec3))
+		// 0,
+		// (void*)0
 	 //);
 	 //glDrawArrays(GL_TRIANGLES, 0, 3*12);
+
+
+	 glm::mat4 MVP = glm::mat4();
+	 glUniformMatrix4fv(_State.matrixID, 1u, GL_FALSE, &MVP[0][0]);
+
+	 glBindVertexArray(_State.VertexArrayID);
+	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
+	 glDrawElements(GL_TRIANGLES, 6u, GL_UNSIGNED_SHORT, nullptr);
 	
 
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
-	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, nullptr);
+	//glDrawArrays(GL_TRIANGLES, 0, 3);
+	//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, nullptr);
 
-	glDisableVertexAttribArray(0);
+	//glDisableVertexAttribArray(0);
 	//glDisableVertexAttribArray(1);
 }
 
