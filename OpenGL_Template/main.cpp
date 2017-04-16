@@ -21,8 +21,29 @@
 //#include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-static SDL_Window*		st_window = nullptr;
-static SDL_GLContext	st_opengl = nullptr;
+struct ApplicationState {
+	GLuint programID = 0;
+	GLuint matrixID = 0;
+
+	GLuint VertexBufferID = 0;
+	GLuint ColorBufferID = 0;
+	GLuint IndexBufferID = 0;
+
+
+	double time = 0.0;
+	double freqMultiplier = 0.0;
+
+	SDL_Window*		st_window = nullptr;
+	SDL_GLContext	st_opengl = nullptr;
+
+	ApplicationState() {
+		if (st_window) SDL_DestroyWindow(st_window);
+		if (st_opengl) SDL_GL_DeleteContext(st_opengl);
+	}
+
+};
+
+
 
 struct opengl_attr_pair
 {
@@ -79,23 +100,13 @@ static void __stdcall openglCallbackFunction(
 
 
 //// -----INIT----- ////
-void init (
-	GLuint& matrixID, 
-	std::vector<GLuint>& VertexBuffer, 
-	std::vector<GLuint>& ColorBuffer, 
-	double& time,
-	double &freqMultiplier)
+void init (ApplicationState& _State)
 {
 #ifdef _DEBUG
 	SDL_LogSetAllPriority (SDL_LOG_PRIORITY_VERBOSE);
 #endif
 	SDL_Init (SDL_INIT_EVERYTHING);
-	std::atexit([] ()
-	{
-		if (st_window) SDL_DestroyWindow(st_window);
-		if (st_opengl) SDL_GL_DeleteContext(st_opengl);
-		SDL_Quit();
-	});
+	std::atexit(SDL_Quit);
 
 	for(const auto& it : st_config)
 	{
@@ -109,16 +120,16 @@ void init (
 
 	// // Create window // //
 	auto width = 1280u, height = 720u;
-	st_window = SDL_CreateWindow ("Tutorial 04 - A Cloured Cube", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
-	assert (st_window != nullptr);
-	st_opengl = SDL_GL_CreateContext (st_window);
-	assert (st_opengl != nullptr);
+	_State.st_window = SDL_CreateWindow ("Tutorial 04 - A Cloured Cube", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
+	assert (_State.st_window != nullptr);
+	_State.st_opengl = SDL_GL_CreateContext (_State.st_window);
+	assert (_State.st_opengl != nullptr);
 
 	// High precision clock interval
-	freqMultiplier = 1.0 / SDL_GetPerformanceFrequency();
+	_State.freqMultiplier = 1.0 / SDL_GetPerformanceFrequency();
 
 	// Initial time in clock ticks
-	time = freqMultiplier * SDL_GetPerformanceCounter();
+	_State.time = _State.freqMultiplier * SDL_GetPerformanceCounter();
 
 	// // Initialise GLEW // //
 	glewExperimental = true;
@@ -161,7 +172,7 @@ void init (
 
 	// // Get handle for out "MVP" uniform. MVP = Model View Projection // //
 	// // Only during initialization // //
-	matrixID = glGetUniformLocation(programID, "MVP");
+	_State.matrixID = glGetUniformLocation(programID, "MVP");
 
 	//static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
 	//static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
@@ -194,38 +205,35 @@ void init (
 	//glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
 	//glBufferData(GL_ARRAY_BUFFER, g_buffer_data_triangle.sizeVertices(), &g_buffer_data_triangle.vertices.front(), GL_STATIC_DRAW);
 
-	glGenBuffers(1, &VertexBuffer[1]);
-	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
+	// // Push triangle vertices:
+	glGenBuffers(1, &_State.VertexBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(
-		 0,			
-		 2,			
-		 GL_FLOAT,	
-		 GL_FALSE,	
-		 0,			
-		 0	
-	 );
 
-	GLuint indexBufferID;
-	glGenBuffers(1, &indexBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, indexBufferID);
+	// // Rig up vertex array:
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+
+	// // Push triangle indeces:
+	glGenBuffers(1, &_State.IndexBufferID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indeces), indeces, GL_STATIC_DRAW);
+
+
+
+
+
 
 	return;
 }
 
-void finish_frame () 
+void finish_frame (ApplicationState& _State)
 {
-	SDL_GL_SwapWindow (st_window);
+	SDL_GL_SwapWindow (_State.st_window);
 }
 
-void render_frame (
-	const GLuint& matrixID, 
-	std::vector<GLuint>& VertexBuffer, 
-	std::vector<GLuint>& ColorBuffer, 
-	double& time,
-	const double& freqMultiplier)
+void render_frame (ApplicationState& _State)
 {
 
 
@@ -278,7 +286,7 @@ void render_frame (
 		// glm::vec3(1.0f,-1.0f,  1.0f)
 	 //};
 
-	 time = freqMultiplier * SDL_GetPerformanceCounter();
+	 _State.time = _State.freqMultiplier * SDL_GetPerformanceCounter();
 	
 	 //static glm::tvec3<GLfloat> g_color_buffer_data_cube[12 * 3 * 3];
 
@@ -307,9 +315,9 @@ void render_frame (
 	 //glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
 	 //glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_cube), g_color_buffer_data_cube, GL_STATIC_DRAW);
 
-	 ////int temp = SDL_GetWindowSurface(st_window)->w;
+	 ////int temp = SDL_GetWindowSurface(_State.st_window)->w;
 	 //// // Projection matrix : 45 degree Field of View, display range : 0.1 <-> 100 units // //
-	 //glm::mat4 Projection = glm::perspective(glm::radians(30.0f), float(SDL_GetWindowSurface(st_window)->w) / SDL_GetWindowSurface(st_window)->h, 0.1f, 100.0f);
+	 //glm::mat4 Projection = glm::perspective(glm::radians(30.0f), float(SDL_GetWindowSurface(_State.st_window)->w) / SDL_GetWindowSurface(_State.st_window)->h, 0.1f, 100.0f);
 	 //// // Orthographic projection // //
 	 ////glm::mat4 Projection = glm::ortho(-2.0f, 2.0f, -2.0f, 1.556f, 0.1f, 100.0f);
 
@@ -335,7 +343,7 @@ void render_frame (
 	 //// // This is done in the main loop since each model will have a different MVP matrix (at least for the M part)
 	 //glm::mat4 rotationOffset = glm::rotate(glm::mat4(1.0f), glm::radians(float(time*100)), glm::vec3(0.0f, 1.0f, 1.0f));
 	 //glm::mat4 MVP = Projection*View*Model_cube*rotationOffset;
-	 ////glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
+	 ////glUniformMatrix4fv(_State.matrixID, 1, GL_FALSE, &MVP[0][0]);
 
 	 //// // Enable the appropriate attributes in the vertex shader
 	 ////glEnableVertexAttribArray(0);
@@ -368,7 +376,7 @@ void render_frame (
 	 ////glDrawArrays(GL_TRIANGLES, 0, 12*3);
  
 	 //MVP = Projection*View*rotationOffset;
-	 //glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
+	 //glUniformMatrix4fv(_State.matrixID, 1, GL_FALSE, &MVP[0][0]);
 	 //// // 1st attribute buffer : vertices // //
 	 ////glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
 	 //glVertexAttribPointer(
@@ -390,11 +398,13 @@ void render_frame (
 		// (char*)(sizeof(glm::vec3))
 	 //);
 	 //glDrawArrays(GL_TRIANGLES, 0, 3*12);
+	
 
-	 glDrawElements(GL_ELEMENT_ARRAY_BUFFER, 3, GL_UNSIGNED_SHORT, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
+	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, nullptr);
 
-	 glDisableVertexAttribArray(0);
-	 //glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(0);
+	//glDisableVertexAttribArray(1);
 }
 
 bool poll_events () 
@@ -410,19 +420,12 @@ bool poll_events ()
 
 int main(int, char**)
 {
-	GLuint matrixID;
-	double time, freqMultiplier;
-	std::vector<GLuint> VertexBuffer, ColorBuffer;
-	VertexBuffer.resize(2); ColorBuffer.resize(2);
-
-
-	init(matrixID, VertexBuffer, ColorBuffer, time, freqMultiplier);
-
-
+	ApplicationState _State;
+	init(_State);
 	while (poll_events ())
 	{
-		render_frame (matrixID, VertexBuffer, ColorBuffer, time, freqMultiplier);
-		finish_frame ();
+		render_frame (_State);
+		finish_frame (_State);
 	}
 
 	return 0;
