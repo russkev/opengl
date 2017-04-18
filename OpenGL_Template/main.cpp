@@ -30,6 +30,8 @@ struct ApplicationState {
 	GLuint ColorBufferID = 0;
 	GLuint IndexBufferID = 0;
 
+	GLuint numBuffers = 1;
+
 
 	double time = 0.0;
 	double freqMultiplier = 0.0;
@@ -177,7 +179,7 @@ void init (ApplicationState& _State)
 	// // Only during initialization // //
 	_State.matrixID = glGetUniformLocation(_State.programID, "MVP");
 
-	//static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
+	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
 	//static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
 
 
@@ -192,15 +194,13 @@ void init (ApplicationState& _State)
 
 	GLfloat verts2[] =
 	{
-		+0.3f, +0.3f, +0.0f,
-		+0.7f, +0.7f, +0.0f,
-		-0.7f, +0.7f, +0.0f,
-		-0.7f, -0.7f, +0.0f,
-		+0.7f, -0.7f, +0.0f,
+		+0.3f, +0.3f, +0.0f, +0.3f, +0.3f, +0.0f,
+		+0.7f, +0.7f, +0.0f, +0.7f, +0.7f, +0.0f,
+		-0.7f, +0.7f, +0.0f, +0.7f, +0.7f, +0.0f,
 	};
 
 	static GLushort indeces[] = {
-		0,1,2, 0,3,4
+		0,1,2
 	};
 
 	// // TEST // //
@@ -220,29 +220,37 @@ void init (ApplicationState& _State)
 	// // Push triangle vertices graphics card memory (location: VertexBufferID):
 	glGenBuffers(1, &_State.VertexBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_triangle.sizeVertices(), &g_buffer_data_triangle.vertices.front(), GL_STATIC_DRAW);
 
-	// // TEST // // 
-	GLuint testID;
-	glGenBuffers(1, &testID);
-	glBindBuffer(GL_ARRAY_BUFFER, testID);
+	 // Push triangle vertices graphics card memory (location: VertexBufferID):
+	glGenBuffers(1, &_State.VertexBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verts2), verts2, GL_STATIC_DRAW);
-	// // TEST // // 
 
 	// // Push triangle indeces to graphics card memory (location: IndexBufferID):
-	glGenBuffers(1, &_State.IndexBufferID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indeces), indeces, GL_STATIC_DRAW);
+	glGenBuffers(1, &_State.IndexBufferID);                                          // Create a bufferID
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);                     // Attach it to the Element Array buffer
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indeces), indeces, GL_STATIC_DRAW); // Move the data into the buffer
 
 	// // Generate the Vertex Aray Object (VAO)
 	// // This will later store all the information about the what is actually in the vertex buffer
-	glGenVertexArrays(1, &_State.VertexArrayID);
-	glBindVertexArray(_State.VertexArrayID);
+	glGenVertexArrays(1, &_State.VertexArrayID);    // Create a VAO ID
+	glBindVertexArray(_State.VertexArrayID);		// Attach the Vertex Array reader to the VAO ID
 
 	// // Open the VAO in order for it to be written to
 	glEnableVertexArrayAttrib(_State.VertexArrayID, 0);
 	// // Store information about the buffer using the latest GL_ARRAY_BUFFER to be called.
-	glVertexAttribPointer(0, 3u, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(
+		0,							// // attribute 0, must match the layout in shader // //
+		3u,							// // size (1,2,3 or 4) // //
+		GL_FLOAT,					// // type // //
+		GL_FALSE,					// // normalised  // //
+		sizeof(Vertex),				// // stride // //
+		(void*)0					// // array buffer offset // //
+	);
+	//glVertexAttribPointer(0, 3u, GL_FLOAT, GL_FALSE, 0, 0);
+
+	//glDisableVertexArrayAttrib(_State.VertexArrayID, 0);
 
 	return;
 }
@@ -360,13 +368,15 @@ void render_frame (ApplicationState& _State)
 	 //);
 	 //glDrawArrays(GL_TRIANGLES, 0, 3*12);
 
+	 //glEnableVertexArrayAttrib(_State.VertexArrayID, 0);
+
 
 	 glm::mat4 MVP = glm::mat4();
 	 glUniformMatrix4fv(_State.matrixID, 1u, GL_FALSE, &MVP[0][0]);
 
-	 glBindVertexArray(_State.VertexArrayID);
+	 //glBindVertexArray(_State.VertexArrayID);
 	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
-	 glDrawElements(GL_TRIANGLES, 6u, GL_UNSIGNED_SHORT, nullptr);
+	 glDrawElements(GL_TRIANGLES, 3u, GL_UNSIGNED_SHORT, nullptr);
 	
 
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
@@ -376,6 +386,13 @@ void render_frame (ApplicationState& _State)
 	//glDisableVertexAttribArray(0);
 	//glDisableVertexAttribArray(1);
 }
+void exit(ApplicationState &_State) {
+	glDeleteBuffers(_State.numBuffers, &_State.VertexBufferID);
+	glDeleteBuffers(_State.numBuffers, &_State.ColorBufferID);
+	glDeleteBuffers(_State.numBuffers, &_State.IndexBufferID);
+	glDeleteVertexArrays(_State.numBuffers, &_State.VertexArrayID);
+}
+
 
 bool poll_events () 
 {
@@ -398,5 +415,6 @@ int main(int, char**)
 		finish_frame (_State);
 	}
 
+	exit(_State);
 	return 0;
 }
