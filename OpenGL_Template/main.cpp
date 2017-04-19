@@ -32,6 +32,8 @@ struct ApplicationState {
 
 	GLuint numBuffers = 1;
 
+	glm::mat4 view        = glm::mat4();
+	glm::mat4 projection  = glm::mat4();
 
 	double time = 0.0;
 	double freqMultiplier = 0.0;
@@ -164,79 +166,41 @@ void init (ApplicationState& _State)
 	// // Accept fragment shader if it closer to the camera than the previous one
 	glDepthFunc(GL_LESS);
 
-	// // --- Create the VAO (Vertex Array Object) --- // //
-	//GLuint VertexArrayID;
-	//glGenVertexArrays(1, &VertexArrayID);
-	//glBindVertexArray(VertexArrayID);
-
 	// // Create and compile our GLSL program from the shaders // //
 	_State.programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
-
-	// // Use our shader // //
-	//glUseProgram(_State.programID);
 
 	// // Get handle for out "MVP" uniform. MVP = Model View Projection // //
 	// // Only during initialization // //
 	_State.matrixID = glGetUniformLocation(_State.programID, "MVP");
 
+	_State.projection = glm::perspective(glm::radians(50.0f), float(width) / float(height), 0.1f, 100.0f);
+	_State.view       = glm::lookAt(glm::vec3(4, 4, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+
 	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
 	//static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
-
-
-	GLfloat verts[] =
-	{
-		+0.0f, +0.0f, +0.0f,
-		+1.0f, +1.0f, +0.0f,
-		-1.0f, +1.0f, +0.0f,
-		-1.0f, -1.0f, +0.0f,
-		+1.0f, -1.0f, +0.0f,
-	};
-
-	GLfloat verts2[] =
-	{
-		+0.3f, +0.3f, +0.0f, +0.3f, +0.3f, +0.0f,
-		+0.7f, +0.7f, +0.0f, +0.7f, +0.7f, +0.0f,
-		-0.7f, +0.7f, +0.0f, +0.7f, +0.7f, +0.0f,
-	};
-
-	static GLushort indeces[] = {
-		0,1,2
-	};
 
 	// // TEST // //
 
 	loadBMP_custom BMP1 ("uvtemplate.bmp");
 	// // END TEST // //
 
-	// // Generate one buffer, put the resulting identifier in vertex buffer // //
-	// // The following commands will talk about our 'vertexbuffer' buffer // //
-	// // Give our vertices to OpenGL
-	// // All this code needs to be in blocks of the three lines
-
-	//glGenBuffers(1, &VertexBuffer[1]);
-	//glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
-	//glBufferData(GL_ARRAY_BUFFER, g_buffer_data_triangle.sizeVertices(), &g_buffer_data_triangle.vertices.front(), GL_STATIC_DRAW);
 
 	// // Push triangle vertices graphics card memory (location: VertexBufferID):
 	glGenBuffers(1, &_State.VertexBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
 	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_triangle.sizeVertices(), &g_buffer_data_triangle.vertices.front(), GL_STATIC_DRAW);
 
-	 // Push triangle vertices graphics card memory (location: VertexBufferID):
-	glGenBuffers(1, &_State.VertexBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verts2), verts2, GL_STATIC_DRAW);
-
 	// // Push triangle indeces to graphics card memory (location: IndexBufferID):
 	glGenBuffers(1, &_State.IndexBufferID);                                          // Create a bufferID
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);                     // Attach it to the Element Array buffer
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indeces), indeces, GL_STATIC_DRAW); // Move the data into the buffer
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_triangle.sizeIndeces(), g_buffer_data_triangle.indeces.data(), GL_STATIC_DRAW); // Move the data into the buffer
 
 	// // Generate the Vertex Aray Object (VAO)
 	// // This will later store all the information about the what is actually in the vertex buffer
 	glGenVertexArrays(1, &_State.VertexArrayID);    // Create a VAO ID
 	glBindVertexArray(_State.VertexArrayID);		// Attach the Vertex Array reader to the VAO ID
 
+	const Vertex* base = nullptr;
 	// // Open the VAO in order for it to be written to
 	glEnableVertexArrayAttrib(_State.VertexArrayID, 0);
 	// // Store information about the buffer using the latest GL_ARRAY_BUFFER to be called.
@@ -246,11 +210,12 @@ void init (ApplicationState& _State)
 		GL_FLOAT,					// // type // //
 		GL_FALSE,					// // normalised  // //
 		sizeof(Vertex),				// // stride // //
-		(void*)0					// // array buffer offset // //
+		&base->position				// // array buffer offset // //
 	);
-	//glVertexAttribPointer(0, 3u, GL_FLOAT, GL_FALSE, 0, 0);
-
-	//glDisableVertexArrayAttrib(_State.VertexArrayID, 0);
+	// Both colour and vertex information are heald in the same buffer
+	// So that doesn't need to be done again for the colour.
+	glEnableVertexArrayAttrib(_State.VertexArrayID, 1);
+	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), &base->color);
 
 	return;
 }
@@ -274,26 +239,6 @@ void render_frame (ApplicationState& _State)
 
 	 _State.time = _State.freqMultiplier * SDL_GetPerformanceCounter();
 
-	 //glGenBuffers(1, &VertexBuffer[0]);
-	 //glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
-	 //glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_cube), g_vertex_buffer_data_cube, GL_STATIC_DRAW);
-
-	 //glGenBuffers(1, &ColorBuffer[0]);
-	 //glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
-	 //glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_cube), g_color_buffer_data_cube, GL_STATIC_DRAW);
-
-	 //int temp = SDL_GetWindowSurface(_State.st_window)->w;
-	 // // Projection matrix : 45 degree Field of View, display range : 0.1 <-> 100 units // //
-	 glm::mat4 Projection = glm::perspective(glm::radians(30.0f), float(SDL_GetWindowSurface(_State.st_window)->w) / SDL_GetWindowSurface(_State.st_window)->h, 0.1f, 100.0f);
-	 // // Orthographic projection // //
-	 //glm::mat4 Projection = glm::ortho(-2.0f, 2.0f, -2.0f, 1.556f, 0.1f, 100.0f);
-
-	 // // Camera Matrix // //
-	 glm::mat4 View = glm::lookAt(
-		 glm::vec3(4, 4, 3),
-		 glm::vec3(0, 0, 0),
-		 glm::vec3(0, 1, 0)
-	 );
 
 	 // // Model matrix : an identity matrix (wil be at the origin) // //
 	 glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
