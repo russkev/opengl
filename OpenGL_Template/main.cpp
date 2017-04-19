@@ -240,96 +240,30 @@ void render_frame (ApplicationState& _State)
 	 _State.time = _State.freqMultiplier * SDL_GetPerformanceCounter();
 
 
-	 // // Model matrix : an identity matrix (wil be at the origin) // //
+	 // // ----- MATRIX TRANSFORMATIONS ----- // //
 	 glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
 	 glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
 	 glm::mat4 modelScale = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
 	 glm::mat4 modelRotate = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-	 //glm::mat4 Model = modelScale * modelTranslate;
 	 glm::mat4 Model_cube = modelTranslate * modelRotate * modelScale;
 	 glm::mat4 Model_triangle = glm::mat4(1.0f);
 
 
-	 //// // Send our transformation matrix to the currently bound shader, in the "MVP" uniform
-	 //// // This is done in the main loop since each model will have a different MVP matrix (at least for the M part)
 	 glm::mat4 rotationOffset = glm::rotate(glm::mat4(1.0f), glm::radians(float(_State.time*100)), glm::vec3(0.0f, 1.0f, 1.0f));
-	 //glm::mat4 MVP = Projection*View*Model_cube*rotationOffset;
-	 ////glUniformMatrix4fv(_State.matrixID, 1, GL_FALSE, &MVP[0][0]);
-
-	 // // Enable the appropriate attributes in the vertex shader
-	 //glEnableVertexAttribArray(0);
-	 ////glEnableVertexAttribArray(1);
+	 glm::mat4 MVP = _State.projection*_State.view*Model_cube*rotationOffset;
+	 // // ----- END MATRIX TRANSFORMATIONS ----- // //
 
 
-	 //// // 1st attribute buffer : vertices // //
-	 ////glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
-	 ////glVertexAttribPointer(
-	 ////	0,			// // attribute 0, could be any number but must match the layout in shader // //
-	 ////	3,			// // size // //
-	 ////	GL_FLOAT,	// // type // //
-	 ////	GL_FALSE,	// // normalised  // //
-	 ////	0,			// // stride // //
-	 ////	(void*)0	// // array buffer offset // //
-	 ////	);
-
-	 //// // 2nd attribute buffer : colours // //
-	 //
-	 ////glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
-	 ////glVertexAttribPointer(
-		//// 1,
-		//// 3,
-		//// GL_FLOAT,
-		//// GL_FALSE,
-		//// 0,
-		//// (void*)0
-	 ////);
-	 //// // Draw the triangle! // //
-	 ////glDrawArrays(GL_TRIANGLES, 0, 12*3);
- 
-	 //glm::mat4 MVP = Projection*View*rotationOffset;
-	 //glBindVertexArray(_State.VertexBufferID);
-	 //
-	 //glUniformMatrix4fv(_State.matrixID, 1, GL_FALSE, &MVP[0][0]);
-	 //// // 1st attribute buffer : vertices // //
-	 ////glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
-	 //glVertexAttribPointer(
-		// 0,			
-		// 3,			
-		// GL_FLOAT,	
-		// GL_FALSE,	
-		// sizeof(Vertex),			
-		// (void*)0	
-	 //);
-	 // // 2nd attribute buffer : colours // //
-	 //glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
-	 //glVertexAttribPointer(
-		// 0,
-		// 2,
-		// GL_FLOAT,
-		// GL_FALSE,
-		// 0,
-		// (void*)0
-	 //);
-	 //glDrawArrays(GL_TRIANGLES, 0, 3*12);
-
-	 //glEnableVertexArrayAttrib(_State.VertexArrayID, 0);
-
-
-	 glm::mat4 MVP = glm::mat4();
+	 //Send Matrix to the currently bound shader
 	 glUniformMatrix4fv(_State.matrixID, 1u, GL_FALSE, &MVP[0][0]);
 
-	 //glBindVertexArray(_State.VertexArrayID);
+	 //Tell OpenGL which array buffer to use for upcoming draw call
 	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
+
+	 //Draw call uses all the relevent OpenGL global variables set up to this point
 	 glDrawElements(GL_TRIANGLES, 3u, GL_UNSIGNED_SHORT, nullptr);
-	
 
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
-	//glDrawArrays(GL_TRIANGLES, 0, 3);
-	//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, nullptr);
-
-	//glDisableVertexAttribArray(0);
-	//glDisableVertexAttribArray(1);
 }
 void exit(ApplicationState &_State) {
 	glDeleteBuffers(_State.numBuffers, &_State.VertexBufferID);
