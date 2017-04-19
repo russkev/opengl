@@ -9,16 +9,46 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include <memory>
 
 #include "loadShader.hpp"
 #include "loadBMP_custom.h"
+#include "Vertex.h"
+#include "ShapeData.h"
+#include "ShapeGenerator.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 //#include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-static SDL_Window*		st_window = nullptr;
-static SDL_GLContext	st_opengl = nullptr;
+struct ApplicationState {
+	GLuint programID = 0;
+	GLuint matrixID = 0;
+
+	GLuint VertexBufferID = 0;
+	GLuint VertexArrayID = 0;
+	GLuint ColorBufferID = 0;
+	GLuint IndexBufferID = 0;
+
+	GLuint numBuffers = 1;
+
+	glm::mat4 view        = glm::mat4();
+	glm::mat4 projection  = glm::mat4();
+
+	double time = 0.0;
+	double freqMultiplier = 0.0;
+
+	SDL_Window*		st_window = nullptr;
+	SDL_GLContext	st_opengl = nullptr;
+
+	ApplicationState() {
+		if (st_window) SDL_DestroyWindow(st_window);
+		if (st_opengl) SDL_GL_DeleteContext(st_opengl);
+	}
+
+};
+
+
 
 struct opengl_attr_pair
 {
@@ -74,25 +104,14 @@ static void __stdcall openglCallbackFunction(
 }
 
 
-
-std::vector<glm::mat4> init (
-	GLuint& programID, 
-	GLuint& matrixID, 
-	std::vector<GLuint>& VertexBuffer, 
-	std::vector<GLuint>& ColorBuffer, 
-	double& time,
-	double &freqMultiplier)
+//// -----INIT----- ////
+void init (ApplicationState& _State)
 {
 #ifdef _DEBUG
 	SDL_LogSetAllPriority (SDL_LOG_PRIORITY_VERBOSE);
 #endif
 	SDL_Init (SDL_INIT_EVERYTHING);
-	std::atexit([] ()
-	{
-		if (st_window) SDL_DestroyWindow(st_window);
-		if (st_opengl) SDL_GL_DeleteContext(st_opengl);
-		SDL_Quit();
-	});
+	std::atexit(SDL_Quit);
 
 	for(const auto& it : st_config)
 	{
@@ -106,16 +125,16 @@ std::vector<glm::mat4> init (
 
 	// // Create window // //
 	auto width = 1280u, height = 720u;
-	st_window = SDL_CreateWindow ("Tutorial 04 - A Cloured Cube", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
-	assert (st_window != nullptr);
-	st_opengl = SDL_GL_CreateContext (st_window);
-	assert (st_opengl != nullptr);
+	_State.st_window = SDL_CreateWindow ("Tutorial 04 - A Cloured Cube", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
+	assert (_State.st_window != nullptr);
+	_State.st_opengl = SDL_GL_CreateContext (_State.st_window);
+	assert (_State.st_opengl != nullptr);
 
 	// High precision clock interval
-	freqMultiplier = 1.0 / SDL_GetPerformanceFrequency();
+	_State.freqMultiplier = 1.0 / SDL_GetPerformanceFrequency();
 
 	// Initial time in clock ticks
-	time = freqMultiplier * SDL_GetPerformanceCounter();
+	_State.time = _State.freqMultiplier * SDL_GetPerformanceCounter();
 
 	// // Initialise GLEW // //
 	glewExperimental = true;
@@ -129,6 +148,7 @@ std::vector<glm::mat4> init (
 	printf("Renderer: %s\n", glGetString(GL_RENDERER));
 	printf("Version:  %s\n", glGetString(GL_VERSION));
 
+#ifdef DEBUG
 	// // Enable the debug callback // //
 	glEnable(GL_DEBUG_OUTPUT);
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -136,6 +156,7 @@ std::vector<glm::mat4> init (
 	glDebugMessageControl(
 		GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE
 	);
+#endif // DEBUG
 
 	// // Dark blue background // //
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
@@ -145,223 +166,178 @@ std::vector<glm::mat4> init (
 	// // Accept fragment shader if it closer to the camera than the previous one
 	glDepthFunc(GL_LESS);
 
-	// // --- Create the VAO (Vertex Array Object) --- // //
-	GLuint VertexArray1D;
-	glGenVertexArrays(1, &VertexArray1D);
-	glBindVertexArray(VertexArray1D);
-
 	// // Create and compile our GLSL program from the shaders // //
-	programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
+	_State.programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
 
 	// // Get handle for out "MVP" uniform. MVP = Model View Projection // //
 	// // Only during initialization // //
-	matrixID = glGetUniformLocation(programID, "MVP");
+	_State.matrixID = glGetUniformLocation(_State.programID, "MVP");
 
+	_State.projection = glm::perspective(glm::radians(50.0f), float(width) / float(height), 0.1f, 100.0f);
+	_State.view       = glm::lookAt(glm::vec3(4, 4, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
-	// // Projection matrix : 45 degree Field of View, display range : 0.1 <-> 100 units // //
-	glm::mat4 Projection = glm::perspective(glm::radians(30.0f), float(width) / float(height), 0.1f, 100.0f);
-	// // Orthographic projection // //
-	//glm::mat4 Projection = glm::ortho(-2.0f, 2.0f, -2.0f, 1.556f, 0.1f, 100.0f);
-
-	// // Camera Matrix // //
-	glm::mat4 View = glm::lookAt(
-		glm::vec3(4, 4, 3),
-		glm::vec3(0, 0, 0),
-		glm::vec3(0, 1, 0)
-	);
-	
-	// // Model matrix : an identity matrix (wil be at the origin) // //
-	glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
-	glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
-	glm::mat4 modelScale     = glm::scale    (glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
-	glm::mat4 modelRotate	 = glm::rotate   (glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-
-	//glm::mat4 Model = modelScale * modelTranslate;
-	glm::mat4 Model_cube     = modelTranslate * modelRotate * modelScale;
-	glm::mat4 Model_triangle = glm::mat4(1.0f);
-
-	// // Our ModelViewProjection : multiplication of our three matrices
-	std::vector<glm::mat4> MVP;
-	MVP.push_back(Projection * View * Model_cube);
-	MVP.push_back(Projection * View * Model_triangle);
-
-	static const GLfloat g_vertex_buffer_data_triangle[] = {
-		0.0f, 1.0f, 0.0f,
-		-0.5f, 0.0f, 0.0f,
-		0.5f, 0.0f, 0.0f
-	};
-
-	static const GLfloat g_color_buffer_data_triangle[] = {
-		1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 1.0f
-	};
+	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
+	//static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
 
 	// // TEST // //
+
 	loadBMP_custom BMP1 ("uvtemplate.bmp");
 	// // END TEST // //
 
-	// // Generate one buffer, put the resulting identifier in vertex buffer // //
-	// // The following commands will talk about our 'vertexbuffer' buffer // //
-	// // Give our vertices to OpenGL
-	// // All this code needs to be in blocks of the three lines
 
-	glGenBuffers(1, &VertexBuffer[1]);
-	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_triangle), g_vertex_buffer_data_triangle, GL_STATIC_DRAW);
+	// // Push triangle vertices graphics card memory (location: VertexBufferID):
+	glGenBuffers(1, &_State.VertexBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
+	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_triangle.sizeVertices(), &g_buffer_data_triangle.vertices.front(), GL_STATIC_DRAW);
 
-	glGenBuffers(1, &ColorBuffer[1]);
-	glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_triangle), g_color_buffer_data_triangle, GL_STATIC_DRAW);
+	// // Push triangle indeces to graphics card memory (location: IndexBufferID):
+	glGenBuffers(1, &_State.IndexBufferID);                                          // Create a bufferID
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);                     // Attach it to the Element Array buffer
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_triangle.sizeIndeces(), g_buffer_data_triangle.indeces.data(), GL_STATIC_DRAW); // Move the data into the buffer
 
-	return MVP;
+	// // Generate the Vertex Aray Object (VAO)
+	// // This will later store all the information about the what is actually in the vertex buffer
+	glGenVertexArrays(1, &_State.VertexArrayID);    // Create a VAO ID
+	glBindVertexArray(_State.VertexArrayID);		// Attach the Vertex Array reader to the VAO ID
+
+	const Vertex* base = nullptr;
+	// // Open the VAO in order for it to be written to
+	glEnableVertexArrayAttrib(_State.VertexArrayID, 0);
+	// // Store information about the buffer using the latest GL_ARRAY_BUFFER to be called.
+	glVertexAttribPointer(
+		0,							// // attribute 0, must match the layout in shader // //
+		3u,							// // size (1,2,3 or 4) // //
+		GL_FLOAT,					// // type // //
+		GL_FALSE,					// // normalised  // //
+		sizeof(Vertex),				// // stride // //
+		&base->position				// // array buffer offset // //
+	);
+	// Both colour and vertex information are heald in the same buffer
+	// So that doesn't need to be done again for the colour.
+	glEnableVertexArrayAttrib(_State.VertexArrayID, 1);
+	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), &base->color);
+
+	return;
 }
 
-void finish_frame () 
+void finish_frame (ApplicationState& _State)
 {
-	SDL_GL_SwapWindow (st_window);
+	SDL_GL_SwapWindow (_State.st_window);
 }
 
-void render_frame (
-	const GLuint& programID, 
-	const GLuint& matrixID, 
-	std::vector<GLuint>& VertexBuffer, 
-	std::vector<GLuint>& ColorBuffer, 
-	std::vector<glm::mat4> MVP,
-	double& time,
-	const double& freqMultiplier)
+void render_frame (ApplicationState& _State)
 {
-	time = freqMultiplier * SDL_GetPerformanceCounter();
-	
+
+
+
 	// // Tutorial from http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/ // //
 	// // Clear the screen // //
+	// // This clears both the colour buffer and the depth buffer at the same time
+	// // 
 	 glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+	 glUseProgram(_State.programID);
 
-	 // // Use our shader // //
-	 glUseProgram(programID);
-
-	 // // Vertices // //
-	 static const GLfloat g_vertex_buffer_data_cube[] = {
-		 // Front //
-		-1.0f, +1.0f, +1.0f,
-		+1.0f, -1.0f, +1.0f,
-		+1.0f, +1.0f, +1.0f,
-		-1.0f, +1.0f, +1.0f,
-		
-		// Back //
-		-1.0f, -1.0f, -1.0f,
-		+1.0f, -1.0f, -1.0f,
-		+1.0f, +1.0f, -1.0f,
-		-1.0f, +1.0f, -1.0f
-	 };
-
-	 glGenBuffers(1, &VertexBuffer[0]);
-	 glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
-	 glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_cube), g_vertex_buffer_data_cube, GL_STATIC_DRAW);
+	 _State.time = _State.freqMultiplier * SDL_GetPerformanceCounter();
 
 
-	 glEnableVertexAttribArray(0);
-	 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	 // // Model matrix : an identity matrix (wil be at the origin) // //
+	 glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
+	 glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
+	 glm::mat4 modelScale = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+	 glm::mat4 modelRotate = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	 //glm::mat4 Model = modelScale * modelTranslate;
+	 glm::mat4 Model_cube = modelTranslate * modelRotate * modelScale;
+	 glm::mat4 Model_triangle = glm::mat4(1.0f);
 
 
-	 // // Vertices index to draw triangle // //
-	 GLushort indicesCube[] = {
-		 // front
-		 0, 1, 2,	2, 3, 0,
-		 // top
-		 1, 5, 6,	6, 2, 1,
-		 // back
-		 7, 6, 5,	5, 4, 7,
-		 // bottom
-		 4, 0, 3,	3, 7, 4,
-		 // left
-		 4, 5, 1,	1, 0, 4,
-		 // right
-		 3, 2, 6,	6, 7, 3,
-	 };
+	 //// // Send our transformation matrix to the currently bound shader, in the "MVP" uniform
+	 //// // This is done in the main loop since each model will have a different MVP matrix (at least for the M part)
+	 glm::mat4 rotationOffset = glm::rotate(glm::mat4(1.0f), glm::radians(float(_State.time*100)), glm::vec3(0.0f, 1.0f, 1.0f));
+	 //glm::mat4 MVP = Projection*View*Model_cube*rotationOffset;
+	 ////glUniformMatrix4fv(_State.matrixID, 1, GL_FALSE, &MVP[0][0]);
 
-	 // // Vertex colours // //
-	 static GLfloat g_color_buffer_data_cube[8 * 3];
-	 for (int i = 0; i < 8 * 3; ++i) {
-		 if (g_vertex_buffer_data_cube[i] == 1) {
-			 g_color_buffer_data_cube[i] = 1;
-		 }
-		 else {
-			 g_color_buffer_data_cube[i] = 0;
-		 }
-	 }
-
-	 GLuint indexBufferID;
-	 glGenBuffers(1, &indexBufferID);
-	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
-	 glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesCube), indicesCube, GL_STATIC_DRAW);
-
-
-	 //glGenBuffers(1, &indexBufferID);
-	 //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
-	 //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_color_buffer_data_cube), g_color_buffer_data_cube, GL_STATIC_DRAW);
-
-
-	 // // Send our transformation matrix to the currently bound shader, in the "MVP" uniform
-	 // // This is done in the main loop since each model will have a different MVP matrix (at least for the M part)
-	 //glm::mat4 rotationOffset = glm::rotate(glm::mat4(1.0f), glm::radians(float(time*100)), glm::vec3(0.0f, 1.0f, 1.0f));
-	 //MVP.at(0) = MVP.at(0)*rotationOffset;
-	 //glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0][0]);
-
-
-	 // // 1st attribute buffer : vertices // //
+	 // // Enable the appropriate attributes in the vertex shader
 	 //glEnableVertexAttribArray(0);
-	 //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
-	 //glVertexAttribPointer(
-	 //	0,					// // attribute 0, could be any number but must match the layout in shader // //
-	 //	3,					// // size of each element (1,2,3 or 4) // //
-	 //	GL_UNSIGNED_INT,	// // type // //
-	 //	GL_FALSE,			// // normalised  // //
-	 //	0,					// // stride // //
-	 //	(void*)0			// // array buffer offset // //
-	 //);
+	 ////glEnableVertexAttribArray(1);
+
+
+	 //// // 1st attribute buffer : vertices // //
+	 ////glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[0]);
+	 ////glVertexAttribPointer(
+	 ////	0,			// // attribute 0, could be any number but must match the layout in shader // //
+	 ////	3,			// // size // //
+	 ////	GL_FLOAT,	// // type // //
+	 ////	GL_FALSE,	// // normalised  // //
+	 ////	0,			// // stride // //
+	 ////	(void*)0	// // array buffer offset // //
+	 ////	);
 
 	 //// // 2nd attribute buffer : colours // //
-	 //glEnableVertexAttribArray(1);
-	 //glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
-	 //glVertexAttribPointer(
-		// 1,
-		// 3,
-		// GL_FLOAT,
-		// GL_FALSE,
-		// 0,
-		// (void*)0
-	 //);
-	 // // Draw the triangle! // //
-	 glDrawElements(GL_TRIANGLES, 8*3, GL_UNSIGNED_INT, 0);
+	 //
+	 ////glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[0]);
+	 ////glVertexAttribPointer(
+		//// 1,
+		//// 3,
+		//// GL_FLOAT,
+		//// GL_FALSE,
+		//// 0,
+		//// (void*)0
+	 ////);
+	 //// // Draw the triangle! // //
+	 ////glDrawArrays(GL_TRIANGLES, 0, 12*3);
  
-
-	 //glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[1][0][0]);
+	 //glm::mat4 MVP = Projection*View*rotationOffset;
+	 //glBindVertexArray(_State.VertexBufferID);
+	 //
+	 //glUniformMatrix4fv(_State.matrixID, 1, GL_FALSE, &MVP[0][0]);
 	 //// // 1st attribute buffer : vertices // //
-	 //glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
+	 ////glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer[1]);
 	 //glVertexAttribPointer(
 		// 0,			
 		// 3,			
 		// GL_FLOAT,	
 		// GL_FALSE,	
-		// 0,			
+		// sizeof(Vertex),			
 		// (void*)0	
 	 //);
-	 //// // 2nd attribute buffer : colours // //
-	 //glBindBuffer(GL_ARRAY_BUFFER, ColorBuffer[1]);
+	 // // 2nd attribute buffer : colours // //
+	 //glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
 	 //glVertexAttribPointer(
-		// 1,
-		// 3,
+		// 0,
+		// 2,
 		// GL_FLOAT,
 		// GL_FALSE,
 		// 0,
 		// (void*)0
 	 //);
-	 //glDrawArrays(GL_TRIANGLES, 0, 3);
+	 //glDrawArrays(GL_TRIANGLES, 0, 3*12);
 
-	 glDisableVertexAttribArray(0);
-	 //glDisableVertexAttribArray(1);
+	 //glEnableVertexArrayAttrib(_State.VertexArrayID, 0);
+
+
+	 glm::mat4 MVP = glm::mat4();
+	 glUniformMatrix4fv(_State.matrixID, 1u, GL_FALSE, &MVP[0][0]);
+
+	 //glBindVertexArray(_State.VertexArrayID);
+	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
+	 glDrawElements(GL_TRIANGLES, 3u, GL_UNSIGNED_SHORT, nullptr);
+	
+
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
+	//glDrawArrays(GL_TRIANGLES, 0, 3);
+	//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, nullptr);
+
+	//glDisableVertexAttribArray(0);
+	//glDisableVertexAttribArray(1);
 }
+void exit(ApplicationState &_State) {
+	glDeleteBuffers(_State.numBuffers, &_State.VertexBufferID);
+	glDeleteBuffers(_State.numBuffers, &_State.ColorBufferID);
+	glDeleteBuffers(_State.numBuffers, &_State.IndexBufferID);
+	glDeleteVertexArrays(_State.numBuffers, &_State.VertexArrayID);
+}
+
 
 bool poll_events () 
 {
@@ -376,20 +352,14 @@ bool poll_events ()
 
 int main(int, char**)
 {
-	GLuint programID, matrixID;
-	double time, freqMultiplier;
-	std::vector<GLuint> VertexBuffer, ColorBuffer;
-	VertexBuffer.resize(2); ColorBuffer.resize(2);
-
-
-	std::vector<glm::mat4> MVP = init(programID, matrixID, VertexBuffer, ColorBuffer, time, freqMultiplier);
-
-
+	ApplicationState _State;
+	init(_State);
 	while (poll_events ())
 	{
-		render_frame (programID, matrixID, VertexBuffer, ColorBuffer, MVP, time, freqMultiplier);
-		finish_frame ();
+		render_frame (_State);
+		finish_frame (_State);
 	}
 
+	exit(_State);
 	return 0;
 }
