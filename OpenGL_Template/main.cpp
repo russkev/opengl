@@ -24,11 +24,13 @@
 struct ApplicationState {
 	GLuint programID = 0;
 	GLuint matrixID = 0;
+	GLuint darkenID = 0;
 
 	GLuint VertexBufferID = 0;
 	GLuint VertexArrayID = 0;
 	GLuint ColorBufferID = 0;
 	GLuint IndexBufferID = 0;
+
 
 	GLuint numBuffers = 1;
 
@@ -172,6 +174,7 @@ void init (ApplicationState& _State)
 	// // Get handle for out "MVP" uniform. MVP = Model View Projection // //
 	// // Only during initialization // //
 	_State.matrixID = glGetUniformLocation(_State.programID, "MVP");
+	_State.darkenID = glGetUniformLocation(_State.programID, "darken");
 
 	_State.projection = glm::perspective(glm::radians(50.0f), float(width) / float(height), 0.1f, 100.0f);
 	_State.view       = glm::lookAt(glm::vec3(4, 4, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
@@ -212,7 +215,7 @@ void init (ApplicationState& _State)
 		sizeof(Vertex),				// // stride // //
 		&base->position				// // array buffer offset // //
 	);
-	// Both colour and vertex information are heald in the same buffer
+	// Both colour and vertex information are held in the same buffer
 	// So that doesn't need to be done again for the colour.
 	glEnableVertexArrayAttrib(_State.VertexArrayID, 1);
 	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), &base->color);
@@ -237,13 +240,23 @@ void render_frame (ApplicationState& _State)
 	 glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	 glUseProgram(_State.programID);
 
+	 //Get time
 	 _State.time = _State.freqMultiplier * SDL_GetPerformanceCounter();
+
+	 //Colour multiplier based on time and a cosine wave
+	 GLfloat cmAmplitude = 0.5;
+	 GLfloat cmFreq      = 0.1;
+	 GLfloat cmOffset    = 0.5;
+	 GLfloat colMult     = cmAmplitude * cos(2 * glm::pi<float>() * cmFreq * _State.time) + cmOffset;
+
+	 //Send multiplier to the currently bound shader
+	 glUniform1f(_State.darkenID, colMult);
 
 
 	 // // ----- MATRIX TRANSFORMATIONS ----- // //
 	 glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
 	 glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
-	 glm::mat4 modelScale = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+	 glm::mat4 modelScale = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 2.0f));
 	 glm::mat4 modelRotate = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	 glm::mat4 Model_cube = modelTranslate * modelRotate * modelScale;
