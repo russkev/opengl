@@ -25,59 +25,22 @@ namespace ShapeGenerator {
 	ShapeData makeCube() {
 		ShapeData m_cube;
 
-		// // Set vertices for cube from -1, -1, -1 to 1, 1, 1 
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, 1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, 1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, -1.0f, 1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f, -1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  -1.0f ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  1.0f,  1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( -1.0f, 1.0f,  1.0f  ),  glm::vec3()} );
-		m_cube.vertices.push_back( {glm::vec3( 1.0f,  -1.0f, 1.0f  ),  glm::vec3()} );
-
-		//m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f) }); //0
-		//m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f) }); //1
-		//m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f) }); //2
-		//m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f) }); //3
-		//m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f) }); //4
-		//m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f) }); //5
-		//m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f) }); //6
-		//m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f) }); //7
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f) }); //0
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f) }); //1
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f) }); //2
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f) }); //3
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f) }); //4
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f) }); //5
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f) }); //6
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f) }); //7
 
 
 
-		// // Set colours to be relate to vertices so that -1 in x is 0 in r, 1 in x is 1 in r, etc.
+		// // Set colours to relate to vertices so that -1 in x is 0 in r, 1 in x is 1 in r, etc.
 		for (int i = 0; i < m_cube.vertices.size(); ++i) {
 			for (int j = 0; j < 3; ++j) {
-				m_cube.vertices.at(i).color[j] = fmod(m_cube.vertices.at(i).position[j] + 1, 2.0f);
+				float temp = (m_cube.vertices.at(i).position[j]+1)/2;
+				m_cube.vertices.at(i).color[j] = (m_cube.vertices.at(i).position[j] + 1) / 2;
 			}
 		}
 

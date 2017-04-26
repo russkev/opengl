@@ -18,21 +18,23 @@
 #include "ShapeGenerator.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
+#define DEBUG
 //#include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 struct ApplicationState {
-	GLuint programID = 0;
-	GLuint matrixID = 0;
-	GLuint darkenID = 0;
+	GLuint programID       = 0;
+	GLuint matrixID        = 0;
+	GLuint darkenID        = 0;
 
-	GLuint VertexBufferID = 0;
-	GLuint VertexArrayID = 0;
-	GLuint ColorBufferID = 0;
-	GLuint IndexBufferID = 0;
+	GLuint VertexBufferID  = 0;
+	GLuint VertexArrayID   = 0;
+	GLuint ColorBufferID   = 0;
+	GLuint IndexBufferID   = 0;
+	GLuint OffsetBufferID  = 0;
 
-
-	GLuint numBuffers = 1;
+	GLuint numBuffers      = 1;
+	GLuint numIndices      = 0;
 
 	glm::mat4 view        = glm::mat4();
 	glm::mat4 projection  = glm::mat4();
@@ -180,23 +182,43 @@ void init (ApplicationState& _State)
 	_State.view       = glm::lookAt(glm::vec3(4, 4, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
 	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
-	//static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
+	static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
+	_State.numIndices = g_buffer_data_cube.numIndeces();
 
 	// // TEST // //
+	//glm::mat2 E21 = { { +1, -2 }, { +0, +1 } };
+	//glm::mat2 E12 = { { +1, +0 }, { -1, +1 } };
+	//glm::mat2 D   = { { +1, +0 }, { +0, 0.5 } };
+	//glm::mat2 A   = { { +1, +2 }, { +2, +6 } };
+	//auto result  = D * E12 * E21;
+	//auto result2 = result*A;
+
+
 
 	loadBMP_custom BMP1 ("uvtemplate.bmp");
 	// // END TEST // //
 
+	//// // Push triangle vertices graphics card memory (location: VertexBufferID):
+	//glGenBuffers(1, &_State.VertexBufferID);
+	//glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
+	//glBufferData(GL_ARRAY_BUFFER, g_buffer_data_triangle.sizeVertices(), &g_buffer_data_triangle.vertices.front(), GL_STATIC_DRAW);
 
-	// // Push triangle vertices graphics card memory (location: VertexBufferID):
+	//// // Push triangle indeces to graphics card memory (location: IndexBufferID):
+	//glGenBuffers(1, &_State.IndexBufferID);                                          // Create a bufferID
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);                     // Attach it to the Element Array buffer
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_triangle.sizeIndeces(), g_buffer_data_triangle.indeces.data(), GL_STATIC_DRAW); // Move the data into the buffer
+
+	// // Push cube vertices graphics card memory (location: VertexBufferID):
 	glGenBuffers(1, &_State.VertexBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
-	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_triangle.sizeVertices(), &g_buffer_data_triangle.vertices.front(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_cube.sizeVertices(), &g_buffer_data_cube.vertices.front(), GL_STATIC_DRAW);
 
-	// // Push triangle indeces to graphics card memory (location: IndexBufferID):
+	// // Push cube indeces to graphics card memory (location: IndexBufferID):
 	glGenBuffers(1, &_State.IndexBufferID);                                          // Create a bufferID
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);                     // Attach it to the Element Array buffer
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_triangle.sizeIndeces(), g_buffer_data_triangle.indeces.data(), GL_STATIC_DRAW); // Move the data into the buffer
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_cube.sizeIndeces(), &g_buffer_data_cube.indeces.front(), GL_STATIC_DRAW); // Move the data into the buffer
+
+
 
 	// // Generate the Vertex Aray Object (VAO)
 	// // This will later store all the information about the what is actually in the vertex buffer
@@ -220,6 +242,18 @@ void init (ApplicationState& _State)
 	glEnableVertexArrayAttrib(_State.VertexArrayID, 1);
 	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), &base->color);
 
+
+	// // Push offset information to the graphics card memory
+	std::vector<GLfloat> offsets = { 2.0f, 5.0f, 6.0f, 9.0f, 12.5f, 20.0f };
+	//GLfloat offsets[] = { 2.0f, 5.0f, 6.0f, 9.0f, 12.5f, 20.0f };
+	glGenBuffers(1, &_State.OffsetBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, _State.OffsetBufferID);
+	glBufferData(GL_ARRAY_BUFFER, offsets.size() * sizeof(GLfloat), offsets.data(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(2);
+	//glEnableVertexArrayAttrib(_State.OffsetBufferID, 2);
+	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribDivisor(2, 1);
+
 	return;
 }
 
@@ -230,9 +264,6 @@ void finish_frame (ApplicationState& _State)
 
 void render_frame (ApplicationState& _State)
 {
-
-
-
 	// // Tutorial from http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/ // //
 	// // Clear the screen // //
 	// // This clears both the colour buffer and the depth buffer at the same time
@@ -241,41 +272,46 @@ void render_frame (ApplicationState& _State)
 	 glUseProgram(_State.programID);
 
 	 //Get time
-	 _State.time = _State.freqMultiplier * SDL_GetPerformanceCounter();
+	 _State.time    = _State.freqMultiplier * SDL_GetPerformanceCounter();
+	 const auto tpi = glm::pi<float>()*float(_State.time);
 
 	 //Colour multiplier based on time and a cosine wave
-	 GLfloat cmAmplitude = 0.5;
-	 GLfloat cmFreq      = 0.1;
-	 GLfloat cmOffset    = 0.5;
-	 GLfloat colMult     = cmAmplitude * cos(2 * glm::pi<float>() * cmFreq * _State.time) + cmOffset;
+	 GLfloat cmAmplitude = 0.5f;
+	 GLfloat cmFreq      = 0.1f;
+	 GLfloat cmOffset    = 0.5f;
+	 GLfloat colMult     = cmAmplitude * cos(2.0f * glm::pi<float>() * cmFreq * GLfloat(_State.time)) + cmOffset;
 
 	 //Send multiplier to the currently bound shader
 	 glUniform1f(_State.darkenID, colMult);
 
 
-	 // // ----- MATRIX TRANSFORMATIONS ----- // //
-	 glm::vec3 modelPosition(0.0f, 0.0f, -2.5f);
-	 glm::mat4 modelTranslate = glm::translate(glm::mat4(1.0f), modelPosition);
-	 glm::mat4 modelScale = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 2.0f));
-	 glm::mat4 modelRotate = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	 // Matrix transformations 1
+	 std::vector<glm::mat4> modelTranslate = { glm::translate(_State.projection*_State.view,	glm::vec3(0.0f, 0.0f, -2.5f))	};	//Translate
+	 std::vector<glm::mat4> modelRotate    = { glm::rotate(    modelTranslate.at(0), 0.6f*tpi,	glm::vec3(0.0f, 1.0f, 1.0f))	};  //Rotate
+	 std::vector<glm::mat4> MVP            = { glm::scale(     modelRotate.at(0),				glm::vec3(0.1f, 0.1f, 0.1f))	};	//Scale
 
-	 glm::mat4 Model_cube = modelTranslate * modelRotate * modelScale;
-	 glm::mat4 Model_triangle = glm::mat4(1.0f);
-
-
-	 glm::mat4 rotationOffset = glm::rotate(glm::mat4(1.0f), glm::radians(float(_State.time*100)), glm::vec3(0.0f, 1.0f, 1.0f));
-	 glm::mat4 MVP = _State.projection*_State.view*Model_cube*rotationOffset;
-	 // // ----- END MATRIX TRANSFORMATIONS ----- // //
-
+	 // Matrix transformations 2
+	 modelTranslate.push_back( glm::translate(_State.projection*_State.view,	glm::vec3(0.0f, 0.0f, 1.0f)) ); //Translate
+	 modelRotate.push_back   ( glm::rotate(modelTranslate.at(1), 0.3f*tpi,		glm::vec3(0.0f, 1.0f, 1.0f)) );  //Rotate
+	 MVP.push_back           ( glm::scale(modelRotate.at(1),					glm::vec3(0.5f, 0.7f, 0.5f)) );	 //Scale
+	 
 
 	 //Send Matrix to the currently bound shader
-	 glUniformMatrix4fv(_State.matrixID, 1u, GL_FALSE, &MVP[0][0]);
+	 glUniformMatrix4fv(_State.matrixID, 1u, GL_FALSE, &MVP[0][0][0]);
 
 	 //Tell OpenGL which array buffer to use for upcoming draw call
 	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
 
 	 //Draw call uses all the relevent OpenGL global variables set up to this point
-	 glDrawElements(GL_TRIANGLES, 3u, GL_UNSIGNED_SHORT, nullptr);
+	 //glDrawElements(GL_TRIANGLES, _State.numIndices, GL_UNSIGNED_SHORT, nullptr);
+	 glDrawElementsInstanced(GL_TRIANGLES, _State.numIndices, GL_UNSIGNED_SHORT, nullptr, 12);
+
+
+	 ////2nd Transform
+	 //glUniformMatrix4fv(_State.matrixID, 1u, GL_FALSE, &MVP[1][0][0]);
+
+	 ////2nd Draw
+	 //glDrawElements(GL_TRIANGLES, _State.numIndices, GL_UNSIGNED_SHORT, nullptr);
 
 }
 void exit(ApplicationState &_State) {
