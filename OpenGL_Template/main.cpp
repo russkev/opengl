@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 #include <glm/matrix.hpp>
 
-
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
@@ -16,6 +15,7 @@
 #include "Vertex.h"
 #include "ShapeData.h"
 #include "ShapeGenerator.h"
+#include "Camera.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #define DEBUG
@@ -40,6 +40,7 @@ struct ApplicationState {
 	glm::mat4 view        = glm::mat4();
 	glm::mat4 projection  = glm::mat4();
 	std::vector<GLfloat> offsets;
+	Camera cam;
 
 	double time = 0.0;
 	double freqMultiplier = 0.0;
@@ -181,7 +182,8 @@ void init (ApplicationState& _State)
 	_State.darkenID = glGetUniformLocation(_State.programID, "darken");
 
 	_State.projection = glm::perspective(glm::radians(50.0f), float(width) / float(height), 0.1f, 100.0f);
-	_State.view       = glm::lookAt(glm::vec3(4, 4, 3), glm::vec3(-1, -1, 0), glm::vec3(0, 1, 0));
+	_State.view       = _State.cam.getWorldToViewMatrix();
+	//_State.view       = glm::lookAt(glm::vec3(4, 4, 3), glm::vec3(-1, -1, 0), glm::vec3(0, 1, 0));
 
 	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
 	static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
@@ -221,6 +223,7 @@ void init (ApplicationState& _State)
 	// Both colour and vertex information are held in the same buffer
 	// So that doesn't need to be done again for the colour.
 	glEnableVertexArrayAttrib(_State.VertexArrayID, 1);
+	//glVertexAttrib3f(1, 1, 0, 1);
 	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), &base->color);
 
 
@@ -243,7 +246,7 @@ void init (ApplicationState& _State)
 	for (int i = 0; i < _State.offsets.size(); i++) {
 		MVP.push_back(glm::mat4(1.0));
 	}
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*MVP.size(), MVP.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*MVP.size(), MVP.data(), GL_DYNAMIC_DRAW);
 	_State.matrixLoc = 2;
 	for (int i = 0; i < 4; ++i) {
 		glEnableVertexArrayAttrib(_State.VertexArrayID, _State.matrixLoc + i);
@@ -270,7 +273,7 @@ void render_frame (ApplicationState& _State)
 
 	 //Get time
 	 _State.time    = _State.freqMultiplier * SDL_GetPerformanceCounter();
-	 const auto tpi = glm::pi<float>()*float(_State.time);
+	 const auto tpi = 0;// glm::pi<float>()*float(_State.time);
 
 	 //Colour multiplier based on time and a cosine wave
 	 GLfloat cmAmplitude = 0.5f;
@@ -283,17 +286,20 @@ void render_frame (ApplicationState& _State)
 
 	 // Matrix transformations
 	 std::vector<glm::mat4> MVP;
+	 //_State.cam.mouseUpdate(glm::vec2)
 	 for (int i = 0; i < _State.offsets.size(); i++) {
-		 MVP.push_back(glm::scale(glm::rotate(glm::translate(_State.projection*_State.view, 
+		 MVP.push_back(glm::scale(glm::rotate(glm::translate(_State.projection*_State.cam.getWorldToViewMatrix(), 
 			 glm::vec3(0.0f, 0.0f, _State.offsets.at(i))),	//Translate
 			 0.6f*tpi, glm::vec3(0.0f, 1.0f, 1.0f)),		//Rotate
 			 glm::vec3(0.1f, 0.1f, 0.1f)));					//Scale
 	 }
 
 	 glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
-	 glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4)*MVP.size(), &MVP[0][0][0]);
+	 //glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4)*MVP.size(), &MVP[0][0][0]);
 	 ////glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*MVP.size(), MVP.data(), GL_STATIC_DRAW);
-	 //void* matrixMap = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+	 auto matrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+	 std::copy(MVP.begin(), MVP.end(), matrixBufferPtr);
+	 glUnmapBuffer(GL_ARRAY_BUFFER);
 	 //for (int i = 0; i < MVP.size(); i += sizeof(float)) {
 		// ((glm::mat4*) matrixMap)[i] = MVP[i];
 	 //}
@@ -310,7 +316,7 @@ void render_frame (ApplicationState& _State)
 
 	 //Draw call uses all the relevent OpenGL global variables set up to this point
 	 //glDrawElements(GL_TRIANGLES, _State.numIndices, GL_UNSIGNED_SHORT, nullptr);
-	 glDrawElementsInstanced(GL_TRIANGLES, _State.numIndices, GL_UNSIGNED_SHORT, nullptr, _State.offsets.size());
+	 glDrawElementsInstanced(GL_TRIANGLES, _State.numIndices, GL_UNSIGNED_SHORT, nullptr, GLsizei(_State.offsets.size()));
 
 	 
 
@@ -322,13 +328,23 @@ void exit(ApplicationState &_State) {
 	glDeleteVertexArrays(_State.numBuffers, &_State.VertexArrayID);
 }
 
+//bool mouse_motion() {
+//	SDL_Event loc_event;
+//	while (SDL_PollEvent(&loc_event)) {
+//		if (loc_event.type =)
+//	}
+//}
 
-bool poll_events () 
+
+bool poll_events (ApplicationState& _State)
 {
 	SDL_Event loc_event;
 	while (SDL_PollEvent (&loc_event)) {
 		if (loc_event.type == SDL_QUIT) {
 			return false;
+		}
+		if (loc_event.type == SDL_MOUSEMOTION) {
+			_State.cam.mouseUpdate(glm::vec2(loc_event.motion.x, loc_event.motion.y));
 		}
 	}
 	return true;
@@ -338,7 +354,7 @@ int main(int, char**)
 {
 	ApplicationState _State;
 	init(_State);
-	while (poll_events ())
+	while (poll_events (_State))
 	{
 		render_frame (_State);
 		finish_frame (_State);
