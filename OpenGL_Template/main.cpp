@@ -225,9 +225,31 @@ void init (ApplicationState& _State)
 
 
 	// // Push offset information to the graphics card memory
-	_State.offsets = { -8.0f, -5.0f, -3.0f, 0.0f, 2.5f, 4.0f };
+	// // Make a line of evenly spaced cubes from line start to line finish
+	GLfloat lineStart = -8.0f;
+	GLfloat lineEnd   = +4.0f;
+	GLuint numCubes   = 35;
+	GLfloat spacing = (lineEnd - lineStart) / numCubes;
+	while (lineStart <= lineEnd) {
+		_State.offsets.push_back(lineStart);
+		lineStart += spacing;
+	}
+	//_State.offsets = { -8.0f, -6.0, -5.0f, -3.0f, 0.0f, 2.5f, 4.0f };
 	glGenBuffers(1, &_State.MatrixBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
+
+	// Initial matrix
+	std::vector<glm::mat4> MVP;
+	for (int i = 0; i < _State.offsets.size(); i++) {
+		MVP.push_back(glm::mat4(1.0));
+	}
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*MVP.size(), MVP.data(), GL_STATIC_DRAW);
+	_State.matrixLoc = 2;
+	for (int i = 0; i < 4; ++i) {
+		glEnableVertexArrayAttrib(_State.VertexArrayID, _State.matrixLoc + i);
+		glVertexAttribPointer(_State.matrixLoc + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * (i * 4)));
+		glVertexAttribDivisor(_State.matrixLoc + i, 1);
+	}
 
 	return;
 }
@@ -265,16 +287,18 @@ void render_frame (ApplicationState& _State)
 		 MVP.push_back(glm::scale(glm::rotate(glm::translate(_State.projection*_State.view, 
 			 glm::vec3(0.0f, 0.0f, _State.offsets.at(i))),	//Translate
 			 0.6f*tpi, glm::vec3(0.0f, 1.0f, 1.0f)),		//Rotate
-			 glm::vec3(0.5f, 0.5f, 0.5f)));					//Scale
+			 glm::vec3(0.1f, 0.1f, 0.1f)));					//Scale
 	 }
-	 glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*MVP.size(), MVP.data(), GL_STATIC_DRAW);
-	 _State.matrixLoc = 2;
-	 for (int i = 0; i < 4; ++i) {
-		 //auto test = sizeof(glm::mat4)*MVP.size();
-		 glVertexAttribPointer(_State.matrixLoc + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * (i*4)));
-		 glEnableVertexAttribArray(_State.matrixLoc + i);
-		 glVertexAttribDivisor(_State.matrixLoc + i, 1);
-	 }
+
+	 glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
+	 glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4)*MVP.size(), &MVP[0][0][0]);
+	 ////glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*MVP.size(), MVP.data(), GL_STATIC_DRAW);
+	 //void* matrixMap = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+	 //for (int i = 0; i < MVP.size(); i += sizeof(float)) {
+		// ((glm::mat4*) matrixMap)[i] = MVP[i];
+	 //}
+	 //glUnmapBuffer(GL_ARRAY_BUFFER);
+	 
 
 	 //Send Matrix to the currently bound shader
 	 //glUniformMatrix4fv(_State.matrixID, 1u, GL_FALSE, &MVP[0][0][0]);
@@ -282,9 +306,13 @@ void render_frame (ApplicationState& _State)
 	 //Tell OpenGL which array buffer to use for upcoming draw call
 	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
 
+
+
 	 //Draw call uses all the relevent OpenGL global variables set up to this point
 	 //glDrawElements(GL_TRIANGLES, _State.numIndices, GL_UNSIGNED_SHORT, nullptr);
 	 glDrawElementsInstanced(GL_TRIANGLES, _State.numIndices, GL_UNSIGNED_SHORT, nullptr, _State.offsets.size());
+
+	 
 
 }
 void exit(ApplicationState &_State) {
