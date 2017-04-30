@@ -1,4 +1,5 @@
 #pragma once
+#include <SDL.h>
 #include <glm\matrix.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -9,9 +10,13 @@ class Camera
 	glm::vec3 viewDirection;
 	glm::vec3 up;
 	glm::vec2 oldMousePosition;
+	glm::vec3 strafeDirection;
+	static const float moveSpeed;
+	static const float rotationSpeed;
 public:
 	Camera();
 	void mouseUpdate(const glm::vec2& newMousePosition);
+	void positionUpdate(const SDL_Scancode& newPosition);
 	glm::mat4 getWorldToViewMatrix() const;
 };
 
