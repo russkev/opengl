@@ -187,7 +187,8 @@ void init (ApplicationState& _State)
 
 	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
 	static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
-	_State.numIndices = g_buffer_data_cube.numIndeces();
+	static ShapeData g_buffer_data_arrow    = ShapeGenerator::makeArrow();
+	_State.numIndices = g_buffer_data_arrow.numIndeces();
 
 	// // TEST // //
 	loadBMP_custom BMP1 ("uvtemplate.bmp");
@@ -196,18 +197,22 @@ void init (ApplicationState& _State)
 	// // Push cube vertices graphics card memory (location: VertexBufferID):
 	glGenBuffers(1, &_State.VertexBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
-	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_cube.sizeVertices(), &g_buffer_data_cube.vertices.front(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_arrow.sizeVertices(), &g_buffer_data_arrow.vertices.front(), GL_STATIC_DRAW);
 
 	// // Push cube indeces to graphics card memory (location: IndexBufferID):
 	glGenBuffers(1, &_State.IndexBufferID);                                          // Create a bufferID
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);                     // Attach it to the Element Array buffer
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_cube.sizeIndeces(), &g_buffer_data_cube.indeces.front(), GL_STATIC_DRAW); // Move the data into the buffer
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_arrow.sizeIndeces(), &g_buffer_data_arrow.indeces.front(), GL_STATIC_DRAW); // Move the data into the buffer
+
+
 
 	// // Generate the Vertex Aray Object (VAO)
 	// // This will later store all the information about the what is actually in the vertex buffer
 	glGenVertexArrays(1, &_State.VertexArrayID);    // Create a VAO ID
 	glBindVertexArray(_State.VertexArrayID);		// Attach the Vertex Array reader to the VAO ID
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
+	
 	const Vertex* base = nullptr;
 	// // Open the VAO in order for it to be written to
 	glEnableVertexArrayAttrib(_State.VertexArrayID, 0);
@@ -226,12 +231,14 @@ void init (ApplicationState& _State)
 	//glVertexAttrib3f(1, 1, 0, 1);
 	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), &base->color);
 
+	
+
 
 	// // Push offset information to the graphics card memory
 	// // Make a line of evenly spaced cubes from line start to line finish
 	GLfloat lineStart = -8.0f;
 	GLfloat lineEnd   = +4.0f;
-	GLuint numCubes   = 35;
+	GLuint numCubes   = 10;
 	GLfloat spacing = (lineEnd - lineStart) / numCubes;
 	while (lineStart <= lineEnd) {
 		_State.offsets.push_back(lineStart);
@@ -253,7 +260,6 @@ void init (ApplicationState& _State)
 		glVertexAttribPointer(_State.matrixLoc + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * (i * 4)));
 		glVertexAttribDivisor(_State.matrixLoc + i, 1);
 	}
-
 	return;
 }
 
@@ -286,7 +292,6 @@ void render_frame (ApplicationState& _State)
 
 	 // Matrix transformations
 	 std::vector<glm::mat4> MVP;
-	 //_State.cam.mouseUpdate(glm::vec2)
 	 for (int i = 0; i < _State.offsets.size(); i++) {
 		 MVP.push_back(glm::scale(glm::rotate(glm::translate(_State.projection*_State.cam.getWorldToViewMatrix(), 
 			 glm::vec3(0.0f, 0.0f, _State.offsets.at(i))),	//Translate
@@ -294,23 +299,14 @@ void render_frame (ApplicationState& _State)
 			 glm::vec3(0.1f, 0.1f, 0.1f)));					//Scale
 	 }
 
+	 // Send updated matrix to appropriate buffer
 	 glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
-	 //glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4)*MVP.size(), &MVP[0][0][0]);
-	 ////glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*MVP.size(), MVP.data(), GL_STATIC_DRAW);
 	 auto matrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
 	 std::copy(MVP.begin(), MVP.end(), matrixBufferPtr);
 	 glUnmapBuffer(GL_ARRAY_BUFFER);
-	 //for (int i = 0; i < MVP.size(); i += sizeof(float)) {
-		// ((glm::mat4*) matrixMap)[i] = MVP[i];
-	 //}
-	 //glUnmapBuffer(GL_ARRAY_BUFFER);
-	 
-
-	 //Send Matrix to the currently bound shader
-	 //glUniformMatrix4fv(_State.matrixID, 1u, GL_FALSE, &MVP[0][0][0]);
 
 	 //Tell OpenGL which array buffer to use for upcoming draw call
-	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
+	 //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
 
 
 
@@ -328,14 +324,6 @@ void exit(ApplicationState &_State) {
 	glDeleteVertexArrays(_State.numBuffers, &_State.VertexArrayID);
 }
 
-//bool mouse_motion() {
-//	SDL_Event loc_event;
-//	while (SDL_PollEvent(&loc_event)) {
-//		if (loc_event.type =)
-//	}
-//}
-
-
 bool poll_events (ApplicationState& _State)
 {
 	SDL_Event loc_event;
@@ -346,9 +334,13 @@ bool poll_events (ApplicationState& _State)
 		if (loc_event.type == SDL_MOUSEMOTION) {
 			_State.cam.mouseUpdate(glm::vec2(loc_event.motion.x, loc_event.motion.y));
 		}
+		if (loc_event.type == SDL_KEYDOWN) {
+			_State.cam.positionUpdate(loc_event.key.keysym.scancode);
+		}
 	}
 	return true;
 }
+
 
 int main(int, char**)
 {
