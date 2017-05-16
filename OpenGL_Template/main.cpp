@@ -188,7 +188,12 @@ void init (ApplicationState& _State)
 	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
 	static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
 	static ShapeData g_buffer_data_arrow    = ShapeGenerator::makeArrow();
-	_State.numIndices = g_buffer_data_arrow.numIndeces();
+	_State.numIndices = g_buffer_data_arrow.numIndeces() + g_buffer_data_cube.numIndeces();
+
+	glm::vec3 arrowTranslate = { 0.0f, 3.0f, 0.0f };
+	for (int i = 0; i < g_buffer_data_arrow.vertices.size(); ++i) {
+		g_buffer_data_arrow.vertices.at(i).position = g_buffer_data_arrow.vertices.at(i).position + arrowTranslate;
+	}
 
 	// // TEST // //
 	loadBMP_custom BMP1 ("uvtemplate.bmp");
@@ -197,12 +202,14 @@ void init (ApplicationState& _State)
 	// // Push cube vertices graphics card memory (location: VertexBufferID):
 	glGenBuffers(1, &_State.VertexBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
-	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_arrow.sizeVertices(), &g_buffer_data_arrow.vertices.front(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_arrow.sizeVertices() + g_buffer_data_cube.sizeVertices(), &g_buffer_data_arrow.vertices.front(), GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, g_buffer_data_arrow.sizeVertices(), g_buffer_data_cube.sizeVertices(), &g_buffer_data_cube.vertices.front());
 
 	// // Push cube indeces to graphics card memory (location: IndexBufferID):
 	glGenBuffers(1, &_State.IndexBufferID);                                          // Create a bufferID
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);                     // Attach it to the Element Array buffer
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_arrow.sizeIndeces(), &g_buffer_data_arrow.indeces.front(), GL_STATIC_DRAW); // Move the data into the buffer
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_arrow.sizeIndeces() + g_buffer_data_cube.sizeIndeces(), &g_buffer_data_arrow.indeces.front(), GL_STATIC_DRAW); // Move the data into the buffer
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_arrow.sizeIndeces(), g_buffer_data_cube.sizeIndeces(), &g_buffer_data_cube.indeces.front());
 
 
 
@@ -327,11 +334,18 @@ void exit(ApplicationState &_State) {
 bool poll_events (ApplicationState& _State)
 {
 	SDL_Event loc_event;
+	static bool mouseDown = false;
 	while (SDL_PollEvent (&loc_event)) {
 		if (loc_event.type == SDL_QUIT) {
 			return false;
 		}
-		if (loc_event.type == SDL_MOUSEMOTION) {
+		if (loc_event.type == SDL_MOUSEBUTTONDOWN){
+			mouseDown = true;
+		}
+		if (loc_event.type == SDL_MOUSEBUTTONUP) {
+			mouseDown = false;
+		}
+		if (loc_event.type == SDL_MOUSEMOTION && mouseDown) {
 			_State.cam.mouseUpdate(glm::vec2(loc_event.motion.x, loc_event.motion.y));
 		}
 		if (loc_event.type == SDL_KEYDOWN) {
