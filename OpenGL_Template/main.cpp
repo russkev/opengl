@@ -191,9 +191,10 @@ void init (ApplicationState& _State)
 	_State.numIndices = g_buffer_data_arrow.numIndeces() + g_buffer_data_cube.numIndeces();
 
 	glm::vec3 arrowTranslate = { 0.0f, 3.0f, 0.0f };
-	for (int i = 0; i < g_buffer_data_arrow.vertices.size(); ++i) {
-		g_buffer_data_arrow.vertices.at(i).position = g_buffer_data_arrow.vertices.at(i).position + arrowTranslate;
+	for (auto& i : g_buffer_data_arrow.vertices) {
+		i.position += arrowTranslate;
 	}
+
 
 	// // TEST // //
 	loadBMP_custom BMP1 ("uvtemplate.bmp");
@@ -202,14 +203,36 @@ void init (ApplicationState& _State)
 	// // Push cube vertices graphics card memory (location: VertexBufferID):
 	glGenBuffers(1, &_State.VertexBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
-	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_arrow.sizeVertices() + g_buffer_data_cube.sizeVertices(), &g_buffer_data_arrow.vertices.front(), GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, g_buffer_data_arrow.sizeVertices(), g_buffer_data_cube.sizeVertices(), &g_buffer_data_cube.vertices.front());
+	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_arrow.sizeVertices() + g_buffer_data_cube.sizeVertices(), nullptr, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER,
+		0,
+		g_buffer_data_arrow.sizeVertices(),
+		&g_buffer_data_arrow.vertices.front());
+	glBufferSubData(GL_ARRAY_BUFFER, 
+		g_buffer_data_arrow.sizeVertices(), 
+		g_buffer_data_cube.sizeVertices(), 
+		&g_buffer_data_cube.vertices.front());
+
+	// // Move the cube indeces over so that they correspond to the correct vertices
+	for (auto& it : g_buffer_data_cube.indeces) {
+		it += g_buffer_data_arrow.vertices.size();
+	}
+
 
 	// // Push cube indeces to graphics card memory (location: IndexBufferID):
 	glGenBuffers(1, &_State.IndexBufferID);                                          // Create a bufferID
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);                     // Attach it to the Element Array buffer
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_arrow.sizeIndeces() + g_buffer_data_cube.sizeIndeces(), &g_buffer_data_arrow.indeces.front(), GL_STATIC_DRAW); // Move the data into the buffer
-	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_arrow.sizeIndeces(), g_buffer_data_cube.sizeIndeces(), &g_buffer_data_cube.indeces.front());
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_arrow.sizeIndeces() + g_buffer_data_cube.sizeIndeces(), nullptr, GL_STATIC_DRAW); // Move the data into the buffer
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER,
+		0,
+		g_buffer_data_arrow.sizeIndeces(),
+		&g_buffer_data_arrow.indeces.front());
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 
+		g_buffer_data_arrow.sizeIndeces(), 
+		g_buffer_data_cube.sizeIndeces(), 
+		&g_buffer_data_cube.indeces.front());
+
+
 
 
 
@@ -313,7 +336,7 @@ void render_frame (ApplicationState& _State)
 	 glUnmapBuffer(GL_ARRAY_BUFFER);
 
 	 //Tell OpenGL which array buffer to use for upcoming draw call
-	 //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
+	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
 
 
 
@@ -350,6 +373,9 @@ bool poll_events (ApplicationState& _State)
 		}
 		if (loc_event.type == SDL_KEYDOWN) {
 			_State.cam.positionUpdate(loc_event.key.keysym.scancode);
+		}
+		if (loc_event.type == SDL_MOUSEWHEEL) {
+			auto temp = 
 		}
 	}
 	return true;
