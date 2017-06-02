@@ -3,8 +3,9 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 
-const float Camera::moveSpeed     = 0.5;
-const float Camera::rotationSpeed = 0.007f;
+const float Camera::moveSpeed      = 0.5;
+const float Camera::mouseMoveSpeed = 0.05;
+const float Camera::rotationSpeed  = 0.007f;
 
 Camera::Camera() :
 	viewDirection(0.0f, 0.0f, -1.0f),
@@ -13,16 +14,19 @@ Camera::Camera() :
 {
 }
 
-void Camera::mouseUpdate(const glm::vec2& newMousePosition) {
+void Camera::mouseUpdate(const glm::vec2& newMousePosition, const bool altDown) {
 	const glm::vec2 mouseDelta = newMousePosition - oldMousePosition;
-	if (glm::length(mouseDelta) < 100.0f) {
-		const float rotationSpeed = 0.007f;
-		strafeDirection = glm::cross(viewDirection, up);
+	strafeDirection = glm::cross(viewDirection, up);
+	if (altDown) {
+		position += mouseMoveSpeed * mouseDelta.x * strafeDirection;
+	}
+	else {
 		glm::mat3 rotator =
 			glm::mat3(glm::rotate(-mouseDelta.x*rotationSpeed, up)) *
 			glm::mat3(glm::rotate(-mouseDelta.y*rotationSpeed, strafeDirection));
 		viewDirection = rotator * viewDirection;
 	}
+
 	oldMousePosition = newMousePosition;
 }
 
@@ -41,6 +45,10 @@ void  Camera::positionUpdate(const SDL_Scancode& newPosition) {
 		position += moveSpeed * strafeDirection;
 		break;
 	}
+}
+
+void Camera::scrollUpdate(const float scrollAmount) {
+	position += scrollAmount * viewDirection;
 }
 
 

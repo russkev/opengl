@@ -12,11 +12,13 @@ class Camera
 	glm::vec2 oldMousePosition;
 	glm::vec3 strafeDirection;
 	static const float moveSpeed;
+	static const float mouseMoveSpeed;
 	static const float rotationSpeed;
 public:
 	Camera();
-	void mouseUpdate(const glm::vec2& newMousePosition);
+	void mouseUpdate(const glm::vec2& newMousePosition, const bool altDown);
 	void positionUpdate(const SDL_Scancode& newPosition);
+	void scrollUpdate(const float scrollAmount);
 	glm::mat4 getWorldToViewMatrix() const;
 };
 
