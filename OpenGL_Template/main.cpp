@@ -358,7 +358,9 @@ bool poll_events (ApplicationState& _State)
 {
 	SDL_Event loc_event;
 	static bool mouseDown = false;
+	static bool altDown = false;
 	while (SDL_PollEvent (&loc_event)) {
+		
 		if (loc_event.type == SDL_QUIT) {
 			return false;
 		}
@@ -368,15 +370,28 @@ bool poll_events (ApplicationState& _State)
 		if (loc_event.type == SDL_MOUSEBUTTONUP) {
 			mouseDown = false;
 		}
-		if (loc_event.type == SDL_MOUSEMOTION && mouseDown) {
-			_State.cam.mouseUpdate(glm::vec2(loc_event.motion.x, loc_event.motion.y));
-		}
 		if (loc_event.type == SDL_KEYDOWN) {
+			if (loc_event.key.keysym.scancode == SDL_SCANCODE_LALT) {
+				altDown = true;
+			}
 			_State.cam.positionUpdate(loc_event.key.keysym.scancode);
 		}
-		if (loc_event.type == SDL_MOUSEWHEEL) {
-			auto temp = 
+		if (loc_event.type == SDL_KEYUP) {
+			if (loc_event.key.keysym.scancode == SDL_SCANCODE_LALT) {
+				altDown = false;
+			}
 		}
+		if (loc_event.type == SDL_MOUSEMOTION && mouseDown) {
+			_State.cam.mouseUpdate(glm::vec2(loc_event.motion.x, loc_event.motion.y), altDown);
+			break;
+		}
+
+		if (loc_event.type == SDL_MOUSEWHEEL) {
+			_State.cam.scrollUpdate(loc_event.wheel.y);
+			break;
+		}
+		// Make alt work for up and down
+		// Make it so it doesn't jump when you click the mouse button somewhere different to where you left it
 	}
 	return true;
 }
