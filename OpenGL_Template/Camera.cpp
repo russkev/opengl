@@ -14,11 +14,16 @@ Camera::Camera() :
 {
 }
 
-void Camera::mouseUpdate(const glm::vec2& newMousePosition, const bool altDown) {
-	const glm::vec2 mouseDelta = newMousePosition - oldMousePosition;
+void Camera::mouseUpdate(const glm::vec2& newMousePosition, const bool altDown, const bool mouseDown) {
+	glm::vec2 mouseDelta = glm::vec2(0, 0);
+	if (mouseDown) {
+		mouseDelta = newMousePosition - oldMousePosition;
+	}
 	strafeDirection = glm::cross(viewDirection, up);
+	camUpDirection = glm::cross(viewDirection, strafeDirection);
 	if (altDown) {
 		position += mouseMoveSpeed * mouseDelta.x * strafeDirection;
+		position += mouseMoveSpeed * mouseDelta.y * camUpDirection;
 	}
 	else {
 		glm::mat3 rotator =
