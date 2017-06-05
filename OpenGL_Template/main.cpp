@@ -381,17 +381,14 @@ bool poll_events (ApplicationState& _State)
 				altDown = false;
 			}
 		}
-		if (loc_event.type == SDL_MOUSEMOTION && mouseDown) {
-			_State.cam.mouseUpdate(glm::vec2(loc_event.motion.x, loc_event.motion.y), altDown);
+		if (loc_event.type == SDL_MOUSEMOTION) {
+			_State.cam.mouseUpdate(glm::vec2(loc_event.motion.x, loc_event.motion.y), altDown, mouseDown);
 			break;
 		}
-
 		if (loc_event.type == SDL_MOUSEWHEEL) {
 			_State.cam.scrollUpdate(loc_event.wheel.y);
 			break;
 		}
-		// Make alt work for up and down
-		// Make it so it doesn't jump when you click the mouse button somewhere different to where you left it
 	}
 	return true;
 }
