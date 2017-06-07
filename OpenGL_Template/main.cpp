@@ -27,11 +27,12 @@ struct ApplicationState {
 	GLuint matrixID        = 0;
 	GLuint darkenID        = 0;
 
-	GLuint TheBufferID  = 0;
-	GLuint VertexArrayID   = 0;
-	GLuint ColorBufferID   = 0;
-	//GLuint TheBufferID   = 0;
-	GLuint MatrixBufferID  = 0;
+	GLuint TheBufferID        = 0;
+	GLuint CubeVertexArrayID  = 0;
+	GLuint ArrowVertexArrayID = 0;
+	GLuint ColorBufferID      = 0;
+	//GLuint TheBufferID      = 0;
+	GLuint MatrixBufferID     = 0;
 
 	GLuint numBuffers      = 1;
 	GLuint numIndices      = 0;
@@ -204,6 +205,11 @@ void init (ApplicationState& _State)
 	glGenBuffers(1, &_State.TheBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
 	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_arrow.sizeVertices() + g_buffer_data_arrow.sizeIndeces() + g_buffer_data_cube.sizeVertices() + g_buffer_data_cube.sizeIndeces(), nullptr, GL_STATIC_DRAW);
+
+	auto temp1 = g_buffer_data_arrow.sizeVertices();
+	auto temp2 = g_buffer_data_cube.sizeIndeces();
+
+
 	GLsizeiptr currentOffset = 0;
 	glBufferSubData(GL_ARRAY_BUFFER, 0, g_buffer_data_arrow.sizeVertices(), &g_buffer_data_arrow.vertices.front());
 	currentOffset += g_buffer_data_arrow.sizeVertices();
@@ -236,8 +242,10 @@ void init (ApplicationState& _State)
 
 
 	// // Generate the Vertex Aray Object (VAO)
-	// // This will later store all the information about the what is actually in the vertex buffer
-	glGenVertexArrays(1, &_State.VertexArrayID);    // Create a VAO ID
+	// // This will later store all the information about what is actually in the vertex buffer
+	glGenVertexArrays(1, &_State.CubeVertexArrayID);    // Create a VAO ID
+	glGenVertexArrays(1, &_State.ArrowVertexArrayID)
+
 	glBindVertexArray(_State.VertexArrayID);		// Attach the Vertex Array reader to the VAO ID
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
 	
@@ -253,8 +261,8 @@ void init (ApplicationState& _State)
 		sizeof(Vertex),				// // stride // //
 		&base->position				// // array buffer offset // //
 	);
-	// Both colour and vertex information are held in the same buffer
-	// So that doesn't need to be done again for the colour.
+	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), &base->color);
+
 	glEnableVertexArrayAttrib(_State.VertexArrayID, 1);
 	//glVertexAttrib3f(1, 1, 0, 1);
 
