@@ -27,10 +27,10 @@ struct ApplicationState {
 	GLuint matrixID        = 0;
 	GLuint darkenID        = 0;
 
-	GLuint VertexBufferID  = 0;
+	GLuint TheBufferID  = 0;
 	GLuint VertexArrayID   = 0;
 	GLuint ColorBufferID   = 0;
-	GLuint IndexBufferID   = 0;
+	//GLuint TheBufferID   = 0;
 	GLuint MatrixBufferID  = 0;
 
 	GLuint numBuffers      = 1;
@@ -200,48 +200,46 @@ void init (ApplicationState& _State)
 	loadBMP_custom BMP1 ("uvtemplate.bmp");
 	// // END TEST // //
 
-	// // Push cube vertices graphics card memory (location: VertexBufferID):
-	glGenBuffers(1, &_State.VertexBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, _State.VertexBufferID);
-	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_arrow.sizeVertices() + g_buffer_data_cube.sizeVertices(), nullptr, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER,
-		0,
-		g_buffer_data_arrow.sizeVertices(),
-		&g_buffer_data_arrow.vertices.front());
-	glBufferSubData(GL_ARRAY_BUFFER, 
-		g_buffer_data_arrow.sizeVertices(), 
-		g_buffer_data_cube.sizeVertices(), 
-		&g_buffer_data_cube.vertices.front());
+	// // Push cube and arrow vertices to :graphics card memory (location: TheBufferID):
+	glGenBuffers(1, &_State.TheBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
+	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_arrow.sizeVertices() + g_buffer_data_arrow.sizeIndeces() + g_buffer_data_cube.sizeVertices() + g_buffer_data_cube.sizeIndeces(), nullptr, GL_STATIC_DRAW);
+	GLsizeiptr currentOffset = 0;
+	glBufferSubData(GL_ARRAY_BUFFER, 0, g_buffer_data_arrow.sizeVertices(), &g_buffer_data_arrow.vertices.front());
+	currentOffset += g_buffer_data_arrow.sizeVertices();
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_arrow.sizeIndeces(), &g_buffer_data_arrow.indeces.front());
+	currentOffset += g_buffer_data_arrow.sizeIndeces();
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_cube.sizeVertices(), &g_buffer_data_cube.vertices.front());
+	currentOffset += g_buffer_data_cube.sizeVertices();
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_cube.sizeIndeces(), &g_buffer_data_cube.indeces.front());
 
 	// // Move the cube indeces over so that they correspond to the correct vertices
 	for (auto& it : g_buffer_data_cube.indeces) {
-		it += g_buffer_data_arrow.vertices.size();
+		it += (GLushort)g_buffer_data_arrow.vertices.size() + (GLushort)g_buffer_data_arrow.indeces.size();
 	}
 
 
-	// // Push cube indeces to graphics card memory (location: IndexBufferID):
-	glGenBuffers(1, &_State.IndexBufferID);                                          // Create a bufferID
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);                     // Attach it to the Element Array buffer
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_arrow.sizeIndeces() + g_buffer_data_cube.sizeIndeces(), nullptr, GL_STATIC_DRAW); // Move the data into the buffer
-	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER,
-		0,
-		g_buffer_data_arrow.sizeIndeces(),
-		&g_buffer_data_arrow.indeces.front());
-	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 
-		g_buffer_data_arrow.sizeIndeces(), 
-		g_buffer_data_cube.sizeIndeces(), 
-		&g_buffer_data_cube.indeces.front());
-
-
-
+	//// // Push cube indeces to graphics card memory (location: IndexBufferID):
+	//glGenBuffers(1, &_State.IndexBufferID);                                          // Create a bufferID
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);                     // Attach it to the Element Array buffer
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_arrow.sizeIndeces() + g_buffer_data_cube.sizeIndeces(), nullptr, GL_STATIC_DRAW); // Move the data into the buffer
+	//glBufferSubData(
+	//	GL_ELEMENT_ARRAY_BUFFER,
+	//	0,
+	//	g_buffer_data_arrow.sizeIndeces(),
+	//	&g_buffer_data_arrow.indeces.front());
+	//glBufferSubData(
+	//	GL_ELEMENT_ARRAY_BUFFER, 
+	//	g_buffer_data_arrow.sizeIndeces(), 
+	//	g_buffer_data_cube.sizeIndeces(), 
+	//	&g_buffer_data_cube.indeces.front());
 
 
 	// // Generate the Vertex Aray Object (VAO)
 	// // This will later store all the information about the what is actually in the vertex buffer
 	glGenVertexArrays(1, &_State.VertexArrayID);    // Create a VAO ID
 	glBindVertexArray(_State.VertexArrayID);		// Attach the Vertex Array reader to the VAO ID
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
 	
 	const Vertex* base = nullptr;
 	// // Open the VAO in order for it to be written to
@@ -259,9 +257,6 @@ void init (ApplicationState& _State)
 	// So that doesn't need to be done again for the colour.
 	glEnableVertexArrayAttrib(_State.VertexArrayID, 1);
 	//glVertexAttrib3f(1, 1, 0, 1);
-	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), &base->color);
-
-	
 
 
 	// // Push offset information to the graphics card memory
@@ -336,7 +331,8 @@ void render_frame (ApplicationState& _State)
 	 glUnmapBuffer(GL_ARRAY_BUFFER);
 
 	 //Tell OpenGL which array buffer to use for upcoming draw call
-	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);
+	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
+	 //glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
 
 
 
@@ -348,9 +344,9 @@ void render_frame (ApplicationState& _State)
 
 }
 void exit(ApplicationState &_State) {
-	glDeleteBuffers(_State.numBuffers, &_State.VertexBufferID);
+	glDeleteBuffers(_State.numBuffers, &_State.TheBufferID);
 	glDeleteBuffers(_State.numBuffers, &_State.ColorBufferID);
-	glDeleteBuffers(_State.numBuffers, &_State.IndexBufferID);
+	glDeleteBuffers(_State.numBuffers, &_State.TheBufferID);
 	glDeleteVertexArrays(_State.numBuffers, &_State.VertexArrayID);
 }
 
@@ -386,7 +382,7 @@ bool poll_events (ApplicationState& _State)
 			break;
 		}
 		if (loc_event.type == SDL_MOUSEWHEEL) {
-			_State.cam.scrollUpdate(loc_event.wheel.y);
+			_State.cam.scrollUpdate((float)loc_event.wheel.y);
 			break;
 		}
 	}
