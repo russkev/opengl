@@ -224,22 +224,6 @@ void init (ApplicationState& _State)
 		it += (GLushort)g_buffer_data_arrow.vertices.size() + (GLushort)g_buffer_data_arrow.indeces.size();
 	}
 
-
-	//// // Push cube indeces to graphics card memory (location: IndexBufferID):
-	//glGenBuffers(1, &_State.IndexBufferID);                                          // Create a bufferID
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.IndexBufferID);                     // Attach it to the Element Array buffer
-	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_buffer_data_arrow.sizeIndeces() + g_buffer_data_cube.sizeIndeces(), nullptr, GL_STATIC_DRAW); // Move the data into the buffer
-	//glBufferSubData(
-	//	GL_ELEMENT_ARRAY_BUFFER,
-	//	0,
-	//	g_buffer_data_arrow.sizeIndeces(),
-	//	&g_buffer_data_arrow.indeces.front());
-	//glBufferSubData(
-	//	GL_ELEMENT_ARRAY_BUFFER, 
-	//	g_buffer_data_arrow.sizeIndeces(), 
-	//	g_buffer_data_cube.sizeIndeces(), 
-	//	&g_buffer_data_cube.indeces.front());
-
 	const Vertex* base = nullptr;
 	const GLsizeiptr byteSizeOfArrow = g_buffer_data_arrow.sizeVertices() + g_buffer_data_arrow.sizeIndeces();
 	// // Generate the Vertex Aray Object (VAO)
@@ -251,10 +235,8 @@ void init (ApplicationState& _State)
 	// // ARROW // //
 	glBindVertexArray(_State.ArrowVertexArrayID);		// Attach the Vertex Array reader to the VAO ID
 	// // Open the VAO in order for it to be written to
-	//glEnableVertexArrayAttrib(_State.ArrowVertexArrayID, 0);
-	//glEnableVertexArrayAttrib(_State.ArrowVertexArrayID, 1);
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	glEnableVertexArrayAttrib(_State.ArrowVertexArrayID, 0);
+	glEnableVertexArrayAttrib(_State.ArrowVertexArrayID, 1);
 	
 	// // Store information about the buffer using the latest GL_ARRAY_BUFFER to be called.
 	glVertexAttribPointer(
@@ -263,11 +245,9 @@ void init (ApplicationState& _State)
 		GL_FLOAT,					// // type // //
 		GL_FALSE,					// // normalised  // //
 		sizeof(Vertex),				// // stride // //
-		(void*)0    				// // array buffer offset // //
-		//&base->position
+		&base->position				// // array buffer offset // //
 	);
-	//glEnableVertexArrayAttrib(_State.ArrowVertexArrayID, 1);
-	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(glm::tvec3<GLfloat>) /*&base->color*/);
+	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), &base->color);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
 
 
@@ -366,13 +346,12 @@ void render_frame (ApplicationState& _State)
 
 	 //Tell OpenGL which array buffer to use for upcoming draw call
 	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
-	 //glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
 
 
 
 	 //Draw call uses all the relevent OpenGL global variables set up to this point
 	 //glDrawElements(GL_TRIANGLES, _State.numIndices, GL_UNSIGNED_SHORT, nullptr);
-	 glDrawElementsInstanced(GL_TRIANGLES, _State.arrowNumIndices, GL_UNSIGNED_SHORT, nullptr, GLsizei(_State.offsets.size()));
+	 glDrawElementsInstanced(GL_TRIANGLES, 6/*_State.arrowNumIndices*/, GL_UNSIGNED_SHORT, (void*)(sizeof(Vertex) * 14), GLsizei(_State.offsets.size()));
 
 	 //glDrawElementsInstanced(GL_TRIANGLES, _State.numIndices, GL_UNSIGNED_SHORT, nullptr, GLsizei(_State.offsets.size()));
 
