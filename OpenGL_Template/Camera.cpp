@@ -3,8 +3,8 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 
-const float Camera::moveSpeed      = 0.5;
-const float Camera::mouseMoveSpeed = 0.05;
+const float Camera::moveSpeed      = 0.5f;
+const float Camera::mouseMoveSpeed = 0.05f;
 const float Camera::rotationSpeed  = 0.007f;
 
 Camera::Camera() :
