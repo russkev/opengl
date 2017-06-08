@@ -35,7 +35,9 @@ struct ApplicationState {
 	GLuint MatrixBufferID     = 0;
 
 	GLuint numBuffers      = 1;
-	GLuint numIndices      = 0;
+	//GLuint numIndices      = 0;
+	GLuint cubeNumIndices  = 0;
+	GLuint arrowNumIndices = 0;
 	GLuint matrixLoc	   = 0;
 
 	glm::mat4 view        = glm::mat4();
@@ -189,7 +191,8 @@ void init (ApplicationState& _State)
 	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
 	static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
 	static ShapeData g_buffer_data_arrow    = ShapeGenerator::makeArrow();
-	_State.numIndices = g_buffer_data_arrow.numIndeces() + g_buffer_data_cube.numIndeces();
+	_State.arrowNumIndices = g_buffer_data_arrow.numIndeces();
+	_State.cubeNumIndices  = g_buffer_data_cube.numIndeces();
 
 	glm::vec3 arrowTranslate = { 0.0f, 3.0f, 0.0f };
 	for (auto& i : g_buffer_data_arrow.vertices) {
@@ -205,9 +208,6 @@ void init (ApplicationState& _State)
 	glGenBuffers(1, &_State.TheBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
 	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_arrow.sizeVertices() + g_buffer_data_arrow.sizeIndeces() + g_buffer_data_cube.sizeVertices() + g_buffer_data_cube.sizeIndeces(), nullptr, GL_STATIC_DRAW);
-
-	auto temp1 = g_buffer_data_arrow.sizeVertices();
-	auto temp2 = g_buffer_data_cube.sizeIndeces();
 
 
 	GLsizeiptr currentOffset = 0;
@@ -240,18 +240,22 @@ void init (ApplicationState& _State)
 	//	g_buffer_data_cube.sizeIndeces(), 
 	//	&g_buffer_data_cube.indeces.front());
 
-
+	const Vertex* base = nullptr;
+	const GLsizeiptr byteSizeOfArrow = g_buffer_data_arrow.sizeVertices() + g_buffer_data_arrow.sizeIndeces();
 	// // Generate the Vertex Aray Object (VAO)
 	// // This will later store all the information about what is actually in the vertex buffer
-	glGenVertexArrays(1, &_State.CubeVertexArrayID);    // Create a VAO ID
-	glGenVertexArrays(1, &_State.ArrowVertexArrayID)
+	glGenVertexArrays(1, &_State.ArrowVertexArrayID);    // Create a VAO ID
+	glGenVertexArrays(1, &_State.CubeVertexArrayID);
 
-	glBindVertexArray(_State.VertexArrayID);		// Attach the Vertex Array reader to the VAO ID
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
-	
-	const Vertex* base = nullptr;
+
+	// // ARROW // //
+	glBindVertexArray(_State.ArrowVertexArrayID);		// Attach the Vertex Array reader to the VAO ID
 	// // Open the VAO in order for it to be written to
-	glEnableVertexArrayAttrib(_State.VertexArrayID, 0);
+	//glEnableVertexArrayAttrib(_State.ArrowVertexArrayID, 0);
+	//glEnableVertexArrayAttrib(_State.ArrowVertexArrayID, 1);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	
 	// // Store information about the buffer using the latest GL_ARRAY_BUFFER to be called.
 	glVertexAttribPointer(
 		0,							// // attribute 0, must match the layout in shader // //
@@ -259,12 +263,33 @@ void init (ApplicationState& _State)
 		GL_FLOAT,					// // type // //
 		GL_FALSE,					// // normalised  // //
 		sizeof(Vertex),				// // stride // //
-		&base->position				// // array buffer offset // //
+		(void*)0    				// // array buffer offset // //
+		//&base->position
 	);
-	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), &base->color);
+	//glEnableVertexArrayAttrib(_State.ArrowVertexArrayID, 1);
+	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(glm::tvec3<GLfloat>) /*&base->color*/);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
 
-	glEnableVertexArrayAttrib(_State.VertexArrayID, 1);
+
+
+	//glEnableVertexArrayAttrib(_State.CubeVertexArrayID, 0);
+	//glEnableVertexArrayAttrib(_State.CubeVertexArrayID, 1);
 	//glVertexAttrib3f(1, 1, 0, 1);
+
+
+	// // CUBE // // 
+	glBindVertexArray(_State.CubeVertexArrayID);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
+	//glEnableVertexArrayAttrib(_State.CubeVertexArrayID, 0);
+
+	glVertexAttribPointer(0, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)byteSizeOfArrow /*&base->position*/);
+	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(byteSizeOfArrow + sizeof(glm::tvec3<GLfloat>))/*&base->color*/);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
+
+
+
 
 
 	// // Push offset information to the graphics card memory
@@ -289,7 +314,8 @@ void init (ApplicationState& _State)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*MVP.size(), MVP.data(), GL_DYNAMIC_DRAW);
 	_State.matrixLoc = 2;
 	for (int i = 0; i < 4; ++i) {
-		glEnableVertexArrayAttrib(_State.VertexArrayID, _State.matrixLoc + i);
+		//glEnableVertexArrayAttrib(_State.ArrowVertexArrayID, _State.matrixLoc + i);
+		glEnableVertexAttribArray(_State.matrixLoc + i);
 		glVertexAttribPointer(_State.matrixLoc + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * (i * 4)));
 		glVertexAttribDivisor(_State.matrixLoc + i, 1);
 	}
@@ -346,7 +372,9 @@ void render_frame (ApplicationState& _State)
 
 	 //Draw call uses all the relevent OpenGL global variables set up to this point
 	 //glDrawElements(GL_TRIANGLES, _State.numIndices, GL_UNSIGNED_SHORT, nullptr);
-	 glDrawElementsInstanced(GL_TRIANGLES, _State.numIndices, GL_UNSIGNED_SHORT, nullptr, GLsizei(_State.offsets.size()));
+	 glDrawElementsInstanced(GL_TRIANGLES, _State.arrowNumIndices, GL_UNSIGNED_SHORT, nullptr, GLsizei(_State.offsets.size()));
+
+	 //glDrawElementsInstanced(GL_TRIANGLES, _State.numIndices, GL_UNSIGNED_SHORT, nullptr, GLsizei(_State.offsets.size()));
 
 	 
 
@@ -355,7 +383,8 @@ void exit(ApplicationState &_State) {
 	glDeleteBuffers(_State.numBuffers, &_State.TheBufferID);
 	glDeleteBuffers(_State.numBuffers, &_State.ColorBufferID);
 	glDeleteBuffers(_State.numBuffers, &_State.TheBufferID);
-	glDeleteVertexArrays(_State.numBuffers, &_State.VertexArrayID);
+	glDeleteVertexArrays(_State.numBuffers, &_State.ArrowVertexArrayID);
+	glDeleteVertexArrays(_State.numBuffers, &_State.CubeVertexArrayID);
 }
 
 bool poll_events (ApplicationState& _State)
