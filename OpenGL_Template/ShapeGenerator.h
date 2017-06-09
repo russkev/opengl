@@ -15,9 +15,9 @@ namespace ShapeGenerator {
 		m_triangle.vertices.push_back({ glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) });
 		m_triangle.vertices.push_back({ glm::vec3(0.5f, 0.0f,  0.0f), glm::vec3(0.0f, 0.0f, 1.0f) });
 
-		m_triangle.indeces.push_back(0);
-		m_triangle.indeces.push_back(1);
-		m_triangle.indeces.push_back(2);
+		m_triangle.indices.push_back(0);
+		m_triangle.indices.push_back(1);
+		m_triangle.indices.push_back(2);
 
 		return m_triangle;
 	}
@@ -42,23 +42,23 @@ namespace ShapeGenerator {
 			}
 		}
 		// // Front
-		m_cube.indeces.push_back(4); m_cube.indeces.push_back(7); m_cube.indeces.push_back(6); 
-		m_cube.indeces.push_back(4); m_cube.indeces.push_back(6); m_cube.indeces.push_back(5);
+		m_cube.indices.push_back(4); m_cube.indices.push_back(7); m_cube.indices.push_back(6); 
+		m_cube.indices.push_back(4); m_cube.indices.push_back(6); m_cube.indices.push_back(5);
 		// // Top
-		m_cube.indeces.push_back(7); m_cube.indeces.push_back(6); m_cube.indeces.push_back(2);
-		m_cube.indeces.push_back(7); m_cube.indeces.push_back(2); m_cube.indeces.push_back(3);
+		m_cube.indices.push_back(7); m_cube.indices.push_back(6); m_cube.indices.push_back(2);
+		m_cube.indices.push_back(7); m_cube.indices.push_back(2); m_cube.indices.push_back(3);
 		// // Right
-		m_cube.indeces.push_back(5); m_cube.indeces.push_back(1); m_cube.indeces.push_back(2);
-		m_cube.indeces.push_back(5); m_cube.indeces.push_back(2); m_cube.indeces.push_back(6);
+		m_cube.indices.push_back(5); m_cube.indices.push_back(1); m_cube.indices.push_back(2);
+		m_cube.indices.push_back(5); m_cube.indices.push_back(2); m_cube.indices.push_back(6);
 		// // Back
-		m_cube.indeces.push_back(1); m_cube.indeces.push_back(0); m_cube.indeces.push_back(3);
-		m_cube.indeces.push_back(1); m_cube.indeces.push_back(3); m_cube.indeces.push_back(2);
+		m_cube.indices.push_back(1); m_cube.indices.push_back(0); m_cube.indices.push_back(3);
+		m_cube.indices.push_back(1); m_cube.indices.push_back(3); m_cube.indices.push_back(2);
 		// // Left
-		m_cube.indeces.push_back(0); m_cube.indeces.push_back(4); m_cube.indeces.push_back(7);
-		m_cube.indeces.push_back(0); m_cube.indeces.push_back(7); m_cube.indeces.push_back(3);
+		m_cube.indices.push_back(0); m_cube.indices.push_back(4); m_cube.indices.push_back(7);
+		m_cube.indices.push_back(0); m_cube.indices.push_back(7); m_cube.indices.push_back(3);
 		// // Bottom
-		m_cube.indeces.push_back(5); m_cube.indeces.push_back(4); m_cube.indeces.push_back(0);
-		m_cube.indeces.push_back(5); m_cube.indeces.push_back(0); m_cube.indeces.push_back(1);
+		m_cube.indices.push_back(5); m_cube.indices.push_back(4); m_cube.indices.push_back(0);
+		m_cube.indices.push_back(5); m_cube.indices.push_back(0); m_cube.indices.push_back(1);
 		return m_cube;
 	}
 
@@ -101,7 +101,7 @@ namespace ShapeGenerator {
 		};
 
 		for (int i = 0; i < (sizeof(tempTriangles) / sizeof(GLushort)); ++i) {
-			m_arrow.indeces.push_back(tempTriangles[i]);
+			m_arrow.indices.push_back(tempTriangles[i]);
 		}
 		return m_arrow;
 	}
