@@ -40,7 +40,9 @@ struct ApplicationState {
 	GLuint arrowNumIndices = 0;
 	GLuint matrixLoc	   = 0;
 	GLsizeiptr sizeOfArrow = 0;
+
 	GLsizeiptr sizeOfArrowVerts = 0;
+	GLsizeiptr sizeOfCubeVerts = 0;
 
 	glm::mat4 view        = glm::mat4();
 	glm::mat4 projection  = glm::mat4();
@@ -239,6 +241,7 @@ void init (ApplicationState& _State)
 	const Vertex* base = nullptr;
 	_State.sizeOfArrow = g_buffer_data_arrow.sizeVertices() + g_buffer_data_arrow.sizeIndices();
 	_State.sizeOfArrowVerts = g_buffer_data_arrow.sizeVertices();
+	_State.sizeOfCubeVerts = g_buffer_data_cube.sizeVertices();
 	// // Generate the Vertex Aray Object (VAO)
 	// // This will later store all the information about what is actually in the vertex buffer
 	glGenVertexArrays(1, &_State.ArrowVertexArrayID);    // Create a VAO ID
@@ -367,7 +370,7 @@ void render_frame (ApplicationState& _State)
 
 	 //Draw call uses all the relevent OpenGL global variables set up to this point
 	 //glDrawElements(GL_TRIANGLES, _State.numIndices, GL_UNSIGNED_SHORT, nullptr);
-	 glDrawElementsInstanced(GL_TRIANGLES, _State.arrowNumIndices, GL_UNSIGNED_SHORT, (void*)(_State.sizeOfArrow + _State.sizeOfCubeVerts_State.sizeOfArrowVerts/*(void*)(336)*/, GLsizei(_State.offsets.size()));
+	 glDrawElementsInstanced(GL_TRIANGLES, _State.arrowNumIndices, GL_UNSIGNED_SHORT, (void*)/*(_State.sizeOfArrow + _State.sizeOfCubeVerts)*/_State.sizeOfArrowVerts/*(void*)(336)*/, GLsizei(_State.offsets.size()));
 
 	 //glDrawElementsInstanced(GL_TRIANGLES, _State.cubeNumIndices,  GL_UNSIGNED_SHORT, (void*)(sizeof(Vertex) * 14 + _State.sizeOfArrow), GLsizei(_State.offsets.size()));
 
