@@ -22,9 +22,9 @@
 //#include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-static constexpr auto POSITIONATTR = 0u;
-static constexpr auto COLORATTR    = 0u;
-static constexpr auto MODELATTR    = 0u;
+static constexpr auto POSITION_ATTR = 0u;
+static constexpr auto COLOR_ATTR    = 1u;
+static constexpr auto MODEL_ATTR    = 2u;
 
 struct ApplicationState {
 	GLuint programID       = 0;
@@ -42,7 +42,7 @@ struct ApplicationState {
 	//GLuint numIndices      = 0;
 	GLuint cubeNumIndices  = 0;
 	GLuint arrowNumIndices = 0;
-	GLuint matrixLoc	   = 0;
+	//GLuint matrixLoc	   = 0;
 	GLsizeiptr sizeOfArrow = 0;
 
 	GLsizeiptr sizeOfArrowVerts = 0;
@@ -213,11 +213,6 @@ void init (ApplicationState& _State)
 	// // END TEST // //
 
 
-	//// // Move the cube indices over so that they correspond to the correct vertices
-	//for (auto& it : g_buffer_data_arrow.indices) {
-	//	it += (GLushort)g_buffer_data_arrow.vertices.size() + (GLushort)g_buffer_data_arrow.indices.size();
-	//}
-
 	for (auto& it : g_buffer_data_cube.indices) {
 		it += (GLushort)g_buffer_data_arrow.vertices.size() + (GLushort)g_buffer_data_arrow.indices.size();
 	}
@@ -225,22 +220,20 @@ void init (ApplicationState& _State)
 	// // Push cube and arrow vertices to :graphics card memory (location: TheBufferID):
 	glGenBuffers(1, &_State.TheBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
-	glBufferData(GL_ARRAY_BUFFER, g_buffer_data_arrow.sizeVertices() + g_buffer_data_arrow.sizeIndices() + g_buffer_data_cube.sizeVertices() + g_buffer_data_cube.sizeIndices(), nullptr, GL_STATIC_DRAW);
-
+	glBufferData(GL_ARRAY_BUFFER, 
+		g_buffer_data_arrow.sizeVertices() + g_buffer_data_arrow.sizeIndices() + 
+		g_buffer_data_cube.sizeVertices() + g_buffer_data_cube.sizeIndices(), nullptr, GL_STATIC_DRAW);
 
 	GLsizeiptr currentOffset = 0;
 	// //             Target buffer    Offset        Size of the data being replaced            Pointer to the data
-	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_arrow.sizeVertices(), &g_buffer_data_arrow.vertices.front());  //ARROW VERTS
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_arrow.sizeVertices(), &g_buffer_data_arrow.vertices.front()); //ARROW VERTS
 	currentOffset += g_buffer_data_arrow.sizeVertices(); //336 (4*6*14)
-	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_arrow.sizeIndices(), &g_buffer_data_arrow.indices.front());    //ARROW INDICES
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_arrow.sizeIndices(),  &g_buffer_data_arrow.indices.front());  //ARROW INDICES
 	currentOffset += g_buffer_data_arrow.sizeIndices();  //480 (336 + 72*2)
-	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_cube.sizeVertices(), &g_buffer_data_cube.vertices.front());  //CUBE VERTS
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_cube.sizeVertices(),  &g_buffer_data_cube.vertices.front());	//CUBE VERTS
 	currentOffset += g_buffer_data_cube.sizeVertices();
-	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_cube.sizeIndices(), &g_buffer_data_cube.indices.front());      //CUBE INDICES
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_cube.sizeIndices(),   &g_buffer_data_cube.indices.front());   //CUBE INDICES
 
-	//for (auto& it : g_buffer_data_cube.indices) {
-	//	it += (GLushort)g_buffer_data_arrow.vertices.size() + (GLushort)g_buffer_data_arrow.indices.size();
-	//}
 
 	const Vertex* base = nullptr;
 	_State.sizeOfArrow = g_buffer_data_arrow.sizeVertices() + g_buffer_data_arrow.sizeIndices();
@@ -254,45 +247,21 @@ void init (ApplicationState& _State)
 
 	// // ARROW // //
 	glBindVertexArray(_State.ArrowVertexArrayID);		// Attach the Vertex Array reader to the VAO ID
-	// // Open the VAO in order for it to be written to
-	//glEnableVertexArrayAttrib(_State.ArrowVertexArrayID, 0);
-	//glEnableVertexArrayAttrib(_State.ArrowVertexArrayID, 1);
-
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	
-	// // Store information about the buffer using the latest GL_ARRAY_BUFFER to be called.
-	glVertexAttribPointer(
-		0,							// // attribute 0, must match the layout in shader // //
-		3u,							// // size (1,2,3 or 4) // //
-		GL_FLOAT,					// // type // //
-		GL_FALSE,					// // normalised  // //
-		sizeof(Vertex),				// // stride // //
-		&base->position				// // array buffer offset // //
-	);
-	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), &base->color);
+	glEnableVertexAttribArray(POSITION_ATTR);
+	glEnableVertexAttribArray(COLOR_ATTR);
+	glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
+	glVertexAttribPointer(POSITION_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), &base->position);
+	glVertexAttribPointer(COLOR_ATTR,    3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), &base->color   );
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
-
-
-
-	//glEnableVertexArrayAttrib(_State.CubeVertexArrayID, 0);
-	//glEnableVertexArrayAttrib(_State.CubeVertexArrayID, 1);
-	//glVertexAttrib3f(1, 1, 0, 1);
-
 
 	// // CUBE // // 
 	glBindVertexArray(_State.CubeVertexArrayID);
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(POSITION_ATTR);
+	glEnableVertexAttribArray(COLOR_ATTR   );
+	glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
+	glVertexAttribPointer(POSITION_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)_State.sizeOfArrow /*&base->position*/);
+	glVertexAttribPointer(COLOR_ATTR,    3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(_State.sizeOfArrow + sizeof(glm::tvec3<GLfloat>))/*&base->color*/);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
-	//glEnableVertexArrayAttrib(_State.CubeVertexArrayID, 0);
-
-	glVertexAttribPointer(0, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)_State.sizeOfArrow /*&base->position*/);
-	glVertexAttribPointer(1, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(_State.sizeOfArrow + sizeof(glm::tvec3<GLfloat>))/*&base->color*/);
-	//(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
-
-
-
 
 
 	// // Push offset information to the graphics card memory
@@ -305,7 +274,6 @@ void init (ApplicationState& _State)
 		_State.offsets.push_back(lineStart);
 		lineStart += spacing;
 	}
-	//_State.offsets = { -8.0f, -6.0, -5.0f, -3.0f, 0.0f, 2.5f, 4.0f };
 	glGenBuffers(1, &_State.MatrixBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
 
@@ -315,12 +283,11 @@ void init (ApplicationState& _State)
 		MVP.push_back(glm::mat4(1.0));
 	}
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*MVP.size(), MVP.data(), GL_DYNAMIC_DRAW);
-	_State.matrixLoc = 2;
 	for (int i = 0; i < 4; ++i) {
 		//glEnableVertexArrayAttrib(_State.ArrowVertexArrayID, _State.matrixLoc + i);
-		glEnableVertexAttribArray(_State.matrixLoc + i);
-		glVertexAttribPointer(_State.matrixLoc + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * (i * 4)));
-		glVertexAttribDivisor(_State.matrixLoc + i, 1);
+		glEnableVertexAttribArray(MODEL_ATTR + i);
+		glVertexAttribPointer(MODEL_ATTR + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * (i * 4)));
+		glVertexAttribDivisor(MODEL_ATTR + i, 1);
 	}
 	return;
 }
