@@ -22,6 +22,10 @@
 //#include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+static constexpr auto POSITIONATTR = 0u;
+static constexpr auto COLORATTR    = 0u;
+static constexpr auto MODELATTR    = 0u;
+
 struct ApplicationState {
 	GLuint programID       = 0;
 	GLuint matrixID        = 0;
