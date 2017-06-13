@@ -222,9 +222,9 @@ void init (ApplicationState& _State)
 	// // END TEST // //
 
 
-	for (auto& it : g_buffer_data_arrow.indices) {
-		it += ((GLushort)g_buffer_data_cube.vertices.size());
-	}
+	//for (auto& it : g_buffer_data_arrow.indices) {
+	//	it += ((GLushort)g_buffer_data_cube.vertices.size());
+	//}
 
 	// // Push cube and arrow vertices to :graphics card memory (location: TheBufferID):
 	glGenBuffers(1, &_State.TheBufferID);
