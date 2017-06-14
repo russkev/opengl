@@ -223,7 +223,7 @@ void init (ApplicationState& _State)
 
 
 	for (auto& it : g_buffer_data_arrow.indices) {
-		it += ((GLushort)g_buffer_data_cube.vertices.size() +(GLushort)g_buffer_data_cube.indices.size());
+		it += ((GLushort)g_buffer_data_cube.vertices.size());
 	}
 
 	// // Push cube and arrow vertices to :graphics card memory (location: TheBufferID):
@@ -235,13 +235,13 @@ void init (ApplicationState& _State)
 
 	GLsizeiptr currentOffset = 0;
 	// //             Target buffer    Offset        Size of the data being replaced            Pointer to the data
-	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_cube.sizeVertices(), &g_buffer_data_cube.vertices.front()); //ARROW VERTS
-	currentOffset += g_buffer_data_cube.sizeVertices(); //336 (4*6*14)
-	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_cube.sizeIndices(),  &g_buffer_data_cube.indices.front());  //ARROW INDICES
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_cube.sizeVertices(), &g_buffer_data_cube.vertices.front());		//CUBE VERTS
+	currentOffset += g_buffer_data_cube.sizeVertices(); //336 (4*6*14)																 
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_cube.sizeIndices(),  &g_buffer_data_cube.indices.front());		//CUBE INDICES
 	currentOffset += g_buffer_data_cube.sizeIndices();  //480 (336 + 72*2)
-	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_arrow.sizeVertices(),  &g_buffer_data_arrow.vertices.front());	//CUBE VERTS
-	currentOffset += g_buffer_data_arrow.sizeVertices();  //672
-	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_arrow.sizeIndices(),   &g_buffer_data_arrow.indices.front());   //CUBE INDICES
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_arrow.sizeVertices(),  &g_buffer_data_arrow.vertices.front());	//ARROW VERTS
+	currentOffset += g_buffer_data_arrow.sizeVertices();  //672																		  
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_arrow.sizeIndices(),   &g_buffer_data_arrow.indices.front());		//ARROW INDICES
 
 
 	const Vertex* base = nullptr;
@@ -271,7 +271,7 @@ void init (ApplicationState& _State)
 	glVertexAttribPointer(    COLOR_ATTR,    3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(_State.sizeOfCube + sizeof(glm::tvec3<GLfloat>)));
 
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
 
 	
 
@@ -348,30 +348,24 @@ void render_frame (ApplicationState& _State)
 			 glm::vec3(0.1f, 0.1f, 0.1f)));					//Scale
 	 }
 
-	 //for (auto i : _State.VertexArrays) {
+	// // Cube // // 
 	glBindVertexArray(_State.CubeVertexArrayID);
-	// Send updated matrix to appropriate buffer
 	glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
 	auto matrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
 	std::copy(MVP.begin(), MVP.end(), matrixBufferPtr);
 	glUnmapBuffer(GL_ARRAY_BUFFER);
-	 //}
-	 
-	
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
+	glDrawElementsInstanced(GL_TRIANGLES, _State.cubeNumIndices, GL_UNSIGNED_SHORT, (void*)_State.sizeOfCubeVerts, GLsizei(_State.numInstances));
 
-	 glBindVertexArray(_State.CubeVertexArrayID);	
-	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
-	 glDrawElementsInstanced(GL_TRIANGLES, _State.cubeNumIndices, GL_UNSIGNED_SHORT, (void*)_State.sizeOfCubeVerts, GLsizei(_State.numInstances));
 
-	 glBindVertexArray(_State.CubeVertexArrayID);
-	 glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
-	 matrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
-	 std::copy(MVP.begin(), MVP.end(), matrixBufferPtr);
-	 glUnmapBuffer(GL_ARRAY_BUFFER);
-
-	 glBindVertexArray(_State.CubeVertexArrayID);
-	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
-	 glDrawElementsInstanced(GL_TRIANGLES, _State.cubeNumIndices,  GL_UNSIGNED_SHORT, (void*)672/*(_State.sizeOfArrow+_State.sizeOfCubeVerts)*/, GLsizei(_State.numInstances));
+	// // ARROW // //
+	glBindVertexArray(_State.ArrowVertexArrayID);
+	glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
+	matrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+	std::copy(MVP.begin(), MVP.end(), matrixBufferPtr);
+	glUnmapBuffer(GL_ARRAY_BUFFER);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
+	glDrawElementsInstanced(GL_TRIANGLES, _State.arrowNumIndices,  GL_UNSIGNED_SHORT, (void*)(_State.sizeOfCube+_State.sizeOfArrowVerts), GLsizei(_State.numInstances));
 }
 
 
