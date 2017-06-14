@@ -196,7 +196,7 @@ void init (ApplicationState& _State)
 
 	// // Create 3D models
 	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
-	static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();
+	static ShapeData g_buffer_data_cube     = ShapeGenerator::makePlane();
 	static ShapeData g_buffer_data_arrow    = ShapeGenerator::makeArrow();
 	_State.arrowNumIndices = g_buffer_data_arrow.numIndices();
 	_State.cubeNumIndices  = g_buffer_data_cube.numIndices();
@@ -213,6 +213,7 @@ void init (ApplicationState& _State)
 
 
 	// // TEST // //
+	auto test = randomColor();
 	loadBMP_custom BMP1 ("uvtemplate.bmp");
 	// // END TEST // //
 
@@ -353,6 +354,8 @@ void exit(ApplicationState &_State) {
 	glDeleteBuffers(_State.numBuffers, &_State.TheBufferID);
 	glDeleteVertexArrays(_State.numBuffers, &_State.ArrowVertexArrayID);
 	glDeleteVertexArrays(_State.numBuffers, &_State.CubeVertexArrayID);
+	glUseProgram(0);
+	glDeleteProgram(_State.programID);
 }
 
 bool poll_events (ApplicationState& _State)
