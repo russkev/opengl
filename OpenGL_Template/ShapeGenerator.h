@@ -6,6 +6,13 @@
 #include "ShapeData.h"
 #include "Vertex.h"
 
+glm::vec3 randomColor() {
+	return glm::vec3(
+		rand() / (float)RAND_MAX,
+		rand() / (float)RAND_MAX,
+		rand() / (float)RAND_MAX
+		);
+}
 
 namespace ShapeGenerator {
 	ShapeData makeTriangle() {
@@ -20,6 +27,28 @@ namespace ShapeGenerator {
 		m_triangle.indices.push_back(2);
 
 		return m_triangle;
+	}
+
+	ShapeData makePlane(GLuint dimensions = 10) {
+		ShapeData m_plane;
+		GLuint offset = 0;
+		for (GLuint x = dimensions * -0.5; x > dimensions * 0.5; ++x) {
+			for (GLuint z = dimensions * -0.5; z > dimensions * 0.5; ++z) {
+				m_plane.vertices.push_back({ glm::vec3(x,   0, z  ), randomColor() });
+				m_plane.vertices.push_back({ glm::vec3(x,   0, z+1), randomColor() });
+				m_plane.vertices.push_back({ glm::vec3(x+1, 0, z  ), randomColor() });
+				m_plane.vertices.push_back({ glm::vec3(x+1, 0, z+1), randomColor() });
+
+				m_plane.indices.push_back(0+offset); m_plane.indices.push_back(1+offset); m_plane.indices.push_back(2+offset);
+				m_plane.indices.push_back(1+offset); m_plane.indices.push_back(2+offset); m_plane.indices.push_back(3+offset);
+				offset += 6;
+			}
+		}
+
+
+
+
+		return m_plane;
 	}
 
 	ShapeData makeCube() {
