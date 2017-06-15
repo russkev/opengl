@@ -29,19 +29,25 @@ namespace ShapeGenerator {
 		return m_triangle;
 	}
 
-	ShapeData makePlane(GLuint dimensions = 10) {
+	ShapeData makePlane(GLuint dimensions = 2) {
 		ShapeData m_plane;
 		GLuint offset = 0;
-		for (GLuint x = dimensions * -0.5; x > dimensions * 0.5; ++x) {
-			for (GLuint z = dimensions * -0.5; z > dimensions * 0.5; ++z) {
+		for (GLint x = GLint(dimensions * -0.5f); x < GLint(dimensions*0.5f+1.5); ++x){
+			for (GLint z = GLint(dimensions * -0.5f); z < GLint(dimensions*0.5f + 1.5); ++z) {
 				m_plane.vertices.push_back({ glm::vec3(x,   0, z  ), randomColor() });
-				m_plane.vertices.push_back({ glm::vec3(x,   0, z+1), randomColor() });
-				m_plane.vertices.push_back({ glm::vec3(x+1, 0, z  ), randomColor() });
-				m_plane.vertices.push_back({ glm::vec3(x+1, 0, z+1), randomColor() });
-
-				m_plane.indices.push_back(0+offset); m_plane.indices.push_back(1+offset); m_plane.indices.push_back(2+offset);
-				m_plane.indices.push_back(1+offset); m_plane.indices.push_back(2+offset); m_plane.indices.push_back(3+offset);
-				offset += 6;
+				//std::cout << "(" << x << "," << z << ")";
+			}
+		}
+		for (GLushort y = 0; y < dimensions; ++y) {
+			for (GLushort x = 0; x < dimensions; ++x) {
+				GLushort a = x + y + dimensions * y;
+				GLushort b = x + y + 1 + dimensions * y;
+				GLushort c = x + y + 1 + dimensions + dimensions * y;
+				GLushort d = x + y + 2 + dimensions + dimensions * y;
+				m_plane.indices.push_back(c); m_plane.indices.push_back(b); m_plane.indices.push_back(a);
+				m_plane.indices.push_back(c); m_plane.indices.push_back(d); m_plane.indices.push_back(b);
+				//std::cout << c << "," << b << "," << a << "    "
+				//		  << c << "," << d << "," << b << "\n";
 			}
 		}
 

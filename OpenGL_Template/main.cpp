@@ -196,8 +196,10 @@ void init (ApplicationState& _State)
 
 	// // Create 3D models
 	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
-	static ShapeData g_buffer_data_cube     = ShapeGenerator::makePlane();
+	static ShapeData g_buffer_data_cube     = ShapeGenerator::makePlane(20);
 	static ShapeData g_buffer_data_arrow    = ShapeGenerator::makeArrow();
+	static ShapeData g_buffer_data_plane    = ShapeGenerator::makePlane();
+
 	_State.arrowNumIndices = g_buffer_data_arrow.numIndices();
 	_State.cubeNumIndices  = g_buffer_data_cube.numIndices();
 
@@ -342,7 +344,8 @@ void render_frame (ApplicationState& _State)
 			 std::copy(MVP.begin(), MVP.end(), matrixBufferPtr);
 			 glUnmapBuffer(GL_ARRAY_BUFFER);
 			 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
-			 glDrawElementsInstanced(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, GLsizei(_State.numInstances));
+			 //glDrawElementsInstanced(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, GLsizei(_State.numInstances));
+			 glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset);
 			 offset = _State.sizeOfCube + _State.sizeOfArrowVerts;
 			 numIndices = _State.arrowNumIndices;
 		 }
