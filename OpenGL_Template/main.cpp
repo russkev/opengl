@@ -180,6 +180,8 @@ void init (ApplicationState& _State)
 
 	// // Enable depth test // //
 	glEnable(GL_DEPTH_TEST);
+	// // Enable backface culling // //
+	glEnable(GL_CULL_FACE);
 	// // Accept fragment shader if it closer to the camera than the previous one
 	glDepthFunc(GL_LESS);
 
@@ -196,7 +198,7 @@ void init (ApplicationState& _State)
 
 	// // Create 3D models
 	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
-	static ShapeData g_buffer_data_cube     = ShapeGenerator::makePlane(20);
+	static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();//makePlane(20);
 	static ShapeData g_buffer_data_arrow    = ShapeGenerator::makeArrow();
 	static ShapeData g_buffer_data_plane    = ShapeGenerator::makePlane();
 
@@ -204,11 +206,11 @@ void init (ApplicationState& _State)
 	_State.cubeNumIndices  = g_buffer_data_cube.numIndices();
 
 	// // Reposition the initial location of the models // //
-	glm::vec3 arrowTranslate = { 30.0f, 38.0f, 0.0f };
+	glm::vec3 arrowTranslate = { 0.0f, 3.0f, 0.0f };
 	for (auto& i : g_buffer_data_arrow.vertices) {
 		i.position += arrowTranslate;
 	}
-	glm::vec3 cubeTranslate = { 30.0f, 30.0f, 0.0f };
+	glm::vec3 cubeTranslate = { 0.0f, 0.0f, 0.0f };
 	for (auto& i : g_buffer_data_cube.vertices) {
 		i.position += cubeTranslate;
 	}
@@ -267,9 +269,9 @@ void init (ApplicationState& _State)
 
 	// // Push offset information to the graphics card memory
 	// // Make a line of evenly spaced cubes from line start to line finish
-	GLfloat lineStart = -8.0f;
-	GLfloat lineEnd   = +4.0f;
-	_State.numInstances   = 10;
+	GLfloat lineStart = -1.0f;
+	GLfloat lineEnd   = +1.0f;
+	_State.numInstances   = 2;
 	GLfloat spacing = (lineEnd - lineStart) / _State.numInstances;
 	while (lineStart <= lineEnd) {
 		_State.offsets.push_back(lineStart);
