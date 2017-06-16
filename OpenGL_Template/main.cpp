@@ -49,6 +49,7 @@ struct ApplicationState {
 
 	glm::mat4 view        = glm::mat4();
 	glm::mat4 projection  = glm::mat4();
+	std::vector<glm::mat4> MVP;
 	std::vector<GLfloat> offsets;
 	Camera cam;
 
@@ -198,7 +199,7 @@ void init (ApplicationState& _State)
 
 	// // Create 3D models
 	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
-	static ShapeData g_buffer_data_cube     = ShapeGenerator::makeCube();//makePlane(20);
+	static ShapeData g_buffer_data_cube     = ShapeGenerator::makePlane(20);
 	static ShapeData g_buffer_data_arrow    = ShapeGenerator::makeArrow();
 	static ShapeData g_buffer_data_plane    = ShapeGenerator::makePlane();
 
@@ -284,10 +285,13 @@ void init (ApplicationState& _State)
 	// Initial matrix
 	std::vector<glm::mat4> MVP;
 	for (GLuint i = 0; i < _State.numInstances; ++i) {
-		MVP.push_back(glm::mat4(1.0));
+		glm::mat4 tempMat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, -10.0f));
+		//glm::mat4 tempMat = glm::rotate(glm::mat4(1.0), 45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		_State.MVP.push_back(tempMat);
+		//MVP.push_back(glm::mat4(1.0));
 	}
 	
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*MVP.size(), MVP.data(), GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*_State.MVP.size(), _State.MVP.data(), GL_DYNAMIC_DRAW);
 	
 	for (auto& j : _State.VertexArrays) {
 		glBindVertexArray(j);
@@ -327,18 +331,27 @@ void render_frame (ApplicationState& _State)
 	 glUniform1f(_State.darkenID, colMult);
 
 
-	 // Matrix transformations
+	 //// Matrix transformations
 	 std::vector<glm::mat4> MVP;
-	 for (GLuint i = 0; i < _State.numInstances; i++) {
-		 MVP.push_back(glm::scale(glm::rotate(glm::translate(_State.projection*_State.cam.getWorldToViewMatrix(), 
-			 glm::vec3(0.0f, 0.0f, _State.offsets.at(i))),	//Translate
-			 0.6f*tpi, glm::vec3(0.0f, 1.0f, 1.0f)),		//Rotate
-			 glm::vec3(0.1f, 0.1f, 0.1f)));					//Scale
+	 //for (GLuint i = 0; i < _State.numInstances; i++) {
+		// MVP.push_back(glm::scale(glm::rotate(glm::translate(_State.projection*_State.cam.getWorldToViewMatrix(), 
+		//	 glm::vec3(0.0f, 0.0f, _State.offsets.at(i))),	//Translate
+		//	 0.6f*tpi, glm::vec3(0.0f, 1.0f, 1.0f)),		//Rotate
+		//	 glm::vec3(0.1f, 0.1f, 0.1f)));					//Scale
+	 //}
+	 for (GLuint i = 0; i < _State.numInstances; ++i){
+		 //glm::scale(glm::rotate(glm::translate(_State.MVP.at(i)*_State.cam.getWorldToViewMatrix(),
+			// glm::vec3(0.0f, 0.0f, 0.0f)),
+			// 0.6f*tpi, glm::vec3(0.0f, 1.0f, 1.0f)),
+			// glm::vec3(0.1f, 0.1f, 0.1f));
+		 auto transformMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, -10.0f));
+		 MVP.at(i) = _State.projection*_State.cam.getWorldToViewMatrix() * transformMatrix;// glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, -10.0f));
 	 }
 
 	 {
 		 GLsizeiptr offset  = _State.sizeOfCubeVerts;
 		 GLuint numIndices = _State.cubeNumIndices;
+		 GLsizei currentNumInstances = 1;
 		 for (auto i : _State.VertexArrays) {
 			 glBindVertexArray(i);
 			 glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
@@ -346,8 +359,9 @@ void render_frame (ApplicationState& _State)
 			 std::copy(MVP.begin(), MVP.end(), matrixBufferPtr);
 			 glUnmapBuffer(GL_ARRAY_BUFFER);
 			 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
-			 //glDrawElementsInstanced(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, GLsizei(_State.numInstances));
-			 glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset);
+			 glDrawElementsInstanced(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
+			 currentNumInstances = (GLsizei)_State.numInstances;
+			 //glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset);
 			 offset = _State.sizeOfCube + _State.sizeOfArrowVerts;
 			 numIndices = _State.arrowNumIndices;
 		 }
