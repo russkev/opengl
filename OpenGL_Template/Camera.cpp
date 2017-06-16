@@ -8,9 +8,9 @@ const float Camera::mouseMoveSpeed = 0.05f;
 const float Camera::rotationSpeed  = 0.007f;
 
 Camera::Camera() :
-	viewDirection(0.0f, 0.0f, -1.0f),
+	viewDirection(-0.0, -1.0f, -1.0f),
 	up(0.0f, 1.0f, 0.0f),
-	position(4.0, 4.0, 3.0)
+	position(0.0, 1.0, 0.0)
 {
 }
 

@@ -44,8 +44,8 @@ namespace ShapeGenerator {
 				GLushort b = x + y + 1 + dimensions * y;
 				GLushort c = x + y + 1 + dimensions + dimensions * y;
 				GLushort d = x + y + 2 + dimensions + dimensions * y;
-				m_plane.indices.push_back(c); m_plane.indices.push_back(b); m_plane.indices.push_back(a);
-				m_plane.indices.push_back(c); m_plane.indices.push_back(d); m_plane.indices.push_back(b);
+				m_plane.indices.push_back(c); m_plane.indices.push_back(a); m_plane.indices.push_back(b);
+				m_plane.indices.push_back(c); m_plane.indices.push_back(b); m_plane.indices.push_back(d);
 				//std::cout << c << "," << b << "," << a << "    "
 				//		  << c << "," << d << "," << b << "\n";
 			}
@@ -80,20 +80,20 @@ namespace ShapeGenerator {
 		m_cube.indices.push_back(4); m_cube.indices.push_back(7); m_cube.indices.push_back(6); 
 		m_cube.indices.push_back(4); m_cube.indices.push_back(6); m_cube.indices.push_back(5);
 		// // Top
-		m_cube.indices.push_back(7); m_cube.indices.push_back(6); m_cube.indices.push_back(2);
-		m_cube.indices.push_back(7); m_cube.indices.push_back(2); m_cube.indices.push_back(3);
+		m_cube.indices.push_back(7); m_cube.indices.push_back(2); m_cube.indices.push_back(6);
+		m_cube.indices.push_back(7); m_cube.indices.push_back(3); m_cube.indices.push_back(2);
 		// // Right
-		m_cube.indices.push_back(5); m_cube.indices.push_back(1); m_cube.indices.push_back(2);
-		m_cube.indices.push_back(5); m_cube.indices.push_back(2); m_cube.indices.push_back(6);
+		m_cube.indices.push_back(5); m_cube.indices.push_back(2); m_cube.indices.push_back(1);
+		m_cube.indices.push_back(5); m_cube.indices.push_back(6); m_cube.indices.push_back(2);
 		// // Back
-		m_cube.indices.push_back(1); m_cube.indices.push_back(0); m_cube.indices.push_back(3);
-		m_cube.indices.push_back(1); m_cube.indices.push_back(3); m_cube.indices.push_back(2);
+		m_cube.indices.push_back(1); m_cube.indices.push_back(3); m_cube.indices.push_back(0);
+		m_cube.indices.push_back(1); m_cube.indices.push_back(2); m_cube.indices.push_back(3);
 		// // Left
-		m_cube.indices.push_back(0); m_cube.indices.push_back(4); m_cube.indices.push_back(7);
-		m_cube.indices.push_back(0); m_cube.indices.push_back(7); m_cube.indices.push_back(3);
+		m_cube.indices.push_back(0); m_cube.indices.push_back(7); m_cube.indices.push_back(4);
+		m_cube.indices.push_back(0); m_cube.indices.push_back(3); m_cube.indices.push_back(7);
 		// // Bottom
-		m_cube.indices.push_back(5); m_cube.indices.push_back(4); m_cube.indices.push_back(0);
-		m_cube.indices.push_back(5); m_cube.indices.push_back(0); m_cube.indices.push_back(1);
+		m_cube.indices.push_back(5); m_cube.indices.push_back(0); m_cube.indices.push_back(4);
+		m_cube.indices.push_back(5); m_cube.indices.push_back(1); m_cube.indices.push_back(0);
 		return m_cube;
 	}
 
@@ -124,15 +124,15 @@ namespace ShapeGenerator {
 		}
 
 		GLushort tempTriangles[] = {
-			6, 1, 0, 6, 5, 1, 1, 3, 2, 1, 5, 3, 5, 4, 3, // Top face
-			0, 8, 7, 0, 1, 8,
-			8, 1, 2, 8, 2, 9,
-			11, 4, 5, 11, 5, 12,
-			13, 12, 5, 13, 5, 6,
-			11, 10, 3, 11, 3, 4,
-			13, 6, 0, 13, 0, 7,
-			3, 10, 9, 3, 9, 2,
-			10, 8, 9, 10, 12, 8, 10, 11, 12, 12, 7, 8, 12, 13, 7 // Bottom Face
+			6, 0, 1, 6, 1, 5, 1, 2, 3, 1, 3, 5, 5, 3, 4, // Top face
+			0, 7, 8, 0, 8, 1,
+			8, 2, 1, 8, 9, 2,
+			11, 5, 4, 11, 12, 5,
+			13, 5, 12, 13, 6, 5,
+			11, 3, 10, 11, 4, 3,
+			13, 0, 6, 13, 7, 0,
+			3, 9, 10, 3, 2, 9,
+			10, 9, 8, 10, 8, 12, 10, 12, 11, 12, 8, 7, 12, 7, 13 // Bottom Face
 		};
 
 		for (int i = 0; i < (sizeof(tempTriangles) / sizeof(GLushort)); ++i) {
