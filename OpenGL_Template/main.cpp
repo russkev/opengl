@@ -32,6 +32,7 @@ struct ApplicationState {
 
 	GLuint TheBufferID        = 0;
 	GLuint CubeVertexArrayID  = 0;
+	GLuint PlaneVertexArrayID = 0;
 	GLuint ArrowVertexArrayID = 0;
 	GLuint ColorBufferID      = 0;
 	GLuint MatrixBufferID     = 0;
@@ -41,11 +42,14 @@ struct ApplicationState {
 	GLuint numInstances    = 0;
 	GLuint cubeNumIndices  = 0;
 	GLuint arrowNumIndices = 0;
+	GLuint planeNumIndices = 0;
 
 	GLsizeiptr sizeOfArrow      = 0;
 	GLsizeiptr sizeOfCube       = 0;
+	GLsizeiptr sizeOfPlane		= 0;
 	GLsizeiptr sizeOfArrowVerts = 0;
 	GLsizeiptr sizeOfCubeVerts  = 0;
+	GLsizeiptr sizeOfPlaneVerts = 0;
 
 	glm::mat4 view        = glm::mat4();
 	glm::mat4 projection  = glm::mat4();
@@ -198,22 +202,21 @@ void init (ApplicationState& _State)
 	_State.view       = _State.cam.getWorldToViewMatrix();
 
 	// // Create 3D models
-	static ShapeData g_buffer_data_triangle = ShapeGenerator::makeTriangle();
-	static ShapeData g_buffer_data_cube     = ShapeGenerator::makePlane(20);
-	static ShapeData g_buffer_data_arrow    = ShapeGenerator::makeArrow();
-	static ShapeData g_buffer_data_plane    = ShapeGenerator::makePlane();
+	static ShapeData data_triangle = ShapeGenerator::makeTriangle();
+	static ShapeData data_plane     = ShapeGenerator::makePlane(20);
+	static ShapeData data_arrow    = ShapeGenerator::makeArrow();
 
-	_State.arrowNumIndices = g_buffer_data_arrow.numIndices();
-	_State.cubeNumIndices  = g_buffer_data_cube.numIndices();
+	_State.arrowNumIndices = data_arrow.numIndices();
+	_State.planeNumIndices  = data_plane.numIndices();
 
 	// // Reposition the initial location of the models // //
 	//glm::vec3 arrowTranslate = { 0.0f, 3.0f, 0.0f };
 	//for (auto& i : g_buffer_data_arrow.vertices) {
 	//	i.position += arrowTranslate;
 	//}
-	glm::vec3 cubeTranslate = { 0.0f, 0.0f, 0.0f };
-	for (auto& i : g_buffer_data_cube.vertices) {
-		i.position += cubeTranslate;
+	glm::vec3 planeTranslate = { 0.0f, 0.0f, 0.0f };
+	for (auto& i : data_plane.vertices) {
+		i.position += planeTranslate;
 	}
 
 
@@ -222,36 +225,36 @@ void init (ApplicationState& _State)
 	loadBMP_custom BMP1 ("uvtemplate.bmp");
 	// // END TEST // //
 
-	// // Push cube and arrow vertices to :graphics card memory (location: TheBufferID):
+	// // Push plane and arrow vertices to :graphics card memory (location: TheBufferID):
 	glGenBuffers(1, &_State.TheBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
 	glBufferData(GL_ARRAY_BUFFER, 
-		g_buffer_data_cube.sizeVertices() + g_buffer_data_cube.sizeIndices() + 
-		g_buffer_data_arrow.sizeVertices() + g_buffer_data_arrow.sizeIndices(), nullptr, GL_STATIC_DRAW);
+		data_plane.sizeVertices() + data_plane.sizeIndices() + 
+		data_arrow.sizeVertices() + data_arrow.sizeIndices(), nullptr, GL_STATIC_DRAW);
 
 	GLsizeiptr currentOffset = 0;
-	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_cube.sizeVertices(), &g_buffer_data_cube.vertices.front());		//CUBE VERTS
-	currentOffset += g_buffer_data_cube.sizeVertices(); //336 (4*6*14)																 
-	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_cube.sizeIndices(),  &g_buffer_data_cube.indices.front());		//CUBE INDICES
-	currentOffset += g_buffer_data_cube.sizeIndices();  //480 (336 + 72*2)
-	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_arrow.sizeVertices(),  &g_buffer_data_arrow.vertices.front());	//ARROW VERTS
-	currentOffset += g_buffer_data_arrow.sizeVertices();  //672																		  
-	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, g_buffer_data_arrow.sizeIndices(),   &g_buffer_data_arrow.indices.front());		//ARROW INDICES
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, data_plane.sizeVertices(), &data_plane.vertices.front());		//CUBE VERTS
+	currentOffset += data_plane.sizeVertices(); //336 (4*6*14)																 
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, data_plane.sizeIndices(),  &data_plane.indices.front());		//CUBE INDICES
+	currentOffset += data_plane.sizeIndices();  //480 (336 + 72*2)
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, data_arrow.sizeVertices(),  &data_arrow.vertices.front());	//ARROW VERTS
+	currentOffset += data_arrow.sizeVertices();  //672																		  
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, data_arrow.sizeIndices(),   &data_arrow.indices.front());		//ARROW INDICES
 
 	
 	const Vertex* base		= nullptr;
 	
 	// // Set up global variables for size of various elements // //
-	_State.sizeOfArrow      = g_buffer_data_arrow.sizeVertices() + g_buffer_data_arrow.sizeIndices();
-	_State.sizeOfArrowVerts = g_buffer_data_arrow.sizeVertices();
-	_State.sizeOfCube       = g_buffer_data_cube.sizeVertices() + g_buffer_data_cube.sizeIndices();
-	_State.sizeOfCubeVerts  = g_buffer_data_cube.sizeVertices();
+	_State.sizeOfArrow      = data_arrow.sizeVertices() + data_arrow.sizeIndices();
+	_State.sizeOfArrowVerts = data_arrow.sizeVertices();
+	_State.sizeOfPlane       = data_plane.sizeVertices() + data_plane.sizeIndices();
+	_State.sizeOfPlaneVerts  = data_plane.sizeVertices();
 
 	// // The Vertex array object stores information about what the buffer actually contains // //
 	// // CUBE // //
 
-	glGenVertexArrays(1, &_State.CubeVertexArrayID);
-	_State.VertexArrays.push_back(_State.CubeVertexArrayID);
+	glGenVertexArrays(1, &_State.PlaneVertexArrayID);
+	_State.VertexArrays.push_back(_State.PlaneVertexArrayID);
 	glGenVertexArrays(1, &_State.ArrowVertexArrayID);
 	_State.VertexArrays.push_back(_State.ArrowVertexArrayID);
 
@@ -263,7 +266,7 @@ void init (ApplicationState& _State)
 			glVertexAttribPointer(POSITION_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offset);
 			glEnableVertexAttribArray(COLOR_ATTR);
 			glVertexAttribPointer(COLOR_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offset + sizeof(glm::tvec3<GLfloat>)));
-			offset += _State.sizeOfCube;
+			offset += _State.sizeOfPlane;
 		}
 	}
 
@@ -343,8 +346,8 @@ void render_frame (ApplicationState& _State)
 	 }
 
 	 {
-		 GLsizeiptr offset  = _State.sizeOfCubeVerts;
-		 GLuint numIndices = _State.cubeNumIndices;
+		 GLsizeiptr offset  = _State.sizeOfPlaneVerts;
+		 GLuint numIndices = _State.planeNumIndices;
 		 GLsizei currentNumInstances = 1;
 		 auto startIterator = MVP.begin();
 		 auto endIterator = MVP.begin();
@@ -362,7 +365,7 @@ void render_frame (ApplicationState& _State)
 			 std::advance(startIterator, currentNumInstances);
 			 currentNumInstances = (GLsizei)_State.numInstances;
 			 //glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset);
-			 offset = _State.sizeOfCube + _State.sizeOfArrowVerts;
+			 offset = _State.sizeOfPlane + _State.sizeOfArrowVerts;
 			 numIndices = _State.arrowNumIndices;
 			 
 		 }
@@ -373,7 +376,7 @@ void render_frame (ApplicationState& _State)
 void exit(ApplicationState &_State) {
 	glDeleteBuffers(_State.numBuffers, &_State.TheBufferID);
 	glDeleteVertexArrays(_State.numBuffers, &_State.ArrowVertexArrayID);
-	glDeleteVertexArrays(_State.numBuffers, &_State.CubeVertexArrayID);
+	glDeleteVertexArrays(_State.numBuffers, &_State.PlaneVertexArrayID);
 	glUseProgram(0);
 	glDeleteProgram(_State.programID);
 }
