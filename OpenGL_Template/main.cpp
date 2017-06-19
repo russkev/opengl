@@ -272,7 +272,7 @@ void init (ApplicationState& _State)
 	// // Make a line of evenly spaced cubes from line start to line finish
 	GLfloat lineStart = -1.0f;
 	GLfloat lineEnd   = +1.0f;
-	_State.numInstances   = 2;
+	_State.numInstances   = 3;
 	GLfloat spacing = (lineEnd - lineStart) / _State.numInstances;
 	while (lineStart <= lineEnd) {
 		_State.offsets.push_back(lineStart);
@@ -285,10 +285,11 @@ void init (ApplicationState& _State)
 	// Initial matrix
 	std::vector<glm::mat4> MVP;
 	for (GLuint i = 0; i < _State.numInstances; ++i) {
-		glm::mat4 tempMat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, -10.0f));
-		//glm::mat4 tempMat = glm::rotate(glm::mat4(1.0), 45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		glm::mat4 tempMat = glm::scale(glm::rotate(glm::translate(glm::mat4(1.0f),
+			 glm::vec3(0.0f + _State.offsets.at(i), 0.0f, 0.0f)),			//Translate
+			 0.0f, glm::vec3(0.0f, 1.0f, 1.0f)),							//Rotate
+			 glm::vec3(0.1f, 0.1f, 0.1f));									//Scale
 		_State.MVP.push_back(tempMat);
-		//MVP.push_back(glm::mat4(1.0));
 	}
 	
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*_State.MVP.size(), _State.MVP.data(), GL_DYNAMIC_DRAW);
@@ -333,37 +334,34 @@ void render_frame (ApplicationState& _State)
 
 	 //// Matrix transformations
 	 std::vector<glm::mat4> MVP;
-	 //for (GLuint i = 0; i < _State.numInstances; i++) {
-		// MVP.push_back(glm::scale(glm::rotate(glm::translate(_State.projection*_State.cam.getWorldToViewMatrix(), 
-		//	 glm::vec3(0.0f, 0.0f, _State.offsets.at(i))),	//Translate
-		//	 0.6f*tpi, glm::vec3(0.0f, 1.0f, 1.0f)),		//Rotate
-		//	 glm::vec3(0.1f, 0.1f, 0.1f)));					//Scale
-	 //}
+	 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.MVP.at(_State.MVP.size() / 2));	//Plane
 	 for (GLuint i = 0; i < _State.numInstances; ++i){
-		 //glm::scale(glm::rotate(glm::translate(_State.MVP.at(i)*_State.cam.getWorldToViewMatrix(),
-			// glm::vec3(0.0f, 0.0f, 0.0f)),
-			// 0.6f*tpi, glm::vec3(0.0f, 1.0f, 1.0f)),
-			// glm::vec3(0.1f, 0.1f, 0.1f));
-		 auto transformMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, -10.0f));
-		 MVP.at(i) = _State.projection*_State.cam.getWorldToViewMatrix() * transformMatrix;// glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, -10.0f));
+		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.MVP.at(i));					//Arrows
 	 }
 
 	 {
 		 GLsizeiptr offset  = _State.sizeOfCubeVerts;
 		 GLuint numIndices = _State.cubeNumIndices;
 		 GLsizei currentNumInstances = 1;
+		 auto startIterator = MVP.begin();
+		 auto endIterator = MVP.begin();
 		 for (auto i : _State.VertexArrays) {
 			 glBindVertexArray(i);
 			 glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
 			 auto matrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
-			 std::copy(MVP.begin(), MVP.end(), matrixBufferPtr);
+			 std::advance(endIterator, currentNumInstances);
+			 std::copy(startIterator, endIterator, matrixBufferPtr);
 			 glUnmapBuffer(GL_ARRAY_BUFFER);
 			 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
+
 			 glDrawElementsInstanced(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
+
+			 std::advance(startIterator, currentNumInstances);
 			 currentNumInstances = (GLsizei)_State.numInstances;
 			 //glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset);
 			 offset = _State.sizeOfCube + _State.sizeOfArrowVerts;
 			 numIndices = _State.arrowNumIndices;
+			 
 		 }
 	 }
 }
