@@ -10,7 +10,7 @@ const float Camera::rotationSpeed  = 0.007f;
 Camera::Camera() :
 	viewDirection(-0.0, -1.0f, -1.0f),
 	up(0.0f, 1.0f, 0.0f),
-	position(0.0, 1.0, 0.0)
+	position(-0.5f, 4.0f, 2.0f)
 {
 }
 

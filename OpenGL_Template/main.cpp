@@ -207,10 +207,10 @@ void init (ApplicationState& _State)
 	_State.cubeNumIndices  = g_buffer_data_cube.numIndices();
 
 	// // Reposition the initial location of the models // //
-	glm::vec3 arrowTranslate = { 0.0f, 3.0f, 0.0f };
-	for (auto& i : g_buffer_data_arrow.vertices) {
-		i.position += arrowTranslate;
-	}
+	//glm::vec3 arrowTranslate = { 0.0f, 3.0f, 0.0f };
+	//for (auto& i : g_buffer_data_arrow.vertices) {
+	//	i.position += arrowTranslate;
+	//}
 	glm::vec3 cubeTranslate = { 0.0f, 0.0f, 0.0f };
 	for (auto& i : g_buffer_data_cube.vertices) {
 		i.position += cubeTranslate;
@@ -272,7 +272,8 @@ void init (ApplicationState& _State)
 	// // Make a line of evenly spaced cubes from line start to line finish
 	GLfloat lineStart = -1.0f;
 	GLfloat lineEnd   = +1.0f;
-	_State.numInstances   = 3;
+	_State.numInstances   = 2;
+	GLfloat distance = lineEnd - lineStart;
 	GLfloat spacing = (lineEnd - lineStart) / _State.numInstances;
 	while (lineStart <= lineEnd) {
 		_State.offsets.push_back(lineStart);
@@ -283,13 +284,15 @@ void init (ApplicationState& _State)
 	glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
 	
 	// Initial matrix
+	// Plane
+	_State.MVP.push_back(glm::translate(glm::mat4(1.0f), glm::vec3(distance / 2.0f, 0.0f, 0.0f)));
+	// Arrows
 	std::vector<glm::mat4> MVP;
 	for (GLuint i = 0; i < _State.numInstances; ++i) {
-		glm::mat4 tempMat = glm::scale(glm::rotate(glm::translate(glm::mat4(1.0f),
-			 glm::vec3(0.0f + _State.offsets.at(i), 0.0f, 0.0f)),			//Translate
-			 0.0f, glm::vec3(0.0f, 1.0f, 1.0f)),							//Rotate
-			 glm::vec3(0.1f, 0.1f, 0.1f));									//Scale
-		_State.MVP.push_back(tempMat);
+		_State.MVP.push_back(glm::scale(glm::rotate(glm::translate(glm::mat4(1.0f),
+			glm::vec3(0.0f + _State.offsets.at(i), 2.0f, 0.0f)),			//Translate
+			(rand() / (float)RAND_MAX)*360, glm::vec3(0.0f, 1.0f, 1.0f)),	//Rotate
+			glm::vec3(0.1f, 0.1f, 0.1f)));									//Scale
 	}
 	
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*_State.MVP.size(), _State.MVP.data(), GL_DYNAMIC_DRAW);
@@ -334,8 +337,8 @@ void render_frame (ApplicationState& _State)
 
 	 //// Matrix transformations
 	 std::vector<glm::mat4> MVP;
-	 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.MVP.at(_State.MVP.size() / 2));	//Plane
-	 for (GLuint i = 0; i < _State.numInstances; ++i){
+	 //MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.MVP.at(_State.MVP.size() / 2));	//Plane
+	 for (GLuint i = 0; i < _State.numInstances + 1; ++i){
 		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.MVP.at(i));					//Arrows
 	 }
 
