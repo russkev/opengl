@@ -187,6 +187,8 @@ void init (ApplicationState& _State)
 	glEnable(GL_DEPTH_TEST);
 	// // Enable backface culling // //
 	glEnable(GL_CULL_FACE);
+	// // Set windind direction // // 
+	glFrontFace(GL_CCW);
 	// // Accept fragment shader if it closer to the camera than the previous one
 	glDepthFunc(GL_LESS);
 
