@@ -28,7 +28,7 @@ static constexpr auto MODEL_ATTR    = 2u;
 struct ApplicationState {
 	GLuint programID       = 0;
 	GLuint matrixID        = 0;
-	GLuint darkenID        = 0;
+	GLuint ambientID        = 0;
 
 	GLuint TheBufferID        = 0;
 	GLuint CubeVertexArrayID  = 0;
@@ -197,16 +197,17 @@ void init (ApplicationState& _State)
 
 	// // Fetch uniforms from vertex shader // //
 	_State.matrixID = glGetUniformLocation(_State.programID, "MVP");
-	_State.darkenID = glGetUniformLocation(_State.programID, "darken");
+	_State.ambientID = glGetUniformLocation(_State.programID, "ambient");
 
 	// // Set up camera // //
 	_State.projection = glm::perspective(glm::radians(50.0f), float(width) / float(height), 0.1f, 100.0f);
 	_State.view       = _State.cam.getWorldToViewMatrix();
 
 	// // Create 3D models
-	static ShapeData data_triangle = ShapeGenerator::makeTriangle();
+	static ShapeData data_triangle  = ShapeGenerator::makeTriangle();
 	static ShapeData data_plane     = ShapeGenerator::makePlane(20);
-	static ShapeData data_arrow    = ShapeGenerator::makeArrow();
+	static ShapeData data_arrow     = ShapeGenerator::makeArrow();
+	static ShapeData data_normals   = ShapeGenerator::makeNormals(data_plane);
 
 	_State.arrowNumIndices = data_arrow.numIndices();
 	_State.planeNumIndices  = data_plane.numIndices();
@@ -232,7 +233,9 @@ void init (ApplicationState& _State)
 	glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
 	glBufferData(GL_ARRAY_BUFFER, 
 		data_plane.sizeVertices() + data_plane.sizeIndices() + 
-		data_arrow.sizeVertices() + data_arrow.sizeIndices(), nullptr, GL_STATIC_DRAW);
+		data_arrow.sizeVertices() + data_arrow.sizeIndices() +
+		data_normals.sizeVertices(), 
+		nullptr, GL_STATIC_DRAW);
 
 	GLsizeiptr currentOffset = 0;
 	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, data_plane.sizeVertices(), &data_plane.vertices.front());		//CUBE VERTS
@@ -242,6 +245,8 @@ void init (ApplicationState& _State)
 	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, data_arrow.sizeVertices(),  &data_arrow.vertices.front());	//ARROW VERTS
 	currentOffset += data_arrow.sizeVertices();  //672																		  
 	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, data_arrow.sizeIndices(),   &data_arrow.indices.front());		//ARROW INDICES
+	currentOffset += data_arrow.sizeIndices();
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, data_normals.sizeVertices(), &data_arrow.vertices.front());
 
 	
 	const Vertex* base		= nullptr;
@@ -311,6 +316,11 @@ void init (ApplicationState& _State)
 		}
 	}
 
+	// // LIGHTING // //
+	glUseProgram(_State.programID);
+	// // Ambient Lighting // //
+	glm::vec3 ambientLight = { 0.6f, 0.6f, 1.0f };
+	glUniform3fv(_State.ambientID, 1, &ambientLight.r);
 	return;
 }
 
@@ -324,7 +334,6 @@ void render_frame (ApplicationState& _State)
 	// // Tutorial from http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/ // //
 	// // Clear both the colour buffer and the depth buffer at the same time // //
 	 glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-	 glUseProgram(_State.programID);
 
 	 //Get time
 	 _State.time    = _State.freqMultiplier * SDL_GetPerformanceCounter();
@@ -334,10 +343,8 @@ void render_frame (ApplicationState& _State)
 	 GLfloat cmAmplitude = 0.5f;
 	 GLfloat cmFreq      = 0.1f;
 	 GLfloat cmOffset    = 0.5f;
-	 GLfloat colMult     = cmAmplitude * cos(2.0f * glm::pi<float>() * cmFreq * GLfloat(_State.time)) + cmOffset;
+	 //GLfloat colMult     = cmAmplitude * cos(2.0f * glm::pi<float>() * cmFreq * GLfloat(_State.time)) + cmOffset;
 
-	 //Send multiplier to the currently bound shader
-	 glUniform1f(_State.darkenID, colMult);
 
 
 	 //// Matrix transformations
