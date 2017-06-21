@@ -28,13 +28,12 @@ namespace ShapeGenerator {
 
 		return m_triangle;
 	}
-
 	ShapeData makePlane(GLuint dimensions = 2) {
 		ShapeData m_plane;
 		GLuint offset = 0;
 		for (GLint x = GLint(dimensions * -0.5f); x < GLint(dimensions*0.5f+1.5); ++x){
 			for (GLint z = GLint(dimensions * -0.5f); z < GLint(dimensions*0.5f + 1.5); ++z) {
-				m_plane.vertices.push_back({ glm::vec3(x,   0, z  ), randomColor() });
+				m_plane.vertices.push_back({ glm::vec3(x,   0, z  ), randomColor(), glm::vec3(0.0f, 1.0f, 0.0f) });
 				//std::cout << "(" << x << "," << z << ")";
 			}
 		}
@@ -56,7 +55,6 @@ namespace ShapeGenerator {
 
 		return m_plane;
 	}
-
 	ShapeData makeCube() {
 		ShapeData m_cube;
 
@@ -96,7 +94,6 @@ namespace ShapeGenerator {
 		m_cube.indices.push_back(5); m_cube.indices.push_back(1); m_cube.indices.push_back(0);
 		return m_cube;
 	}
-
 	ShapeData makeArrow() {
 		ShapeData m_arrow;
 		m_arrow.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f) }); //0
@@ -139,6 +136,14 @@ namespace ShapeGenerator {
 			m_arrow.indices.push_back(tempTriangles[i]);
 		}
 		return m_arrow;
+	}
+	ShapeData makeNormals(ShapeData inShape) {
+		ShapeData m_normals;
+		for (GLint i = 0; i < inShape.vertices.size(); ++i) {
+			m_normals.vertices.push_back(inShape.vertices.at(i).position);
+			m_normals.vertices.push_back(inShape.vertices.at(i).position + inShape.vertices.at(i).normal);
+		}
+		return m_normals;
 	}
 }
 
