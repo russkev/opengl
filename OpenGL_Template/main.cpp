@@ -30,12 +30,14 @@ struct ApplicationState {
 	GLuint matrixID        = 0;
 	GLuint ambientID        = 0;
 
-	GLuint TheBufferID        = 0;
-	GLuint CubeVertexArrayID  = 0;
-	GLuint PlaneVertexArrayID = 0;
-	GLuint ArrowVertexArrayID = 0;
-	GLuint ColorBufferID      = 0;
-	GLuint MatrixBufferID     = 0;
+	GLuint TheBufferID			= 0;
+	GLuint CubeVertexArrayID	= 0;
+	GLuint PlaneVertexArrayID	= 0;
+	GLuint ArrowVertexArrayID	= 0;
+	GLuint NormalsVertexArrayID = 0;
+	GLuint MatrixBufferID		= 0;
+	GLuint NormalsID			= 0;
+	GLuint ColorBufferID		= 0;
 	std::vector<GLuint> VertexArrays;
 
 	GLuint numBuffers      = 1;
@@ -50,6 +52,8 @@ struct ApplicationState {
 	GLsizeiptr sizeOfArrowVerts = 0;
 	GLsizeiptr sizeOfCubeVerts  = 0;
 	GLsizeiptr sizeOfPlaneVerts = 0;
+	GLsizeiptr sizeOfNormals    = 0;
+	GLsizeiptr sizeOfNormalsVerts = 0;
 
 	glm::mat4 view        = glm::mat4();
 	glm::mat4 projection  = glm::mat4();
@@ -209,7 +213,7 @@ void init (ApplicationState& _State)
 	static ShapeData data_arrow     = ShapeGenerator::makeArrow();
 	static ShapeData data_normals   = ShapeGenerator::makeNormals(data_plane);
 
-	_State.arrowNumIndices = data_arrow.numIndices();
+	_State.arrowNumIndices  = data_arrow.numIndices();
 	_State.planeNumIndices  = data_plane.numIndices();
 
 	// // Reposition the initial location of the models // //
@@ -246,16 +250,20 @@ void init (ApplicationState& _State)
 	currentOffset += data_arrow.sizeVertices();  //672																		  
 	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, data_arrow.sizeIndices(),   &data_arrow.indices.front());		//ARROW INDICES
 	currentOffset += data_arrow.sizeIndices();
-	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, data_normals.sizeVertices(), &data_arrow.vertices.front());
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, data_normals.sizeVertices(), &data_normals.vertices.front());
+	currentOffset += data_normals.sizeIndices();
+	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, data_normals.sizeIndices(), &data_normals.indices.front());
 
 	
 	const Vertex* base		= nullptr;
 	
 	// // Set up global variables for size of various elements // //
-	_State.sizeOfArrow      = data_arrow.sizeVertices() + data_arrow.sizeIndices();
-	_State.sizeOfArrowVerts = data_arrow.sizeVertices();
+	_State.sizeOfArrow       = data_arrow.sizeVertices() + data_arrow.sizeIndices();
+	_State.sizeOfArrowVerts  = data_arrow.sizeVertices();
 	_State.sizeOfPlane       = data_plane.sizeVertices() + data_plane.sizeIndices();
 	_State.sizeOfPlaneVerts  = data_plane.sizeVertices();
+	_State.sizeOfNormals     = data_normals.sizeVertices();
+	_State.sizeOfNormalsVerts= data_normals.sizeVertices() + data_normals.sizeIndices();
 
 	// // The Vertex array object stores information about what the buffer actually contains // //
 	// // CUBE // //
@@ -264,6 +272,8 @@ void init (ApplicationState& _State)
 	_State.VertexArrays.push_back(_State.PlaneVertexArrayID);
 	glGenVertexArrays(1, &_State.ArrowVertexArrayID);
 	_State.VertexArrays.push_back(_State.ArrowVertexArrayID);
+	glGenVertexArrays(1, &_State.NormalsVertexArrayID);
+	//_State.VertexArrays.push_back(_State.NormalsVertexArrayID);
 
 	{
 		GLsizeiptr offset = 0;
@@ -275,8 +285,14 @@ void init (ApplicationState& _State)
 			glVertexAttribPointer(COLOR_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offset + sizeof(glm::tvec3<GLfloat>)));
 			offset += _State.sizeOfPlane;
 		}
+		offset += _State.sizeOfArrow - _State.sizeOfPlane;
+		glBindVertexArray(_State.NormalsVertexArrayID);
+		glEnableVertexAttribArray(POSITION_ATTR);
+		glVertexAttribPointer(POSITION_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offset));
+		glEnableVertexAttribArray(COLOR_ATTR);
+		glVertexAttribPointer(COLOR_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offset + sizeof(glm::tvec3<GLfloat>)));
 	}
-
+	
 
 	// // Push offset information to the graphics card memory
 	// // Make a line of evenly spaced cubes from line start to line finish
@@ -304,6 +320,7 @@ void init (ApplicationState& _State)
 			(rand() / (float)RAND_MAX)*360, glm::vec3(0.0f, 1.0f, 1.0f)),	//Rotate
 			glm::vec3(0.1f, 0.1f, 0.1f)));									//Scale
 	}
+	_State.MVP.push_back(glm::translate(glm::mat4(1.0f), glm::vec3(distance / 2.0f, 0.0f, 0.0f)));
 	
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*_State.MVP.size(), _State.MVP.data(), GL_DYNAMIC_DRAW);
 	
@@ -378,6 +395,14 @@ void render_frame (ApplicationState& _State)
 			 numIndices = _State.arrowNumIndices;
 			 
 		 }
+		 glBindVertexArray(_State.NormalsVertexArrayID);
+		 glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
+		 auto matrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+		 std::copy(endIterator, MVP.end(), matrixBufferPtr);
+		 glUnmapBuffer(GL_ARRAY_BUFFER);
+		 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
+		 numIndices = _State.normalsNumIndices;
+		 glDrawElements(GL_LINES, )
 	 }
 }
 
