@@ -142,6 +142,7 @@ namespace ShapeGenerator {
 		for (GLint i = 0; i < inShape.vertices.size(); ++i) {
 			m_normals.vertices.push_back(inShape.vertices.at(i).position);
 			m_normals.vertices.push_back(inShape.vertices.at(i).position + inShape.vertices.at(i).normal);
+			m_normals.indices.push_back(i);
 		}
 		return m_normals;
 	}
