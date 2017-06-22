@@ -33,7 +33,7 @@ namespace ShapeGenerator {
 		GLuint offset = 0;
 		for (GLint x = GLint(dimensions * -0.5f); x < GLint(dimensions*0.5f+1.5); ++x){
 			for (GLint z = GLint(dimensions * -0.5f); z < GLint(dimensions*0.5f + 1.5); ++z) {
-				m_plane.vertices.push_back({ glm::vec3(x,   0, z  ), randomColor(), glm::vec3(0.0f, 1.0f, 0.0f) });
+				m_plane.vertices.push_back({ glm::vec3(x, 0, z), randomColor(), glm::vec3(0.0f, 10.0f, 0.0f) });
 				//std::cout << "(" << x << "," << z << ")";
 			}
 		}
@@ -139,10 +139,14 @@ namespace ShapeGenerator {
 	}
 	ShapeData makeNormals(ShapeData inShape) {
 		ShapeData m_normals;
+		GLint j = 0;
 		for (GLint i = 0; i < inShape.vertices.size(); ++i) {
-			m_normals.vertices.push_back(inShape.vertices.at(i).position);
-			m_normals.vertices.push_back(inShape.vertices.at(i).position + inShape.vertices.at(i).normal);
-			m_normals.indices.push_back(i);
+			m_normals.vertices.push_back(Vertex(inShape.vertices.at(i).position, glm::vec3(1.0f, 0.0f, 0.0f)));
+			m_normals.vertices.push_back(Vertex(inShape.vertices.at(i).position + inShape.vertices.at(i).normal, glm::vec3(1.0f, 0.0f, 0.0f)));
+			m_normals.indices.push_back(j);
+			++j;
+			m_normals.indices.push_back(j);
+			++j;
 		}
 		return m_normals;
 	}
