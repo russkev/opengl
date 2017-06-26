@@ -191,42 +191,23 @@ namespace ShapeGenerator {
 		m_arrow.vertices.push_back({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal }); //(10)36
 		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -2.0f), faceColor, faceNormal }); //(11)37
 
-
-
 		m_arrow.indices.push_back(37), m_arrow.indices.push_back(35), m_arrow.indices.push_back(34);
 		m_arrow.indices.push_back(37), m_arrow.indices.push_back(34), m_arrow.indices.push_back(36);
 
-		//m_arrow.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f) }); //7
-		//m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f) }); //8
-		//m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +2.0f) }); //9
-		//m_arrow.vertices.push_back({ glm::vec3(+3.0f, -1.0f, +0.0f) }); //10
-		//m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -2.0f) }); //11
-		//m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f) }); //12
-		//m_arrow.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f) }); //13
+		// // RIGHT DIAGONAL FACE // //
+		faceColor = { 0.75f, 0.0f, 0.75f };
+		faceNormal = glm::normalize(glm::cross(
+			glm::vec3(+3.0f, +1.0f, +0.0f) - glm::vec3(+1.0f, +1.0f, -2.0f),
+			glm::vec3(+3.0f, +1.0f, +0.0f) - glm::vec3(+3.0f, -1.0f, +0.0f)));
 
-		//// // Set colours to relate to vertices so that -1 in x is 0 in r, 1 in x is 1 in r, etc.
-		//for (int i = 0; i < m_arrow.vertices.size(); ++i) {
-		//	for (int j = 0; j < 3; ++j) {
-		//		float temp = fmod((m_arrow.vertices.at(i).position[j] + 1) / 2, 1.01f);
-		//		m_arrow.vertices.at(i).color[j] = (m_arrow.vertices.at(i).position[j] + 1) / 2;
-		//	}
-		//}
+		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +2.0f), faceColor, faceNormal }); //(2)38
+		m_arrow.vertices.push_back({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal }); //(3)39
+		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +2.0f), faceColor, faceNormal }); //(9)40
+		m_arrow.vertices.push_back({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal }); //(10)41
 
-		//GLushort tempTriangles[] = {
-		//	6, 0, 1, 6, 1, 5, 1, 2, 3, 1, 3, 5, 5, 3, 4, // Top face
-		//	0, 7, 8, 0, 8, 1,
-		//	8, 2, 1, 8, 9, 2,
-		//	11, 5, 4, 11, 12, 5,
-		//	13, 5, 12, 13, 6, 5,
-		//	11, 3, 10, 11, 4, 3,
-		//	13, 0, 6, 13, 7, 0,
-		//	3, 9, 10, 3, 2, 9,
-		//	10, 9, 8, 10, 8, 12, 10, 12, 11, 12, 8, 7, 12, 7, 13 // Bottom Face
-		//};
+		m_arrow.indices.push_back(38), m_arrow.indices.push_back(40), m_arrow.indices.push_back(41);
+		m_arrow.indices.push_back(38), m_arrow.indices.push_back(41), m_arrow.indices.push_back(39);
 
-		//for (int i = 0; i < (sizeof(tempTriangles) / sizeof(GLushort)); ++i) {
-		//	m_arrow.indices.push_back(tempTriangles[i]);
-		//}
 		return m_arrow;
 	}
 	ShapeData makeNormals(ShapeData inShape) {
