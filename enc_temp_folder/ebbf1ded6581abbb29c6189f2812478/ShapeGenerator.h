@@ -182,16 +182,15 @@ namespace ShapeGenerator {
 
 		// // LEFT DIAGONAL FACE // //
 		faceColor = { 0.75f, 0.75f, 0.0f };
-		faceNormal = glm::normalize(glm::cross(
-			glm::vec3(+3.0f, +1.0f, +0.0f) - glm::vec3(+1.0f, +1.0f, -2.0f),
-			glm::vec3(+3.0f, +1.0f, +0.0f) - glm::vec3(+3.0f, -1.0f, +0.0f)));
-
+		faceNormal = { 0.0f, 0.0f, +0.0f };
 		m_arrow.vertices.push_back({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal }); //(3)34
 		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -2.0f), faceColor, faceNormal }); //(4)35
 		m_arrow.vertices.push_back({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal }); //(10)36
 		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -2.0f), faceColor, faceNormal }); //(11)37
 
-
+		auto tempCrossProduct = glm::cross(
+			glm::vec3(+3.0f, +1.0f, +0.0f) - glm::vec3(+1.0f, +1.0f, -2.0f),
+			glm::vec3(+3.0f, +1.0f, +0.0f) - glm::vec3(+3.0f, -1.0f, +0.0f));
 
 		m_arrow.indices.push_back(37), m_arrow.indices.push_back(35), m_arrow.indices.push_back(34);
 		m_arrow.indices.push_back(37), m_arrow.indices.push_back(34), m_arrow.indices.push_back(36);
