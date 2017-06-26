@@ -160,7 +160,7 @@ namespace ShapeGenerator {
 
 		// // LEFT FACE // //
 		faceColor = { 0.5f, 1.0f, 0.0f };
-		faceNormal = { 0.0f, 1.0f, +0.0f };
+		faceNormal = { 0.0f, 0.0f, -1.0f };
 		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(5)26
 		m_arrow.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)27
 		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(12)28
@@ -171,7 +171,7 @@ namespace ShapeGenerator {
 
 		// // RIGHT FACE // //
 		faceColor = { 0.0f, 0.5f, 1.0f };
-		faceNormal = { 0.0f, -1.0f, +0.0f };
+		faceNormal = { 0.0f, 0.0f, +1.0f };
 		m_arrow.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(0)30
 		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(1)31
 		m_arrow.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(7)32
@@ -183,8 +183,8 @@ namespace ShapeGenerator {
 		// // LEFT DIAGONAL FACE // //
 		faceColor = { 0.75f, 0.75f, 0.0f };
 		faceNormal = glm::normalize(glm::cross(
-			glm::vec3(+3.0f, +1.0f, +0.0f) - glm::vec3(+1.0f, +1.0f, -2.0f),
-			glm::vec3(+3.0f, +1.0f, +0.0f) - glm::vec3(+3.0f, -1.0f, +0.0f)));
+			glm::vec3(+3.0f, -1.0f, +0.0f) - glm::vec3(+1.0f, -1.0f, -2.0f),
+			glm::vec3(+3.0f, -1.0f, +0.0f) - glm::vec3(+3.0f, +1.0f, +0.0f)));
 
 		m_arrow.vertices.push_back({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal }); //(3)34
 		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -2.0f), faceColor, faceNormal }); //(4)35
@@ -197,8 +197,8 @@ namespace ShapeGenerator {
 		// // RIGHT DIAGONAL FACE // //
 		faceColor = { 0.75f, 0.0f, 0.75f };
 		faceNormal = glm::normalize(glm::cross(
-			glm::vec3(+3.0f, +1.0f, +0.0f) - glm::vec3(+1.0f, +1.0f, -2.0f),
-			glm::vec3(+3.0f, +1.0f, +0.0f) - glm::vec3(+3.0f, -1.0f, +0.0f)));
+			glm::vec3(+1.0f, -1.0f, +2.0f) - glm::vec3(+3.0f, -1.0f, +0.0f),
+			glm::vec3(+1.0f, -1.0f, +2.0f) - glm::vec3(+1.0f, +1.0f, +2.0f)));
 
 		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +2.0f), faceColor, faceNormal }); //(2)38
 		m_arrow.vertices.push_back({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal }); //(3)39
