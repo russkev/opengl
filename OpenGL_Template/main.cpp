@@ -23,7 +23,8 @@
 
 static constexpr auto POSITION_ATTR = 0u;
 static constexpr auto COLOR_ATTR    = 1u;
-static constexpr auto MODEL_ATTR    = 2u;
+static constexpr auto NORMAL_ATTR	= 2u;
+static constexpr auto MODEL_ATTR    = 3u;
 
 struct ApplicationState {
 	GLuint programID       = 0;
@@ -287,6 +288,8 @@ void init (ApplicationState& _State)
 			glVertexAttribPointer(POSITION_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offset);
 			glEnableVertexAttribArray(COLOR_ATTR);
 			glVertexAttribPointer(COLOR_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offset + sizeof(glm::tvec3<GLfloat>)));
+			glEnableVertexAttribArray(NORMAL_ATTR);
+			glVertexAttribPointer(NORMAL_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offset + (sizeof(glm::tvec3<GLfloat>)*2)));
 			if (i == _State.PlaneVertexArrayID)			{ offset += _State.sizeOfPlane; }
 			if (i == _State.PlaneNormalsVertexArrayID)	{ offset += _State.sizeOfPlaneNormals; }
 			if (i == _State.ArrowVertexArrayID)			{ offset += _State.sizeOfArrow; }
