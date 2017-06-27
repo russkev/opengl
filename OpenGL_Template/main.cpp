@@ -31,6 +31,7 @@ struct ApplicationState {
 	GLuint matrixID        = 0;
 	GLuint ambientID        = 0;
 	GLuint lightPositionID = 0;
+	GLuint worldPositionID = 0;
 
 	GLuint TheBufferID			= 0;
 	GLuint CubeVertexArrayID	= 0;
@@ -210,6 +211,7 @@ void init (ApplicationState& _State)
 	_State.matrixID = glGetUniformLocation(_State.programID, "MVP");
 	_State.ambientID = glGetUniformLocation(_State.programID, "ambient");
 	_State.lightPositionID = glGetUniformLocation(_State.programID, "lightPosition");
+	_State.worldPositionID = glGetUniformLocation(_State.programID, "worldPosition");
 
 	// // Set up camera // //
 	_State.projection = glm::perspective(glm::radians(50.0f), float(width) / float(height), 0.1f, 100.0f);
