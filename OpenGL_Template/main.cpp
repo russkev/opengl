@@ -30,6 +30,7 @@ struct ApplicationState {
 	GLuint programID       = 0;
 	GLuint matrixID        = 0;
 	GLuint ambientID        = 0;
+	GLuint lightPositionID = 0;
 
 	GLuint TheBufferID			= 0;
 	GLuint CubeVertexArrayID	= 0;
@@ -63,7 +64,7 @@ struct ApplicationState {
 
 	glm::mat4 view        = glm::mat4();
 	glm::mat4 projection  = glm::mat4();
-	std::vector<glm::mat4> MVP;
+	std::vector<glm::mat4> modelMatrix;
 	std::vector<GLfloat> offsets;
 	Camera cam;
 
@@ -208,6 +209,7 @@ void init (ApplicationState& _State)
 	// // Fetch uniforms from vertex shader // //
 	_State.matrixID = glGetUniformLocation(_State.programID, "MVP");
 	_State.ambientID = glGetUniformLocation(_State.programID, "ambient");
+	_State.lightPositionID = glGetUniformLocation(_State.programID, "lightPosition");
 
 	// // Set up camera // //
 	_State.projection = glm::perspective(glm::radians(50.0f), float(width) / float(height), 0.1f, 100.0f);
@@ -315,20 +317,20 @@ void init (ApplicationState& _State)
 	
 	// Initial matrix
 	// Plane
-	_State.MVP.push_back(glm::translate(glm::mat4(1.0f), glm::vec3(distance / 2.0f, 0.0f, 0.0f)));
+	_State.modelMatrix.push_back(glm::translate(glm::mat4(1.0f), glm::vec3(distance / 2.0f, 0.0f, 0.0f)));
 	// Arrows
 	std::vector<glm::mat4> MVP; 
-	_State.MVP.push_back(glm::translate(glm::mat4(1.0f), glm::vec3(distance / 2.0f, 0.0f, 0.0f)));
+	_State.modelMatrix.push_back(glm::translate(glm::mat4(1.0f), glm::vec3(distance / 2.0f, 0.0f, 0.0f)));
 	//_State.MVP.push_back(glm::translate(glm::mat4(1.0f), glm::vec3(distance / 2.0f, 0.0f, 0.0f)));
 	for (GLuint i = 0; i < _State.numInstances; ++i) {
-		_State.MVP.push_back(glm::scale(glm::rotate(glm::translate(glm::mat4(1.0f),
+		_State.modelMatrix.push_back(glm::scale(glm::rotate(glm::translate(glm::mat4(1.0f),
 			glm::vec3(0.0f + _State.offsets.at(i), 2.0f, 0.0f)),			//Translate
 			(rand() / (float)RAND_MAX)*360, glm::vec3(0.0f, 1.0f, 1.0f)),	//Rotate
 			glm::vec3(0.1f, 0.1f, 0.1f)));									//Scale
 	}
 	
 	
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*_State.MVP.size(), _State.MVP.data(), GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*_State.modelMatrix.size(), _State.modelMatrix.data(), GL_DYNAMIC_DRAW);
 	
 	for (auto& j : _State.VertexArrays) {
 		glBindVertexArray(j);
@@ -339,11 +341,7 @@ void init (ApplicationState& _State)
 		}
 	}
 
-	// // LIGHTING // //
-	glUseProgram(_State.programID);
-	// // Ambient Lighting // //
-	glm::vec3 ambientLight = { 1.0f, 1.0f, 1.0f };
-	glUniform3fv(_State.ambientID, 1, &ambientLight.r);
+
 	return;
 }
 
@@ -368,16 +366,23 @@ void render_frame (ApplicationState& _State)
 	 GLfloat cmOffset    = 0.5f;
 	 //GLfloat colMult     = cmAmplitude * cos(2.0f * glm::pi<float>() * cmFreq * GLfloat(_State.time)) + cmOffset;
 
-
+	 // // LIGHTING // //
+	 glUseProgram(_State.programID);
+	 // // Ambient Lighting // //
+	 glm::vec3 ambientLight = { 0.5f, 0.5f, 1.0f };
+	 glUniform3fv(_State.ambientID, 1, &ambientLight.r);
+	 // // Diffuse Lighting // // 
+	 glm::vec3 lightPosition = { 0.0f, 2.0f, 0.0f };
+	 glUniform3fv(_State.lightPositionID, 1, &lightPosition.x);
 
 	 //// Matrix transformations
 	 std::vector<glm::mat4> MVP;
 	 //MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.MVP.at(_State.MVP.size() / 2));	//Plane
 	 for (GLuint i = 0; i < _State.numInstances + 2; ++i){
-		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.MVP.at(i));					//Arrows
+		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));					//Arrows
 	 }
 	 for (GLuint i = 2; i < _State.numInstances + 2; ++i) {
-		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.MVP.at(i));
+		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
 	 }
 
 	 {
@@ -396,7 +401,7 @@ void render_frame (ApplicationState& _State)
 			 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
 
 			 if (i == _State.PlaneNormalsVertexArrayID || i == _State.ArrowNormalsVertexArrayID) {
-				 glDrawElementsInstanced(GL_LINES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
+				 //glDrawElementsInstanced(GL_LINES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
 			 }
 			 else {
 				 glDrawElementsInstanced(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
