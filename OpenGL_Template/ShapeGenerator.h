@@ -116,7 +116,7 @@ namespace ShapeGenerator {
 
 		// // BOTTOM FACE // // 
 		faceColor  = { 0.0f, 1.0f, 0.5f };
-		faceNormal = { 0.0f, 1.0f, 0.0f };
+		faceNormal = { 0.0f, -1.0f, 0.0f };
 		m_arrow.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //7
 		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //8
 		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +2.0f), faceColor, faceNormal }); //9

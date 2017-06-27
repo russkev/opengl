@@ -4,7 +4,8 @@
 in layout(location = 0) vec3 vertexPosition;
 // // Notice that the "1" here matches the "1" in glVertexAttribPointer
 in layout(location = 1) vec3 vertexColor;
-in layout(location = 2) mat4 MVP;
+in layout(location = 2) vec3 vertexNormal;
+in layout(location = 3) mat4 MVP;
 
 // // Output data ; will be interpolated for each fragment
 out vec3 fragmentColor;
@@ -20,5 +21,5 @@ void main(){
 	gl_Position = MVP * vec4(vertexPosition, 1);
 
 	// // The colour of each vertex will be interpolated to produce the colour of each fragment
-	fragmentColor = vertexColor*ambient;
+	fragmentColor = vertexNormal;//vertexColor*ambient;
 }
