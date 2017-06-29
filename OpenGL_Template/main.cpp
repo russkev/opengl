@@ -31,7 +31,7 @@ struct ApplicationState {
 	GLuint matrixID        = 0;
 	GLuint ambientID        = 0;
 	GLuint lightPositionID = 0;
-	GLuint worldPositionID = 0;
+	GLuint worldMatrixID = 0;
 
 	GLuint TheBufferID			= 0;
 	GLuint CubeVertexArrayID	= 0;
@@ -211,7 +211,7 @@ void init (ApplicationState& _State)
 	_State.matrixID = glGetUniformLocation(_State.programID, "MVP");
 	_State.ambientID = glGetUniformLocation(_State.programID, "ambient");
 	_State.lightPositionID = glGetUniformLocation(_State.programID, "lightPosition");
-	_State.worldPositionID = glGetUniformLocation(_State.programID, "worldPosition");
+	_State.worldMatrixID = glGetUniformLocation(_State.programID, "ModelToWorldTransformMatrix");
 
 	// // Set up camera // //
 	_State.projection = glm::perspective(glm::radians(50.0f), float(width) / float(height), 0.1f, 100.0f);
@@ -314,13 +314,10 @@ void init (ApplicationState& _State)
 		lineStart += spacing;
 	}
 	
-	glGenBuffers(1, &_State.MatrixBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
-	
 	// Initial matrix
 	// Plane
 	_State.modelMatrix.push_back(glm::translate(glm::mat4(1.0f), glm::vec3(distance / 2.0f, 0.0f, 0.0f)));
-	// Arrows
+	// Normals
 	std::vector<glm::mat4> MVP; 
 	_State.modelMatrix.push_back(glm::translate(glm::mat4(1.0f), glm::vec3(distance / 2.0f, 0.0f, 0.0f)));
 	//_State.MVP.push_back(glm::translate(glm::mat4(1.0f), glm::vec3(distance / 2.0f, 0.0f, 0.0f)));
@@ -331,7 +328,8 @@ void init (ApplicationState& _State)
 			glm::vec3(0.1f, 0.1f, 0.1f)));									//Scale
 	}
 	
-	
+	glGenBuffers(1, &_State.MatrixBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*_State.modelMatrix.size(), _State.modelMatrix.data(), GL_DYNAMIC_DRAW);
 	
 	for (auto& j : _State.VertexArrays) {
@@ -374,18 +372,23 @@ void render_frame (ApplicationState& _State)
 	 glm::vec3 ambientLight = { 0.5f, 0.5f, 1.0f };
 	 glUniform3fv(_State.ambientID, 1, &ambientLight.r);
 	 // // Diffuse Lighting // // 
-	 glm::vec3 lightPosition = { 0.0f, 2.0f, 0.0f };
+	 glm::vec3 lightPosition = { 0.0f, 0.0f, 0.0f };
 	 glUniform3fv(_State.lightPositionID, 1, &lightPosition.x);
 
 	 //// Matrix transformations
 	 std::vector<glm::mat4> MVP;
+	 std::vector<glm::mat4> MV;
 	 //MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.MVP.at(_State.MVP.size() / 2));	//Plane
 	 for (GLuint i = 0; i < _State.numInstances + 2; ++i){
 		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));					//Arrows
+		 MV.push_back(_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
 	 }
 	 for (GLuint i = 2; i < _State.numInstances + 2; ++i) {
 		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
+		 MV.push_back(_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
 	 }
+	 glUniform4fv(_State.worldMatrixID, _State.numInstances + 2, &MV.at(0)[0][0]);
+
 
 	 {
 		 GLsizeiptr offset  = _State.sizeOfPlaneVerts;
@@ -395,11 +398,16 @@ void render_frame (ApplicationState& _State)
 		 auto endIterator = MVP.begin();
 		 for (auto i : _State.VertexArrays) {
 			 glBindVertexArray(i);
+
 			 glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
 			 auto matrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
 			 std::advance(endIterator, currentNumInstances);
 			 std::copy(startIterator, endIterator, matrixBufferPtr);
 			 glUnmapBuffer(GL_ARRAY_BUFFER);
+
+			 //glBindBuffer(GL_ARRAY_BUFFER, _State.worldMatrixID)
+
+
 			 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
 
 			 if (i == _State.PlaneNormalsVertexArrayID || i == _State.ArrowNormalsVertexArrayID) {
