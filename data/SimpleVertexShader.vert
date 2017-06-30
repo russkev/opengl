@@ -6,6 +6,7 @@ in layout(location = 0) vec3 vertexPosition;
 in layout(location = 1) vec3 vertexColor;
 in layout(location = 2) vec3 vertexNormal;
 in layout(location = 3) mat4 ModelMatrix;
+in layout(location = 7) mat4 WorldMatrix;
 
 // // Output data ; will be interpolated for each fragment
 out vec3 fragmentColor;
