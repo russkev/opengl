@@ -397,14 +397,14 @@ void render_frame (ApplicationState& _State)
 	 //MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.MVP.at(_State.MVP.size() / 2));	//Plane
 	 for (GLuint i = 0; i < _State.numInstances + 2; ++i){
 		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));					//Arrows
-		 MV.push_back(_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
+		 MV.push_back(_State.modelMatrix.at(i));
 	 }
 	 for (GLuint i = 2; i < _State.numInstances + 2; ++i) {
 		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
-		 MV.push_back(_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
+		 MV.push_back(_State.modelMatrix.at(i));
 	 }
 	 //glUniform4fv(_State.worldMatrixID, _State.numInstances + 2, &MV.at(0)[0][0]);
-
+	 //glUniform4fv(_State.worldMatrixID, 1, &_State.modelMatrix.at(0)[0][0]);
 
 	 {
 		 GLsizeiptr offset  = _State.sizeOfPlaneVerts;
@@ -412,6 +412,8 @@ void render_frame (ApplicationState& _State)
 		 GLsizei currentNumInstances = 1;
 		 auto startIterator = MVP.begin();
 		 auto endIterator = MVP.begin();
+		 auto wItStart = MV.begin();
+		 auto wItEnd = MV.begin();
 		 GLuint j = 0;
 		 for (auto i : _State.VertexArrays) {
 			 glBindVertexArray(i);
@@ -421,6 +423,13 @@ void render_frame (ApplicationState& _State)
 			 std::advance(endIterator, currentNumInstances);
 			 std::copy(startIterator, endIterator, matrixBufferPtr);
 			 glUnmapBuffer(GL_ARRAY_BUFFER);
+
+			 //glBindBuffer(GL_ARRAY_BUFFER, _State.WorldMatBuffID);
+			 //auto matrixBufferPtr2 = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+			 //std::advance(wItEnd, currentNumInstances);
+			 //std::copy(startIterator, endIterator, matrixBufferPtr2);
+			 //glUnmapBuffer(GL_ARRAY_BUFFER);
+
 
 			 //glBindBuffer(GL_ARRAY_BUFFER, _State.worldMatrixID)
 
@@ -437,6 +446,7 @@ void render_frame (ApplicationState& _State)
 			 }
 
 			 std::advance(startIterator, currentNumInstances);
+			 std::advance(wItStart, currentNumInstances);
 			 if (i == _State.PlaneVertexArrayID) {
 				 offset = _State.sizeOfPlane + _State.sizeOfPlaneNormalsVerts;
 				 numIndices = _State.normalsPlaneNumIndices;
