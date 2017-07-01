@@ -327,20 +327,7 @@ void init (ApplicationState& _State)
 			(rand() / (float)RAND_MAX)*360, glm::vec3(0.0f, 1.0f, 1.0f)),	//Rotate
 			glm::vec3(0.1f, 0.1f, 0.1f)));									//Scale
 	}
-	
 
-	glGenBuffers(1, &_State.WorldMatBuffID);
-	glBindBuffer(GL_ARRAY_BUFFER, _State.WorldMatBuffID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*_State.modelMatrix.size(), _State.modelMatrix.data(), GL_DYNAMIC_DRAW);
-
-	for (auto& j : _State.VertexArrays) {
-		glBindVertexArray(j);
-		for (int i = 0; i < 4; ++i) {
-			glEnableVertexAttribArray(	WORLD_ATTR + i);
-			glVertexAttribPointer(		WORLD_ATTR + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * (i * 4)));
-			glVertexAttribDivisor(		WORLD_ATTR + i, 1);
-		}
-	}
 
 	glGenBuffers(1, &_State.MatrixBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
