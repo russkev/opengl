@@ -407,52 +407,41 @@ void render_frame (ApplicationState& _State)
 	 //// Matrix transformations
 	 std::vector<glm::mat4> MVP;
 	 std::vector<glm::mat4> MV;
-	 //MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.MVP.at(_State.MVP.size() / 2));	//Plane
 	 for (GLuint i = 0; i < _State.numInstances + 2; ++i){
-		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));					//Arrows
+		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
 		 MV.push_back(_State.modelMatrix.at(i));
 	 }
 	 for (GLuint i = 2; i < _State.numInstances + 2; ++i) {
 		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
 		 MV.push_back(_State.modelMatrix.at(i));
 	 }
-	 //glUniform4fv(_State.worldMatrixID, _State.numInstances + 2, &MV.at(0)[0][0]);
-	 //glUniform4fv(_State.worldMatrixID, 1, &_State.modelMatrix.at(0)[0][0]);
 
 	 {
 		 GLsizeiptr offset  = _State.sizeOfPlaneVerts;
 		 GLuint numIndices = _State.planeNumIndices;
 		 GLsizei currentNumInstances = 1;
-		 auto startIterator = MVP.begin();
-		 auto endIterator = MVP.begin();
-		 auto wItStart = MV.begin();
-		 auto wItEnd = MV.begin();
+		 auto MVPstartIterator	= MVP.begin();
+		 auto MVPendIterator	= MVP.begin();
+		 auto MVstartIterator	= MV.begin();
+		 auto MVendIterator		= MV.begin();
 		 GLuint j = 0;
 		 for (auto i : _State.VertexArrays) {
 			 glBindVertexArray(i);
 
+			 // // Write matrices to transform vertices from object space to screen space
 			 glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
 			 auto matrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
-			 std::advance(endIterator, currentNumInstances);
-			 std::copy(startIterator, endIterator, matrixBufferPtr);
+			 std::advance(MVPendIterator, currentNumInstances);
+			 std::copy(MVPstartIterator, MVPendIterator, matrixBufferPtr);
 			 glUnmapBuffer(GL_ARRAY_BUFFER);
 
+			 // // Write matrices to transform vertices from object space to world space
 			 glBindBuffer(GL_ARRAY_BUFFER, _State.WorldMatBuffID);
 			 auto wMatrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
-			 std::advance(wItEnd, currentNumInstances);
-			 std::copy(wItStart, wItEnd, wMatrixBufferPtr);
+			 std::advance(MVendIterator, currentNumInstances);
+			 std::copy(MVstartIterator, MVendIterator, wMatrixBufferPtr);
 			 glUnmapBuffer(GL_ARRAY_BUFFER);
 
-
-			 //glBindBuffer(GL_ARRAY_BUFFER, _State.worldMatrixID)
-
-
-			 glUniformMatrix4fv(_State.worldMatrixID, currentNumInstances, false, &MV.at(j)[0][0]); j+=currentNumInstances;
-			 //if (i > 1) {
-				// glm::vec4 t_firstVert = _State.modelMatrix.at(j)*glm::vec4(_State.sData_arrow.vertices.at(0).position, 1.0f);
-				// glm::vec4 t_lastVert  = _State.modelMatrix.at(j)*glm::vec4(_State.sData_arrow.vertices.at(41).position, 1.0f);
-				// __debugbreak();
-			 //}
 
 			 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
 
@@ -463,8 +452,8 @@ void render_frame (ApplicationState& _State)
 				 glDrawElementsInstanced(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
 			 }
 
-			 std::advance(startIterator, currentNumInstances);
-			 std::advance(wItStart, currentNumInstances);
+			 std::advance(MVPstartIterator, currentNumInstances);
+			 std::advance(MVstartIterator, currentNumInstances);
 			 if (i == _State.PlaneVertexArrayID) {
 				 offset = _State.sizeOfPlane + _State.sizeOfPlaneNormalsVerts;
 				 numIndices = _State.normalsPlaneNumIndices;
