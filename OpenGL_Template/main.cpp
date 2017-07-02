@@ -77,6 +77,8 @@ struct ApplicationState {
 	SDL_Window*		st_window = nullptr;
 	SDL_GLContext	st_opengl = nullptr;
 
+	ShapeData sData_plane;
+	
 	ApplicationState() {
 		if (st_window) SDL_DestroyWindow(st_window);
 		if (st_opengl) SDL_GL_DeleteContext(st_opengl);
@@ -226,6 +228,8 @@ void init (ApplicationState& _State)
 	static ShapeData data_plane_normals		= ShapeGenerator::makeNormals(data_plane);
 	static ShapeData data_arrow_normals		= ShapeGenerator::makeNormals(data_arrow);
 
+	_State.sData_plane = data_plane;
+
 
 	// // Set up global variables for size of various elements // //
 	_State.arrowNumIndices		  = data_arrow.numIndices();
@@ -318,9 +322,9 @@ void init (ApplicationState& _State)
 	
 	// Initial matrix
 	// Plane
-	_State.modelMatrix.push_back(glm::translate(glm::mat4(1.0f), glm::vec3(distance / 2.0f, 0.0f, 0.0f)));
+	_State.modelMatrix.push_back(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
 	// Normals
-	_State.modelMatrix.push_back(glm::translate(glm::mat4(1.0f), glm::vec3(distance / 2.0f, 0.0f, 0.0f)));
+	_State.modelMatrix.push_back(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
 	for (GLuint i = 0; i < _State.numInstances; ++i) {
 		_State.modelMatrix.push_back(glm::scale(glm::rotate(glm::translate(glm::mat4(1.0f),
 			glm::vec3(0.0f + _State.offsets.at(i), 2.0f, 0.0f)),			//Translate
@@ -422,6 +426,8 @@ void render_frame (ApplicationState& _State)
 
 
 			 glUniform4fv(_State.worldMatrixID, 1, &_State.modelMatrix.at(j)[0][0]); ++j;
+			 //glm::vec4 t_firstVert = _State.modelMatrix.at(j)*glm::vec4(_State.sData_plane.vertices.at(0).position, 1.0f);
+			 //glm::vec4 t_lastVert  = _State.modelMatrix.at(j)*glm::vec4(_State.sData_plane.vertices.at(440).position, 1.0f);
 
 			 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
 

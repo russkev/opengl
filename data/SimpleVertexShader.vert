@@ -3,8 +3,8 @@
 // // Input vertex data, different for all executions of this shader.
 in layout(location = 0) vec3 vertexPosition;
 // // Notice that the "1" here matches the "1" in glVertexAttribPointer
-//in layout(location = 1) vec3 vertexColor;
-//in layout(location = 2) vec3 vertexNormal;
+in layout(location = 1) vec3 vertexColor;
+in layout(location = 2) vec3 vertexNormal;
 in layout(location = 3) mat4 ModelMatrix;
 //in layout(location = 7) mat4 WorldMatrix;
 
@@ -24,7 +24,7 @@ void main(){
 	//vertexPosition_modelspace.x+=offset;
 	// // Output position of the vertex, in clip space : MVP * position
 	gl_Position			= ModelMatrix * vec4(vertexPosition, 1);
-	vec4 v				= vec4(vertexPosition, 1);
+	vec4 v				= vec4(vertexPosition[2], vertexPosition[2], vertexPosition[2], 1);
 	//vec3 lightVector = normalize(lightPosition - vertexPosition);
 
 	// // The colour of each vertex will be interpolated to produce the colour of each fragment
@@ -33,7 +33,7 @@ void main(){
 	//f_vertexNormal		= vec4(vertexNormal, 1);
 	//f_vertexPosition	= vec4(vertexPosition, 1);
 	
-	vec3 positionForFragment = vec3(ModelToWorldMatrix * v);
+	vec3 positionForFragment = vec3(ModelToWorldMatrix * v)*0.1;
 	//f_worldPosition		= vec3(ModelToWorldMatrix * v);
 	f_worldPosition			= positionForFragment;
 }

@@ -25,6 +25,6 @@ void main(){
 	// // Output colour = colour specified in the vertex shader,
 	// // interpolated between all 3 surrounding vertices
 	//color = vec4(brightness, brightness, brightness, 1.0);
-	//color = vec4(f_worldPosition, 1);
-	color = vec4(1.0, 0.5, 0.3);
+	color = vec4(f_worldPosition, 1);
+	//color = vec4(1.0, 0.5, 0.3, 1.0);
 }
