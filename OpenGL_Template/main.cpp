@@ -334,7 +334,8 @@ void init (ApplicationState& _State)
 		else {
 			_State.modelMatrix.push_back(glm::scale(glm::rotate(glm::translate(glm::mat4(1.0f),
 				glm::vec3(0.0f + _State.offsets.at(i), 2.0f, 0.0f)),					//Translate
-				0.0f/*(rand() / (float)RAND_MAX)*360*/, glm::vec3(0.0f, 1.0f, 1.0f)),	//Rotate
+				//(rand() / (float)RAND_MAX)*360, glm::vec3(0.0f, 1.0f, 1.0f)),			//Random Rotate
+				0.0f, glm::vec3(0.0f, 1.0f, 1.0f)),										//Non Random Rotate
 				glm::vec3(0.1f, 0.1f, 0.1f)));											//Scale
 		}
 	}
