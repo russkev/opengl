@@ -242,11 +242,11 @@ void init (ApplicationState& _State)
 	_State.sizeOfPlane				= data_plane.sizeVertices() + data_plane.sizeIndices();
 	_State.sizeOfPlaneVerts			= data_plane.sizeVertices();
 	_State.sizeOfPlaneNormals		= data_plane_normals.sizeVertices() + data_plane_normals.sizeIndices();
-	_State.sizeOfPlaneNormalsVerts = data_plane_normals.sizeVertices();
-	_State.sizeOfArrow = data_arrow.sizeVertices() + data_arrow.sizeIndices();
-	_State.sizeOfArrowVerts = data_arrow.sizeVertices();
-	_State.sizeOfArrowNormals = data_arrow_normals.sizeVertices() + data_arrow_normals.sizeIndices();
-	_State.sizeOfArrowNormalsVerts = data_arrow_normals.sizeVertices();
+	_State.sizeOfPlaneNormalsVerts	= data_plane_normals.sizeVertices();
+	_State.sizeOfArrow				= data_arrow.sizeVertices() + data_arrow.sizeIndices();
+	_State.sizeOfArrowVerts			= data_arrow.sizeVertices();
+	_State.sizeOfArrowNormals		= data_arrow_normals.sizeVertices() + data_arrow_normals.sizeIndices();
+	_State.sizeOfArrowNormalsVerts	= data_arrow_normals.sizeVertices();
 
 
 	// // TEST // //
@@ -334,8 +334,8 @@ void init (ApplicationState& _State)
 		else {
 			_State.modelMatrix.push_back(glm::scale(glm::rotate(glm::translate(glm::mat4(1.0f),
 				glm::vec3(0.0f + _State.offsets.at(i), 2.0f, 0.0f)),					//Translate
-				//(rand() / (float)RAND_MAX)*360, glm::vec3(0.0f, 1.0f, 1.0f)),			//Random Rotate
-				0.0f, glm::vec3(0.0f, 1.0f, 1.0f)),										//Non Random Rotate
+				(rand() / (float)RAND_MAX)*360, glm::vec3(0.0f, 1.0f, 1.0f)),			//Random Rotate
+				//0.0f, glm::vec3(0.0f, 1.0f, 1.0f)),										//Non Random Rotate
 				glm::vec3(0.1f, 0.1f, 0.1f)));											//Scale
 		}
 	}
@@ -447,7 +447,7 @@ void render_frame (ApplicationState& _State)
 			 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
 
 			 if (i == _State.PlaneNormalsVertexArrayID || i == _State.ArrowNormalsVertexArrayID) {
-				 //glDrawElementsInstanced(GL_LINES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
+				 glDrawElementsInstanced(GL_LINES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
 			 }
 			 else {
 				 glDrawElementsInstanced(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
