@@ -19,6 +19,6 @@ void main(){
 	vec4 v				= vec4(vertexPosition, 1);
 
 	// // The colour of each vertex will be interpolated to produce the colour of each fragment
-	f_vertexNormal		= vertexNormal;
+	f_vertexNormal		= normalize(vec3(WorldMatrix * vec4(vertexNormal, 0)));
 	f_worldPosition		= vec3(WorldMatrix * v);
 }

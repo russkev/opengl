@@ -19,4 +19,5 @@ void main(){
 	vec3 lightVector = normalize(lightPosition - f_worldPosition);
 	float brightness = dot(lightVector, f_vertexNormal);
 	color = vec4(brightness, brightness, brightness, 1.0);
+	//color = vec4(f_vertexNormal, 1);
 }
