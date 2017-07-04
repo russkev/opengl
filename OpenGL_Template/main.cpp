@@ -30,9 +30,9 @@ static constexpr auto WORLD_ATTR	= 7u;
 struct ApplicationState {
 	GLuint programID       = 0;
 	GLuint matrixID        = 0;
-	GLuint ambientID        = 0;
+	GLuint ambientLightID  = 0;
 	GLuint lightPositionID = 0;
-	GLuint worldMatrixID = 0;
+	GLuint worldMatrixID   = 0;
 
 	GLuint TheBufferID			= 0;
 	GLuint CubeVertexArrayID	= 0;
@@ -214,7 +214,7 @@ void init (ApplicationState& _State)
 
 	// // Fetch uniforms from vertex shader // //
 	_State.matrixID = glGetUniformLocation(_State.programID, "MVP");
-	_State.ambientID = glGetUniformLocation(_State.programID, "ambient");
+	_State.ambientLightID = glGetUniformLocation(_State.programID, "ambientLight");
 	_State.lightPositionID = glGetUniformLocation(_State.programID, "lightPosition");
 	_State.worldMatrixID = glGetUniformLocation(_State.programID, "ModelToWorldMatrix");
 
@@ -399,8 +399,8 @@ void render_frame (ApplicationState& _State)
 	 // // LIGHTING // //
 	 glUseProgram(_State.programID);
 	 // // Ambient Lighting // //
-	 glm::vec3 ambientLight = { 0.5f, 0.5f, 1.0f };
-	 glUniform3fv(_State.ambientID, 1, &ambientLight.r);
+	 glm::vec4 ambientLight = { 0.0f, 0.17f, 0.3f, 1.0f };
+	 glUniform4fv(_State.ambientLightID, 1, &ambientLight.r);
 	 // // Diffuse Lighting // // 
 	 glm::vec3 lightPosition = { 0.0f, 2.0f, 0.0f };
 	 glUniform3fv(_State.lightPositionID, 1, &lightPosition.x);
@@ -447,7 +447,7 @@ void render_frame (ApplicationState& _State)
 			 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
 
 			 if (i == _State.PlaneNormalsVertexArrayID || i == _State.ArrowNormalsVertexArrayID) {
-				 glDrawElementsInstanced(GL_LINES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
+				 //glDrawElementsInstanced(GL_LINES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
 			 }
 			 else {
 				 glDrawElementsInstanced(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
