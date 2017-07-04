@@ -4,8 +4,9 @@
 in layout(location = 0) vec4 model_vertexPosition;
 in layout(location = 1) vec3 model_vertexColor;
 in layout(location = 2) vec3 model_vertexNormal;
-in layout(location = 3) mat4 mat_modelToProjection;
-in layout(location = 7) mat4 mat_modelToWorld;
+//in layout(location = 3) vec4 model_camPosition;
+in layout(location = 4) mat4 mat_modelToProjection;
+in layout(location = 8) mat4 mat_modelToWorld;
 
 // // Output data ; will be interpolated for each fragment
 out vec3 f_world_vertexNormal;

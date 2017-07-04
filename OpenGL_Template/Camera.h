@@ -21,5 +21,6 @@ public:
 	void positionUpdate(const SDL_Scancode& newPosition);
 	void scrollUpdate(const float scrollAmount);
 	glm::mat4 getWorldToViewMatrix() const;
+	glm::vec3 getPosition() const;
 };
 
