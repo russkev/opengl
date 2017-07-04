@@ -61,4 +61,8 @@ glm::mat4 Camera::getWorldToViewMatrix() const {
 	return glm::lookAt(position, position + viewDirection, up);
 }
 
+glm::vec3 Camera::getPosition() const {
+	return position;
+}
+
 

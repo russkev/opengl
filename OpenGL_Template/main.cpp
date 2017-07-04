@@ -24,8 +24,9 @@
 static constexpr auto POSITION_ATTR = 0u;
 static constexpr auto COLOR_ATTR    = 1u;
 static constexpr auto NORMAL_ATTR	= 2u;
-static constexpr auto MODEL_ATTR    = 3u;
-static constexpr auto WORLD_ATTR	= 7u;
+static constexpr auto CAM_ATTR		= 3u;
+static constexpr auto MODEL_ATTR    = 4u;
+static constexpr auto WORLD_ATTR	= 8u;
 
 struct ApplicationState {
 	GLuint programID       = 0;
@@ -33,6 +34,7 @@ struct ApplicationState {
 	GLuint ambientLightID  = 0;
 	GLuint lightPositionID = 0;
 	GLuint worldMatrixID   = 0;
+	GLuint camPositionID   = 0;
 
 	GLuint TheBufferID			= 0;
 	GLuint CubeVertexArrayID	= 0;
@@ -44,6 +46,7 @@ struct ApplicationState {
 	GLuint WorldMatBuffID		= 0;
 	GLuint NormalsID			= 0;
 	GLuint ColorBufferID		= 0;
+	GLuint CamPositionBufferID	= 0;
 	std::vector<GLuint> VertexArrays;
 
 	GLuint numBuffers      = 1;
@@ -217,6 +220,7 @@ void init (ApplicationState& _State)
 	_State.ambientLightID = glGetUniformLocation(_State.programID, "ambientLight");
 	_State.lightPositionID = glGetUniformLocation(_State.programID, "lightPosition");
 	_State.worldMatrixID = glGetUniformLocation(_State.programID, "ModelToWorldMatrix");
+	_State.camPositionID = glGetUniformLocation(_State.programID, "camPosition");
 
 	// // Set up camera // //
 	_State.projection = glm::perspective(glm::radians(50.0f), float(width) / float(height), 0.1f, 100.0f);
@@ -290,7 +294,6 @@ void init (ApplicationState& _State)
 	_State.VertexArrays.push_back(_State.ArrowVertexArrayID);
 	glGenVertexArrays(1, &_State.ArrowNormalsVertexArrayID);
 	_State.VertexArrays.push_back(_State.ArrowNormalsVertexArrayID);
-
 
 	{
 		GLsizeiptr offset = 0;
@@ -366,6 +369,11 @@ void init (ApplicationState& _State)
 		}
 	}
 
+	//glGenBuffers(1, &_State.CamPositionBufferID);
+	//glBindBuffer(GL_ARRAY_BUFFER, _State.CamPositionBufferID);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3), &_State.cam.outPosition->x, GL_DYNAMIC_DRAW);
+	//glBindVertexArray()
+
 
 
 
@@ -404,6 +412,10 @@ void render_frame (ApplicationState& _State)
 	 // // Diffuse Lighting // // 
 	 glm::vec3 lightPosition = { 0.0f, 2.0f, 0.0f };
 	 glUniform3fv(_State.lightPositionID, 1, &lightPosition.x);
+
+	 // // Cam position // //
+	 glm::vec3 camPositionVec = _State.cam.getPosition();
+	 glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
 
 	 //// Matrix transformations
 	 std::vector<glm::mat4> MVP;

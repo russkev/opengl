@@ -9,6 +9,7 @@ in vec3 f_world_vertexPosition;
 uniform vec4 ambientLight;
 uniform vec3 lightPosition;
 uniform vec3 f_fragmentPosition;
+uniform vec3 camPosition;
 
 
 // // Output data // //
@@ -19,7 +20,6 @@ void main(){
 	vec3 lightVector = normalize(lightPosition - f_world_vertexPosition);
 	float brightness = dot(lightVector, normalize(f_world_vertexNormal));
 	vec4 diffuseLight = vec4(brightness, brightness, brightness, 1.0);
-	color = ambientLight + clamp(diffuseLight, 0, 1);
-	//color = vec4(ambientLight[0] + diffuseLight[0], ambientlight[1] + diffuseLight[1], ambientLight[2] + diffuseLight[2], 1);
-	//color = vec4(ambientLight[0] + diffuseLight[0], ambientLight[1] + diffuseLight[1], 0, 1);
+	//color = ambientLight + clamp(diffuseLight, 0, 1);
+	color = vec4(0, camPosition[1] - 3.5, 0, 1);
 }
