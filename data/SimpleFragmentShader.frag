@@ -17,9 +17,19 @@ out vec4 color;
 
 
 void main(){
-	vec3 lightVector = normalize(lightPosition - f_world_vertexPosition);
-	float brightness = dot(lightVector, normalize(f_world_vertexNormal));
-	vec4 diffuseLight = vec4(brightness, brightness, brightness, 1.0);
+	vec3 world_lightVector		= normalize(lightPosition - f_world_vertexPosition);
+	vec3 world_normalVector		= normalize(f_world_vertexNormal);
+
+	float diffuseBrightness		= dot(world_lightVector, world_normalVector);
+	vec4 diffuseLight			= vec4(diffuseBrightness, diffuseBrightness, diffuseBrightness, 1.0);
+
+	//vec3 reflectedLightVector	= lightVector - 2 * diffuseBrightness * normalVector;
+	vec3 reflectedLightVector	= reflect(-world_lightVector, world_normalVector);
+	vec3 camVector				= normalize(camPosition - f_world_vertexPosition);
+
+	float specularBrightness	= clamp(dot(reflectedLightVector, camVector), 0, 1);
+	vec4 specularLight			= vec4(specularBrightness, specularBrightness, specularBrightness, 1.0);
+
 	//color = ambientLight + clamp(diffuseLight, 0, 1);
-	color = vec4(0, camPosition[1] - 3.5, 0, 1);
+	color = specularLight;
 }
