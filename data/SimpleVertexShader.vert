@@ -16,7 +16,7 @@ out vec3 f_world_vertexPosition;
 
 void main(){
 	// // Output position of the vertex, in clip space : MVP * position
-	gl_Position			= mat_modelToProjection * model_vertexPosition;
+	gl_Position				= mat_modelToProjection * model_vertexPosition;
 
 	// // The colour of each vertex will be interpolated to produce the colour of each fragment
 	f_world_vertexNormal	= normalize(vec3(mat_modelToWorld * vec4(model_vertexNormal, 0)));
