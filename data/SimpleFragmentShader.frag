@@ -27,9 +27,10 @@ void main(){
 	vec3 reflectedLightVector	= reflect(-world_lightVector, world_normalVector);
 	vec3 camVector				= normalize(camPosition - f_world_vertexPosition);
 
-	float specularBrightness	= clamp(dot(reflectedLightVector, camVector), 0, 1);
+	float specularBrightness	= dot(reflectedLightVector, camVector);
+	specularBrightness			= pow(specularBrightness, 30);
 	vec4 specularLight			= vec4(specularBrightness, specularBrightness, specularBrightness, 1.0);
 
-	//color = ambientLight + clamp(diffuseLight, 0, 1);
-	color = specularLight;
+	color = ambientLight + clamp(diffuseLight, 0, 1) + clamp(specularLight, 0, 1);
+	//color = clamp(specularLight, 0, 1);
 }
