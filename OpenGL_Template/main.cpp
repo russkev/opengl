@@ -455,24 +455,23 @@ void render_frame (ApplicationState& _State)
 
 	 glBindVertexArray(_State.vertexBuffer.getBufferID());
 	 glBindBuffer(GL_ARRAY_BUFFER, _State.viewMatrixBuffer.getBufferID());
-	 // // !!! This buffer ID is not being set correctly
-	 //auto matrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
-	 //auto startIterator = MVP.begin();
-	 //auto endIterator = startIterator;
-	 //std::advance(endIterator, 1);
-	 //std::copy(startIterator, endIterator, matrixBufferPtr);
-	 //glUnmapBuffer(GL_ARRAY_BUFFER);
+	 auto matrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+	 auto startIterator = MVP.begin();
+	 auto endIterator = startIterator;
+	 std::advance(endIterator, 1);
+	 std::copy(startIterator, endIterator, matrixBufferPtr);
+	 glUnmapBuffer(GL_ARRAY_BUFFER);
 
-	 //glBindBuffer(GL_ARRAY_BUFFER, _State.worldMatrixBuffer.getBufferID());
-	 //auto wMatrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
-	 //auto wStartIterator = MV.begin();
-	 //auto wEndIterator = wStartIterator;
-	 //std::advance(wEndIterator, 1);
-	 //std::copy(wStartIterator, wEndIterator, wMatrixBufferPtr);
-	 //glUnmapBuffer(GL_ARRAY_BUFFER);
+	 glBindBuffer(GL_ARRAY_BUFFER, _State.worldMatrixBuffer.getBufferID());
+	 auto wMatrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+	 auto wStartIterator = MV.begin();
+	 auto wEndIterator = wStartIterator;
+	 std::advance(wEndIterator, 1);
+	 std::copy(wStartIterator, wEndIterator, wMatrixBufferPtr);
+	 glUnmapBuffer(GL_ARRAY_BUFFER);
 
-	 //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.vertexBuffer.getBufferID());
-	 //glDrawElementsInstanced(GL_TRIANGLES, _State.planeNumIndices, GL_UNSIGNED_SHORT, (void*)_State.sizeOfPlaneVerts, 1);
+	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.vertexBuffer.getBufferID());
+	 glDrawElementsInstanced(GL_TRIANGLES, _State.planeNumIndices, GL_UNSIGNED_SHORT, (void*)_State.sizeOfPlaneVerts, 1);
 
 	 ////{
 		//// GLsizeiptr offset  = _State.sizeOfPlaneVerts;
