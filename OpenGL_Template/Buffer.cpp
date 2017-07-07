@@ -33,20 +33,20 @@ void Buffer::createGeoBuffer(const void* data, std::size_t size)
 }
 
 void Buffer::createMatrixBuffer(const void* data, std::size_t size, std::uint32_t attribute) {
-	//glGenBuffers(1, &m_bufferID);
-	//glBindBuffer(m_target, m_bufferID);
-	//glBufferData(m_target, size, nullptr, GL_DYNAMIC_DRAW);
-	//glBufferSubData(m_target, 0, size, (void*)data);
+	glGenBuffers(1, &m_bufferID);
+	glBindBuffer(m_target, m_bufferID);
+	glBufferData(m_target, size, nullptr, GL_DYNAMIC_DRAW);
+	glBufferSubData(m_target, 0, size, (void*)data);
 
-	//std::uint32_t vertexArrayID;
-	//glGenVertexArrays(1, &vertexArrayID);
-	//glBindVertexArray(vertexArrayID);
-	//glEnableVertexAttribArray(attribute);
-	//for (int i = 0; i < 4; ++i) {
-	//	glEnableVertexAttribArray(attribute + i);
-	//	glVertexAttribPointer(attribute + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * (i * 4)));
-	//	glVertexAttribDivisor(attribute + i, 1);
-	//}
+	std::uint32_t vertexArrayID;
+	glGenVertexArrays(1, &vertexArrayID);
+	glBindVertexArray(vertexArrayID);
+	glEnableVertexAttribArray(attribute);
+	for (int i = 0; i < 4; ++i) {
+		glEnableVertexAttribArray(attribute + i);
+		glVertexAttribPointer(attribute + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * (i * 4)));
+		glVertexAttribDivisor(attribute + i, 1);
+	}
 
 
 }
