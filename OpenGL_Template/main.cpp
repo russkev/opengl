@@ -16,6 +16,8 @@
 #include "ShapeData.h"
 #include "ShapeGenerator.h"
 #include "Camera.h"
+#include "Buffer.h"
+
 
 #define GLM_ENABLE_EXPERIMENTAL
 #define DEBUG
@@ -82,6 +84,9 @@ struct ApplicationState {
 
 	ShapeData sData_plane;
 	ShapeData sData_arrow;
+
+	Buffer vertexBuffer = { GL_ARRAY_BUFFER, 0 };
+	Buffer matrixBuffer = { GL_ARRAY_BUFFER, 0 };
 	
 	ApplicationState() {
 		if (st_window) SDL_DestroyWindow(st_window);
@@ -267,6 +272,9 @@ void init (ApplicationState& _State)
 		_State.sizeOfArrowNormals,
 		nullptr, GL_STATIC_DRAW);
 
+	_State.vertexBuffer.append(&data_plane.vertices.front(), data_plane.vertices.size());
+
+	glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
 	GLsizeiptr currentOffset = 0;
 	glBufferSubData(GL_ARRAY_BUFFER, currentOffset, data_plane.sizeVertices(), &data_plane.vertices.front());
 	currentOffset += data_plane.sizeVertices();
