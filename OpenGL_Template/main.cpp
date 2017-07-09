@@ -235,7 +235,7 @@ void init (ApplicationState& _State)
 
 	// // Create 3D models
 	static ShapeData data_triangle			= ShapeGenerator::makeTriangle();
-	static ShapeData data_plane				= ShapeGenerator::makePlane(20);
+	static ShapeData data_plane				= ShapeGenerator::makePlane(200);
 	static ShapeData data_arrow				= ShapeGenerator::makeArrow();
 	static ShapeData data_plane_normals		= ShapeGenerator::makeNormals(data_plane);
 	static ShapeData data_arrow_normals		= ShapeGenerator::makeNormals(data_arrow);
@@ -261,7 +261,7 @@ void init (ApplicationState& _State)
 
 
 	// // TEST // //
-	loadBMP_custom BMP1("uvtemplate.bmp");
+	//loadBMP_custom BMP1("uvtemplate.bmp");
 	// // END TEST // //
 
 	// // Push plane and arrow vertices to :graphics card memory (location: TheBufferID):
