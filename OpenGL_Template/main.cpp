@@ -86,8 +86,8 @@ struct ApplicationState {
 	ShapeData sData_arrow;
 
 	Buffer vertexBuffer			= { GL_ARRAY_BUFFER, 0 };
-	Buffer viewMatrixBuffer		= { GL_ARRAY_BUFFER, 0 };
-	Buffer worldMatrixBuffer	= { GL_ARRAY_BUFFER, 0 };
+	//Buffer viewMatrixBuffer		= { GL_ARRAY_BUFFER, 0 };
+	//Buffer worldMatrixBuffer	= { GL_ARRAY_BUFFER, 0 };
 	
 	
 	ApplicationState() {
@@ -235,7 +235,7 @@ void init (ApplicationState& _State)
 
 	// // Create 3D models
 	static ShapeData data_triangle			= ShapeGenerator::makeTriangle();
-	static ShapeData data_plane				= ShapeGenerator::makePlane(200);
+	static ShapeData data_plane				= ShapeGenerator::makePlane(3);
 	static ShapeData data_arrow				= ShapeGenerator::makeArrow();
 	static ShapeData data_plane_normals		= ShapeGenerator::makeNormals(data_plane);
 	static ShapeData data_arrow_normals		= ShapeGenerator::makeNormals(data_arrow);
@@ -348,7 +348,7 @@ void init (ApplicationState& _State)
 			_State.modelMatrix.push_back(glm::scale(glm::rotate(glm::translate(glm::mat4(1.0f),
 				glm::vec3(0.0f + _State.offsets.at(i), 2.0f, 0.0f)),					//Translate
 				(rand() / (float)RAND_MAX)*360, glm::vec3(0.0f, 1.0f, 1.0f)),			//Random Rotate
-				//0.0f, glm::vec3(0.0f, 1.0f, 1.0f)),										//Non Random Rotate
+				//0.0f, glm::vec3(0.0f, 1.0f, 1.0f)),									//Non Random Rotate
 				glm::vec3(0.1f, 0.1f, 0.1f)));											//Scale
 		}
 	}
@@ -381,8 +381,8 @@ void init (ApplicationState& _State)
 
 	glm::mat4 iMatrix(1.0);
 	glm::vec3 testVec = { 1.0f, 1.0f, 1.0f };
-	_State.viewMatrixBuffer.createMatrixBuffer(&iMatrix, sizeof(glm::mat4), MODEL_ATTR);
-	_State.worldMatrixBuffer.createMatrixBuffer(&iMatrix, sizeof(glm::mat4), WORLD_ATTR);
+	//_State.viewMatrixBuffer.createMatrixBuffer(&iMatrix, sizeof(glm::mat4), MODEL_ATTR, _State.vertexBuffer.getBufferID());
+	//_State.worldMatrixBuffer.createMatrixBuffer(&iMatrix, sizeof(glm::mat4), WORLD_ATTR, _State.vertexBuffer.getBufferID());
 
 	//glGenBuffers(1, &_State.CamPositionBufferID);
 	//glBindBuffer(GL_ARRAY_BUFFER, _State.CamPositionBufferID);
@@ -443,89 +443,31 @@ void render_frame (ApplicationState& _State)
 		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
 		 MV.push_back(_State.modelMatrix.at(i));
 	 }
-	 ////glBindVertexArray(_State.vertexBuffer.getBufferID());
-	 ////glBindBuffer(GL_ARRAY_BUFFER, _State.viewMatrixBuffer.getBufferID());
-	 ////glBufferSubData(GL_ARRAY_)
-	 ////for (int i = 0; i < 4; ++i) {
-		//// glEnableVertexAttribArray(_State.viewMatrixBuffer.getBufferID() + i);
-		//// glVertexAttribPointer(_State.viewMatrixBuffer.getBufferID() + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * (i * 4)));
-		//// glVertexAttribDivisor(_State.viewMatrixBuffer.getBufferID() + i, 1);
-	 ////}
 
 
-	 glBindVertexArray(_State.vertexBuffer.getBufferID());
-	 glBindBuffer(GL_ARRAY_BUFFER, _State.viewMatrixBuffer.getBufferID());
-	 auto matrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
-	 auto startIterator = MVP.begin();
-	 auto endIterator = startIterator;
-	 std::advance(endIterator, 1);
-	 std::copy(startIterator, endIterator, matrixBufferPtr);
-	 glUnmapBuffer(GL_ARRAY_BUFFER);
+	 {
+		 GLsizeiptr offset = _State.sizeOfPlaneVerts;
+		 GLuint numIndices = _State.planeNumIndices;
+		 GLsizei currentNumInstances = 1;
 
-	 glBindBuffer(GL_ARRAY_BUFFER, _State.worldMatrixBuffer.getBufferID());
-	 auto wMatrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
-	 auto wStartIterator = MV.begin();
-	 auto wEndIterator = wStartIterator;
-	 std::advance(wEndIterator, 1);
-	 std::copy(wStartIterator, wEndIterator, wMatrixBufferPtr);
-	 glUnmapBuffer(GL_ARRAY_BUFFER);
+		 glBindVertexArray(_State.vertexBuffer.getBufferID());
 
-	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.vertexBuffer.getBufferID());
-	 glDrawElementsInstanced(GL_TRIANGLES, _State.planeNumIndices, GL_UNSIGNED_SHORT, (void*)_State.sizeOfPlaneVerts, 1);
+		// // Write matrices to transform vertices from object space to screen space
+		 
+		 glBindBuffer(GL_ARRAY_BUFFER, _State.vertexBuffer.getViewMatrixBufferID());
+		 glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), MVP.data());
 
-	 ////{
-		//// GLsizeiptr offset  = _State.sizeOfPlaneVerts;
-		//// GLuint numIndices = _State.planeNumIndices;
-		//// GLsizei currentNumInstances = 1;
-		//// auto MVPstartIterator	= MVP.begin();
-		//// auto MVPendIterator	= MVP.begin();
-		//// auto MVstartIterator	= MV.begin();
-		//// auto MVendIterator		= MV.begin();
-		//// GLuint j = 0;
-		//// for (auto i : _State.VertexArrays) {
-		////	 glBindVertexArray(i);
+		// // Write matrices to transform vertices from object space to world space
+		glBindBuffer(GL_ARRAY_BUFFER, _State.vertexBuffer.getViewMatrixBufferID());
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), MV.data());
 
-		////	 // // Write matrices to transform vertices from object space to screen space
-		////	 glBindBuffer(GL_ARRAY_BUFFER, _State.MatrixBufferID);
-		////	 auto matrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
-		////	 std::advance(MVPendIterator, currentNumInstances);
-		////	 std::copy(MVPstartIterator, MVPendIterator, matrixBufferPtr);
-		////	 glUnmapBuffer(GL_ARRAY_BUFFER);
-
-		////	 // // Write matrices to transform vertices from object space to world space
-		////	 glBindBuffer(GL_ARRAY_BUFFER, _State.WorldMatBuffID);
-		////	 auto wMatrixBufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
-		////	 std::advance(MVendIterator, currentNumInstances);
-		////	 std::copy(MVstartIterator, MVendIterator, wMatrixBufferPtr);
-		////	 glUnmapBuffer(GL_ARRAY_BUFFER);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
 
 
-		////	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
+		glDrawElementsInstanced(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
 
-		////	 if (i == _State.PlaneNormalsVertexArrayID || i == _State.ArrowNormalsVertexArrayID) {
-		////		 //glDrawElementsInstanced(GL_LINES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
-		////	 }
-		////	 else {
-		////		 glDrawElementsInstanced(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
-		////	 }
 
-		////	 std::advance(MVPstartIterator, currentNumInstances);
-		////	 std::advance(MVstartIterator, currentNumInstances);
-		////	 if (i == _State.PlaneVertexArrayID) {
-		////		 offset = _State.sizeOfPlane + _State.sizeOfPlaneNormalsVerts;
-		////		 numIndices = _State.normalsPlaneNumIndices;
-		////	 }
-		////	 if (i == _State.PlaneNormalsVertexArrayID) { 
-		////		 currentNumInstances = (GLsizei)_State.numInstances;
-		////		 offset = _State.sizeOfPlane + _State.sizeOfPlaneNormals + _State.sizeOfArrowVerts;
-		////		 numIndices = _State.arrowNumIndices;
-		////	 }
-		////	 if (i == _State.ArrowVertexArrayID) {
-		////		 offset = _State.sizeOfPlane + _State.sizeOfPlaneNormals + _State.sizeOfArrow + _State.sizeOfArrowNormalsVerts;
-		////		 numIndices = _State.normalsArrowNumIndices;
-		////	 }
-		//// }
-	 ////}
+	 }
 }
 
 
