@@ -33,17 +33,17 @@ void Buffer::createGeoBuffer(const void* data, std::size_t size)
 	glVertexAttribPointer(COLOR_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(glm::tvec3<GLfloat>));
 	glEnableVertexAttribArray(NORMAL_ATTR);
 	glVertexAttribPointer(NORMAL_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::tvec3<GLfloat>) * 2));
-	const glm::mat4 identityMatrix = glm::mat4(1.0);
-	glGenBuffers(1, &m_viewMatrixBufferID);
-	createMatrixBuffer(&identityMatrix, sizeof(glm::mat4), MODEL_ATTR, m_viewMatrixBufferID);
-	glGenBuffers(1, &m_worldMatrixBufferID);
-	createMatrixBuffer(&identityMatrix, sizeof(glm::mat4), WORLD_ATTR, m_worldMatrixBufferID);
+	//const glm::mat4 identityMatrix = glm::mat4(1.0);
+	//glGenBuffers(1, &m_viewMatrixBufferID);
+	//createMatrixBuffer(&identityMatrix, sizeof(glm::mat4), MODEL_ATTR, m_viewMatrixBufferID);
+	//glGenBuffers(1, &m_worldMatrixBufferID);
+	//createMatrixBuffer(&identityMatrix, sizeof(glm::mat4), WORLD_ATTR, m_worldMatrixBufferID);
 }
 
-void Buffer::createMatrixBuffer(const void* data, std::size_t size, std::uint32_t attribute, std::uint32_t vertexBufferID) {
-	//m_arrayID = vertexArrayID;
-	//glGenBuffers(1, &m_vertexBufferID);
-	glBindBuffer(m_target, vertexBufferID);
+void Buffer::createMatrixBuffer(const void* data, std::size_t size, std::uint32_t attribute, std::uint32_t vertexArrayID) {
+	m_arrayID = vertexArrayID;
+	glGenBuffers(1, &m_vertexBufferID);
+	glBindBuffer(m_target, m_vertexBufferID);
 	glBufferData(m_target, size, nullptr, GL_DYNAMIC_DRAW);
 	glBufferSubData(m_target, 0, size, (void*)data);
 

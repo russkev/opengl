@@ -8,7 +8,7 @@ struct Buffer
 {
 	Buffer(std::uint32_t target_, std::size_t initial_length_);
 	void createGeoBuffer(const void* data, std::size_t size);
-	void createMatrixBuffer(const void* data, std::size_t size, std::uint32_t attribute, std::uint32_t vertexBufferID);
+	void createMatrixBuffer(const void* data, std::size_t size, std::uint32_t attribute, std::uint32_t vertexArrayID);
 	std::uint32_t getBufferID();
 	std::uint32_t getArrayID();
 	std::uint32_t Buffer::getViewMatrixBufferID();
