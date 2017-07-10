@@ -86,8 +86,8 @@ struct ApplicationState {
 	ShapeData sData_arrow;
 
 	Buffer vertexBuffer			= { GL_ARRAY_BUFFER, 0 };
-	//Buffer viewMatrixBuffer		= { GL_ARRAY_BUFFER, 0 };
-	//Buffer worldMatrixBuffer	= { GL_ARRAY_BUFFER, 0 };
+	Buffer viewMatrixBuffer		= { GL_ARRAY_BUFFER, 0 };
+	Buffer worldMatrixBuffer	= { GL_ARRAY_BUFFER, 0 };
 	
 	
 	ApplicationState() {
@@ -380,9 +380,9 @@ void init (ApplicationState& _State)
 	}
 
 	glm::mat4 iMatrix(1.0);
-	glm::vec3 testVec = { 1.0f, 1.0f, 1.0f };
-	//_State.viewMatrixBuffer.createMatrixBuffer(&iMatrix, sizeof(glm::mat4), MODEL_ATTR, _State.vertexBuffer.getBufferID());
-	//_State.worldMatrixBuffer.createMatrixBuffer(&iMatrix, sizeof(glm::mat4), WORLD_ATTR, _State.vertexBuffer.getBufferID());
+	//glm::vec3 testVec = { 1.0f, 1.0f, 1.0f };
+	_State.viewMatrixBuffer.createMatrixBuffer(&iMatrix, sizeof(glm::mat4), MODEL_ATTR, _State.vertexBuffer.getBufferID());
+	_State.worldMatrixBuffer.createMatrixBuffer(&iMatrix, sizeof(glm::mat4), WORLD_ATTR, _State.vertexBuffer.getBufferID());
 
 	//glGenBuffers(1, &_State.CamPositionBufferID);
 	//glBindBuffer(GL_ARRAY_BUFFER, _State.CamPositionBufferID);
@@ -454,14 +454,14 @@ void render_frame (ApplicationState& _State)
 
 		// // Write matrices to transform vertices from object space to screen space
 		 
-		 glBindBuffer(GL_ARRAY_BUFFER, _State.vertexBuffer.getViewMatrixBufferID());
+		 glBindBuffer(GL_ARRAY_BUFFER, _State.viewMatrixBuffer.getBufferID());
 		 glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), MVP.data());
 
 		// // Write matrices to transform vertices from object space to world space
-		glBindBuffer(GL_ARRAY_BUFFER, _State.vertexBuffer.getViewMatrixBufferID());
+		glBindBuffer(GL_ARRAY_BUFFER, _State.worldMatrixBuffer.getBufferID());
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), MV.data());
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID); //!!!TheBuffer here? Really?
 
 
 		glDrawElementsInstanced(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
