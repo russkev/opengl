@@ -23,6 +23,7 @@ void Buffer::createGeoBuffer(const void* data, std::size_t size)
 	glGenBuffers(1, &m_vertexBufferID);
 	glBindBuffer(m_target, m_vertexBufferID);
 	glBufferData(m_target, size, nullptr, GL_DYNAMIC_DRAW);
+	glBindBuffer(m_target, m_vertexBufferID);
 	glBufferSubData(m_target, 0, size, (void*)data);
 
 	glGenVertexArrays(1, &m_arrayID);

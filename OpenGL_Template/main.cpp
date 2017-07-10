@@ -461,8 +461,8 @@ void render_frame (ApplicationState& _State)
 		glBindBuffer(GL_ARRAY_BUFFER, _State.worldMatrixBuffer.getBufferID());
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), MV.data());
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID); //!!!TheBuffer here? Really?
-
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.TheBufferID); //!!!TheBuffer here? Really?
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.vertexBuffer.getBufferID());
 
 		glDrawElementsInstanced(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
 
