@@ -18,13 +18,16 @@ Buffer::Buffer(std::uint32_t target_, std::size_t initial_length_) :
 }
 
 
-void Buffer::createGeoBuffer(const void* data, std::size_t size)
+void Buffer::createGeoBuffer(
+	const void* vertex_data, std::size_t vertex_size,
+	const void* indice_data, std::size_t indice_size)
 {
 	glGenBuffers(1, &m_vertexBufferID);
-	glBindBuffer(m_target, m_vertexBufferID);
-	glBufferData(m_target, size, nullptr, GL_DYNAMIC_DRAW);
-	glBindBuffer(m_target, m_vertexBufferID);
-	glBufferSubData(m_target, 0, size, (void*)data);
+	glBindBuffer(	m_target, m_vertexBufferID);
+	glBufferData(	m_target, vertex_size + indice_size, nullptr, GL_STATIC_DRAW);
+	glBindBuffer(	m_target, m_vertexBufferID);
+	glBufferSubData(m_target, 0,			vertex_size, vertex_data);
+	glBufferSubData(m_target, vertex_size,	indice_size, indice_data);
 
 	glGenVertexArrays(1, &m_arrayID);
 	glBindVertexArray(m_arrayID);
