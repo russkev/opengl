@@ -3,14 +3,17 @@
 #include <cstddef>
 #include <cstdint>
 #include <vector>
+#include "Camera.h"
 
 struct Buffer
 {
 	Buffer(std::uint32_t target_, std::size_t initial_length_);
 	void createGeoBuffer(
 		const void* vertex_data, std::size_t vertex_size,
-		const void* indice_data, std::size_t indice_size);
+		const void* indice_data, std::size_t indice_size,
+		std::size_t indice_number);
 	void createMatrixBuffer(const void* data, std::size_t size, std::uint32_t attribute, std::uint32_t vertexArrayID);
+	void drawGeo(const Camera& cam);
 	std::uint32_t getBufferID();
 	std::uint32_t getArrayID();
 	std::uint32_t Buffer::getViewMatrixBufferID();
@@ -26,5 +29,6 @@ private:
 	std::uint32_t m_worldMatrixBufferID;
 	//std::uint32_t m_arrayBufferID;
 	std::uint32_t m_arrayID;
-
+	std::size_t m_vertexSize;
+	std::size_t m_indice_number;
 };

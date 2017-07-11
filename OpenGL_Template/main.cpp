@@ -276,7 +276,8 @@ void init (ApplicationState& _State)
 
 	_State.vertexBuffer.createGeoBuffer(
 		&data_plane.vertices.front(), data_plane.sizeVertices(),
-		&data_plane.indices.front(),  data_plane.sizeIndices());
+		&data_plane.indices.front(),  data_plane.sizeIndices(),
+		data_plane.numIndices());
 
 	glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
 	GLsizeiptr currentOffset = 0;
@@ -381,22 +382,6 @@ void init (ApplicationState& _State)
 		}
 	}
 
-	glm::mat4 iMatrix(1.0);
-	//glm::vec3 testVec = { 1.0f, 1.0f, 1.0f };
-	_State.viewMatrixBuffer.createMatrixBuffer(&iMatrix, sizeof(glm::mat4), MODEL_ATTR, _State.vertexBuffer.getBufferID());
-	_State.worldMatrixBuffer.createMatrixBuffer(&iMatrix, sizeof(glm::mat4), WORLD_ATTR, _State.vertexBuffer.getBufferID());
-
-	//glGenBuffers(1, &_State.CamPositionBufferID);
-	//glBindBuffer(GL_ARRAY_BUFFER, _State.CamPositionBufferID);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3), &_State.cam.outPosition->x, GL_DYNAMIC_DRAW);
-	//glBindVertexArray()
-
-
-
-
-
-
-
 	return;
 }
 
@@ -435,16 +420,16 @@ void render_frame (ApplicationState& _State)
 	 glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
 
 	 //// Matrix transformations
-	 std::vector<glm::mat4> MVP;
+	 //std::vector<glm::mat4> MVP;
 	 std::vector<glm::mat4> MV;
-	 for (GLuint i = 0; i < _State.numInstances + 2; ++i){
-		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
-		 MV.push_back(_State.modelMatrix.at(i));
-	 }
-	 for (GLuint i = 2; i < _State.numInstances + 2; ++i) {
-		 MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
-		 MV.push_back(_State.modelMatrix.at(i));
-	 }
+	 //for (GLuint i = 0; i < _State.numInstances + 2; ++i){
+		// MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
+		// MV.push_back(_State.modelMatrix.at(i));
+	 //}
+	 //for (GLuint i = 2; i < _State.numInstances + 2; ++i) {
+		// MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
+		// MV.push_back(_State.modelMatrix.at(i));
+	 //}
 
 
 	 {
@@ -452,16 +437,12 @@ void render_frame (ApplicationState& _State)
 		 GLuint numIndices = _State.planeNumIndices;
 		 GLsizei currentNumInstances = 1;
 
-		 glBindVertexArray(_State.vertexBuffer.getBufferID());
+		 glBindVertexArray(_State.vertexBuffer.getArrayID());
 
-		// // Write matrices to transform vertices from object space to screen space
 		 
-		 glBindBuffer(GL_ARRAY_BUFFER, _State.viewMatrixBuffer.getBufferID());
-		 glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), MVP.data());
-
-		// // Write matrices to transform vertices from object space to world space
-		glBindBuffer(GL_ARRAY_BUFFER, _State.worldMatrixBuffer.getBufferID());
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), MV.data());
+		 glBindBuffer(GL_ARRAY_BUFFER, _State.vertexBuffer.getViewMatrixBufferID());
+		 glm::mat4 MVP = _State.projection*_State.cam.getWorldToViewMatrix();
+		 glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &MVP[0][0]);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.vertexBuffer.getBufferID());
 
