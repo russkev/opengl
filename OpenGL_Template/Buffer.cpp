@@ -3,6 +3,7 @@
 #include "Buffer.h"
 #include "Vertex.h"
 #include "Camera.h"
+#include "ShapeData.h"
 
 static constexpr auto POSITION_ATTR = 0u;
 static constexpr auto COLOR_ATTR = 1u;
@@ -19,19 +20,18 @@ Buffer::Buffer(std::uint32_t target_, std::size_t initial_length_) :
 }
 
 
-void Buffer::createGeoBuffer(
-	const void* vertex_data, std::size_t vertex_size,
-	const void* indice_data, std::size_t indice_size,
-	std::size_t indice_number)
+void Buffer::createGeoBuffer(const ShapeData& shape)
 {
-	m_vertexSize = vertex_size;
-	m_indice_number = indice_number;
+	m_shape = shape;
+	m_vertexSize = m_shape.sizeVertices();
+	m_indiceSize = m_shape.sizeIndices();
+	m_indice_number = m_shape.numIndices();
 	glGenBuffers(1, &m_vertexBufferID);
 	glBindBuffer(	m_target, m_vertexBufferID);
-	glBufferData(	m_target, vertex_size + indice_size, nullptr, GL_STATIC_DRAW);
+	glBufferData(	m_target, m_vertexSize + m_indiceSize, nullptr, GL_STATIC_DRAW);
 	glBindBuffer(	m_target, m_vertexBufferID);
-	glBufferSubData(m_target, 0,			vertex_size, vertex_data);
-	glBufferSubData(m_target, vertex_size,	indice_size, indice_data);
+	glBufferSubData(m_target, 0,			m_vertexSize, &m_shape.vertices.front());
+	glBufferSubData(m_target, m_vertexSize,	m_indiceSize, &m_shape.indices.front());
 
 	glGenVertexArrays(1, &m_arrayID);
 	glBindVertexArray(m_arrayID);
@@ -64,10 +64,13 @@ void Buffer::createMatrixBuffer(const void* data, std::size_t size, std::uint32_
 	}
 }
 
-void Buffer::drawGeo(const Camera& cam) {
+void Buffer::drawGeo(const Camera& cam, const glm::mat4& projection) {
 	glBindVertexArray(m_arrayID);
 	glBindBuffer(m_target, m_viewMatrixBufferID);
-	glm::mat4 MVP = _State.
+	glm::mat4 MVP = projection * cam.getWorldToViewMatrix();
+	glBufferSubData(m_target, 0, sizeof(glm::mat4), &MVP[0][0]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vertexBufferID);
+	glDrawElementsInstanced(GL_TRIANGLES, m_indice_number, GL_UNSIGNED_SHORT, (void*)m_vertexSize, 1);
 
 }
 
