@@ -274,7 +274,8 @@ void init (ApplicationState& _State)
 		_State.sizeOfArrowNormals,
 		nullptr, GL_STATIC_DRAW);
 
-	_State.vertexBuffer.createGeoBuffer(ShapeGenerator::makePlane(30));
+	std::vector<ShapeData> shapes = { ShapeGenerator::makePlane(30), ShapeGenerator::makeArrow() };
+	_State.vertexBuffer.createGeoBuffer(shapes);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
 	GLsizeiptr currentOffset = 0;

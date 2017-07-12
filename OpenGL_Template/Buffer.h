@@ -11,7 +11,7 @@
 struct Buffer
 {
 	Buffer(std::uint32_t target_, std::size_t initial_length_);
-	void createGeoBuffer(const ShapeData& shape);
+	void createGeoBuffer(const std::vector<ShapeData>& shapes);
 		//const void* vertex_data, std::size_t vertex_size,
 		//const void* indice_data, std::size_t indice_size,
 		//std::size_t indice_number);
@@ -32,9 +32,10 @@ private:
 	std::uint32_t m_worldMatrixBufferID;
 	//std::uint32_t m_arrayBufferID;
 	std::uint32_t m_arrayID;
-	std::size_t m_vertexSize;
-	std::size_t m_indiceSize;
-	std::size_t m_indice_number;
-	ShapeData m_shape;
+	std::size_t m_bufferSize;
+	std::vector<std::size_t> m_vertexSizes;
+	std::vector<std::size_t> m_indiceSizes;
+	std::vector<std::size_t> m_indice_numbers;
+	std::vector<ShapeData> m_shapes;
 
 };
