@@ -274,10 +274,7 @@ void init (ApplicationState& _State)
 		_State.sizeOfArrowNormals,
 		nullptr, GL_STATIC_DRAW);
 
-	_State.vertexBuffer.createGeoBuffer(
-		&data_plane.vertices.front(), data_plane.sizeVertices(),
-		&data_plane.indices.front(),  data_plane.sizeIndices(),
-		data_plane.numIndices());
+	_State.vertexBuffer.createGeoBuffer(ShapeGenerator::makePlane(30));
 
 	glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
 	GLsizeiptr currentOffset = 0;
@@ -422,34 +419,8 @@ void render_frame (ApplicationState& _State)
 	 //// Matrix transformations
 	 //std::vector<glm::mat4> MVP;
 	 std::vector<glm::mat4> MV;
-	 //for (GLuint i = 0; i < _State.numInstances + 2; ++i){
-		// MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
-		// MV.push_back(_State.modelMatrix.at(i));
-	 //}
-	 //for (GLuint i = 2; i < _State.numInstances + 2; ++i) {
-		// MVP.push_back(_State.projection*_State.cam.getWorldToViewMatrix()*_State.modelMatrix.at(i));
-		// MV.push_back(_State.modelMatrix.at(i));
-	 //}
 
-
-	 {
-		 GLsizeiptr offset = _State.sizeOfPlaneVerts;
-		 GLuint numIndices = _State.planeNumIndices;
-		 GLsizei currentNumInstances = 1;
-
-		 glBindVertexArray(_State.vertexBuffer.getArrayID());
-
-		 
-		 glBindBuffer(GL_ARRAY_BUFFER, _State.vertexBuffer.getViewMatrixBufferID());
-		 glm::mat4 MVP = _State.projection*_State.cam.getWorldToViewMatrix();
-		 glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &MVP[0][0]);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.vertexBuffer.getBufferID());
-
-		glDrawElementsInstanced(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (void*)offset, currentNumInstances);
-
-
-	 }
+	 _State.vertexBuffer.drawGeo(_State.cam, _State.projection);
 }
 
 
