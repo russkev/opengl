@@ -27,6 +27,7 @@ struct ShapeData {
 	GLsizeiptr sizeIndices() {
 		return indices.size() * sizeof(GLushort);
 	}
+	
 	GLuint numIndices() {
 		return GLuint(indices.size());
 	}
