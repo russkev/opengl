@@ -29,8 +29,10 @@ void Buffer::createGeoBuffer(const std::vector<ShapeData>& shapes)
 		m_indiceSizes.push_back(m_shapes[i].sizeIndices());
 		m_indice_numbers.push_back(m_shapes[i].numIndices());
 		m_bufferSize += m_vertexSizes.at(i) + m_indiceSizes.at(i);
+		int x = 0;// 45396
 	}
 
+	//m_bufferSize += 100000;
 	glGenBuffers(1, &m_vertexBufferID);
 	glBindBuffer(	m_target, m_vertexBufferID);
 	glBufferData(	m_target, m_bufferSize, nullptr, GL_STATIC_DRAW);
@@ -38,26 +40,29 @@ void Buffer::createGeoBuffer(const std::vector<ShapeData>& shapes)
 
 	std::size_t offset = 0;
 	for (auto i = 0; i < m_shapes.size(); ++i) {
-		glBufferSubData(m_target, offset, m_vertexSizes.at(i), &m_shapes.at(i).vertices.front());
+		glBufferSubData(m_target, offset, m_vertexSizes.at(i), m_shapes.at(i).vertices.data());
 		offset += m_vertexSizes.at(i);
 		glBufferSubData(m_target, offset, m_indiceSizes.at(i), &m_shapes.at(i).indices.front());
 		offset += m_indiceSizes.at(i);
+		m_arrayIDs.push_back(0);
+		glGenVertexArrays(1, &m_arrayIDs.at(i));
+
 	}
-	
-	// !!! m_array needs to be a vector
-	glGenVertexArrays(1, &m_arrayID);
-	glBindVertexArray(m_arrayID);
-	glEnableVertexAttribArray(POSITION_ATTR);
-	glVertexAttribPointer(POSITION_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-	glEnableVertexAttribArray(COLOR_ATTR);
-	glVertexAttribPointer(COLOR_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(glm::tvec3<GLfloat>));
-	glEnableVertexAttribArray(NORMAL_ATTR);
-	glVertexAttribPointer(NORMAL_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::tvec3<GLfloat>) * 2));
-	const glm::mat4 identityMatrix = glm::mat4(1.0);
-	glGenBuffers(1, &m_viewMatrixBufferID);
-	createMatrixBuffer(&identityMatrix, sizeof(glm::mat4), MODEL_ATTR, m_viewMatrixBufferID);
-	glGenBuffers(1, &m_worldMatrixBufferID);
-	createMatrixBuffer(&identityMatrix, sizeof(glm::mat4), WORLD_ATTR, m_worldMatrixBufferID);
+
+	for (auto i = 0; i < m_shapes.size(); ++i){
+		glBindVertexArray(m_arrayIDs.at(i));
+		glEnableVertexAttribArray(POSITION_ATTR);
+		glVertexAttribPointer(POSITION_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+		glEnableVertexAttribArray(COLOR_ATTR);
+		glVertexAttribPointer(COLOR_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(glm::tvec3<GLfloat>));
+		glEnableVertexAttribArray(NORMAL_ATTR);
+		glVertexAttribPointer(NORMAL_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::tvec3<GLfloat>) * 2));
+		const glm::mat4 identityMatrix = glm::mat4(1.0);
+		glGenBuffers(1, &m_viewMatrixBufferID);
+		createMatrixBuffer(&identityMatrix, sizeof(glm::mat4), MODEL_ATTR, m_viewMatrixBufferID);
+		glGenBuffers(1, &m_worldMatrixBufferID);
+		createMatrixBuffer(&identityMatrix, sizeof(glm::mat4), WORLD_ATTR, m_worldMatrixBufferID);
+	}
 }
 
 void Buffer::createMatrixBuffer(const void* data, std::size_t size, std::uint32_t attribute, std::uint32_t vertexBufferID) {
@@ -65,38 +70,40 @@ void Buffer::createMatrixBuffer(const void* data, std::size_t size, std::uint32_
 	glBufferData(m_target, size, nullptr, GL_DYNAMIC_DRAW);
 	glBufferSubData(m_target, 0, size, (void*)data);
 
-	glBindVertexArray(m_arrayID);
-	glEnableVertexAttribArray(attribute);
-	for (int i = 0; i < 4; ++i) {
-		glEnableVertexAttribArray(attribute + i);
-		glVertexAttribPointer(attribute + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * (i * 4)));
-		glVertexAttribDivisor(attribute + i, 1);
+	for (auto arrayID : m_arrayIDs) {
+		glBindVertexArray(arrayID);
+		glEnableVertexAttribArray(attribute);
+		for (int i = 0; i < 4; ++i) {
+			glEnableVertexAttribArray(attribute + i);
+			glVertexAttribPointer(attribute + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * (i * 4)));
+			glVertexAttribDivisor(attribute + i, 1);
+		}
 	}
 }
 
 void Buffer::drawGeo(const Camera& cam, const glm::mat4& projection) {
+	GLsizeiptr offset = 0;
 	for (auto i = 0; i < m_shapes.size(); ++i) {
-		glBindVertexArray(m_arrayID);
+		offset += m_shapes.at(i).sizeVertices();
+		glBindVertexArray(m_arrayIDs[i]);
 		glBindBuffer(m_target, m_viewMatrixBufferID);
 		glm::mat4 MVP = projection * cam.getWorldToViewMatrix();
 		glBufferSubData(m_target, 0, sizeof(glm::mat4), &MVP[0][0]);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vertexBufferID);
-		glDrawElementsInstanced(GL_TRIANGLES, m_indice_numbers[i], GL_UNSIGNED_SHORT, (void*)m_vertexSizes[i], 1);
+		glDrawElementsInstanced(GL_TRIANGLES, m_indice_numbers[i], GL_UNSIGNED_SHORT, (void*)offset/*m_vertexSizes[i]*/, 1);
+		if (i < m_shapes.size() - 1) {
+			//offset += 8;
+			//offset += m_indiceSizes[i];
+			offset += m_shapes.at(i).sizeIndices();
+		}
 	}
 	
 
 }
 
-//void Buffer::createVAOs(const void* data, std::vector<std::uint32_t> attributes, std::uint32_t step, std::uint32_t initialOffset) {
-//	return;
-//}
 
 std::uint32_t Buffer::getBufferID() {
 	return m_vertexBufferID;
-}
-
-std::uint32_t Buffer::getArrayID() {
-	return m_arrayID;
 }
 
 std::uint32_t Buffer::getViewMatrixBufferID() {

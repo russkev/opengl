@@ -274,7 +274,7 @@ void init (ApplicationState& _State)
 		_State.sizeOfArrowNormals,
 		nullptr, GL_STATIC_DRAW);
 
-	std::vector<ShapeData> shapes = { ShapeGenerator::makePlane(30), ShapeGenerator::makeArrow() };
+	std::vector<ShapeData> shapes = { ShapeGenerator::makePlane(1), ShapeGenerator::makePlane(5) };
 	_State.vertexBuffer.createGeoBuffer(shapes);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _State.TheBufferID);
