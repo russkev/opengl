@@ -241,7 +241,10 @@ void init (ApplicationState& _State)
 	//loadBMP_custom BMP1("uvtemplate.bmp");
 	// // END TEST // //
 
-	std::vector<ShapeData> shapes = { ShapeGenerator::makePlane(1)/*, ShapeGenerator::makePlane(1) */};
+	std::vector<ShapeData> shapes = { ShapeGenerator::makePlane(1), ShapeGenerator::makePlane(1) };
+	//for (int i = 0; i < shapes.at(0).numIndices(); ++i) {
+	//	shapes.at(1).indices.at(i) += 4;
+	//}
 	_State.vertexBuffer.createGeoBuffer(shapes);
 
 	return;

@@ -49,14 +49,20 @@ void Buffer::createGeoBuffer(const std::vector<ShapeData>& shapes)
 
 	}
 
+	std::size_t shapeOffset = 0;
+	
 	for (auto i = 0; i < m_shapes.size(); ++i){
 		glBindVertexArray(m_arrayIDs.at(i));
+		offset = shapeOffset;
 		glEnableVertexAttribArray(POSITION_ATTR);
-		glVertexAttribPointer(POSITION_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+		glVertexAttribPointer(POSITION_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offset);
+		offset += sizeof(glm::tvec3<GLfloat>);
 		glEnableVertexAttribArray(COLOR_ATTR);
-		glVertexAttribPointer(COLOR_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(glm::tvec3<GLfloat>));
+		glVertexAttribPointer(COLOR_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offset);
 		glEnableVertexAttribArray(NORMAL_ATTR);
-		glVertexAttribPointer(NORMAL_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::tvec3<GLfloat>) * 2));
+		offset += sizeof(glm::tvec3<GLfloat>);
+		glVertexAttribPointer(NORMAL_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offset);
+		shapeOffset += m_shapes.at(i).sizeShape();
 		const glm::mat4 identityMatrix = glm::mat4(1.0);
 		glGenBuffers(1, &m_viewMatrixBufferID);
 		createMatrixBuffer(&identityMatrix, sizeof(glm::mat4), MODEL_ATTR, m_viewMatrixBufferID);
