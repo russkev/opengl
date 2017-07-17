@@ -80,12 +80,11 @@ void Buffer::createGeoBuffer()
 		shapeOffset += m_shapes.at(i).sizeShape();
 	}
 
-	//const glm::mat4 identityMatrix = glm::mat4(1.0);
-	GLsizeiptr matrixBufferSize = sizeof(glm::mat4)*m_matrices.size();
+	m_matrixBufferSize = sizeof(glm::mat4)*m_matrices.size();
 	glGenBuffers(1, &m_viewMatrixBufferID);
-	createMatrixBuffer(m_matrices.data(), matrixBufferSize, MODEL_ATTR, m_viewMatrixBufferID);
+	createMatrixBuffer(m_matrices.data(), m_matrixBufferSize, MODEL_ATTR, m_viewMatrixBufferID);
 	glGenBuffers(1, &m_worldMatrixBufferID);
-	createMatrixBuffer(m_matrices.data(), matrixBufferSize, WORLD_ATTR, m_worldMatrixBufferID);
+	createMatrixBuffer(m_matrices.data(), m_matrixBufferSize, WORLD_ATTR, m_worldMatrixBufferID);
 
 }
 
@@ -96,34 +95,38 @@ void Buffer::createMatrixBuffer(const void* data, std::size_t size, std::uint32_
 
 
 	GLsizeiptr offset = 0;
-	for (auto arrayID : m_arrayIDs) {
-		glBindVertexArray(arrayID);
+	
+	for (auto j = 0; j < m_arrayIDs.size(); ++j) {
+		glBindVertexArray(m_arrayIDs.at(j));
 		glEnableVertexAttribArray(attribute);
-		//offset = 0;
 		for (int i = 0; i < 4; ++i) {
 			glEnableVertexAttribArray(attribute + i);
-			glVertexAttribPointer(attribute + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)offset);
+			glVertexAttribPointer(attribute + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4)*m_instances.at(j), (void*)offset);
 			glVertexAttribDivisor(attribute + i, 1);
-			offset += (sizeof(float) * 4);
+			offset += sizeof(float) * 4;
 		}
+		offset += sizeof(glm::mat4)*(m_instances.at(j) - 1);
 	}
 }
 
 void Buffer::drawGeo(const Camera& cam, const glm::mat4& projection) {
 	GLsizeiptr shapeOffset = 0;
-	GLsizeiptr matOffset = 0; 
+	GLsizeiptr matOffset = 0;
+	std::vector<glm::mat4> MVPs;
+	for (auto matrix : m_matrices) {
+		MVPs.push_back(projection * cam.getWorldToViewMatrix() * matrix);
+	}
+	glBindBuffer(m_target, m_viewMatrixBufferID);
+	glBufferSubData(m_target, 0, m_matrixBufferSize, &MVPs[0][0][0]);
+
 	for (auto i = 0; i < m_shapes.size(); ++i) {
 		shapeOffset += m_shapes.at(i).sizeVertices();
 		glBindVertexArray(m_arrayIDs[i]);
-		glBindBuffer(m_target, m_viewMatrixBufferID);
-		glm::mat4 MVP = projection * cam.getWorldToViewMatrix();
-		glBufferSubData(m_target, matOffset, sizeof(glm::mat4), &MVP[0][0]);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vertexBufferID);
 		glDrawElementsInstanced(GL_TRIANGLES, (GLsizei)m_indice_numbers[i], GL_UNSIGNED_SHORT, (void*)shapeOffset, m_instances.at(i));
-		if (i < m_shapes.size() - 1) {
-			shapeOffset += m_shapes.at(i).sizeIndices();
-			matOffset += sizeof(glm::mat4);
-		}
+
+		shapeOffset += m_shapes.at(i).sizeIndices();
+		matOffset += sizeof(glm::mat4);
 	}
 	
 

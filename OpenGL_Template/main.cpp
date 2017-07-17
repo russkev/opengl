@@ -238,19 +238,19 @@ void init (ApplicationState& _State)
 
 
 	// // TEST // //
-	std::vector<glm::mat4> t_matrixvector = { glm::mat4(1.0), glm::mat4(1.0), glm::mat4(1.0), glm::mat4(1.0) };
-	auto t_size = sizeof(t_matrixvector.data());
 	// // END TEST // //
-	std::vector<glm::mat4> iMatrixVec = { glm::mat4(1.0) };
-	glm::mat4 iMatrix = glm::mat4(1.0);
-	_State.vertexBuffer.addShape(ShapeGenerator::makeArrow()/*, iMatrixVec*/);
-	_State.vertexBuffer.addShape(ShapeGenerator::makePlane(10), iMatrix);
-	//std::vector<ShapeData> shapes = { ShapeGenerator::makePlane(10)/*, ShapeGenerator::makeArrow(), ShapeGenerator::makeTriangle()*/, ShapeGenerator::makeCube() };
-	//for (int i = 0; i < shapes.at(0).numIndices(); ++i) {
-	//	shapes.at(1).indices.at(i) += 4;
-	//}
-	//_State.vertexBuffer.createGeoBuffer(shapes);
+	glm::mat4 testMatrix1 = glm::mat4(1.0);
+	glm::mat4 testMatrix2 = glm::translate(testMatrix1, glm::vec3(0.0, 3.0, 0.0));
+	testMatrix1[3][1] = 8.0f;
 
+	std::vector<glm::mat4> arrowTransforms = {
+		glm::translate(glm::mat4(1.0), glm::vec3(0.0f, 8.0f, 0.0f))
+		,glm::translate(glm::mat4(1.0), glm::vec3(0.0f, 3.0f, 0.0f))
+	};
+
+
+	_State.vertexBuffer.addShape(ShapeGenerator::makeArrow(), arrowTransforms);
+	_State.vertexBuffer.addShape(ShapeGenerator::makePlane(10));
 	_State.vertexBuffer.createGeoBuffer();
 	return;
 }

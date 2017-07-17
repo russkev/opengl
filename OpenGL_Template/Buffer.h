@@ -30,6 +30,7 @@ private:
 	std::uint32_t m_worldMatrixBufferID;
 	std::vector<std::uint32_t> m_arrayIDs;
 	std::size_t m_bufferSize;
+	std::size_t m_matrixBufferSize;
 	std::vector<std::size_t> m_instances;
 	std::vector<glm::mat4>   m_matrices;
 	std::vector<std::size_t> m_vertexSizes;
