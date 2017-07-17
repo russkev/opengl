@@ -238,15 +238,20 @@ void init (ApplicationState& _State)
 
 
 	// // TEST // //
-	//loadBMP_custom BMP1("uvtemplate.bmp");
+	std::vector<glm::mat4> t_matrixvector = { glm::mat4(1.0), glm::mat4(1.0), glm::mat4(1.0), glm::mat4(1.0) };
+	auto t_size = sizeof(t_matrixvector.data());
 	// // END TEST // //
-
-	std::vector<ShapeData> shapes = { ShapeGenerator::makePlane(1), ShapeGenerator::makePlane(1) };
+	std::vector<glm::mat4> iMatrixVec = { glm::mat4(1.0) };
+	glm::mat4 iMatrix = glm::mat4(1.0);
+	_State.vertexBuffer.addShape(ShapeGenerator::makeArrow()/*, iMatrixVec*/);
+	_State.vertexBuffer.addShape(ShapeGenerator::makePlane(10), iMatrix);
+	//std::vector<ShapeData> shapes = { ShapeGenerator::makePlane(10)/*, ShapeGenerator::makeArrow(), ShapeGenerator::makeTriangle()*/, ShapeGenerator::makeCube() };
 	//for (int i = 0; i < shapes.at(0).numIndices(); ++i) {
 	//	shapes.at(1).indices.at(i) += 4;
 	//}
-	_State.vertexBuffer.createGeoBuffer(shapes);
+	//_State.vertexBuffer.createGeoBuffer(shapes);
 
+	_State.vertexBuffer.createGeoBuffer();
 	return;
 }
 

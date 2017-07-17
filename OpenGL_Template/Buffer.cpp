@@ -20,19 +20,34 @@ Buffer::Buffer(std::uint32_t target_, std::size_t initial_length_) :
 {
 }
 
+void Buffer::addShape(const ShapeData& shape, const glm::mat4 matrix) {
+	m_shapes.push_back(shape);
+	m_instances.push_back(1);
+	m_matrices.push_back(matrix);
+}
 
-void Buffer::createGeoBuffer(const std::vector<ShapeData>& shapes)
+
+void Buffer::addShape(const ShapeData& shape, const std::vector<glm::mat4>& matrices) {
+	m_shapes.push_back(shape);
+	m_instances.push_back(matrices.size());
+	for (auto matrix : matrices) { m_matrices.push_back(matrix); }
+
+
+
+	return;
+}
+
+
+void Buffer::createGeoBuffer()
 {
-	m_shapes = shapes;
 	for (auto i = 0; i < m_shapes.size(); ++i) {
 		m_vertexSizes.push_back(m_shapes[i].sizeVertices());
 		m_indiceSizes.push_back(m_shapes[i].sizeIndices());
 		m_indice_numbers.push_back(m_shapes[i].numIndices());
 		m_bufferSize += m_vertexSizes.at(i) + m_indiceSizes.at(i);
-		int x = 0;// 45396
+		int x = 0;
 	}
 
-	//m_bufferSize += 100000;
 	glGenBuffers(1, &m_vertexBufferID);
 	glBindBuffer(	m_target, m_vertexBufferID);
 	glBufferData(	m_target, m_bufferSize, nullptr, GL_STATIC_DRAW);
@@ -51,7 +66,7 @@ void Buffer::createGeoBuffer(const std::vector<ShapeData>& shapes)
 
 	std::size_t shapeOffset = 0;
 	
-	for (auto i = 0; i < m_shapes.size(); ++i){
+	for (auto i = 0; i < m_shapes.size(); ++i) {
 		glBindVertexArray(m_arrayIDs.at(i));
 		offset = shapeOffset;
 		glEnableVertexAttribArray(POSITION_ATTR);
@@ -63,12 +78,15 @@ void Buffer::createGeoBuffer(const std::vector<ShapeData>& shapes)
 		offset += sizeof(glm::tvec3<GLfloat>);
 		glVertexAttribPointer(NORMAL_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offset);
 		shapeOffset += m_shapes.at(i).sizeShape();
-		const glm::mat4 identityMatrix = glm::mat4(1.0);
-		glGenBuffers(1, &m_viewMatrixBufferID);
-		createMatrixBuffer(&identityMatrix, sizeof(glm::mat4), MODEL_ATTR, m_viewMatrixBufferID);
-		glGenBuffers(1, &m_worldMatrixBufferID);
-		createMatrixBuffer(&identityMatrix, sizeof(glm::mat4), WORLD_ATTR, m_worldMatrixBufferID);
 	}
+
+	//const glm::mat4 identityMatrix = glm::mat4(1.0);
+	GLsizeiptr matrixBufferSize = sizeof(glm::mat4)*m_matrices.size();
+	glGenBuffers(1, &m_viewMatrixBufferID);
+	createMatrixBuffer(m_matrices.data(), matrixBufferSize, MODEL_ATTR, m_viewMatrixBufferID);
+	glGenBuffers(1, &m_worldMatrixBufferID);
+	createMatrixBuffer(m_matrices.data(), matrixBufferSize, WORLD_ATTR, m_worldMatrixBufferID);
+
 }
 
 void Buffer::createMatrixBuffer(const void* data, std::size_t size, std::uint32_t attribute, std::uint32_t vertexBufferID) {
@@ -76,31 +94,35 @@ void Buffer::createMatrixBuffer(const void* data, std::size_t size, std::uint32_
 	glBufferData(m_target, size, nullptr, GL_DYNAMIC_DRAW);
 	glBufferSubData(m_target, 0, size, (void*)data);
 
+
+	GLsizeiptr offset = 0;
 	for (auto arrayID : m_arrayIDs) {
 		glBindVertexArray(arrayID);
 		glEnableVertexAttribArray(attribute);
+		//offset = 0;
 		for (int i = 0; i < 4; ++i) {
 			glEnableVertexAttribArray(attribute + i);
-			glVertexAttribPointer(attribute + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * (i * 4)));
+			glVertexAttribPointer(attribute + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)offset);
 			glVertexAttribDivisor(attribute + i, 1);
+			offset += (sizeof(float) * 4);
 		}
 	}
 }
 
 void Buffer::drawGeo(const Camera& cam, const glm::mat4& projection) {
-	GLsizeiptr offset = 0;
+	GLsizeiptr shapeOffset = 0;
+	GLsizeiptr matOffset = 0; 
 	for (auto i = 0; i < m_shapes.size(); ++i) {
-		offset += m_shapes.at(i).sizeVertices();
+		shapeOffset += m_shapes.at(i).sizeVertices();
 		glBindVertexArray(m_arrayIDs[i]);
 		glBindBuffer(m_target, m_viewMatrixBufferID);
 		glm::mat4 MVP = projection * cam.getWorldToViewMatrix();
-		glBufferSubData(m_target, 0, sizeof(glm::mat4), &MVP[0][0]);
+		glBufferSubData(m_target, matOffset, sizeof(glm::mat4), &MVP[0][0]);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vertexBufferID);
-		glDrawElementsInstanced(GL_TRIANGLES, m_indice_numbers[i], GL_UNSIGNED_SHORT, (void*)offset/*m_vertexSizes[i]*/, 1);
+		glDrawElementsInstanced(GL_TRIANGLES, (GLsizei)m_indice_numbers[i], GL_UNSIGNED_SHORT, (void*)shapeOffset, m_instances.at(i));
 		if (i < m_shapes.size() - 1) {
-			//offset += 8;
-			//offset += m_indiceSizes[i];
-			offset += m_shapes.at(i).sizeIndices();
+			shapeOffset += m_shapes.at(i).sizeIndices();
+			matOffset += sizeof(glm::mat4);
 		}
 	}
 	
