@@ -12,12 +12,18 @@ static constexpr auto NORMAL_ATTR = 2u;
 static constexpr auto MODEL_ATTR = 4u;
 static constexpr auto WORLD_ATTR = 8u;
 
-Buffer::Buffer(std::uint32_t target_, std::size_t initial_length_) :
+Buffer::Buffer(std::uint32_t target_) :
 	m_target(target_),
-	m_length(initial_length_),
 	m_vertexBufferID(0),
 	m_bufferSize(0)
 {
+}
+
+Buffer::~Buffer() {
+	glDeleteBuffers(1, &m_vertexBufferID);
+	glDeleteBuffers(1, &m_viewMatrixBufferID);
+	glDeleteBuffers(1, &m_worldMatrixBufferID);
+	glDeleteVertexArrays(m_arrayIDs.size(), &m_arrayIDs[0]);
 }
 
 void Buffer::addShape(const ShapeData& shape, const glm::mat4 matrix) {
@@ -101,7 +107,7 @@ void Buffer::createMatrixBuffer(const void* data, std::size_t size, std::uint32_
 		glEnableVertexAttribArray(attribute);
 		for (int i = 0; i < 4; ++i) {
 			glEnableVertexAttribArray(attribute + i);
-			glVertexAttribPointer(attribute + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4)*m_instances.at(j), (void*)offset);
+			glVertexAttribPointer(attribute + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)offset);
 			glVertexAttribDivisor(attribute + i, 1);
 			offset += sizeof(float) * 4;
 		}
@@ -130,17 +136,4 @@ void Buffer::drawGeo(const Camera& cam, const glm::mat4& projection) {
 	}
 	
 
-}
-
-
-std::uint32_t Buffer::getBufferID() {
-	return m_vertexBufferID;
-}
-
-std::uint32_t Buffer::getViewMatrixBufferID() {
-	return m_viewMatrixBufferID;
-}
-
-std::uint32_t Buffer::getWorldMatrixBufferID() {
-	return m_worldMatrixBufferID;
 }

@@ -38,37 +38,7 @@ struct ApplicationState {
 	GLuint worldMatrixID   = 0;
 	GLuint camPositionID   = 0;
 
-	GLuint TheBufferID			= 0;
-	GLuint CubeVertexArrayID	= 0;
-	GLuint PlaneVertexArrayID	= 0;
-	GLuint ArrowVertexArrayID	= 0;
-	GLuint PlaneNormalsVertexArrayID = 0;
-	GLuint ArrowNormalsVertexArrayID = 0;
-	GLuint MatrixBufferID		= 0;
-	GLuint WorldMatBuffID		= 0;
-	GLuint NormalsID			= 0;
-	GLuint ColorBufferID		= 0;
-	GLuint CamPositionBufferID	= 0;
-	std::vector<GLuint> VertexArrays;
-
 	GLuint numBuffers      = 1;
-	GLuint numInstances    = 0;
-	GLuint cubeNumIndices  = 0;
-	GLuint arrowNumIndices = 0;
-	GLuint planeNumIndices = 0;
-	GLuint normalsPlaneNumIndices = 0;
-	GLuint normalsArrowNumIndices = 0;
-
-	GLsizeiptr sizeOfArrow      = 0;
-	GLsizeiptr sizeOfCube       = 0;
-	GLsizeiptr sizeOfPlane		= 0;
-	GLsizeiptr sizeOfArrowVerts = 0;
-	GLsizeiptr sizeOfCubeVerts  = 0;
-	GLsizeiptr sizeOfPlaneVerts = 0;
-	GLsizeiptr sizeOfPlaneNormals    = 0;
-	GLsizeiptr sizeOfPlaneNormalsVerts = 0;
-	GLsizeiptr sizeOfArrowNormals = 0;
-	GLsizeiptr sizeOfArrowNormalsVerts = 0;
 
 	glm::mat4 view        = glm::mat4();
 	glm::mat4 projection  = glm::mat4();
@@ -82,12 +52,7 @@ struct ApplicationState {
 	SDL_Window*		st_window = nullptr;
 	SDL_GLContext	st_opengl = nullptr;
 
-	ShapeData sData_plane;
-	ShapeData sData_arrow;
-
-	Buffer vertexBuffer			= { GL_ARRAY_BUFFER, 0 };
-	Buffer viewMatrixBuffer		= { GL_ARRAY_BUFFER, 0 };
-	Buffer worldMatrixBuffer	= { GL_ARRAY_BUFFER, 0 };
+	Buffer vertexBuffer			= { GL_ARRAY_BUFFER };
 	
 	
 	ApplicationState() {
@@ -244,8 +209,10 @@ void init (ApplicationState& _State)
 	testMatrix1[3][1] = 8.0f;
 
 	std::vector<glm::mat4> arrowTransforms = {
-		glm::translate(glm::mat4(1.0), glm::vec3(0.0f, 8.0f, 0.0f))
-		,glm::translate(glm::mat4(1.0), glm::vec3(0.0f, 3.0f, 0.0f))
+		 glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 0.0f,  0.0f)), 3.14f,     glm::vec3(0.25f, 1.0f, 0.0f))
+		,glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(+0.0f, 0.0f, -3.0f)), 3.14f / 2, glm::vec3(0.25f, 1.0f, 0.25f))
+		,glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(+3.0f, 0.0f, -0.0f)), 3.14f / 8, glm::vec3(0.00f, 0.0f, 1.0f))
+		,glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(+0.0f, 0.0f, +3.0f)), 3.14f / 2, glm::vec3(-0.25f, -1.0f, 0.25f))
 	};
 
 
@@ -298,9 +265,6 @@ void render_frame (ApplicationState& _State)
 
 
 void exit(ApplicationState &_State){
-	glDeleteBuffers(_State.numBuffers, &_State.TheBufferID);
-	glDeleteVertexArrays(_State.numBuffers, &_State.ArrowVertexArrayID);
-	glDeleteVertexArrays(_State.numBuffers, &_State.PlaneVertexArrayID);
 	glUseProgram(0);
 	glDeleteProgram(_State.programID);
 }
