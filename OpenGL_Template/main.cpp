@@ -216,12 +216,17 @@ void init (ApplicationState& _State)
 		,glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(+0.0f, 0.0f, +3.0f)), 3.14f / 2, glm::vec3(-0.25f, -1.0f, 0.25f))
 	};
 
+	std::vector<glm::mat4> tubeTransforms = {
+		glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -3.0f,  0.0f)), 3.14f * 0.5f, glm::vec3(1.0f, 0.0f, 0.0f))
+	};
+
 	
-	_State.vertexBuffer.addShape(ShapeGenerator::makeArrow(), arrowTransforms);
-	_State.vertexBuffer.addShape(ShapeGenerator::makePlane(10));
-	_State.vertexBuffer.addShape(ShapeGenerator::makeCube());
+	//_State.vertexBuffer.addShape(ShapeGenerator::makeArrow(), arrowTransforms);
+	//_State.vertexBuffer.addShape(ShapeGenerator::makePlane(10));
+	//_State.vertexBuffer.addShape(ShapeGenerator::makeCube());
+	_State.vertexBuffer.addShape(ShapeGenerator::makeTube(10, 1.0f, 10.0f), tubeTransforms);
 	_State.vertexBuffer.createGeoBuffer();
-	_State.normalsBuffer.addShape(ShapeGenerator::makeNormals(ShapeGenerator::makeCube()));
+	_State.normalsBuffer.addShape(ShapeGenerator::makeNormals(ShapeGenerator::makeTube(10, 1.0f, 10.0f)), tubeTransforms);
 	_State.normalsBuffer.createGeoBuffer();
 	return;
 }
