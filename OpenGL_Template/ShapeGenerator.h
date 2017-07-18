@@ -6,6 +6,8 @@
 #include "ShapeData.h"
 #include "Vertex.h"
 
+#define PI 3.1415927
+
 glm::vec3 randomColor() {
 	return glm::vec3(
 		rand() / (float)RAND_MAX,
@@ -236,6 +238,32 @@ namespace ShapeGenerator {
 
 		return m_arrow;
 	}
+	ShapeData makeTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2 ) {
+		ShapeData outTube = makePlane(resolution);
+		GLuint width = resolution + 1;
+		GLfloat y = -height * 0.5f;
+		GLfloat x = 0.0f;
+		GLfloat z = 0.0f;
+		GLfloat y_step = height / width;
+		GLint vertex = 0;
+		GLfloat angle = 0.0f;
+		GLfloat angleStep = (2 * PI) / resolution;
+
+		for (GLint i = width; i > 0; --i, y += y_step) {
+
+			for (GLint j = 0; j < width; ++j, ++vertex, angle -= angleStep) {
+				x = radius * cos(angle);
+				z = radius * sin(angle);
+				outTube.vertices.at(vertex).position = { x, y, z };
+				outTube.vertices.at(vertex).normal = { cos(angle), 0, sin(angle) };
+			}
+			
+		}
+		//outTube.vertices.at(0).position.y = 1.0f;
+		return outTube;
+	}
+
+
 	ShapeData makeNormals(ShapeData inShape) {
 		ShapeData m_normals;
 		
