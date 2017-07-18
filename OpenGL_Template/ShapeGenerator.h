@@ -58,40 +58,66 @@ namespace ShapeGenerator {
 	ShapeData makeCube() {
 		ShapeData m_cube;
 
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f) }); //0
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f) }); //1
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f) }); //2
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f) }); //3
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f) }); //4
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f) }); //5
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f) }); //6
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f) }); //7
+		// // UP FACE // //
+		glm::vec3 faceColor = { 1.0f, 0.5f, 0.0f };
+		glm::vec3 faceNormal = { 0.0f, 1.0f, 0.0f };
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(2)0
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(3)1
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)2
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(7)3
+		m_cube.indices.push_back(3); m_cube.indices.push_back(0); m_cube.indices.push_back(2);
+		m_cube.indices.push_back(3); m_cube.indices.push_back(1); m_cube.indices.push_back(0);
 
-		// // Set colours to relate to vertices so that -1 in x is 0 in r, 1 in x is 1 in r, etc.
-		for (int i = 0; i < m_cube.vertices.size(); ++i) {
-			for (int j = 0; j < 3; ++j) {
-				float temp = (m_cube.vertices.at(i).position[j]+1)/2;
-				m_cube.vertices.at(i).color[j] = (m_cube.vertices.at(i).position[j] + 1) / 2;
-			}
-		}
-		// // Front
-		m_cube.indices.push_back(4); m_cube.indices.push_back(7); m_cube.indices.push_back(6); 
-		m_cube.indices.push_back(4); m_cube.indices.push_back(6); m_cube.indices.push_back(5);
-		// // Top
-		m_cube.indices.push_back(7); m_cube.indices.push_back(2); m_cube.indices.push_back(6);
-		m_cube.indices.push_back(7); m_cube.indices.push_back(3); m_cube.indices.push_back(2);
-		// // Right
-		m_cube.indices.push_back(5); m_cube.indices.push_back(2); m_cube.indices.push_back(1);
-		m_cube.indices.push_back(5); m_cube.indices.push_back(6); m_cube.indices.push_back(2);
-		// // Back
-		m_cube.indices.push_back(1); m_cube.indices.push_back(3); m_cube.indices.push_back(0);
-		m_cube.indices.push_back(1); m_cube.indices.push_back(2); m_cube.indices.push_back(3);
-		// // Left
-		m_cube.indices.push_back(0); m_cube.indices.push_back(7); m_cube.indices.push_back(4);
-		m_cube.indices.push_back(0); m_cube.indices.push_back(3); m_cube.indices.push_back(7);
-		// // Bottom
-		m_cube.indices.push_back(5); m_cube.indices.push_back(0); m_cube.indices.push_back(4);
-		m_cube.indices.push_back(5); m_cube.indices.push_back(1); m_cube.indices.push_back(0);
+		// // RIGHT FACE // //
+		faceColor = { 0.0f, 1.0f, 0.5f };
+		faceNormal = { 1.0f, 0.0f, 0.0f };
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(1)4
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(2)5
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)6
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(5)7
+		m_cube.indices.push_back(7); m_cube.indices.push_back(6); m_cube.indices.push_back(5);
+		m_cube.indices.push_back(7); m_cube.indices.push_back(5); m_cube.indices.push_back(4);
+
+
+		// // FRONT FACE // //
+		faceColor  = { 0.5f, 0.0f, 1.0f };
+		faceNormal = { 0.0f, 0.0f, -1.0f };
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(4)8
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(5)9
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)10
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(7)11
+		m_cube.indices.push_back(8); m_cube.indices.push_back(11); m_cube.indices.push_back(10);
+		m_cube.indices.push_back(8); m_cube.indices.push_back(10); m_cube.indices.push_back(9);
+
+		// // LEFT FACE // //
+		faceColor = { 0.75f, 0.75f, 0.0f };
+		faceNormal = { -1.0f, 0.0f, 0.0f };
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(0)12
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(3)13
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(4)14
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(7)15
+		m_cube.indices.push_back(12); m_cube.indices.push_back(13); m_cube.indices.push_back(15);
+		m_cube.indices.push_back(12); m_cube.indices.push_back(15); m_cube.indices.push_back(14);
+
+		// // BACK FACE // //
+		faceColor = { 0.75f, 0.0f, 0.75f };
+		faceNormal = { 0.0f, 0.0f, 1.0f };
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(0)16
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(1)17
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(2)18
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(3)19
+		m_cube.indices.push_back(17); m_cube.indices.push_back(18); m_cube.indices.push_back(19);
+		m_cube.indices.push_back(17); m_cube.indices.push_back(19); m_cube.indices.push_back(16);
+
+		// // BOTTOM FACE // //
+		faceColor = { 0.0f, 0.75f, 0.75f };
+		faceNormal = { 0.0f, -1.0f, 0.0f };
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(0)20
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(1)21
+		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(4)22
+		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(5)23
+		m_cube.indices.push_back(23); m_cube.indices.push_back(21); m_cube.indices.push_back(20);
+		m_cube.indices.push_back(23); m_cube.indices.push_back(20); m_cube.indices.push_back(22);
 		return m_cube;
 	}
 	ShapeData makeArrow() {

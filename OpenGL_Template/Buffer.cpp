@@ -115,7 +115,7 @@ void Buffer::createMatrixBuffer(const void* data, std::size_t size, std::uint32_
 	}
 }
 
-void Buffer::drawGeo(const Camera& cam, const glm::mat4& projection) {
+void Buffer::drawGeo(const Camera& cam, const glm::mat4& projection, std::uint32_t mode) {
 	GLsizeiptr shapeOffset = 0;
 	GLsizeiptr matOffset = 0;
 	std::vector<glm::mat4> MVPs;
@@ -129,7 +129,7 @@ void Buffer::drawGeo(const Camera& cam, const glm::mat4& projection) {
 		shapeOffset += m_shapes.at(i).sizeVertices();
 		glBindVertexArray(m_arrayIDs[i]);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vertexBufferID);
-		glDrawElementsInstanced(GL_TRIANGLES, (GLsizei)m_indice_numbers[i], GL_UNSIGNED_SHORT, (void*)shapeOffset, m_instances.at(i));
+		glDrawElementsInstanced(mode, (GLsizei)m_indice_numbers[i], GL_UNSIGNED_SHORT, (void*)shapeOffset, m_instances.at(i));
 
 		shapeOffset += m_shapes.at(i).sizeIndices();
 		matOffset += sizeof(glm::mat4);
