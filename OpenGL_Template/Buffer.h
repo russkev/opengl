@@ -11,20 +11,19 @@
 struct Buffer
 {
 	// // Constructor // //
-	Buffer(std::uint32_t target_, std::size_t initial_length_);
+	Buffer(std::uint32_t target_);
+
+	// // Destructor // //
+	~Buffer();
 
 	// // Functions // //
 	void addShape(const ShapeData& shape, const glm::mat4 matrix = glm::mat4(1.0f));
 	void addShape(const ShapeData& shape, const std::vector<glm::mat4>& matrices);
 	void createGeoBuffer();
-	void createMatrixBuffer(const void* data, std::size_t size, std::uint32_t attribute, std::uint32_t vertexArrayID);
 	void drawGeo(const Camera& cam, const glm::mat4& projection);
-	std::uint32_t getBufferID();
-	std::uint32_t Buffer::getViewMatrixBufferID();
-	std::uint32_t Buffer::getWorldMatrixBufferID();
 private:
+	void createMatrixBuffer(const void* data, std::size_t size, std::uint32_t attribute, std::uint32_t vertexArrayID);
 	std::uint32_t m_target;
-	std::size_t m_length;
 	std::uint32_t m_vertexBufferID;
 	std::uint32_t m_viewMatrixBufferID;
 	std::uint32_t m_worldMatrixBufferID;
