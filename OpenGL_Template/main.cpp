@@ -52,7 +52,8 @@ struct ApplicationState {
 	SDL_Window*		st_window = nullptr;
 	SDL_GLContext	st_opengl = nullptr;
 
-	Buffer vertexBuffer			= { GL_ARRAY_BUFFER };
+	Buffer vertexBuffer	 = { GL_ARRAY_BUFFER };
+	Buffer normalsBuffer = { GL_ARRAY_BUFFER };
 	
 	
 	ApplicationState() {
@@ -215,10 +216,13 @@ void init (ApplicationState& _State)
 		,glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(+0.0f, 0.0f, +3.0f)), 3.14f / 2, glm::vec3(-0.25f, -1.0f, 0.25f))
 	};
 
-
+	
 	_State.vertexBuffer.addShape(ShapeGenerator::makeArrow(), arrowTransforms);
 	_State.vertexBuffer.addShape(ShapeGenerator::makePlane(10));
+	_State.vertexBuffer.addShape(ShapeGenerator::makeCube());
 	_State.vertexBuffer.createGeoBuffer();
+	_State.normalsBuffer.addShape(ShapeGenerator::makeNormals(ShapeGenerator::makeCube()));
+	_State.normalsBuffer.createGeoBuffer();
 	return;
 }
 
@@ -260,7 +264,8 @@ void render_frame (ApplicationState& _State)
 	 //std::vector<glm::mat4> MVP;
 	 std::vector<glm::mat4> MV;
 
-	 _State.vertexBuffer.drawGeo(_State.cam, _State.projection);
+	 _State.vertexBuffer.drawGeo(_State.cam, _State.projection, GL_TRIANGLES);
+	 _State.normalsBuffer.drawGeo(_State.cam, _State.projection, GL_LINES);
 }
 
 
