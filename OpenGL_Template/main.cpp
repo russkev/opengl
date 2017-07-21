@@ -16,7 +16,7 @@
 #include "ShapeData.h"
 #include "ShapeGenerator.h"
 #include "Camera.h"
-#include "Buffer.h"
+#include "GLShapes.h"
 
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -52,8 +52,8 @@ struct ApplicationState {
 	SDL_Window*		st_window = nullptr;
 	SDL_GLContext	st_opengl = nullptr;
 
-	Buffer vertexBuffer	 = { GL_ARRAY_BUFFER };
-	Buffer normalsBuffer = { GL_ARRAY_BUFFER };
+	GLShapes vertexBuffer	 = { GL_ARRAY_BUFFER };
+	GLShapes normalsBuffer = { GL_ARRAY_BUFFER };
 	
 	
 	ApplicationState() {
