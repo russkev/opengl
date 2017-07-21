@@ -17,6 +17,7 @@
 #include "ShapeGenerator.h"
 #include "Camera.h"
 #include "GLShapes.h"
+#include "Buffer.h"
 
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -204,6 +205,9 @@ void init (ApplicationState& _State)
 
 
 	// // TEST // //
+	{
+		Buffer test_buffer(45);
+	}
 	// // END TEST // //
 	glm::mat4 testMatrix1 = glm::mat4(1.0);
 	glm::mat4 testMatrix2 = glm::translate(testMatrix1, glm::vec3(0.0, 3.0, 0.0));
