@@ -62,6 +62,12 @@ struct ApplicationState {
 		if (st_opengl) SDL_GL_DeleteContext(st_opengl);
 	}
 
+	// // TEST // //
+	//ShapeData test_plane = ShapeGenerator::makePlane(2);
+	//std::size_t test_plane_size = test_plane.sizeShape();
+	//Buffer ba = Buffer(GL_ARRAY_BUFFER, test_plane_size);
+	// // END TEST // //
+
 };
 
 
@@ -203,15 +209,20 @@ void init (ApplicationState& _State)
 	// // Create 3D models
 	//static ShapeData data_arrow_normals		= ShapeGenerator::makeNormals(data_arrow);
 
-
 	// // TEST // //
-	{
-		Buffer ba(5);
-		Buffer bb = std::move(ba);
-		bb = Buffer(0u);
 
-	}
+	ShapeData test_plane = ShapeGenerator::makePlane(2);
+	std::size_t test_plane_size = test_plane.sizeShape();
+	Buffer ba = Buffer(GL_ARRAY_BUFFER, test_plane_size);
+	ba.Upload(0u, test_plane.sizeVertices(), test_plane.vertices.data());
+	ba.Upload(test_plane.sizeVertices(), test_plane.sizeIndices(), test_plane.indices.data());
+	ba.Resize(2000);
+	ba.Resize(3000);
+	//ba.Map(0, test_plane.sizeVertices());
+	//_State.ba.Upload(0u, test_plane_size, test_plane.vertices.data());
 	// // END TEST // //
+
+
 	glm::mat4 testMatrix1 = glm::mat4(1.0);
 	glm::mat4 testMatrix2 = glm::translate(testMatrix1, glm::vec3(0.0, 3.0, 0.0));
 	testMatrix1[3][1] = 8.0f;
@@ -233,8 +244,8 @@ void init (ApplicationState& _State)
 	//_State.vertexBuffer.addShape(ShapeGenerator::makeCube());
 	_State.vertexBuffer.addShape(ShapeGenerator::makeTube(10, 1.0f, 10.0f), tubeTransforms);
 	_State.vertexBuffer.createGeoBuffer();
-	_State.normalsBuffer.addShape(ShapeGenerator::makeNormals(ShapeGenerator::makeTube(10, 1.0f, 10.0f)), tubeTransforms);
-	_State.normalsBuffer.createGeoBuffer();
+	//_State.normalsBuffer.addShape(ShapeGenerator::makeNormals(ShapeGenerator::makeTube(10, 1.0f, 10.0f)), tubeTransforms);
+	//_State.normalsBuffer.createGeoBuffer();
 	return;
 }
 
@@ -277,7 +288,7 @@ void render_frame (ApplicationState& _State)
 	 std::vector<glm::mat4> MV;
 
 	 _State.vertexBuffer.drawGeo(_State.cam, _State.projection, GL_TRIANGLES);
-	 _State.normalsBuffer.drawGeo(_State.cam, _State.projection, GL_LINES);
+	 //_State.normalsBuffer.drawGeo(_State.cam, _State.projection, GL_LINES);
 }
 
 
