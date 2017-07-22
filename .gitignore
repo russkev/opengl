@@ -7,3 +7,4 @@
 *.db
 /data/shaders
 *.VC.opendb
+*.suo
