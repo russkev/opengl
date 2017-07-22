@@ -206,7 +206,10 @@ void init (ApplicationState& _State)
 
 	// // TEST // //
 	{
-		Buffer test_buffer(45);
+		Buffer ba(5);
+		Buffer bb = std::move(ba);
+		bb = Buffer(0u);
+
 	}
 	// // END TEST // //
 	glm::mat4 testMatrix1 = glm::mat4(1.0);

@@ -5,7 +5,7 @@
 
 struct Buffer
 {
-	Buffer(std::size_t);
+	Buffer(std::uint32_t, std::size_t);
 	~Buffer();
 	Buffer(const Buffer&) = delete;
 	Buffer(Buffer&&);
@@ -13,6 +13,8 @@ struct Buffer
 	Buffer& operator = (Buffer&&);
 private:
 	std::size_t m_size;
+	std::uint32_t m_bufferID;
+	std::uint32_t m_target;
 
 
 };
