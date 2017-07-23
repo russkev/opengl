@@ -18,6 +18,10 @@ struct Buffer
 	void Unmap();
 	std::uint32_t Append(std::size_t size, void* data);
 	void Resize(std::size_t newSize);
+
+	std::uint32_t getBufferID() {
+		return m_bufferID;
+	}
 private:
 	std::size_t		m_size;
 	std::size_t		m_capacity;

@@ -58,6 +58,7 @@ struct ApplicationState {
 	Buffer geoBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer matBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer wldBuffer		= {	GL_ARRAY_BUFFER, 0 };
+	GLuint planeVAO			= 0;
 	
 	
 	ApplicationState() {
@@ -248,9 +249,9 @@ void init (ApplicationState& _State)
 	//_State.normalsBuffer.addShape(ShapeGenerator::makeNormals(ShapeGenerator::makeTube(10, 1.0f, 10.0f)), tubeTransforms);
 	//_State.normalsBuffer.createGeoBuffer();
 
-	std::uint32_t planeVAO;
-	glGenVertexArrays(1, &planeVAO);
-	glBindVertexArray(planeVAO);
+	//std::uint32_t planeVAO;
+	glGenVertexArrays(1, &_State.planeVAO);
+	glBindVertexArray(_State.planeVAO);
 	std::size_t offset = 0;
 	glEnableVertexAttribArray(POSITION_ATTR);
 	glVertexAttribPointer(POSITION_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
@@ -260,6 +261,15 @@ void init (ApplicationState& _State)
 	offset += sizeof(glm::tvec3<GLfloat>);
 	glEnableVertexAttribArray(NORMAL_ATTR);
 	glVertexAttribPointer(NORMAL_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
+
+	glBindVertexArray(_State.planeVAO);
+	offset = 0;
+	for (int i = 0; i < 4; ++i) {
+		glEnableVertexAttribArray(MODEL_ATTR + i);
+		glVertexAttribPointer(MODEL_ATTR + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)offset);
+		glVertexAttribDivisor(MODEL_ATTR, 1);
+		offset += sizeof(GLfloat) * 4;
+	}
 
 	return;
 }
@@ -302,8 +312,16 @@ void render_frame (ApplicationState& _State)
 	 //std::vector<glm::mat4> MVP;
 	 std::vector<glm::mat4> MV;
 
-	 _State.vertexBuffer.drawGeo(_State.cam, _State.projection, GL_TRIANGLES);
+	 //_State.vertexBuffer.drawGeo(_State.cam, _State.projection, GL_TRIANGLES);
 	 //_State.normalsBuffer.drawGeo(_State.cam, _State.projection, GL_LINES);
+
+	 glBindBuffer(GL_ARRAY_BUFFER, _State.geoBuffer.getBufferID());
+	 glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &((_State.projection * _State.cam.getWorldToViewMatrix())[0][0]));
+	 glBindVertexArray(_State.planeVAO);
+	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.geoBuffer.getBufferID());
+	 glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (void*)ShapeGenerator::makePlane(2).sizeVertices());
+
+
 }
 
 
