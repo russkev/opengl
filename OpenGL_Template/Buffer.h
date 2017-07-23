@@ -16,6 +16,7 @@ struct Buffer
 	void Upload(std::size_t, std::size_t, void*);
 	void* Map(std::size_t offset, std::size_t size);
 	void Unmap();
+	std::uint32_t Append(std::size_t size, void* data);
 	void Resize(std::size_t newSize);
 private:
 	std::size_t		m_size;

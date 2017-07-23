@@ -10,13 +10,13 @@
 
 // DEFAULT CONSTRUCTOR //
 Buffer::Buffer(std::uint32_t target, std::size_t size) :
-	m_size(size),
+	m_size(0),
 	m_capacity(size),
 	m_bufferID(0),
 	m_target(target)
 {
 	std::cout << "Constructor\n";
-	if (m_size != 0) {
+	if (size != 0) {
 		m_bufferID = GenerateBuffer(size);
 	}
 };
@@ -24,9 +24,9 @@ Buffer::Buffer(std::uint32_t target, std::size_t size) :
 // DESTRUCTOR //
 Buffer::~Buffer() {
 	std::cout << "Destructor\n";
-	//if (m_bufferID != 0) {
-	//	glDeleteBuffers(1, &m_bufferID);
-	//}	
+	if (m_bufferID != 0) {
+		glDeleteBuffers(1, &m_bufferID);
+	}	
 }
 
 // MOVE CONSTRUCTOR //
@@ -49,7 +49,6 @@ Buffer& Buffer::operator=(Buffer&& other)
 
 // // UPLOAD
 void Buffer::Upload(std::size_t offset, std::size_t size, void* data) {
-	//glBufferSubData(m_target, offset, size, data);
 	assert(offset + size <= m_capacity);
 	void * dest = Map(offset, size);
 	std::memcpy(dest, data, size);
@@ -79,6 +78,15 @@ void * Buffer::Map(std::size_t offset, std::size_t size) {
 void Buffer::Unmap() {
 	glBindBuffer(m_target, m_bufferID);
 	glUnmapBuffer(m_target);
+}
+
+// // APPEND
+std::uint32_t Buffer::Append(std::size_t size, void* data) {
+
+	std::size_t offset = m_size;
+	Resize(offset + size);
+	Upload(offset, size, data);
+	return offset;
 }
 
 // // RESIZE
