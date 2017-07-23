@@ -53,8 +53,11 @@ struct ApplicationState {
 	SDL_Window*		st_window = nullptr;
 	SDL_GLContext	st_opengl = nullptr;
 
-	GLShapes vertexBuffer	 = { GL_ARRAY_BUFFER };
-	GLShapes normalsBuffer = { GL_ARRAY_BUFFER };
+	GLShapes vertexBuffer	= { GL_ARRAY_BUFFER };
+	GLShapes normalsBuffer	= { GL_ARRAY_BUFFER };
+	Buffer geoBuffer		= { GL_ARRAY_BUFFER, 0 };
+	Buffer matBuffer		= { GL_ARRAY_BUFFER, 0 };
+	Buffer wldBuffer		= {	GL_ARRAY_BUFFER, 0 };
 	
 	
 	ApplicationState() {
@@ -213,13 +216,11 @@ void init (ApplicationState& _State)
 
 	ShapeData test_plane = ShapeGenerator::makePlane(2);
 	std::size_t test_plane_size = test_plane.sizeShape();
-	Buffer ba = Buffer(GL_ARRAY_BUFFER, test_plane_size);
-	ba.Upload(0u, test_plane.sizeVertices(), test_plane.vertices.data());
-	ba.Upload(test_plane.sizeVertices(), test_plane.sizeIndices(), test_plane.indices.data());
-	ba.Resize(2000);
-	ba.Resize(3000);
-	//ba.Map(0, test_plane.sizeVertices());
-	//_State.ba.Upload(0u, test_plane_size, test_plane.vertices.data());
+	std::uint32_t planeVerticesOffset = _State.geoBuffer.Append(test_plane.sizeVertices(), test_plane.vertices.data());
+	std::uint32_t planeIndicesOffset  = _State.geoBuffer.Append(test_plane.sizeIndices(), test_plane.indices.data());
+	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0)[0][0]);
+	_State.wldBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0)[0][0]);
+
 	// // END TEST // //
 
 
@@ -246,6 +247,20 @@ void init (ApplicationState& _State)
 	_State.vertexBuffer.createGeoBuffer();
 	//_State.normalsBuffer.addShape(ShapeGenerator::makeNormals(ShapeGenerator::makeTube(10, 1.0f, 10.0f)), tubeTransforms);
 	//_State.normalsBuffer.createGeoBuffer();
+
+	std::uint32_t planeVAO;
+	glGenVertexArrays(1, &planeVAO);
+	glBindVertexArray(planeVAO);
+	std::size_t offset = 0;
+	glEnableVertexAttribArray(POSITION_ATTR);
+	glVertexAttribPointer(POSITION_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
+	offset += sizeof(glm::tvec3<GLfloat>);
+	glEnableVertexAttribArray(COLOR_ATTR);
+	glVertexAttribPointer(COLOR_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
+	offset += sizeof(glm::tvec3<GLfloat>);
+	glEnableVertexAttribArray(NORMAL_ATTR);
+	glVertexAttribPointer(NORMAL_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
+
 	return;
 }
 
