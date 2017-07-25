@@ -53,8 +53,8 @@ struct ApplicationState {
 	SDL_Window*		st_window = nullptr;
 	SDL_GLContext	st_opengl = nullptr;
 
-	GLShapes vertexBuffer	= { GL_ARRAY_BUFFER };
-	GLShapes normalsBuffer	= { GL_ARRAY_BUFFER };
+	//GLShapes vertexBuffer	= { GL_ARRAY_BUFFER };
+	//GLShapes normalsBuffer	= { GL_ARRAY_BUFFER };
 	Buffer geoBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer matBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer wldBuffer		= {	GL_ARRAY_BUFFER, 0 };
@@ -215,9 +215,11 @@ void init (ApplicationState& _State)
 
 	// // TEST // //
 
-	ShapeData test_plane = ShapeGenerator::makePlane(2);
+	ShapeData test_plane = ShapeGenerator::makePlane(10);
+	ShapeData test_cube  = ShapeGenerator::makeCube();
+	std::vector<std::vector<Vertex>> test_vector = { test_plane.vertices, test_cube.vertices };
 	std::size_t test_plane_size = test_plane.sizeShape();
-	std::uint32_t planeVerticesOffset = _State.geoBuffer.Append(test_plane.sizeVertices(), test_plane.vertices.data());
+	std::uint32_t planeVerticesOffset = _State.geoBuffer.Append(/*test_plane.sizeVertices(), */test_plane.vertices/*.data()*/);
 	std::uint32_t planeIndicesOffset  = _State.geoBuffer.Append(test_plane.sizeIndices(), test_plane.indices.data());
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0)[0][0]);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0)[0][0]);
@@ -241,15 +243,16 @@ void init (ApplicationState& _State)
 	};
 
 	
-	//_State.vertexBuffer.addShape(ShapeGenerator::makeArrow(), arrowTransforms);
-	//_State.vertexBuffer.addShape(ShapeGenerator::makePlane(10));
-	//_State.vertexBuffer.addShape(ShapeGenerator::makeCube());
-	_State.vertexBuffer.addShape(ShapeGenerator::makeTube(10, 1.0f, 10.0f), tubeTransforms);
-	_State.vertexBuffer.createGeoBuffer();
-	//_State.normalsBuffer.addShape(ShapeGenerator::makeNormals(ShapeGenerator::makeTube(10, 1.0f, 10.0f)), tubeTransforms);
-	//_State.normalsBuffer.createGeoBuffer();
+	////_State.vertexBuffer.addShape(ShapeGenerator::makeArrow(), arrowTransforms);
+	////_State.vertexBuffer.addShape(ShapeGenerator::makePlane(10));
+	////_State.vertexBuffer.addShape(ShapeGenerator::makeCube());
+	//_State.vertexBuffer.addShape(ShapeGenerator::makeTube(10, 1.0f, 10.0f), tubeTransforms);
+	//_State.vertexBuffer.createGeoBuffer();
+	////_State.normalsBuffer.addShape(ShapeGenerator::makeNormals(ShapeGenerator::makeTube(10, 1.0f, 10.0f)), tubeTransforms);
+	////_State.normalsBuffer.createGeoBuffer();
 
 	//std::uint32_t planeVAO;
+	_State.geoBuffer.Bind(GL_ARRAY_BUFFER);
 	glGenVertexArrays(1, &_State.planeVAO);
 	glBindVertexArray(_State.planeVAO);
 	std::size_t offset = 0;
@@ -263,11 +266,12 @@ void init (ApplicationState& _State)
 	glVertexAttribPointer(NORMAL_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
 
 	glBindVertexArray(_State.planeVAO);
+	_State.matBuffer.Bind();
 	offset = 0;
 	for (int i = 0; i < 4; ++i) {
 		glEnableVertexAttribArray(MODEL_ATTR + i);
 		glVertexAttribPointer(MODEL_ATTR + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)offset);
-		glVertexAttribDivisor(MODEL_ATTR, 1);
+		glVertexAttribDivisor(MODEL_ATTR + i, 1);
 		offset += sizeof(GLfloat) * 4;
 	}
 
@@ -315,11 +319,14 @@ void render_frame (ApplicationState& _State)
 	 //_State.vertexBuffer.drawGeo(_State.cam, _State.projection, GL_TRIANGLES);
 	 //_State.normalsBuffer.drawGeo(_State.cam, _State.projection, GL_LINES);
 
-	 glBindBuffer(GL_ARRAY_BUFFER, _State.geoBuffer.getBufferID());
-	 glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &((_State.projection * _State.cam.getWorldToViewMatrix())[0][0]));
+	 ShapeData test_plane = ShapeGenerator::makePlane(10);
+	 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * glm::mat4(1.0);
+	 //glBindBuffer(GL_ARRAY_BUFFER, _State.matBuffer.getBufferID());
+	 //glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &tempMVP[0][0]);
+	 _State.matBuffer.Upload(0, sizeof(glm::mat4), &tempMVP[0][0]);
 	 glBindVertexArray(_State.planeVAO);
-	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _State.geoBuffer.getBufferID());
-	 glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (void*)ShapeGenerator::makePlane(2).sizeVertices());
+	 _State.geoBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
+	 glDrawElements(GL_TRIANGLES, test_plane.numIndices(), GL_UNSIGNED_SHORT, (void*)test_plane.sizeVertices());
 
 
 }
