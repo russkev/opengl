@@ -37,9 +37,6 @@ void GLShapes::addShape(const ShapeData& shape, const std::vector<glm::mat4>& ma
 	m_shapes.push_back(shape);
 	m_instances.push_back(matrices.size());
 	for (auto matrix : matrices) { m_matrices.push_back(matrix); }
-
-
-
 	return;
 }
 
@@ -67,7 +64,6 @@ void GLShapes::createGeoBuffer()
 		offset += m_indiceSizes.at(i);
 		m_arrayIDs.push_back(0);
 		glGenVertexArrays(1, &m_arrayIDs.at(i));
-
 	}
 
 	std::size_t shapeOffset = 0;
