@@ -21,7 +21,7 @@
 
 
 #define GLM_ENABLE_EXPERIMENTAL
-#define DEBUG
+//#define DEBUG
 #include <glm/gtc/matrix_transform.hpp>
 
 static constexpr auto POSITION_ATTR = 0u;
@@ -156,6 +156,8 @@ void init (ApplicationState& _State)
 	_State.st_opengl = SDL_GL_CreateContext (_State.st_window);
 	assert (_State.st_opengl != nullptr);
 
+	SDL_GL_SetSwapInterval(1);
+
 	// High precision clock interval
 	_State.freqMultiplier = 1.0 / SDL_GetPerformanceFrequency();
 
@@ -215,7 +217,7 @@ void init (ApplicationState& _State)
 
 	// // TEST // //
 
-	ShapeData test_plane = ShapeGenerator::makePlane(10);
+	ShapeData test_plane = ShapeGenerator::makeArrow();
 	ShapeData test_cube  = ShapeGenerator::makeCube();
 	std::vector<std::vector<Vertex>> test_vector = { test_plane.vertices, test_cube.vertices };
 	std::size_t test_plane_size = test_plane.sizeShape();
@@ -319,7 +321,7 @@ void render_frame (ApplicationState& _State)
 	 //_State.vertexBuffer.drawGeo(_State.cam, _State.projection, GL_TRIANGLES);
 	 //_State.normalsBuffer.drawGeo(_State.cam, _State.projection, GL_LINES);
 
-	 ShapeData test_plane = ShapeGenerator::makePlane(10);
+	 ShapeData test_plane = ShapeGenerator::makeArrow();
 	 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * glm::mat4(1.0);
 	 //glBindBuffer(GL_ARRAY_BUFFER, _State.matBuffer.getBufferID());
 	 //glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &tempMVP[0][0]);
@@ -347,33 +349,66 @@ bool poll_events (ApplicationState& _State)
 		if (loc_event.type == SDL_QUIT) {
 			return false;
 		}
-		if (loc_event.type == SDL_MOUSEBUTTONDOWN){
-			mouseDown = true;
-		}
-		if (loc_event.type == SDL_MOUSEBUTTONUP) {
-			mouseDown = false;
-		}
-		if (loc_event.type == SDL_KEYDOWN) {
-			if (loc_event.key.keysym.scancode == SDL_SCANCODE_LALT) {
-				altDown = true;
-			}
-			_State.cam.positionUpdate(loc_event.key.keysym.scancode);
-		}
-		if (loc_event.type == SDL_KEYUP) {
-			if (loc_event.key.keysym.scancode == SDL_SCANCODE_LALT) {
-				altDown = false;
-			}
-		}
-		if (loc_event.type == SDL_MOUSEMOTION) {
-			_State.cam.mouseUpdate(glm::vec2(loc_event.motion.x, loc_event.motion.y), altDown, mouseDown);
-			break;
-		}
-		if (loc_event.type == SDL_MOUSEWHEEL) {
-			_State.cam.scrollUpdate((float)loc_event.wheel.y);
-			break;
-		}
+		//if (loc_event.type == SDL_MOUSEBUTTONDOWN){
+		//	SDL_SetRelativeMouseMode(SDL_TRUE);
+		//	return true;
+		//	//mouseDown = true;
+		//}
+		//if (loc_event.type == SDL_MOUSEBUTTONUP) {
+		//	//mouseDown = false;
+		//	SDL_SetRelativeMouseMode(SDL_FALSE);
+		//	return true;
+		//}
+		//if (loc_event.type == SDL_KEYDOWN) {
+		//	if (loc_event.key.keysym.scancode == SDL_SCANCODE_LALT) {
+		//		altDown = true;
+		//	}
+		//	_State.cam.positionUpdate(loc_event.key.keysym.scancode);
+		//}
+		//if (loc_event.type == SDL_KEYUP) {
+		//	if (loc_event.key.keysym.scancode == SDL_SCANCODE_LALT) {
+		//		altDown = false;
+		//	}
+		//}
+		//if (loc_event.type == SDL_MOUSEMOTION) {
+		//	_State.cam.mouseUpdate(glm::vec2(loc_event.motion.x, loc_event.motion.y), altDown, mouseDown);
+		//	break;
+		//}
+		//if (loc_event.type == SDL_MOUSEWHEEL) {
+		//	_State.cam.scrollUpdate((float)loc_event.wheel.y);
+		//	break;
+		//}
 	}
 	return true;
+}
+
+void update_camera(ApplicationState& _State) {
+	static const auto cMoveSpeed   = glm::vec3(0.03f, 0.03f, 0.1f);
+	static const auto cRotateSpeed = glm::vec2(0.01f);
+
+	auto const keyboardState = SDL_GetKeyboardState(nullptr);
+	auto mouseDelta  = glm::ivec2();
+	auto mouseButton = SDL_GetRelativeMouseState(&mouseDelta.x, &mouseDelta.y);
+	auto axisDelta	 = glm::vec3();
+	auto rotateDelta = glm::vec2();
+
+	if  (mouseButton & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+		rotateDelta	= (glm::vec2)mouseDelta;
+	}
+	if (mouseButton & SDL_BUTTON(SDL_BUTTON_MIDDLE)) {
+		axisDelta.x = -mouseDelta.x;
+		axisDelta.y = mouseDelta.y;
+	}
+	if (mouseButton & SDL_BUTTON(SDL_BUTTON_RIGHT)) {
+		axisDelta.z = mouseDelta.y;
+
+	}
+
+	if (keyboardState[SDL_SCANCODE_LALT]) {
+		//std::cout << "LEFT ALT PRESSED\n";
+	}
+	_State.cam.moveRel(axisDelta * cMoveSpeed);
+	_State.cam.rotateRel(rotateDelta * cRotateSpeed);
 }
 
 
@@ -383,6 +418,7 @@ int main(int, char**)
 	init(_State);
 	while (poll_events (_State))
 	{
+		update_camera(_State);
 		render_frame (_State);
 		finish_frame (_State);
 	}

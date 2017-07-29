@@ -8,7 +8,7 @@ class Camera
 {
 	glm::vec3 position;
 	glm::vec3 viewDirection;
-	glm::vec3 up;
+	glm::vec3 yAxis;
 	glm::vec2 oldMousePosition;
 	glm::vec3 strafeDirection;
 	glm::vec3 camUpDirection;
@@ -20,6 +20,11 @@ public:
 	void mouseUpdate(const glm::vec2& newMousePosition, const bool altDown, const bool mouseDown);
 	void positionUpdate(const SDL_Scancode& newPosition);
 	void scrollUpdate(const float scrollAmount);
+	void moveRel(glm::vec3 moveDelta);
+	void rotateRel(glm::vec2 rotateDelta);
+	//glm::vec3 rotateQuaternion(std::float_t magnitude, glm::vec3 axis);
+	void pitch(std::float_t theta);
+	void yaw(std::float_t theta);
 	glm::mat4 getWorldToViewMatrix() const;
 	glm::vec3 getPosition() const;
 };
