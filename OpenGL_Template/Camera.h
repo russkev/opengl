@@ -8,10 +8,11 @@ class Camera
 {
 	glm::vec3 position;
 	glm::vec3 viewDirection;
+	glm::vec3 lookTarget;
 	glm::vec3 yAxis;
 	glm::vec2 oldMousePosition;
-	glm::vec3 strafeDirection;
-	glm::vec3 camUpDirection;
+	glm::vec3 camRight;
+	glm::vec3 camUp;
 	static const float moveSpeed;
 	static const float mouseMoveSpeed;
 	static const float rotationSpeed;
