@@ -11,9 +11,12 @@ const float Camera::rotationSpeed  = 0.007f;
 Camera::Camera() :
 
 	viewDirection(-0.0, -1.0f, -1.0f),
-	strafeDirection(glm::vec3(1.0f, 0.0f, 0.0f)),
+	camRight(glm::vec3(-1.0f, 0.0f, 0.0f)),
 	yAxis(glm::vec3(0.0f, 1.0f, 0.0f)),
-	position(-0.5f, 4.0f, 2.0f)
+	position(-0.5f, 4.0f,8.0f),
+	camUp(cross(viewDirection, camRight)),
+	lookTarget(glm::vec3(0.0f, 0.0f, 0.0f)/*position + viewDirection*/)
+
 {
 }
 
@@ -25,13 +28,13 @@ void Camera::mouseUpdate(const glm::vec2& newMousePosition, const bool altDown, 
 	//strafeDirection = glm::cross(viewDirection, yAxis);
 	//camUpDirection = glm::cross(viewDirection, strafeDirection);
 	if (altDown) {
-		position += mouseMoveSpeed * mouseDelta.x * strafeDirection;
-		position += mouseMoveSpeed * mouseDelta.y * camUpDirection;
+		position += mouseMoveSpeed * mouseDelta.x * camRight;
+		position += mouseMoveSpeed * mouseDelta.y * camUp;
 	}
 	else {
 		glm::mat3 rotator =
 			glm::mat3(glm::rotate(-mouseDelta.x*rotationSpeed, yAxis)) *
-			glm::mat3(glm::rotate(-mouseDelta.y*rotationSpeed, strafeDirection));
+			glm::mat3(glm::rotate(-mouseDelta.y*rotationSpeed, camRight));
 		//viewDirection = rotator * viewDirection;
 	}
 
@@ -47,15 +50,15 @@ void  Camera::positionUpdate(const SDL_Scancode& newPosition) {
 		position += -moveSpeed * viewDirection;
 		break;
 	case SDL_SCANCODE_A:
-		position += -moveSpeed * strafeDirection;
+		position += -moveSpeed * camRight;
 		break;
 	case SDL_SCANCODE_D:
-		position += moveSpeed * strafeDirection;
+		position += moveSpeed * camRight;
 		break;
 	}
 }
 
-void Camera::moveRel(glm::vec3 positionDelta) {
+void Camera::moveRel(glm::vec3 mouseDelta) {
 	//strafeDirection = glm::normalize(glm::cross(viewDirection, yAxis));
 	//if (up != camUpDirection) {
 	//	camUpDirection 
@@ -65,15 +68,26 @@ void Camera::moveRel(glm::vec3 positionDelta) {
 	//std::cout << "View Direction: " << viewDirection.x << ", " << viewDirection.y << ", " << viewDirection.z << "\n";
 	//std::cout << "Cam Up Direction: " << camUpDirection.x << ", " << camUpDirection.y << ", " << camUpDirection.z << "\n";
 	//std::cout << "Strafe Direction: " << strafeDirection.x << ", " << strafeDirection.y << ", " << strafeDirection.z << "\n";
-	position += strafeDirection * positionDelta.x;
-	position -= camUpDirection  * positionDelta.y;
-	position += viewDirection   * positionDelta.z;
+
+
+	glm::vec3 positionDelta =
+		camRight * mouseDelta.x
+		- camUp * mouseDelta.y
+		+ viewDirection * mouseDelta.z;
+	
+	position += positionDelta;
+	lookTarget += positionDelta;
+
+	//position += camRight * mouseDelta.x;
+	//position += -camUp  * mouseDelta.y;
+	//position += viewDirection   * mouseDelta.z;
 	
 }
 
 void Camera::rotateRel(glm::vec2 rotateDelta) {
 
-	pitch(rotateDelta.y);
+	//pitch(rotateDelta.y);
+	yaw(rotateDelta.x);
 
 	//strafeDirection = glm::cross(viewDirection, up);
 	//camUpDirection = glm::normalize(glm::cross(viewDirection, strafeDirection));
@@ -87,7 +101,10 @@ void Camera::rotateRel(glm::vec2 rotateDelta) {
 		std::cout << "rotateDelta,     y: " << rotateDelta.y << "\n";
 		std::cout << "rotateDelta, sin y: " << sin(rotateDelta.y) << "\n";
 		std::cout << "viewDirection     : (" << viewDirection.x << ", " << viewDirection.y << ", " << viewDirection.z << ")\n";
-		std::cout << "strafeDirection   : (" << strafeDirection.x << ", " << strafeDirection.y << ", " << strafeDirection.z << ")\n";
+		std::cout << "strafeDirection   : (" << camRight.x << ", " << camRight.y << ", " << camRight.z << ")\n";
+		std::cout << "camUpDirection    : (" << camUp.x << ", " << camUp.y << ", " << camUp.z << ")\n";
+		std::cout << "position          : (" << position.x << ", " << position.y << ", " << position.z << ")\n";
+		std::cout << "lookTarget        : (" << lookTarget.x << ", " << lookTarget.y << ", " << lookTarget.z << ")\n";
 		std::cout << "----------------------------\n";
 	}
 	//viewDirection.z += cos(rotateDelta.y) * sin(rotateDelta.x);
@@ -95,7 +112,17 @@ void Camera::rotateRel(glm::vec2 rotateDelta) {
 
 void Camera::pitch(std::float_t theta) {
 
-	//glm::mat3 rotator;
+	glm::mat3 rotator;
+	rotator = (glm::mat3)glm::rotate(theta, camRight);
+	position -= lookTarget;
+	position  = rotator * position;
+	position += lookTarget;
+	camUp = cross(camRight, position - lookTarget);
+	//camUp = { 0, (rotator * camUp).y, 0 };
+	//camUp = rotator * camUp;
+	//viewDirection = cross(camRight, camUp);
+
+
 	//if (sin(theta) < 0) {
 	//	yAxis = glm::vec3(0, 1, 0);
 	//}
@@ -107,7 +134,16 @@ void Camera::pitch(std::float_t theta) {
 }
 
 void Camera::yaw(std::float_t theta) {
-	return;
+	glm::mat3 rotator = (glm::mat3)glm::rotate(-theta, yAxis);
+	position -= lookTarget;
+	position = rotator * position;
+	position += lookTarget;
+	//glm::vec3 rVec = rotator * camRight;
+	//
+	//camRight.x = rVec.x;
+	//camRight.z = rVec.z;
+	camRight = rotator * camRight;
+	viewDirection = cross(camRight, camUp);
 }
 
 //glm::vec3 Camera::rotateQuaternion(std::float_t angle, glm::vec3 axis) {
@@ -129,7 +165,7 @@ void Camera::scrollUpdate(const float scrollAmount) {
 }
 
 glm::mat4 Camera::getWorldToViewMatrix() const {
-	return glm::lookAt(position, position + viewDirection, yAxis);
+	return glm::lookAt(position, lookTarget/* position + viewDirection*/, camUp);
 }
 
 glm::vec3 Camera::getPosition() const {
