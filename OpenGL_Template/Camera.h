@@ -20,10 +20,9 @@ public:
 	Camera();
 	void positionUpdate(const SDL_Scancode& newPosition);
 	void scrollUpdate(const float scrollAmount);
-	void moveRel(glm::vec3 moveDelta);
-	void rotateRel(glm::vec2 rotateDelta);
-	void pitch(std::float_t theta);
-	void yaw(std::float_t theta);
+	void moveRel(const glm::vec3& moveDelta);
+	void rotateRel(const glm::vec2& rotateDelta);
+	void printData(const glm::vec2& rotateDelta);
 	glm::mat4 getWorldToViewMatrix() const;
 	glm::vec3 getPosition() const;
 };
