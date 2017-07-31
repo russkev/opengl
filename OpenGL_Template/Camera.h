@@ -18,12 +18,10 @@ class Camera
 	static const float rotationSpeed;
 public:
 	Camera();
-	void mouseUpdate(const glm::vec2& newMousePosition, const bool altDown, const bool mouseDown);
 	void positionUpdate(const SDL_Scancode& newPosition);
 	void scrollUpdate(const float scrollAmount);
 	void moveRel(glm::vec3 moveDelta);
 	void rotateRel(glm::vec2 rotateDelta);
-	//glm::vec3 rotateQuaternion(std::float_t magnitude, glm::vec3 axis);
 	void pitch(std::float_t theta);
 	void yaw(std::float_t theta);
 	glm::mat4 getWorldToViewMatrix() const;
