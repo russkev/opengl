@@ -37,7 +37,7 @@ void  Camera::positionUpdate(const SDL_Scancode& newPosition) {
 	}
 }
 
-void Camera::moveRel(glm::vec3 mouseDelta) {
+void Camera::moveRel(const glm::vec3& mouseDelta) {
 
 	glm::vec3 positionDelta =
 		- camRight * mouseDelta.x
@@ -49,11 +49,23 @@ void Camera::moveRel(glm::vec3 mouseDelta) {
 	
 }
 
-void Camera::rotateRel(glm::vec2 rotateDelta) {
+void Camera::rotateRel(const glm::vec2& rotateDelta) {
 
-	pitch(rotateDelta.y);
-	yaw(rotateDelta.x);
 
+	glm::mat3 r_pitch = (glm::mat3)glm::rotate( rotateDelta.y, camRight);
+	glm::mat3 r_yaw   = (glm::mat3)glm::rotate(-rotateDelta.x, yAxis);
+	position -= lookTarget;
+	position = r_pitch * r_yaw * position;
+	position += lookTarget;
+
+	viewDirection   = position - lookTarget;
+	camRight		= r_yaw * camRight;
+	camUp			= cross(camRight, viewDirection);
+
+	printData(rotateDelta);
+}
+
+void Camera::printData(const glm::vec2& rotateDelta) {
 	if (rotateDelta.y != 0) {
 		std::cout << "rotateDelta,     y: " << rotateDelta.y << "\n";
 		std::cout << "rotateDelta, sin y: " << sin(rotateDelta.y) << "\n";
@@ -66,26 +78,6 @@ void Camera::rotateRel(glm::vec2 rotateDelta) {
 	}
 }
 
-void Camera::pitch(std::float_t theta) {
-
-	glm::mat3 rotator;
-	rotator = (glm::mat3)glm::rotate(theta, camRight);
-	position -= lookTarget;
-	position = rotator * position;
-	position += lookTarget;
-	camUp = cross(camRight, position - lookTarget);
-}
-
-void Camera::yaw(std::float_t theta) {
-	glm::mat3 rotator = (glm::mat3)glm::rotate(-theta, yAxis);
-	position -= lookTarget;
-	position = rotator * position;
-	position += lookTarget;
-
-	camRight = rotator * camRight;
-	camUp = cross(camRight, position - lookTarget);
-	viewDirection = cross(camRight, camUp);
-}
 
 void Camera::scrollUpdate(const float scrollAmount) {
 	position += scrollAmount * viewDirection;
