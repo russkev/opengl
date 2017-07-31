@@ -15,7 +15,7 @@ Camera::Camera() :
 	yAxis(glm::vec3(0.0f, 1.0f, 0.0f)),
 	position(-0.5f, 4.0f,8.0f),
 	camUp(cross(viewDirection, camRight)),
-	lookTarget(glm::vec3(0.0f, 0.0f, 0.0f)/*position + viewDirection*/)
+	lookTarget(/*glm::vec3(0.0f, 0.0f, 0.0f)*/position + viewDirection)
 
 {
 }
@@ -71,8 +71,8 @@ void Camera::moveRel(glm::vec3 mouseDelta) {
 
 
 	glm::vec3 positionDelta =
-		camRight * mouseDelta.x
-		- camUp * mouseDelta.y
+		- camRight * mouseDelta.x
+		+ camUp * mouseDelta.y
 		+ viewDirection * mouseDelta.z;
 	
 	position += positionDelta;
@@ -86,7 +86,7 @@ void Camera::moveRel(glm::vec3 mouseDelta) {
 
 void Camera::rotateRel(glm::vec2 rotateDelta) {
 
-	//pitch(rotateDelta.y);
+	pitch(rotateDelta.y);
 	yaw(rotateDelta.x);
 
 	//strafeDirection = glm::cross(viewDirection, up);
@@ -143,6 +143,7 @@ void Camera::yaw(std::float_t theta) {
 	//camRight.x = rVec.x;
 	//camRight.z = rVec.z;
 	camRight = rotator * camRight;
+	camUp = cross(camRight, position - lookTarget);
 	viewDirection = cross(camRight, camUp);
 }
 
