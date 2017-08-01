@@ -223,8 +223,10 @@ void init (ApplicationState& _State)
 	std::size_t test_plane_size = test_plane.sizeShape();
 	std::uint32_t planeVerticesOffset = _State.geoBuffer.Append(/*test_plane.sizeVertices(), */test_plane.vertices/*.data()*/);
 	std::uint32_t planeIndicesOffset  = _State.geoBuffer.Append(test_plane.sizeIndices(), test_plane.indices.data());
-	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0)[0][0]);
-	_State.wldBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0)[0][0]);
+	auto positionMatrix = glm::mat4(1.0f);
+	positionMatrix[3] = { 0.0f, 10.0f, 0.0f, 1.0f };
+	_State.matBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
+	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 
 	// // END TEST // //
 
@@ -345,9 +347,18 @@ bool poll_events (ApplicationState& _State)
 	static bool mouseDown = false;
 	static bool altDown = false;
 	while (SDL_PollEvent (&loc_event)) {
-		
+
+
+
+
+
 		if (loc_event.type == SDL_QUIT) {
 			return false;
+		}
+		if (loc_event.type == SDL_KEYUP) {
+			if (loc_event.key.keysym.scancode == SDL_SCANCODE_F) {
+				_State.cam.focus();
+			}
 		}
 		//if (loc_event.type == SDL_MOUSEBUTTONDOWN){
 		//	SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -383,6 +394,16 @@ bool poll_events (ApplicationState& _State)
 }
 
 void update_camera(ApplicationState& _State) {
+
+	std::size_t wldBufferSize = _State.wldBuffer.size();
+	void * src = _State.wldBuffer.Map(wldBufferSize, 0);
+	std::size_t matNumber = (wldBufferSize / (sizeof(float) * 16));
+	std::vector<glm::mat4> matrices;
+	matrices.resize(matNumber);
+	std::memcpy(matrices.data(), src, wldBufferSize);
+	_State.wldBuffer.Unmap();
+
+
 	static const auto cMoveSpeed   = glm::vec3(0.03f, 0.03f, 0.1f);
 	static const auto cRotateSpeed = glm::vec2(0.01f);
 
@@ -404,11 +425,13 @@ void update_camera(ApplicationState& _State) {
 
 	}
 
+
 	if (keyboardState[SDL_SCANCODE_LALT]) {
 		//std::cout << "LEFT ALT PRESSED\n";
 	}
 	_State.cam.moveRel(axisDelta * cMoveSpeed);
 	_State.cam.rotateRel(rotateDelta * cRotateSpeed);
+
 }
 
 
