@@ -71,7 +71,8 @@ std::uint32_t Buffer::GenerateBuffer(std::size_t size) {
 void * Buffer::Map(std::size_t size, std::size_t offset) {
 	assert(offset + size <= m_capacity);
 	glBindBuffer(m_target, m_bufferID);
-	return glMapBufferRange(m_target, offset, size, GL_MAP_WRITE_BIT);
+	void * out = glMapBufferRange(m_target, offset, size, GL_MAP_WRITE_BIT);
+	return out;
 }
 
 // // UNMAP
