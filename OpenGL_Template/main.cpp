@@ -223,8 +223,8 @@ void init (ApplicationState& _State)
 	std::size_t test_plane_size = test_plane.sizeShape();
 	std::uint32_t planeVerticesOffset = _State.geoBuffer.Append(/*test_plane.sizeVertices(), */test_plane.vertices/*.data()*/);
 	std::uint32_t planeIndicesOffset  = _State.geoBuffer.Append(test_plane.sizeIndices(), test_plane.indices.data());
-	auto positionMatrix = glm::mat4(1.0f);
-	positionMatrix[3] = { 0.0f, 10.0f, 0.0f, 1.0f };
+	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
+	//positionMatrix[3] = { 0.0f, -100.0f, 0.0f, 1.0f };
 	_State.matBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 
@@ -324,7 +324,9 @@ void render_frame (ApplicationState& _State)
 	 //_State.normalsBuffer.drawGeo(_State.cam, _State.projection, GL_LINES);
 
 	 ShapeData test_plane = ShapeGenerator::makeArrow();
-	 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * glm::mat4(1.0);
+	 glm::mat4 wldBuffer = glm::mat4(1.0f);
+	 _State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
+	 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffer;
 	 //glBindBuffer(GL_ARRAY_BUFFER, _State.matBuffer.getBufferID());
 	 //glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &tempMVP[0][0]);
 	 _State.matBuffer.Upload(0, sizeof(glm::mat4), &tempMVP[0][0]);
