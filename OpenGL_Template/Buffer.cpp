@@ -70,12 +70,10 @@ std::uint32_t Buffer::GenerateBuffer(std::size_t size) {
 }
 
 // // READ BUFFER
-template <typename T>
-void Buffer::ReadBuffer(T& dest) {
+void Buffer::ReadBuffer(void* dest) {
 	void * src = Map(m_size, 0);
 	std::memcpy(dest, src, m_size);
 	Unmap();
-	//return dest;
 }
 
 // // MAP
