@@ -17,8 +17,7 @@ struct Buffer
 
 	// // GENERAL FUNCTIONS
 	std::uint32_t GenerateBuffer(std::size_t size);
-	template<typename T>
-	void ReadBuffer(T& dest);
+	void ReadBuffer(void* dest);
 	void Upload(std::size_t, std::size_t, void*);
 	void* Map(std::size_t size, std::size_t offset = 0u);
 	void Unmap();
