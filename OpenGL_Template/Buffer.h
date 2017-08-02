@@ -2,6 +2,8 @@
 #include <cstddef>
 #include <cstdint>
 #include <vector>
+#include <glm/glm.hpp>
+#include <glm/matrix.hpp>
 
 struct Buffer
 {
@@ -15,6 +17,8 @@ struct Buffer
 
 	// // GENERAL FUNCTIONS
 	std::uint32_t GenerateBuffer(std::size_t size);
+	template<typename T>
+	void ReadBuffer(T& dest);
 	void Upload(std::size_t, std::size_t, void*);
 	void* Map(std::size_t size, std::size_t offset = 0u);
 	void Unmap();
@@ -26,7 +30,7 @@ struct Buffer
 
 	// // INPUTTING WITH VECTORS // //
 	template<typename T>
-	auto Append(std::vector<T> data) { //!!!Why was there a boolean here?
+	auto Append(std::vector<T> data) { 
 		return Append(data.size() * sizeof(T), data.data());
 	}
 	template<typename T>
@@ -34,7 +38,7 @@ struct Buffer
 		return Upload(data.size() * sizeof(T), data.data());
 	}
 
-	template<typename T> //!!!What is this function for?
+	template<typename T> 
 	T* Map(std::size_t size, std::size_t offset = 0u) {
 		return (T*)Map(size * sizeof(T), offset * sizeof(T));
 	}

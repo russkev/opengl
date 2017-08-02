@@ -395,14 +395,16 @@ bool poll_events (ApplicationState& _State)
 
 void update_camera(ApplicationState& _State) {
 
-	std::size_t wldBufferSize = _State.wldBuffer.size();
-	void * src = _State.wldBuffer.Map(wldBufferSize, 0);
-	std::size_t matNumber = (wldBufferSize / (sizeof(float) * 16));
-	std::vector<glm::mat4> matrices;
-	matrices.resize(matNumber);
-	std::memcpy(matrices.data(), src, wldBufferSize);
-	_State.wldBuffer.Unmap();
+	//std::size_t wldBufferSize = _State.wldBuffer.size();
+	//void * src = _State.wldBuffer.Map(wldBufferSize, 0);
+	//std::size_t matNumber = (wldBufferSize / (sizeof(float) * 16));
+	//std::vector<glm::mat4> matrices;
+	//matrices.resize(matNumber);
+	//std::memcpy(matrices.data(), src, wldBufferSize);
+	//_State.wldBuffer.Unmap();
 
+	glm::mat4 wldBuffer = glm::mat4(1.0f);
+	_State.wldBuffer.ReadBuffer(wldBuffer);
 
 	static const auto cMoveSpeed   = glm::vec3(0.03f, 0.03f, 0.1f);
 	static const auto cRotateSpeed = glm::vec2(0.01f);

@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cassert>
 #include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/matrix.hpp>
 
 #include "Buffer.h"
 
@@ -42,9 +44,9 @@ Buffer::Buffer(Buffer&& other) :
 // MOVE ASSIGN
 Buffer& Buffer::operator=(Buffer&& other)
 {
-		std::cout << "Buffer move assign called\n";
-		(*this).~Buffer();
-		return *new (this) Buffer(std::move(other));
+	std::cout << "Buffer move assign called\n";
+	(*this).~Buffer();
+	return *new (this) Buffer(std::move(other));
 }
 
 // // UPLOAD
@@ -65,6 +67,15 @@ std::uint32_t Buffer::GenerateBuffer(std::size_t size) {
 		glBufferData(m_target, size, nullptr, GL_DYNAMIC_DRAW);
 	}
 	return tempID;
+}
+
+// // READ BUFFER
+template <typename T>
+void Buffer::ReadBuffer(T& dest) {
+	void * src = Map(m_size, 0);
+	std::memcpy(dest, src, m_size);
+	Unmap();
+	//return dest;
 }
 
 // // MAP
