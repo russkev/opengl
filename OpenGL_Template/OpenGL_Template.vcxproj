@@ -146,6 +146,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="common\loadShader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="VAO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\SimpleFragmentShader.frag" />
@@ -161,6 +162,7 @@
     <ClInclude Include="loadShader.hpp" />
     <ClInclude Include="ShapeData.h" />
     <ClInclude Include="ShapeGenerator.h" />
+    <ClInclude Include="VAO.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>

@@ -18,6 +18,7 @@
 #include "Camera.h"
 #include "GLShapes.h"
 #include "Buffer.h"
+#include "VAO.h"
 
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -58,6 +59,7 @@ struct ApplicationState {
 	Buffer geoBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer matBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer wldBuffer		= {	GL_ARRAY_BUFFER, 0 };
+	VAO    VAO_main;
 	GLuint planeVAO			= 0;
 	
 	
@@ -227,6 +229,11 @@ void init (ApplicationState& _State)
 	//positionMatrix[3] = { 0.0f, -100.0f, 0.0f, 1.0f };
 	_State.matBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
+
+	_State.geoBuffer.Bind(GL_ARRAY_BUFFER);
+	_State.VAO_main.Append(1, 3, 4);
+	_State.VAO_main.Append(2, 3, 4);
+
 
 	// // END TEST // //
 
