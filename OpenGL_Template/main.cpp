@@ -358,8 +358,10 @@ bool poll_events (ApplicationState& _State)
 			return false;
 		}
 		if (loc_event.type == SDL_KEYUP) {
-			if (loc_event.key.keysym.scancode == SDL_SCANCODE_F) {
-				_State.cam.focus();
+			if (loc_event.key.keysym.scancode == SDL_SCANCODE_F) {\
+				glm::mat4 wldBuffer = glm::mat4(1.0f);
+				_State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
+				_State.cam.focus(wldBuffer);
 			}
 		}
 		//if (loc_event.type == SDL_MOUSEBUTTONDOWN){
@@ -397,11 +399,10 @@ bool poll_events (ApplicationState& _State)
 
 void update_camera(ApplicationState& _State) {
 
-	glm::mat4 wldBuffer = glm::mat4(1.0f);
-	_State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
 
-	static const auto cMoveSpeed   = glm::vec3(0.03f, 0.03f, 0.1f);
-	static const auto cRotateSpeed = glm::vec2(0.01f);
+
+	static const auto cMoveSpeed   = glm::vec3(0.02f, 0.01f, 0.1f);
+	static const auto cRotateSpeed = glm::vec2(0.01f, 0.01f);
 
 	auto const keyboardState = SDL_GetKeyboardState(nullptr);
 	auto mouseDelta  = glm::ivec2();
@@ -410,7 +411,7 @@ void update_camera(ApplicationState& _State) {
 	auto rotateDelta = glm::vec2();
 
 	if  (mouseButton & SDL_BUTTON(SDL_BUTTON_LEFT)) {
-		rotateDelta	= (glm::vec2)mouseDelta;
+		rotateDelta = (glm::vec2)mouseDelta;
 	}
 	if (mouseButton & SDL_BUTTON(SDL_BUTTON_MIDDLE)) {
 		axisDelta.x = -mouseDelta.x;

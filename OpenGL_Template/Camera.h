@@ -23,7 +23,7 @@ public:
 	void moveRel(const glm::vec3& moveDelta);
 	void rotateRel(const glm::vec2& rotateDelta);
 	void printData(const glm::vec2& rotateDelta);
-	void focus();
+	void focus(const glm::mat4& wldMatrix);
 	glm::mat4 getWorldToViewMatrix() const;
 	glm::vec3 getPosition() const;
 };
