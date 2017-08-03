@@ -78,8 +78,8 @@ void Camera::printData(const glm::vec2& rotateDelta) {
 	}
 }
 
-void Camera::focus() {
-	m_lookTarget = {0, 0, 0};
+void Camera::focus(const glm::mat4& wldMatrix) {
+	m_lookTarget = {wldMatrix[3][0], wldMatrix[3][1], wldMatrix[3][2]};
 }
 
 
