@@ -230,9 +230,12 @@ void init (ApplicationState& _State)
 	_State.matBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 
-	_State.geoBuffer.Bind(GL_ARRAY_BUFFER);
-	_State.VAO_main.Append(1, 3, 4);
-	_State.VAO_main.Append(2, 3, 4);
+	_State.VAO_main.GenerateID(_State.geoBuffer);
+	_State.VAO_main.Append(POSITION_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
+	_State.VAO_main.Append(COLOR_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
+	_State.VAO_main.Append(NORMAL_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
+
+	_State.VAO_main.GenerateVAO();
 
 
 	// // END TEST // //
@@ -263,21 +266,22 @@ void init (ApplicationState& _State)
 	////_State.normalsBuffer.createGeoBuffer();
 
 	//std::uint32_t planeVAO;
-	_State.geoBuffer.Bind(GL_ARRAY_BUFFER);
-	glGenVertexArrays(1, &_State.planeVAO);
-	glBindVertexArray(_State.planeVAO);
-	std::size_t offset = 0;
-	glEnableVertexAttribArray(POSITION_ATTR);
-	glVertexAttribPointer(POSITION_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
-	offset += sizeof(glm::tvec3<GLfloat>);
-	glEnableVertexAttribArray(COLOR_ATTR);
-	glVertexAttribPointer(COLOR_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
-	offset += sizeof(glm::tvec3<GLfloat>);
-	glEnableVertexAttribArray(NORMAL_ATTR);
-	glVertexAttribPointer(NORMAL_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
+	//_State.geoBuffer.Bind(GL_ARRAY_BUFFER);
+	//glGenVertexArrays(1, &_State.planeVAO);
+	//glBindVertexArray(_State.planeVAO);
+	//std::size_t offset = 0;
+	//glEnableVertexAttribArray(POSITION_ATTR);
+	//glVertexAttribPointer(POSITION_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
+	//offset += sizeof(glm::tvec3<GLfloat>);
+	//glEnableVertexAttribArray(COLOR_ATTR);
+	//glVertexAttribPointer(COLOR_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
+	//offset += sizeof(glm::tvec3<GLfloat>);
+	//glEnableVertexAttribArray(NORMAL_ATTR);
+	//glVertexAttribPointer(NORMAL_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
 
 	glBindVertexArray(_State.planeVAO);
 	_State.matBuffer.Bind();
+	std::size_t offset = 0;
 	offset = 0;
 	for (int i = 0; i < 4; ++i) {
 		glEnableVertexAttribArray(MODEL_ATTR + i);
