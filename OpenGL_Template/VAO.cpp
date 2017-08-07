@@ -34,9 +34,10 @@ void VAO::Append(const std::uint32_t attribute, const std::size_t numElements, c
 	m_types.push_back(type);
 }
 
-void VAO::GenerateVAO() {
+void VAO::GenerateVAO(const Buffer& inBuffer, std::size_t divisor) {
 	assert(m_attributes.size() == m_elementAmounts.size() && m_attributes.size() == m_elementSizes.size());
-	glBindVertexArray(m_VAO_ID);
+	Bind();
+	inBuffer.Bind();
 	std::size_t offset = 0;
 	std::size_t stride = 0;
 	for (int i = 0; i < m_attributes.size(); ++i) {
@@ -45,13 +46,24 @@ void VAO::GenerateVAO() {
 	for (int i = 0; i < m_attributes.size(); ++i) {
 		glEnableVertexAttribArray(m_attributes.at(i));
 		glVertexAttribPointer(m_attributes.at(i), m_elementAmounts.at(i), m_types.at(i), GL_FALSE, stride, (void*)offset);
+		glVertexAttribDivisor(m_attributes.at(i), divisor);
 		offset += m_elementSizes.at(i) * m_elementAmounts.at(i);
 	}
 }
 
+void VAO::ClearVectors() {
+	m_attributes.clear();
+	m_elementAmounts.clear();
+	m_elementSizes.clear();
+}
+
+void VAO::Bind() {
+	glBindVertexArray(m_VAO_ID);
+}
+
 // // GENERATE ID
-void VAO::GenerateID(const Buffer& inputBuffer) {
-	inputBuffer.Bind();
+void VAO::GenerateID(const Buffer& inBuffer) {
+	inBuffer.Bind();
 	glGenVertexArrays(1, &m_VAO_ID);
 }
 

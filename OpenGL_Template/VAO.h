@@ -2,6 +2,9 @@
 
 #include <vector>
 
+#include "Buffer.h"
+
+
 
 struct VAO
 {
@@ -10,10 +13,16 @@ struct VAO
 
 	// // GENERAL FUNCTIONS
 	void Append(const std::uint32_t attribute, const std::size_t numElements, const std::size_t elementSize, const std::uint32_t type);
-	void GenerateID(const Buffer& inputBuffer);
-	void GenerateVAO();
+	void GenerateID(const Buffer& inBuffer);
+	void GenerateVAO(const Buffer& inBuffer, std::size_t divisor);
+	void ClearVectors();
+	void Bind();
+
 	
 	//void BindBuffer(const Buffer& inputBuffer);
+
+	// // GETTERS
+	std::uint32_t VAO_ID() { return m_VAO_ID; }
 
 private:
 	std::uint32_t					m_target;

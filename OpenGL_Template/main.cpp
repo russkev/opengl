@@ -59,7 +59,7 @@ struct ApplicationState {
 	Buffer geoBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer matBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer wldBuffer		= {	GL_ARRAY_BUFFER, 0 };
-	VAO    VAO_main;
+	VAO    VAO_main, VAO_mat;
 	GLuint planeVAO			= 0;
 	
 	
@@ -234,8 +234,15 @@ void init (ApplicationState& _State)
 	_State.VAO_main.Append(POSITION_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
 	_State.VAO_main.Append(COLOR_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
 	_State.VAO_main.Append(NORMAL_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
+	_State.VAO_main.GenerateVAO(_State.geoBuffer, 0);
+	_State.VAO_main.ClearVectors();
 
-	_State.VAO_main.GenerateVAO();
+	for (int i = 0; i < 4; ++i) {
+		_State.VAO_main.Append(MODEL_ATTR + i, 4, sizeof(float), GL_FLOAT);
+	}
+	_State.VAO_main.GenerateVAO(_State.matBuffer, 1);
+
+
 
 
 	// // END TEST // //
@@ -265,9 +272,9 @@ void init (ApplicationState& _State)
 	////_State.normalsBuffer.addShape(ShapeGenerator::makeNormals(ShapeGenerator::makeTube(10, 1.0f, 10.0f)), tubeTransforms);
 	////_State.normalsBuffer.createGeoBuffer();
 
-	//std::uint32_t planeVAO;
 	//_State.geoBuffer.Bind(GL_ARRAY_BUFFER);
 	//glGenVertexArrays(1, &_State.planeVAO);
+	
 	//glBindVertexArray(_State.planeVAO);
 	//std::size_t offset = 0;
 	//glEnableVertexAttribArray(POSITION_ATTR);
@@ -279,16 +286,16 @@ void init (ApplicationState& _State)
 	//glEnableVertexAttribArray(NORMAL_ATTR);
 	//glVertexAttribPointer(NORMAL_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
 
-	glBindVertexArray(_State.planeVAO);
-	_State.matBuffer.Bind();
-	std::size_t offset = 0;
-	offset = 0;
-	for (int i = 0; i < 4; ++i) {
-		glEnableVertexAttribArray(MODEL_ATTR + i);
-		glVertexAttribPointer(MODEL_ATTR + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)offset);
-		glVertexAttribDivisor(MODEL_ATTR + i, 1);
-		offset += sizeof(GLfloat) * 4;
-	}
+	//glBindVertexArray(_State.planeVAO);
+	//glBindVertexArray(_State.VAO_main.VAO_ID());
+	//_State.matBuffer.Bind();
+	//std::size_t offsetb = 0;
+	//for (int i = 0; i < 4; ++i) {
+	//	glEnableVertexAttribArray(MODEL_ATTR + i);
+	//	glVertexAttribPointer(MODEL_ATTR + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)offsetb);
+	//	glVertexAttribDivisor(MODEL_ATTR + i, 1);
+	//	offsetb += sizeof(GLfloat) * 4;
+	//}
 
 	return;
 }
@@ -341,7 +348,9 @@ void render_frame (ApplicationState& _State)
 	 //glBindBuffer(GL_ARRAY_BUFFER, _State.matBuffer.getBufferID());
 	 //glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &tempMVP[0][0]);
 	 _State.matBuffer.Upload(0, sizeof(glm::mat4), &tempMVP[0][0]);
-	 glBindVertexArray(_State.planeVAO);
+	 _State.VAO_main.Bind();
+	 //glBindVertexArray(_State.VAO_main.VAO_ID());
+	 //glBindVertexArray(_State.planeVAO);
 	 _State.geoBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
 	 glDrawElements(GL_TRIANGLES, test_plane.numIndices(), GL_UNSIGNED_SHORT, (void*)test_plane.sizeVertices());
 
