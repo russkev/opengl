@@ -369,11 +369,7 @@ bool poll_events (ApplicationState& _State)
 	static bool mouseDown = false;
 	static bool altDown = false;
 	while (SDL_PollEvent (&loc_event)) {
-
-
-
-
-
+		
 		if (loc_event.type == SDL_QUIT) {
 			return false;
 		}
@@ -384,43 +380,11 @@ bool poll_events (ApplicationState& _State)
 				_State.cam.focus(wldBuffer);
 			}
 		}
-		//if (loc_event.type == SDL_MOUSEBUTTONDOWN){
-		//	SDL_SetRelativeMouseMode(SDL_TRUE);
-		//	return true;
-		//	//mouseDown = true;
-		//}
-		//if (loc_event.type == SDL_MOUSEBUTTONUP) {
-		//	//mouseDown = false;
-		//	SDL_SetRelativeMouseMode(SDL_FALSE);
-		//	return true;
-		//}
-		//if (loc_event.type == SDL_KEYDOWN) {
-		//	if (loc_event.key.keysym.scancode == SDL_SCANCODE_LALT) {
-		//		altDown = true;
-		//	}
-		//	_State.cam.positionUpdate(loc_event.key.keysym.scancode);
-		//}
-		//if (loc_event.type == SDL_KEYUP) {
-		//	if (loc_event.key.keysym.scancode == SDL_SCANCODE_LALT) {
-		//		altDown = false;
-		//	}
-		//}
-		//if (loc_event.type == SDL_MOUSEMOTION) {
-		//	_State.cam.mouseUpdate(glm::vec2(loc_event.motion.x, loc_event.motion.y), altDown, mouseDown);
-		//	break;
-		//}
-		//if (loc_event.type == SDL_MOUSEWHEEL) {
-		//	_State.cam.scrollUpdate((float)loc_event.wheel.y);
-		//	break;
-		//}
 	}
 	return true;
 }
 
 void update_camera(ApplicationState& _State) {
-
-
-
 	static const auto cMoveSpeed   = glm::vec3(0.02f, 0.01f, 0.1f);
 	static const auto cRotateSpeed = glm::vec2(0.01f, 0.01f);
 
@@ -442,10 +406,6 @@ void update_camera(ApplicationState& _State) {
 
 	}
 
-
-	if (keyboardState[SDL_SCANCODE_LALT]) {
-		//std::cout << "LEFT ALT PRESSED\n";
-	}
 	_State.cam.moveRel(axisDelta * cMoveSpeed);
 	_State.cam.rotateRel(rotateDelta * cRotateSpeed);
 

@@ -16,6 +16,11 @@ VAO::VAO(/*const std::uint32_t target*/) :
 	// SOMETHING
 };
 
+template<typename... T>
+void VAO::MakeVAO(T... tuple) {
+
+}
+
 // // APPEND
 void VAO::Append(const std::uint32_t attribute, const std::size_t numElements, const std::size_t elementSize, const std::uint32_t type) {
 	//assert(m_attributes.size() == m_sizes.size());
