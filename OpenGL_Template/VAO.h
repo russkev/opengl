@@ -18,6 +18,7 @@ struct VAO
 	void ClearVectors();
 	void Bind();
 
+	void 
 	
 	//void BindBuffer(const Buffer& inputBuffer);
 
