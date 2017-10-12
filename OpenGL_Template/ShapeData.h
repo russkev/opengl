@@ -2,20 +2,24 @@
 #include "Vertex.h"
 #include <GL\glew.h>
 #include <vector>
+#include <tuple>
 
+template<typename... Ts>
 struct ShapeData {
 
 	// // ----- Member Variables ----- // //
-	std::vector<Vertex> vertices;
+	typedef std::vector<std::tuple<Ts...>> vertexType;
+	vertexType vertices;
 	std::vector<GLushort> indices;
 
 
 	// // ----- Constructor ----- // //
 	ShapeData() :
-		vertices(), 
+		vertices(std::tuple<Ts...>), 
 		indices(NULL)
 	{};
-	ShapeData(const std::vector<Vertex> s_vertices, const std::vector<GLushort> s_indeces) :
+
+	ShapeData(const vertexType s_vertices, const std::vector<GLushort> s_indeces) :
 		vertices(s_vertices),
 		indices(s_indeces)
 	{};
@@ -27,12 +31,10 @@ struct ShapeData {
 	GLsizeiptr sizeIndices() {
 		return indices.size() * sizeof(GLushort);
 	}
-
 	GLsizeiptr sizeShape() {
 		return 
 			vertices.size() * sizeof(Vertex) + 
 			indices.size() * sizeof(GLushort);
-
 	}
 	
 	GLuint numIndices() {
