@@ -2,6 +2,7 @@
 
 #include <glm/matrix.hpp>
 #include <math.h>
+#include <tuple>
 
 #include "ShapeData.h"
 #include "Vertex.h"
@@ -17,8 +18,10 @@ glm::vec3 randomColor() {
 }
 
 namespace ShapeGenerator {
-	ShapeData makeTriangle() {
-		ShapeData m_triangle;
+	ShapeData<glm::vec3, glm::vec3> makeTriangle() {
+		ShapeData<glm::vec3, glm::vec3> m_triangle;
+
+
 
 		m_triangle.vertices.push_back({ glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f) });
 		m_triangle.vertices.push_back({ glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) });
@@ -30,8 +33,8 @@ namespace ShapeGenerator {
 
 		return m_triangle;
 	}
-	ShapeData makePlane(GLuint dimensions = 2) {
-		ShapeData m_plane;
+	ShapeData<glm::vec3, glm::vec3> makePlane(GLuint dimensions = 2) {
+		ShapeData<glm::vec3, glm::vec3> m_plane;
 		GLuint offset = 0;
 		for (GLint x = GLint(dimensions * -0.5f); x < GLint(dimensions*0.5f+1.5); ++x){
 			for (GLint z = GLint(dimensions * -0.5f); z < GLint(dimensions*0.5f + 1.5); ++z) {
@@ -57,8 +60,8 @@ namespace ShapeGenerator {
 
 		return m_plane;
 	}
-	ShapeData makeCube() {
-		ShapeData m_cube;
+	ShapeData<glm::vec3, glm::vec3, glm::vec3> makeCube() {
+		ShapeData<glm::vec3, glm::vec3, glm::vec3> m_cube;
 
 		// // UP FACE // //
 		glm::vec3 faceColor = { 1.0f, 0.5f, 0.0f };
@@ -122,8 +125,8 @@ namespace ShapeGenerator {
 		m_cube.indices.push_back(23); m_cube.indices.push_back(20); m_cube.indices.push_back(22);
 		return m_cube;
 	}
-	ShapeData makeArrow() {
-		ShapeData m_arrow;
+	ShapeData<glm::vec3, glm::vec3, glm::vec3> makeArrow() {
+		ShapeData<glm::vec3, glm::vec3, glm::vec3> m_arrow;
 
 		// // UP FACE // // 
 		glm::vec3 faceColor  = { 1.0f, 0.5f, 0.0f };
@@ -238,8 +241,8 @@ namespace ShapeGenerator {
 
 		return m_arrow;
 	}
-	ShapeData makeTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2 ) {
-		ShapeData outTube = makePlane(resolution);
+	ShapeData<glm::vec3, glm::vec3, glm::vec3> makeTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2 ) {
+		ShapeData<glm::vec3, glm::vec3> outTube = makePlane(resolution);
 		GLuint width = resolution + 1;
 		GLfloat y = -height * 0.5f;
 		GLfloat x = 0.0f;
@@ -254,8 +257,10 @@ namespace ShapeGenerator {
 			for (GLint j = 0; j < width; ++j, ++vertex, angle -= angleStep) {
 				x = radius * cos(angle);
 				z = radius * sin(angle);
-				outTube.vertices.at(vertex).position = { x, y, z };
-				outTube.vertices.at(vertex).normal = { cos(angle), 0, sin(angle) };
+				std::get<0>(outTube.vertices.at(vertex)) = { x, y, z };
+				//outTube.vertices.at(vertex).position = { x, y, z };
+				std::get<2>(outTube.vertices.at(vertex)) = { cos(angle), 0, sin(angle) };
+				//outTube.vertices.at(vertex).normal = { cos(angle), 0, sin(angle) };
 			}
 			
 		}
@@ -264,8 +269,8 @@ namespace ShapeGenerator {
 	}
 
 
-	ShapeData makeNormals(ShapeData inShape) {
-		ShapeData m_normals;
+	ShapeData<glm::vec3, glm::vec3, glm::vec3> makeNormals(ShapeData<glm::vec3, glm::vec3, glm::vec3> inShape) {
+		ShapeData<glm::vec3, glm::vec3, glm::vec3> m_normals;
 		
 		GLint j = 0;
 		for (GLint i = 0; i < inShape.vertices.size(); ++i) {

@@ -140,6 +140,8 @@ void init (ApplicationState& _State)
 #endif
 	SDL_Init (SDL_INIT_EVERYTHING);
 	std::atexit(SDL_Quit);
+	
+	typedef std::vector<std::tuple<glm::tvec3<GLfloat>, glm::tvec3<GLfloat>, glm::tvec3<GLfloat>>> vertexType;
 
 	for(const auto& it : st_config)
 	{
@@ -221,7 +223,7 @@ void init (ApplicationState& _State)
 
 	ShapeData test_plane = ShapeGenerator::makeArrow();
 	ShapeData test_cube  = ShapeGenerator::makeCube();
-	std::vector<std::vector<Vertex>> test_vector = { test_plane.vertices, test_cube.vertices };
+	//std::vector<std::vector<vertexType>> test_vector = { test_plane.vertices, test_cube.vertices };
 	std::size_t test_plane_size = test_plane.sizeShape();
 	std::uint32_t planeVerticesOffset = _State.geoBuffer.Append(/*test_plane.sizeVertices(), */test_plane.vertices/*.data()*/);
 	std::uint32_t planeIndicesOffset  = _State.geoBuffer.Append(test_plane.sizeIndices(), test_plane.indices.data());
