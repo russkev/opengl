@@ -17,8 +17,6 @@ struct VAO
 	void GenerateVAO(const Buffer& inBuffer, std::size_t divisor);
 	void ClearVectors();
 	void Bind();
-
-	void 
 	
 	//void BindBuffer(const Buffer& inputBuffer);
 

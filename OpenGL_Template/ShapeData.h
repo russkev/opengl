@@ -4,18 +4,19 @@
 #include <vector>
 #include <tuple>
 
-template<typename... Ts>
+
 struct ShapeData {
+	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3> shapeType;
 
 	// // ----- Member Variables ----- // //
-	typedef std::vector<std::tuple<Ts...>> vertexType;
+	typedef std::vector<shapeType> vertexType;
 	vertexType vertices;
 	std::vector<GLushort> indices;
 
 
 	// // ----- Constructor ----- // //
 	ShapeData() :
-		vertices(std::tuple<Ts...>), 
+		vertices(shapeType),
 		indices(NULL)
 	{};
 

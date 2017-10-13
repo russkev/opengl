@@ -18,14 +18,14 @@ glm::vec3 randomColor() {
 }
 
 namespace ShapeGenerator {
-	ShapeData<glm::vec3, glm::vec3> makeTriangle() {
-		ShapeData<glm::vec3, glm::vec3> m_triangle;
+	ShapeData makeTriangle() {
+		ShapeData m_triangle;
 
+		glm::vec3 faceNormal = { 0.0f, 1.0f, 0.0f };
 
-
-		m_triangle.vertices.push_back({ glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f) });
-		m_triangle.vertices.push_back({ glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) });
-		m_triangle.vertices.push_back({ glm::vec3(0.5f, 0.0f,  0.0f), glm::vec3(0.0f, 0.0f, 1.0f) });
+		m_triangle.vertices.push_back({ glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f), faceNormal });
+		m_triangle.vertices.push_back({ glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), faceNormal });
+		m_triangle.vertices.push_back({ glm::vec3(0.5f, 0.0f,  0.0f), glm::vec3(0.0f, 0.0f, 1.0f), faceNormal });
 
 		m_triangle.indices.push_back(0);
 		m_triangle.indices.push_back(1);
@@ -33,8 +33,8 @@ namespace ShapeGenerator {
 
 		return m_triangle;
 	}
-	ShapeData<glm::vec3, glm::vec3> makePlane(GLuint dimensions = 2) {
-		ShapeData<glm::vec3, glm::vec3> m_plane;
+	ShapeData makePlane(GLuint dimensions = 2) {
+		ShapeData m_plane;
 		GLuint offset = 0;
 		for (GLint x = GLint(dimensions * -0.5f); x < GLint(dimensions*0.5f+1.5); ++x){
 			for (GLint z = GLint(dimensions * -0.5f); z < GLint(dimensions*0.5f + 1.5); ++z) {
@@ -60,8 +60,8 @@ namespace ShapeGenerator {
 
 		return m_plane;
 	}
-	ShapeData<glm::vec3, glm::vec3, glm::vec3> makeCube() {
-		ShapeData<glm::vec3, glm::vec3, glm::vec3> m_cube;
+	ShapeData makeCube() {
+		ShapeData m_cube;
 
 		// // UP FACE // //
 		glm::vec3 faceColor = { 1.0f, 0.5f, 0.0f };
@@ -125,8 +125,8 @@ namespace ShapeGenerator {
 		m_cube.indices.push_back(23); m_cube.indices.push_back(20); m_cube.indices.push_back(22);
 		return m_cube;
 	}
-	ShapeData<glm::vec3, glm::vec3, glm::vec3> makeArrow() {
-		ShapeData<glm::vec3, glm::vec3, glm::vec3> m_arrow;
+	ShapeData makeArrow() {
+		ShapeData m_arrow;
 
 		// // UP FACE // // 
 		glm::vec3 faceColor  = { 1.0f, 0.5f, 0.0f };
@@ -241,8 +241,8 @@ namespace ShapeGenerator {
 
 		return m_arrow;
 	}
-	ShapeData<glm::vec3, glm::vec3, glm::vec3> makeTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2 ) {
-		ShapeData<glm::vec3, glm::vec3> outTube = makePlane(resolution);
+	ShapeData makeTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2 ) {
+		ShapeData outTube = makePlane(resolution);
 		GLuint width = resolution + 1;
 		GLfloat y = -height * 0.5f;
 		GLfloat x = 0.0f;
@@ -250,11 +250,11 @@ namespace ShapeGenerator {
 		GLfloat y_step = height / width;
 		GLint vertex = 0;
 		GLfloat angle = 0.0f;
-		GLfloat angleStep = (2 * PI) / resolution;
+		GLfloat angleStep = (2 * float(PI)) / resolution;
 
-		for (GLint i = width; i > 0; --i, y += y_step) {
+		for (GLuint i = width; i > 0; --i, y += y_step) {
 
-			for (GLint j = 0; j < width; ++j, ++vertex, angle -= angleStep) {
+			for (GLuint j = 0; j < width; ++j, ++vertex, angle -= angleStep) {
 				x = radius * cos(angle);
 				z = radius * sin(angle);
 				std::get<0>(outTube.vertices.at(vertex)) = { x, y, z };
@@ -269,13 +269,15 @@ namespace ShapeGenerator {
 	}
 
 
-	ShapeData<glm::vec3, glm::vec3, glm::vec3> makeNormals(ShapeData<glm::vec3, glm::vec3, glm::vec3> inShape) {
-		ShapeData<glm::vec3, glm::vec3, glm::vec3> m_normals;
+	ShapeData makeNormals(ShapeData inShape) {
+		ShapeData m_normals;
 		
 		GLint j = 0;
 		for (GLint i = 0; i < inShape.vertices.size(); ++i) {
-			m_normals.vertices.push_back(Vertex(inShape.vertices.at(i).position, glm::vec3(1.0f, 0.0f, 0.0f)));
-			m_normals.vertices.push_back(Vertex(inShape.vertices.at(i).position + inShape.vertices.at(i).normal, glm::vec3(1.0f, 0.0f, 0.0f)));
+			m_normals.vertices.push_back({ std::get<0>(inShape.vertices.at(i)), glm::vec3(1.0f, 0.0f, 0.0f) });
+			//m_normals.vertices.push_back(Vertex(inShape.vertices.at(i).position, glm::vec3(1.0f, 0.0f, 0.0f)));
+			//m_normals.vertices.push_back(Vertex(inShape.vertices.at(i).position + inShape.vertices.at(i).normal, glm::vec3(1.0f, 0.0f, 0.0f)));
+			m_normals.vertices.push_back({ std::get<2>(inShape.vertices.at(i)) + std::get<2>(inShape.vertices.at(i)), glm::vec3(1.0f, 0.0f, 0.0f) });
 			m_normals.indices.push_back(j);
 			++j;
 			m_normals.indices.push_back(j);
