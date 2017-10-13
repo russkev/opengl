@@ -11,6 +11,7 @@ static constexpr auto COLOR_ATTR = 1u;
 static constexpr auto NORMAL_ATTR = 2u;
 static constexpr auto MODEL_ATTR = 4u;
 static constexpr auto WORLD_ATTR = 8u;
+typedef ShapeData& shapeType;
 
 GLShapes::GLShapes(std::uint32_t target_) :
 	m_target(target_),
@@ -26,20 +27,18 @@ GLShapes::~GLShapes() {
 	glDeleteVertexArrays(m_arrayIDs.size(), &m_arrayIDs[0]);
 }
 
-void GLShapes::addShape(const ShapeData& shape, const glm::mat4 matrix) {
+void GLShapes::addShape(const shapeType shape, const glm::mat4 matrix) {
 	m_shapes.push_back(shape);
 	m_instances.push_back(1);
 	m_matrices.push_back(matrix);
 }
 
-
-void GLShapes::addShape(const ShapeData& shape, const std::vector<glm::mat4>& matrices) {
+void GLShapes::addShape(const shapeType shape, const std::vector<glm::mat4>& matrices) {
 	m_shapes.push_back(shape);
 	m_instances.push_back(matrices.size());
 	for (auto matrix : matrices) { m_matrices.push_back(matrix); }
 	return;
 }
-
 
 void GLShapes::createGeoBuffer()
 {
@@ -130,6 +129,4 @@ void GLShapes::drawGeo(const Camera& cam, const glm::mat4& projection, std::uint
 		shapeOffset += m_shapes.at(i).sizeIndices();
 		matOffset += sizeof(glm::mat4);
 	}
-	
-
 }
