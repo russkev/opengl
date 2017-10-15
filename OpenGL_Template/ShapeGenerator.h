@@ -33,7 +33,7 @@ namespace ShapeGenerator {
 
 	//	return m_triangle;
 	//}
-	ShapeData makePlane(GLuint dimensions = 2) {
+	ShapeData makePlane(GLuint dimensions = 20) {
 		ShapeData m_plane;
 		GLuint offset = 0;
 		for (GLint x = GLint(dimensions * -0.5f); x < GLint(dimensions*0.5f+1.5); ++x){
