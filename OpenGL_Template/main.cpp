@@ -221,28 +221,28 @@ void init (ApplicationState& _State)
 
 	// // TEST // //
 
-	auto test_plane = ShapeGenerator::makePlane();
-	//auto test_cube  = ShapeGenerator::makeCube();
+	auto test_plane = ShapeGenerator::makeArrow();
+	auto test_cube  = ShapeGenerator::makeCube();
 	//std::vector<std::vector<vertexType>> test_vector = { test_plane.vertices, test_cube.vertices };
 	std::size_t test_plane_size = test_plane.sizeShape();
 	std::uint32_t planeVerticesOffset = _State.geoBuffer.Append(/*test_plane.sizeVertices(), */test_plane.vertices/*.data()*/);
 	std::uint32_t planeIndicesOffset  = _State.geoBuffer.Append(test_plane.sizeIndices(), test_plane.indices.data());
 	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
-	//positionMatrix[3] = { 0.0f, -100.0f, 0.0f, 1.0f };
-	//_State.matBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
-	//_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
+	positionMatrix[3] = { 0.0f, -100.0f, 0.0f, 1.0f };
+	_State.matBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
+	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 
-	//_State.VAO_main.GenerateID(_State.geoBuffer);
-	//_State.VAO_main.Append(POSITION_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
-	//_State.VAO_main.Append(COLOR_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
-	//_State.VAO_main.Append(NORMAL_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
-	//_State.VAO_main.GenerateVAO(_State.geoBuffer, 0);
-	//_State.VAO_main.ClearVectors();
+	_State.VAO_main.GenerateID(_State.geoBuffer);
+	_State.VAO_main.Append(POSITION_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
+	_State.VAO_main.Append(COLOR_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
+	_State.VAO_main.Append(NORMAL_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
+	_State.VAO_main.GenerateVAO(_State.geoBuffer, 0);
+	_State.VAO_main.ClearVectors();
 
-	//for (int i = 0; i < 4; ++i) {
-	//	_State.VAO_main.Append(MODEL_ATTR + i, 4, sizeof(float), GL_FLOAT);
-	//}
-	//_State.VAO_main.GenerateVAO(_State.matBuffer, 1);
+	for (int i = 0; i < 4; ++i) {
+		_State.VAO_main.Append(MODEL_ATTR + i, 4, sizeof(float), GL_FLOAT);
+	}
+	_State.VAO_main.GenerateVAO(_State.matBuffer, 1);
 
 
 
