@@ -54,8 +54,6 @@ struct ApplicationState {
 	SDL_Window*		st_window = nullptr;
 	SDL_GLContext	st_opengl = nullptr;
 
-	//GLShapes vertexBuffer	= { GL_ARRAY_BUFFER };
-	//GLShapes normalsBuffer	= { GL_ARRAY_BUFFER };
 	Buffer geoBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer matBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer wldBuffer		= {	GL_ARRAY_BUFFER, 0 };
@@ -67,12 +65,6 @@ struct ApplicationState {
 		if (st_window) SDL_DestroyWindow(st_window);
 		if (st_opengl) SDL_GL_DeleteContext(st_opengl);
 	}
-
-	// // TEST // //
-	//ShapeData test_plane = ShapeGenerator::makePlane(2);
-	//std::size_t test_plane_size = test_plane.sizeShape();
-	//Buffer ba = Buffer(GL_ARRAY_BUFFER, test_plane_size);
-	// // END TEST // //
 
 };
 
@@ -216,19 +208,15 @@ void init (ApplicationState& _State)
 	_State.projection = glm::perspective(glm::radians(50.0f), float(width) / float(height), 0.1f, 100.0f);
 	_State.view       = _State.cam.getWorldToViewMatrix();
 
-	// // Create 3D models
-	//static ShapeData data_arrow_normals		= ShapeGenerator::makeNormals(data_arrow);
 
 	// // TEST // //
+	// // END TEST // //
 
 	auto test_plane = ShapeGenerator::makeArrow();
-	auto test_cube  = ShapeGenerator::makeCube();
-	//std::vector<std::vector<vertexType>> test_vector = { test_plane.vertices, test_cube.vertices };
-	std::size_t test_plane_size = test_plane.sizeShape();
-	std::uint32_t planeVerticesOffset = _State.geoBuffer.Append(/*test_plane.sizeVertices(), */test_plane.vertices/*.data()*/);
-	std::uint32_t planeIndicesOffset  = _State.geoBuffer.Append(test_plane.sizeIndices(), test_plane.indices.data());
-	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
-	positionMatrix[3] = { 0.0f, -100.0f, 0.0f, 1.0f };
+	std::size_t   test_plane_size     = test_plane.sizeShape();
+	std::uint32_t planeVerticesOffset = _State.geoBuffer.Append(test_plane.vertices);
+	std::uint32_t planeIndicesOffset  = _State.geoBuffer.Append(test_plane.indices);
+	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 6, 0));
 	_State.matBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 
@@ -247,57 +235,7 @@ void init (ApplicationState& _State)
 
 
 
-	// // END TEST // //
 
-
-	glm::mat4 testMatrix1 = glm::mat4(1.0);
-	glm::mat4 testMatrix2 = glm::translate(testMatrix1, glm::vec3(0.0, 3.0, 0.0));
-	testMatrix1[3][1] = 8.0f;
-
-	std::vector<glm::mat4> arrowTransforms = {
-		 glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 0.0f,  0.0f)), 3.14f,     glm::vec3(0.25f, 1.0f, 0.0f))
-		,glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(+0.0f, 0.0f, -3.0f)), 3.14f / 2, glm::vec3(0.25f, 1.0f, 0.25f))
-		,glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(+3.0f, 0.0f, -0.0f)), 3.14f / 8, glm::vec3(0.00f, 0.0f, 1.0f))
-		,glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(+0.0f, 0.0f, +3.0f)), 3.14f / 2, glm::vec3(-0.25f, -1.0f, 0.25f))
-	};
-
-	std::vector<glm::mat4> tubeTransforms = {
-		glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -3.0f,  0.0f)), 3.14f * 0.5f, glm::vec3(1.0f, 0.0f, 0.0f))
-	};
-
-	
-	////_State.vertexBuffer.addShape(ShapeGenerator::makeArrow(), arrowTransforms);
-	////_State.vertexBuffer.addShape(ShapeGenerator::makePlane(10));
-	////_State.vertexBuffer.addShape(ShapeGenerator::makeCube());
-	//_State.vertexBuffer.addShape(ShapeGenerator::makeTube(10, 1.0f, 10.0f), tubeTransforms);
-	//_State.vertexBuffer.createGeoBuffer();
-	////_State.normalsBuffer.addShape(ShapeGenerator::makeNormals(ShapeGenerator::makeTube(10, 1.0f, 10.0f)), tubeTransforms);
-	////_State.normalsBuffer.createGeoBuffer();
-
-	//_State.geoBuffer.Bind(GL_ARRAY_BUFFER);
-	//glGenVertexArrays(1, &_State.planeVAO);
-	
-	//glBindVertexArray(_State.planeVAO);
-	//std::size_t offset = 0;
-	//glEnableVertexAttribArray(POSITION_ATTR);
-	//glVertexAttribPointer(POSITION_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
-	//offset += sizeof(glm::tvec3<GLfloat>);
-	//glEnableVertexAttribArray(COLOR_ATTR);
-	//glVertexAttribPointer(COLOR_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
-	//offset += sizeof(glm::tvec3<GLfloat>);
-	//glEnableVertexAttribArray(NORMAL_ATTR);
-	//glVertexAttribPointer(NORMAL_ATTR, 3u, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(planeVerticesOffset + offset));
-
-	//glBindVertexArray(_State.planeVAO);
-	//glBindVertexArray(_State.VAO_main.VAO_ID());
-	//_State.matBuffer.Bind();
-	//std::size_t offsetb = 0;
-	//for (int i = 0; i < 4; ++i) {
-	//	glEnableVertexAttribArray(MODEL_ATTR + i);
-	//	glVertexAttribPointer(MODEL_ATTR + i, 4u, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)offsetb);
-	//	glVertexAttribDivisor(MODEL_ATTR + i, 1);
-	//	offsetb += sizeof(GLfloat) * 4;
-	//}
 
 	return;
 }
@@ -315,13 +253,12 @@ void render_frame (ApplicationState& _State)
 
 	 //Get time
 	 _State.time    = _State.freqMultiplier * SDL_GetPerformanceCounter();
-	 const auto tpi = 0;// glm::pi<float>()*float(_State.time);
+	 const auto tpi = 0;
 
 	 //Colour multiplier based on time and a cosine wave
 	 GLfloat cmAmplitude = 0.5f;
 	 GLfloat cmFreq      = 0.1f;
 	 GLfloat cmOffset    = 0.5f;
-	 //GLfloat colMult     = cmAmplitude * cos(2.0f * glm::pi<float>() * cmFreq * GLfloat(_State.time)) + cmOffset;
 
 	 // // LIGHTING // //
 	 glUseProgram(_State.programID);
@@ -336,9 +273,6 @@ void render_frame (ApplicationState& _State)
 	 glm::vec3 camPositionVec = _State.cam.getPosition();
 	 glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
 
-	 //// Matrix transformations
-	 std::vector<glm::mat4> MV;
-
 	 auto test_plane = ShapeGenerator::makeArrow();
 	 glm::mat4 wldBuffer = glm::mat4(1.0f);
 	 _State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
@@ -347,8 +281,6 @@ void render_frame (ApplicationState& _State)
 	 _State.VAO_main.Bind();
 	 _State.geoBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
 	 glDrawElements(GL_TRIANGLES, test_plane.numIndices(), GL_UNSIGNED_SHORT, (void*)test_plane.sizeVertices());
-
-
 }
 
 
