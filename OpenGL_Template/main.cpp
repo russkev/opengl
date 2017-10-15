@@ -231,12 +231,6 @@ void init (ApplicationState& _State)
 		_State.VAO_main.Append(MODEL_ATTR + i, 4, sizeof(float), GL_FLOAT);
 	}
 	_State.VAO_main.GenerateVAO(_State.matBuffer, 1);
-
-
-
-
-
-
 	return;
 }
 
