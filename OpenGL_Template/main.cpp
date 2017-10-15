@@ -221,8 +221,8 @@ void init (ApplicationState& _State)
 
 	// // TEST // //
 
-	auto test_plane = ShapeGenerator::makeArrow();
-	auto test_cube  = ShapeGenerator::makeCube();
+	auto test_plane = ShapeGenerator::makePlane();
+	//auto test_cube  = ShapeGenerator::makeCube();
 	//std::vector<std::vector<vertexType>> test_vector = { test_plane.vertices, test_cube.vertices };
 	std::size_t test_plane_size = test_plane.sizeShape();
 	std::uint32_t planeVerticesOffset = _State.geoBuffer.Append(/*test_plane.sizeVertices(), */test_plane.vertices/*.data()*/);
@@ -337,22 +337,14 @@ void render_frame (ApplicationState& _State)
 	 glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
 
 	 //// Matrix transformations
-	 //std::vector<glm::mat4> MVP;
 	 std::vector<glm::mat4> MV;
-
-	 //_State.vertexBuffer.drawGeo(_State.cam, _State.projection, GL_TRIANGLES);
-	 //_State.normalsBuffer.drawGeo(_State.cam, _State.projection, GL_LINES);
 
 	 auto test_plane = ShapeGenerator::makeArrow();
 	 glm::mat4 wldBuffer = glm::mat4(1.0f);
 	 _State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
 	 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffer;
-	 //glBindBuffer(GL_ARRAY_BUFFER, _State.matBuffer.getBufferID());
-	 //glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4), &tempMVP[0][0]);
 	 _State.matBuffer.Upload(0, sizeof(glm::mat4), &tempMVP[0][0]);
 	 _State.VAO_main.Bind();
-	 //glBindVertexArray(_State.VAO_main.VAO_ID());
-	 //glBindVertexArray(_State.planeVAO);
 	 _State.geoBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
 	 glDrawElements(GL_TRIANGLES, test_plane.numIndices(), GL_UNSIGNED_SHORT, (void*)test_plane.sizeVertices());
 
