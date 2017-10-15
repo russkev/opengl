@@ -1,14 +1,16 @@
 #pragma once
 #include "Vertex.h"
 #include <GL\glew.h>
+#include <glm/glm.hpp>
 #include <vector>
 #include <tuple>
 
 
 struct ShapeData {
-	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3> shapeType;
+	
 
 	// // ----- Member Variables ----- // //
+	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3> shapeType;
 	typedef std::vector<shapeType> vertexType;
 	vertexType vertices;
 	std::vector<GLushort> indices;
@@ -16,7 +18,7 @@ struct ShapeData {
 
 	// // ----- Constructor ----- // //
 	ShapeData() :
-		vertices(shapeType),
+		vertices(vertexType{}),
 		indices(NULL)
 	{};
 
