@@ -216,7 +216,7 @@ void init (ApplicationState& _State)
 	std::size_t   test_plane_size     = test_plane.sizeShape();
 	std::uint32_t planeVerticesOffset = _State.geoBuffer.Append(test_plane.vertices);
 	std::uint32_t planeIndicesOffset  = _State.geoBuffer.Append(test_plane.indices);
-	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 6, 0));
+	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
 	_State.matBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 
