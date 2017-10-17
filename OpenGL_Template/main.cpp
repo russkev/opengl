@@ -212,7 +212,7 @@ void init (ApplicationState& _State)
 	// // TEST // //
 	// // END TEST // //
 
-	auto test_plane = ShapeGenerator::makeArrow();
+	auto test_plane = ShapeGenerator::makePlane(20);
 	std::size_t   test_plane_size     = test_plane.sizeShape();
 	std::uint32_t planeVerticesOffset = _State.geoBuffer.Append(test_plane.vertices);
 	std::uint32_t planeIndicesOffset  = _State.geoBuffer.Append(test_plane.indices);
@@ -267,7 +267,7 @@ void render_frame (ApplicationState& _State)
 	 glm::vec3 camPositionVec = _State.cam.getPosition();
 	 glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
 
-	 auto test_plane = ShapeGenerator::makeArrow();
+	 auto test_plane = ShapeGenerator::makePlane(20);
 	 glm::mat4 wldBuffer = glm::mat4(1.0f);
 	 _State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
 	 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffer;
