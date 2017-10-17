@@ -62,7 +62,7 @@ void Camera::rotateRel(const glm::vec2& rotateDelta) {
 	m_camRight		= r_yaw * m_camRight;
 	m_camUp			= cross(m_camRight, m_viewDirection);
 
-	/*printData(rotateDelta);*/
+	//printData(rotateDelta);
 }
 
 void Camera::printData(const glm::vec2& rotateDelta) {
