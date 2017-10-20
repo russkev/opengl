@@ -19,6 +19,7 @@
 #include "GLShapes.h"
 #include "Buffer.h"
 #include "VAO.h"
+#include "GL_Type_Traits.h"
 
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -210,6 +211,9 @@ void init (ApplicationState& _State)
 
 
 	// // TEST // //
+	using float_gl_type = gl_type_traits<float>;
+	auto glTypeTest1 = float_gl_type::gl_enum_type;
+	auto glTypeTest2 = gl_type_traits<float>::component_count;
 	// // END TEST // //
 
 	auto test_plane = ShapeGenerator::makePlane(20);
@@ -221,9 +225,9 @@ void init (ApplicationState& _State)
 	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 
 	_State.VAO_main.GenerateID(_State.geoBuffer);
-	_State.VAO_main.Append(POSITION_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
-	_State.VAO_main.Append(COLOR_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
 	_State.VAO_main.Append(NORMAL_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
+	_State.VAO_main.Append(COLOR_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
+	_State.VAO_main.Append(POSITION_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
 	_State.VAO_main.GenerateVAO(_State.geoBuffer, 0);
 	_State.VAO_main.ClearVectors();
 
