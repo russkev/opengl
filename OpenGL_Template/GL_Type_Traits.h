@@ -55,7 +55,7 @@ struct gl_type_traits<TM<T>>\
 	static constexpr auto component_count	= gl_type_traits<T>::component_count * CC_Mul; \
 	static constexpr auto slot_occupancy	= gl_type_traits<T>::slot_occupancy * SO_Mul; \
 	static constexpr auto storage_size		= sizeof(T); \
-	static constexpr auto aligment_size		= alignof (T); \
+	static constexpr auto alignment_size		= alignof (T); \
 }
 
 // Vectors:

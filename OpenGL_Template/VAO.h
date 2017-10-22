@@ -4,6 +4,8 @@
 
 #include "Buffer.h"
 
+#include "GL_Tuple_Introspect.h"
+
 
 
 struct VAO
@@ -14,7 +16,7 @@ struct VAO
 	// // GENERAL FUNCTIONS
 	void Append(const std::uint32_t attribute, const std::size_t numElements, const std::size_t elementSize, const std::uint32_t type);
 	void GenerateID(const Buffer& inBuffer);
-	void GenerateVAO(const Buffer& inBuffer, std::size_t divisor);
+	void GenerateVAO(const Buffer& inBuffer, std::size_t divisor, const member_info_type* begin, const member_info_type* end, std::uint32_t id_offset =  0u);
 	void ClearVectors();
 	void Bind();
 	
