@@ -227,7 +227,7 @@ void init (ApplicationState& _State)
 	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 	_State.VAO_main.GenerateID(_State.geoBuffer);
 
-	static const auto shape_info  = gl_introspect_tuple<ShapeData::shapeType>::get();
+	static const auto shape_info  = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3>>::get();
 	static const auto matrix_info = gl_introspect_tuple<std::tuple<glm::mat4>>::get();
 
 
@@ -239,6 +239,8 @@ void init (ApplicationState& _State)
 	_State.VAO_main.ClearVectors();
 
 	_State.VAO_main.GenerateVAO(_State.matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
+	_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
+
 
 	//for (int i = 0; i < 4; ++i) {
 	//	_State.VAO_main.Append(MODEL_ATTR + i, 4, sizeof(float), GL_FLOAT);
