@@ -211,9 +211,9 @@ void init (ApplicationState& _State)
 
 
 	// // TEST // //
-	using float_gl_type = gl_type_traits<float>;
-	auto glTypeTest1 = float_gl_type::gl_enum_type;
-	auto glTypeTest2 = gl_type_traits<float>::component_count;
+	//using mat_type = gl_type_traits<glm::mat4>;
+	//auto glTypeTest1 = mat_type::slot_occupancy;
+	const auto glTypeTest2 = gl_type_traits<glm::vec3>::component_count;
 	// // END TEST // //
 
 	auto test_plane = ShapeGenerator::makePlane(20);
@@ -322,11 +322,11 @@ void update_camera(ApplicationState& _State) {
 		rotateDelta = (glm::vec2)mouseDelta;
 	}
 	if (mouseButton & SDL_BUTTON(SDL_BUTTON_MIDDLE)) {
-		axisDelta.x = -mouseDelta.x;
-		axisDelta.y = mouseDelta.y;
+		axisDelta.x = -(float)mouseDelta.x;
+		axisDelta.y = (float)mouseDelta.y;
 	}
 	if (mouseButton & SDL_BUTTON(SDL_BUTTON_RIGHT)) {
-		axisDelta.z = mouseDelta.y;
+		axisDelta.z = (float)mouseDelta.y;
 
 	}
 
