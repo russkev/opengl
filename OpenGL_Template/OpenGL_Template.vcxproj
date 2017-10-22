@@ -158,6 +158,7 @@
     <ClInclude Include="GLShapes.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="glad\glad.h" />
+    <ClInclude Include="GL_Tuple_Introspect.h" />
     <ClInclude Include="GL_Type_Traits.h" />
     <ClInclude Include="loadBMP_custom.h" />
     <ClInclude Include="loadShader.hpp" />
