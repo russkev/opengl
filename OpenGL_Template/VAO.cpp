@@ -39,21 +39,32 @@ void VAO::Append(const std::uint32_t attribute, const std::size_t numElements, c
 	m_types.push_back(type);
 }
 
-void VAO::GenerateVAO(const Buffer& inBuffer, std::size_t divisor) {
+void VAO::GenerateVAO(const Buffer& inBuffer, std::size_t divisor, const member_info_type* begin, const member_info_type* end, std::uint32_t id_offset) {
 	assert(m_attributes.size() == m_elementAmounts.size() && m_attributes.size() == m_elementSizes.size());
 	Bind();
 	inBuffer.Bind();
-	std::size_t offset = 0;
-	std::size_t stride = 0;
-	for (int i = 0; i < m_attributes.size(); ++i) {
-		stride += m_elementSizes.at(i) * m_elementAmounts.at(i);
-	}
-	for (int i = 0; i < m_attributes.size(); ++i) {
-		glEnableVertexAttribArray(m_attributes.at(i));
-		glVertexAttribPointer(m_attributes.at(i), m_elementAmounts.at(i), m_types.at(i), GL_FALSE, stride, (void*)offset);
-		glVertexAttribDivisor(m_attributes.at(i), divisor);
-		offset += m_elementSizes.at(i) * m_elementAmounts.at(i);
-	}
+	//std::size_t offset = 0;
+	//std::size_t stride = 0;
+	//for (int i = 0; i < m_attributes.size(); ++i) {
+	//	stride += m_elementSizes.at(i) * m_elementAmounts.at(i);
+	//}
+	//for (int i = 0; i < m_attributes.size(); ++i) {
+	//	glEnableVertexAttribArray(m_attributes.at(i));
+	//	glVertexAttribPointer(m_attributes.at(i), m_elementAmounts.at(i), m_types.at(i), GL_FALSE, stride, (void*)offset);
+	//	glVertexAttribDivisor(m_attributes.at(i), divisor);
+	//	offset += m_elementSizes.at(i) * m_elementAmounts.at(i);
+	//}
+
+	std::for_each(begin, end, [&](const member_info_type& mi)
+	{
+		for (auto i = 0u; i < mi.slot_occupancy; ++i)
+		{
+			glEnableVertexAttribArray(id_offset + mi.attribute_slot + i);
+			glVertexAttribPointer(id_offset + mi.attribute_slot + i,mi.component_count, mi.gl_type_enum, GL_TRUE, mi.tuple_stride, mi.offset_from_start + i * mi.slot_size_in_bytes);
+			glVertexAttribDivisor(id_offset + mi.attribute_slot + i, divisor);
+
+		}
+	});
 }
 
 void VAO::ClearVectors() {

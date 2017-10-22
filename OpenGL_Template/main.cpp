@@ -19,7 +19,9 @@
 #include "GLShapes.h"
 #include "Buffer.h"
 #include "VAO.h"
+
 #include "GL_Type_Traits.h"
+#include "GL_Tuple_Introspect.h"
 
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -223,18 +225,25 @@ void init (ApplicationState& _State)
 	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
 	_State.matBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
-
 	_State.VAO_main.GenerateID(_State.geoBuffer);
-	_State.VAO_main.Append(NORMAL_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
-	_State.VAO_main.Append(COLOR_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
-	_State.VAO_main.Append(POSITION_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
-	_State.VAO_main.GenerateVAO(_State.geoBuffer, 0);
+
+	static const auto shape_info  = gl_introspect_tuple<ShapeData::shapeType>::get();
+	static const auto matrix_info = gl_introspect_tuple<std::tuple<glm::mat4>>::get();
+
+
+	//_State.VAO_main.Append(NORMAL_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
+	//_State.VAO_main.Append(COLOR_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
+	//_State.VAO_main.Append(POSITION_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
+	//_State.VAO_main.GenerateVAO(_State.geoBuffer, 0);
+	_State.VAO_main.GenerateVAO(_State.geoBuffer, 0, shape_info.data(), shape_info.data() + shape_info.size(), POSITION_ATTR);
 	_State.VAO_main.ClearVectors();
 
-	for (int i = 0; i < 4; ++i) {
-		_State.VAO_main.Append(MODEL_ATTR + i, 4, sizeof(float), GL_FLOAT);
-	}
-	_State.VAO_main.GenerateVAO(_State.matBuffer, 1);
+	_State.VAO_main.GenerateVAO(_State.matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
+
+	//for (int i = 0; i < 4; ++i) {
+	//	_State.VAO_main.Append(MODEL_ATTR + i, 4, sizeof(float), GL_FLOAT);
+	//}
+	//_State.VAO_main.GenerateVAO(_State.matBuffer, 1);
 	return;
 }
 
