@@ -226,7 +226,6 @@ void init (ApplicationState& _State)
 	_State.geoBuffer.Append(test_plane.indices);
 	_State.matBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
-	_State.VAO_main.GenerateID(_State.geoBuffer);
 
 	// // Set up standard information for the VAO
 	static const auto shape_info  = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3>>::get();

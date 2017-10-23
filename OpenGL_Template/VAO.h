@@ -14,7 +14,7 @@ struct VAO
 	VAO();
 
 	// // GENERAL FUNCTIONS
-	void GenerateID(const Buffer& inBuffer);
+	void GenerateID();
 	void GenerateVAO(const Buffer& inBuffer, std::size_t divisor, const member_info_type* begin, const member_info_type* end, std::uint32_t id_offset =  0u);
 	void Bind();
 
