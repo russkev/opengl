@@ -192,7 +192,7 @@ void init (ApplicationState& _State)
 	glEnable(GL_DEPTH_TEST);
 	// // Enable backface culling // //
 	glEnable(GL_CULL_FACE);
-	// // Set windind direction // // 
+	// // Set winding direction // // 
 	glFrontFace(GL_CCW);
 	// // Accept fragment shader if it closer to the camera than the previous one
 	glDepthFunc(GL_LESS);
@@ -213,39 +213,29 @@ void init (ApplicationState& _State)
 
 
 	// // TEST // //
-	//using mat_type = gl_type_traits<glm::mat4>;
-	//auto glTypeTest1 = mat_type::slot_occupancy;
-	const auto glTypeTest2 = gl_type_traits<glm::vec3>::component_count;
 	// // END TEST // //
 
+	// // Create Geo
 	auto test_plane = ShapeGenerator::makePlane(20);
-	std::size_t   test_plane_size     = test_plane.sizeShape();
-	std::uint32_t planeVerticesOffset = _State.geoBuffer.Append(test_plane.vertices);
-	std::uint32_t planeIndicesOffset  = _State.geoBuffer.Append(test_plane.indices);
+
+	// // Transform Geo
 	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
+
+	// // Send information to graphics card
+	_State.geoBuffer.Append(test_plane.vertices);
+	_State.geoBuffer.Append(test_plane.indices);
 	_State.matBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 	_State.VAO_main.GenerateID(_State.geoBuffer);
 
+	// // Set up standard information for the VAO
 	static const auto shape_info  = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3>>::get();
 	static const auto matrix_info = gl_introspect_tuple<std::tuple<glm::mat4>>::get();
 
-
-	//_State.VAO_main.Append(NORMAL_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
-	//_State.VAO_main.Append(COLOR_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
-	//_State.VAO_main.Append(POSITION_ATTR, 3, sizeof(GLfloat), GL_FLOAT);
-	//_State.VAO_main.GenerateVAO(_State.geoBuffer, 0);
+	// // Upload the VAO information
 	_State.VAO_main.GenerateVAO(_State.geoBuffer, 0, shape_info.data(), shape_info.data() + shape_info.size(), POSITION_ATTR);
-	_State.VAO_main.ClearVectors();
-
 	_State.VAO_main.GenerateVAO(_State.matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
 	_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
-
-
-	//for (int i = 0; i < 4; ++i) {
-	//	_State.VAO_main.Append(MODEL_ATTR + i, 4, sizeof(float), GL_FLOAT);
-	//}
-	//_State.VAO_main.GenerateVAO(_State.matBuffer, 1);
 	return;
 }
 
@@ -289,6 +279,8 @@ void render_frame (ApplicationState& _State)
 	 _State.matBuffer.Upload(0, sizeof(glm::mat4), &tempMVP[0][0]);
 	 _State.VAO_main.Bind();
 	 _State.geoBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
+
+	 // // Draw the shapes // //
 	 glDrawElements(GL_TRIANGLES, test_plane.numIndices(), GL_UNSIGNED_SHORT, (void*)test_plane.sizeVertices());
 }
 
