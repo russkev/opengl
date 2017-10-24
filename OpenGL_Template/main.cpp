@@ -60,6 +60,7 @@ struct ApplicationState {
 	Buffer geoBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer matBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer wldBuffer		= {	GL_ARRAY_BUFFER, 0 };
+	Buffer indxBuffer		= { GL_ARRAY_BUFFER, 0 };
 	VAO    VAO_main, VAO_mat;
 	GLuint planeVAO			= 0;
 	
@@ -216,14 +217,21 @@ void init (ApplicationState& _State)
 	// // END TEST // //
 
 	// // Create Geo
-	auto test_plane = ShapeGenerator::makePlane(20);
+	auto plane = ShapeGenerator::makePlane(20);
+	auto cube  = ShapeGenerator::makeCube();
+	for (int i = 0; i < cube.indices.size(); ++i) {
+		cube.indices.at(i) += plane.vertices.size();
+	}
 
 	// // Transform Geo
 	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
 
 	// // Send information to graphics card
-	_State.geoBuffer.Append(test_plane.vertices);
-	_State.geoBuffer.Append(test_plane.indices);
+	_State.geoBuffer.Append(plane.vertices);
+	_State.indxBuffer.Append(plane.indices);
+	_State.geoBuffer.Append(cube.vertices);
+	_State.indxBuffer.Append(cube.indices);
+
 	_State.matBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 
@@ -232,7 +240,7 @@ void init (ApplicationState& _State)
 	static const auto matrix_info = gl_introspect_tuple<std::tuple<glm::mat4>>::get();
 
 	// // Upload the VAO information
-	_State.VAO_main.GenerateVAO(_State.geoBuffer, 0, shape_info.data(), shape_info.data() + shape_info.size(), POSITION_ATTR);
+	_State.VAO_main.GenerateVAO(_State.geoBuffer, 0, shape_info.data(),  shape_info.data() +  shape_info.size(),  POSITION_ATTR);
 	_State.VAO_main.GenerateVAO(_State.matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
 	_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
 	return;
@@ -271,16 +279,14 @@ void render_frame (ApplicationState& _State)
 	 glm::vec3 camPositionVec = _State.cam.getPosition();
 	 glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
 
-	 auto test_plane = ShapeGenerator::makePlane(20);
 	 glm::mat4 wldBuffer = glm::mat4(1.0f);
 	 _State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
 	 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffer;
 	 _State.matBuffer.Upload(0, sizeof(glm::mat4), &tempMVP[0][0]);
 	 _State.VAO_main.Bind();
-	 _State.geoBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
-
+	 _State.indxBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
 	 // // Draw the shapes // //
-	 glDrawElements(GL_TRIANGLES, test_plane.numIndices(), GL_UNSIGNED_SHORT, (void*)test_plane.sizeVertices());
+	 glDrawElements(GL_TRIANGLES, _State.indxBuffer.size(), GL_UNSIGNED_SHORT, 0);
 }
 
 
