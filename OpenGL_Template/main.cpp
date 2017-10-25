@@ -219,7 +219,7 @@ void init (ApplicationState& _State)
 	// // END TEST // //
 
 	// // Create Geo
-	_State.shapes.makePlane(20);
+	_State.shapes.appendTriangle();
 
 	//auto plane = ShapeGenerator::makePlane(20);
 	//auto cube  = ShapeGenerator::makeCube();

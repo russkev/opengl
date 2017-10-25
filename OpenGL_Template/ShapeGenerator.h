@@ -25,6 +25,11 @@ struct ShapeGenerator
 	// // MEMBER VARIABLES
 	ShapeData m_shapes;
 
+	// // CREATE THE SHAPES
+	void appendTriangle() {
+		appendShape(makeTriangle());
+	}
+
 private:
 	void appendShape(ShapeData s_shape) {
 		for (std::size_t i = 0; i < s_shape.indices.size(); ++i) {
@@ -34,8 +39,6 @@ private:
 		m_shapes.indices.insert(m_shapes.indices.end(), s_shape.indices.begin(), s_shape.indices.end());
 	}
 
-
-public:
 	// // CREATE THE SHAPES
 	ShapeData makeTriangle() 
 	{
