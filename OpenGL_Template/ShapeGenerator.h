@@ -22,15 +22,30 @@ struct ShapeGenerator
 	// // CONSTRUCTOR
 	ShapeGenerator() : m_shapes(ShapeData()){};
 	
+
+
+	// // GETTERS
+	auto vertices() { return m_shapes.vertices; }
+	auto indices()  { return m_shapes.indices;  }
+
+
+	// // APPEND THE SHAPES
+	void appendTriangle()				{ appendShape(makeTriangle());			}
+	void appendPlane(GLuint dimension)	{ appendShape(makePlane(dimension));	}
+	void appendCube()					{ appendShape(makeCube());				}
+	void appendArrow()					{ appendShape(makeArrow());				}
+	void appendTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2)
+	{
+		appendShape(makeTube(resolution, radius, height));
+	}
+	void appendNormals(ShapeData inShape) { appendShape(makeNormals(inShape));	}			
+
+
+private:
 	// // MEMBER VARIABLES
 	ShapeData m_shapes;
 
-	// // CREATE THE SHAPES
-	void appendTriangle() {
-		appendShape(makeTriangle());
-	}
-
-private:
+	// // MAKE THE SHAPES
 	void appendShape(ShapeData s_shape) {
 		for (std::size_t i = 0; i < s_shape.indices.size(); ++i) {
 			s_shape.indices.at(i) += s_shape.vertices.size();
@@ -54,7 +69,6 @@ private:
 		m_triangle.indices.push_back(1);
 		m_triangle.indices.push_back(2);
 
-		appendShape(m_triangle);
 		return m_triangle;
 	}
 	ShapeData makePlane(GLuint dimensions = 20) {
@@ -78,8 +92,6 @@ private:
 				//		  << c << "," << d << "," << b << "\n";
 			}
 		}
-
-		appendShape(m_plane);
 		return m_plane;
 	}
 	ShapeData makeCube() {
@@ -145,8 +157,7 @@ private:
 		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(5)23
 		m_cube.indices.push_back(23); m_cube.indices.push_back(21); m_cube.indices.push_back(20);
 		m_cube.indices.push_back(23); m_cube.indices.push_back(20); m_cube.indices.push_back(22);
-		
-		appendShape(m_cube);
+
 		return m_cube;
 	}
 	ShapeData makeArrow() {
@@ -263,7 +274,6 @@ private:
 		m_arrow.indices.push_back(38), m_arrow.indices.push_back(40), m_arrow.indices.push_back(41);
 		m_arrow.indices.push_back(38), m_arrow.indices.push_back(41), m_arrow.indices.push_back(39);
 
-		appendShape(m_arrow);
 		return m_arrow;
 	}
 	ShapeData makeTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2 ) {
@@ -291,7 +301,6 @@ private:
 		}
 		//outTube.vertices.at(0).position.y = 1.0f;
 
-		appendShape(outTube);
 		return outTube;
 	}
 	ShapeData makeNormals(ShapeData inShape) {
