@@ -17,22 +17,43 @@ glm::vec3 randomColor() {
 		);
 }
 
-namespace ShapeGenerator {
-	//ShapeData makeTriangle() {
-	//	ShapeData m_triangle;
+struct ShapeGenerator 
+{
+	// // CONSTRUCTOR
+	ShapeGenerator() : m_shapes(ShapeData()){};
+	
+	// // MEMBER VARIABLES
+	ShapeData m_shapes;
 
-	//	glm::vec3 faceNormal = { 0.0f, 1.0f, 0.0f };
+private:
+	void appendShape(ShapeData s_shape) {
+		for (std::size_t i = 0; i < s_shape.indices.size(); ++i) {
+			s_shape.indices.at(i) += s_shape.vertices.size();
+		}
+		m_shapes.vertices.insert(m_shapes.vertices.end(), s_shape.vertices.begin(), s_shape.vertices.end());
+		m_shapes.indices.insert(m_shapes.indices.end(), s_shape.indices.begin(), s_shape.indices.end());
+	}
 
-	//	m_triangle.vertices.push_back({ glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f), faceNormal });
-	//	m_triangle.vertices.push_back({ glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), faceNormal });
-	//	m_triangle.vertices.push_back({ glm::vec3(0.5f, 0.0f,  0.0f), glm::vec3(0.0f, 0.0f, 1.0f), faceNormal });
 
-	//	m_triangle.indices.push_back(0);
-	//	m_triangle.indices.push_back(1);
-	//	m_triangle.indices.push_back(2);
+public:
+	// // CREATE THE SHAPES
+	ShapeData makeTriangle() 
+	{
+		ShapeData m_triangle;
 
-	//	return m_triangle;
-	//}
+		glm::vec3 faceNormal = { 0.0f, 1.0f, 0.0f };
+
+		m_triangle.vertices.push_back({ glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f), faceNormal });
+		m_triangle.vertices.push_back({ glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), faceNormal });
+		m_triangle.vertices.push_back({ glm::vec3(0.5f, 0.0f,  0.0f), glm::vec3(0.0f, 0.0f, 1.0f), faceNormal });
+
+		m_triangle.indices.push_back(0);
+		m_triangle.indices.push_back(1);
+		m_triangle.indices.push_back(2);
+
+		appendShape(m_triangle);
+		return m_triangle;
+	}
 	ShapeData makePlane(GLuint dimensions = 20) {
 		ShapeData m_plane;
 		GLuint offset = 0;
@@ -55,9 +76,7 @@ namespace ShapeGenerator {
 			}
 		}
 
-
-
-
+		appendShape(m_plane);
 		return m_plane;
 	}
 	ShapeData makeCube() {
@@ -123,6 +142,8 @@ namespace ShapeGenerator {
 		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(5)23
 		m_cube.indices.push_back(23); m_cube.indices.push_back(21); m_cube.indices.push_back(20);
 		m_cube.indices.push_back(23); m_cube.indices.push_back(20); m_cube.indices.push_back(22);
+		
+		appendShape(m_cube);
 		return m_cube;
 	}
 	ShapeData makeArrow() {
@@ -239,6 +260,7 @@ namespace ShapeGenerator {
 		m_arrow.indices.push_back(38), m_arrow.indices.push_back(40), m_arrow.indices.push_back(41);
 		m_arrow.indices.push_back(38), m_arrow.indices.push_back(41), m_arrow.indices.push_back(39);
 
+		appendShape(m_arrow);
 		return m_arrow;
 	}
 	ShapeData makeTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2 ) {
@@ -265,10 +287,10 @@ namespace ShapeGenerator {
 			
 		}
 		//outTube.vertices.at(0).position.y = 1.0f;
+
+		appendShape(outTube);
 		return outTube;
 	}
-
-
 	ShapeData makeNormals(ShapeData inShape) {
 		ShapeData m_normals;
 		
@@ -285,5 +307,4 @@ namespace ShapeGenerator {
 		}
 		return m_normals;
 	}
-}
-
+};
