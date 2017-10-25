@@ -219,7 +219,7 @@ void init (ApplicationState& _State)
 	// // END TEST // //
 
 	// // Create Geo
-	_State.shapes.appendTriangle();
+	_State.shapes.appendCube();
 
 	//auto plane = ShapeGenerator::makePlane(20);
 	//auto cube  = ShapeGenerator::makeCube();
@@ -231,8 +231,8 @@ void init (ApplicationState& _State)
 	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
 
 	//// // Send information to graphics card
-	//_State.geoBuffer.Append(plane.vertices);
-	//_State.indxBuffer.Append(plane.indices);
+	_State.geoBuffer.Append(_State.shapes.vertices());
+	_State.indxBuffer.Append(_State.shapes.indices());
 	//_State.geoBuffer.Append(cube.vertices);
 	//_State.indxBuffer.Append(cube.indices);
 
