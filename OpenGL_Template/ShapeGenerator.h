@@ -30,10 +30,10 @@ struct ShapeGenerator
 
 
 	// // APPEND THE SHAPES
-	void appendTriangle()				{ appendShape(makeTriangle());			}
-	void appendPlane(GLuint dimension)	{ appendShape(makePlane(dimension));	}
-	void appendCube()					{ appendShape(makeCube());				}
-	void appendArrow()					{ appendShape(makeArrow());				}
+	void appendTriangle()						{ appendShape(makeTriangle());			}
+	void appendPlane(GLuint dimensions = 10)	{ appendShape(makePlane(dimensions));	}
+	void appendCube()							{ appendShape(makeCube());				}
+	void appendArrow()							{ appendShape(makeArrow());				}
 	void appendTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2)
 	{
 		appendShape(makeTube(resolution, radius, height));

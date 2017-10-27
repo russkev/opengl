@@ -219,7 +219,8 @@ void init (ApplicationState& _State)
 	// // END TEST // //
 
 	// // Create Geo
-	_State.shapes.appendCube();
+	_State.shapes.appendPlane(1);
+	_State.shapes.appendTriangle();
 
 	//auto plane = ShapeGenerator::makePlane(20);
 	//auto cube  = ShapeGenerator::makeCube();
@@ -232,7 +233,7 @@ void init (ApplicationState& _State)
 
 	//// // Send information to graphics card
 	_State.geoBuffer.Append(_State.shapes.vertices());
-	_State.indxBuffer.Append(_State.shapes.indices());
+	_State.indxBuffer.Append(_State.shapes.indices()); //!!! INDEX BUFFER BEING PUT IN WRONG
 	//_State.geoBuffer.Append(cube.vertices);
 	//_State.indxBuffer.Append(cube.indices);
 
