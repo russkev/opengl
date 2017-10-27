@@ -233,7 +233,7 @@ void init (ApplicationState& _State)
 
 	//// // Send information to graphics card
 	_State.geoBuffer.Append(_State.shapes.vertices());
-	_State.indxBuffer.Append(_State.shapes.indices()); //!!! INDEX BUFFER BEING PUT IN WRONG
+	_State.indxBuffer.Append(_State.shapes.indices()); //!!! Need to modify m_shapes to allow appending of a vector
 	//_State.geoBuffer.Append(cube.vertices);
 	//_State.indxBuffer.Append(cube.indices);
 

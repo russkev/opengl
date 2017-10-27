@@ -25,7 +25,7 @@ Buffer::Buffer(std::uint32_t target, std::size_t size) :
 
 // DESTRUCTOR //
 Buffer::~Buffer() {
-	std::cout << "Buffer object destructor\n";
+	std::cout << "Buffer object destructed\n";
 	if (m_bufferID != 0) {
 		glDeleteBuffers(1, &m_bufferID);
 	}	
