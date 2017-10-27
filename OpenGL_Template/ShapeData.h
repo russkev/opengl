@@ -8,24 +8,45 @@
 
 struct ShapeData {
 	
+	// // ----- Type Definitions ----- // //
+	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3> shapeType;
+	typedef std::vector<shapeType>						vertexType;
+	typedef std::vector<GLushort>						indexType;
 
 	// // ----- Member Variables ----- // //
-	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3> shapeType;
-	typedef std::vector<shapeType> vertexType;
-	vertexType vertices;
-	std::vector<GLushort> indices;
+	vertexType	vertices;
+	indexType	indices;
+	std::size_t m_num_vertices;
+	std::size_t m_num_indices;
 
 
 	// // ----- Constructor ----- // //
 	ShapeData() :
 		vertices(vertexType{}),
-		indices(NULL)
+		indices(indexType{}),
+		m_num_vertices(0),
+		m_num_indices(0)
 	{};
 
-	ShapeData(const vertexType s_vertices, const std::vector<GLushort> s_indeces) :
+	// // ----- Constructor ----- // //
+	ShapeData(const vertexType s_vertices, const indexType s_indices) :
 		vertices(s_vertices),
-		indices(s_indeces)
+		indices(s_indices),
+		m_num_vertices(m_num_vertices + s_vertices.size()),
+		m_num_indices(m_num_indices + s_indices.size())
 	{};
+
+	// // ----- PUSH ----- // //
+	void append_vertices(const shapeType s_shape) {
+		vertices.push_back(s_shape);
+		m_num_vertices++;
+	}
+
+	void append_indices(const GLushort s_index) {
+		indices.push_back(s_index);
+		m_num_indices++;
+	}
+
 
 	// // ----- Size Getters ----- // //
 	GLsizeiptr sizeVertices() {

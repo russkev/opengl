@@ -20,7 +20,7 @@ glm::vec3 randomColor() {
 struct ShapeGenerator 
 {
 	// // CONSTRUCTOR
-	ShapeGenerator() : m_shapes(ShapeData()){};
+	ShapeGenerator() : m_shapes(ShapeData() = {}) {};
 	
 
 
@@ -61,13 +61,13 @@ private:
 
 		glm::vec3 faceNormal = { 0.0f, 1.0f, 0.0f };
 
-		m_triangle.vertices.push_back({ glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f), faceNormal });
-		m_triangle.vertices.push_back({ glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), faceNormal });
-		m_triangle.vertices.push_back({ glm::vec3(0.5f, 0.0f,  0.0f), glm::vec3(0.0f, 0.0f, 1.0f), faceNormal });
+		m_triangle.append_vertices({ glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f), faceNormal });
+		m_triangle.append_vertices({ glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), faceNormal });
+		m_triangle.append_vertices({ glm::vec3(0.5f, 0.0f,  0.0f), glm::vec3(0.0f, 0.0f, 1.0f), faceNormal });
 
-		m_triangle.indices.push_back(0);
-		m_triangle.indices.push_back(1);
-		m_triangle.indices.push_back(2);
+		m_triangle.append_indices(0);
+		m_triangle.append_indices(1);
+		m_triangle.append_indices(2);
 
 		return m_triangle;
 	}
@@ -76,7 +76,7 @@ private:
 		GLuint offset = 0;
 		for (GLint x = GLint(dimensions * -0.5f); x < GLint(dimensions*0.5f+1.5); ++x){
 			for (GLint z = GLint(dimensions * -0.5f); z < GLint(dimensions*0.5f + 1.5); ++z) {
-				m_plane.vertices.push_back({ glm::vec3(x, 0, z), randomColor(), glm::vec3(0.0f, 1.0f, 0.0f) });
+				m_plane.append_vertices({ glm::vec3(x, 0, z), randomColor(), glm::vec3(0.0f, 1.0f, 0.0f) });
 				//std::cout << "(" << x << "," << z << ")";
 			}
 		}
@@ -86,8 +86,8 @@ private:
 				GLushort b = x + y + 1 + dimensions * y;
 				GLushort c = x + y + 1 + dimensions + dimensions * y;
 				GLushort d = x + y + 2 + dimensions + dimensions * y;
-				m_plane.indices.push_back(c); m_plane.indices.push_back(a); m_plane.indices.push_back(b);
-				m_plane.indices.push_back(c); m_plane.indices.push_back(b); m_plane.indices.push_back(d);
+				m_plane.append_indices(c); m_plane.append_indices(a); m_plane.append_indices(b);
+				m_plane.append_indices(c); m_plane.append_indices(b); m_plane.append_indices(d);
 				//std::cout << c << "," << b << "," << a << "    "
 				//		  << c << "," << d << "," << b << "\n";
 			}
