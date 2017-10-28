@@ -142,7 +142,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Buffer.cpp" />
-    <ClCompile Include="GLShapes.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="common\loadShader.cpp" />
     <ClCompile Include="main.cpp" />
@@ -155,7 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
-    <ClInclude Include="GLShapes.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="glad\glad.h" />
     <ClInclude Include="GL_Tuple_Introspect.h" />

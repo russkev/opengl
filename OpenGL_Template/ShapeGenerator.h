@@ -20,39 +20,32 @@ glm::vec3 randomColor() {
 struct ShapeGenerator 
 {
 	// // CONSTRUCTOR
-	ShapeGenerator() : m_shapes(ShapeData() = {}) {};
+	ShapeGenerator() : m_shapes(ShapeData()) {};
 	
 
 
 	// // GETTERS
-	auto vertices() { return m_shapes.vertices; }
-	auto indices()  { return m_shapes.indices;  }
+	auto vertices() { return m_shapes.m_vertices; }
+	auto indices()  { return m_shapes.m_indices;  }
 
 
 	// // APPEND THE SHAPES
-	void appendTriangle()						{ appendShape(makeTriangle());			}
-	void appendPlane(GLuint dimensions = 10)	{ appendShape(makePlane(dimensions));	}
-	void appendCube()							{ appendShape(makeCube());				}
-	void appendArrow()							{ appendShape(makeArrow());				}
+	
+
+	void appendTriangle()						{ m_shapes += makeTriangle();			}
+	void appendPlane(GLuint dimensions = 10)	{ m_shapes += makePlane(dimensions);	}
+	void appendCube()							{ m_shapes += makeCube();				}
+	void appendArrow()							{ m_shapes += makeArrow();				}
 	void appendTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2)
 	{
-		appendShape(makeTube(resolution, radius, height));
+		m_shapes += makeTube(resolution, radius, height);
 	}
-	void appendNormals(ShapeData inShape) { appendShape(makeNormals(inShape));	}			
+	void appendNormals(const ShapeData& inShape)		{ m_shapes += makeNormals(inShape);	}			
 
 
 private:
 	// // MEMBER VARIABLES
 	ShapeData m_shapes;
-
-	// // MAKE THE SHAPES
-	void appendShape(ShapeData s_shape) {
-		for (std::size_t i = 0; i < s_shape.indices.size(); ++i) {
-			s_shape.indices.at(i) += s_shape.vertices.size();
-		}
-		m_shapes.vertices.insert(m_shapes.vertices.end(), s_shape.vertices.begin(), s_shape.vertices.end());
-		m_shapes.indices.insert(m_shapes.indices.end(), s_shape.indices.begin(), s_shape.indices.end());
-	}
 
 	// // CREATE THE SHAPES
 	ShapeData makeTriangle() 
@@ -94,69 +87,70 @@ private:
 		}
 		return m_plane;
 	}
+	
 	ShapeData makeCube() {
 		ShapeData m_cube;
 
 		// // UP FACE // //
 		glm::vec3 faceColor = { 1.0f, 0.5f, 0.0f };
 		glm::vec3 faceNormal = { 0.0f, 1.0f, 0.0f };
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(2)0
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(3)1
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)2
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(7)3
-		m_cube.indices.push_back(3); m_cube.indices.push_back(0); m_cube.indices.push_back(2);
-		m_cube.indices.push_back(3); m_cube.indices.push_back(1); m_cube.indices.push_back(0);
+		m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(2)0
+		m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(3)1
+		m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)2
+		m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(7)3
+		m_cube.append_indices(3); m_cube.append_indices(0); m_cube.append_indices(2);
+		m_cube.append_indices(3); m_cube.append_indices(1); m_cube.append_indices(0);
 
 		// // RIGHT FACE // //
 		faceColor = { 0.0f, 1.0f, 0.5f };
 		faceNormal = { 1.0f, 0.0f, 0.0f };
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(1)4
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(2)5
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)6
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(5)7
-		m_cube.indices.push_back(7); m_cube.indices.push_back(6); m_cube.indices.push_back(5);
-		m_cube.indices.push_back(7); m_cube.indices.push_back(5); m_cube.indices.push_back(4);
+		m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(1)4
+		m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(2)5
+		m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)6
+		m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(5)7
+		m_cube.append_indices(7); m_cube.append_indices(6); m_cube.append_indices(5);
+		m_cube.append_indices(7); m_cube.append_indices(5); m_cube.append_indices(4);
 
 
 		// // FRONT FACE // //
 		faceColor  = { 0.5f, 0.0f, 1.0f };
 		faceNormal = { 0.0f, 0.0f, -1.0f };
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(4)8
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(5)9
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)10
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(7)11
-		m_cube.indices.push_back(8); m_cube.indices.push_back(11); m_cube.indices.push_back(10);
-		m_cube.indices.push_back(8); m_cube.indices.push_back(10); m_cube.indices.push_back(9);
+		m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(4)8
+		m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(5)9
+		m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)10
+		m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(7)11
+		m_cube.append_indices(8); m_cube.append_indices(11); m_cube.append_indices(10);
+		m_cube.append_indices(8); m_cube.append_indices(10); m_cube.append_indices(9);
 
 		// // LEFT FACE // //
 		faceColor = { 0.75f, 0.75f, 0.0f };
 		faceNormal = { -1.0f, 0.0f, 0.0f };
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(0)12
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(3)13
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(4)14
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(7)15
-		m_cube.indices.push_back(12); m_cube.indices.push_back(13); m_cube.indices.push_back(15);
-		m_cube.indices.push_back(12); m_cube.indices.push_back(15); m_cube.indices.push_back(14);
+		m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(0)12
+		m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(3)13
+		m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(4)14
+		m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(7)15
+		m_cube.append_indices(12); m_cube.append_indices(13); m_cube.append_indices(15);
+		m_cube.append_indices(12); m_cube.append_indices(15); m_cube.append_indices(14);
 
 		// // BACK FACE // //
 		faceColor = { 0.75f, 0.0f, 0.75f };
 		faceNormal = { 0.0f, 0.0f, 1.0f };
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(0)16
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(1)17
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(2)18
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(3)19
-		m_cube.indices.push_back(17); m_cube.indices.push_back(18); m_cube.indices.push_back(19);
-		m_cube.indices.push_back(17); m_cube.indices.push_back(19); m_cube.indices.push_back(16);
+		m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(0)16
+		m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(1)17
+		m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(2)18
+		m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(3)19
+		m_cube.append_indices(17); m_cube.append_indices(18); m_cube.append_indices(19);
+		m_cube.append_indices(17); m_cube.append_indices(19); m_cube.append_indices(16);
 
 		// // BOTTOM FACE // //
 		faceColor = { 0.0f, 0.75f, 0.75f };
 		faceNormal = { 0.0f, -1.0f, 0.0f };
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(0)20
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(1)21
-		m_cube.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(4)22
-		m_cube.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(5)23
-		m_cube.indices.push_back(23); m_cube.indices.push_back(21); m_cube.indices.push_back(20);
-		m_cube.indices.push_back(23); m_cube.indices.push_back(20); m_cube.indices.push_back(22);
+		m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(0)20
+		m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(1)21
+		m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(4)22
+		m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(5)23
+		m_cube.append_indices(23); m_cube.append_indices(21); m_cube.append_indices(20);
+		m_cube.append_indices(23); m_cube.append_indices(20); m_cube.append_indices(22);
 
 		return m_cube;
 	}
@@ -166,85 +160,85 @@ private:
 		// // UP FACE // // 
 		glm::vec3 faceColor  = { 1.0f, 0.5f, 0.0f };
 		glm::vec3 faceNormal = { 0.0f, 1.0f, 0.0f };
-		m_arrow.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //0
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //1
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +2.0f), faceColor, faceNormal }); //2
-		m_arrow.vertices.push_back({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal }); //3
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -2.0f), faceColor, faceNormal }); //4
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //5
-		m_arrow.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //6
+		m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //0
+		m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //1
+		m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +2.0f), faceColor, faceNormal }); //2
+		m_arrow.append_vertices({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal }); //3
+		m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -2.0f), faceColor, faceNormal }); //4
+		m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //5
+		m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //6
 		
-		m_arrow.indices.push_back(6), m_arrow.indices.push_back(0), m_arrow.indices.push_back(1);
-		m_arrow.indices.push_back(6), m_arrow.indices.push_back(1), m_arrow.indices.push_back(5);
-		m_arrow.indices.push_back(1), m_arrow.indices.push_back(2), m_arrow.indices.push_back(3);
-		m_arrow.indices.push_back(1), m_arrow.indices.push_back(3), m_arrow.indices.push_back(5);
-		m_arrow.indices.push_back(5), m_arrow.indices.push_back(3), m_arrow.indices.push_back(4);
+		m_arrow.append_indices(6), m_arrow.append_indices(0), m_arrow.append_indices(1);
+		m_arrow.append_indices(6), m_arrow.append_indices(1), m_arrow.append_indices(5);
+		m_arrow.append_indices(1), m_arrow.append_indices(2), m_arrow.append_indices(3);
+		m_arrow.append_indices(1), m_arrow.append_indices(3), m_arrow.append_indices(5);
+		m_arrow.append_indices(5), m_arrow.append_indices(3), m_arrow.append_indices(4);
 
 		// // BOTTOM FACE // // 
 		faceColor  = { 0.0f, 1.0f, 0.5f };
 		faceNormal = { 0.0f, -1.0f, 0.0f };
-		m_arrow.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //7
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //8
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +2.0f), faceColor, faceNormal }); //9
-		m_arrow.vertices.push_back({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal }); //10
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -2.0f), faceColor, faceNormal }); //11
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //12
-		m_arrow.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //13
+		m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //7
+		m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //8
+		m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +2.0f), faceColor, faceNormal }); //9
+		m_arrow.append_vertices({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal }); //10
+		m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -2.0f), faceColor, faceNormal }); //11
+		m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //12
+		m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //13
 
-		m_arrow.indices.push_back(10), m_arrow.indices.push_back(9), m_arrow.indices.push_back(8);
-		m_arrow.indices.push_back(10), m_arrow.indices.push_back(8), m_arrow.indices.push_back(12);
-		m_arrow.indices.push_back(10), m_arrow.indices.push_back(12), m_arrow.indices.push_back(11);
-		m_arrow.indices.push_back(12), m_arrow.indices.push_back(8), m_arrow.indices.push_back(7);
-		m_arrow.indices.push_back(12), m_arrow.indices.push_back(7), m_arrow.indices.push_back(13);
+		m_arrow.append_indices(10), m_arrow.append_indices(9), m_arrow.append_indices(8);
+		m_arrow.append_indices(10), m_arrow.append_indices(8), m_arrow.append_indices(12);
+		m_arrow.append_indices(10), m_arrow.append_indices(12), m_arrow.append_indices(11);
+		m_arrow.append_indices(12), m_arrow.append_indices(8), m_arrow.append_indices(7);
+		m_arrow.append_indices(12), m_arrow.append_indices(7), m_arrow.append_indices(13);
 
 		// // BACK FACES // //
 		faceColor =  { 0.5f, 0.0f, 1.0f };
 		faceNormal = { -1.0f, 0.0f, 0.0f };
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(1)14
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +2.0f), faceColor, faceNormal }); //(2)15
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(8)16
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +2.0f), faceColor, faceNormal }); //(9)17
+		m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(1)14
+		m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +2.0f), faceColor, faceNormal }); //(2)15
+		m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(8)16
+		m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +2.0f), faceColor, faceNormal }); //(9)17
 
-		m_arrow.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(0)18
-		m_arrow.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)19
-		m_arrow.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(7)20
-		m_arrow.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(13)21
+		m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(0)18
+		m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)19
+		m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(7)20
+		m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(13)21
 
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -2.0f), faceColor, faceNormal }); //(4)22
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(5)23
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -2.0f), faceColor, faceNormal }); //(11)24
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(12)25
+		m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -2.0f), faceColor, faceNormal }); //(4)22
+		m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(5)23
+		m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -2.0f), faceColor, faceNormal }); //(11)24
+		m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(12)25
 
-		m_arrow.indices.push_back(16), m_arrow.indices.push_back(17), m_arrow.indices.push_back(15);
-		m_arrow.indices.push_back(16), m_arrow.indices.push_back(15), m_arrow.indices.push_back(14);
+		m_arrow.append_indices(16), m_arrow.append_indices(17), m_arrow.append_indices(15);
+		m_arrow.append_indices(16), m_arrow.append_indices(15), m_arrow.append_indices(14);
 
-		m_arrow.indices.push_back(21), m_arrow.indices.push_back(20), m_arrow.indices.push_back(18);
-		m_arrow.indices.push_back(21), m_arrow.indices.push_back(18), m_arrow.indices.push_back(19);
+		m_arrow.append_indices(21), m_arrow.append_indices(20), m_arrow.append_indices(18);
+		m_arrow.append_indices(21), m_arrow.append_indices(18), m_arrow.append_indices(19);
 
-		m_arrow.indices.push_back(24), m_arrow.indices.push_back(25), m_arrow.indices.push_back(23);
-		m_arrow.indices.push_back(24), m_arrow.indices.push_back(23), m_arrow.indices.push_back(22);
+		m_arrow.append_indices(24), m_arrow.append_indices(25), m_arrow.append_indices(23);
+		m_arrow.append_indices(24), m_arrow.append_indices(23), m_arrow.append_indices(22);
 
 		// // LEFT FACE // //
 		faceColor = { 0.5f, 1.0f, 0.0f };
 		faceNormal = { 0.0f, 0.0f, -1.0f };
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(5)26
-		m_arrow.vertices.push_back({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)27
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(12)28
-		m_arrow.vertices.push_back({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(13)29
+		m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(5)26
+		m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)27
+		m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(12)28
+		m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(13)29
 
-		m_arrow.indices.push_back(29), m_arrow.indices.push_back(27), m_arrow.indices.push_back(26);
-		m_arrow.indices.push_back(29), m_arrow.indices.push_back(26), m_arrow.indices.push_back(28);
+		m_arrow.append_indices(29), m_arrow.append_indices(27), m_arrow.append_indices(26);
+		m_arrow.append_indices(29), m_arrow.append_indices(26), m_arrow.append_indices(28);
 
 		// // RIGHT FACE // //
 		faceColor = { 0.0f, 0.5f, 1.0f };
 		faceNormal = { 0.0f, 0.0f, +1.0f };
-		m_arrow.vertices.push_back({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(0)30
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(1)31
-		m_arrow.vertices.push_back({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(7)32
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(8)33
+		m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(0)30
+		m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(1)31
+		m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(7)32
+		m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(8)33
 
-		m_arrow.indices.push_back(30), m_arrow.indices.push_back(32), m_arrow.indices.push_back(33);
-		m_arrow.indices.push_back(30), m_arrow.indices.push_back(33), m_arrow.indices.push_back(31);
+		m_arrow.append_indices(30), m_arrow.append_indices(32), m_arrow.append_indices(33);
+		m_arrow.append_indices(30), m_arrow.append_indices(33), m_arrow.append_indices(31);
 
 		// // LEFT DIAGONAL FACE // //
 		faceColor = { 0.75f, 0.75f, 0.0f };
@@ -252,13 +246,13 @@ private:
 			glm::vec3(+3.0f, -1.0f, +0.0f) - glm::vec3(+1.0f, -1.0f, -2.0f),
 			glm::vec3(+3.0f, -1.0f, +0.0f) - glm::vec3(+3.0f, +1.0f, +0.0f)));
 
-		m_arrow.vertices.push_back({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal }); //(3)34
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, -2.0f), faceColor, faceNormal }); //(4)35
-		m_arrow.vertices.push_back({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal }); //(10)36
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, -2.0f), faceColor, faceNormal }); //(11)37
+		m_arrow.append_vertices({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal }); //(3)34
+		m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -2.0f), faceColor, faceNormal }); //(4)35
+		m_arrow.append_vertices({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal }); //(10)36
+		m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -2.0f), faceColor, faceNormal }); //(11)37
 
-		m_arrow.indices.push_back(37), m_arrow.indices.push_back(35), m_arrow.indices.push_back(34);
-		m_arrow.indices.push_back(37), m_arrow.indices.push_back(34), m_arrow.indices.push_back(36);
+		m_arrow.append_indices(37), m_arrow.append_indices(35), m_arrow.append_indices(34);
+		m_arrow.append_indices(37), m_arrow.append_indices(34), m_arrow.append_indices(36);
 
 		// // RIGHT DIAGONAL FACE // //
 		faceColor = { 0.75f, 0.0f, 0.75f };
@@ -266,13 +260,13 @@ private:
 			glm::vec3(+1.0f, -1.0f, +2.0f) - glm::vec3(+3.0f, -1.0f, +0.0f),
 			glm::vec3(+1.0f, -1.0f, +2.0f) - glm::vec3(+1.0f, +1.0f, +2.0f)));
 
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, +1.0f, +2.0f), faceColor, faceNormal }); //(2)38
-		m_arrow.vertices.push_back({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal }); //(3)39
-		m_arrow.vertices.push_back({ glm::vec3(+1.0f, -1.0f, +2.0f), faceColor, faceNormal }); //(9)40
-		m_arrow.vertices.push_back({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal }); //(10)41
+		m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +2.0f), faceColor, faceNormal }); //(2)38
+		m_arrow.append_vertices({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal }); //(3)39
+		m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +2.0f), faceColor, faceNormal }); //(9)40
+		m_arrow.append_vertices({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal }); //(10)41
 
-		m_arrow.indices.push_back(38), m_arrow.indices.push_back(40), m_arrow.indices.push_back(41);
-		m_arrow.indices.push_back(38), m_arrow.indices.push_back(41), m_arrow.indices.push_back(39);
+		m_arrow.append_indices(38), m_arrow.append_indices(40), m_arrow.append_indices(41);
+		m_arrow.append_indices(38), m_arrow.append_indices(41), m_arrow.append_indices(39);
 
 		return m_arrow;
 	}
@@ -292,29 +286,24 @@ private:
 			for (GLuint j = 0; j < width; ++j, ++vertex, angle -= angleStep) {
 				x = radius * cos(angle);
 				z = radius * sin(angle);
-				std::get<0>(outTube.vertices.at(vertex)) = { x, y, z };
-				//outTube.vertices.at(vertex).position = { x, y, z };
-				std::get<2>(outTube.vertices.at(vertex)) = { cos(angle), 0, sin(angle) };
-				//outTube.vertices.at(vertex).normal = { cos(angle), 0, sin(angle) };
+				std::get<0>(outTube.m_vertices.at(vertex)) = { x, y, z };
+				std::get<2>(outTube.m_vertices.at(vertex)) = { cos(angle), 0, sin(angle) };
 			}
 			
 		}
-		//outTube.vertices.at(0).position.y = 1.0f;
 
 		return outTube;
 	}
-	ShapeData makeNormals(ShapeData inShape) {
+	ShapeData makeNormals(const ShapeData& inShape) {
 		ShapeData m_normals;
 		
 		GLint j = 0;
-		for (GLint i = 0; i < inShape.vertices.size(); ++i) {
-			m_normals.vertices.push_back({ std::get<0>(inShape.vertices.at(i)), glm::vec3(1.0f, 0.0f, 0.0f) , glm::vec3(1.0f, 0.0f, 0.0f) });
-			//m_normals.vertices.push_back(Vertex(inShape.vertices.at(i).position, glm::vec3(1.0f, 0.0f, 0.0f)));
-			//m_normals.vertices.push_back(Vertex(inShape.vertices.at(i).position + inShape.vertices.at(i).normal, glm::vec3(1.0f, 0.0f, 0.0f)));
-			m_normals.vertices.push_back({ std::get<2>(inShape.vertices.at(i)) + std::get<2>(inShape.vertices.at(i)), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f) });
-			m_normals.indices.push_back(j);
+		for (GLint i = 0; i < inShape.m_vertices.size(); ++i) {
+			m_normals.append_vertices({ std::get<0>(inShape.m_vertices.at(i)), glm::vec3(1.0f, 0.0f, 0.0f) , glm::vec3(1.0f, 0.0f, 0.0f) });
+			m_normals.append_vertices({ std::get<2>(inShape.m_vertices.at(i)) + std::get<2>(inShape.m_vertices.at(i)), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f) });
+			m_normals.append_indices(j);
 			++j;
-			m_normals.indices.push_back(j);
+			m_normals.append_indices(j);
 			++j;
 		}
 		return m_normals;
