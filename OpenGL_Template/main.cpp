@@ -16,7 +16,7 @@
 #include "ShapeData.h"
 #include "ShapeGenerator.h"
 #include "Camera.h"
-#include "GLShapes.h"
+//#include "GLShapes.h"
 #include "Buffer.h"
 #include "VAO.h"
 
@@ -219,8 +219,8 @@ void init (ApplicationState& _State)
 	// // END TEST // //
 
 	// // Create Geo
-	_State.shapes.appendPlane(1);
-	_State.shapes.appendTriangle();
+	_State.shapes.appendPlane(15);
+	_State.shapes.appendTube();
 
 	//auto plane = ShapeGenerator::makePlane(20);
 	//auto cube  = ShapeGenerator::makeCube();
@@ -233,7 +233,7 @@ void init (ApplicationState& _State)
 
 	//// // Send information to graphics card
 	_State.geoBuffer.Append(_State.shapes.vertices());
-	_State.indxBuffer.Append(_State.shapes.indices()); //!!! Need to modify m_shapes to allow appending of a vector
+	_State.indxBuffer.Append(_State.shapes.indices());
 	//_State.geoBuffer.Append(cube.vertices);
 	//_State.indxBuffer.Append(cube.indices);
 
@@ -291,7 +291,7 @@ void render_frame (ApplicationState& _State)
 	 _State.VAO_main.Bind();
 	 _State.indxBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
 	 // // Draw the shapes // //
-	 glDrawElements(GL_TRIANGLES, _State.indxBuffer.size(), GL_UNSIGNED_SHORT, 0);
+	 glDrawElements(GL_TRIANGLES, (GLsizei)_State.indxBuffer.size(), GL_UNSIGNED_SHORT, 0);
 }
 
 
