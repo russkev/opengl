@@ -73,22 +73,10 @@ void ShapeData::setVertex(std::size_t loc, const shapeType& data)
 	assert(m_num_vertices >= loc);
 	m_vertices.at(loc) = data;
 }
-//template <std::size_t attr>
-//void ShapeData::setVertex(std::size_t loc, const glm::vec3& data)
-//{
-//	assert(m_num_vertices >= loc);
-//	std::get<attr>(m_vertices.at(loc)) = data;
-//}
 
 // // ----- Getters ----- // //
 shapeType ShapeData::getVertex(std::size_t i)
 {
 	assert(m_num_vertices > i);
 	return m_vertices.at(i);
-}
-template <std::size_t attr>
-glm::vec3 ShapeData::getVertex(const std::size_t i)
-{
-	assert(m_num_vertices > 0);
-	return std::get<attr>(m_vertices.at(i));
 }
