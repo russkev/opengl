@@ -96,7 +96,7 @@ std::uint32_t Buffer::Append(std::size_t size, void* data) {
 	std::size_t offset = m_size;
 	Resize(offset + size);
 	Upload(offset, size, data);
-	return offset;
+	return (uint32_t)offset;
 }
 
 // // RESIZE
