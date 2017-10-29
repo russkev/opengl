@@ -3,6 +3,7 @@
 #include <glm/matrix.hpp>
 #include <math.h>
 #include <tuple>
+#include <cassert>
 
 #include "ShapeData.h"
 #include "Vertex.h"
@@ -25,8 +26,8 @@ struct ShapeGenerator
 
 
 	// // GETTERS
-	auto vertices() { return m_shapes.m_vertices; }
-	auto indices()  { return m_shapes.m_indices;  }
+	auto vertices() { return m_shapes.vertices(); }
+	auto indices()  { return m_shapes.indices();  }
 
 
 	// // APPEND THE SHAPES
@@ -40,7 +41,12 @@ struct ShapeGenerator
 	{
 		m_shapes += makeTube(resolution, radius, height);
 	}
-	void appendNormals(const ShapeData& inShape)		{ m_shapes += makeNormals(inShape);	}			
+	void appendNormals(ShapeData& inShape){ m_shapes += makeNormals(inShape);	}
+	void appendNormals()
+	{
+		assert(sizeof(m_shapes) > 0);
+		m_shapes += makeNormals(m_shapes);
+	}
 
 
 private:
@@ -286,21 +292,30 @@ private:
 			for (GLuint j = 0; j < width; ++j, ++vertex, angle -= angleStep) {
 				x = radius * cos(angle);
 				z = radius * sin(angle);
-				std::get<0>(outTube.m_vertices.at(vertex)) = { x, y, z };
-				std::get<2>(outTube.m_vertices.at(vertex)) = { cos(angle), 0, sin(angle) };
+				outTube.setVertex<0>(vertex, { x, y, z });
+				outTube.setVertex<2>(vertex, { cos(angle), 0, sin(angle) });
 			}
 			
 		}
 
 		return outTube;
 	}
-	ShapeData makeNormals(const ShapeData& inShape) {
+	ShapeData makeNormals(ShapeData& inShape) {
 		ShapeData m_normals;
-		
 		GLint j = 0;
-		for (GLint i = 0; i < inShape.m_vertices.size(); ++i) {
-			m_normals.append_vertices({ std::get<0>(inShape.m_vertices.at(i)), glm::vec3(1.0f, 0.0f, 0.0f) , glm::vec3(1.0f, 0.0f, 0.0f) });
-			m_normals.append_vertices({ std::get<2>(inShape.m_vertices.at(i)) + std::get<2>(inShape.m_vertices.at(i)), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f) });
+		for (GLint i = 0; i < inShape.numVertices(); ++i) {
+			m_normals.append_vertices(
+			{
+				inShape.getVertex<inShape.position>(i),
+				glm::vec3(1.0f, 0.0f, 0.0f),
+				glm::vec3(1.0f, 0.0f, 0.0f)
+			});
+			m_normals.append_vertices(
+			{
+				inShape.getVertex<inShape.position>(i) + inShape.getVertex<inShape.normal>(i),
+				glm::vec3(1.0f, 0.0f, 0.0f),
+				glm::vec3(0.0f, 0.0f, 0.0f)
+			});
 			m_normals.append_indices(j);
 			++j;
 			m_normals.append_indices(j);
