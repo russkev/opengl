@@ -36,20 +36,20 @@ struct ShapeData {
 	// // ----- Setters ----- // //
 	//void setVertex(std::size_t loc, const shapeType& data);
 
-	template <std::size_t attr>
-	void setVertex(std::size_t loc, const glm::vec3& data);
+	//template <std::size_t attr>
+	//void setVertex(std::size_t loc, const glm::vec3& data);
 
 	void setVertex(std::size_t loc, const shapeType& data)
 	{
 		assert(m_num_vertices >= loc);
 		m_vertices.at(loc) = data;
 	}
-	//template <std::size_t attr>
-	//void setVertex(std::size_t loc, const glm::vec3& data)
-	//{
-	//	assert(m_num_vertices >= loc);
-	//	std::get<attr>(m_vertices.at(loc)) = data;
-	//}
+	template <std::size_t attr>
+	void setVertex(std::size_t loc, const glm::vec3& data)
+	{
+		assert(m_num_vertices >= loc);
+		std::get<attr>(m_vertices.at(loc)) = data;
+	}
 
 	// // ----- Getters ----- // //
 	shapeType getVertex(std::size_t i);

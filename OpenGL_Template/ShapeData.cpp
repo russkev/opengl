@@ -73,12 +73,12 @@ void ShapeData::append_indices(const GLushort s_index)
 //	assert(m_num_vertices >= loc);
 //	m_vertices.at(loc) = data;
 //}
-template <std::size_t attr>
-void ShapeData::setVertex(std::size_t loc, const glm::vec3& data)
-{
-	assert(m_num_vertices >= loc);
-	std::get<attr>(m_vertices.at(loc)) = data;
-}
+//template <std::size_t attr>
+//void ShapeData::setVertex(std::size_t loc, const glm::vec3& data)
+//{
+//	assert(m_num_vertices >= loc);
+//	std::get<attr>(m_vertices.at(loc)) = data;
+//}
 
 // // ----- Getters ----- // //
 shapeType ShapeData::getVertex(std::size_t i)
