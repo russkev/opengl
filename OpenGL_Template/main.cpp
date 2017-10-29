@@ -221,6 +221,7 @@ void init (ApplicationState& _State)
 	// // Create Geo
 	_State.shapes.appendPlane(15);
 	_State.shapes.appendTube();
+	//_State.shapes.appendNormals();
 
 	//auto plane = ShapeGenerator::makePlane(20);
 	//auto cube  = ShapeGenerator::makeCube();

@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <tuple>
+#include <cassert>
 
 
 struct ShapeData {
@@ -13,93 +14,62 @@ struct ShapeData {
 	typedef std::vector<shapeType>						vertexType;
 	typedef std::vector<GLushort>						indexType;
 
+	// // ----- Attribute Enumeration ----- // //
+	enum attr { position = 0, color = 1, normal = 2 };
+
+	// // ----- Big 6 ----- // //
+	ShapeData();
+	ShapeData(const vertexType s_vertices, const indexType s_indices);
+	~ShapeData() {};
+	ShapeData(const ShapeData&) = delete;
+	ShapeData(const ShapeData&& other);
+	ShapeData& operator = (const ShapeData&) = delete;
+	ShapeData& operator = (ShapeData&& other);
+
+	// // ----- Addition Assign ----- // //
+	ShapeData& operator += (ShapeData& other);
+
+	// // ----- Append ----- // //
+	void append_vertices(const shapeType s_shape);
+	void append_indices(const GLushort s_index);
+
+	// // ----- Setters ----- // //
+	//void setVertex(std::size_t loc, const shapeType& data);
+
+	template <std::size_t attr>
+	void setVertex(std::size_t loc, const glm::vec3& data);
+
+	void setVertex(std::size_t loc, const shapeType& data)
+	{
+		assert(m_num_vertices >= loc);
+		m_vertices.at(loc) = data;
+	}
+	//template <std::size_t attr>
+	//void setVertex(std::size_t loc, const glm::vec3& data)
+	//{
+	//	assert(m_num_vertices >= loc);
+	//	std::get<attr>(m_vertices.at(loc)) = data;
+	//}
+
+	// // ----- Getters ----- // //
+	shapeType getVertex(std::size_t i);
+	template <std::size_t attr>
+	glm::vec3 getVertex(const std::size_t i);
+
+	std::size_t numIndices()	{ return m_num_indices; }
+	std::size_t numVertices()	{ return m_num_vertices; }
+	vertexType vertices()		{ return m_vertices; }
+	indexType indices()			{ return m_indices; }
+
+	// // ----- Size Getters ----- // //
+	GLsizeiptr sizeVertices()	{ return m_vertices.size() * sizeof(Vertex); }
+	GLsizeiptr sizeIndices()	{ return m_indices.size() * sizeof(GLushort); }
+	GLsizeiptr sizeShape()		{ return sizeVertices() + sizeIndices(); }
+
+private:
 	// // ----- Member Variables ----- // //
 	vertexType	m_vertices;
 	indexType	m_indices;
 	std::size_t m_num_vertices;
 	std::size_t m_num_indices;
-
-
-	// // ----- Constructor ----- // //
-	ShapeData() :
-		m_vertices(vertexType{}),
-		m_indices(indexType{}),
-		m_num_vertices(0u),
-		m_num_indices(0u)
-	{};
-
-	// // ----- Constructor ----- // //
-	ShapeData(const vertexType s_vertices, const indexType s_indices) :
-		m_vertices(s_vertices),
-		m_indices(s_indices),
-		m_num_vertices(m_num_vertices + s_vertices.size()),
-		m_num_indices(m_num_indices + s_indices.size())
-	{};
-
-	// // ----- Destructor ----- // //
-	~ShapeData() {};
-
-	// // ----- Copy Constructor ----- // //
-	ShapeData(const ShapeData&) = delete;
-
-	// // ----- Move Constructor ----- // //
-	ShapeData(const ShapeData&& other) :
-		m_vertices		(std::move(other.m_vertices		)),
-		m_indices		(std::move(other.m_indices		)),
-		m_num_vertices	(std::move(other.m_num_vertices	)),
-		m_num_indices	(std::move(other.m_num_indices	))
-	{};
-
-	// // ----- Copy Assign ----- // //
-	ShapeData& operator = (const ShapeData&) = delete;
-	
-	// // ----- Move Assign ----- // //
-	ShapeData& operator = (ShapeData&& other) 
-	{
-		(*this).~ShapeData();
-		return *new (this) ShapeData(std::move(other));
-	}
-
-	// // ----- Addition Assign ----- // //
-	ShapeData& operator += (ShapeData& other) 
-	{
-		//auto temp_num_indices = m_num_vertices;
-		for (std::size_t i = 0u; i < other.numIndices(); ++i) 
-		{
-			m_indices.push_back(other.m_indices.at(i) + (GLushort)m_num_vertices);
-		}
-		m_vertices.insert(m_vertices.end(), other.m_vertices.begin(), other.m_vertices.end());
-		m_num_indices += other.m_num_indices;
-		m_num_vertices += other.m_num_vertices;
-		return *this;
-	}
-
-	// // ----- PUSH ----- // //
-	void append_vertices(const shapeType s_shape) {
-		m_vertices.push_back(s_shape);
-		m_num_vertices++;
-	}
-
-	void append_indices(const GLushort s_index) {
-		m_indices.push_back(s_index);
-		m_num_indices++;
-	}
-
-
-	// // ----- Size Getters ----- // //
-	GLsizeiptr sizeVertices() {
-		return m_vertices.size() * sizeof(Vertex);
-	}
-	GLsizeiptr sizeIndices() {
-		return m_indices.size() * sizeof(GLushort);
-	}
-	GLsizeiptr sizeShape() {
-		return 
-			m_vertices.size() * sizeof(Vertex) + 
-			m_indices.size() * sizeof(GLushort);
-	}
-	
-	GLuint numIndices() {
-		return GLuint(m_indices.size());
-	}
 };
