@@ -16,7 +16,6 @@
 #include "ShapeData.h"
 #include "ShapeGenerator.h"
 #include "Camera.h"
-//#include "GLShapes.h"
 #include "Buffer.h"
 #include "VAO.h"
 
