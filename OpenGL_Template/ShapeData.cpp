@@ -1,12 +1,12 @@
 #pragma once
+#include "ShapeData.h"
+#include "Vertex.h"
+
 #include <GL\glew.h>
 #include <glm/glm.hpp>
 #include <vector>
 #include <tuple>
 #include <cassert>
-
-#include "Vertex.h"
-#include "ShapeData.h"
 
 // // ----- Type Definitions ----- // //
 typedef std::tuple<glm::vec3, glm::vec3, glm::vec3> shapeType;
@@ -68,11 +68,11 @@ void ShapeData::append_indices(const GLushort s_index)
 }
 
 // // ----- Setters ----- // //
-//void ShapeData::setVertex(std::size_t loc, const shapeType& data)
-//{
-//	assert(m_num_vertices >= loc);
-//	m_vertices.at(loc) = data;
-//}
+void ShapeData::setVertex(std::size_t loc, const shapeType& data)
+{
+	assert(m_num_vertices >= loc);
+	m_vertices.at(loc) = data;
+}
 //template <std::size_t attr>
 //void ShapeData::setVertex(std::size_t loc, const glm::vec3& data)
 //{
