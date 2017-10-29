@@ -220,13 +220,7 @@ void init (ApplicationState& _State)
 	// // Create Geo
 	_State.shapes.appendPlane(15);
 	_State.shapes.appendTube();
-	//_State.shapes.appendNormals();
-
-	//auto plane = ShapeGenerator::makePlane(20);
-	//auto cube  = ShapeGenerator::makeCube();
-	//for (int i = 0; i < cube.indices.size(); ++i) {
-	//	cube.indices.at(i) += plane.vertices.size();
-	//}
+	_State.shapes.appendNormals();
 
 	// // Transform Geo
 	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
@@ -234,8 +228,6 @@ void init (ApplicationState& _State)
 	//// // Send information to graphics card
 	_State.geoBuffer.Append(_State.shapes.vertices());
 	_State.indxBuffer.Append(_State.shapes.indices());
-	//_State.geoBuffer.Append(cube.vertices);
-	//_State.indxBuffer.Append(cube.indices);
 
 	_State.matBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
