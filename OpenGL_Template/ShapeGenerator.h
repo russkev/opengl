@@ -23,16 +23,12 @@ struct ShapeGenerator
 	// // CONSTRUCTOR
 	ShapeGenerator() : m_shapes(ShapeData()) {};
 	
-
-
 	// // GETTERS
 	auto vertices() { return m_shapes.vertices(); }
 	auto indices()  { return m_shapes.indices();  }
 
 
 	// // APPEND THE SHAPES
-	
-
 	void appendTriangle()						{ m_shapes += makeTriangle();			}
 	void appendPlane(GLuint dimensions = 10)	{ m_shapes += makePlane(dimensions);	}
 	void appendCube()							{ m_shapes += makeCube();				}
@@ -48,6 +44,11 @@ struct ShapeGenerator
 		m_shapes += makeNormals(m_shapes);
 	}
 
+	// // TRANSFORM SHAPES
+	//void transform(glm::mat4 transformMatrix)
+	//{
+	//	m_shapes.transform(transformMatrix);
+	//}
 
 private:
 	// // MEMBER VARIABLES

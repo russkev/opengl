@@ -82,11 +82,10 @@ shapeType ShapeData::getVertex(std::size_t i)
 }
 
 // // ----- Transform ----- // //
-void ShapeData::transform(glm::mat4 transformMatrix) {
-	assert(m_num_vertices > 0);
-	for (auto i = 0; i < m_num_vertices; ++i) {
-		glm::vec4(std::get<position>(m_vertices.at(i)), 1) position;
-		// *= transformMatrix;
-		std::get<normal>(m_vertices.at(i))   *= transformMatrix;
-	}
-}
+//void ShapeData::transform(glm::mat4 transformMatrix) {
+//	assert(m_num_vertices > 0);
+//	for (auto i = 0; i < m_num_vertices; ++i) {
+//		std::get<position>(m_vertices.at(i)) *= transformMatrix;
+//		std::get<normal>(m_vertices.at(i))   *= transformMatrix;
+//	}
+//}

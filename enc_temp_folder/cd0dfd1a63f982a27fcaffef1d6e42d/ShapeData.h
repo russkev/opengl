@@ -53,7 +53,7 @@ public:
 	}
 
 	// // ----- Transform ----- // //
-	void transform(glm::mat4 transformMatrix);
+	/*void transform(glm::mat4 transformMatrix);*/
 
 
 	std::size_t numIndices()	{ return m_num_indices; }
