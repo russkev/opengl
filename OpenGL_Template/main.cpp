@@ -276,10 +276,13 @@ void render_frame (ApplicationState& _State)
 	 glm::vec3 camPositionVec = _State.cam.getPosition();
 	 glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
 
+	 // // Update matrices // //
 	 glm::mat4 wldBuffer = glm::mat4(1.0f);
 	 _State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
 	 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffer;
 	 _State.matBuffer.Upload(0, sizeof(glm::mat4), &tempMVP[0][0]);
+	
+	 
 	 _State.VAO_main.Bind();
 	 _State.indxBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
 	 // // Draw the shapes // //
