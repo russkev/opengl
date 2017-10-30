@@ -215,6 +215,11 @@ void init (ApplicationState& _State)
 
 
 	// // TEST // //
+	glm::vec3 tvecA = { 11, 5, 9 };
+	glm::vec4 tvecB(tvecA, 1);
+	glm::mat4 tmatA = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
+	glm::vec4 tvecC = tmatA * tvecB;
+	glm::vec3 tvecD = tvecC;
 	// // END TEST // //
 
 	// // Create Geo
@@ -224,13 +229,14 @@ void init (ApplicationState& _State)
 
 	// // Transform Geo
 	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
+	//_State.shapes.transform(positionMatrix);
 
 	//// // Send information to graphics card
 	_State.geoBuffer.Append(_State.shapes.vertices());
 	_State.indxBuffer.Append(_State.shapes.indices());
 
-	_State.matBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
-	_State.wldBuffer.Append(sizeof(glm::mat4), &positionMatrix[0][0]);
+	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
+	_State.wldBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
 
 	// // Set up standard information for the VAO
 	static const auto shape_info  = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3>>::get();
