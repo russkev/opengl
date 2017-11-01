@@ -28,7 +28,7 @@ Buffer::~Buffer() {
 	std::cout << "Buffer object destructed\n";
 	if (m_bufferID != 0) {
 		glDeleteBuffers(1, &m_bufferID);
-	}	
+	}
 }
 
 // MOVE CONSTRUCTOR //
