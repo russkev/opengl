@@ -55,7 +55,6 @@ public:
 	// // ----- Transform ----- // //
 	void transform(glm::mat4 transformMatrix);
 
-
 	std::size_t numIndices()	{ return m_num_indices; }
 	std::size_t numVertices()	{ return m_num_vertices; }
 	vertexType vertices()		{ return m_vertices; }
