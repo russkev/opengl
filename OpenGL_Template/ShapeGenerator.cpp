@@ -9,6 +9,18 @@
 #include <tuple>
 #include <cassert>
 
+// // ----- Getters ----- // //
+auto ShapeGenerator::vertices() 
+{
+	t_vertices
+	assert(m_shapes2.size() > 0);
+	for (auto i : m_shapes2) {
+
+	}
+	return m_shapes.vertices(); 
+}
+
+
 ShapeData ShapeGenerator::makeTriangle()
 {
 	ShapeData m_triangle;

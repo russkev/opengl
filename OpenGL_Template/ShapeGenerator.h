@@ -13,7 +13,7 @@
 struct ShapeGenerator
 {
 	// // CONSTRUCTOR
-	ShapeGenerator() : m_shapes(ShapeData()) {};
+	//ShapeGenerator() : m_shapes(ShapeData()) {};
 
 	// // GETTERS
 	auto vertices() { return m_shapes.vertices(); }
@@ -45,6 +45,8 @@ struct ShapeGenerator
 private:
 	// // MEMBER VARIABLES
 	ShapeData m_shapes;
+
+	std::vector<ShapeData> m_shapes2;
 
 	// // CREATE THE SHAPES
 	ShapeData makeTriangle();
