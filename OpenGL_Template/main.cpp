@@ -229,7 +229,7 @@ void init (ApplicationState& _State)
 
 	// // Transform Geo
 	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
-	//_State.shapes.transform(positionMatrix);
+	_State.shapes.transform(positionMatrix);
 
 	//// // Send information to graphics card
 	_State.geoBuffer.Append(_State.shapes.vertices());
