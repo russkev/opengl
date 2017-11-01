@@ -4,8 +4,9 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 
-class Camera
+struct Camera
 {
+private:
 	glm::vec3 m_position;
 	glm::vec3 m_viewDirection;
 	glm::vec3 m_lookTarget;

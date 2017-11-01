@@ -10,14 +10,6 @@
 
 #define PI 3.1415927
 
-glm::vec3 randomColor() {
-	return glm::vec3(
-		rand() / (float)RAND_MAX,
-		rand() / (float)RAND_MAX,
-		rand() / (float)RAND_MAX
-		);
-}
-
 struct ShapeGenerator
 {
 	// // CONSTRUCTOR
@@ -44,6 +36,12 @@ struct ShapeGenerator
 		m_shapes += makeNormals(m_shapes);
 	}
 
+	// // TRANSFORM
+	void transform(glm::mat4 transformMatrix) { m_shapes.transform(transformMatrix); }
+
+	// // RANDOM COLOR
+	glm::vec3 randomColor();
+
 private:
 	// // MEMBER VARIABLES
 	ShapeData m_shapes;
@@ -55,4 +53,4 @@ private:
 	ShapeData makeArrow();
 	ShapeData makeTube(GLuint resolution, GLfloat radius, GLfloat height);
 	ShapeData makeNormals(ShapeData& inShape);
-}
+};

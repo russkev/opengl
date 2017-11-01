@@ -62,8 +62,8 @@ public:
 
 	// // ----- Size Getters ----- // //
 	GLsizeiptr sizeVertices()	{ return m_vertices.size() * sizeof(Vertex); }
-	GLsizeiptr sizeIndices()	{ return m_indices.size() * sizeof(GLushort); }
-	GLsizeiptr sizeShape()		{ return sizeVertices() + sizeIndices(); }
+	GLsizeiptr sizeIndices()	{ return m_indices.size()  * sizeof(GLushort); }
+	GLsizeiptr sizeShape()		{ return sizeVertices()    + sizeIndices(); }
 
 private:
 	// // ----- Member Variables ----- // //

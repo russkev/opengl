@@ -1,13 +1,13 @@
 #pragma once
 
+#include "ShapeGenerator.h"
+#include "ShapeData.h"
+//#include "Vertex.h"
+
 #include <glm/matrix.hpp>
 #include <math.h>
 #include <tuple>
 #include <cassert>
-
-#include "ShapeGenerator.h"
-#include "ShapeData.h"
-#include "Vertex.h"
 
 ShapeData ShapeGenerator::makeTriangle()
 {
@@ -284,4 +284,14 @@ ShapeData ShapeGenerator::makeNormals(ShapeData& inShape)
 		++j;
 	}
 	return m_normals;
+}
+
+
+glm::vec3 ShapeGenerator::randomColor()
+{
+	return glm::vec3(
+		rand() / (float)RAND_MAX,
+		rand() / (float)RAND_MAX,
+		rand() / (float)RAND_MAX
+	);
 }
