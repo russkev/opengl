@@ -2,7 +2,7 @@
 
 #include "ShapeGenerator.h"
 #include "ShapeData.h"
-//#include "Vertex.h"
+#include "Vertex.h"
 
 #include <glm/matrix.hpp>
 #include <math.h>
@@ -10,14 +10,20 @@
 #include <cassert>
 
 // // ----- Getters ----- // //
-auto ShapeGenerator::vertices() 
+shapeType ShapeGenerator::vertices() 
 {
-	t_vertices
+	
 	assert(m_shapes2.size() > 0);
-	for (auto i : m_shapes2) {
-
+	shapeType t_shapes = m_shapes2.at(0).vertices();
+	if (m_shapes2.size() > 1)
+	{
+		for (auto i = 1; i < m_shapes2.size(); ++i)
+		{
+			auto t1 = m_shapes2.at(i).vertices().end();
+			t_shapes.insert(t_shapes.end(), m_shapes2.at(i).vertices().begin(), m_shapes2.at(i).vertices().end());
+		}
 	}
-	return m_shapes.vertices(); 
+	return t_shapes;
 }
 
 
