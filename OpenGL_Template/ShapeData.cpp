@@ -9,8 +9,8 @@
 #include <cassert>
 
 // // ----- Type Definitions ----- // //
-typedef std::tuple<glm::vec3, glm::vec3, glm::vec3> shapeType;
-typedef std::vector<shapeType>						vertexType;
+typedef std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexType;
+typedef std::vector<vertexType>						shapeType;
 typedef std::vector<GLushort>						indexType;
 
 // // ----- Constructors ----- // //
@@ -75,7 +75,7 @@ void ShapeData::setVertex(std::size_t loc, const shapeType& data)
 }
 
 // // ----- Getters ----- // //
-shapeType ShapeData::getVertex(std::size_t i)
+vertexType ShapeData::getVertex(std::size_t i)
 {
 	assert(m_num_vertices > i);
 	return m_vertices.at(i);
