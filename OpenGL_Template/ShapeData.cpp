@@ -15,12 +15,12 @@
 
 // // ----- Constructors ----- // //
 ShapeData::ShapeData() :
-	m_vertices(shapeType{}),
+	m_vertices(verticesType{}),
 	m_indices(indexType{}),
 	m_num_vertices(0u),
 	m_num_indices(0u)
 {};
-ShapeData::ShapeData(const shapeType s_vertices, const indexType s_indices) :
+ShapeData::ShapeData(const verticesType s_vertices, const indicesType s_indices) :
 	m_vertices(s_vertices),
 	m_indices(s_indices),
 	m_num_vertices(m_num_vertices + s_vertices.size()),
@@ -74,11 +74,23 @@ void ShapeData::setVertex(std::size_t loc, const vertexType& data)
 	m_vertices.at(loc) = data;
 }
 
+void ShapeData::setIndex(std::size_t loc, const indexType& data)
+{
+	assert(m_num_indices >= loc);
+	m_indices.at(loc) = data;
+}
+
 // // ----- Getters ----- // //
 ShapeData::vertexType ShapeData::getVertex(std::size_t i)
 {
-	assert(m_num_vertices > i);
+	assert(m_num_vertices >= i);
 	return m_vertices.at(i);
+}
+
+ShapeData::indexType ShapeData::getIndex(std::size_t i)
+{
+	assert(m_num_indices >= i);
+	return m_indices.at(i);
 }
 
  // ----- Transform ----- // //

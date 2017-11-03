@@ -12,8 +12,9 @@ struct ShapeData
 public:	
 	// // ----- Type Definitions ----- // //
 	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexType;
-	typedef std::vector<vertexType>						shapeType;
-	typedef std::vector<GLushort>						indexType;
+	typedef std::vector<vertexType>						verticesType;
+	typedef GLushort									indexType;
+	typedef std::vector<indexType>						indicesType;
 	typedef std::vector<vertexType>::const_iterator		vrt_iterator;
 	typedef std::vector<GLushort>::const_iterator		ind_iterator;
 
@@ -23,7 +24,7 @@ public:
 
 	// // ----- Big 6 ----- // //
 	ShapeData();
-	ShapeData(const shapeType s_vertices, const indexType s_indices);
+	ShapeData(const verticesType s_vertices, const indicesType s_indices);
 	~ShapeData() {};
 	ShapeData(const ShapeData&) = delete;
 	ShapeData(const ShapeData&& other);
@@ -45,6 +46,7 @@ public:
 		assert(m_num_vertices >= loc);
 		std::get<attr>(m_vertices.at(loc)) = data;
 	}
+	void setIndex(std::size_t loc, const indexType& data);
 
 	// // ----- Transform ----- // //
 	void transform(glm::mat4 transformMatrix);
@@ -57,10 +59,11 @@ public:
 		assert(m_num_vertices > 0);
 		return std::get<attr>(m_vertices.at(i));
 	}
+	indexType getIndex(std::size_t i);
 	std::size_t numIndices()	{ return m_num_indices; }
 	std::size_t numVertices()	{ return m_num_vertices; }
-	shapeType vertices()		{ return m_vertices; }
-	indexType indices()			{ return m_indices; }
+	verticesType vertices()		{ return m_vertices; }
+	indicesType indices()		{ return m_indices; }
 
 	// // ----- Size Getters ----- // //
 	GLsizeiptr sizeVertices()	{ return m_vertices.size() * sizeof(Vertex); }
@@ -76,8 +79,8 @@ public:
 
 private:
 	// // ----- Member Variables ----- // //
-	shapeType	m_vertices;
-	indexType	m_indices;
-	std::size_t m_num_vertices;
-	std::size_t m_num_indices;
+	verticesType	m_vertices;
+	indicesType		m_indices;
+	std::size_t		m_num_vertices;
+	std::size_t		m_num_indices;
 };

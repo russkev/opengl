@@ -231,7 +231,7 @@ void init (ApplicationState& _State)
 	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
 	_State.shapes.transform(positionMatrix);
 
-	//!!! Working on SHapeGenerator.cpp refactoring m_shapes to vector
+	//!!! Working on SHapeGenerator.cpp append shape
 
 	//// // Send information to graphics card
 	_State.geoBuffer.Append(_State.shapes.vertices());

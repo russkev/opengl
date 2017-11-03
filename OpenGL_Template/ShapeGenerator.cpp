@@ -10,11 +10,11 @@
 #include <cassert>
 
 // // ----- Getters ----- // //
-ShapeData::shapeType ShapeGenerator::vertices() 
+ShapeData::verticesType ShapeGenerator::vertices() 
 {
 	
 	assert(m_shapes2.size() > 0);
-	ShapeData::shapeType t_shapes = m_shapes2.at(0).vertices();
+	ShapeData::verticesType t_shapes = m_shapes2.at(0).vertices();
 	if (m_shapes2.size() > 1)
 	{
 		for (auto i = 1; i < m_shapes2.size(); ++i)
@@ -40,52 +40,47 @@ ShapeData::shapeType ShapeGenerator::vertices()
 //}
 
 // // ----- Append Shapes ----- // //
-void appendShape(std::vector<ShapeData>& inShapes)
+void ShapeGenerator::appendShape(ShapeData& inShape)
 {
-	//auto appendIndices = [](ShapeData& inShape) {
-	//	for (auto it = inShape.indx_begin(); it != inShape.indx_end(); ++it)
-	//	{
-
-	//	}
-	//}
-	if (inShapes.size() > 1)
+	if (m_shapes2.size() > 1)
 	{
-		auto vertexCount = inShapes.at(0).numVertices();
-		for (auto i = 1; i < inShapes.size(); ++i) 
-		{
-			//for (auto it = inShapes.at(i).indx_begin(); it != inShapes.at(i).indx_end(); ++it)
-			for( auto j = 0; j < inShapes.at(i).sizeVertices(); ++i)
-		}
+		std::size_t vertexCount = m_shapes2.at(0).numVertices();
+		for (auto & i : m_shapes2){ vertexCount += i.numVertices(); }
 
+		for (auto i = 0; i < inShape.numIndices(); ++i)
+		{
+			inShape.setIndex(i, inShape.getIndex(i) + vertexCount);
+		}
 	}
+	m_shapes2.push_back(inShape);
 }
 void ShapeGenerator::appendTriangle() 
 {
 	m_shapes += makeTriangle();
-	m_shapes2.push_back(makeTriangle());
+	appendShape(makeTriangle());
 }
 void ShapeGenerator::appendPlane(GLuint dimensions = 10) 
 {
 	m_shapes += makePlane(dimensions);
-	m_shapes2.push_back(makePlane(dimensions));
+	appendShape(makePlane(dimensions));
 }
 void ShapeGenerator::appendCube() 
 {
 	m_shapes += makeCube();
-	m_shapes2.push_back(makeCube());
+	appendShape(makeCube());
 }
 void ShapeGenerator::appendArrow() {
 	m_shapes += makeArrow();
-	m_shapes2.push_back(makeArrow());
+	appendShape(makeArrow());
 }
 void ShapeGenerator::appendTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2)
 {
 	m_shapes += makeTube(resolution, radius, height);
-	m_shapes2.push_back(makeTube(resolution, radius, height));
+	appendShape(makeTube(resolution, radius, height));
 }
 void ShapeGenerator::appendNormals(ShapeData& inShape) {
 	m_shapes += makeNormals(inShape);
-	m_shapes2.push_back(makeNormals(inShape));
+	appendShape(makeNormals(inShape));
 }
 void ShapeGenerator::appendNormals()
 {
@@ -95,7 +90,7 @@ void ShapeGenerator::appendNormals()
 	assert(m_shapes2.size() > 0);
 	auto m_shapes_size = m_shapes2.size();
 	for (auto i = 0; i < m_shapes_size; ++i) {
-		m_shapes2.push_back(makeNormals(m_shapes2.at(i)));
+		appendShape(makeNormals(m_shapes2.at(i)));
 	}
 }
 

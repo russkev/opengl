@@ -14,12 +14,12 @@
 struct ShapeGenerator
 {
 	// // GETTERS
-	ShapeData::shapeType vertices();// { return m_shapes.vertices(); }
-	ShapeData::indexType indices() { return m_shapes.indices(); }
+	ShapeData::verticesType vertices();// { return m_shapes.vertices(); }
+	ShapeData::indicesType indices() { return m_shapes.indices(); }
 
 
 	// // APPEND THE SHAPES
-	void appendShape(std::vector<ShapeData>& inShape);
+	void appendShape(ShapeData& inShape);
 	void appendTriangle();
 	void appendPlane(GLuint dimensions);
 	void appendCube();
