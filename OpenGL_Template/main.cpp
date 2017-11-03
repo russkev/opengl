@@ -223,8 +223,8 @@ void init (ApplicationState& _State)
 	// // END TEST // //
 
 	// // Create Geo
-	_State.shapes.appendPlane(15);
-	_State.shapes.appendTube();
+	_State.shapes.appendPlane(1);
+	_State.shapes.appendTriangle();
 	_State.shapes.appendNormals();
 
 	// // Transform Geo
@@ -236,7 +236,6 @@ void init (ApplicationState& _State)
 	//// // Send information to graphics card
 	_State.geoBuffer.Append(_State.shapes.vertices());
 	_State.indxBuffer.Append(_State.shapes.indices());
-
 
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);

@@ -9,18 +9,18 @@
 #include <cassert>
 
 // // ----- Type Definitions ----- // //
-typedef std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexType;
-typedef std::vector<vertexType>						shapeType;
-typedef std::vector<GLushort>						indexType;
+//typedef std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexType;
+//typedef std::vector<vertexType>						shapeType;
+//typedef std::vector<GLushort>						indexType;
 
 // // ----- Constructors ----- // //
 ShapeData::ShapeData() :
-	m_vertices(vertexType{}),
+	m_vertices(shapeType{}),
 	m_indices(indexType{}),
 	m_num_vertices(0u),
 	m_num_indices(0u)
 {};
-ShapeData::ShapeData(const vertexType s_vertices, const indexType s_indices) :
+ShapeData::ShapeData(const shapeType s_vertices, const indexType s_indices) :
 	m_vertices(s_vertices),
 	m_indices(s_indices),
 	m_num_vertices(m_num_vertices + s_vertices.size()),
@@ -56,7 +56,7 @@ ShapeData& ShapeData::operator += (ShapeData& other)
 }
 
 // // ----- Append ----- // //
-void ShapeData::append_vertices(const shapeType s_shape)
+void ShapeData::append_vertices(const vertexType s_shape)
 {
 	m_vertices.push_back(s_shape);
 	m_num_vertices++;
@@ -68,14 +68,14 @@ void ShapeData::append_indices(const GLushort s_index)
 }
 
 // // ----- Setters ----- // //
-void ShapeData::setVertex(std::size_t loc, const shapeType& data)
+void ShapeData::setVertex(std::size_t loc, const vertexType& data)
 {
 	assert(m_num_vertices >= loc);
 	m_vertices.at(loc) = data;
 }
 
 // // ----- Getters ----- // //
-vertexType ShapeData::getVertex(std::size_t i)
+ShapeData::vertexType ShapeData::getVertex(std::size_t i)
 {
 	assert(m_num_vertices > i);
 	return m_vertices.at(i);
