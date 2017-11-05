@@ -8,11 +8,6 @@
 #include <tuple>
 #include <cassert>
 
-// // ----- Type Definitions ----- // //
-//typedef std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexType;
-//typedef std::vector<vertexType>						shapeType;
-//typedef std::vector<GLushort>						indexType;
-
 // // ----- Constructors ----- // //
 ShapeData::ShapeData() :
 	m_vertices(verticesType{}),
