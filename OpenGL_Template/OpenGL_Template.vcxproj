@@ -165,6 +165,7 @@
     <ClInclude Include="loadShader.hpp" />
     <ClInclude Include="ShapeData.h" />
     <ClInclude Include="ShapeGenerator.h" />
+    <ClInclude Include="ShapeHolder.h" />
     <ClInclude Include="VAO.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
