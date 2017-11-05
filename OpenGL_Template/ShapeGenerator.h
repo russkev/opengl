@@ -15,7 +15,7 @@ struct ShapeGenerator
 {
 	// // GETTERS
 	ShapeData::verticesType vertices();// { return m_shapes.vertices(); }
-	ShapeData::indicesType indices() { return m_shapes.indices(); }
+	ShapeData::indicesType indices();// { return m_shapes.indices(); }
 
 
 	// // APPEND THE SHAPES
@@ -29,14 +29,14 @@ struct ShapeGenerator
 	void appendNormals();
 
 	// // TRANSFORM
-	void transform(glm::mat4 transformMatrix) { m_shapes.transform(transformMatrix); }
+	void transform(glm::mat4 transformMatrix);
 
 	// // RANDOM COLOR
 	glm::vec3 randomColor();
 
 private:
 	// // MEMBER VARIABLES
-	ShapeData m_shapes;
+	//ShapeData m_shapes;
 	std::vector<ShapeData> m_shapes2;
 
 	// // CREATE THE SHAPES
