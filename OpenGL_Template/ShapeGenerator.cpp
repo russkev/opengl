@@ -13,13 +13,13 @@
 ShapeData::verticesType ShapeGenerator::vertices() 
 {
 	
-	assert(m_shapes2.size() > 0);
-	ShapeData::verticesType t_vertices = m_shapes2.at(0).vertices();
-	if (m_shapes2.size() > 1)
+	assert(m_shapes.size() > 0);
+	ShapeData::verticesType t_vertices = m_shapes.at(0).vertices();
+	if (m_shapes.size() > 1)
 	{
-		for (auto i = 1; i < m_shapes2.size(); ++i)
+		for (auto i = 1; i < m_shapes.size(); ++i)
 		{
-			t_vertices.insert(t_vertices.end(), m_shapes2.at(i).vert_begin(), m_shapes2.at(i).vert_end());
+			t_vertices.insert(t_vertices.end(), m_shapes.at(i).vert_begin(), m_shapes.at(i).vert_end());
 		}
 	}
 	return t_vertices;
@@ -27,13 +27,13 @@ ShapeData::verticesType ShapeGenerator::vertices()
 
 ShapeData::indicesType ShapeGenerator::indices()
 {
-	assert(m_shapes2.size() > 0);
-	ShapeData::indicesType t_indices = m_shapes2.at(0).indices();
-	if (m_shapes2.size() > 1)
+	assert(m_shapes.size() > 0);
+	ShapeData::indicesType t_indices = m_shapes.at(0).indices();
+	if (m_shapes.size() > 1)
 	{
-		for (auto i = 1; i < m_shapes2.size(); ++i) 
+		for (auto i = 1; i < m_shapes.size(); ++i) 
 		{
-			t_indices.insert(t_indices.end(), m_shapes2.at(i).indx_begin(), m_shapes2.at(i).indx_end());
+			t_indices.insert(t_indices.end(), m_shapes.at(i).indx_begin(), m_shapes.at(i).indx_end());
 		}
 	}
 	return t_indices;
@@ -42,7 +42,7 @@ ShapeData::indicesType ShapeGenerator::indices()
 // // TRANSFORM
 void ShapeGenerator::transform(glm::mat4 transformMatrix) 
 {
-	for (auto & i : m_shapes2)
+	for (auto & i : m_shapes)
 	{
 		i.transform(transformMatrix);
 	}
@@ -51,10 +51,10 @@ void ShapeGenerator::transform(glm::mat4 transformMatrix)
 // // ----- Append Shapes ----- // //
 void ShapeGenerator::appendShape(ShapeData& inShape)
 {
-	if (m_shapes2.size() > 0)
+	if (m_shapes.size() > 0)
 	{
 		std::size_t vertexCount = 0;
-		for (auto & i : m_shapes2)
+		for (auto & i : m_shapes)
 		{ 
 			vertexCount += i.numVertices(); 
 		}
@@ -64,47 +64,39 @@ void ShapeGenerator::appendShape(ShapeData& inShape)
 			inShape.setIndex(i, inShape.getIndex(i) + vertexCount);
 		}
 	}
-	m_shapes2.push_back(std::move(inShape));
+	m_shapes.push_back(std::move(inShape));
 }
 
 
 void ShapeGenerator::appendTriangle() 
 {
-	//m_shapes += makeTriangle();
 	appendShape(makeTriangle());
 }
 void ShapeGenerator::appendPlane(GLuint dimensions = 10) 
 {
-	//m_shapes += makePlane(dimensions);
 	appendShape(makePlane(dimensions));
 }
 void ShapeGenerator::appendCube() 
 {
-	//m_shapes += makeCube();
 	appendShape(makeCube());
 }
 void ShapeGenerator::appendArrow() {
-	//m_shapes += makeArrow();
 	appendShape(makeArrow());
 }
 void ShapeGenerator::appendTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2)
 {
-	//m_shapes += makeTube(resolution, radius, height);
 	appendShape(makeTube(resolution, radius, height));
 }
 void ShapeGenerator::appendNormals(ShapeData& inShape) {
-	//m_shapes += makeNormals(inShape);
 	appendShape(makeNormals(inShape));
 }
 void ShapeGenerator::appendNormals()
 {
-	//assert(sizeof(m_shapes) > 0);
-	//m_shapes += makeNormals(m_shapes);
-
-	assert(m_shapes2.size() > 0);
-	auto m_shapes_size = m_shapes2.size();
-	for (auto i = 0; i < m_shapes_size; ++i) {
-		appendShape(makeNormals(m_shapes2.at(i)));
+	assert(m_shapes.size() > 0);
+	auto m_shapes_size = m_shapes.size();
+	for (auto i = 0; i < m_shapes_size; ++i) 
+	{
+		appendShape(makeNormals(m_shapes.at(i)));
 	}
 }
 

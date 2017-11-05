@@ -14,8 +14,8 @@
 struct ShapeGenerator
 {
 	// // GETTERS
-	ShapeData::verticesType vertices();// { return m_shapes.vertices(); }
-	ShapeData::indicesType indices();// { return m_shapes.indices(); }
+	ShapeData::verticesType vertices();
+	ShapeData::indicesType indices();
 
 
 	// // APPEND THE SHAPES
@@ -36,8 +36,7 @@ struct ShapeGenerator
 
 private:
 	// // MEMBER VARIABLES
-	//ShapeData m_shapes;
-	std::vector<ShapeData> m_shapes2;
+	std::vector<ShapeData> m_shapes;
 
 	// // CREATE THE SHAPES
 	ShapeData makeTriangle();
