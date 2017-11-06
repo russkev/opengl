@@ -18,6 +18,7 @@
 #include "Camera.h"
 #include "Buffer.h"
 #include "VAO.h"
+#include "ShapeContainer.h"
 
 #include "GL_Type_Traits.h"
 #include "GL_Tuple_Introspect.h"
@@ -215,11 +216,11 @@ void init (ApplicationState& _State)
 
 
 	// // TEST // //
-	glm::vec3 tvecA = { 11, 5, 9 };
-	glm::vec4 tvecB(tvecA, 1);
-	glm::mat4 tmatA = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
-	glm::vec4 tvecC = tmatA * tvecB;
-	glm::vec3 tvecD = tvecC;
+	ShapeContainer testContainer;
+	testContainer.appendShape(_State.shapes.makePlane(1),	"plane");
+	testContainer.appendShape(_State.shapes.makeArrow(),	"arrow");
+	testContainer.appendShape(_State.shapes.makeCube(),		"cube");
+	testContainer.appendShape(_State.shapes.makePlane(10),	"plane");
 	// // END TEST // //
 
 	// // Create Geo
