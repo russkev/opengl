@@ -83,7 +83,7 @@
     <ClInclude Include="GL_Tuple_Introspect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ShapeHolder.h">
+    <ClInclude Include="ShapeContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
