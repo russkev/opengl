@@ -34,7 +34,7 @@ struct ShapeGenerator
 	// // RANDOM COLOR
 	glm::vec3 randomColor();
 
-private:
+public:
 	// // MEMBER VARIABLES
 	std::vector<ShapeData> m_shapes;
 

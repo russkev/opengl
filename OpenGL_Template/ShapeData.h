@@ -5,6 +5,7 @@
 #include <vector>
 #include <tuple>
 #include <cassert>
+#include <string>
 
 
 struct ShapeData 
