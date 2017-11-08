@@ -146,6 +146,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="common\loadShader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ShapeContainer.cpp" />
     <ClCompile Include="ShapeData.cpp" />
     <ClCompile Include="ShapeGenerator.cpp" />
     <ClCompile Include="VAO.cpp" />
