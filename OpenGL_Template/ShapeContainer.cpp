@@ -3,13 +3,15 @@
 void ShapeContainer::appendShape(ShapeData&& s_shape, const std::string& s_name)
 {
 	auto t_name = s_name;
-	while (nameExists(t_name))
-	{
-		incrementString(t_name);
-	}
+	auto suffix = "_shape";
+	//auto t_name_s = s_name + suffix;
 
-	m_shapes.insert(shapeType(t_name + "_shape", std::move(s_shape)));
+
+	while (nameExists(t_name) || nameExists(t_name + suffix)) { incrementString(t_name); }
+
+	m_shapes.insert(shapeType(t_name + suffix, std::move(s_shape)));
 	appendTransform(glm::mat4(), t_name);
+	connect(t_name, t_name+suffix);
 }
 
 void ShapeContainer::appendTransform(glm::mat4&& s_transform, const std::string& s_name)

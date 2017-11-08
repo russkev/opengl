@@ -25,11 +25,31 @@ struct ShapeContainer
 	void connect(const std::string& source, const std::string& destination);
 
 	std::string type(const std::string& s_name);
+
+	// // ----- Getters ----- // //
+	std::vector<ShapeData::verticesType> vertices()
+	{
+		std::vector<ShapeData::verticesType> t_vertices;
+		for (auto & i : m_shapes)
+		{
+			t_vertices.push_back(i.second.vertices());
+		}
+		return t_vertices;
+	}
+	std::vector<ShapeData::indicesType> indices()
+	{
+		std::vector<ShapeData::indicesType> t_indices;
+		auto numVertices = 0;
+		for (auto & i : m_shapes)
+		{
+
+		}
+	}
+
+		
+private:
 	bool nameExists(const std::string& s_name);
 	void incrementString(std::string& s_name);
-
-	
-private:
 	// // ----- Member Variables ----- // //
 	std::map<nameType, ShapeData>		m_shapes;
 	std::map<nameType, glm::mat4>		m_transforms;

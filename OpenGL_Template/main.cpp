@@ -225,6 +225,8 @@ void init (ApplicationState& _State)
 	testContainer.appendShape(_State.shapes.makeArrow(),	"arrow");
 	testContainer.appendShape(_State.shapes.makeCube()		);
 	testContainer.appendShape(_State.shapes.makePlane(10)	);
+
+	auto testVertices = testContainer.vertices();
 	// // END TEST // //
 
 	// // Create Geo
