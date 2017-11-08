@@ -29,17 +29,19 @@ struct ShapeContainer
 
 	void appendShape(ShapeData&& s_shape, const std::string& s_name)
 	{
-		auto t_name = s_name;
+		std::string t_name = std::string(s_name);
 
 		std::regex re("[^0-9]+([0-9]+$)");
 		std::smatch sm;
 		if (std::regex_match(t_name, sm, re))
 		{
 			auto length = sm[1].length();
-			//for (auto i = 0; i < length; ++i)
-			//{
-			//	t_name.pop_back();
-			//}
+			std::string s2 = "plane_01";
+			for (auto i = 0; i < length; ++i)
+			{
+				s2.pop_back();
+				t_name.pop_back();
+			}
 
 			auto num = stoi(sm[1]);
 
