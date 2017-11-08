@@ -219,6 +219,10 @@ void init (ApplicationState& _State)
 	ShapeContainer testContainer;
 	testContainer.appendShape(_State.shapes.makePlane(1),	"plane_01");
 	testContainer.appendShape(_State.shapes.makeArrow(),	"arrow");
+	testContainer.appendShape(_State.shapes.makeCube(),		"cube_999");
+	testContainer.appendShape(_State.shapes.makePlane(10),	"plane_01");
+	testContainer.appendShape(_State.shapes.makePlane(1),	"plane_01");
+	testContainer.appendShape(_State.shapes.makeArrow(),	"arrow");
 	testContainer.appendShape(_State.shapes.makeCube(),		"cube_101");
 	testContainer.appendShape(_State.shapes.makePlane(10),	"plane_01");
 	// // END TEST // //
