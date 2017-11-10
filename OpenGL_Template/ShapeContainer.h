@@ -23,37 +23,15 @@ struct ShapeContainer
 	void appendShape(ShapeData&& s_shape, const std::string& s_name = "poly");
 	void appendTransform(glm::mat4&& s_transform, const std::string& s_name = "transform");
 	void connect(const std::string& source, const std::string& destination);
+	void transform(const std::string& name, const glm::mat4& transformMatrix);
+	//void transformTransform(const std::string& transformName, const glm::mat4& transformMatrix);
+
 
 	std::string type(const std::string& s_name);
 
 	// // ----- Getters ----- // //
-	ShapeData::verticesType vertices()
-	{
-		ShapeData::verticesType t_vertices;
-		for (auto & i : m_shapes)
-		{
-			t_vertices.insert(t_vertices.end(), i.second.vert_begin(), i.second.vert_end());
-			//t_vertices.push_back(i.second.vertices());
-		}
-		return t_vertices;
-	}
-	std::vector<ShapeData::indicesType> indices()
-	{
-		std::vector<ShapeData::indicesType> t_indices_vec;
-		std::size_t numVertices = 0;
-		for (auto & i : m_shapes)
-		{
-			std::vector<ShapeData::indexType> t_indices;
-			for (auto j = 0; j < i.second.numIndices(); ++j)
-			{
-				t_indices.push_back(i.second.indices().at(j) + numVertices);
-			}
-			numVertices += i.second.numVertices();
-			t_indices_vec.push_back(t_indices);
-			//t_indices_vec.insert(t_indices.end(), i.second.indx_begin(), i.second.indx_end());
-		}
-		return t_indices_vec;
-	}
+	ShapeData::verticesType vertices();
+	ShapeData::indicesType  indices();
 
 		
 private:
