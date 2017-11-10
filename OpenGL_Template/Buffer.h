@@ -29,11 +29,20 @@ struct Buffer
 
 	// // INPUTTING WITH VECTORS // //
 	template<typename T>
-	auto Append(std::vector<T> data) { 
+	auto Append(std::vector<std::vector<T>> data)
+	{
+		std::size_t numElements = 0;
+		for (auto & i : data) { numElements += i.size(); }
+		return Append(numElements * sizeof(T), data.data());
+	}
+	template<typename T>
+	auto Append(std::vector<T> data) 
+	{ 
 		return Append(data.size() * sizeof(T), data.data());
 	}
 	template<typename T>
-	auto Upload(std::vector<T> data) {
+	auto Upload(std::vector<T> data) 
+	{
 		return Upload(data.size() * sizeof(T), data.data());
 	}
 
