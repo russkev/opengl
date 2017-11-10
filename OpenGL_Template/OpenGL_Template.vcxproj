@@ -167,6 +167,8 @@
     <ClInclude Include="ShapeContainer.h" />
     <ClInclude Include="ShapeData.h" />
     <ClInclude Include="ShapeGenerator.h" />
+    <ClInclude Include="ShapeNode.h" />
+    <ClInclude Include="TranformNode.h" />
     <ClInclude Include="VAO.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>

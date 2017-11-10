@@ -31,7 +31,38 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	assert(sourceType != "0" && destType != "0");
 	assert(sourceType != "shape");
 	m_connections.insert(connectionType(source, destination));
+	//if (sourceType == "transform" && destType == "shape" && m_transforms.at(source) != glm::mat4())
+	//{
+	//	m_shapes.at(destination).transform(m_transforms.at(source));
+	//}
+	//if (sourceType == "transform" && destType == "transform" && m_transforms.at(source) != glm::mat4())
+	//{
+
+	//}
 }
+
+void ShapeContainer::transform(const std::string& name, const glm::mat4& transformMatrix)
+{
+	auto t_type = type(name);
+	if (t_type == "shape")
+	{
+		m_shapes.at(name).transform(transformMatrix);
+	}
+	if (t_type == "transform")
+	{
+		glm::mat4 newMatrix = transformMatrix * m_transforms.at(name);
+		m_transforms.at(name) = newMatrix;
+		for (auto & i : m_connections)
+		{
+			if (i.first == name)
+			{
+				transform(i.second, newMatrix);
+			}
+		}
+	}
+}
+
+
 
 std::string ShapeContainer::type(const std::string& s_name)
 {
@@ -73,4 +104,28 @@ void ShapeContainer::incrementString(std::string& s_name)
 		t_name_stream << std::setfill('0') << std::setw(num_length) << ++num;
 		s_name = t_name_stream.str();
 	}
+}
+// // ----- Getters ----- // //
+ShapeData::verticesType ShapeContainer::vertices()
+{
+	ShapeData::verticesType t_vertices;
+	for (auto & i : m_shapes)
+	{
+		t_vertices.insert(t_vertices.end(), i.second.vert_begin(), i.second.vert_end());
+	}
+	return t_vertices;
+}
+ShapeData::indicesType ShapeContainer::indices()
+{
+	ShapeData::indicesType t_indices;
+	std::size_t numVertices = 0;
+	for (auto & i : m_shapes)
+	{
+		for (auto j = 0; j < i.second.numIndices(); ++j)
+		{
+			t_indices.push_back(i.second.indices().at(j) + numVertices);
+		}
+		numVertices += i.second.numVertices();
+	}
+	return t_indices;
 }
