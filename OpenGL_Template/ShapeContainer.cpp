@@ -57,9 +57,9 @@ void ShapeContainer::incrementString(std::string& s_name)
 	}
 	if (std::regex_match(s_name, sm, re))
 	{
-		auto num_length		= sm[1].length();
-		auto name_length	= s_name.length();
-		auto num			= stoi(sm[1]);
+		std::size_t num_length		= sm[1].length();
+		auto name_length			= s_name.length();
+		auto num					= stoi(sm[1]);
 		if (std::to_string(num + 1).length() > num_length)
 		{
 			++num_length;

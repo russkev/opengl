@@ -217,16 +217,19 @@ void init (ApplicationState& _State)
 
 	// // TEST // //
 	ShapeContainer testContainer;
-	testContainer.appendShape(_State.shapes.makePlane(1),	"plane_01");
-	testContainer.appendShape(_State.shapes.makeArrow(),	"arrow");
-	testContainer.appendShape(_State.shapes.makeCube(),		"cube_999");
-	testContainer.appendShape(_State.shapes.makePlane(10),	"cube_999");
-	testContainer.appendShape(_State.shapes.makePlane(1),	"plane_01");
-	testContainer.appendShape(_State.shapes.makeArrow(),	"arrow");
-	testContainer.appendShape(_State.shapes.makeCube()		);
-	testContainer.appendShape(_State.shapes.makePlane(10)	);
+	testContainer.appendShape(_State.shapes.makePlane(1),	"plane");
+	//testContainer.appendShape(_State.shapes.makeArrow(),	"arrow");
+	//testContainer.appendShape(_State.shapes.makeCube(),		"cube");
+	//testContainer.appendShape(_State.shapes.makePlane(10),	"plane");
+	//testContainer.appendShape(_State.shapes.makePlane(1),	"plane");
+	//testContainer.appendShape(_State.shapes.makeArrow(),	"arrow");
+	//testContainer.appendShape(_State.shapes.makeCube(),		"cube");
+	//testContainer.appendShape(_State.shapes.makePlane(10),	"plane");
 
 	auto testVertices = testContainer.vertices();
+	auto testIndices = testContainer.indices();
+
+
 	// // END TEST // //
 
 	// // Create Geo
@@ -241,8 +244,11 @@ void init (ApplicationState& _State)
 	//!!! Working on ShapeGenerator.cpp append shape
 
 	//// // Send information to graphics card
-	_State.geoBuffer.Append(_State.shapes.vertices());
-	_State.indxBuffer.Append(_State.shapes.indices());
+	//_State.geoBuffer.Append(_State.shapes.vertices());
+	//_State.indxBuffer.Append(_State.shapes.indices());
+	auto testVerticesOld = _State.shapes.vertices();
+	_State.geoBuffer.Append(testVertices);
+	_State.indxBuffer.Append(testIndices.at(0));
 
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);

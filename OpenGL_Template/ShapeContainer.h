@@ -27,23 +27,32 @@ struct ShapeContainer
 	std::string type(const std::string& s_name);
 
 	// // ----- Getters ----- // //
-	std::vector<ShapeData::verticesType> vertices()
+	ShapeData::verticesType vertices()
 	{
-		std::vector<ShapeData::verticesType> t_vertices;
+		ShapeData::verticesType t_vertices;
 		for (auto & i : m_shapes)
 		{
-			t_vertices.push_back(i.second.vertices());
+			t_vertices.insert(t_vertices.end(), i.second.vert_begin(), i.second.vert_end());
+			//t_vertices.push_back(i.second.vertices());
 		}
 		return t_vertices;
 	}
 	std::vector<ShapeData::indicesType> indices()
 	{
-		std::vector<ShapeData::indicesType> t_indices;
-		auto numVertices = 0;
+		std::vector<ShapeData::indicesType> t_indices_vec;
+		std::size_t numVertices = 0;
 		for (auto & i : m_shapes)
 		{
-
+			std::vector<ShapeData::indexType> t_indices;
+			for (auto j = 0; j < i.second.numIndices(); ++j)
+			{
+				t_indices.push_back(i.second.indices().at(j) + numVertices);
+			}
+			numVertices += i.second.numVertices();
+			t_indices_vec.push_back(t_indices);
+			//t_indices_vec.insert(t_indices.end(), i.second.indx_begin(), i.second.indx_end());
 		}
+		return t_indices_vec;
 	}
 
 		
