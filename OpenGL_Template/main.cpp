@@ -58,6 +58,7 @@ struct ApplicationState {
 	SDL_GLContext	st_opengl = nullptr;
 
 	ShapeGenerator	shapes;
+	ShapeContainer  sh;
 
 	Buffer geoBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer matBuffer		= { GL_ARRAY_BUFFER, 0 };
@@ -216,39 +217,33 @@ void init (ApplicationState& _State)
 
 
 	// // TEST // //
-	ShapeContainer testContainer;
-	testContainer.appendShape(_State.shapes.makePlane(10),	"plane");
-	testContainer.appendShape(_State.shapes.makeArrow(),	"arrow");
-	testContainer.appendShape(_State.shapes.makeCube(),		"cube");
-	testContainer.appendShape(_State.shapes.makePlane(10),	"plane");
-	testContainer.appendShape(_State.shapes.makePlane(1),	"plane");
-	testContainer.appendShape(_State.shapes.makeArrow(),	"arrow");
-	testContainer.appendShape(_State.shapes.makeCube(),		"cube");
-	testContainer.appendShape(_State.shapes.makePlane(10),	"plane");
-
-	auto testVertices = testContainer.vertices();
-	auto testIndices = testContainer.indices();
-
-
 	// // END TEST // //
 
+	//!!! See shape container
+
 	// // Create Geo
-	_State.shapes.appendPlane(1);
-	_State.shapes.appendTriangle();
-	_State.shapes.appendNormals();
+	_State.sh.appendShape(_State.shapes.makePlane(10), "plane");
+	_State.sh.appendShape(_State.shapes.makeArrow(), "arrow");
+	_State.sh.appendShape(_State.shapes.makeCube(), "cube");
+	_State.sh.appendShape(_State.shapes.makePlane(10), "plane");
+
+	// // Create transforms
+	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3( 0,   -20,  0   )), "transformDown");
+	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3( -8,  -6,   0   )), "transformLeft");
+	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3( 0,   -6,   -8  )), "transformBack");
 
 	// // Transform Geo
-	auto positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
-	_State.shapes.transform(positionMatrix);
+	_State.sh.connect("transformLeft", "plane"); 
+	_State.sh.connect("transformBack", "arrow");
+	_State.sh.connect("transformLeft", "arrow");
+	_State.sh.connect("transformDown", "cube");
+	_State.sh.connect("transformBack", "plane_01");
 
 	//!!! Working on making matrix transforms work
 
-	//// // Send information to graphics card
-	//_State.geoBuffer.Append(_State.shapes.vertices());
-	//_State.indxBuffer.Append(_State.shapes.indices());
-	auto testVerticesOld = _State.shapes.vertices();
-	_State.geoBuffer.Append(testVertices);
-	_State.indxBuffer.Append(testIndices);
+	// // Send information to graphics card
+	_State.geoBuffer.Append(_State.sh.vertices());
+	_State.indxBuffer.Append(_State.sh.indices());
 
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);

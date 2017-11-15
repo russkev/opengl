@@ -31,6 +31,7 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	assert(sourceType != "0" && destType != "0");
 	assert(sourceType != "shape");
 	m_connections.insert(connectionType(source, destination));
+	transform(destination, m_transforms.at(source));
 	//if (sourceType == "transform" && destType == "shape" && m_transforms.at(source) != glm::mat4())
 	//{
 	//	m_shapes.at(destination).transform(m_transforms.at(source));
@@ -108,6 +109,15 @@ void ShapeContainer::incrementString(std::string& s_name)
 // // ----- Getters ----- // //
 ShapeData::verticesType ShapeContainer::vertices()
 {
+	/*
+	make vector of vertices, check for input as you go
+	if input exists, staroe matrix, check for input
+	do this recursivelly until no input exists
+	apply matrix transforms
+	store transformed vertices
+	go through connections list and apply transform to the appropriate vertices
+	
+	*/
 	ShapeData::verticesType t_vertices;
 	for (auto & i : m_shapes)
 	{
