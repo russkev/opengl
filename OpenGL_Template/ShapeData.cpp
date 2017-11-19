@@ -91,12 +91,27 @@ ShapeData::indexType ShapeData::getIndex(std::size_t i)
  // ----- Transform ----- // //
 void ShapeData::transform(glm::mat4 transformMatrix) 
 {
-	assert(m_num_vertices > 0);
-	for (auto i = 0; i < m_num_vertices; ++i) 
+	//assert(m_num_vertices > 0);
+	//for (auto i = 0; i < m_num_vertices; ++i) 
+	//{
+	//	auto position = transformMatrix * glm::vec4(std::get<attr::position>(m_vertices.at(i)), 1);
+	//	auto normal   = transformMatrix * glm::vec4(std::get<attr::normal>(m_vertices.at(i)),   1);
+	//	std::get<attr::position>(m_vertices.at(i))  = (glm::vec3)position;
+	//	std::get<attr::normal>(m_vertices.at(i))	= (glm::vec3)normal;
+	//}
+	transform(m_vertices, transformMatrix);
+}
+
+void ShapeData::transform(ShapeData::verticesType& inVertices, const glm::mat4 transformMatrix)
+{
+
+	assert(inVertices.size() > 0);
+	for (auto & vertex : inVertices)
 	{
-		auto position = transformMatrix * glm::vec4(std::get<attr::position>(m_vertices.at(i)), 1);
-		auto normal   = transformMatrix * glm::vec4(std::get<attr::normal>(m_vertices.at(i)),   1);
-		std::get<attr::position>(m_vertices.at(i))  = (glm::vec3)position;
-		std::get<attr::normal>(m_vertices.at(i))	= (glm::vec3)normal;
+		auto position = transformMatrix * glm::vec4(std::get<attr::position>(vertex), 1);
+		auto normal   = transformMatrix * glm::vec4(std::get<attr::normal>(vertex),   1);
+		std::get<attr::position>(vertex) = (glm::vec3)position;
+		std::get<attr::normal>(vertex) = (glm::vec3)normal;
+
 	}
 }

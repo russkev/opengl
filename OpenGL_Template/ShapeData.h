@@ -51,6 +51,7 @@ public:
 
 	// // ----- Transform ----- // //
 	void transform(glm::mat4 transformMatrix);
+	void transform(verticesType& inVertices, const glm::mat4 transformMatrix);
 
 	// // ----- Getters ----- // //
 	vertexType getVertex(std::size_t i);

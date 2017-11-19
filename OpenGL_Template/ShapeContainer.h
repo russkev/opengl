@@ -23,7 +23,22 @@ struct ShapeContainer
 	void appendShape(ShapeData&& s_shape, const std::string& s_name = "poly");
 	void appendTransform(glm::mat4&& s_transform, const std::string& s_name = "transform");
 	void connect(const std::string& source, const std::string& destination);
-	void transform(const std::string& name, const glm::mat4& transformMatrix);
+	//void transform(const std::string& name, const glm::mat4& transformMatrix);
+	void transform(glm::mat4& sourceMatrix, const glm::mat4& transformMatrix);
+	void transform(ShapeData::verticesType&, const glm::mat4& transformMatrix);
+	template <typename T>
+	void tranformFromConnection(const std::string& name, T& s_object)
+	{
+		auto source = input(name);
+		if (source != "")
+		{
+			transform(s_object, source);
+			transformFromConnection(source, s_object);
+		}
+	}
+
+	glm::mat4* matInput(const std::string& destination);
+	std::string input(const std::string& name);
 	//void transformTransform(const std::string& transformName, const glm::mat4& transformMatrix);
 
 
