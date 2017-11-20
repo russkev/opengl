@@ -27,14 +27,26 @@ struct ShapeContainer
 	void transform(glm::mat4& sourceMatrix, const glm::mat4& transformMatrix);
 	void transform(ShapeData::verticesType&, const glm::mat4& transformMatrix);
 	template <typename T>
-	void tranformFromConnection(const std::string& name, T& s_object)
+	void transformFromConnection(const std::string& name, T& s_object)
 	{
-		auto source = input(name);
-		if (source != "")
+		//if (type(name) == "shape")
 		{
-			transform(s_object, source);
-			transformFromConnection(source, s_object);
+			std::string sourceMatrixName = input(name);
+			glm::mat4 sourceMatrix = m_transforms.at(sourceMatrixName);
+			transform(s_object, sourceMatrix);
+			transformFromConnection(sourceMatrixName, sourceMatrix);
 		}
+		//if (type(name) == "transform")
+		//{
+		//	auto source = m_transforms.at(name);
+		//	transform(s_object, source);
+		//	transformFromConnection(source, s_object);
+		//}
+		////auto source = input(name);
+		////if (source != "")
+		//{
+		//	
+		//}
 	}
 
 	glm::mat4* matInput(const std::string& destination);
