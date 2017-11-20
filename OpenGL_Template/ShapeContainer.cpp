@@ -137,7 +137,7 @@ ShapeData::verticesType ShapeContainer::vertices()
 		//	ShapeData t_shape;
 		//	t_shape.transform(shapeVerts, *input);
 		//}
-		tranformFromConnection(shape.first, shapeVerts);
+		transformFromConnection(shape.first, shapeVerts);
 		t_vertices.insert(t_vertices.end(), shapeVerts.begin(), shapeVerts.end());
 	}
 	//if (auto input matInput())

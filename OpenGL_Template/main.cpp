@@ -239,7 +239,7 @@ void init (ApplicationState& _State)
 	_State.sh.connect("transformDown", "cube");
 	_State.sh.connect("transformBack", "plane_01");
 
-	_State.sh.matInput("plane");
+	//_State.sh.matInput("plane");
 
 	//!!! Working on making matrix transforms work
 
