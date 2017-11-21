@@ -15,15 +15,16 @@
 struct ShapeContainer
 {
 	// // ----- Type Definitions ----- // //
-	typedef std::string						nameType;
-	typedef std::pair<nameType, ShapeData>	shapeType;
-	typedef std::pair<nameType, glm::mat4>	matType;
-	typedef std::pair<nameType, nameType>	connectionType;
+	typedef std::string									nameType;
+	typedef std::pair<nameType, ShapeData>				shapeType;
+	typedef std::pair<nameType, glm::mat4>				matType;
+	typedef std::pair<nameType, std::vector<nameType>>	connectionType;
 
 	void appendShape(ShapeData&& s_shape, const std::string& s_name = "poly");
 	void appendTransform(glm::mat4&& s_transform, const std::string& s_name = "transform");
 	void connect(const std::string& source, const std::string& destination);
-	bool connectionExists(std::string source, std::string destination);
+	std::string input(const std::string& destination);
+	bool sourceConnectionExists(const std::string& source);
 	//void transform(const std::string& name, const glm::mat4& transformMatrix);
 	void transform(glm::mat4& sourceMatrix, const glm::mat4& transformMatrix);
 	void transform(ShapeData::verticesType&, const glm::mat4& transformMatrix);
@@ -41,8 +42,8 @@ struct ShapeContainer
 		}
 	}
 
-	glm::mat4* matInput(const std::string& destination);
-	std::string input(const std::string& name);
+	//glm::mat4* matInput(const std::string& destination);
+	//std::string input(const std::string& name);
 	//void transformTransform(const std::string& transformName, const glm::mat4& transformMatrix);
 
 
