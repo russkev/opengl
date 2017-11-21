@@ -30,41 +30,56 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	auto destType	= type(destination);
 	assert(sourceType != "0" && destType != "0");
 	assert(sourceType != "shape");
-	if (connectionExists(source, destination))
-	m_connections.insert(connectionType(source, destination));
+	std::string existingInput = input(destination);
+	if (!sourceConnectionExists(source))
+	{
+		m_connections.insert(connectionType(source, {}));
+	}
+	if (existingInput != "")
+	{
+		for (auto i = 0; i < m_connections.at(existingInput).size(); ++i)
+		{
+			if (m_connections.at(existingInput).at(i) == destination)
+			{
+				m_connections.at(existingInput).erase(m_connections.at(existingInput).begin() + i);
+			}
+			if (m_connections.at(existingInput).size() == 0)
+			{
+				//auto it = m_connections.find()
+				//!!!Want to delete m_connections element here
+				//Maybe put this bit into a new function
+			}
+
+		}
+		m_connections.at(existingInput)
+	}
+	m_connections.at(source).push_back(destination);
+
+	{
+
+		m_connections.insert(connectionType(source, { destination }));
+	}
 }
 
-bool ShapeContainer::connectionExists(std::string source, std::string destination)
+std::string ShapeContainer::input(const std::string& destination)
 {
-	//if 
+	for (auto & connection : m_connections)
+	{
+		for (auto & i : connection.second)
+		{
+			if (i == destination)
+			{
+				return connection.first;
+			}
+		}
+	}
+	return "";
 }
-//void ShapeContainer::transform(const std::string& name, const glm::mat4& transformMatrix)
-//{
-//	auto t_type = type(name);
-//	if (t_type == "shape")
-//	{
-//		m_shapes.at(name).transform(transformMatrix);
-//	}
-//	if (t_type == "transform")
-//	{
-//		glm::mat4 newMatrix = transformMatrix * m_transforms.at(name);
-//		m_transforms.at(name) = newMatrix;
-//		for (auto & i : m_connections)
-//		{
-//			if (i.first == name)
-//			{
-//				transform(i.second, newMatrix);
-//			}
-//		}
-//	}
-//}
 
-
-
-//void ShapeContainer::tranformFromConnection(const std::string& name)
-//{
-//
-//}
+bool ShapeContainer::sourceConnectionExists(const std::string& source)
+{
+	return m_connections.find(source) != m_connections.end();
+}
 
 void ShapeContainer::transform(glm::mat4& sourceMatrix, const glm::mat4& transformMatrix)
 {
@@ -155,28 +170,28 @@ ShapeData::indicesType ShapeContainer::indices()
 	return t_indices;
 }
 
-glm::mat4* ShapeContainer::matInput(const std::string& destination)
-{
-	for (auto & connection : m_connections)
-	{
-		if (connection.second == destination)
-		{
-			return &(m_transforms.at(connection.first));
-		}
-	}
-	return nullptr;
-}
-
-std::string ShapeContainer::input(const std::string& destination)
-{
-	std::string source = "";
-	for (auto & connection : m_connections)
-	{
-		if (connection.second == destination)
-		{
-			source = connection.first;
-			break;
-		}
-	}
-	return source;
-}
+//glm::mat4* ShapeContainer::matInput(const std::string& destination)
+//{
+//	for (auto & connection : m_connections)
+//	{
+//		if (connection.second == destination)
+//		{
+//			return &(m_transforms.at(connection.first));
+//		}
+//	}
+//	return nullptr;
+//}
+//
+//std::string ShapeContainer::input(const std::string& destination)
+//{
+//	std::string source = "";
+//	for (auto & connection : m_connections)
+//	{
+//		if (connection.second == destination)
+//		{
+//			source = connection.first;
+//			break;
+//		}
+//	}
+//	return source;
+//}
