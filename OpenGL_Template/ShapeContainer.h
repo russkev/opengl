@@ -23,30 +23,22 @@ struct ShapeContainer
 	void appendShape(ShapeData&& s_shape, const std::string& s_name = "poly");
 	void appendTransform(glm::mat4&& s_transform, const std::string& s_name = "transform");
 	void connect(const std::string& source, const std::string& destination);
+	bool connectionExists(std::string source, std::string destination);
 	//void transform(const std::string& name, const glm::mat4& transformMatrix);
 	void transform(glm::mat4& sourceMatrix, const glm::mat4& transformMatrix);
 	void transform(ShapeData::verticesType&, const glm::mat4& transformMatrix);
 	template <typename T>
 	void transformFromConnection(const std::string& name, T& s_object)
 	{
-		//if (type(name) == "shape")
 		{
 			std::string sourceMatrixName = input(name);
-			glm::mat4 sourceMatrix = m_transforms.at(sourceMatrixName);
-			transform(s_object, sourceMatrix);
-			transformFromConnection(sourceMatrixName, sourceMatrix);
+			if (sourceMatrixName != "")
+			{
+				glm::mat4 sourceMatrix = m_transforms.at(sourceMatrixName);
+				transformFromConnection(sourceMatrixName, sourceMatrix);
+				transform(s_object, sourceMatrix);
+			}
 		}
-		//if (type(name) == "transform")
-		//{
-		//	auto source = m_transforms.at(name);
-		//	transform(s_object, source);
-		//	transformFromConnection(source, s_object);
-		//}
-		////auto source = input(name);
-		////if (source != "")
-		//{
-		//	
-		//}
 	}
 
 	glm::mat4* matInput(const std::string& destination);
@@ -65,7 +57,7 @@ private:
 	bool nameExists(const std::string& s_name);
 	void incrementString(std::string& s_name);
 	// // ----- Member Variables ----- // //
-	std::map<nameType, ShapeData>		m_shapes;
-	std::map<nameType, glm::mat4>		m_transforms;
-	std::map<nameType, nameType>		m_connections;
+	std::map<nameType, ShapeData>					m_shapes;
+	std::map<nameType, glm::mat4>					m_transforms;
+	std::map<nameType, std::vector<nameType>>		m_connections;
 };

@@ -228,16 +228,16 @@ void init (ApplicationState& _State)
 	_State.sh.appendShape(_State.shapes.makePlane(10), "plane");
 
 	// // Create transforms
-	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3( 0,   -20,  0   )), "transformDown");
-	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3( -8,  -6,   0   )), "transformLeft");
-	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3( 0,   -6,   -8  )), "transformBack");
+	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3( 0,   -6,  0   )), "transformDown");
+	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3( -8,  0,   0   )), "transformLeft");
+	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3( 0,   0,   -8  )), "transformForward");
 
 	// // Transform Geo
 	_State.sh.connect("transformLeft", "plane"); 
-	_State.sh.connect("transformBack", "arrow");
+	_State.sh.connect("transformForward", "arrow");
 	_State.sh.connect("transformLeft", "arrow");
-	_State.sh.connect("transformDown", "cube");
-	_State.sh.connect("transformBack", "plane_01");
+	//_State.sh.connect("transformDown", "cube");
+	//_State.sh.connect("transformBack", "plane_01");
 
 	//_State.sh.matInput("plane");
 
