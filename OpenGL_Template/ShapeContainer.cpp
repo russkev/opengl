@@ -30,10 +30,14 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	auto destType	= type(destination);
 	assert(sourceType != "0" && destType != "0");
 	assert(sourceType != "shape");
+	if (connectionExists(source, destination))
 	m_connections.insert(connectionType(source, destination));
-	//transform(destination, m_transforms.at(source));
 }
 
+bool ShapeContainer::connectionExists(std::string source, std::string destination)
+{
+	//if 
+}
 //void ShapeContainer::transform(const std::string& name, const glm::mat4& transformMatrix)
 //{
 //	auto t_type = type(name);
@@ -131,21 +135,9 @@ ShapeData::verticesType ShapeContainer::vertices()
 	for (auto & shape : m_shapes)
 	{
 		ShapeData::verticesType shapeVerts = shape.second.vertices();
-		//auto input = matInput(shape.first);
-		//if (input != nullptr)
-		//{
-		//	ShapeData t_shape;
-		//	t_shape.transform(shapeVerts, *input);
-		//}
 		transformFromConnection(shape.first, shapeVerts);
 		t_vertices.insert(t_vertices.end(), shapeVerts.begin(), shapeVerts.end());
 	}
-	//if (auto input matInput())
-
-	//for (auto & i : m_shapes)
-	//{
-	//	t_vertices.insert(t_vertices.end(), i.second.vert_begin(), i.second.vert_end());
-	//}
 	return t_vertices;
 }
 ShapeData::indicesType ShapeContainer::indices()
