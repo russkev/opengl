@@ -30,34 +30,30 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	auto destType	= type(destination);
 	assert(sourceType != "0" && destType != "0");
 	assert(sourceType != "shape");
+
 	std::string existingInput = input(destination);
 	if (!sourceConnectionExists(source))
 	{
 		m_connections.insert(connectionType(source, {}));
 	}
-	if (existingInput != "")
+	if (existingInput != "") // If destination already has an incoming connection
 	{
-		for (auto i = 0; i < m_connections.at(existingInput).size(); ++i)
+		std::size_t vecSize = m_connections.at(existingInput).size();
+		for (auto i = 0; i < vecSize; ++i)
 		{
-			if (m_connections.at(existingInput).at(i) == destination)
+			if (m_connections.at(existingInput).at(i) == destination) // Remove the existing connection from vector
 			{
 				m_connections.at(existingInput).erase(m_connections.at(existingInput).begin() + i);
 			}
-			if (m_connections.at(existingInput).size() == 0)
+			if (m_connections.at(existingInput).size() == 0) // Remove connection from m_connections if it was the only connection
 			{
-				//auto it = m_connections.find()
-				//!!!Want to delete m_connections element here
-				//Maybe put this bit into a new function
+				m_connections.erase(existingInput);
 			}
-
 		}
-		m_connections.at(existingInput)
 	}
-	m_connections.at(source).push_back(destination);
-
+	if (m_connections.find(source) != m_connections.end())
 	{
-
-		m_connections.insert(connectionType(source, { destination }));
+		m_connections.at(source).push_back(destination);
 	}
 }
 
@@ -169,29 +165,3 @@ ShapeData::indicesType ShapeContainer::indices()
 	}
 	return t_indices;
 }
-
-//glm::mat4* ShapeContainer::matInput(const std::string& destination)
-//{
-//	for (auto & connection : m_connections)
-//	{
-//		if (connection.second == destination)
-//		{
-//			return &(m_transforms.at(connection.first));
-//		}
-//	}
-//	return nullptr;
-//}
-//
-//std::string ShapeContainer::input(const std::string& destination)
-//{
-//	std::string source = "";
-//	for (auto & connection : m_connections)
-//	{
-//		if (connection.second == destination)
-//		{
-//			source = connection.first;
-//			break;
-//		}
-//	}
-//	return source;
-//}
