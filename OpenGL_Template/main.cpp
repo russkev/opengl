@@ -233,9 +233,9 @@ void init (ApplicationState& _State)
 	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3( 0,   0,   -8  )), "transformForward");
 
 	// // Transform Geo
-	_State.sh.connect("transformLeft", "plane"); 
-	//_State.sh.connect("transformForward", "arrow");
-	//_State.sh.connect("transformLeft", "arrow");
+	//_State.sh.connect("transformLeft", "plane"); 
+	_State.sh.connect("transformForward", "arrow");
+	_State.sh.connect("transformLeft", "arrow");
 	//_State.sh.connect("transformDown", "cube");
 	//_State.sh.connect("transformBack", "plane_01");
 
