@@ -4,8 +4,6 @@ void ShapeContainer::appendShape(ShapeData&& s_shape, const std::string& s_name)
 {
 	auto t_name = s_name;
 	auto suffix = "_shape";
-	//auto t_name_s = s_name + suffix;
-
 
 	while (nameExists(t_name) || nameExists(t_name + suffix)) { incrementString(t_name); }
 
@@ -17,10 +15,7 @@ void ShapeContainer::appendShape(ShapeData&& s_shape, const std::string& s_name)
 void ShapeContainer::appendTransform(glm::mat4&& s_transform, const std::string& s_name)
 {
 	auto t_name = s_name;
-	while (nameExists(t_name))
-	{
-		incrementString(t_name);
-	}
+	while (nameExists(t_name))	{ incrementString(t_name); }
 	m_transforms.insert(matType(t_name, std::move(s_transform)));
 }
 
@@ -32,10 +27,7 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	assert(sourceType != "shape");
 
 	std::string existingInput = input(destination);
-	if (!sourceConnectionExists(source))
-	{
-		m_connections.insert(connectionType(source, {}));
-	}
+	if (!sourceConnectionExists(source))	{ m_connections.insert(connectionType(source, {})); }
 	if (existingInput != "") // If destination already has an incoming connection
 	{
 		std::size_t vecSize = m_connections.at(existingInput).size();

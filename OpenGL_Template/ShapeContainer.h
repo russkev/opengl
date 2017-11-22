@@ -25,7 +25,6 @@ struct ShapeContainer
 	void connect(const std::string& source, const std::string& destination);
 	std::string input(const std::string& destination);
 	bool sourceConnectionExists(const std::string& source);
-	//void transform(const std::string& name, const glm::mat4& transformMatrix);
 	void transform(glm::mat4& sourceMatrix, const glm::mat4& transformMatrix);
 	void transform(ShapeData::verticesType&, const glm::mat4& transformMatrix);
 	template <typename T>
@@ -41,10 +40,6 @@ struct ShapeContainer
 			}
 		}
 	}
-
-	//glm::mat4* matInput(const std::string& destination);
-	//std::string input(const std::string& name);
-	//void transformTransform(const std::string& transformName, const glm::mat4& transformMatrix);
 
 
 	std::string type(const std::string& s_name);
