@@ -233,13 +233,13 @@ void init (ApplicationState& _State)
 	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3( 0,   0,   -8  )), "transformForward");
 
 	// // Transform Geo
-	_State.sh.connect("transformMaster", "transformLeft");
-	_State.sh.connect("transformMaster", "transformForward");
-	_State.sh.connect("transformMaster", "plane");
-	_State.sh.connect("transformMaster", "plane_01");
-	_State.sh.connect("transformMaster", "cube");
-	_State.sh.connect("transformForward", "arrow");
-	_State.sh.connect("transformLeft", "arrow");
+	_State.sh.connect("transformMaster",	"transformLeft");
+	_State.sh.connect("transformMaster",	"transformForward");
+	_State.sh.connect("transformMaster",	"plane");
+	_State.sh.connect("transformMaster",	"plane_01");
+	_State.sh.connect("transformMaster",	"cube");
+	_State.sh.connect("transformForward",	"arrow");
+	_State.sh.connect("transformLeft",		"arrow");
 
 	//!!! Working on making matrix transforms work
 
@@ -259,6 +259,27 @@ void init (ApplicationState& _State)
 	_State.VAO_main.GenerateVAO(_State.geoBuffer, 0, shape_info.data(),  shape_info.data() +  shape_info.size(),  POSITION_ATTR);
 	_State.VAO_main.GenerateVAO(_State.matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
 	_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
+
+	// // Upload UBO (Uniform Buffer Object)
+	std::uint32_t blockIndex = glGetUniformBlockIndex(_State.programID, "matrices");
+
+	GLint blockSize;
+	glGetActiveUniformBlockiv(_State.programID, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
+	GLubyte * blockBuffer = (GLubyte *)malloc(blockSize);
+
+	// Query the offsets of each block variable
+	// https://www.packtpub.com/books/content/opengl-40-using-uniform-blocks-and-uniform-buffer-objects
+	const GLchar *names[] = { "umat_modelToProjection", "umat_modelToWorld" };
+
+	GLuint indices[2];
+	glGetUniformIndices(_State.programID, 2, names, indices);
+
+	GLint offset[2];
+	glGetActiveUniformsiv(_State.programID, 2, indices, GL_UNIFORM_OFFSET, offset);
+
+	auto z = 0;
+
+
 	return;
 }
 
