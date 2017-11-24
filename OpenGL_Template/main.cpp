@@ -277,6 +277,23 @@ void init (ApplicationState& _State)
 	GLint offset[2];
 	glGetActiveUniformsiv(_State.programID, 2, indices, GL_UNIFORM_OFFSET, offset);
 
+	// Place data into buffers at appropriate offsets
+	std::vector<glm::mat4> viewMatrix = { glm::mat4(1.0f), glm::mat4(2.0f) };
+	std::vector<glm::mat4> wldMatrix  = { glm::mat4(1.0f), glm::mat4(4.0f) };
+
+	memcpy(blockBuffer + offset[0], &viewMatrix, sizeof(glm::mat4)*viewMatrix.size());
+	memcpy(blockBuffer + offset[1], &wldMatrix,  sizeof(glm::mat4)*viewMatrix.size());
+	// !!! This runs, need to use nSight to check whether the vectors of matrices is being uploaded as expected
+
+	// Create OpenGL Buffer and copy data into it
+	GLuint uboID;
+	glGenBuffers( 1, &uboID);
+	glBindBuffer(GL_UNIFORM_BUFFER, uboID);
+	glBufferData (GL_UNIFORM_BUFFER, blockSize, blockBuffer, GL_DYNAMIC_DRAW);
+
+	glBindBufferBase(GL_UNIFORM_BUFFER, blockIndex, uboID);
+
+
 	auto z = 0;
 
 
