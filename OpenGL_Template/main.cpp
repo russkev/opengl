@@ -260,6 +260,7 @@ void init (ApplicationState& _State)
 	_State.VAO_main.GenerateVAO(_State.matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
 	_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
 
+	/*
 	// // Upload UBO (Uniform Buffer Object)
 	std::uint32_t blockIndex = glGetUniformBlockIndex(_State.programID, "matrices");
 
@@ -295,6 +296,7 @@ void init (ApplicationState& _State)
 
 
 	auto z = 0;
+	*/
 
 
 	return;
