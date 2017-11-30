@@ -228,18 +228,22 @@ void init (ApplicationState& _State)
 	_State.sh.appendShape(_State.shapes.makePlane(10), "plane");
 
 	// // Create transforms
-	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3( 0,   -6,  0   )), "transformMaster");
-	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3( -8,  0,   0   )), "transformLeft");
-	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3( 0,   0,   -8  )), "transformForward");
+	glm::mat4 transformMaster  = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
+	glm::mat4 transformLeft    = glm::translate(glm::mat4(1.0f), glm::vec3(-8, 0, 0));
+	glm::mat4 transformForward = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -8));
 
-	// // Transform Geo
-	_State.sh.connect("transformMaster",	"transformLeft");
-	_State.sh.connect("transformMaster",	"transformForward");
-	_State.sh.connect("transformMaster",	"plane");
-	_State.sh.connect("transformMaster",	"plane_01");
-	_State.sh.connect("transformMaster",	"cube");
-	_State.sh.connect("transformForward",	"arrow");
-	_State.sh.connect("transformLeft",		"arrow");
+	_State.sh.appendTransform(std::move(transformMaster),  "transformMaster");
+	_State.sh.appendTransform(std::move(transformLeft),    "transformLeft");
+	_State.sh.appendTransform(std::move(transformForward), "transformForward");
+
+	// // Transform Geo 
+	//_State.sh.connect("transformMaster",	"transformLeft");
+	//_State.sh.connect("transformMaster",	"transformForward");
+	//_State.sh.connect("transformMaster",	"plane");
+	//_State.sh.connect("transformMaster",	"plane_01");
+	//_State.sh.connect("transformMaster",	"cube");
+	//_State.sh.connect("transformForward",	"arrow");
+	//_State.sh.connect("transformLeft",		"arrow");
 
 	//!!! Working on making matrix transforms work
 
@@ -248,7 +252,12 @@ void init (ApplicationState& _State)
 	_State.indxBuffer.Append(_State.sh.indices());
 
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
-	_State.wldBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
+	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
+	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
+
+	_State.wldBuffer.Append(sizeof(glm::mat4), &transformMaster);
+	_State.wldBuffer.Append(sizeof(glm::mat4), &transformLeft);
+	_State.wldBuffer.Append(sizeof(glm::mat4), &transformForward);
 
 
 	// // Set up standard information for the VAO
@@ -260,6 +269,7 @@ void init (ApplicationState& _State)
 	_State.VAO_main.GenerateVAO(_State.matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
 	_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
 
+	
 	/*
 	// // Upload UBO (Uniform Buffer Object)
 	std::uint32_t blockIndex = glGetUniformBlockIndex(_State.programID, "matrices");
@@ -277,15 +287,17 @@ void init (ApplicationState& _State)
 
 	GLint offset[2];
 	glGetActiveUniformsiv(_State.programID, 2, indices, GL_UNIFORM_OFFSET, offset);
-
+	
 	// Place data into buffers at appropriate offsets
 	std::vector<glm::mat4> viewMatrix = { glm::mat4(1.0f), glm::mat4(2.0f) };
 	std::vector<glm::mat4> wldMatrix  = { glm::mat4(1.0f), glm::mat4(4.0f) };
-
+	
 	memcpy(blockBuffer + offset[0], &viewMatrix, sizeof(glm::mat4)*viewMatrix.size());
+	
 	memcpy(blockBuffer + offset[1], &wldMatrix,  sizeof(glm::mat4)*viewMatrix.size());
+	
 	// !!! This runs, need to use nSight to check whether the vectors of matrices is being uploaded as expected
-
+	
 	// Create OpenGL Buffer and copy data into it
 	GLuint uboID;
 	glGenBuffers( 1, &uboID);
@@ -336,10 +348,19 @@ void render_frame (ApplicationState& _State)
 	 glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
 
 	 // // Update matrices // //
-	 glm::mat4 wldBuffer = glm::mat4(1.0f);
-	 _State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
-	 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffer;
-	 _State.matBuffer.Upload(0, sizeof(glm::mat4), &tempMVP[0][0]);
+	 auto numMatrices = _State.wldBuffer.size()/sizeof(glm::mat4);
+	 std::vector<glm::mat4> wldBuffers(numMatrices);
+	 _State.wldBuffer.ReadBuffer(&wldBuffers.data);
+	 for (auto i = 0; i < numMatrices; ++i)
+	 {
+		 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffers.at(i);
+		 _State.matBuffer.Upload(i * sizeof(glm::mat4), &tempMVP[0][0]);
+	 }
+
+	 //glm::mat4 wldBuffer = glm::mat4(1.0f);
+	 //_State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
+	 //glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffer;
+	 //_State.matBuffer.Upload(0, sizeof(glm::mat4), &tempMVP[0][0]);
 	
 	 
 	 _State.VAO_main.Bind();
