@@ -269,6 +269,18 @@ void init (ApplicationState& _State)
 	_State.VAO_main.GenerateVAO(_State.matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
 	_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
 
+
+	// // TEST // //
+	std::vector<glm::mat4> viewMatrix = { glm::mat4(1.0f), glm::mat4(2.0f) };
+	std::vector<glm::mat4> wldMatrix  = { glm::mat4(1.0f), glm::mat4(4.0f) };
+
+
+
+	// // END TEST // //
+
+
+
+
 	
 	/*
 	// // Upload UBO (Uniform Buffer Object)
@@ -350,11 +362,11 @@ void render_frame (ApplicationState& _State)
 	 // // Update matrices // //
 	 auto numMatrices = _State.wldBuffer.size()/sizeof(glm::mat4);
 	 std::vector<glm::mat4> wldBuffers(numMatrices);
-	 _State.wldBuffer.ReadBuffer(&wldBuffers.data);
+	 _State.wldBuffer.ReadBuffer(&wldBuffers.at(0)[0][0]);
 	 for (auto i = 0; i < numMatrices; ++i)
 	 {
 		 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffers.at(i);
-		 _State.matBuffer.Upload(i * sizeof(glm::mat4), &tempMVP[0][0]);
+		 _State.matBuffer.Upload(i * sizeof(glm::mat4), sizeof(glm::mat4), &tempMVP[0][0]);
 	 }
 
 	 //glm::mat4 wldBuffer = glm::mat4(1.0f);
