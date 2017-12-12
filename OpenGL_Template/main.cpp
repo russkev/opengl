@@ -64,6 +64,10 @@ struct ApplicationState {
 	Buffer matBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer wldBuffer		= {	GL_ARRAY_BUFFER, 0 };
 	Buffer indxBuffer		= { GL_ARRAY_BUFFER, 0 };
+
+	Buffer wldMatrices		= { GL_ARRAY_BUFFER, 0 };
+	Buffer viewMatrices		= { GL_ARRAY_BUFFER, 0 };
+
 	VAO    VAO_main, VAO_mat;
 	GLuint planeVAO			= 0;
 	
@@ -222,15 +226,17 @@ void init (ApplicationState& _State)
 	//!!! See shape container
 
 	// // Create Geo
-	_State.sh.appendShape(_State.shapes.makePlane(10), "plane");
+	_State.sh.appendShape(_State.shapes.makePlane(1), "plane");
+	/*
 	_State.sh.appendShape(_State.shapes.makeArrow(), "arrow");
 	_State.sh.appendShape(_State.shapes.makeCube(), "cube");
 	_State.sh.appendShape(_State.shapes.makePlane(10), "plane");
-
+	*/
 	// // Create transforms
 	glm::mat4 transformMaster  = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
 	glm::mat4 transformLeft    = glm::translate(glm::mat4(1.0f), glm::vec3(-8, 0, 0));
 	glm::mat4 transformForward = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -8));
+	
 
 	_State.sh.appendTransform(std::move(transformMaster),  "transformMaster");
 	_State.sh.appendTransform(std::move(transformLeft),    "transformLeft");
@@ -274,7 +280,8 @@ void init (ApplicationState& _State)
 	std::vector<glm::mat4> viewMatrix = { glm::mat4(1.0f), glm::mat4(2.0f) };
 	std::vector<glm::mat4> wldMatrix  = { glm::mat4(1.0f), glm::mat4(4.0f) };
 
-
+	_State.viewMatrices.Append(sizeof(glm::mat4)*viewMatrix.size(), &viewMatrix[0][0]);
+	_State.viewMatrices.Append(sizeof(glm::mat4)*wldMatrix.size(),   &wldMatrix[0][0]);
 
 	// // END TEST // //
 
