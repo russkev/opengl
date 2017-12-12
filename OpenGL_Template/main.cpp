@@ -227,11 +227,10 @@ void init (ApplicationState& _State)
 
 	// // Create Geo
 	_State.sh.appendShape(_State.shapes.makePlane(1), "plane");
-	/*
 	_State.sh.appendShape(_State.shapes.makeArrow(), "arrow");
 	_State.sh.appendShape(_State.shapes.makeCube(), "cube");
 	_State.sh.appendShape(_State.shapes.makePlane(10), "plane");
-	*/
+
 	// // Create transforms
 	glm::mat4 transformMaster  = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
 	glm::mat4 transformLeft    = glm::translate(glm::mat4(1.0f), glm::vec3(-8, 0, 0));
@@ -277,7 +276,7 @@ void init (ApplicationState& _State)
 
 
 	// // TEST // //
-	std::vector<glm::mat4> viewMatrix = { glm::mat4(1.0f), glm::mat4(2.0f) };
+	std::vector<glm::mat4> viewMatrix = { glm::mat4(9.0f), glm::mat4(2.0f) };
 	std::vector<glm::mat4> wldMatrix  = { glm::mat4(1.0f), glm::mat4(4.0f) };
 
 	_State.viewMatrices.Append(sizeof(glm::mat4)*viewMatrix.size(), &viewMatrix[0][0]);
@@ -370,14 +369,16 @@ void render_frame (ApplicationState& _State)
 	 auto numMatrices = _State.wldBuffer.size()/sizeof(glm::mat4);
 	 std::vector<glm::mat4> wldBuffers(numMatrices);
 	 _State.wldBuffer.ReadBuffer(&wldBuffers.at(0)[0][0]);
-	 for (auto i = 0; i < numMatrices; ++i)
+	 for (auto i = 0; i < (numMatrices-0); ++i)
 	 {
 		 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffers.at(i);
-		 _State.matBuffer.Upload(i * sizeof(glm::mat4), sizeof(glm::mat4), &tempMVP[0][0]);
+		 auto offset = i * sizeof(glm::mat4);
+		 _State.matBuffer.Upload(offset, sizeof(glm::mat4), &tempMVP[0][0]);
 	 }
+	 
 
 	 //glm::mat4 wldBuffer = glm::mat4(1.0f);
-	 //_State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
+	 ////_State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
 	 //glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffer;
 	 //_State.matBuffer.Upload(0, sizeof(glm::mat4), &tempMVP[0][0]);
 	
