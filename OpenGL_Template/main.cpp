@@ -371,6 +371,7 @@ void render_frame (ApplicationState& _State)
 	 _State.wldBuffer.ReadBuffer(&wldBuffers.at(0)[0][0]);
 	 for (auto i = 0; i < (numMatrices-0); ++i)
 	 {
+		 //auto i = 0;
 		 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffers.at(i);
 		 auto offset = i * sizeof(glm::mat4);
 		 _State.matBuffer.Upload(offset, sizeof(glm::mat4), &tempMVP[0][0]);
