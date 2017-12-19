@@ -257,8 +257,8 @@ void init (ApplicationState& _State)
 	_State.indxBuffer.Append(_State.sh.indices());
 
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
-	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
-	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
+	//_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
+	//_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
 
 	_State.wldBuffer.Append(sizeof(glm::mat4), &transformMaster);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &transformLeft);
@@ -369,7 +369,7 @@ void render_frame (ApplicationState& _State)
 	 auto numMatrices = _State.wldBuffer.size()/sizeof(glm::mat4);
 	 std::vector<glm::mat4> wldBuffers(numMatrices);
 	 _State.wldBuffer.ReadBuffer(&wldBuffers.at(0)[0][0]);
-	 for (auto i = 0; i < (numMatrices-0); ++i)
+	 for (auto i = 0; i < (_State.matBuffer.size() / sizeof(glm::mat4) -0); ++i)
 	 {
 		 //auto i = 0;
 		 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffers.at(i);
