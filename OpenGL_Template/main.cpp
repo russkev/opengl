@@ -452,13 +452,9 @@ int main(int, char**)
 	init(_State);
 	while (poll_events (_State))
 	{
-		_State.matBuffer.Upload(0, sizeof(glm::mat4), &(glm::mat4(5.4)));
 		update_camera(_State);
-		_State.matBuffer.Upload(0, sizeof(glm::mat4), &(glm::mat4(5.4)));
 		render_frame (_State);
-		_State.matBuffer.Upload(0, sizeof(glm::mat4), &(glm::mat4(5.4)));
 		finish_frame (_State);
-		_State.matBuffer.Upload(0, sizeof(glm::mat4), &(glm::mat4(5.4)));
 	}
 
 	exit(_State);
