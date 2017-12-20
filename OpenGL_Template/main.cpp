@@ -282,6 +282,13 @@ void init (ApplicationState& _State)
 	_State.viewMatrices.Append(sizeof(glm::mat4)*viewMatrix.size(), &viewMatrix[0][0]);
 	_State.viewMatrices.Append(sizeof(glm::mat4)*wldMatrix.size(),   &wldMatrix[0][0]);
 
+	GLint loc = glGetUniformLocation(_State.programID, "uniformMatrix");
+	if (loc != -1)
+	{
+		glUniformMatrix4fv(loc, 2, GL_FALSE, &viewMatrix[0][0][0]);
+	}
+
+
 	// // END TEST // //
 
 
