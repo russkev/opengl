@@ -366,10 +366,11 @@ void render_frame (ApplicationState& _State)
 	 glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
 
 	 // // Update matrices // //
-	 auto numMatrices = _State.wldBuffer.size()/sizeof(glm::mat4);
-	 std::vector<glm::mat4> wldBuffers(numMatrices);
+	 auto numWldMatrices = _State.wldBuffer.size()/sizeof(glm::mat4);
+	 auto numMatMatrices = _State.matBuffer.size() / sizeof(glm::mat4);
+	 std::vector<glm::mat4> wldBuffers(numWldMatrices);
 	 _State.wldBuffer.ReadBuffer(&wldBuffers.at(0)[0][0]);
-	 for (auto i = 2; i < (numMatrices-0); ++i)
+	 for (auto i = 0; i < (numMatMatrices -0); ++i)
 	 {
 		 //auto i = 0;
 		 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffers.at(i);
