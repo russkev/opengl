@@ -377,7 +377,7 @@ void render_frame (ApplicationState& _State)
 		 auto offset = i * sizeof(glm::mat4);
 		 _State.matBuffer.Upload(offset, sizeof(glm::mat4), &tempMVP[0][0]);
 	 }
-	 _State.matBuffer.Upload(0, sizeof(glm::mat4), &(glm::mat4(5.4)));
+	 //_State.matBuffer.Upload(0, sizeof(glm::mat4), &(glm::mat4(5.4)));
 
 	 //glm::mat4 wldBuffer = glm::mat4(1.0f);
 	 ////_State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
