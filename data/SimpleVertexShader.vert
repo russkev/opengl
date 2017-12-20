@@ -8,6 +8,8 @@ in layout(location = 2) vec3 model_vertexNormal;
 in layout(location = 4) mat4 mat_modelToProjection;
 in layout(location = 8) mat4 mat_modelToWorld;
 
+
+
 uniform matrices
 {
 	mat4 umat_modelToProjection;
@@ -20,6 +22,8 @@ out vec3 f_world_vertexNormal;
 out vec3 f_world_vertexPosition;
 
 // // Uniforms ; values that stay constant for whole mesh
+
+uniform mat4 uniformMatrix[100];
 
 void main(){
 	// // Output position of the vertex, in clip space : MVP * position
