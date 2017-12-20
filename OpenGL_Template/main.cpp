@@ -287,7 +287,8 @@ void init (ApplicationState& _State)
 	{
 		glUniformMatrix4fv(loc, 2, GL_FALSE, &viewMatrix[0][0][0]);
 	}
-
+	std::vector<glm::mat4>* uniformTest;
+	glGetUniformfv(_State.programID, loc, uniformTest);
 
 	// // END TEST // //
 
