@@ -23,11 +23,11 @@ out vec3 f_world_vertexPosition;
 
 // // Uniforms ; values that stay constant for whole mesh
 
-uniform mat4 uniformMatrix[100];
+uniform mat4x4 uniformMatrix;
 
 void main(){
 	// // Output position of the vertex, in clip space : MVP * position
-	gl_Position				= mat_modelToProjection * model_vertexPosition;
+	gl_Position				= mat_modelToProjection * model_vertexPosition * uniformMatrix;
 
 	// // The colour of each vertex will be interpolated to produce the colour of each fragment
 	f_world_vertexNormal	= normalize(vec3(mat_modelToWorld * vec4(model_vertexNormal, 0)));
