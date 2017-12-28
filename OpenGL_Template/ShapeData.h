@@ -12,16 +12,16 @@ struct ShapeData
 {
 public:	
 	// // ----- Type Definitions ----- // //
-	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3> vertexType;
-	typedef std::vector<vertexType>						verticesType;
-	typedef GLushort									indexType;
-	typedef std::vector<indexType>						indicesType;
-	typedef std::vector<vertexType>::const_iterator		vrt_iterator;
-	typedef std::vector<GLushort>::const_iterator		ind_iterator;
+	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, GLushort>	vertexType;
+	typedef std::vector<vertexType>									verticesType;
+	typedef GLushort												indexType;
+	typedef std::vector<indexType>									indicesType;
+	typedef std::vector<vertexType>::const_iterator					vrt_iterator;
+	typedef std::vector<GLushort>::const_iterator					ind_iterator;
 
 
 	// // ----- Attribute Enumeration ----- // //
-	enum attr { position = 0, color = 1, normal = 2 };
+	enum attr { position = 0, color = 1, normal = 2, id = 4 };
 
 	// // ----- Big 6 ----- // //
 	ShapeData();
@@ -53,6 +53,9 @@ public:
 	void transform(glm::mat4 transformMatrix);
 	void transform(verticesType& inVertices, const glm::mat4 transformMatrix);
 
+	// // ----- IDs ----- // //
+	void addIdToVerts();
+
 	// // ----- Getters ----- // //
 	vertexType getVertex(std::size_t i);
 	template <std::size_t attr>
@@ -83,6 +86,7 @@ private:
 	// // ----- Member Variables ----- // //
 	verticesType	m_vertices;
 	indicesType		m_indices;
+	indexType		m_id;
 	std::size_t		m_num_vertices;
 	std::size_t		m_num_indices;
 };

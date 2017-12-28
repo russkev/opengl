@@ -277,22 +277,22 @@ void init (ApplicationState& _State)
 
 	// // TEST // //
 	//std::vector<glm::mat4> viewMatrix = { glm::mat4(9.0f), glm::mat4(2.0f) };
-	glm::mat4 viewMatrix = glm::mat4(1.0f);
-	std::vector<glm::mat4> wldMatrix  = { glm::mat4(1.0f), glm::mat4(4.0f) };
+	glm::mat4 viewMatrix = glm::mat4(5.0f);
+	//std::vector<glm::mat4> wldMatrix  = { glm::mat4(1.0f), glm::mat4(4.0f) };
 
 	//_State.viewMatrices.Append(sizeof(glm::mat4)*viewMatrix.size(), &viewMatrix[0][0]);
-	_State.viewMatrices.Append(sizeof(glm::mat4), &viewMatrix[0][0]);
-	_State.viewMatrices.Append(sizeof(glm::mat4)*wldMatrix.size(),   &wldMatrix[0][0]);
+	_State.wldMatrices.Append(sizeof(glm::mat4), &viewMatrix[0][0]);
+	//_State.viewMatrices.Append(sizeof(glm::mat4)*wldMatrix.size(),   &wldMatrix[0][0]);
 
 	GLint loc = -1;
-	//loc = glGetUniformLocation(_State.programID, "uniformMatrix");
+	loc = glGetUniformLocation(_State.programID, "uniformMatrix");
 	if (loc != -1)
 	{
-		glUniformMatrix4fv(loc, 2, GL_FALSE, &viewMatrix[0][0]);
+		glUniformMatrix4fv(loc, 1, GL_FALSE, &viewMatrix[0][0]);
 	}
-	//std::vector<glm::mat4> uniformTest;
+	//glm::mat4 uniformTest = glm::mat4(1.0f);
 	float uniformTest[16];
-	//glGetUniformfv(_State.programID, loc, uniformTest);
+	glGetUniformfv(_State.programID, loc, uniformTest);
 	auto x = 0;
 
 	// // END TEST // //
