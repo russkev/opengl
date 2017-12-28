@@ -13,10 +13,11 @@ ShapeData::ShapeData() :
 	m_vertices(verticesType{}),
 	m_indices(indexType{}),
 	m_num_vertices(0u),
-	m_num_indices(0u)
+	m_num_indices(0u),
+	m_id(0u)
 {};
 ShapeData::ShapeData(const verticesType s_vertices, const indicesType s_indices) :
-	m_vertices(s_vertices),
+	m_vertices({ s_vertices, 0u }),
 	m_indices(s_indices),
 	m_num_vertices(m_num_vertices + s_vertices.size()),
 	m_num_indices(m_num_indices + s_indices.size())
@@ -113,5 +114,13 @@ void ShapeData::transform(ShapeData::verticesType& inVertices, const glm::mat4 t
 		std::get<attr::position>(vertex) = (glm::vec3)position;
 		std::get<attr::normal>(vertex) = (glm::vec3)normal;
 
+	}
+}
+
+void ShapeData::addIdToVerts()
+{
+	for (auto & vertex : m_vertices)
+	{
+		vertex.
 	}
 }
