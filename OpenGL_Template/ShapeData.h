@@ -12,6 +12,7 @@ struct ShapeData
 {
 public:	
 	// // ----- Type Definitions ----- // //
+	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3>				vertexDataType;
 	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, GLushort>	vertexType;
 	typedef std::vector<vertexType>									verticesType;
 	typedef GLushort												indexType;
@@ -36,7 +37,7 @@ public:
 	ShapeData& operator += (ShapeData& other);
 
 	// // ----- Append ----- // //
-	void append_vertices(const vertexType s_shape);
+	void append_vertices(const vertexDataType s_shape);
 	void append_indices(const GLushort s_index);
 
 	// // ----- Setters ----- // //
@@ -54,7 +55,7 @@ public:
 	void transform(verticesType& inVertices, const glm::mat4 transformMatrix);
 
 	// // ----- IDs ----- // //
-	void addIdToVerts();
+	//void addIdToVerts();
 
 	// // ----- Getters ----- // //
 	vertexType getVertex(std::size_t i);

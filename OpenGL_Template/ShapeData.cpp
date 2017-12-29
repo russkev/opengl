@@ -14,10 +14,10 @@ ShapeData::ShapeData() :
 	m_indices(indexType{}),
 	m_num_vertices(0u),
 	m_num_indices(0u),
-	m_id(0u)
+	m_id(5u)
 {};
 ShapeData::ShapeData(const verticesType s_vertices, const indicesType s_indices) :
-	m_vertices({ s_vertices, 0u }),
+	m_vertices(s_vertices),
 	m_indices(s_indices),
 	m_num_vertices(m_num_vertices + s_vertices.size()),
 	m_num_indices(m_num_indices + s_indices.size())
@@ -52,9 +52,9 @@ ShapeData& ShapeData::operator += (ShapeData& other)
 }
 
 // // ----- Append ----- // //
-void ShapeData::append_vertices(const vertexType s_shape)
+void ShapeData::append_vertices(const vertexDataType s_shape)
 {
-	m_vertices.push_back(s_shape);
+	m_vertices.push_back({ std::get<attr::position>(s_shape), std::get<attr::color>(s_shape), std::get<attr::normal>(s_shape), m_id });
 	m_num_vertices++;
 }
 void ShapeData::append_indices(const GLushort s_index)
@@ -92,20 +92,11 @@ ShapeData::indexType ShapeData::getIndex(std::size_t i)
  // ----- Transform ----- // //
 void ShapeData::transform(glm::mat4 transformMatrix) 
 {
-	//assert(m_num_vertices > 0);
-	//for (auto i = 0; i < m_num_vertices; ++i) 
-	//{
-	//	auto position = transformMatrix * glm::vec4(std::get<attr::position>(m_vertices.at(i)), 1);
-	//	auto normal   = transformMatrix * glm::vec4(std::get<attr::normal>(m_vertices.at(i)),   1);
-	//	std::get<attr::position>(m_vertices.at(i))  = (glm::vec3)position;
-	//	std::get<attr::normal>(m_vertices.at(i))	= (glm::vec3)normal;
-	//}
 	transform(m_vertices, transformMatrix);
 }
 
 void ShapeData::transform(ShapeData::verticesType& inVertices, const glm::mat4 transformMatrix)
 {
-
 	assert(inVertices.size() > 0);
 	for (auto & vertex : inVertices)
 	{
@@ -113,14 +104,13 @@ void ShapeData::transform(ShapeData::verticesType& inVertices, const glm::mat4 t
 		auto normal   = transformMatrix * glm::vec4(std::get<attr::normal>(vertex),   1);
 		std::get<attr::position>(vertex) = (glm::vec3)position;
 		std::get<attr::normal>(vertex) = (glm::vec3)normal;
-
 	}
 }
 
-void ShapeData::addIdToVerts()
-{
-	for (auto & vertex : m_vertices)
-	{
-		vertex.
-	}
-}
+//void ShapeData::addIdToVerts()
+//{
+//	for (auto & vertex : m_vertices)
+//	{
+//		vertex.
+//	}
+//}
