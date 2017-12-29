@@ -219,17 +219,11 @@ void init (ApplicationState& _State)
 	_State.projection = glm::perspective(glm::radians(50.0f), float(width) / float(height), 0.1f, 100.0f);
 	_State.view       = _State.cam.getWorldToViewMatrix();
 
-
-	// // TEST // //
-	// // END TEST // //
-
-	//!!! See shape container
-
 	// // Create Geo
-	_State.sh.appendShape(_State.shapes.makePlane(1), "plane");
-	_State.sh.appendShape(_State.shapes.makeArrow(), "arrow");
-	_State.sh.appendShape(_State.shapes.makeCube(), "cube");
-	_State.sh.appendShape(_State.shapes.makePlane(10), "plane");
+	_State.sh.appendShape(_State.shapes.makePlane(1),	"plane");
+	_State.sh.appendShape(_State.shapes.makeArrow(),	"arrow");
+	_State.sh.appendShape(_State.shapes.makeCube(),		"cube");
+	_State.sh.appendShape(_State.shapes.makePlane(10),	"plane");
 
 	// // Create transforms
 	glm::mat4 transformMaster  = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
@@ -266,7 +260,8 @@ void init (ApplicationState& _State)
 
 
 	// // Set up standard information for the VAO
-	static const auto shape_info  = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3>>::get();
+	//static const auto shape_info  = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3>>::get();
+	static const auto shape_info = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, GLushort>>::get();
 	static const auto matrix_info = gl_introspect_tuple<std::tuple<glm::mat4>>::get();
 
 	// // Upload the VAO information
@@ -276,24 +271,24 @@ void init (ApplicationState& _State)
 
 
 	// // TEST // //
-	//std::vector<glm::mat4> viewMatrix = { glm::mat4(9.0f), glm::mat4(2.0f) };
-	glm::mat4 viewMatrix = glm::mat4(5.0f);
-	//std::vector<glm::mat4> wldMatrix  = { glm::mat4(1.0f), glm::mat4(4.0f) };
+	////std::vector<glm::mat4> viewMatrix = { glm::mat4(9.0f), glm::mat4(2.0f) };
+	//glm::mat4 viewMatrix = glm::mat4(5.0f);
+	////std::vector<glm::mat4> wldMatrix  = { glm::mat4(1.0f), glm::mat4(4.0f) };
 
-	//_State.viewMatrices.Append(sizeof(glm::mat4)*viewMatrix.size(), &viewMatrix[0][0]);
-	_State.wldMatrices.Append(sizeof(glm::mat4), &viewMatrix[0][0]);
-	//_State.viewMatrices.Append(sizeof(glm::mat4)*wldMatrix.size(),   &wldMatrix[0][0]);
+	////_State.viewMatrices.Append(sizeof(glm::mat4)*viewMatrix.size(), &viewMatrix[0][0]);
+	//_State.wldMatrices.Append(sizeof(glm::mat4), &viewMatrix[0][0]);
+	////_State.viewMatrices.Append(sizeof(glm::mat4)*wldMatrix.size(),   &wldMatrix[0][0]);
 
-	GLint loc = -1;
-	loc = glGetUniformLocation(_State.programID, "uniformMatrix");
-	if (loc != -1)
-	{
-		glUniformMatrix4fv(loc, 1, GL_FALSE, &viewMatrix[0][0]);
-	}
-	//glm::mat4 uniformTest = glm::mat4(1.0f);
-	float uniformTest[16];
-	glGetUniformfv(_State.programID, loc, uniformTest);
-	auto x = 0;
+	//GLint loc = -1;
+	//loc = glGetUniformLocation(_State.programID, "uniformMatrix");
+	//if (loc != -1)
+	//{
+	//	glUniformMatrix4fv(loc, 1, GL_FALSE, &viewMatrix[0][0]);
+	//}
+	////glm::mat4 uniformTest = glm::mat4(1.0f);
+	//float uniformTest[16];
+	//glGetUniformfv(_State.programID, loc, uniformTest);
+	//auto x = 0;
 
 	// // END TEST // //
 
