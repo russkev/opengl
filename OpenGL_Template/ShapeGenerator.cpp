@@ -49,60 +49,60 @@ void ShapeGenerator::transform(glm::mat4 transformMatrix)
 }
 
 // // ----- Append Shapes ----- // //
-void ShapeGenerator::appendShape(ShapeData& inShape)
-{
-	if (m_shapes.size() > 0)
-	{
-		std::size_t vertexCount = 0;
-		for (auto & i : m_shapes)
-		{ 
-			vertexCount += i.numVertices(); 
-		}
-
-		for (auto i = 0; i < inShape.numIndices(); ++i)
-		{
-			inShape.setIndex(i, inShape.getIndex(i) + vertexCount);
-		}
-	}
-	m_shapes.push_back(std::move(inShape));
-}
-
-
-void ShapeGenerator::appendTriangle() 
-{
-	appendShape(makeTriangle());
-}
-void ShapeGenerator::appendPlane(GLuint dimensions = 10) 
-{
-	appendShape(makePlane(dimensions));
-}
-void ShapeGenerator::appendCube() 
-{
-	appendShape(makeCube());
-}
-void ShapeGenerator::appendArrow() {
-	appendShape(makeArrow());
-}
-void ShapeGenerator::appendTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2)
-{
-	appendShape(makeTube(resolution, radius, height));
-}
-void ShapeGenerator::appendNormals(ShapeData& inShape) {
-	appendShape(makeNormals(inShape));
-}
-void ShapeGenerator::appendNormals()
-{
-	assert(m_shapes.size() > 0);
-	auto m_shapes_size = m_shapes.size();
-	for (auto i = 0; i < m_shapes_size; ++i) 
-	{
-		appendShape(makeNormals(m_shapes.at(i)));
-	}
-}
+//void ShapeGenerator::appendShape(ShapeData& inShape)
+//{
+//	if (m_shapes.size() > 0)
+//	{
+//		std::size_t vertexCount = 0;
+//		for (auto & i : m_shapes)
+//		{ 
+//			vertexCount += i.numVertices(); 
+//		}
+//
+//		for (auto i = 0; i < inShape.numIndices(); ++i)
+//		{
+//			inShape.setIndex(i, inShape.getIndex(i) + vertexCount);
+//		}
+//	}
+//	m_shapes.push_back(std::move(inShape));
+//}
 
 
+//void ShapeGenerator::appendTriangle() 
+//{
+//	appendShape(makeTriangle());
+//}
+//void ShapeGenerator::appendPlane(GLuint dimensions = 10) 
+//{
+//	appendShape(makePlane(dimensions));
+//}
+//void ShapeGenerator::appendCube() 
+//{
+//	appendShape(makeCube());
+//}
+//void ShapeGenerator::appendArrow() {
+//	appendShape(makeArrow());
+//}
+//void ShapeGenerator::appendTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2)
+//{
+//	appendShape(makeTube(resolution, radius, height));
+//}
+//void ShapeGenerator::appendNormals(ShapeData& inShape) {
+//	appendShape(makeNormals(inShape));
+//}
+//void ShapeGenerator::appendNormals()
+//{
+//	assert(m_shapes.size() > 0);
+//	auto m_shapes_size = m_shapes.size();
+//	for (auto i = 0; i < m_shapes_size; ++i) 
+//	{
+//		appendShape(makeNormals(m_shapes.at(i)));
+//	}
+//}
 
-ShapeData ShapeGenerator::makeTriangle()
+
+
+ShapeData ShapeGenerator::makeTriangle(GLuint id)
 {
 	ShapeData m_triangle;
 
@@ -116,10 +116,12 @@ ShapeData ShapeGenerator::makeTriangle()
 	m_triangle.append_indices(1);
 	m_triangle.append_indices(2);
 
+	m_triangle.setId(id);
+
 	return m_triangle;
 }
 
-ShapeData ShapeGenerator::makePlane(GLuint dimensions = 20) 
+ShapeData ShapeGenerator::makePlane(GLuint id, GLuint dimensions = 20) 
 {
 	ShapeData m_plane;
 	GLuint offset = 0;
@@ -141,10 +143,11 @@ ShapeData ShapeGenerator::makePlane(GLuint dimensions = 20)
 			//		  << c << "," << d << "," << b << "\n";
 		}
 	}
+	m_plane.setId(id);
 	return m_plane;
 }
 
-ShapeData ShapeGenerator::makeCube() 
+ShapeData ShapeGenerator::makeCube(GLuint id) 
 {
 	ShapeData m_cube;
 
@@ -209,10 +212,11 @@ ShapeData ShapeGenerator::makeCube()
 	m_cube.append_indices(23); m_cube.append_indices(21); m_cube.append_indices(20);
 	m_cube.append_indices(23); m_cube.append_indices(20); m_cube.append_indices(22);
 
+	m_cube.setId(id);
 	return m_cube;
 }
 
-ShapeData ShapeGenerator::makeArrow() 
+ShapeData ShapeGenerator::makeArrow(GLuint id) 
 {
 	ShapeData m_arrow;
 
@@ -327,10 +331,11 @@ ShapeData ShapeGenerator::makeArrow()
 	m_arrow.append_indices(38), m_arrow.append_indices(40), m_arrow.append_indices(41);
 	m_arrow.append_indices(38), m_arrow.append_indices(41), m_arrow.append_indices(39);
 
+	m_arrow.setId(id);
 	return m_arrow;
 }
 
-ShapeData ShapeGenerator::makeTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2) 
+ShapeData ShapeGenerator::makeTube(GLuint id, GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2) 
 {
 	ShapeData outTube = makePlane(resolution);
 	GLuint width = resolution + 1;
@@ -351,6 +356,7 @@ ShapeData ShapeGenerator::makeTube(GLuint resolution = 10, GLfloat radius = 2, G
 			outTube.setVertex<2>(vertex, { cos(angle), 0, sin(angle) });
 		}
 	}
+	outTube.setId(id);
 	return outTube;
 }
 

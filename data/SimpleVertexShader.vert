@@ -8,11 +8,13 @@ in layout(location = 2) vec3 model_vertexNormal;
 in layout(location = 4) mat4 mat_modelToProjection;
 in layout(location = 8) mat4 mat_modelToWorld;
 
-uniform matrices
-{
-	mat4 umat_modelToProjection;
-	mat4 umat_modelToWorld;
-};
+uniform mat4[4] umat_test;
+
+//uniform matrices
+//{
+//	mat4 umat_modelToProjection;
+//	mat4 umat_modelToWorld;
+//};
 
 
 // // Output data ; will be interpolated for each fragment
