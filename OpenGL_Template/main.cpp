@@ -277,14 +277,36 @@ void init (ApplicationState& _State)
 
 
 	// // TEST // //
-
+	glUseProgram(_State.programID);
 	std::vector<glm::mat4> viewMatrix = { glm::mat4(9.0f), glm::mat4(2.0f) };
 	std::vector<glm::mat4> wldMatrix  = { glm::mat4(1.0f), glm::mat4(4.0f) };
+
+	//glm::mat4[2] = [glm::mat4(9.0f), glm::mat4(2.0f)];
 
 	//_State.viewMatrices.Append(sizeof(glm::mat4)*viewMatrix.size(), &viewMatrix[0][0]);
 	//_State.viewMatrices.Append(sizeof(glm::mat4)*wldMatrix.size(),   &wldMatrix[0][0]);
 
-	_State.testMatrices.Append(sizeof(glm::mat4)* viewMatrix.size(), &viewMatrix[0][0]);
+	GLint test_location = glGetUniformLocation(_State.programID, "umat_test");
+	GLint test_float_location = glGetUniformLocation(_State.programID, "ufloat_test");
+	//GLint test_locationB = glGetUniformLocation(_State.programID, "umat_testB");
+	//glm::mat4 testMatrix = glm::mat4(1.0f);
+	const GLfloat testMatrix[] =
+	{
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+	//const GLfloat testFloat = 200.0f;
+	glUniformMatrix4fv(test_location, 1, GL_FALSE, testMatrix);
+	glUniform1f(test_float_location, 10.0f);
+
+	GLfloat testMatrixIn[16];
+	glGetUniformfv(_State.programID, test_location, testMatrixIn);
+	GLfloat testFloatIn = 5.0f;
+	glGetUniformfv(_State.programID, test_float_location, &testFloatIn);
+
+	//_State.testMatrices.Append(sizeof(glm::mat4), &testMatrix[0][0]);
 
 	// // END TEST // //
 
