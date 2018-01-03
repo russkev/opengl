@@ -285,14 +285,21 @@ void init (ApplicationState& _State)
 	// // Create test matrices
 	glm::mat4 testMatrix1			= glm::mat4(1.0f);
 	glm::mat4 testMatrix2			= glm::translate(glm::mat4(1.0f), glm::vec3(2, 0.5, 0.3));
-	glm::mat4 testMatrices[2]		= { testMatrix2, testMatrix2 };
+	glm::mat4 testMatrices[]		= { testMatrix1, testMatrix2, testMatrix2, testMatrix1 };
 
+	const auto testNumMatrices = sizeof(testMatrices) / sizeof(testMatrices)[0];
 	// // Upload test matrices
-	glUniformMatrix4fv(test_location, 2, GL_FALSE, &testMatrices[0][0][0]);
+	glUniformMatrix4fv(test_location, testNumMatrices, GL_FALSE, &testMatrices[0][0][0]);
 
-	// // Download test matrices
-	glm::mat4 testMatrixIn[2];
-	glGetUniformfv(_State.programID, test_location, &testMatrixIn[0][0][0]);
+	
+	// // Debug matrix array
+	glm::mat4 testMatrixIn[testNumMatrices];
+	for (auto i = 0; i < testNumMatrices; ++i)
+	{
+		glGetUniformfv(_State.programID, test_location + i, &testMatrixIn[i][0][0]);
+	}
+	// // End debug matrix array
+
 
 	auto x = 0;
 	// // END TEST // //
