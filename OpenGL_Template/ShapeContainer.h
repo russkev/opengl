@@ -53,7 +53,9 @@ private:
 	bool nameExists(const std::string& s_name);
 	void incrementString(std::string& s_name);
 	// // ----- Member Variables ----- // //
-	std::map<nameType, ShapeData>					m_shapes;
-	std::map<nameType, glm::mat4>					m_transforms;
-	std::map<nameType, std::vector<nameType>>		m_connections;
+	std::vector<ShapeData>		m_shapes;
+	std::vector<nameType>		m_shape_names;
+	std::vector<glm::mat4>		m_transforms;
+	std::vector<nameType>		m_transform_names;
+	std::vector<glm::ivec2>		m_connections;
 };
