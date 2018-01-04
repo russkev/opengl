@@ -14,7 +14,7 @@ ShapeData::ShapeData() :
 	m_indices(indexType{}),
 	m_num_vertices(0u),
 	m_num_indices(0u),
-	m_id(5u)
+	m_id(0u)
 {};
 
 ShapeData::ShapeData(const verticesType s_vertices, const indicesType s_indices) :
