@@ -227,10 +227,10 @@ void init (ApplicationState& _State)
 	//!!! See shape container
 
 	// // Create Geo
-	_State.sh.appendShape(_State.shapes.makePlane(0, 1), "plane");
-	_State.sh.appendShape(_State.shapes.makeArrow(1), "arrow");
-	_State.sh.appendShape(_State.shapes.makeCube(2), "cube");
-	_State.sh.appendShape(_State.shapes.makePlane(3, 10), "plane");
+	_State.sh.appendShape(_State.shapes.makePlane(1), "plane");
+	_State.sh.appendShape(_State.shapes.makeArrow(), "arrow");
+	_State.sh.appendShape(_State.shapes.makeCube(), "cube");
+	_State.sh.appendShape(_State.shapes.makePlane(10), "plane");
 
 	// // Create transforms
 	glm::mat4 transformMaster  = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));

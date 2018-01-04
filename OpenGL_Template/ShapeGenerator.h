@@ -39,10 +39,10 @@ public:
 	std::vector<ShapeData> m_shapes;
 
 	// // CREATE THE SHAPES
-	ShapeData makeTriangle(GLuint id);
-	ShapeData makePlane(GLuint id, GLuint dimensions);
-	ShapeData makeCube(GLuint id);
-	ShapeData makeArrow(GLuint id);
-	ShapeData makeTube(GLuint id, GLuint resolution, GLfloat radius, GLfloat height);
+	ShapeData makeTriangle();
+	ShapeData makePlane(GLuint dimensions);
+	ShapeData makeCube();
+	ShapeData makeArrow();
+	ShapeData makeTube(GLuint resolution, GLfloat radius, GLfloat height);
 	ShapeData makeNormals(ShapeData& inShape);
 };

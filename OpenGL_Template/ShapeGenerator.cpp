@@ -100,9 +100,7 @@ void ShapeGenerator::transform(glm::mat4 transformMatrix)
 //	}
 //}
 
-
-
-ShapeData ShapeGenerator::makeTriangle(GLuint id)
+ShapeData ShapeGenerator::makeTriangle()
 {
 	ShapeData m_triangle;
 
@@ -116,12 +114,10 @@ ShapeData ShapeGenerator::makeTriangle(GLuint id)
 	m_triangle.append_indices(1);
 	m_triangle.append_indices(2);
 
-	m_triangle.setId(id);
-
 	return m_triangle;
 }
 
-ShapeData ShapeGenerator::makePlane(GLuint id, GLuint dimensions = 20) 
+ShapeData ShapeGenerator::makePlane(GLuint dimensions = 20) 
 {
 	ShapeData m_plane;
 	GLuint offset = 0;
@@ -143,11 +139,10 @@ ShapeData ShapeGenerator::makePlane(GLuint id, GLuint dimensions = 20)
 			//		  << c << "," << d << "," << b << "\n";
 		}
 	}
-	m_plane.setId(id);
 	return m_plane;
 }
 
-ShapeData ShapeGenerator::makeCube(GLuint id) 
+ShapeData ShapeGenerator::makeCube() 
 {
 	ShapeData m_cube;
 
@@ -212,11 +207,10 @@ ShapeData ShapeGenerator::makeCube(GLuint id)
 	m_cube.append_indices(23); m_cube.append_indices(21); m_cube.append_indices(20);
 	m_cube.append_indices(23); m_cube.append_indices(20); m_cube.append_indices(22);
 
-	m_cube.setId(id);
 	return m_cube;
 }
 
-ShapeData ShapeGenerator::makeArrow(GLuint id) 
+ShapeData ShapeGenerator::makeArrow() 
 {
 	ShapeData m_arrow;
 
@@ -331,11 +325,10 @@ ShapeData ShapeGenerator::makeArrow(GLuint id)
 	m_arrow.append_indices(38), m_arrow.append_indices(40), m_arrow.append_indices(41);
 	m_arrow.append_indices(38), m_arrow.append_indices(41), m_arrow.append_indices(39);
 
-	m_arrow.setId(id);
 	return m_arrow;
 }
 
-ShapeData ShapeGenerator::makeTube(GLuint id, GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2) 
+ShapeData ShapeGenerator::makeTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2) 
 {
 	ShapeData outTube = makePlane(resolution);
 	GLuint width = resolution + 1;
@@ -356,7 +349,6 @@ ShapeData ShapeGenerator::makeTube(GLuint id, GLuint resolution = 10, GLfloat ra
 			outTube.setVertex<2>(vertex, { cos(angle), 0, sin(angle) });
 		}
 	}
-	outTube.setId(id);
 	return outTube;
 }
 
