@@ -2,21 +2,29 @@
 
 void ShapeContainer::appendShape(ShapeData&& s_shape, const std::string& s_name)
 {
+	auto id = m_shapes.size() + 1;
 	auto t_name = s_name;
-	auto suffix = "_shape";
+	//auto suffix = "_shape";
 
-	while (nameExists(t_name) || nameExists(t_name + suffix)) { incrementString(t_name); }
+	while (nameExists(t_name) /*|| nameExists(t_name + suffix)*/) { incrementString(t_name); }
 
-	m_shapes.insert(shapeType(t_name + suffix, std::move(s_shape)));
-	appendTransform(glm::mat4(), t_name);
-	connect(t_name, t_name+suffix);
+	m_shapes.push_back(std::move(s_shape));
+	m_shape_names.push_back(std::move(t_name));
+	m_shapes.at(id).setId(id);
+	//appendTransform(glm::mat4(), t_name);
+	//connect(t_name, t_name+suffix);
+	assert(m_shapes.size() == m_shape_names.size());
 }
 
 void ShapeContainer::appendTransform(glm::mat4&& s_transform, const std::string& s_name)
 {
 	auto t_name = s_name;
 	while (nameExists(t_name))	{ incrementString(t_name); }
-	m_transforms.insert(matType(t_name, std::move(s_transform)));
+
+	m_transforms.push_back(std::move(s_transform));
+	m_transform_names.push_back(std::move(t_name));
+
+	assert(m_transforms.size() == m_transform_names.size());
 }
 
 void ShapeContainer::connect(const std::string& source, const std::string& destination)
