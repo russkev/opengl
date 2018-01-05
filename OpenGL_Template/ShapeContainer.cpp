@@ -32,9 +32,9 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	auto sourceType = type(source);
 	auto destType	= type(destination);
 	assert(sourceType != "0" && destType != "0");
-	assert(sourceType != "shape");
+	assert(sourceType == "transform");
 
-	std::string existingInput = input(destination);
+	std::string existingInput = input(destination, destType);
 	if (!sourceConnectionExists(source))	{ m_connections.insert(connectionType(source, {})); }
 	if (existingInput != "") // If destination already has an incoming connection
 	{
@@ -57,16 +57,19 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	}
 }
 
-std::string ShapeContainer::input(const std::string& destination)
+std::string ShapeContainer::input(const std::string& s_destination, const std::string& s_destination_type)
 {
+	intType location = -1;
+	if 
+		(s_destination_type == "shape"){ location = findString(m_shape_names, s_destination); }
+	else if 
+		(s_destination_type == "transform") { location = findString(m_transform_names, s_destination);	}
+
 	for (auto & connection : m_connections)
 	{
-		for (auto & i : connection.second)
+		if (connection[1] == findString(destination))
 		{
-			if (i == destination)
-			{
-				return connection.first;
-			}
+			return connection.first;
 		}
 	}
 	return "";
@@ -90,8 +93,10 @@ void ShapeContainer::transform(ShapeData::verticesType& sourceVerts, const glm::
 
 std::string ShapeContainer::type(const std::string& s_name)
 {
-	if (m_shapes.find(s_name) != m_shapes.end()) { return "shape"; }
-	if (m_transforms.find(s_name) != m_transforms.end()) { return "transform"; }
+	//if (m_shapes.find(s_name) != m_shapes.end()) { return "shape"; }
+	if (findString(m_shape_names, s_name) != -1) { return "shape"; }
+	//if (m_transforms.find(s_name) != m_transforms.end()) { return "transform"; }
+	if (findString(m_transform_names, s_name) != -1) { return "transform"; }
 	else { return "0"; }
 }
 
@@ -164,4 +169,18 @@ ShapeData::indicesType ShapeContainer::indices()
 		numVertices += i.second.numVertices();
 	}
 	return t_indices;
+}
+
+ShapeContainer::intType ShapeContainer::findString(const std::vector<std::string> &s_vec, const std::string &s_string)
+{
+	intType location = -1;
+	assert(s_vec.size() > 0);
+	for (intType i = 0; i < s_vec.size(); ++i)
+	{
+		if (s_vec.at(i) == s_string)
+		{
+			return i;
+		}
+	}
+	return location;
 }
