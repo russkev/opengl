@@ -33,8 +33,13 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	auto destType	= type(destination);
 	assert(sourceType != "0" && destType != "0");
 	assert(sourceType == "transform");
+	std::vector<std::string> * destination_strings;
+	if (destType == "shape")		{ destination_strings = &m_shape_names;  }
+	if (destType == "transform")	{ destination_strings = &m_transform_names; }
 
-	std::string existingInput = input(destination, destType);
+	std::string existingInput = input(destination, *destination_strings);
+
+	// // !!!UP TO HERE
 	if (!sourceConnectionExists(source))	{ m_connections.insert(connectionType(source, {})); }
 	if (existingInput != "") // If destination already has an incoming connection
 	{
@@ -57,19 +62,14 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	}
 }
 
-std::string ShapeContainer::input(const std::string& s_destination, const std::string& s_destination_type)
+std::string ShapeContainer::input(const std::string& s_destination, const std::vector<std::string>& s_destination_strings)
 {
-	intType location = -1;
-	if 
-		(s_destination_type == "shape"){ location = findString(m_shape_names, s_destination); }
-	else if 
-		(s_destination_type == "transform") { location = findString(m_transform_names, s_destination);	}
-
+	intType location = findString(s_destination_strings, s_destination);
 	for (auto & connection : m_connections)
 	{
-		if (connection[1] == findString(destination))
+		if (connection[1] == location || connection[2] == location)
 		{
-			return connection.first;
+			return m_transform_names.at(connection[0]);
 		}
 	}
 	return "";
