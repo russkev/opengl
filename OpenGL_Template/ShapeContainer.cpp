@@ -29,21 +29,33 @@ void ShapeContainer::appendTransform(glm::mat4&& s_transform, const std::string&
 
 void ShapeContainer::connect(const std::string& source, const std::string& destination)
 {
-	auto sourceType = type(source);
-	auto destType	= type(destination);
+	auto sourceType		= type(source);
+	auto sourceLoc		= findString(sourceType, source);
+	auto destType		= type(destination);
+	auto destLoc		= findString(destType, destination);
+
 	assert(sourceType != "0" && destType != "0");
 	assert(sourceType == "transform");
+	assert(sourceLoc > -1 && destLoc > -1);
+
 	std::vector<std::string> * destination_strings;
 	if (destType == "shape")		{ destination_strings = &m_shape_names;  }
 	if (destType == "transform")	{ destination_strings = &m_transform_names; }
 
 	std::string existingInput = input(destination, *destination_strings);
 
-	// // !!!UP TO HERE
-	if (!sourceConnectionExists(source))	{ m_connections.insert(connectionType(source, {})); }
+	if (!sourceConnectionExists(source))	
+	{ 
+		//m_connections.insert(connectionType(source, {})); 
+		m_connections.push_back({ sourceLoc, (destType == "transform") * destLoc, (destType == "shape") * destLoc });
+	}
+
 	if (existingInput != "") // If destination already has an incoming connection
 	{
-		std::size_t vecSize = m_connections.at(existingInput).size();
+		//std::size_t vecSize = m_connections.at(existingInput).size();
+		auto vecSize = numDestinations(sourceLoc);
+
+		// // !!! Up to here
 		for (auto i = 0; i < vecSize; ++i)
 		{
 			if (m_connections.at(existingInput).at(i) == destination) // Remove the existing connection from vector
@@ -173,14 +185,27 @@ ShapeData::indicesType ShapeContainer::indices()
 
 ShapeContainer::intType ShapeContainer::findString(const std::vector<std::string> &s_vec, const std::string &s_string)
 {
-	intType location = -1;
 	assert(s_vec.size() > 0);
 	for (intType i = 0; i < s_vec.size(); ++i)
 	{
-		if (s_vec.at(i) == s_string)
-		{
-			return i;
-		}
+		if (s_vec.at(i) == s_string) { return i; }
 	}
-	return location;
+	return (intType)-1;
+}
+
+ShapeContainer::intType ShapeContainer::findString(const std::string &s_type, const std::string &s_string)
+{
+	if (s_type == "shape")		{ return findString(m_shape_names,		s_string); }
+	if (s_type == "transform")	{ return findString(m_transform_names,	s_string); }
+	return (intType)-1;
+}
+
+ShapeContainer::intType ShapeContainer::numDestinations(const ShapeContainer::intType s_source)
+{
+	intType destinations = 0;
+	for (auto & connection : m_connections)
+	{
+		if (connection[0] == s_source) { ++destinations; }
+	}
+	return destinations;
 }

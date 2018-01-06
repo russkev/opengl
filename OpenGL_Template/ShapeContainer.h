@@ -50,6 +50,8 @@ struct ShapeContainer
 	ShapeData::indicesType  indices();
 
 	intType findString(const std::vector<std::string> &s_vec, const std::string &s_string);
+	intType findString(const std::string &s_type, const std::string &s_string);
+	intType numDestinations(const intType s_source);
 		
 private:
 	bool nameExists(const std::string& s_name);
