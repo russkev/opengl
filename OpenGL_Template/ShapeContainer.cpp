@@ -42,9 +42,10 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	if (destType == "shape")		{ destination_strings = &m_shape_names;  }
 	if (destType == "transform")	{ destination_strings = &m_transform_names; }
 
-	std::string existingInput = input(destination, *destination_strings);
+	std::string existingInput	= input(destination, *destination_strings);
+	intType existingInputLoc	= findString("transform", existingInput);
 
-	if (!sourceConnectionExists(source))	
+	if (!sourceConnectionExists(sourceLoc))	
 	{ 
 		//m_connections.insert(connectionType(source, {})); 
 		m_connections.push_back({ sourceLoc, (destType == "transform") * destLoc, (destType == "shape") * destLoc });
@@ -56,22 +57,25 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 		auto vecSize = numDestinations(sourceLoc);
 
 		// // !!! Up to here
-		for (auto i = 0; i < vecSize; ++i)
+		for (auto i = 0; i < m_connections.size(); ++i)
 		{
-			if (m_connections.at(existingInput).at(i) == destination) // Remove the existing connection from vector
+			//if (m_connections.at(existingInput).at(i) == destination) // Remove the existing connection from vector
+			//if (m_connections.at(i)[0] == existingInputLoc && (m_connections.at(i)[1] == destLoc || m_connections.at(i)[2] == destLoc))
+			if (connectionExists(i, existingInputLoc, destLoc))
 			{
-				m_connections.at(existingInput).erase(m_connections.at(existingInput).begin() + i);
+				//m_connections.at(existingInput).erase(m_connections.at(existingInput).begin() + i);
+				m_connections.erase(m_connections.begin() + i);
 			}
-			if (m_connections.at(existingInput).size() == 0) // Remove connection from m_connections if it was the only connection
-			{
-				m_connections.erase(existingInput);
-			}
+			//if (m_connections.at(existingInput).size() == 0) // Remove connection from m_connections if it was the only connection
+			//{
+			//	m_connections.erase(existingInput);
+			//}
 		}
 	}
-	if (m_connections.find(source) != m_connections.end())
-	{
-		m_connections.at(source).push_back(destination);
-	}
+	//if (m_connections.find(source) != m_connections.end())
+	//{
+	//	m_connections.at(source).push_back(destination);
+	//}
 }
 
 std::string ShapeContainer::input(const std::string& s_destination, const std::vector<std::string>& s_destination_strings)
@@ -87,9 +91,14 @@ std::string ShapeContainer::input(const std::string& s_destination, const std::v
 	return "";
 }
 
-bool ShapeContainer::sourceConnectionExists(const std::string& source)
+bool ShapeContainer::sourceConnectionExists(const intType source)
 {
-	return m_connections.find(source) != m_connections.end();
+	for (auto i = 0; i < m_connections.size(); ++i)
+	{
+		if (m_connections.at(i)[0] == source) { return true; }
+	}
+	//return m_connections.find(source) != m_connections.end();
+	return false;
 }
 
 void ShapeContainer::transform(glm::mat4& sourceMatrix, const glm::mat4& transformMatrix)
@@ -114,9 +123,18 @@ std::string ShapeContainer::type(const std::string& s_name)
 
 bool ShapeContainer::nameExists(const std::string& s_name)
 {
-	return
-		(m_shapes.find(s_name) != m_shapes.end() ||
-			m_transforms.find(s_name) != m_transforms.end());
+	//return
+	//	(m_shapes.find(s_name) != m_shapes.end() ||
+	//		m_transforms.find(s_name) != m_transforms.end());
+	for (auto & shape_name : m_shape_names)
+	{
+		if (shape_name == s_name) { return true; }
+	}
+	for (auto & transform_name : m_transform_names)
+	{
+		if (transform_name == s_name) { return true; }
+	}
+	return false;
 }
 
 void ShapeContainer::incrementString(std::string& s_name)
@@ -160,25 +178,28 @@ ShapeData::verticesType ShapeContainer::vertices()
 	*/
 	ShapeData::verticesType t_vertices;
 
-	for (auto & shape : m_shapes)
+	//for (auto & shape : m_shapes)
+	for (auto i = 0; i < m_shapes.size(); ++i)
 	{
-		ShapeData::verticesType shapeVerts = shape.second.vertices();
-		transformFromConnection(shape.first, shapeVerts);
+		ShapeData::verticesType shapeVerts = m_shapes.at(i).vertices();
+		transformFromConnection(m_shape_names.at(i), shapeVerts);
 		t_vertices.insert(t_vertices.end(), shapeVerts.begin(), shapeVerts.end());
 	}
 	return t_vertices;
 }
+
+
 ShapeData::indicesType ShapeContainer::indices()
 {
 	ShapeData::indicesType t_indices;
 	std::size_t numVertices = 0;
-	for (auto & i : m_shapes)
+	for (auto & shape : m_shapes)
 	{
-		for (auto j = 0; j < i.second.numIndices(); ++j)
+		for (auto j = 0; j < shape.numIndices(); ++j)
 		{
-			t_indices.push_back(i.second.indices().at(j) + numVertices);
+			t_indices.push_back(shape.indices().at(j) + numVertices);
 		}
-		numVertices += i.second.numVertices();
+		numVertices += shape.numVertices();
 	}
 	return t_indices;
 }
@@ -208,4 +229,14 @@ ShapeContainer::intType ShapeContainer::numDestinations(const ShapeContainer::in
 		if (connection[0] == s_source) { ++destinations; }
 	}
 	return destinations;
+}
+
+bool ShapeContainer::connectionExists(const intType s_location, const intType s_source_location, const intType s_dest_location)
+{
+	return
+		m_connections.at(s_location)[0] == s_source_location &&
+		(
+			m_connections.at(s_location)[1] == s_dest_location || 
+			m_connections.at(s_location)[2] == s_dest_location
+			);
 }

@@ -25,17 +25,19 @@ struct ShapeContainer
 	void appendTransform(glm::mat4&& s_transform, const std::string& s_name = "transform");
 	void connect(const std::string& source, const std::string& destination);
 	std::string input(const std::string& destination, const std::vector<std::string>& s_destination_strings);
-	bool sourceConnectionExists(const std::string& source);
+	bool sourceConnectionExists(const intType source);
 	void transform(glm::mat4& sourceMatrix, const glm::mat4& transformMatrix);
 	void transform(ShapeData::verticesType&, const glm::mat4& transformMatrix);
 	template <typename T>
 	void transformFromConnection(const std::string& name, T& s_object)
 	{
 		{
-			std::string sourceMatrixName = input(name);
+			//std::string sourceMatrixName = input(name);
+			std::string sourceMatrixName = input(name, m_shape_names) + input(name, m_transform_names);
 			if (sourceMatrixName != "")
 			{
-				glm::mat4 sourceMatrix = m_transforms.at(sourceMatrixName);
+				//glm::mat4 sourceMatrix = m_transforms.at(sourceMatrixName);
+				glm::mat4 = m_transforms.at(findString(sourceMatrixName));
 				transformFromConnection(sourceMatrixName, sourceMatrix);
 				transform(s_object, sourceMatrix);
 			}
@@ -52,6 +54,7 @@ struct ShapeContainer
 	intType findString(const std::vector<std::string> &s_vec, const std::string &s_string);
 	intType findString(const std::string &s_type, const std::string &s_string);
 	intType numDestinations(const intType s_source);
+	bool connectionExists(const intType s_location, const intType s_source_location, const intType s_dest_location);
 		
 private:
 	bool nameExists(const std::string& s_name);
