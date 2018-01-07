@@ -38,7 +38,7 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	assert(sourceType == "transform");
 	assert(sourceLoc > -1 && destLoc > -1);
 
-	std::vector<std::string> * destination_strings;
+	std::vector<std::string> * destination_strings = NULL;
 	if (destType == "shape")		{ destination_strings = &m_shape_names;  }
 	if (destType == "transform")	{ destination_strings = &m_transform_names; }
 

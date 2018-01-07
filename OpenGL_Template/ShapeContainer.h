@@ -37,7 +37,7 @@ struct ShapeContainer
 			if (sourceMatrixName != "")
 			{
 				//glm::mat4 sourceMatrix = m_transforms.at(sourceMatrixName);
-				glm::mat4 = m_transforms.at(findString(sourceMatrixName));
+				glm::mat4 sourceMatrix = m_transforms.at(findString(m_transform_names, sourceMatrixName));
 				transformFromConnection(sourceMatrixName, sourceMatrix);
 				transform(s_object, sourceMatrix);
 			}
