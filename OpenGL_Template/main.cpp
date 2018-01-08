@@ -276,6 +276,10 @@ void init (ApplicationState& _State)
 	_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
 
 
+	glUseProgram(_State.programID);
+	GLint transformsLocation = glGetUniformLocation(_State.programID, "transforms");
+	glUniform4fv(transformsLocation, _State.sh.numTransforms, _State.sh.transformsPtr());
+
 	// // TEST // //
 	glUseProgram(_State.programID);
 

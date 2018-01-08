@@ -50,6 +50,9 @@ struct ShapeContainer
 	// // ----- Getters ----- // //
 	ShapeData::verticesType vertices();
 	ShapeData::indicesType  indices();
+	intType numShapes() { return m_shapes.size(); }
+	intType numTransforms() { return m_transforms.size(); }
+	void* transformsPtr() { return &m_transforms; }
 
 	intType findString(const std::vector<std::string> &s_vec, const std::string &s_string);
 	intType findString(const std::string &s_type, const std::string &s_string);
