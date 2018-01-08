@@ -8,7 +8,7 @@ in layout(location = 2) vec3 model_vertexNormal;
 in layout(location = 4) mat4 mat_modelToProjection;
 in layout(location = 8) mat4 mat_modelToWorld;
 
-uniform mat4[8] umat_test;
+uniform mat4[100] transforms;
 //uniform float ufloat_test;
 //uniform mat4 umat_testB;
 
