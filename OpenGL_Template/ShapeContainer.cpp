@@ -2,7 +2,7 @@
 
 void ShapeContainer::appendShape(ShapeData&& s_shape, const std::string& s_name)
 {
-	auto id = m_shapes.size() + 1;
+	auto id = m_shapes.size();
 	auto t_name = s_name;
 	//auto suffix = "_shape";
 
