@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/matrix.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <cassert>
 #include <cstdlib>
@@ -280,23 +281,25 @@ void init (ApplicationState& _State)
 
 	//glUseProgram(_State.programID);
 	//const GLuint numTransforms = _State.sh.numTransforms();
-	const GLint transformsLocation = glGetUniformLocation(_State.programID, "transforms");
+	//const GLint transformsLocation = glGetUniformLocation(_State.programID, "transforms");
 	//std::vector<glm::mat4> transformsToUpload = _State.sh.transforms();
 	//glUniformMatrix4fv(transformsLocation, numTransforms, GL_FALSE, &transformsToUpload[0][0][0]);
 	_State.sh.uploadTransforms(_State.programID);
 
 
-#ifdef DEBUG
-	// // Debug matrix array
-	std::vector<glm::mat4> testMatrixIn;
-
-	for (auto i = 0; i < 4; ++i)
-	{
-		testMatrixIn.push_back(glm::mat4(1.0f));
-		glGetUniformfv(_State.programID, transformsLocation + i, &testMatrixIn[i][0][0]);
-	}
-
-#endif // DEBUG
+//#ifdef DEBUG
+//	// // Debug matrix array
+//	std::vector<glm::mat4> testMatrixIn;
+//
+//	for (auto i = 0; i < 4; ++i)
+//	{
+//		testMatrixIn.push_back(glm::mat4(1.0f));
+//		glGetUniformfv(_State.programID, transformsLocation + i, glm::value_ptr(testMatrixIn[i]));
+//	}
+//
+//#endif // DEBUG
+	std::vector<glm::mat4> testUniform;
+	testUniform = _State.sh.readUniform<glm::mat4>(_State.programID, "transforms", 4);
 	auto x = 0;
 
 

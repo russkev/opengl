@@ -60,6 +60,20 @@ struct ShapeContainer
 	bool connectionExists(const intType s_location, const intType s_source_location, const intType s_dest_location);
 
 	void uploadTransforms(const intType s_program_id);
+
+	template <typename T>
+	std::vector<T> readUniform(const intType s_program_id, const std::string &s_location_name, const intType numElements = 4)
+	{
+		const GLChar* locationName = &s_location_name;
+		intType location = glGetUniformLocation(s_program_id, locationName);
+		std::vector<T> returnVector;
+		for (auto i = 0; i < numElements)
+		{
+			returnVector.push_back(T);
+			glGetUniformfv(s_program_id, location + i, glm::value_ptr(returnVector[i]));
+		}
+		return returnVector;
+	}
 		
 private:
 	bool nameExists(const std::string& s_name);
