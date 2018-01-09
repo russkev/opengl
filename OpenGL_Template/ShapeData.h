@@ -67,6 +67,7 @@ public:
 		return std::get<attr>(m_vertices.at(i));
 	}
 	indexType getIndex(std::size_t i);
+
 	std::size_t numIndices()	{ return m_num_indices; }
 	std::size_t numVertices()	{ return m_num_vertices; }
 	verticesType vertices()		{ return m_vertices; }

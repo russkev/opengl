@@ -233,14 +233,17 @@ void init (ApplicationState& _State)
 	_State.sh.appendShape(_State.shapes.makePlane(10), "plane");
 
 	// // Create transforms
-	glm::mat4 transformMaster  = glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
-	glm::mat4 transformLeft    = glm::translate(glm::mat4(1.0f), glm::vec3(-8, 0, 0));
-	glm::mat4 transformForward = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -8));
+	glm::mat4 transformMaster	= glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
+	glm::mat4 transformLeft		= glm::translate(glm::mat4(1.0f), glm::vec3(-8, 0, 0));
+	glm::mat4 transformForward	= glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -8));
+	glm::mat4 transformNone		= glm::mat4(1.0f);
 	
+	_State.sh.appendTransform(std::move(transformNone),		"transformNone");
+	_State.sh.appendTransform(std::move(transformMaster),	"transformMaster");
+	_State.sh.appendTransform(std::move(transformLeft),		"transformLeft");
+	_State.sh.appendTransform(std::move(transformForward),	"transformForward");
 
-	_State.sh.appendTransform(std::move(transformMaster),  "transformMaster");
-	_State.sh.appendTransform(std::move(transformLeft),    "transformLeft");
-	_State.sh.appendTransform(std::move(transformForward), "transformForward");
+
 
 	// // Transform Geo 
 	//_State.sh.connect("transformMaster",	"transformLeft");
@@ -277,30 +280,34 @@ void init (ApplicationState& _State)
 
 
 	glUseProgram(_State.programID);
+	const GLuint numTransforms = _State.sh.numTransforms();
 	GLint transformsLocation = glGetUniformLocation(_State.programID, "transforms");
-	glUniform4fv(transformsLocation, _State.sh.numTransforms, _State.sh.transformsPtr());
+	std::vector<glm::mat4> transformsToUpload = _State.sh.transforms();
+	glUniform4fv(transformsLocation, numTransforms, &transformsToUpload[0][0][0]);
 
 	// // TEST // //
-	glUseProgram(_State.programID);
+	//glUseProgram(_State.programID);
 
-	// // Get uniform location
-	GLint test_location = glGetUniformLocation(_State.programID, "umat_test");
+	//// // Get uniform location
+	//GLint test_location = glGetUniformLocation(_State.programID, "umat_test");
 
-	// // Create test matrices
-	glm::mat4 testMatrix1			= glm::mat4(1.0f);
-	glm::mat4 testMatrix2			= glm::translate(glm::mat4(1.0f), glm::vec3(2, 0.5, 0.3));
-	glm::mat4 testMatrices[]		= { testMatrix1, testMatrix2, testMatrix2, testMatrix1 };
+	//// // Create test matrices
+	//glm::mat4 testMatrix1			= glm::mat4(1.0f);
+	//glm::mat4 testMatrix2			= glm::translate(glm::mat4(1.0f), glm::vec3(2, 0.5, 0.3));
+	//glm::mat4 testMatrices[]		= { testMatrix1, testMatrix2, testMatrix2, testMatrix1 };
 
-	const auto testNumMatrices = sizeof(testMatrices) / sizeof(testMatrices)[0];
-	// // Upload test matrices
-	glUniformMatrix4fv(test_location, testNumMatrices, GL_FALSE, &testMatrices[0][0][0]);
+	//const auto testNumMatrices = sizeof(testMatrices) / sizeof(testMatrices)[0];
+	//// // Upload test matrices
+	//glUniformMatrix4fv(test_location, testNumMatrices, GL_FALSE, &testMatrices[0][0][0]);
 
 	
 	// // Debug matrix array
-	glm::mat4 testMatrixIn[testNumMatrices];
-	for (auto i = 0; i < testNumMatrices; ++i)
+	//glm::mat4 testMatrixIn[numTransforms];
+	std::vector<glm::mat4> testMatrixIn;
+	for (auto i = 0; i < numTransforms; ++i)
 	{
-		glGetUniformfv(_State.programID, test_location + i, &testMatrixIn[i][0][0]);
+		testMatrixIn.push_back(glm::mat4(1.0f));
+		glGetUniformfv(_State.programID, transformsLocation + i, &testMatrixIn[i][0][0]);
 	}
 	// // End debug matrix array
 
