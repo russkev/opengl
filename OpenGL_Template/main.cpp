@@ -25,7 +25,7 @@
 
 
 #define GLM_ENABLE_EXPERIMENTAL
-//#define DEBUG
+#define DEBUG
 #include <glm/gtc/matrix_transform.hpp>
 
 static constexpr auto POSITION_ATTR = 0u;
@@ -274,16 +274,16 @@ void init (ApplicationState& _State)
 	static const auto matrix_info = gl_introspect_tuple<std::tuple<glm::mat4>>::get();
 
 	// // Upload the VAO information
-	_State.VAO_main.GenerateVAO(_State.geoBuffer, 0, shape_info.data(),  shape_info.data() +  shape_info.size(),  POSITION_ATTR);
+	_State.VAO_main.GenerateVAO(_State.geoBuffer, 0, shape_info.data(),  shape_info.data()  + shape_info.size(),  POSITION_ATTR);
 	_State.VAO_main.GenerateVAO(_State.matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
 	_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
 
 
 	glUseProgram(_State.programID);
 	const GLuint numTransforms = _State.sh.numTransforms();
-	GLint transformsLocation = glGetUniformLocation(_State.programID, "transforms");
+	const GLint transformsLocation = glGetUniformLocation(_State.programID, "transforms");
 	std::vector<glm::mat4> transformsToUpload = _State.sh.transforms();
-	glUniform4fv(transformsLocation, numTransforms, &transformsToUpload[0][0][0]);
+	glUniformMatrix4fv(transformsLocation, numTransforms, GL_FALSE, &transformsToUpload[0][0][0]);
 
 	// // TEST // //
 	//glUseProgram(_State.programID);
@@ -300,20 +300,18 @@ void init (ApplicationState& _State)
 	//// // Upload test matrices
 	//glUniformMatrix4fv(test_location, testNumMatrices, GL_FALSE, &testMatrices[0][0][0]);
 
-	
+#ifdef DEBUG
 	// // Debug matrix array
-	//glm::mat4 testMatrixIn[numTransforms];
 	std::vector<glm::mat4> testMatrixIn;
+
 	for (auto i = 0; i < numTransforms; ++i)
 	{
 		testMatrixIn.push_back(glm::mat4(1.0f));
 		glGetUniformfv(_State.programID, transformsLocation + i, &testMatrixIn[i][0][0]);
 	}
-	// // End debug matrix array
 
-
+#endif // DEBUG
 	auto x = 0;
-	// // END TEST // //
 
 
 
