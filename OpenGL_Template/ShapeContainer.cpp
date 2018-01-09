@@ -240,3 +240,16 @@ bool ShapeContainer::connectionExists(const intType s_location, const intType s_
 			m_connections.at(s_location)[2] == s_dest_location
 			);
 }
+
+void ShapeContainer::uploadTransforms(const intType s_program_id)
+{
+	glUseProgram(s_program_id);
+	const intType numTransforms = m_transforms.size();
+	const intType transformsLocation = glGetUniformLocation(s_program_id, "transforms");
+	glUniformMatrix4fv(transformsLocation, numTransforms, GL_FALSE, &m_transforms.at(0)[0][0]);
+	//glUseProgram(_State.programID);
+	//const GLuint numTransforms = _State.sh.numTransforms();
+	//const GLint transformsLocation = glGetUniformLocation(_State.programID, "transforms");
+	//std::vector<glm::mat4> transformsToUpload = _State.sh.transforms();
+	//glUniformMatrix4fv(transformsLocation, numTransforms, GL_FALSE, &transformsToUpload[0][0][0]);
+}
