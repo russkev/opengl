@@ -278,33 +278,19 @@ void init (ApplicationState& _State)
 	_State.VAO_main.GenerateVAO(_State.matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
 	_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
 
-
-	glUseProgram(_State.programID);
-	const GLuint numTransforms = _State.sh.numTransforms();
-	const GLint transformsLocation = glGetUniformLocation(_State.programID, "transforms");
-	std::vector<glm::mat4> transformsToUpload = _State.sh.transforms();
-	glUniformMatrix4fv(transformsLocation, numTransforms, GL_FALSE, &transformsToUpload[0][0][0]);
-
-	// // TEST // //
 	//glUseProgram(_State.programID);
+	//const GLuint numTransforms = _State.sh.numTransforms();
+	const GLint transformsLocation = glGetUniformLocation(_State.programID, "transforms");
+	//std::vector<glm::mat4> transformsToUpload = _State.sh.transforms();
+	//glUniformMatrix4fv(transformsLocation, numTransforms, GL_FALSE, &transformsToUpload[0][0][0]);
+	_State.sh.uploadTransforms(_State.programID);
 
-	//// // Get uniform location
-	//GLint test_location = glGetUniformLocation(_State.programID, "umat_test");
-
-	//// // Create test matrices
-	//glm::mat4 testMatrix1			= glm::mat4(1.0f);
-	//glm::mat4 testMatrix2			= glm::translate(glm::mat4(1.0f), glm::vec3(2, 0.5, 0.3));
-	//glm::mat4 testMatrices[]		= { testMatrix1, testMatrix2, testMatrix2, testMatrix1 };
-
-	//const auto testNumMatrices = sizeof(testMatrices) / sizeof(testMatrices)[0];
-	//// // Upload test matrices
-	//glUniformMatrix4fv(test_location, testNumMatrices, GL_FALSE, &testMatrices[0][0][0]);
 
 #ifdef DEBUG
 	// // Debug matrix array
 	std::vector<glm::mat4> testMatrixIn;
 
-	for (auto i = 0; i < numTransforms; ++i)
+	for (auto i = 0; i < 4; ++i)
 	{
 		testMatrixIn.push_back(glm::mat4(1.0f));
 		glGetUniformfv(_State.programID, transformsLocation + i, &testMatrixIn[i][0][0]);

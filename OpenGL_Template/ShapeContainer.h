@@ -53,12 +53,13 @@ struct ShapeContainer
 	std::vector<glm::mat4>  transforms() { return m_transforms; }
 	intType numShapes() { return m_shapes.size(); }
 	intType numTransforms() { return m_transforms.size(); }
-	void* transformsPtr() { return &m_transforms; }
 
 	intType findString(const std::vector<std::string> &s_vec, const std::string &s_string);
 	intType findString(const std::string &s_type, const std::string &s_string);
 	intType numDestinations(const intType s_source);
 	bool connectionExists(const intType s_location, const intType s_source_location, const intType s_dest_location);
+
+	void uploadTransforms(const intType s_program_id);
 		
 private:
 	bool nameExists(const std::string& s_name);
