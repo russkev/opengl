@@ -50,6 +50,7 @@ struct ShapeContainer
 	// // ----- Getters ----- // //
 	ShapeData::verticesType vertices();
 	ShapeData::indicesType  indices();
+	std::vector<glm::mat4>  transforms() { return m_transforms; }
 	intType numShapes() { return m_shapes.size(); }
 	intType numTransforms() { return m_transforms.size(); }
 	void* transformsPtr() { return &m_transforms; }
