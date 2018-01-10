@@ -55,14 +55,14 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	if (existingInput != "") // If destination already has an incoming connection
 	{
 		//std::size_t vecSize = m_connections.at(existingInput).size();
-		auto vecSize = numDestinations(sourceLoc);
+		//auto vecSize = numDestinations(sourceLoc);
 
-		// // !!! Up to here
+
 		for (auto i = 0; i < m_connections.size(); ++i)
 		{
 			//if (m_connections.at(existingInput).at(i) == destination) // Remove the existing connection from vector
 			//if (m_connections.at(i)[0] == existingInputLoc && (m_connections.at(i)[1] == destLoc || m_connections.at(i)[2] == destLoc))
-			if (connectionExists(i, existingInputLoc, destLoc))
+			if (connectionExists(i, existingInputLoc, destLoc, destType))
 			{
 				//m_connections.at(existingInput).erase(m_connections.at(existingInput).begin() + i);
 				m_connections.erase(m_connections.begin() + i);
@@ -78,7 +78,7 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	//{
 	//	m_connections.at(source).push_back(destination);
 	//}
-	m_connections.push_back({ sourceLoc, (destType == "transform") * destLoc, (destType == "shape") * destLoc });
+	m_connections.push_back({ sourceLoc, (destType == "transform") * destLoc + ((destType == "transform") - 1), (destType == "shape") * destLoc + ((destType == "shape") - 1) });
 	m_connection_names.push_back(source + " -> " + destination);
 
 	assert(m_connections.size() == m_connection_names.size());
@@ -237,14 +237,26 @@ ShapeContainer::intType ShapeContainer::numDestinations(const ShapeContainer::in
 	return destinations;
 }
 
-bool ShapeContainer::connectionExists(const intType s_location, const intType s_source_location, const intType s_dest_location)
+bool ShapeContainer::connectionExists(const intType s_connections_location, const intType s_source_location, const intType s_dest_location, const std::string& s_dest_type)
 {
-	return
-		m_connections.at(s_location)[0] == s_source_location &&
-		(
-			m_connections.at(s_location)[1] == s_dest_location || 
-			m_connections.at(s_location)[2] == s_dest_location
-			);
+	if (s_dest_type == "transform")
+	{
+		return m_connections.at(s_connections_location)[0] == s_source_location &&
+			m_connections.at(s_connections_location)[1] == s_dest_location;
+	}
+	if (s_dest_type == "shape")
+	{
+		return m_connections.at(s_connections_location)[0] == s_source_location &&
+			m_connections.at(s_connections_location)[2] == s_dest_location;
+	}
+	return false;
+
+	//return
+	//	m_connections.at(s_location)[0] == s_source_location &&
+	//	(
+	//		( m_connections.at(s_location)[1] == s_dest_location && s_dest_type == "transform" ) || 
+	//		( m_connections.at(s_location)[2] == s_dest_location && s_dest_type == "shape")
+	//		);
 }
 
 void ShapeContainer::uploadTransforms(const intType s_program_id)
