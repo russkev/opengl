@@ -64,12 +64,13 @@ struct ShapeContainer
 	template <typename T>
 	std::vector<T> readUniform(const intType s_program_id, const std::string &s_location_name, const intType numElements = 4)
 	{
-		const GLChar* locationName = &s_location_name;
-		intType location = glGetUniformLocation(s_program_id, locationName);
+		//std::vector<std::string> location_name_vec(s_location_name.begin(), s_location_name.end());
+		//const GLChar* locationName = &s_location_name;
+		intType location = glGetUniformLocation(s_program_id, s_location_name.c_str());
 		std::vector<T> returnVector;
-		for (auto i = 0; i < numElements)
+		for (auto i = 0; i < numElements; ++i)
 		{
-			returnVector.push_back(T);
+			returnVector.resize(returnVector.size() + 1);
 			glGetUniformfv(s_program_id, location + i, glm::value_ptr(returnVector[i]));
 		}
 		return returnVector;
