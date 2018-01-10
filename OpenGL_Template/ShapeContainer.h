@@ -57,7 +57,7 @@ struct ShapeContainer
 	intType findString(const std::vector<std::string> &s_vec, const std::string &s_string);
 	intType findString(const std::string &s_type, const std::string &s_string);
 	intType numDestinations(const intType s_source);
-	bool connectionExists(const intType s_location, const intType s_source_location, const intType s_dest_location);
+	bool connectionExists(const intType s_location, const intType s_source_location, const intType s_dest_location, const std::string& s_dest_type);
 
 	void uploadTransforms(const intType s_program_id);
 
