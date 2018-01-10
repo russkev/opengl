@@ -85,4 +85,5 @@ private:
 	std::vector<glm::mat4>		m_transforms;
 	std::vector<nameType>		m_transform_names;
 	std::vector<glm::ivec3>		m_connections; // [source transform, destination transform (if any), destination shape (if any)]
+	std::vector<std::string>	m_connection_names;
 };

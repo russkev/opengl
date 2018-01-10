@@ -247,13 +247,13 @@ void init (ApplicationState& _State)
 
 
 	// // Transform Geo 
-	//_State.sh.connect("transformMaster",	"transformLeft");
-	//_State.sh.connect("transformMaster",	"transformForward");
-	//_State.sh.connect("transformMaster",	"plane");
-	//_State.sh.connect("transformMaster",	"plane_01");
-	//_State.sh.connect("transformMaster",	"cube");
-	//_State.sh.connect("transformForward",	"arrow");
-	//_State.sh.connect("transformLeft",		"arrow");
+	_State.sh.connect("transformMaster",	"transformLeft");
+	_State.sh.connect("transformMaster",	"transformForward");
+	_State.sh.connect("transformMaster",	"plane");
+	_State.sh.connect("transformMaster",	"plane_01");
+	_State.sh.connect("transformMaster",	"cube");
+	_State.sh.connect("transformForward",	"arrow");
+	_State.sh.connect("transformLeft",		"arrow");
 
 	// // Send information to graphics card
 	_State.geoBuffer.Append(_State.sh.vertices());
