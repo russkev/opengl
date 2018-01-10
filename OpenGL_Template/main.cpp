@@ -255,8 +255,6 @@ void init (ApplicationState& _State)
 	//_State.sh.connect("transformForward",	"arrow");
 	//_State.sh.connect("transformLeft",		"arrow");
 
-	//!!! Working on making matrix transforms work
-
 	// // Send information to graphics card
 	_State.geoBuffer.Append(_State.sh.vertices());
 	_State.indxBuffer.Append(_State.sh.indices());
@@ -279,73 +277,18 @@ void init (ApplicationState& _State)
 	_State.VAO_main.GenerateVAO(_State.matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
 	_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
 
-	//glUseProgram(_State.programID);
-	//const GLuint numTransforms = _State.sh.numTransforms();
-	//const GLint transformsLocation = glGetUniformLocation(_State.programID, "transforms");
-	//std::vector<glm::mat4> transformsToUpload = _State.sh.transforms();
-	//glUniformMatrix4fv(transformsLocation, numTransforms, GL_FALSE, &transformsToUpload[0][0][0]);
 	_State.sh.uploadTransforms(_State.programID);
 
 
-//#ifdef DEBUG
-//	// // Debug matrix array
-//	std::vector<glm::mat4> testMatrixIn;
-//
-//	for (auto i = 0; i < 4; ++i)
-//	{
-//		testMatrixIn.push_back(glm::mat4(1.0f));
-//		glGetUniformfv(_State.programID, transformsLocation + i, glm::value_ptr(testMatrixIn[i]));
-//	}
-//
-//#endif // DEBUG
-	std::vector<glm::mat4> testUniform;
-	testUniform = _State.sh.readUniform<glm::mat4>(_State.programID, "transforms", 4);
+#ifdef DEBUG
+	// // Debug matrix array
+	std::vector<glm::mat4> testTransformsUniform;
+	testTransformsUniform = _State.sh.readUniform<glm::mat4>(_State.programID, "transforms", 4);
+
+
+#endif // DEBUG
+
 	auto x = 0;
-
-
-
-
-	
-	/*
-	// // Upload UBO (Uniform Buffer Object)
-	std::uint32_t blockIndex = glGetUniformBlockIndex(_State.programID, "matrices");
-
-	GLint blockSize;
-	glGetActiveUniformBlockiv(_State.programID, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
-	GLubyte * blockBuffer = (GLubyte *)malloc(blockSize);
-
-	// Query the offsets of each block variable
-	// https://www.packtpub.com/books/content/opengl-40-using-uniform-blocks-and-uniform-buffer-objects
-	const GLchar *names[] = { "umat_modelToProjection", "umat_modelToWorld" };
-
-	GLuint indices[2];
-	glGetUniformIndices(_State.programID, 2, names, indices);
-
-	GLint offset[2];
-	glGetActiveUniformsiv(_State.programID, 2, indices, GL_UNIFORM_OFFSET, offset);
-	
-	// Place data into buffers at appropriate offsets
-	std::vector<glm::mat4> viewMatrix = { glm::mat4(1.0f), glm::mat4(2.0f) };
-	std::vector<glm::mat4> wldMatrix  = { glm::mat4(1.0f), glm::mat4(4.0f) };
-	
-	memcpy(blockBuffer + offset[0], &viewMatrix, sizeof(glm::mat4)*viewMatrix.size());
-	
-	memcpy(blockBuffer + offset[1], &wldMatrix,  sizeof(glm::mat4)*viewMatrix.size());
-	
-	// !!! This runs, need to use nSight to check whether the vectors of matrices is being uploaded as expected
-	
-	// Create OpenGL Buffer and copy data into it
-	GLuint uboID;
-	glGenBuffers( 1, &uboID);
-	glBindBuffer(GL_UNIFORM_BUFFER, uboID);
-	glBufferData (GL_UNIFORM_BUFFER, blockSize, blockBuffer, GL_DYNAMIC_DRAW);
-
-	glBindBufferBase(GL_UNIFORM_BUFFER, blockIndex, uboID);
-
-
-	auto z = 0;
-	*/
-
 
 	return;
 }
