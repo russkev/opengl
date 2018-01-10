@@ -36,7 +36,7 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 
 	assert(sourceType != "0" && destType != "0");
 	assert(sourceType == "transform");
-	assert(sourceLoc > -1 && destLoc > -1);
+	assert(sourceLoc >= 0 && destLoc >= 0);
 
 	std::vector<std::string> * destination_strings = NULL;
 	if (destType == "shape")		{ destination_strings = &m_shape_names;  }
@@ -45,11 +45,12 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	std::string existingInput	= input(destination, *destination_strings);
 	intType existingInputLoc	= findString("transform", existingInput);
 
-	if (!sourceConnectionExists(sourceLoc))	
-	{ 
-		//m_connections.insert(connectionType(source, {})); 
-		m_connections.push_back({ sourceLoc, (destType == "transform") * destLoc, (destType == "shape") * destLoc });
-	}
+	//if (!sourceConnectionExists(sourceLoc))	
+	//{ 
+	//	//m_connections.insert(connectionType(source, {})); 
+	//	m_connections.push_back({ sourceLoc, (destType == "transform") * destLoc, (destType == "shape") * destLoc });
+	//	m_connection_names.push_back(source + " -> " + destination);
+	//}
 
 	if (existingInput != "") // If destination already has an incoming connection
 	{
@@ -65,6 +66,7 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 			{
 				//m_connections.at(existingInput).erase(m_connections.at(existingInput).begin() + i);
 				m_connections.erase(m_connections.begin() + i);
+				m_connection_names.erase(m_connection_names.begin() + i);
 			}
 			//if (m_connections.at(existingInput).size() == 0) // Remove connection from m_connections if it was the only connection
 			//{
@@ -76,6 +78,10 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 	//{
 	//	m_connections.at(source).push_back(destination);
 	//}
+	m_connections.push_back({ sourceLoc, (destType == "transform") * destLoc, (destType == "shape") * destLoc });
+	m_connection_names.push_back(source + " -> " + destination);
+
+	assert(m_connections.size() == m_connection_names.size());
 }
 
 std::string ShapeContainer::input(const std::string& s_destination, const std::vector<std::string>& s_destination_strings)
@@ -182,7 +188,7 @@ ShapeData::verticesType ShapeContainer::vertices()
 	for (auto i = 0; i < m_shapes.size(); ++i)
 	{
 		ShapeData::verticesType shapeVerts = m_shapes.at(i).vertices();
-		transformFromConnection(m_shape_names.at(i), shapeVerts);
+		//transformFromConnection(m_shape_names.at(i), shapeVerts);
 		t_vertices.insert(t_vertices.end(), shapeVerts.begin(), shapeVerts.end());
 	}
 	return t_vertices;
