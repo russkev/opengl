@@ -14,8 +14,9 @@ ShapeData::ShapeData() :
 	m_indices(indexType{}),
 	m_num_vertices(0u),
 	m_num_indices(0u),
-	m_id(5u)
+	m_id(0u)
 {};
+
 ShapeData::ShapeData(const verticesType s_vertices, const indicesType s_indices) :
 	m_vertices(s_vertices),
 	m_indices(s_indices),
@@ -28,7 +29,8 @@ ShapeData::ShapeData(const ShapeData&& other) :
 	m_vertices(std::move(other.m_vertices)),
 	m_indices(std::move(other.m_indices)),
 	m_num_vertices(std::move(other.m_num_vertices)),
-	m_num_indices(std::move(other.m_num_indices))
+	m_num_indices(std::move(other.m_num_indices)),
+	m_id(std::move(other.m_id))
 {};
 
 // // ----- Move Assign ----- // //
@@ -48,13 +50,14 @@ ShapeData& ShapeData::operator += (ShapeData& other)
 	m_vertices.insert(m_vertices.end(), other.m_vertices.begin(), other.m_vertices.end());
 	m_num_indices += other.m_num_indices;
 	m_num_vertices += other.m_num_vertices;
+	updateIds();
 	return *this;
 }
 
 // // ----- Append ----- // //
 void ShapeData::append_vertices(const vertexDataType s_shape)
 {
-	m_vertices.push_back({ std::get<attr::position>(s_shape), std::get<attr::color>(s_shape), std::get<attr::normal>(s_shape), m_id });
+	m_vertices.push_back({ std::get<attr::position>(s_shape),std::get<attr::color>(s_shape), std::get<attr::normal>(s_shape), m_id });
 	m_num_vertices++;
 }
 void ShapeData::append_indices(const GLushort s_index)
@@ -74,6 +77,18 @@ void ShapeData::setIndex(std::size_t loc, const indexType& data)
 {
 	assert(m_num_indices >= loc);
 	m_indices.at(loc) = data;
+}
+
+void ShapeData::setId(GLuint s_id) 
+{
+	if (m_num_vertices > 0)
+	{
+		for (auto & vertex : m_vertices)
+		{
+			std::get<attr::id>(vertex) = s_id;
+		}
+	}
+
 }
 
 // // ----- Getters ----- // //
@@ -97,6 +112,7 @@ void ShapeData::transform(glm::mat4 transformMatrix)
 
 void ShapeData::transform(ShapeData::verticesType& inVertices, const glm::mat4 transformMatrix)
 {
+
 	assert(inVertices.size() > 0);
 	for (auto & vertex : inVertices)
 	{
@@ -104,13 +120,18 @@ void ShapeData::transform(ShapeData::verticesType& inVertices, const glm::mat4 t
 		auto normal   = transformMatrix * glm::vec4(std::get<attr::normal>(vertex),   1);
 		std::get<attr::position>(vertex) = (glm::vec3)position;
 		std::get<attr::normal>(vertex) = (glm::vec3)normal;
+
 	}
 }
 
-//void ShapeData::addIdToVerts()
-//{
-//	for (auto & vertex : m_vertices)
-//	{
-//		vertex.
-//	}
-//}
+void ShapeData::updateIds()
+{
+	if (m_num_vertices > 0)
+	{
+		for (auto & vertex : m_vertices)
+		{
+			std::get<attr::id>(vertex) = m_id;
+		}
+	}
+
+}
