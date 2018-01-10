@@ -19,14 +19,14 @@ struct ShapeGenerator
 
 
 	// // APPEND THE SHAPES
-	void appendShape(ShapeData& inShape);
-	void appendTriangle();
-	void appendPlane(GLuint dimensions);
-	void appendCube();
-	void appendArrow();
-	void appendTube(GLuint resolution, GLfloat radius, GLfloat height);
-	void appendNormals(ShapeData& inShape);
-	void appendNormals();
+	//void appendShape(ShapeData& inShape);
+	//void appendTriangle();
+	//void appendPlane(GLuint dimensions);
+	//void appendCube();
+	//void appendArrow();
+	//void appendTube(GLuint resolution, GLfloat radius, GLfloat height);
+	//void appendNormals(ShapeData& inShape);
+	//void appendNormals();
 
 	// // TRANSFORM
 	void transform(glm::mat4 transformMatrix);
