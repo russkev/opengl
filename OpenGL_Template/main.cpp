@@ -278,7 +278,7 @@ void init (ApplicationState& _State)
 	_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
 
 	_State.sh.uploadTransforms(_State.programID);
-
+	_State.sh.uploadConnections(_State.programID);
 
 #ifdef DEBUG
 	// // Debug matrix array

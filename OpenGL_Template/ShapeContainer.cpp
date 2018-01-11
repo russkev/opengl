@@ -265,9 +265,12 @@ void ShapeContainer::uploadTransforms(const intType s_program_id)
 	const intType numTransforms = m_transforms.size();
 	const intType transformsLocation = glGetUniformLocation(s_program_id, "transforms");
 	glUniformMatrix4fv(transformsLocation, numTransforms, GL_FALSE, &m_transforms.at(0)[0][0]);
-	//glUseProgram(_State.programID);
-	//const GLuint numTransforms = _State.sh.numTransforms();
-	//const GLint transformsLocation = glGetUniformLocation(_State.programID, "transforms");
-	//std::vector<glm::mat4> transformsToUpload = _State.sh.transforms();
-	//glUniformMatrix4fv(transformsLocation, numTransforms, GL_FALSE, &transformsToUpload[0][0][0]);
+}
+
+void ShapeContainer::uploadConnections(const intType s_program_id)
+{
+	glUseProgram(s_program_id);
+	const intType numConnections = m_connections.size();
+	const intType connectionsLocation = glGetUniformLocation(s_program_id, "connections");
+	glUniform3iv(connectionsLocation, numConnections, &m_connections.at(0)[0]);
 }
