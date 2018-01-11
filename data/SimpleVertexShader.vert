@@ -9,6 +9,7 @@ in layout(location = 4) mat4 mat_modelToProjection;
 in layout(location = 8) mat4 mat_modelToWorld;
 
 uniform mat4[100] transforms;
+uniform ivec3[100] connections;
 //uniform float ufloat_test;
 //uniform mat4 umat_testB;
 

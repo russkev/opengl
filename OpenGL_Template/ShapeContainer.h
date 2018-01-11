@@ -60,6 +60,7 @@ struct ShapeContainer
 	bool connectionExists(const intType s_location, const intType s_source_location, const intType s_dest_location, const std::string& s_dest_type);
 
 	void uploadTransforms(const intType s_program_id);
+	void uploadConnections(const intType s_program_id);
 
 	template <typename T>
 	std::vector<T> readUniform(const intType s_program_id, const std::string &s_location_name, const intType numElements = 4)
