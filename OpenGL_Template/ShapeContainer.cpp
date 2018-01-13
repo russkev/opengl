@@ -261,16 +261,22 @@ bool ShapeContainer::connectionExists(const intType s_connections_location, cons
 
 void ShapeContainer::uploadTransforms(const intType s_program_id)
 {
-	glUseProgram(s_program_id);
-	const intType numTransforms = m_transforms.size();
-	const intType transformsLocation = glGetUniformLocation(s_program_id, "transforms");
-	glUniformMatrix4fv(transformsLocation, numTransforms, GL_FALSE, &m_transforms.at(0)[0][0]);
+	if (m_transforms.size() > 0) 
+	{
+		glUseProgram(s_program_id);
+		const intType numTransforms = m_transforms.size();
+		const intType transformsLocation = glGetUniformLocation(s_program_id, "transforms");
+		glUniformMatrix4fv(transformsLocation, numTransforms, GL_FALSE, &m_transforms.at(0)[0][0]);
+	}
 }
 
 void ShapeContainer::uploadConnections(const intType s_program_id)
 {
-	glUseProgram(s_program_id);
-	const intType numConnections = m_connections.size();
-	const intType connectionsLocation = glGetUniformLocation(s_program_id, "connections");
-	glUniform3iv(connectionsLocation, numConnections, &m_connections.at(0)[0]);
+	if (m_connections.size() > 0)
+	{
+		glUseProgram(s_program_id);
+		const intType numConnections = m_connections.size();
+		const intType connectionsLocation = glGetUniformLocation(s_program_id, "connections");
+		glUniform3iv(connectionsLocation, numConnections, &m_connections.at(0)[0]);
+	}
 }

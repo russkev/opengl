@@ -8,7 +8,7 @@ const int numElements = 100;
 in layout(location = 0) vec4 model_vertexPosition;
 in layout(location = 1) vec3 model_vertexColor;
 in layout(location = 2) vec3 model_vertexNormal;
-in layout(location = 3) uint model_id;
+in layout(location = 3) int model_id;
 in layout(location = 4) mat4 mat_modelToProjection;
 in layout(location = 8) mat4 mat_modelToWorld;
 
@@ -25,20 +25,35 @@ bool hasInput(int a)
 {
 	for(int i = 0; i < numElements; ++i)
 	{
-		if(connections[i][1] == a || connections[i][2] == a)
+		if((connections[i][1] == a || connections[i][2] == a) && (connections[i][0] != 0 && connections[i][1] != 0 && connections[1][2] != 0))
 		{
 			return true;
 		}
 	}
-}
+	return false;
+}		
 
 //void commitTransform
 
 
 void main()
 {
-	// // Output position of the vertex, in clip space : MVP * position
-	gl_Position				= mat_modelToProjection * model_vertexPosition * transforms[0] * (model_id+500u);
+	for(int i = 0; i < numElements; ++i)
+	{
+		if (!(hasInput(i)))
+		{
+			gl_Position	= mat_modelToProjection * model_vertexPosition * transforms[0];
+		}
+	}
+
+	//for (int i = 0; i < numElements; ++i)
+	//{
+	//	if (connections[i][2] == model_id)
+	//	{
+	//		// // Output position of the vertex, in clip space : MVP * position
+	//		gl_Position	= mat_modelToProjection * /*transforms[connections[i][0]] * */model_vertexPosition;
+	//	}
+	//}
 
 	// // The colour of each vertex will be interpolated to produce the colour of each fragment
 	f_world_vertexNormal	= normalize(vec3(mat_modelToWorld * vec4(model_vertexNormal, 0)));

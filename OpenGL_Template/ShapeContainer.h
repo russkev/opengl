@@ -63,7 +63,7 @@ struct ShapeContainer
 	void uploadConnections(const intType s_program_id);
 
 	template <typename T>
-	std::vector<T> readUniform(const intType s_program_id, const std::string &s_location_name, const intType numElements = 4)
+	std::vector<T> readUniform(const intType s_program_id, const std::string &s_location_name, const char &dataType, const intType numElements = 4)
 	{
 		//std::vector<std::string> location_name_vec(s_location_name.begin(), s_location_name.end());
 		//const GLChar* locationName = &s_location_name;
@@ -72,11 +72,14 @@ struct ShapeContainer
 		for (auto i = 0; i < numElements; ++i)
 		{
 			returnVector.resize(returnVector.size() + 1);
-			glGetUniformfv(s_program_id, location + i, glm::value_ptr(returnVector[i]));
+			//glGetUniformfv(s_program_id, location + i, glm::value_ptr(returnVector[i]));
+			//glGetUniformfv(s_program_id, location + i, glm::value_ptr(returnVector[i]));
+			//if (dataType == 'f') { glGetUniformfv(s_program_id, location + i, glm::value_ptr(returnVector[i])); }
+			if (dataType == 'i') { glGetUniformiv(s_program_id, location + i, glm::value_ptr(returnVector[i])); }
 		}
 		return returnVector;
 	}
-		
+
 private:
 	bool nameExists(const std::string& s_name);
 	void incrementString(std::string& s_name);
