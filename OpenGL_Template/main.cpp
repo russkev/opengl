@@ -282,8 +282,8 @@ void init (ApplicationState& _State)
 
 #ifdef DEBUG
 	// // Debug matrix array
-	std::vector<glm::mat4> testTransformsUniform;
-	testTransformsUniform = _State.sh.readUniform<glm::mat4>(_State.programID, "transforms", 'f', 4);
+	//std::vector<glm::mat4> testTransformsUniform;
+	//testTransformsUniform = _State.sh.readUniform<glm::mat4>(_State.programID, "transforms", 'f', 4);
 	std::vector<glm::ivec3> testConnectionsUniform;
 	testConnectionsUniform = _State.sh.readUniform<glm::ivec3>(_State.programID, "connections", 'i', 4);
 
