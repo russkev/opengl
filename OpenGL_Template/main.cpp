@@ -251,8 +251,8 @@ void init (ApplicationState& _State)
 	//_State.sh.connect("transformMaster",	"transformForward");
 	//_State.sh.connect("transformMaster",	"plane");
 	//_State.sh.connect("transformMaster",	"plane_01");
-	//_State.sh.connect("transformMaster",	"cube");
-	//_State.sh.connect("transformForward",	"arrow");
+	_State.sh.connect("transformMaster",	"cube");
+	_State.sh.connect("transformForward",	"arrow");
 	_State.sh.connect("transformLeft",		"arrow");
 
 	// // Send information to graphics card
@@ -282,10 +282,10 @@ void init (ApplicationState& _State)
 
 #ifdef DEBUG
 	// // Debug matrix array
-	//std::vector<glm::mat4> testTransformsUniform;
-	//testTransformsUniform = _State.sh.readUniform<glm::mat4>(_State.programID, "transforms", 'f', 4);
+	std::vector<glm::mat4> testTransformsUniform;
+	testTransformsUniform = _State.sh.readUniform<glm::mat4>(_State.programID, "transforms", 4);
 	std::vector<glm::ivec3> testConnectionsUniform;
-	testConnectionsUniform = _State.sh.readUniform<glm::ivec3>(_State.programID, "connections", 'i', 4);
+	testConnectionsUniform = _State.sh.readUniform<glm::ivec3>(_State.programID, "connections", 4);
 
 
 #endif // DEBUG

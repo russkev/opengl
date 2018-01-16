@@ -63,24 +63,43 @@ struct ShapeContainer
 	void uploadConnections(const intType s_program_id);
 
 	template <typename T>
-	std::vector<T> readUniform(const intType s_program_id, const std::string &s_location_name, const char &dataType, const intType numElements = 4)
+	std::vector<T> readUniform(const intType s_program_id, const std::string &s_location_name, const intType numElements = 4)
 	{
-		intType location = glGetUniformLocation(s_program_id, s_location_name.c_str());
-		std::vector<T> returnVector;
+		auto location = glGetUniformLocation(s_program_id, s_location_name.c_str());
+		std::vector<T> returnVector (numElements);
 		for (auto i = 0; i < numElements; ++i)
 		{
-			returnVector.resize(returnVector.size() + 1);
 			auto vp = glm::value_ptr(returnVector[i]);
-			//if (dataType == 'f') { 
-			if(std::is_same<glm::mat4, T>::value)
-			{	
-				//https://stackoverflow.com/questions/40546553/call-function-based-on-template-argument-type
+			auto vp_1 = *vp;
+			if constexpr(std::is_same_v<decltype(vp_1), float>)
+			{
 				glGetUniformfv(s_program_id, location + i, vp); 
 			}
-			if (dataType == 'i') { glGetUniformiv(s_program_id, location + i, vp); }
+			else if constexpr(std::is_same_v<decltype(vp_1), int>) 
+			{ 
+				glGetUniformiv(s_program_id, location + i, vp); 
+			}
 		}
 		return returnVector;
 	}
+
+
+	//template <typename T>
+	//std::vector<T> readUniform(int s_program_id, const std::string &s_location_name, unsigned numElements)
+	//{
+	//	auto location = glGetUniformLocation(s_program_id, s_location_name.c_str());
+	//	std::vector<T> returnVector(numElements);
+	//	for (auto i = 0; i < numElements; ++i)
+	//	{
+	//		auto vp = glm::value_ptr(returnVector[i]);
+	//		auto vp_type = decltype(*vp);
+	//		if constexpr (std::is_same_v<T, float>)
+	//			glGetUniformfv(s_program_id, location + i, vp);
+	//		else if constexpr (std::is_same_v<T, int>)
+	//			glGetUniformiv(s_program_id, location + i, vp);
+	//	}
+	//	return returnVector;
+	//}
 
 private:
 	bool nameExists(const std::string& s_name);
