@@ -234,7 +234,7 @@ void init (ApplicationState& _State)
 	_State.sh.appendShape(_State.shapes.makePlane(10), "plane");
 
 	// // Create transforms
-	glm::mat4 transformDown		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -20, 0));
+	glm::mat4 transformDown		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -10, 0));
 	glm::mat4 transformLeft		= glm::translate(glm::mat4(1.0f), glm::vec3(-8, 0, 0));
 	glm::mat4 transformForward	= glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -8));
 	glm::mat4 transformNone		= glm::mat4(1.0f);
@@ -252,8 +252,8 @@ void init (ApplicationState& _State)
 	//_State.sh.connect("transformMaster",	"plane");
 	//_State.sh.connect("transformMaster",	"plane_01");
 	//_State.sh.connect("transformMaster",	"cube");
-	_State.sh.connect("transformDown",		"plane");
-	_State.sh.connect("transformLeft",		"arrow");
+	_State.sh.connect("transformDown",		"arrow");
+	_State.sh.connect("transformLeft",		"plane");
 
 	// // Send information to graphics card
 	_State.geoBuffer.Append(_State.sh.vertices());
@@ -336,7 +336,7 @@ void render_frame (ApplicationState& _State)
 	 for (auto i = 0; i < (numMatMatrices -0); ++i)
 	 {
 		 //auto i = 0;
-		 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffers.at(i);
+		 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix();// * wldBuffers.at(i);
 		 auto offset = i * sizeof(glm::mat4);
 		 _State.matBuffer.Upload(offset, sizeof(glm::mat4), &tempMVP[0][0]);
 	 }

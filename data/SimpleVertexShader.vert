@@ -43,24 +43,28 @@ int incomingConnection(int a, int loc)
 
 void transformGlPosition()
 {
-	bool isTransformed = false;
-	for(int i = 0; i < numElements; ++i)
-	{
-		if (model_id == i) 
-		{
-			int incoming = incomingConnection(i, shapeDestLoc);
+	//bool isTransformed = false;
+	//for(int i = 0; i < numElements; ++i)
+	//{
+		//if (model_id == 0) 
+		//{
+			int incoming = incomingConnection(model_id, shapeDestLoc);
 			if (incoming > -1)
 			{ 
 				gl_Position	= mat_modelToProjection * transforms[incoming] * model_vertexPosition;
-				isTransformed = true;
-				break;
+				//isTransformed = true;
+				//return;
 			}
-		}
-	}
-	if (!isTransformed) 
-	{
-		gl_Position	= mat_modelToProjection * model_vertexPosition; 
-	}
+			else
+			{
+				gl_Position	= mat_modelToProjection * transforms[incoming] * model_vertexPosition;
+			}
+		//}
+	//}
+	//if (!isTransformed) 
+	//{
+	//	gl_Position	= mat_modelToProjection * model_vertexPosition; 
+	//}
 }
 	
 
