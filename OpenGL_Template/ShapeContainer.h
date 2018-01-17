@@ -83,24 +83,6 @@ struct ShapeContainer
 		return returnVector;
 	}
 
-
-	//template <typename T>
-	//std::vector<T> readUniform(int s_program_id, const std::string &s_location_name, unsigned numElements)
-	//{
-	//	auto location = glGetUniformLocation(s_program_id, s_location_name.c_str());
-	//	std::vector<T> returnVector(numElements);
-	//	for (auto i = 0; i < numElements; ++i)
-	//	{
-	//		auto vp = glm::value_ptr(returnVector[i]);
-	//		auto vp_type = decltype(*vp);
-	//		if constexpr (std::is_same_v<T, float>)
-	//			glGetUniformfv(s_program_id, location + i, vp);
-	//		else if constexpr (std::is_same_v<T, int>)
-	//			glGetUniformiv(s_program_id, location + i, vp);
-	//	}
-	//	return returnVector;
-	//}
-
 private:
 	bool nameExists(const std::string& s_name);
 	void incrementString(std::string& s_name);
