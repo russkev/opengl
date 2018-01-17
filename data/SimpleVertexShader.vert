@@ -21,16 +21,19 @@ out vec3 f_world_vertexPosition;
 
 // // Uniforms ; values that stay constant for whole mesh
 
-bool hasInput(int a)
+int hasInput(int a)
 {
+	int transformDestination = -1;
+	int shapeDestination = -1;
 	for(int i = 0; i < numElements; ++i)
 	{
+		transformDestination = connections[i][1]
 		if((connections[i][1] == a || connections[i][2] == a) && (connections[i][0] != 0 && connections[i][1] != 0 && connections[1][2] != 0))
 		{
 			return true;
 		}
 	}
-	return false;
+	return -1;
 }		
 
 //void commitTransform
@@ -40,10 +43,13 @@ void main()
 {
 	for(int i = 0; i < numElements; ++i)
 	{
-		if (!(hasInput(i)))
+		if (hasInput(i) == true)
 		{
-			gl_Position	= mat_modelToProjection * model_vertexPosition * transforms[0];
+			transform_loc = 
+			gl_Position	= mat_modelToProjection * transforms[1] * model_vertexPosition;
+			break;
 		}
+		gl_Position	= mat_modelToProjection * transforms[0] * model_vertexPosition;
 	}
 
 	//for (int i = 0; i < numElements; ++i)
