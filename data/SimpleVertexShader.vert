@@ -3,6 +3,9 @@
 #version 330 core
 
 const int numElements = 100;
+const int transformSourceLoc	= 0;
+const int transformDestLoc		= 1;
+const int shapeDestLoc			= 2;
 
 // // Input vertex data, different for all executions of this shader.
 in layout(location = 0) vec4 model_vertexPosition;
@@ -21,45 +24,50 @@ out vec3 f_world_vertexPosition;
 
 // // Uniforms ; values that stay constant for whole mesh
 
-int hasInput(int a)
+int incomingConnection(int a, int loc)
 {
-	int transformDestination = -1;
-	int shapeDestination = -1;
+	int destination			= -1;
+	bool emptyConnection	= true;
+
 	for(int i = 0; i < numElements; ++i)
 	{
-		transformDestination = connections[i][1]
-		if((connections[i][1] == a || connections[i][2] == a) && (connections[i][0] != 0 && connections[i][1] != 0 && connections[1][2] != 0))
-		{
-			return true;
-		}
+		destination		= connections[i][loc];
+		emptyConnection	= (connections[i][transformSourceLoc] == 0 && connections[i][transformDestLoc] == 0 && connections[1][shapeDestLoc] == 0);
+		if (emptyConnection)	{ continue; }
+		if (destination == a)	{ return connections[i][transformSourceLoc]; }
 	}
 	return -1;
-}		
+}
 
-//void commitTransform
+
+
+void transformGlPosition()
+{
+	bool isTransformed = false;
+	for(int i = 0; i < numElements; ++i)
+	{
+		if (model_id == i) 
+		{
+			int incoming = incomingConnection(i, shapeDestLoc);
+			if (incoming > -1)
+			{ 
+				gl_Position	= mat_modelToProjection * transforms[incoming] * model_vertexPosition;
+				isTransformed = true;
+				break;
+			}
+		}
+	}
+	if (!isTransformed) 
+	{
+		gl_Position	= mat_modelToProjection * model_vertexPosition; 
+	}
+}
+	
 
 
 void main()
 {
-	for(int i = 0; i < numElements; ++i)
-	{
-		if (hasInput(i) == true)
-		{
-			transform_loc = 
-			gl_Position	= mat_modelToProjection * transforms[1] * model_vertexPosition;
-			break;
-		}
-		gl_Position	= mat_modelToProjection * transforms[0] * model_vertexPosition;
-	}
-
-	//for (int i = 0; i < numElements; ++i)
-	//{
-	//	if (connections[i][2] == model_id)
-	//	{
-	//		// // Output position of the vertex, in clip space : MVP * position
-	//		gl_Position	= mat_modelToProjection * /*transforms[connections[i][0]] * */model_vertexPosition;
-	//	}
-	//}
+	transformGlPosition();
 
 	// // The colour of each vertex will be interpolated to produce the colour of each fragment
 	f_world_vertexNormal	= normalize(vec3(mat_modelToWorld * vec4(model_vertexNormal, 0)));

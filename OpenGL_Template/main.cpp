@@ -228,31 +228,31 @@ void init (ApplicationState& _State)
 	//!!! See shape container
 
 	// // Create Geo
-	_State.sh.appendShape(_State.shapes.makePlane(1), "plane");
+	//_State.sh.appendShape(_State.shapes.makePlane(1), "plane");
 	_State.sh.appendShape(_State.shapes.makeArrow(), "arrow");
-	_State.sh.appendShape(_State.shapes.makeCube(), "cube");
+	//_State.sh.appendShape(_State.shapes.makeCube(), "cube");
 	_State.sh.appendShape(_State.shapes.makePlane(10), "plane");
 
 	// // Create transforms
-	glm::mat4 transformMaster	= glm::translate(glm::mat4(1.0f), glm::vec3(0, -6, 0));
+	glm::mat4 transformDown		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -20, 0));
 	glm::mat4 transformLeft		= glm::translate(glm::mat4(1.0f), glm::vec3(-8, 0, 0));
 	glm::mat4 transformForward	= glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -8));
 	glm::mat4 transformNone		= glm::mat4(1.0f);
 	
 	_State.sh.appendTransform(std::move(transformNone),		"transformNone");
-	_State.sh.appendTransform(std::move(transformMaster),	"transformMaster");
+	_State.sh.appendTransform(std::move(transformDown),		"transformDown");
 	_State.sh.appendTransform(std::move(transformLeft),		"transformLeft");
 	_State.sh.appendTransform(std::move(transformForward),	"transformForward");
 
 
 
 	// // Transform Geo 
-	_State.sh.connect("transformMaster",	"transformLeft");
-	_State.sh.connect("transformMaster",	"transformForward");
-	_State.sh.connect("transformMaster",	"plane");
-	_State.sh.connect("transformMaster",	"plane_01");
-	_State.sh.connect("transformMaster",	"cube");
-	_State.sh.connect("transformForward",	"arrow");
+	//_State.sh.connect("transformMaster",	"transformLeft");
+	//_State.sh.connect("transformMaster",	"transformForward");
+	//_State.sh.connect("transformMaster",	"plane");
+	//_State.sh.connect("transformMaster",	"plane_01");
+	//_State.sh.connect("transformMaster",	"cube");
+	_State.sh.connect("transformDown",		"plane");
 	_State.sh.connect("transformLeft",		"arrow");
 
 	// // Send information to graphics card
@@ -263,7 +263,7 @@ void init (ApplicationState& _State)
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(6.0f)[0][0]);
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
 
-	_State.wldBuffer.Append(sizeof(glm::mat4), &transformMaster);
+	_State.wldBuffer.Append(sizeof(glm::mat4), &transformDown);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &transformLeft);
 	_State.wldBuffer.Append(sizeof(glm::mat4), &transformForward);
 
