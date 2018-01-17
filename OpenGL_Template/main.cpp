@@ -26,7 +26,7 @@
 
 
 #define GLM_ENABLE_EXPERIMENTAL
-#define DEBUG
+//#define DEBUG
 #include <glm/gtc/matrix_transform.hpp>
 
 static constexpr auto POSITION_ATTR = 0u;
@@ -247,10 +247,10 @@ void init (ApplicationState& _State)
 
 
 	// // Transform Geo 
-	//_State.sh.connect("transformMaster",	"transformLeft");
-	//_State.sh.connect("transformMaster",	"transformForward");
-	//_State.sh.connect("transformMaster",	"plane");
-	//_State.sh.connect("transformMaster",	"plane_01");
+	_State.sh.connect("transformMaster",	"transformLeft");
+	_State.sh.connect("transformMaster",	"transformForward");
+	_State.sh.connect("transformMaster",	"plane");
+	_State.sh.connect("transformMaster",	"plane_01");
 	_State.sh.connect("transformMaster",	"cube");
 	_State.sh.connect("transformForward",	"arrow");
 	_State.sh.connect("transformLeft",		"arrow");
@@ -285,7 +285,7 @@ void init (ApplicationState& _State)
 	std::vector<glm::mat4> testTransformsUniform;
 	testTransformsUniform = _State.sh.readUniform<glm::mat4>(_State.programID, "transforms", 4);
 	std::vector<glm::ivec3> testConnectionsUniform;
-	testConnectionsUniform = _State.sh.readUniform<glm::ivec3>(_State.programID, "connections", 4);
+	testConnectionsUniform = _State.sh.readUniform<glm::ivec3>(_State.programID, "connections", 7);
 
 
 #endif // DEBUG
