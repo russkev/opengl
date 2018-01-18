@@ -15,8 +15,18 @@ in layout(location = 3) int model_id;
 in layout(location = 4) mat4 mat_modelToProjection;
 in layout(location = 8) mat4 mat_modelToWorld;
 
+// // Array of transforms
+// // Numbers in the transform slots of the connections array
+// // indicte the nth matrix in this array
 uniform mat4[numElements] transforms;
+
+// // Connections is an ivec3 of the form:
+// // <source transform, destination transform, destination shape>
+// // It should have a number in slot 0 and either a number in slot 1 or slot 2
+// // -1 indicates that that slot is empty
+// // <0,0,0> indicates that the connection is empty
 uniform ivec3[numElements] connections;
+
 
 // // Output data ; will be interpolated for each fragment
 out vec3 f_world_vertexNormal;
@@ -43,28 +53,15 @@ int incomingConnection(int a, int loc)
 
 void transformGlPosition()
 {
-	//bool isTransformed = false;
-	//for(int i = 0; i < numElements; ++i)
-	//{
-		//if (model_id == 0) 
-		//{
-			int incoming = incomingConnection(model_id, shapeDestLoc);
-			if (incoming > -1)
-			{ 
-				gl_Position	= mat_modelToProjection * transforms[incoming] * model_vertexPosition;
-				//isTransformed = true;
-				//return;
-			}
-			else
-			{
-				gl_Position	= mat_modelToProjection * transforms[incoming] * model_vertexPosition;
-			}
-		//}
-	//}
-	//if (!isTransformed) 
-	//{
-	//	gl_Position	= mat_modelToProjection * model_vertexPosition; 
-	//}
+	int incoming = incomingConnection(model_id, shapeDestLoc);
+	if (incoming > -1)
+	{ 
+		gl_Position	= mat_modelToProjection * transforms[incoming] * model_vertexPosition;
+	}
+	else
+	{
+		gl_Position	= mat_modelToProjection * model_vertexPosition;
+	}
 }
 	
 
@@ -74,7 +71,9 @@ void main()
 	transformGlPosition();
 
 	// // The colour of each vertex will be interpolated to produce the colour of each fragment
-	f_world_vertexNormal	= normalize(vec3(mat_modelToWorld * vec4(model_vertexNormal, 0)));
+	
 	f_world_vertexPosition	= vec3(mat_modelToWorld * model_vertexPosition);
+	fragmentColor			= model_vertexColor;
+	f_world_vertexNormal	= normalize(vec3(mat_modelToWorld * vec4(model_vertexNormal, 0)));
 }
 
