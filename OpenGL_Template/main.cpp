@@ -26,7 +26,7 @@
 
 
 #define GLM_ENABLE_EXPERIMENTAL
-//#define DEBUG
+#define DEBUG
 #include <glm/gtc/matrix_transform.hpp>
 
 static constexpr auto POSITION_ATTR = 0u;
@@ -229,9 +229,9 @@ void init (ApplicationState& _State)
 
 	// // Create Geo
 	//_State.sh.appendShape(_State.shapes.makePlane(1), "plane");
+	_State.sh.appendShape(_State.shapes.makeCube(), "cube");
 	_State.sh.appendShape(_State.shapes.makeArrow(), "arrow");
-	//_State.sh.appendShape(_State.shapes.makeCube(), "cube");
-	_State.sh.appendShape(_State.shapes.makePlane(10), "plane");
+	_State.sh.appendShape(_State.shapes.makePlane(4), "plane");
 
 	// // Create transforms
 	glm::mat4 transformDown		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -10, 0));
@@ -251,8 +251,8 @@ void init (ApplicationState& _State)
 	//_State.sh.connect("transformMaster",	"transformForward");
 	//_State.sh.connect("transformMaster",	"plane");
 	//_State.sh.connect("transformMaster",	"plane_01");
-	//_State.sh.connect("transformMaster",	"cube");
-	_State.sh.connect("transformDown",		"arrow");
+	_State.sh.connect("transformForward",	"cube");
+	_State.sh.connect("transformLeft",		"arrow");
 	_State.sh.connect("transformLeft",		"plane");
 
 	// // Send information to graphics card

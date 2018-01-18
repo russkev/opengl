@@ -1,9 +1,10 @@
 #version 330 core
 
 // // Interpolate values from the vertex shaders // //
-//in vec3 fragmentColor;
-in vec3 f_world_vertexNormal;
 in vec3 f_world_vertexPosition;
+in vec3 fragmentColor;
+in vec3 f_world_vertexNormal;
+
 
 // // Uniforms // //
 uniform vec4 ambientLight;
