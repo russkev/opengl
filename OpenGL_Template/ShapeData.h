@@ -13,7 +13,7 @@ struct ShapeData
 public:	
 	// // ----- Type Definitions ----- // //
 	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3>			vertexDataType;
-	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, GLuint>	vertexType;
+	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, GLint>	vertexType;
 	typedef std::vector<vertexType>								verticesType;
 	typedef GLushort											indexType;
 	typedef std::vector<indexType>								indicesType;

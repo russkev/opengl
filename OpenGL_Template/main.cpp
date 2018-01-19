@@ -26,7 +26,7 @@
 
 
 #define GLM_ENABLE_EXPERIMENTAL
-#define DEBUG
+//#define DEBUG
 #include <glm/gtc/matrix_transform.hpp>
 
 static constexpr auto POSITION_ATTR = 0u;
@@ -269,7 +269,7 @@ void init (ApplicationState& _State)
 
 
 	// // Set up standard information for the VAO
-	static const auto shape_info  = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, GLuint>>::get();
+	static const auto shape_info  = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, GLint>>::get();
 	static const auto matrix_info = gl_introspect_tuple<std::tuple<glm::mat4>>::get();
 
 	// // Upload the VAO information
@@ -365,15 +365,18 @@ bool poll_events (ApplicationState& _State)
 	SDL_Event loc_event;
 	static bool mouseDown = false;
 	static bool altDown = false;
-	while (SDL_PollEvent (&loc_event)) {
+	while (SDL_PollEvent (&loc_event)) 
+	{
 		
-		if (loc_event.type == SDL_QUIT) {
+		if (loc_event.type == SDL_QUIT) 
+		{
 			return false;
 		}
 		if (loc_event.type == SDL_KEYUP) {
-			if (loc_event.key.keysym.scancode == SDL_SCANCODE_F) {\
+			if (loc_event.key.keysym.scancode == SDL_SCANCODE_F) 
+			{
 				glm::mat4 wldBuffer = glm::mat4(1.0f);
-				_State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
+				//_State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
 				_State.cam.focus(wldBuffer);
 			}
 		}

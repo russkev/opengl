@@ -32,6 +32,7 @@ uniform ivec3[numElements] connections;
 out vec3 f_world_vertexPosition;
 out vec3 fragmentColor;
 out vec3 f_world_vertexNormal;
+out float float_id;
 
 
 // // Uniforms ; values that stay constant for whole mesh
@@ -75,7 +76,14 @@ void main()
 	// // The colour of each vertex will be interpolated to produce the colour of each fragment
 	
 	f_world_vertexPosition	= vec3(mat_modelToWorld * model_vertexPosition);
+
 	fragmentColor			= model_vertexColor;
+	//float id_as_float		= float(model_id);
+	//float id_color			= id_as_float / float(2147483647);
+	//float id_color			= id_as_float - 1;
+	//fragmentColor			= vec3(id_color, id_color, id_color);
+
 	f_world_vertexNormal	= normalize(vec3(mat_modelToWorld * vec4(model_vertexNormal, 0)));
+	float_id				= float(model_id);
 }
 
