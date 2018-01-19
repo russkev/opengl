@@ -4,6 +4,7 @@
 in vec3 f_world_vertexPosition;
 in vec3 fragmentColor;
 in vec3 f_world_vertexNormal;
+in float float_id;
 
 
 // // Uniforms // //
@@ -44,5 +45,8 @@ void main(){
 
 	//color						= ambientLight + clamp(diff_light*lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
 	//color						= vec4(lightIntensity, lightIntensity, lightIntensity, 1.0);
-	color						= vec4(diff_color, 1);
+	//color						= ambientLight + clamp(diff_light * lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
+	//color						= vec4(fragmentColor, 1);
+	float float_id_adjusted		= float_id/2147483647;
+	color						= vec4(float_id_adjusted, float_id_adjusted, float_id_adjusted, 1);
 }
