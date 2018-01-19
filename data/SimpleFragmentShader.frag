@@ -15,7 +15,8 @@ uniform vec3 camPosition;
 out vec4 color;
 
 void main(){
-	vec3 diff_color				= vec3(1.0, 0.7, 0.5);
+	//vec3 diff_color				= vec3(1.0, 0.7, 0.5);
+	vec3 diff_color				= fragmentColor;
 
 	vec3  spec_color			= vec3(1.0, 0.7, 0.5);
 	float spec_cosinePower		= 30;
@@ -33,6 +34,7 @@ void main(){
 	float diff_brightness		= dot(world_lightVector, world_normalVector);
 	vec4 diff_light				= vec4(diff_color * diff_brightness, 1.0);
 
+
 	vec3 reflectedLightVector	= reflect(-world_lightVector, world_normalVector);
 	vec3 camVector				= normalize(camPosition - f_world_vertexPosition);
 
@@ -40,6 +42,7 @@ void main(){
 	spec_brightness				= pow(spec_brightness, spec_cosinePower);
 	vec4 spec_light				= vec4(spec_color*spec_brightness, 1.0);
 
-	color						= ambientLight + clamp(diff_light*lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
+	//color						= ambientLight + clamp(diff_light*lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
 	//color						= vec4(lightIntensity, lightIntensity, lightIntensity, 1.0);
+	color						= vec4(diff_color, 1);
 }

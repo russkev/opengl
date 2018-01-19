@@ -29,8 +29,10 @@ uniform ivec3[numElements] connections;
 
 
 // // Output data ; will be interpolated for each fragment
-out vec3 f_world_vertexNormal;
 out vec3 f_world_vertexPosition;
+out vec3 fragmentColor;
+out vec3 f_world_vertexNormal;
+
 
 // // Uniforms ; values that stay constant for whole mesh
 
