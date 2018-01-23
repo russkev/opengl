@@ -146,7 +146,7 @@ void init (ApplicationState& _State)
 	SDL_Init (SDL_INIT_EVERYTHING);
 	std::atexit(SDL_Quit);
 	
-	typedef std::vector<std::tuple<glm::tvec3<GLfloat>, glm::tvec3<GLfloat>, glm::tvec3<GLfloat>>> vertexType;
+	//typedef std::vector<std::tuple<glm::tvec3<GLfloat>, glm::tvec3<GLfloat>, glm::tvec3<GLfloat>>> vertexType;
 
 	for(const auto& it : st_config)
 	{

@@ -47,6 +47,7 @@ void main(){
 	//color						= vec4(lightIntensity, lightIntensity, lightIntensity, 1.0);
 	//color						= ambientLight + clamp(diff_light * lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
 	//color						= vec4(fragmentColor, 1);
-	float float_id_adjusted		= float_id/2147483647;
+	float toAdd					= 32.000;
+	float float_id_adjusted		= float(double(float_id) - double(813694943));//float(float_id - 813694976) + toAdd;
 	color						= vec4(float_id_adjusted, float_id_adjusted, float_id_adjusted, 1);
 }
