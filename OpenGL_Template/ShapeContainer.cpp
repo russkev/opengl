@@ -4,15 +4,12 @@ void ShapeContainer::appendShape(ShapeData&& s_shape, const std::string& s_name)
 {
 	auto id = m_shapes.size();
 	auto t_name = s_name;
-	//auto suffix = "_shape";
 
-	while (nameExists(t_name) /*|| nameExists(t_name + suffix)*/) { incrementString(t_name); }
+	while ( nameExists(t_name) ) { incrementString(t_name); }
 
 	m_shapes.push_back(std::move(s_shape));
 	m_shape_names.push_back(std::move(t_name));
 	m_shapes.at(id).setId(id);
-	//appendTransform(glm::mat4(), t_name);
-	//connect(t_name, t_name+suffix);
 	assert(m_shapes.size() == m_shape_names.size());
 }
 
@@ -82,7 +79,6 @@ bool ShapeContainer::sourceConnectionExists(const intType source)
 	{
 		if (m_connections.at(i)[0] == source) { return true; }
 	}
-	//return m_connections.find(source) != m_connections.end();
 	return false;
 }
 
@@ -157,12 +153,9 @@ ShapeData::verticesType ShapeContainer::vertices()
 	
 	*/
 	ShapeData::verticesType t_vertices;
-
-	//for (auto & shape : m_shapes)
 	for (auto i = 0; i < m_shapes.size(); ++i)
 	{
 		ShapeData::verticesType shapeVerts = m_shapes.at(i).vertices();
-		//transformFromConnection(m_shape_names.at(i), shapeVerts);
 		t_vertices.insert(t_vertices.end(), shapeVerts.begin(), shapeVerts.end());
 	}
 	return t_vertices;
@@ -224,13 +217,6 @@ bool ShapeContainer::connectionExists(const intType s_connections_location, cons
 			m_connections.at(s_connections_location)[2] == s_dest_location;
 	}
 	return false;
-
-	//return
-	//	m_connections.at(s_location)[0] == s_source_location &&
-	//	(
-	//		( m_connections.at(s_location)[1] == s_dest_location && s_dest_type == "transform" ) || 
-	//		( m_connections.at(s_location)[2] == s_dest_location && s_dest_type == "shape")
-	//		);
 }
 
 void ShapeContainer::uploadTransforms(const intType s_program_id)

@@ -32,7 +32,6 @@ uniform ivec3[numElements] connections;
 out vec3 f_world_vertexPosition;
 out vec3 fragmentColor;
 out vec3 f_world_vertexNormal;
-out float float_id;
 
 
 // // Uniforms ; values that stay constant for whole mesh
@@ -57,37 +56,44 @@ int incomingConnection(int a, int loc)
 void transformGlPosition()
 {
 	int incoming = incomingConnection(model_id, shapeDestLoc);
+
+	mat4 transform = {
+		vec4(1.0f, 0.0f, 0.0f, 0.0f),
+		vec4(0.0f, 1.0f, 0.0f, 0.0f),
+		vec4(0.0f, 0.0f, 1.0f, 0.0f),
+		vec4(0.0f, 0.0f, 0.0f, 1.0f)
+	};
+
 	if (incoming > -1)
-	{ 
-		gl_Position	= mat_modelToProjection * transforms[incoming] * model_vertexPosition;
-	}
-	else
 	{
-		gl_Position	= mat_modelToProjection * model_vertexPosition;
+		transform = transforms[incoming];
 	}
+	gl_Position	= mat_modelToProjection * transform * model_vertexPosition;
+	f_world_vertexPosition	= vec3(mat_modelToWorld * transform * model_vertexPosition);
+	f_world_vertexNormal	= normalize(vec3(mat_modelToWorld * transform * vec4(model_vertexNormal, 0)));
 }
 	
-//vec3 colorFromIndex(int a)
-//{
-//	colArray = 
-//}
+vec3 colorFromIndex(int a)
+{
+	vec3 colArray[6] = 
+	{
+		vec3(1.0f, 0.0f, 0.0f), //red
+		vec3(0.0f, 1.0f, 0.0f), //green
+		vec3(0.0f, 0.0f, 1.0f), //blue
+		vec3(1.0f, 1.0f, 0.0f), //yellow
+		vec3(0.0f, 1.0f, 1.0f), //cyan
+		vec3(1.0f, 0.0f, 1.0f)  //magenta
+	};
+	return colArray[a%6];
+}
 
 
 void main()
 {
 	transformGlPosition();
 
-	// // The colour of each vertex will be interpolated to produce the colour of each fragment
+	fragmentColor			= colorFromIndex(model_id+2) * 0.5;
+
 	
-	f_world_vertexPosition	= vec3(mat_modelToWorld * model_vertexPosition);
-
-	fragmentColor			= model_vertexColor;
-	//float id_as_float		= float(model_id);
-	//float id_color			= id_as_float / float(2147483647);
-	//float id_color			= id_as_float - 1;
-	//fragmentColor			= vec3(id_color, id_color, id_color);
-
-	f_world_vertexNormal	= normalize(vec3(mat_modelToWorld * vec4(model_vertexNormal, 0)));
-	float_id				= float(model_id);
 }
 

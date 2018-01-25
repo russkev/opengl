@@ -59,9 +59,6 @@
     <ClInclude Include="loadShader.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="glad\glad.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="loadBMP_custom.h">
       <Filter>Source Files</Filter>
     </ClInclude>

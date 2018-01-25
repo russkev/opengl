@@ -221,12 +221,6 @@ void init (ApplicationState& _State)
 	_State.projection = glm::perspective(glm::radians(50.0f), float(width) / float(height), 0.1f, 100.0f);
 	_State.view       = _State.cam.getWorldToViewMatrix();
 
-
-	// // TEST // //
-	// // END TEST // //
-
-	//!!! See shape container
-
 	// // Create Geo
 	//_State.sh.appendShape(_State.shapes.makePlane(1), "plane");
 	_State.sh.appendShape(_State.shapes.makeCube(), "cube");
@@ -238,22 +232,17 @@ void init (ApplicationState& _State)
 	glm::mat4 transformLeft		= glm::translate(glm::mat4(1.0f), glm::vec3(-8, 0, 0));
 	glm::mat4 transformForward	= glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -8));
 	glm::mat4 transformNone		= glm::mat4(1.0f);
-	
+	glm::mat4 transformR1		= glm::rotate(glm::mat4(1.0f), 5.0f, glm::vec3(1.0f, 0.0f, 1.0f));
 	_State.sh.appendTransform(std::move(transformNone),		"transformNone");
 	_State.sh.appendTransform(std::move(transformDown),		"transformDown");
 	_State.sh.appendTransform(std::move(transformLeft),		"transformLeft");
 	_State.sh.appendTransform(std::move(transformForward),	"transformForward");
-
-
+	_State.sh.appendTransform(std::move(transformR1),		"rotate1");
 
 	// // Transform Geo 
-	//_State.sh.connect("transformMaster",	"transformLeft");
-	//_State.sh.connect("transformMaster",	"transformForward");
-	//_State.sh.connect("transformMaster",	"plane");
-	//_State.sh.connect("transformMaster",	"plane_01");
 	_State.sh.connect("transformForward",	"cube");
-	_State.sh.connect("transformLeft",		"arrow");
-	_State.sh.connect("transformLeft",		"plane");
+	_State.sh.connect("rotate1",			"arrow");
+	_State.sh.connect("transformDown",		"plane");
 
 	// // Send information to graphics card
 	_State.geoBuffer.Append(_State.sh.vertices());
@@ -318,7 +307,7 @@ void render_frame (ApplicationState& _State)
 	 // // LIGHTING // //
 	 glUseProgram(_State.programID);
 	 // // Ambient Lighting // //
-	 glm::vec4 ambientLight = { 0.0f, 0.17f, 0.3f, 1.0f };
+	 glm::vec4 ambientLight = { 0.0f, 0.34f, 0.6f, 1.0f };
 	 glUniform4fv(_State.ambientLightID, 1, &ambientLight.r);
 	 // // Diffuse Lighting // // 
 	 glm::vec3 lightPosition = { 0.0f, 2.0f, 0.0f };
@@ -335,18 +324,10 @@ void render_frame (ApplicationState& _State)
 	 _State.wldBuffer.ReadBuffer(&wldBuffers.at(0)[0][0]);
 	 for (auto i = 0; i < (numMatMatrices -0); ++i)
 	 {
-		 //auto i = 0;
 		 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix();// * wldBuffers.at(i);
 		 auto offset = i * sizeof(glm::mat4);
 		 _State.matBuffer.Upload(offset, sizeof(glm::mat4), &tempMVP[0][0]);
 	 }
-	 //_State.matBuffer.Upload(0, sizeof(glm::mat4), &(glm::mat4(5.4)));
-
-	 //glm::mat4 wldBuffer = glm::mat4(1.0f);
-	 ////_State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
-	 //glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix() * wldBuffer;
-	 //_State.matBuffer.Upload(0, sizeof(glm::mat4), &tempMVP[0][0]);
-	
 	 
 	 _State.VAO_main.Bind();
 	 _State.indxBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
