@@ -67,6 +67,10 @@ void transformGlPosition()
 	}
 }
 	
+//vec3 colorFromIndex(int a)
+//{
+//	colArray = 
+//}
 
 
 void main()

@@ -23,7 +23,14 @@ void VAO::GenerateVAO(const Buffer& inBuffer, std::size_t divisor, const member_
 		for (auto i = 0u; i < mi.slot_occupancy; ++i)
 		{
 			glEnableVertexAttribArray(id_offset + mi.attribute_slot + i);
-			glVertexAttribPointer(id_offset + mi.attribute_slot + i,mi.component_count, mi.gl_type_enum, GL_TRUE, mi.tuple_stride, mi.offset_from_start + i * mi.slot_size_in_bytes);
+			if (mi.gl_type_enum == GL_FLOAT || mi.gl_type_enum == GL_DOUBLE)
+			{
+				glVertexAttribPointer(id_offset + mi.attribute_slot + i, mi.component_count, mi.gl_type_enum, GL_TRUE, mi.tuple_stride, mi.offset_from_start + i * mi.slot_size_in_bytes);
+			}
+			else
+			{
+				glVertexAttribIPointer(id_offset + mi.attribute_slot + i, mi.component_count, mi.gl_type_enum, mi.tuple_stride, mi.offset_from_start + i * mi.slot_size_in_bytes);
+			}
 			glVertexAttribDivisor(id_offset + mi.attribute_slot + i, divisor);
 
 		}
