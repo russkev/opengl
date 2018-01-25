@@ -10,7 +10,7 @@
 
 struct VAO
 {
-	// // BIG 6
+	// // CONSTRUCTOR
 	VAO();
 
 	// // GENERAL FUNCTIONS
