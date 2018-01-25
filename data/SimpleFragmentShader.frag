@@ -4,7 +4,6 @@
 in vec3 f_world_vertexPosition;
 in vec3 fragmentColor;
 in vec3 f_world_vertexNormal;
-in float float_id;
 
 
 // // Uniforms // //
@@ -16,7 +15,6 @@ uniform vec3 camPosition;
 out vec4 color;
 
 void main(){
-	//vec3 diff_color				= vec3(1.0, 0.7, 0.5);
 	vec3 diff_color				= fragmentColor;
 
 	vec3  spec_color			= vec3(1.0, 0.7, 0.5);
@@ -25,7 +23,7 @@ void main(){
 	float lightDistance			= distance(lightPosition, f_world_vertexPosition);
 	float lightRadius			= 1;
 
-	float lightIntensity		= 2;
+	float lightIntensity		= 200;
 	lightIntensity				= lightIntensity / pow(((lightDistance / lightRadius) + 1), 2);
 
 
@@ -43,11 +41,5 @@ void main(){
 	spec_brightness				= pow(spec_brightness, spec_cosinePower);
 	vec4 spec_light				= vec4(spec_color*spec_brightness, 1.0);
 
-	//color						= ambientLight + clamp(diff_light*lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
-	//color						= vec4(lightIntensity, lightIntensity, lightIntensity, 1.0);
-	//color						= ambientLight + clamp(diff_light * lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
-	//color						= vec4(fragmentColor, 1);
-	//float toAdd					= 32.000;
-	float float_id_adjusted		= float_id / 3;
-	color						= vec4(float_id_adjusted, float_id_adjusted, float_id_adjusted, 1);
+	color						= ambientLight * vec4(diff_color, 1) + clamp(diff_light * lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
 }
