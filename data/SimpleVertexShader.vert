@@ -19,6 +19,7 @@ in layout(location = 8) mat4 mat_modelToWorld;
 // // Numbers in the transform slots of the connections array
 // // indicte the nth matrix in this array
 uniform mat4[numElements] transforms;
+mat4[numElements] transformsMoved = transforms;
 
 // // Connections is an ivec3 of the form:
 // // <source transform, destination transform, destination shape>
@@ -51,7 +52,18 @@ int incomingConnection(int a, int loc)
 	return -1;
 }
 
+mat4 transformTransform(int endTransformId)
+{
+	mat4 outTransform = transforms[endTransformId];
+	int incomingTransformId = incomingConnection(endTransformId, transformDestLoc);
 
+	while (incomingTransformId != -1)
+	{
+		outTransform = transforms[incomingTransformId] * transforms[endTransformId];
+		incomingTransformId = incomingConnection(incomingTransformId, transformDestLoc);
+	}
+	return outTransform;
+}
 
 void transformGlPosition()
 {
@@ -66,7 +78,7 @@ void transformGlPosition()
 
 	if (incoming > -1)
 	{
-		transform = transforms[incoming];
+		transform = transformTransform(incoming);
 	}
 	gl_Position	= mat_modelToProjection * transform * model_vertexPosition;
 	f_world_vertexPosition	= vec3(mat_modelToWorld * transform * model_vertexPosition);

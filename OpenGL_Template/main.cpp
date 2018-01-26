@@ -37,12 +37,15 @@ static constexpr auto MODEL_ATTR    = 4u;
 static constexpr auto WORLD_ATTR	= 8u;
 
 struct ApplicationState {
-	GLuint programID       = 0;
-	GLuint matrixID        = 0;
-	GLuint ambientLightID  = 0;
-	GLuint lightPositionID = 0;
-	GLuint worldMatrixID   = 0;
-	GLuint camPositionID   = 0;
+	GLuint programID		= 0;
+	GLuint matrixID			= 0;
+	GLuint ambientLightID	= 0;
+	GLuint lightPositionID	= 0;
+	GLuint worldMatrixID	= 0;
+	GLuint camPositionID	= 0;
+
+	GLuint width			= 0;
+	GLuint height			= 0;
 
 	GLuint numBuffers      = 1;
 
@@ -138,17 +141,17 @@ static void __stdcall openglCallbackFunction(
 
 
 //// -----INIT----- ////
-void init (ApplicationState& _State)
+void initWindow(ApplicationState& _State)
 {
 #ifdef _DEBUG
-	SDL_LogSetAllPriority (SDL_LOG_PRIORITY_VERBOSE);
+	SDL_LogSetAllPriority(SDL_LOG_PRIORITY_VERBOSE);
 #endif
-	SDL_Init (SDL_INIT_EVERYTHING);
+	SDL_Init(SDL_INIT_EVERYTHING);
 	std::atexit(SDL_Quit);
-	
+
 	//typedef std::vector<std::tuple<glm::tvec3<GLfloat>, glm::tvec3<GLfloat>, glm::tvec3<GLfloat>>> vertexType;
 
-	for(const auto& it : st_config)
+	for (const auto& it : st_config)
 	{
 		SDL_GL_SetAttribute(it.key, it.value);
 	}
@@ -159,11 +162,12 @@ void init (ApplicationState& _State)
 	);
 
 	// // Create window // //
-	auto width = 1280u, height = 720u;
-	_State.st_window = SDL_CreateWindow ("Tutorial 04 - A Cloured Cube", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
-	assert (_State.st_window != nullptr);
-	_State.st_opengl = SDL_GL_CreateContext (_State.st_window);
-	assert (_State.st_opengl != nullptr);
+	_State.width = 1280u;
+	_State.height = 720u;
+	_State.st_window = SDL_CreateWindow("Tutorial 04 - A Cloured Cube", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _State.width, _State.height, SDL_WINDOW_OPENGL);
+	assert(_State.st_window != nullptr);
+	_State.st_opengl = SDL_GL_CreateContext(_State.st_window);
+	assert(_State.st_opengl != nullptr);
 
 	SDL_GL_SetSwapInterval(1);
 
@@ -175,8 +179,8 @@ void init (ApplicationState& _State)
 
 	// // Initialise GLEW // //
 	glewExperimental = true;
-	auto loc_glewok = glewInit ();
-	assert (loc_glewok == GLEW_OK);
+	auto loc_glewok = glewInit();
+	assert(loc_glewok == GLEW_OK);
 
 	// // Check OpenGL properties // //
 	printf("OpenGL loaded\n");
@@ -206,7 +210,10 @@ void init (ApplicationState& _State)
 	glFrontFace(GL_CCW);
 	// // Accept fragment shader if it closer to the camera than the previous one
 	glDepthFunc(GL_LESS);
+}
 
+void initGeo(ApplicationState& _State)
+{
 	// // Create and compile our GLSL program from the shaders // //
 	_State.programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
 
@@ -218,7 +225,7 @@ void init (ApplicationState& _State)
 	_State.camPositionID = glGetUniformLocation(_State.programID, "camPosition");
 
 	// // Set up camera // //
-	_State.projection = glm::perspective(glm::radians(50.0f), float(width) / float(height), 0.1f, 100.0f);
+	_State.projection = glm::perspective(glm::radians(50.0f), float(_State.width) / float(_State.height), 0.1f, 100.0f);
 	_State.view       = _State.cam.getWorldToViewMatrix();
 
 	// // Create Geo
@@ -240,7 +247,9 @@ void init (ApplicationState& _State)
 	_State.sh.appendTransform(std::move(transformR1),		"rotate1");
 
 	// // Transform Geo 
+	_State.sh.connect("transformLeft",		"transformForward");	
 	_State.sh.connect("transformForward",	"cube");
+	_State.sh.connect("transformDown",		"cube");
 	_State.sh.connect("rotate1",			"arrow");
 	_State.sh.connect("transformDown",		"plane");
 
@@ -396,7 +405,8 @@ void update_camera(ApplicationState& _State) {
 int main(int, char**)
 {
 	ApplicationState _State;
-	init(_State);
+	initWindow(_State);
+	initGeo(_State);
 	while (poll_events (_State))
 	{
 		_State.matBuffer.Upload(0, sizeof(glm::mat4), &(glm::mat4(5.4)));
