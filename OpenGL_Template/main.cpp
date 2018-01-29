@@ -205,11 +205,14 @@ void initWindow(ApplicationState& _State)
 	// // Enable depth test // //
 	glEnable(GL_DEPTH_TEST);
 	// // Enable backface culling // //
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	// // Set winding direction // // 
 	glFrontFace(GL_CCW);
 	// // Accept fragment shader if it closer to the camera than the previous one
 	glDepthFunc(GL_LESS);
+	// // Enable alpha
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void initCam(ApplicationState& _State)
