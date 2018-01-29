@@ -33,7 +33,6 @@ void main(){
 	float diff_brightness		= dot(world_lightVector, world_normalVector);
 	vec4 diff_light				= vec4(diff_color * diff_brightness, 1.0);
 
-
 	vec3 reflectedLightVector	= reflect(-world_lightVector, world_normalVector);
 	vec3 camVector				= normalize(camPosition - f_world_vertexPosition);
 
@@ -41,5 +40,7 @@ void main(){
 	spec_brightness				= pow(spec_brightness, spec_cosinePower);
 	vec4 spec_light				= vec4(spec_color*spec_brightness, 1.0);
 
-	color						= ambientLight * vec4(diff_color, 1) + clamp(diff_light * lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
+	vec4 colorRGB				= ambientLight * vec4(diff_color, 1) + clamp(diff_light * lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
+	float alpha					= 0.5;
+	color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
 }
