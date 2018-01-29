@@ -212,6 +212,22 @@ void initWindow(ApplicationState& _State)
 	glDepthFunc(GL_LESS);
 }
 
+void initCam(ApplicationState& _State)
+{
+	_State.worldMatrixID = glGetUniformLocation(_State.programID, "ModelToWorldMatrix");
+	_State.camPositionID = glGetUniformLocation(_State.programID, "camPosition");
+
+	// // Set up camera // //
+	_State.projection	= glm::perspective(glm::radians(50.0f), float(_State.width) / float(_State.height), 0.1f, 100.0f);
+	_State.view			= _State.cam.getWorldToViewMatrix();
+}
+
+void initLight(ApplicationState& _State)
+{
+	_State.ambientLightID = glGetUniformLocation(_State.programID, "ambientLight");
+	_State.lightPositionID = glGetUniformLocation(_State.programID, "lightPosition");
+}
+
 void initGeo(ApplicationState& _State)
 {
 	// // Create and compile our GLSL program from the shaders // //
@@ -219,14 +235,6 @@ void initGeo(ApplicationState& _State)
 
 	// // Fetch uniforms from vertex shader // //
 	_State.matrixID = glGetUniformLocation(_State.programID, "MVP");
-	_State.ambientLightID = glGetUniformLocation(_State.programID, "ambientLight");
-	_State.lightPositionID = glGetUniformLocation(_State.programID, "lightPosition");
-	_State.worldMatrixID = glGetUniformLocation(_State.programID, "ModelToWorldMatrix");
-	_State.camPositionID = glGetUniformLocation(_State.programID, "camPosition");
-
-	// // Set up camera // //
-	_State.projection = glm::perspective(glm::radians(50.0f), float(_State.width) / float(_State.height), 0.1f, 100.0f);
-	_State.view       = _State.cam.getWorldToViewMatrix();
 
 	// // Create Geo
 	//_State.sh.appendShape(_State.shapes.makePlane(1), "plane");
@@ -298,6 +306,30 @@ void finish_frame (ApplicationState& _State)
 	SDL_GL_SwapWindow (_State.st_window);
 }
 
+void prepareLight(ApplicationState& _State) 
+{
+	// // Ambient Lighting // //
+	glm::vec4 ambientLight = { 0.0f, 0.34f, 0.6f, 1.0f };
+	glUniform4fv(_State.ambientLightID, 1, &ambientLight.r);
+	// // Diffuse Lighting // // 
+	glm::vec3 lightPosition = { 0.0f, 2.0f, 0.0f };
+	glUniform3fv(_State.lightPositionID, 1, &lightPosition.x);
+}
+
+void prepareCam(ApplicationState& _State)
+{
+	// // Cam position // //
+	glm::vec3 camPositionVec = _State.cam.getPosition();
+	glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
+}
+
+void prepareGeo(ApplicationState& _State)
+{
+	// // Update matrices // //
+	glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix();
+	_State.matBuffer.Upload(0, sizeof(glm::mat4), glm::value_ptr(tempMVP));
+}
+
 void render_frame (ApplicationState& _State)
 {
 	// // Tutorial from http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/ // //
@@ -306,41 +338,18 @@ void render_frame (ApplicationState& _State)
 
 	 //Get time
 	 _State.time    = _State.freqMultiplier * SDL_GetPerformanceCounter();
-	 const auto tpi = 0;
 
 	 //Colour multiplier based on time and a cosine wave
 	 GLfloat cmAmplitude = 0.5f;
 	 GLfloat cmFreq      = 0.1f;
 	 GLfloat cmOffset    = 0.5f;
 
-	 // // LIGHTING // //
-	 glUseProgram(_State.programID);
-	 // // Ambient Lighting // //
-	 glm::vec4 ambientLight = { 0.0f, 0.34f, 0.6f, 1.0f };
-	 glUniform4fv(_State.ambientLightID, 1, &ambientLight.r);
-	 // // Diffuse Lighting // // 
-	 glm::vec3 lightPosition = { 0.0f, 2.0f, 0.0f };
-	 glUniform3fv(_State.lightPositionID, 1, &lightPosition.x);
-
-	 // // Cam position // //
-	 glm::vec3 camPositionVec = _State.cam.getPosition();
-	 glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
-
-	 // // Update matrices // //
-	 auto numWldMatrices = _State.wldBuffer.size()/sizeof(glm::mat4);
-	 auto numMatMatrices = _State.matBuffer.size() / sizeof(glm::mat4);
-	 std::vector<glm::mat4> wldBuffers(numWldMatrices);
-	 _State.wldBuffer.ReadBuffer(&wldBuffers.at(0)[0][0]);
-	 for (auto i = 0; i < (numMatMatrices -0); ++i)
-	 {
-		 glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix();// * wldBuffers.at(i);
-		 auto offset = i * sizeof(glm::mat4);
-		 _State.matBuffer.Upload(offset, sizeof(glm::mat4), &tempMVP[0][0]);
-	 }
+	 prepareCam(_State);
+	 prepareLight(_State);
+	 prepareGeo(_State);
 	 
 	 _State.VAO_main.Bind();
 	 _State.indxBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
-	 // // Draw the shapes // //
 	 glDrawElements(GL_TRIANGLES, (GLsizei)_State.indxBuffer.size(), GL_UNSIGNED_SHORT, 0);
 }
 
@@ -406,6 +415,8 @@ int main(int, char**)
 {
 	ApplicationState _State;
 	initWindow(_State);
+	initCam(_State);
+	initLight(_State);
 	initGeo(_State);
 	while (poll_events (_State))
 	{
