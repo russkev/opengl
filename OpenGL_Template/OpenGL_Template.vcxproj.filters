@@ -45,6 +45,9 @@
     <ClCompile Include="ShapeContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BSP_Tree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="TranformNode.h">
       <Filter>Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="BSP_Tree.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
