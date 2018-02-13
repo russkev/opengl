@@ -240,3 +240,8 @@ void ShapeContainer::uploadConnections(const intType s_program_id)
 		glUniform3iv(connectionsLocation, numConnections, &m_connections.at(0)[0]);
 	}
 }
+
+//void ShapeContainer::depthSort(glm::vec3 s_cam_location)
+//{
+//	std::vector<std::pair<float, glm::vec3>> distances;
+//}
