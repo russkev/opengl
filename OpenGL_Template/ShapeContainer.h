@@ -15,11 +15,12 @@
 struct ShapeContainer
 {
 	// // ----- Type Definitions ----- // //
-	typedef std::string									nameType;
-	typedef GLuint										intType;
-	typedef std::pair<nameType, ShapeData>				shapeType;
-	typedef std::pair<nameType, glm::mat4>				matType;
-	typedef std::pair<nameType, std::vector<nameType>>	connectionType;
+	typedef std::string															nameType;
+	typedef GLuint																intType;
+	typedef std::pair<nameType, ShapeData>										shapeType;
+	typedef std::pair<nameType, glm::mat4>										matType;
+	typedef std::pair<nameType, std::vector<nameType>>							connectionType;
+	typedef std::vector<std::pair<GLfloat, glm::tvec3<ShapeData::indexType>>>	distancesType;
 
 	void appendShape(ShapeData&& s_shape, const std::string& s_name = "poly");
 	void appendTransform(glm::mat4&& s_transform, const std::string& s_name = "transform");
@@ -46,8 +47,10 @@ struct ShapeContainer
 
 
 	std::string type(const std::string& s_name);
-	void depthSort(glm::vec3 s_cam_location);
-	GLfloat pointDistance(glm::vec3 s_point_1, glm::vec3 s_point_2);
+	ShapeData::indicesType depthSort(glm::vec3 s_cam_location);
+	GLfloat distanceSquared(glm::vec3 s_point_1, glm::vec3 s_point_2);
+	void quickSortDistances(distancesType& s_distances);
+	distancesType combineThreeDistanceVectors(distancesType& s_distances_1, distancesType& s_distances_2, distancesType& s_distances_3);
 
 	// // ----- Getters ----- // //
 	ShapeData::verticesType vertices();

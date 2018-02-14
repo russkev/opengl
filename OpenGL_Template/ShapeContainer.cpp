@@ -178,23 +178,81 @@ ShapeData::indicesType ShapeContainer::indices()
 	return t_indices;
 }
 
-void ShapeContainer::depthSort(glm::vec3 s_cam_location)
+ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 {
-	std::vector<std::pair<GLfloat, glm::tvec3<ShapeData::indexType>>> distances;
-	//for (auto & shape : m_shapes)
-	//{
-	//	auto numVertices = 0;
-	//	for (auto j = 0; j < shape.numIndices)
-	//}
+	distancesType distances;
 	auto raw_indices  = indices();
 	auto raw_vertices = vertices();
+	ShapeData::indicesType outIndices;
 	for (auto i = 0; i < raw_indices.size(); i += 3)
 	{
-		//glm::vec3 face = { raw_vertices.at(i), raw_vertices.at(i + 1), raw_vertices.at(i + 2) };
 		auto t_vertex		= raw_vertices.at(raw_indices.at(i));
 		auto t_vertex_loc	= std::get<ShapeData::attr::position>(t_vertex);
-		GLfloat distance	= pointDistance(t_vertex_loc, s_cam_location);
+		GLfloat distance	= distanceSquared(t_vertex_loc, s_cam_location);
+		distances.push_back(std::make_pair(distance, glm::tvec3<ShapeData::indexType>{raw_indices.at(i), raw_indices.at(i + 1), raw_indices.at(i + 2)}));
 	}
+	quickSortDistances(distances);
+	for (auto & i : distances)
+	{
+		outIndices.push_back(i.second.x);
+		outIndices.push_back(i.second.y);
+		outIndices.push_back(i.second.z);
+	}
+	return outIndices;
+}
+
+GLfloat ShapeContainer::distanceSquared(glm::vec3 s_point_1, glm::vec3 s_point_2)
+{
+	return 
+		(
+		(s_point_2.x - s_point_1.x) * (s_point_2.x - s_point_1.x) +
+		(s_point_2.y - s_point_1.y) * (s_point_2.y - s_point_1.y) +
+		(s_point_2.z - s_point_1.z) * (s_point_2.z - s_point_1.z)
+		);
+}
+
+void ShapeContainer::quickSortDistances(distancesType& s_distances)
+{
+	if (s_distances.size() < 2)
+	{
+		return;
+	}
+
+	auto pivot = s_distances.at(0).first;
+	distancesType less;
+	distancesType greater;
+	distancesType pivots;
+
+	for (auto & i : s_distances)
+	{
+		if (i.first < pivot)
+		{
+			less.push_back(i);
+		}
+		else if (i.first > pivot)
+		{
+			greater.push_back(i);
+		}
+		else
+		{
+			pivots.push_back(i);
+		}
+	}
+	quickSortDistances(less);
+	quickSortDistances(greater);
+
+	s_distances = combineThreeDistanceVectors(less, pivots, greater);
+	return;
+}
+
+ShapeContainer::distancesType ShapeContainer::combineThreeDistanceVectors(distancesType& s_distances_1, distancesType& s_distances_2, distancesType& s_distances_3)
+{
+	distancesType outDistances;
+	outDistances.reserve(s_distances_1.size() + s_distances_2.size() + s_distances_3.size());
+	outDistances.insert(outDistances.end(), s_distances_1.begin(), s_distances_1.end());
+	outDistances.insert(outDistances.end(), s_distances_2.begin(), s_distances_2.end());
+	outDistances.insert(outDistances.end(), s_distances_3.begin(), s_distances_3.end());
+	return outDistances;
 }
 
 ShapeContainer::intType ShapeContainer::findString(const std::vector<std::string> &s_vec, const std::string &s_string)
