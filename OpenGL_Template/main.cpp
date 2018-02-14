@@ -266,7 +266,12 @@ void initGeo(ApplicationState& _State)
 
 	// // Send information to graphics card
 	_State.geoBuffer.Append(_State.sh.vertices());
-	_State.indxBuffer.Append(_State.sh.indices());
+	_State.indxBuffer.Append(_State.sh.depthSort(_State.cam.getPosition()));
+
+	// // TEST // //
+	//_State.sh.depthSort(_State.cam.getPosition());
+
+	// // END TEST // //
 
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(5.0f)[0][0]);
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(6.0f)[0][0]);
@@ -331,6 +336,7 @@ void prepareGeo(ApplicationState& _State)
 	// // Update matrices // //
 	glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix();
 	_State.matBuffer.Upload(0, sizeof(glm::mat4), glm::value_ptr(tempMVP));
+	//_State.indxBuffer.Upload(_State.sh.depthSort(_State.cam.getPosition()));
 }
 
 void render_frame (ApplicationState& _State)

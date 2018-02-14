@@ -18,7 +18,7 @@ struct Buffer
 	// // GENERAL FUNCTIONS
 	std::uint32_t GenerateBuffer(std::size_t size);
 	void ReadBuffer(void* dest);
-	void Upload(std::size_t, std::size_t, void*);
+	void Upload(std::size_t offset, std::size_t size, void* data);
 	void* Map(std::size_t size, std::size_t offset = 0u);
 	void Unmap();
 	std::uint32_t Append(std::size_t size, void* data);
