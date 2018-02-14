@@ -47,6 +47,7 @@ struct ShapeContainer
 
 	std::string type(const std::string& s_name);
 	void depthSort(glm::vec3 s_cam_location);
+	GLfloat pointDistance(glm::vec3 s_point_1, glm::vec3 s_point_2);
 
 	// // ----- Getters ----- // //
 	ShapeData::verticesType vertices();

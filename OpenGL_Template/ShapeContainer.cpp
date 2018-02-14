@@ -1,4 +1,5 @@
 #include "ShapeContainer.h"
+#include "ShapeData.h"
 
 void ShapeContainer::appendShape(ShapeData&& s_shape, const std::string& s_name)
 {
@@ -177,6 +178,25 @@ ShapeData::indicesType ShapeContainer::indices()
 	return t_indices;
 }
 
+void ShapeContainer::depthSort(glm::vec3 s_cam_location)
+{
+	std::vector<std::pair<GLfloat, glm::tvec3<ShapeData::indexType>>> distances;
+	//for (auto & shape : m_shapes)
+	//{
+	//	auto numVertices = 0;
+	//	for (auto j = 0; j < shape.numIndices)
+	//}
+	auto raw_indices  = indices();
+	auto raw_vertices = vertices();
+	for (auto i = 0; i < raw_indices.size(); i += 3)
+	{
+		//glm::vec3 face = { raw_vertices.at(i), raw_vertices.at(i + 1), raw_vertices.at(i + 2) };
+		auto t_vertex		= raw_vertices.at(raw_indices.at(i));
+		auto t_vertex_loc	= std::get<ShapeData::attr::position>(t_vertex);
+		GLfloat distance	= pointDistance(t_vertex_loc, s_cam_location);
+	}
+}
+
 ShapeContainer::intType ShapeContainer::findString(const std::vector<std::string> &s_vec, const std::string &s_string)
 {
 	assert(s_vec.size() > 0);
@@ -240,8 +260,3 @@ void ShapeContainer::uploadConnections(const intType s_program_id)
 		glUniform3iv(connectionsLocation, numConnections, &m_connections.at(0)[0]);
 	}
 }
-
-//void ShapeContainer::depthSort(glm::vec3 s_cam_location)
-//{
-//	std::vector<std::pair<float, glm::vec3>> distances;
-//}
