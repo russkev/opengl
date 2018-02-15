@@ -87,6 +87,22 @@ struct ShapeContainer
 		}
 		return returnVector;
 	}
+	template<typename T>
+	T minValue(T args)
+	{
+		return args;
+	}
+	template <typename T1, typename T2>
+	T1 minValue(T1 first, T2 second)
+	{
+		return (first < second) ? first : second;
+	}
+	template <typename T1, typename T2, typename ...Args>
+	T1 minValue(T1 first, T2 second, Args ...args)
+	{
+		return (first < second) ? minValue(first, args...) : minValue(second, args...);
+	}
+
 
 private:
 	bool nameExists(const std::string& s_name);

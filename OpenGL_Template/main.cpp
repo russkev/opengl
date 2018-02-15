@@ -269,7 +269,7 @@ void initGeo(ApplicationState& _State)
 	_State.indxBuffer.Append(_State.sh.depthSort(_State.cam.getPosition()));
 
 	// // TEST // //
-	//_State.sh.depthSort(_State.cam.getPosition());
+	auto test_min = _State.sh.minValue(3.4f, 9.6f, 2.1f, 4.4f, 3.3f, 3.4f, 3.4f, -12.9);
 
 	// // END TEST // //
 
