@@ -43,7 +43,12 @@ struct Buffer
 	template<typename T>
 	auto Upload(std::vector<T> data) 
 	{
-		return Upload(data.size() * sizeof(T), data.data());
+		return Upload(0, data.size() * sizeof(T), data.data());
+	}
+	template<typename T>
+	auto Upload(T data)
+	{
+		return Upload(0, sizeof(T), &data);
 	}
 
 	template<typename T> 
