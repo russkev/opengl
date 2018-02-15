@@ -334,9 +334,8 @@ void prepareCam(ApplicationState& _State)
 void prepareGeo(ApplicationState& _State)
 {
 	// // Update matrices // //
-	glm::mat4 tempMVP = _State.projection * _State.cam.getWorldToViewMatrix();
-	_State.matBuffer.Upload(0, sizeof(glm::mat4), glm::value_ptr(tempMVP));
-	//_State.indxBuffer.Upload(_State.sh.depthSort(_State.cam.getPosition()));
+	_State.matBuffer.Upload( _State.projection * _State.cam.getWorldToViewMatrix());
+	_State.indxBuffer.Upload(_State.sh.depthSort(_State.cam.getPosition()));
 }
 
 void render_frame (ApplicationState& _State)
