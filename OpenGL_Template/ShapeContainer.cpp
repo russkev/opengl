@@ -1,5 +1,6 @@
 #include "ShapeContainer.h"
 #include "ShapeData.h"
+#include "Utilities.h"
 
 void ShapeContainer::appendShape(ShapeData&& s_shape, const std::string& s_name)
 {
@@ -188,7 +189,7 @@ ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 	{
 		auto t_vertex		= raw_vertices.at(raw_indices.at(i));
 		auto t_vertex_loc	= std::get<ShapeData::attr::position>(t_vertex);
-		GLfloat distance	= distanceSquared(t_vertex_loc, s_cam_location);
+		GLfloat distance	= Utilities::distanceSquared(t_vertex_loc, s_cam_location);
 		distances.push_back(std::make_pair(distance, glm::tvec3<ShapeData::indexType>{raw_indices.at(i), raw_indices.at(i + 1), raw_indices.at(i + 2)}));
 	}
 	quickSortDistances(distances);
@@ -201,15 +202,7 @@ ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 	return outIndices;
 }
 
-GLfloat ShapeContainer::distanceSquared(glm::vec3 s_point_1, glm::vec3 s_point_2)
-{
-	return 
-		(
-		(s_point_2.x - s_point_1.x) * (s_point_2.x - s_point_1.x) +
-		(s_point_2.y - s_point_1.y) * (s_point_2.y - s_point_1.y) +
-		(s_point_2.z - s_point_1.z) * (s_point_2.z - s_point_1.z)
-		);
-}
+
 
 void ShapeContainer::quickSortDistances(distancesType& s_distances)
 {
@@ -241,18 +234,8 @@ void ShapeContainer::quickSortDistances(distancesType& s_distances)
 	quickSortDistances(less);
 	quickSortDistances(greater);
 
-	s_distances = combineThreeDistanceVectors(less, pivots, greater);
+	s_distances = Utilities::combineVectors(less, pivots, greater);
 	return;
-}
-
-ShapeContainer::distancesType ShapeContainer::combineThreeDistanceVectors(distancesType& s_distances_1, distancesType& s_distances_2, distancesType& s_distances_3)
-{
-	distancesType outDistances;
-	outDistances.reserve(s_distances_1.size() + s_distances_2.size() + s_distances_3.size());
-	outDistances.insert(outDistances.end(), s_distances_1.begin(), s_distances_1.end());
-	outDistances.insert(outDistances.end(), s_distances_2.begin(), s_distances_2.end());
-	outDistances.insert(outDistances.end(), s_distances_3.begin(), s_distances_3.end());
-	return outDistances;
 }
 
 ShapeContainer::intType ShapeContainer::findString(const std::vector<std::string> &s_vec, const std::string &s_string)

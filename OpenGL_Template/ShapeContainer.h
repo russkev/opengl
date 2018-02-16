@@ -48,9 +48,7 @@ struct ShapeContainer
 
 	std::string type(const std::string& s_name);
 	ShapeData::indicesType depthSort(glm::vec3 s_cam_location);
-	GLfloat distanceSquared(glm::vec3 s_point_1, glm::vec3 s_point_2);
 	void quickSortDistances(distancesType& s_distances);
-	distancesType combineThreeDistanceVectors(distancesType& s_distances_1, distancesType& s_distances_2, distancesType& s_distances_3);
 
 	// // ----- Getters ----- // //
 	ShapeData::verticesType vertices();
@@ -88,27 +86,7 @@ struct ShapeContainer
 		return returnVector;
 	}
 	
-	// // ----- Min/Max Values ----- // //
-	template <typename T1, typename T2>
-	T1 minValue(T1 first, T2 second)
-	{
-		return (first < second) ? first : second;
-	}
-	template <typename T1, typename T2, typename ...Args>
-	T1 minValue(T1 first, T2 second, Args ...args)
-	{
-		return (first < second) ? minValue(first, args...) : minValue(second, args...);
-	}
-	template<typename T1, typename T2>
-	T1 maxValue(T1 first, T2 second)
-	{
-		return (first > second) ? first : second;
-	}
-	template<typename T1, typename T2, typename ...Args>
-	T1 maxValue(T1 first, T2 second, Args... args)
-	{
-		return (first > second) ? maxValue(first, args...) : maxValue(second, args...);
-	}
+
 
 
 private:
