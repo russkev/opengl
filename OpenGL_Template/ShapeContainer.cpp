@@ -187,12 +187,16 @@ ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 	ShapeData::indicesType outIndices;
 	for (auto i = 0; i < raw_indices.size(); i += 3)
 	{
-		auto t_vertex		= raw_vertices.at(raw_indices.at(i));
-		auto t_vertex_loc	= std::get<ShapeData::attr::position>(t_vertex);
-		GLfloat distance	= Utilities::distanceSquared(t_vertex_loc, s_cam_location);
+		auto t_vertex_1			= std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i    )));
+		auto t_vertex_2			= std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i + 1)));
+		auto t_vertex_3			= std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i + 2)));
+
+		auto t_vertex_loc_avg	= Utilities::vectorAverage(t_vertex_1, t_vertex_2, t_vertex_3);
+		GLfloat distance		= Utilities::distanceSquared(t_vertex_loc_avg, s_cam_location);
+
 		distances.push_back(std::make_pair(distance, glm::tvec3<ShapeData::indexType>{raw_indices.at(i), raw_indices.at(i + 1), raw_indices.at(i + 2)}));
 	}
-	quickSortDistances(distances);
+	Utilities::quickSortPairVector(distances);
 	for (auto & i : distances)
 	{
 		outIndices.push_back(i.second.x);
@@ -204,39 +208,39 @@ ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 
 
 
-void ShapeContainer::quickSortDistances(distancesType& s_distances)
-{
-	if (s_distances.size() < 2)
-	{
-		return;
-	}
-
-	auto pivot = s_distances.at(0).first;
-	distancesType less;
-	distancesType greater;
-	distancesType pivots;
-
-	for (auto & i : s_distances)
-	{
-		if (i.first < pivot)
-		{
-			less.push_back(i);
-		}
-		else if (i.first > pivot)
-		{
-			greater.push_back(i);
-		}
-		else
-		{
-			pivots.push_back(i);
-		}
-	}
-	quickSortDistances(less);
-	quickSortDistances(greater);
-
-	s_distances = Utilities::combineVectors(less, pivots, greater);
-	return;
-}
+//void ShapeContainer::quickSortDistances(distancesType& s_distances)
+//{
+//	if (s_distances.size() < 2)
+//	{
+//		return;
+//	}
+//
+//	auto pivot = s_distances.at(0).first;
+//	distancesType less;
+//	distancesType greater;
+//	distancesType pivots;
+//
+//	for (auto & i : s_distances)
+//	{
+//		if (i.first < pivot)
+//		{
+//			less.push_back(i);
+//		}
+//		else if (i.first > pivot)
+//		{
+//			greater.push_back(i);
+//		}
+//		else
+//		{
+//			pivots.push_back(i);
+//		}
+//	}
+//	quickSortDistances(less);
+//	quickSortDistances(greater);
+//
+//	s_distances = Utilities::combineVectors(less, pivots, greater);
+//	return;
+//}
 
 ShapeContainer::intType ShapeContainer::findString(const std::vector<std::string> &s_vec, const std::string &s_string)
 {

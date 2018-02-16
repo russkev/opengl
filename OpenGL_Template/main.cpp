@@ -205,6 +205,7 @@ void initWindow(ApplicationState& _State)
 
 	// // Enable depth test // //
 	glEnable(GL_DEPTH_TEST);
+
 	// // Enable backface culling // //
 	//glEnable(GL_CULL_FACE);
 	// // Set winding direction // // 
@@ -241,47 +242,31 @@ void initGeo(ApplicationState& _State)
 	_State.matrixID = glGetUniformLocation(_State.programID, "MVP");
 
 	// // Create Geo
-	//_State.sh.appendShape(_State.shapes.makePlane(1), "plane");
-	_State.sh.appendShape(_State.shapes.makeCube(), "cube");
-	_State.sh.appendShape(_State.shapes.makeArrow(), "arrow");
-	_State.sh.appendShape(_State.shapes.makePlane(4), "plane");
+	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_1");
+	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_2");
+	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_3");
 
 	// // Create transforms
-	glm::mat4 transformDown		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -10, 0));
-	glm::mat4 transformLeft		= glm::translate(glm::mat4(1.0f), glm::vec3(-8, 0, 0));
-	glm::mat4 transformForward	= glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -8));
-	glm::mat4 transformNone		= glm::mat4(1.0f);
-	glm::mat4 transformR1		= glm::rotate(glm::mat4(1.0f), 5.0f, glm::vec3(1.0f, 0.0f, 1.0f));
-	_State.sh.appendTransform(std::move(transformNone),		"transformNone");
-	_State.sh.appendTransform(std::move(transformDown),		"transformDown");
-	_State.sh.appendTransform(std::move(transformLeft),		"transformLeft");
-	_State.sh.appendTransform(std::move(transformForward),	"transformForward");
-	_State.sh.appendTransform(std::move(transformR1),		"rotate1");
+	glm::mat4 transformDown_2		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0));
+	glm::mat4 transformDown_3		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0));
+
+	_State.sh.appendTransform(std::move(transformDown_2),		"transformDown_2");
+	_State.sh.appendTransform(std::move(transformDown_3),		"transformDown_3");
 
 	// // Transform Geo 
-	_State.sh.connect("transformLeft",		"transformForward");	
-	_State.sh.connect("transformForward",	"cube");
-	_State.sh.connect("transformDown",		"cube");
-	_State.sh.connect("rotate1",			"arrow");
-	_State.sh.connect("transformDown",		"plane");
+	_State.sh.connect("TransformDown_2",	"plane_2");	
+	_State.sh.connect("TransformDown_3",	"plane_3");
 
 	// // Send information to graphics card
 	_State.geoBuffer.Append(_State.sh.vertices());
 	_State.indxBuffer.Append(_State.sh.depthSort(_State.cam.getPosition()));
 
-	// // TEST // //
-	auto test_min = Utilities::minValue(3.4f, 9.6f, 2.1f, 4.4f, 3.3f, 3.4f, 3.4f, -12.9f);
-	auto test_max = Utilities::maxValue(3.4f, 9.6f, 2.1f, 4.4f, 3.3f, 3.4f, 3.4f, -12.9f);
-
-	// // END TEST // //
-
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(5.0f)[0][0]);
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(6.0f)[0][0]);
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
 
-	_State.wldBuffer.Append(sizeof(glm::mat4), &transformDown);
-	_State.wldBuffer.Append(sizeof(glm::mat4), &transformLeft);
-	_State.wldBuffer.Append(sizeof(glm::mat4), &transformForward);
+	_State.wldBuffer.Append(sizeof(glm::mat4), &transformDown_2);
+	_State.wldBuffer.Append(sizeof(glm::mat4), &transformDown_3);
 
 
 	// // Set up standard information for the VAO

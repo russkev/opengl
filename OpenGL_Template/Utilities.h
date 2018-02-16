@@ -1,6 +1,10 @@
 #pragma once
 #include <vector>
+#include <utility>
+
 #include <GL/glew.h>
+
+
 
 namespace Utilities
 {
@@ -52,6 +56,27 @@ namespace Utilities
 		return (first > second) ? maxValue(first, args...) : maxValue(second, args...);
 	}
 
+	// // ----- AVERAGE VECTOR ----- // //
+	template <typename ... Args>
+	glm::vec3 vectorAverage(Args... args)
+	{
+		glm::vec3 outVec;
+
+		auto min_x = minValue(args.x...);
+		auto max_x = maxValue(args.x...);
+		auto min_y = minValue(args.y...);
+		auto max_y = maxValue(args.y...);
+		auto min_z = minValue(args.z...);
+		auto max_z = maxValue(args.z...);
+
+		outVec.x = min_x + (max_x - min_x) / 2;
+		outVec.y = min_y + (max_y - min_y) / 2;
+		outVec.z = min_z + (max_z - min_z) / 2;
+		
+		return outVec;
+	}
+
+
 	// // ----- DISTANCE SQUARED ----- // //
 	template <typename T>
 	GLfloat distanceSquared(T s_point_1, T s_point_2)
@@ -71,5 +96,41 @@ namespace Utilities
 				(s_point_2.y - s_point_1.y) * (s_point_2.y - s_point_1.y) +
 				(s_point_2.z - s_point_1.z) * (s_point_2.z - s_point_1.z));
 		}
+	}
+
+	
+	template<typename T1, typename T2>
+
+	void quickSortPairVector(std::vector<std::pair<T1, T2>>& s_pairs)
+	{
+		typedef std::vector<std::pair<T1, T2>> pairType;
+
+		if (s_pairs.size() < 2) return;
+
+		auto pivot = s_pairs.at(0).first;
+		pairType less;
+		pairType greater;
+		pairType pivots;
+
+		for (auto & i : s_pairs)
+		{
+			if (i.first < pivot)
+			{
+				less.push_back(i);
+			}
+			else if (i.first > pivot)
+			{
+				greater.push_back(i);
+			}
+			else
+			{
+				pivots.push_back(i);
+			}
+		}
+		quickSortPairVector(less);
+		quickSortPairVector(greater);
+
+		s_pairs = combineVectors(greater, pivots, less);
+		return;
 	}
 };
