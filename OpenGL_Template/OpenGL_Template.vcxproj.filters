@@ -101,6 +101,9 @@
     <ClInclude Include="BSP_Tree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\data\uvtemplate.bmp">
