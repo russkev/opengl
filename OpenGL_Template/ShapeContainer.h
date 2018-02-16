@@ -48,7 +48,7 @@ struct ShapeContainer
 
 	std::string type(const std::string& s_name);
 	ShapeData::indicesType depthSort(glm::vec3 s_cam_location);
-	void quickSortDistances(distancesType& s_distances);
+	//void quickSortDistances(distancesType& s_distances);
 
 	// // ----- Getters ----- // //
 	ShapeData::verticesType vertices();
