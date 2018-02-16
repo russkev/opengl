@@ -269,7 +269,8 @@ void initGeo(ApplicationState& _State)
 	_State.indxBuffer.Append(_State.sh.depthSort(_State.cam.getPosition()));
 
 	// // TEST // //
-	auto test_min = _State.sh.minValue(3.4f, 9.6f, 2.1f, 4.4f, 3.3f, 3.4f, 3.4f, -12.9);
+	auto test_min = _State.sh.minValue(3.4f, 9.6f, 2.1f, 4.4f, 3.3f, 3.4f, 3.4f, -12.9f);
+	auto test_max = _State.sh.maxValue(3.4f, 9.6f, 2.1f, 4.4f, 3.3f, 3.4f, 3.4f, -12.9f);
 
 	// // END TEST // //
 
