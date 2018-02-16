@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <GL/glew.h>
 
 namespace Utilities
 {
@@ -52,13 +53,23 @@ namespace Utilities
 	}
 
 	// // ----- DISTANCE SQUARED ----- // //
-	GLfloat distanceSquared(glm::vec3 s_point_1, glm::vec3 s_point_2)
+	template <typename T>
+	GLfloat distanceSquared(T s_point_1, T s_point_2)
 	{
-		return
-			(
-			(s_point_2.x - s_point_1.x) * (s_point_2.x - s_point_1.x) +
-			(s_point_2.y - s_point_1.y) * (s_point_2.y - s_point_1.y) +
-			(s_point_2.z - s_point_1.z) * (s_point_2.z - s_point_1.z)
-			);
+		if (typeid(T) == typeid(glm::vec2))
+		{
+			return
+				(
+				(s_point_2.x - s_point_1.x) * (s_point_2.x - s_point_1.x) +
+				(s_point_2.y - s_point_1.y) * (s_point_2.y - s_point_1.y));
+		}
+		else
+		{
+			return
+				(
+				(s_point_2.x - s_point_1.x) * (s_point_2.x - s_point_1.x) +
+				(s_point_2.y - s_point_1.y) * (s_point_2.y - s_point_1.y) +
+				(s_point_2.z - s_point_1.z) * (s_point_2.z - s_point_1.z));
+		}
 	}
 };
