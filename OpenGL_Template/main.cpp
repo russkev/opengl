@@ -242,20 +242,20 @@ void initGeo(ApplicationState& _State)
 	_State.matrixID = glGetUniformLocation(_State.programID, "MVP");
 
 	// // Create Geo
-	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_1");
-	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_2");
-	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_3");
+	_State.sh.appendShape(_State.shapes.makePlane(4), "plane_1");
+	//_State.sh.appendShape(_State.shapes.makePlane(1), "plane_2");
+	//_State.sh.appendShape(_State.shapes.makePlane(1), "plane_3");
 
 	// // Create transforms
-	glm::mat4 transformDown_2		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0));
-	glm::mat4 transformDown_3		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0));
+	//glm::mat4 transformDown_2		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0));
+	//glm::mat4 transformDown_3		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0));
 
-	_State.sh.appendTransform(std::move(transformDown_2),		"transformDown_2");
-	_State.sh.appendTransform(std::move(transformDown_3),		"transformDown_3");
+	//_State.sh.appendTransform(std::move(transformDown_2),		"transformDown_2");
+	//_State.sh.appendTransform(std::move(transformDown_3),		"transformDown_3");
 
-	// // Transform Geo 
-	_State.sh.connect("TransformDown_2",	"plane_2");	
-	_State.sh.connect("TransformDown_3",	"plane_3");
+	//// // Transform Geo 
+	//_State.sh.connect("transformDown_2",	"plane_2");	
+	//_State.sh.connect("transformDown_3",	"plane_3");
 
 	// // Send information to graphics card
 	_State.geoBuffer.Append(_State.sh.vertices());
@@ -265,8 +265,8 @@ void initGeo(ApplicationState& _State)
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(6.0f)[0][0]);
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
 
-	_State.wldBuffer.Append(sizeof(glm::mat4), &transformDown_2);
-	_State.wldBuffer.Append(sizeof(glm::mat4), &transformDown_3);
+	//_State.wldBuffer.Append(sizeof(glm::mat4), &transformDown_2);
+	//_State.wldBuffer.Append(sizeof(glm::mat4), &transformDown_3);
 
 
 	// // Set up standard information for the VAO
@@ -276,7 +276,7 @@ void initGeo(ApplicationState& _State)
 	// // Upload the VAO information
 	_State.VAO_main.GenerateVAO(_State.geoBuffer, 0, shape_info.data(),  shape_info.data()  + shape_info.size(),  POSITION_ATTR);
 	_State.VAO_main.GenerateVAO(_State.matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
-	_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
+	//_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
 
 	_State.sh.uploadTransforms(_State.programID);
 	_State.sh.uploadConnections(_State.programID);
