@@ -207,14 +207,14 @@ void initWindow(ApplicationState& _State)
 	glEnable(GL_DEPTH_TEST);
 
 	// // Enable backface culling // //
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	// // Set winding direction // // 
 	glFrontFace(GL_CCW);
 	// // Accept fragment shader if it closer to the camera than the previous one
 	glDepthFunc(GL_LESS);
 	// // Enable alpha
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void initCam(ApplicationState& _State)
@@ -247,13 +247,16 @@ void initGeo(ApplicationState& _State)
 	//_State.sh.appendShape(_State.shapes.makePlane(1), "plane_3");
 
 	// // Create transforms
-	//glm::mat4 transformDown_2		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0));
-	//glm::mat4 transformDown_3		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0));
+	glm::mat4 transformDown_1		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -2, 0));
+	//glm::mat4 transformDown_2		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -3, 0));
+	//glm::mat4 transformDown_3		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -4, 0));
 
+	_State.sh.appendTransform(std::move(transformDown_1),		"transformDown_1");
 	//_State.sh.appendTransform(std::move(transformDown_2),		"transformDown_2");
 	//_State.sh.appendTransform(std::move(transformDown_3),		"transformDown_3");
 
 	//// // Transform Geo 
+	_State.sh.connect("transformDown_1",	"plane_1");	
 	//_State.sh.connect("transformDown_2",	"plane_2");	
 	//_State.sh.connect("transformDown_3",	"plane_3");
 
@@ -265,6 +268,7 @@ void initGeo(ApplicationState& _State)
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(6.0f)[0][0]);
 	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
 
+	_State.wldBuffer.Append(sizeof(glm::mat4), &transformDown_1);
 	//_State.wldBuffer.Append(sizeof(glm::mat4), &transformDown_2);
 	//_State.wldBuffer.Append(sizeof(glm::mat4), &transformDown_3);
 
