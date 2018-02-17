@@ -69,12 +69,12 @@ void transformGlPosition()
 {
 	int incoming = incomingConnection(model_id, shapeDestLoc);
 
-	mat4 transform = {
+	mat4 transform = mat4(
 		vec4(1.0f, 0.0f, 0.0f, 0.0f),
 		vec4(0.0f, 1.0f, 0.0f, 0.0f),
 		vec4(0.0f, 0.0f, 1.0f, 0.0f),
 		vec4(0.0f, 0.0f, 0.0f, 1.0f)
-	};
+	);
 
 	if (incoming > -1)
 	{
@@ -87,15 +87,15 @@ void transformGlPosition()
 	
 vec3 colorFromIndex(int a)
 {
-	vec3 colArray[6] = 
-	{
+	vec3 colArray[6] = vec3[6]
+	(
 		vec3(1.0f, 0.0f, 0.0f), //red
 		vec3(0.0f, 1.0f, 0.0f), //green
 		vec3(0.0f, 0.0f, 1.0f), //blue
 		vec3(1.0f, 1.0f, 0.0f), //yellow
 		vec3(0.0f, 1.0f, 1.0f), //cyan
 		vec3(1.0f, 0.0f, 1.0f)  //magenta
-	};
+	);
 	return colArray[a%6];
 }
 
