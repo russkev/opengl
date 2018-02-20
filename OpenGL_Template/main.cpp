@@ -241,9 +241,9 @@ void initGeo(ApplicationState& _State)
 
 	// // Create Geo
 	//_State.sh.appendShape(_State.shapes.makePlane(1), "plane");
-	_State.sh.appendShape(_State.shapes.makeCube(), "cube");
-	_State.sh.appendShape(_State.shapes.makeArrow(), "arrow");
-	_State.sh.appendShape(_State.shapes.makePlane(4), "plane");
+	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_01");
+	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_02");
+	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_03");
 
 	// // Create transforms
 	glm::mat4 transformDown		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -10, 0));
@@ -251,7 +251,7 @@ void initGeo(ApplicationState& _State)
 	glm::mat4 transformForward	= glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -8));
 	glm::mat4 transformNone		= glm::mat4(1.0f);
 	glm::mat4 transformR1		= glm::rotate(glm::mat4(1.0f), 5.0f, glm::vec3(1.0f, 0.0f, 1.0f));
-	_State.sh.appendTransform(std::move(transformNone),		"transformNone");
+	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0)),		"transformNone");
 	_State.sh.appendTransform(std::move(transformDown),		"transformDown");
 	_State.sh.appendTransform(std::move(transformLeft),		"transformLeft");
 	_State.sh.appendTransform(std::move(transformForward),	"transformForward");
@@ -259,10 +259,10 @@ void initGeo(ApplicationState& _State)
 
 	// // Transform Geo 
 	_State.sh.connect("transformLeft",		"transformForward");	
-	_State.sh.connect("transformForward",	"cube");
-	_State.sh.connect("transformDown",		"cube");
-	_State.sh.connect("rotate1",			"arrow");
-	_State.sh.connect("transformDown",		"plane");
+	_State.sh.connect("transformForward",	"plane_01");
+	_State.sh.connect("transformDown",		"plane_01");
+	_State.sh.connect("rotate1",			"plane_02");
+	_State.sh.connect("transformDown",		"plane_03");
 
 	// // Send information to graphics card
 	_State.geoBuffer.Append(_State.sh.vertices());
