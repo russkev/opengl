@@ -27,7 +27,7 @@
 
 
 #define GLM_ENABLE_EXPERIMENTAL
-//#define DEBUG
+#define DEBUG
 #include <glm/gtc/matrix_transform.hpp>
 
 static constexpr auto POSITION_ATTR = 0u;
@@ -207,14 +207,14 @@ void initWindow(ApplicationState& _State)
 	glEnable(GL_DEPTH_TEST);
 
 	// // Enable backface culling // //
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	// // Set winding direction // // 
 	glFrontFace(GL_CCW);
 	// // Accept fragment shader if it closer to the camera than the previous one
 	glDepthFunc(GL_LESS);
 	// // Enable alpha
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void initCam(ApplicationState& _State)
