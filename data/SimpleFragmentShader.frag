@@ -43,4 +43,5 @@ void main(){
 	vec4 colorRGB				= ambientLight * vec4(diff_color, 1) + clamp(diff_light * lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
 	float alpha					= 0.5;
 	color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
+	//color						= ambientLight;
 }
