@@ -47,7 +47,10 @@ int incomingConnection(int a, int loc)
 		destination		= connections[i][loc];
 		emptyConnection	= (connections[i][transformSourceLoc] == 0 && connections[i][transformDestLoc] == 0 && connections[1][shapeDestLoc] == 0);
 		if (emptyConnection)	{ continue; }
-		if (destination == a)	{ return connections[i][transformSourceLoc]; }
+		if (destination == a)	
+		{ 
+			return connections[i][transformSourceLoc]; 
+		}
 	}
 	return -1;
 }
@@ -55,12 +58,12 @@ int incomingConnection(int a, int loc)
 mat4 transformTransform(int endTransformId)
 {
 	mat4 outTransform = transforms[endTransformId];
-	int incomingTransformId = incomingConnection(endTransformId, transformDestLoc);
+	int incomingTransformId = incomingConnection(endTransformId, shapeDestLoc);
 
 	while (incomingTransformId != -1)
 	{
-		outTransform = transforms[incomingTransformId] * transforms[endTransformId];
-		incomingTransformId = incomingConnection(incomingTransformId, transformDestLoc);
+		outTransform			= transforms[incomingTransformId] * transforms[endTransformId];
+		incomingTransformId		= incomingConnection(incomingTransformId, transformDestLoc);
 	}
 	return outTransform;
 }

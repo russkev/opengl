@@ -3,7 +3,7 @@
 
 void ShapeContainer::appendShape(ShapeData&& s_shape, const std::string& s_name)
 {
-	auto id = m_shapes.size();
+	auto id = (GLuint)m_shapes.size();
 	auto t_name = s_name;
 
 	while ( nameExists(t_name) ) { incrementString(t_name); }
@@ -171,7 +171,7 @@ ShapeData::indicesType ShapeContainer::indices()
 	{
 		for (auto j = 0; j < shape.numIndices(); ++j)
 		{
-			t_indices.push_back(shape.indices().at(j) + numVertices);
+			t_indices.push_back(shape.indices().at(j) + (ShapeData::indexType)numVertices);
 		}
 		numVertices += shape.numVertices();
 	}
@@ -302,7 +302,7 @@ void ShapeContainer::uploadTransforms(const intType s_program_id)
 	if (m_transforms.size() > 0) 
 	{
 		glUseProgram(s_program_id);
-		const intType numTransforms = m_transforms.size();
+		const intType numTransforms = (intType)m_transforms.size();
 		const intType transformsLocation = glGetUniformLocation(s_program_id, "transforms");
 		glUniformMatrix4fv(transformsLocation, numTransforms, GL_FALSE, &m_transforms.at(0)[0][0]);
 	}
@@ -313,7 +313,7 @@ void ShapeContainer::uploadConnections(const intType s_program_id)
 	if (m_connections.size() > 0)
 	{
 		glUseProgram(s_program_id);
-		const intType numConnections = m_connections.size();
+		const intType numConnections = (intType)m_connections.size();
 		const intType connectionsLocation = glGetUniformLocation(s_program_id, "connections");
 		glUniform3iv(connectionsLocation, numConnections, &m_connections.at(0)[0]);
 	}
