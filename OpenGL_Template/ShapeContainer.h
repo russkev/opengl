@@ -56,8 +56,8 @@ struct ShapeContainer
 	ShapeData::verticesType vertices();
 	ShapeData::indicesType  indices();
 	std::vector<glm::mat4>  transforms() { return m_transforms; }
-	intType numShapes() { return m_shapes.size(); }
-	intType numTransforms() { return m_transforms.size(); }
+	intType numShapes() {		return intType(m_shapes.size());		}
+	intType numTransforms() {	return intType(m_transforms.size()); }
 
 	intType findString(const std::vector<std::string> &s_vec, const std::string &s_string);
 	intType findString(const std::string &s_type, const std::string &s_string);

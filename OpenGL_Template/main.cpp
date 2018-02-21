@@ -234,8 +234,8 @@ void initGeo(ApplicationState& _State)
 
 	// // Transform Geo 
 	_State.sh.connect("transform_01",		"plane_01");
-	//_State.sh.connect("transform_02",		"plane_02");
-	//_State.sh.connect("transform_03",		"plane_03");
+	_State.sh.connect("transform_02",		"plane_02");
+	_State.sh.connect("transform_03",		"plane_03");
 
 	// // Send information to graphics card
 	_State.geoBuffer.Append(_State.sh.vertices());
@@ -264,11 +264,11 @@ void initGeo(ApplicationState& _State)
 	_State.sh.uploadConnections(_State.programID);
 
 #ifdef DEBUG
-	// // Debug matrix array
-	//std::vector<glm::mat4> testTransformsUniform;
-	//testTransformsUniform = _State.sh.readUniform<glm::mat4>(_State.programID, "transforms", 4);
-	//std::vector<glm::ivec3> testConnectionsUniform;
-	//testConnectionsUniform = _State.sh.readUniform<glm::ivec3>(_State.programID, "connections", 7);
+	 // Debug matrix array
+	std::vector<glm::mat4> testTransformsUniform;
+	testTransformsUniform = _State.sh.readUniform<glm::mat4>(_State.programID, "transforms", 4);
+	std::vector<glm::ivec3> testConnectionsUniform;
+	testConnectionsUniform = _State.sh.readUniform<glm::ivec3>(_State.programID, "connections", 7);
 
 
 #endif // DEBUG

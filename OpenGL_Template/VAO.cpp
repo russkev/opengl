@@ -31,7 +31,7 @@ void VAO::GenerateVAO(const Buffer& inBuffer, std::size_t divisor, const member_
 			{
 				glVertexAttribIPointer(id_offset + mi.attribute_slot + i, mi.component_count, mi.gl_type_enum, mi.tuple_stride, mi.offset_from_start + i * mi.slot_size_in_bytes);
 			}
-			glVertexAttribDivisor(id_offset + mi.attribute_slot + i, divisor);
+			glVertexAttribDivisor(id_offset + mi.attribute_slot + i, (GLuint)divisor);
 
 		}
 	});
