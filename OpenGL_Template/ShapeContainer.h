@@ -48,9 +48,6 @@ struct ShapeContainer
 
 	std::string type(const std::string& s_name);
 	ShapeData::indicesType depthSort(glm::vec3 s_cam_location);
-	GLfloat distanceSquared(glm::vec3 s_point_1, glm::vec3 s_point_2);
-	void quickSortDistances(distancesType& s_distances);
-	distancesType combineThreeDistanceVectors(distancesType& s_distances_1, distancesType& s_distances_2, distancesType& s_distances_3);
 
 	// // ----- Getters ----- // //
 	ShapeData::verticesType vertices();

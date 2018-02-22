@@ -171,6 +171,7 @@
     <ClInclude Include="ShapeGenerator.h" />
     <ClInclude Include="ShapeNode.h" />
     <ClInclude Include="TranformNode.h" />
+    <ClInclude Include="Utilities.h" />
     <ClInclude Include="VAO.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
