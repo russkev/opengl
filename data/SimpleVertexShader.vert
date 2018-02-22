@@ -34,23 +34,25 @@ out vec3 f_world_vertexPosition;
 out vec3 fragmentColor;
 out vec3 f_world_vertexNormal;
 
-
-// // Uniforms ; values that stay constant for whole mesh
+bool isEmptyConnection(int index)
+{
+	return
+		connections[index][0] == 0 &&
+		connections[index][1] == 0 &&
+		connections[index][2] == 0;
+}
 
 int incomingConnection(int a, int loc)
 {
-	//if (loc == 1) { return -1; }
 	if (a == -1) { return -1; }
 
 	int destination			= -1;
-	bool emptyConnection	= true;
 
 	for(int i = 0; i < numElements; ++i)
 	{
 		destination		= connections[i][loc];
-		emptyConnection	= (connections[i][transformSourceLoc] == 0 && connections[i][transformDestLoc] == 0 && connections[1][shapeDestLoc] == 0);
-		if (emptyConnection)	{ continue; }
-		if (destination == -1)	{ continue; }
+		if (isEmptyConnection(i))	{ continue; }
+		if (destination == -1)		{ continue; }
 		if (destination == a)	
 		{ 
 			return connections[i][transformSourceLoc]; 
@@ -58,6 +60,8 @@ int incomingConnection(int a, int loc)
 	}
 	return -1;
 }
+
+
 
 mat4 transformTransform(int endTransformId)
 {
