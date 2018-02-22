@@ -2,7 +2,7 @@
 
 #version 330 core
 
-const int numElements = 100;
+const int numElements = 6;
 const int transformSourceLoc	= 0;
 const int transformDestLoc		= 1;
 const int shapeDestLoc			= 2;
@@ -39,6 +39,9 @@ out vec3 f_world_vertexNormal;
 
 int incomingConnection(int a, int loc)
 {
+	//if (loc == 1) { return -1; }
+	if (a == -1) { return -1; }
+
 	int destination			= -1;
 	bool emptyConnection	= true;
 
@@ -47,6 +50,7 @@ int incomingConnection(int a, int loc)
 		destination		= connections[i][loc];
 		emptyConnection	= (connections[i][transformSourceLoc] == 0 && connections[i][transformDestLoc] == 0 && connections[1][shapeDestLoc] == 0);
 		if (emptyConnection)	{ continue; }
+		if (destination == -1)	{ continue; }
 		if (destination == a)	
 		{ 
 			return connections[i][transformSourceLoc]; 
@@ -58,7 +62,7 @@ int incomingConnection(int a, int loc)
 mat4 transformTransform(int endTransformId)
 {
 	mat4 outTransform = transforms[endTransformId];
-	int incomingTransformId = incomingConnection(endTransformId, shapeDestLoc);
+	int incomingTransformId = incomingConnection(endTransformId, transformDestLoc);
 
 	while (incomingTransformId != -1)
 	{
