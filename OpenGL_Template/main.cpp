@@ -273,7 +273,7 @@ void initGeo(ApplicationState& _State)
 
 #endif // DEBUG
 
-auto x = 2;
+auto x = 3;
 
 	return;
 }
