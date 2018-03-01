@@ -115,7 +115,7 @@ void main()
 {
 	transformGlPosition();
 
-	fragmentColor			= colorFromIndex(model_id+2) * 0.5;
+	fragmentColor			= colorFromIndex(model_id);
 
 	
 }

@@ -134,5 +134,22 @@ namespace Utilities
 		return;
 	}
 
-	// // !!!Three way transform node ///
+	// // ----- THREE WAY TRANSFORM NODE ----- // //
+	template<typename T>
+	glm::tmat4x4<T> trs(const glm::tvec3<T>& s_translate, const T s_angle, const glm::tvec3<T>& s_rotate, const glm::tvec3<T>& s_scale)
+	{
+		return
+			glm::scale
+			(
+				glm::rotate
+				(
+					glm::translate
+					(
+						glm::tmat4x4<T>(T(1.0f)), s_translate
+					),
+					s_angle, s_rotate
+				),
+				s_scale
+			);
+	}
 };
