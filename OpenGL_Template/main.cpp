@@ -20,6 +20,7 @@
 #include "Buffer.h"
 #include "VAO.h"
 #include "ShapeContainer.h"
+#include "Utilities.h"
 
 #include "GL_Type_Traits.h"
 #include "GL_Tuple_Introspect.h"
@@ -193,14 +194,14 @@ void initWindow(ApplicationState& _State)
 	// // Enable depth test // //
 	glEnable(GL_DEPTH_TEST);
 	// // Enable backface culling // //
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	// // Set winding direction // // 
 	glFrontFace(GL_CCW);
 	// // Accept fragment shader if it closer to the camera than the previous one
 	glDepthFunc(GL_LESS);
 	// // Enable alpha
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void initCam(ApplicationState& _State)
@@ -222,12 +223,13 @@ void initGeo(ApplicationState& _State)
 	_State.programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
 
 	// // Create Geo
-	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_01");
+	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_01"); //!!!MakePlaneCentered
 	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_02");
 	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_03");
 
 	// // Create transforms
-	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, 0.0f)),	"transform_01");
+	//_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, 0.0f)),	"transform_01");
+	_State.sh.appendTransform(Utilities::trs(glm::vec3(0.0f, -1.0f, 0.0f), 1.0f, glm::vec3(1.0f), glm::vec3(5.0f)),	"transform_01");
 	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -2.0f, 0.0f)),	"transform_02");
 	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -3.0f, 0.0f)),	"transform_03");	
 
