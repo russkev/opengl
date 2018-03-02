@@ -134,22 +134,34 @@ namespace Utilities
 		return;
 	}
 
-	// // ----- THREE WAY TRANSFORM NODE ----- // //
+	// // ----- TRANSLATE ROTATE SCALE ----- // //
 	template<typename T>
-	glm::tmat4x4<T> trs(const glm::tvec3<T>& s_translate, const T s_angle, const glm::tvec3<T>& s_rotate, const glm::tvec3<T>& s_scale)
+	glm::tmat4x4<T> trs(const glm::tmat3x3<T>& s_trs)
 	{
+		glm::tvec3<T> rotate_radians(glm::radians(s_trs[1][0]), glm::radians(s_trs[1][1]), glm::radians(s_trs[1][2]));
+		int rotate_order[] = { 0, 2, 1 }; //!!!Make this an input
+		glm::tvec3<T> rotate_vectors[] = { {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0} };
+
 		return
 			glm::scale
 			(
 				glm::rotate
 				(
-					glm::translate
+					glm::rotate
 					(
-						glm::tmat4x4<T>(T(1.0f)), s_translate
+						glm::rotate
+						(
+							glm::translate
+							(
+								glm::tmat4x4<T>(T(1.0f)), s_trs[0]
+							),
+							rotate_radians[rotate_order[2]], rotate_vectors[rotate_order[2]]
+						),
+						rotate_radians[rotate_order[1]], rotate_vectors[rotate_order[1]]
 					),
-					s_angle, s_rotate
+					rotate_radians[rotate_order[0]], rotate_vectors[rotate_order[0]]
 				),
-				s_scale
+				s_trs[2]
 			);
 	}
 };
