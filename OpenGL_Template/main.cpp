@@ -27,7 +27,7 @@
 
 
 #define GLM_ENABLE_EXPERIMENTAL
-#define DEBUG
+//#define DEBUG
 #include <glm/gtc/matrix_transform.hpp>
 
 static constexpr auto POSITION_ATTR = 0u;
@@ -39,6 +39,8 @@ static constexpr auto WORLD_ATTR	= 8u;
 
 struct ApplicationState {
 	GLuint programID		= 0;
+
+	GLuint atomicsBuffer	= 0;
 
 	GLuint width			= 0;
 	GLuint height			= 0;
@@ -198,7 +200,8 @@ void initWindow(ApplicationState& _State)
 	// // Set winding direction // // 
 	glFrontFace(GL_CCW);
 	// // Accept fragment shader if it closer to the camera than the previous one
-	glDepthFunc(GL_LESS);
+	//glDepthFunc(GL_LESS);
+	glDepthFunc(GL_ALWAYS);
 	// // Enable alpha
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -280,6 +283,31 @@ void initGeo(ApplicationState& _State)
 auto x = 3;
 
 	return;
+}
+
+void initAtomicCounter(ApplicationState& _State)
+{
+	// From http://www.lighthouse3d.com/tutorials/opengl-atomic-counters/
+	// Declare and generate a buffer object name
+	glGenBuffers(1, &_State.atomicsBuffer);
+
+	// Bind the buffer and define it's initial storage capacity
+	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, _State.atomicsBuffer);
+	glBufferData(GL_ATOMIC_COUNTER_BUFFER, sizeof(GLuint) * 3, NULL, GL_DYNAMIC_DRAW);
+	// Unibind the buffer
+	GLuint *userCounters;
+	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, _State.atomicsBuffer);
+	// Map the buffers. userCounters will point to the buffers area
+	userCounters = (GLuint*)glMapBufferRange(
+		GL_ATOMIC_COUNTER_BUFFER,
+		0,
+		sizeof(GLuint) * 3,
+		GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT
+	);
+	// Set the memory to zeros, resetting the values in the buffer
+	memset(userCounters, 0, sizeof(GLuint) * 3);
+	// unmap the buffer
+	glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
 }
 
 void finish_frame (ApplicationState& _State)
@@ -399,6 +427,7 @@ int main(int, char**)
 	initCam(_State);
 	initLight(_State);
 	initGeo(_State);
+	initAtomicCounter(_State);
 	while (poll_events (_State))
 	{
 		update_camera(_State);
