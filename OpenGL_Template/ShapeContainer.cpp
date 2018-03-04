@@ -4,7 +4,7 @@
 
 void ShapeContainer::appendShape(ShapeData&& s_shape, const std::string& s_name)
 {
-	auto id = m_shapes.size();
+	auto id = (GLuint)m_shapes.size();
 	auto t_name = s_name;
 
 	while ( nameExists(t_name) ) { incrementString(t_name); }
@@ -172,7 +172,7 @@ ShapeData::indicesType ShapeContainer::indices()
 	{
 		for (auto j = 0; j < shape.numIndices(); ++j)
 		{
-			t_indices.push_back(shape.indices().at(j) + numVertices);
+			t_indices.push_back(shape.indices().at(j) + (ShapeData::indexType)numVertices);
 		}
 		numVertices += shape.numVertices();
 	}
@@ -182,17 +182,17 @@ ShapeData::indicesType ShapeContainer::indices()
 ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 {
 	distancesType distances;
-	auto raw_indices  = indices();
+	auto raw_indices = indices();
 	auto raw_vertices = vertices();
 	ShapeData::indicesType outIndices;
 	for (auto i = 0; i < raw_indices.size(); i += 3)
 	{
-		auto t_vertex_1			= std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i    )));
-		auto t_vertex_2			= std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i + 1)));
-		auto t_vertex_3			= std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i + 2)));
+		auto t_vertex_1 = std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i)));
+		auto t_vertex_2 = std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i + 1)));
+		auto t_vertex_3 = std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i + 2)));
 
-		auto t_vertex_loc_avg	= Utilities::vectorAverage(t_vertex_1, t_vertex_2, t_vertex_3);
-		GLfloat distance		= Utilities::distanceSquared(t_vertex_loc_avg, s_cam_location);
+		auto t_vertex_loc_avg = Utilities::vectorAverage(t_vertex_1, t_vertex_2, t_vertex_3);
+		GLfloat distance = Utilities::distanceSquared(t_vertex_loc_avg, s_cam_location);
 
 		distances.push_back(std::make_pair(distance, glm::tvec3<ShapeData::indexType>{raw_indices.at(i), raw_indices.at(i + 1), raw_indices.at(i + 2)}));
 	}
@@ -205,42 +205,6 @@ ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 	}
 	return outIndices;
 }
-
-
-
-//void ShapeContainer::quickSortDistances(distancesType& s_distances)
-//{
-//	if (s_distances.size() < 2)
-//	{
-//		return;
-//	}
-//
-//	auto pivot = s_distances.at(0).first;
-//	distancesType less;
-//	distancesType greater;
-//	distancesType pivots;
-//
-//	for (auto & i : s_distances)
-//	{
-//		if (i.first < pivot)
-//		{
-//			less.push_back(i);
-//		}
-//		else if (i.first > pivot)
-//		{
-//			greater.push_back(i);
-//		}
-//		else
-//		{
-//			pivots.push_back(i);
-//		}
-//	}
-//	quickSortDistances(less);
-//	quickSortDistances(greater);
-//
-//	s_distances = Utilities::combineVectors(less, pivots, greater);
-//	return;
-//}
 
 ShapeContainer::intType ShapeContainer::findString(const std::vector<std::string> &s_vec, const std::string &s_string)
 {
@@ -289,7 +253,7 @@ void ShapeContainer::uploadTransforms(const intType s_program_id)
 	if (m_transforms.size() > 0) 
 	{
 		glUseProgram(s_program_id);
-		const intType numTransforms = m_transforms.size();
+		const intType numTransforms = (intType)m_transforms.size();
 		const intType transformsLocation = glGetUniformLocation(s_program_id, "transforms");
 		glUniformMatrix4fv(transformsLocation, numTransforms, GL_FALSE, &m_transforms.at(0)[0][0]);
 	}
@@ -300,7 +264,7 @@ void ShapeContainer::uploadConnections(const intType s_program_id)
 	if (m_connections.size() > 0)
 	{
 		glUseProgram(s_program_id);
-		const intType numConnections = m_connections.size();
+		const intType numConnections = (intType)m_connections.size();
 		const intType connectionsLocation = glGetUniformLocation(s_program_id, "connections");
 		glUniform3iv(connectionsLocation, numConnections, &m_connections.at(0)[0]);
 	}
