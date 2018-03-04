@@ -40,7 +40,7 @@ static constexpr auto WORLD_ATTR	= 8u;
 struct ApplicationState {
 	GLuint programID		= 0;
 
-	GLuint atomicsBuffer	= 0;
+	//GLuint atomicsBuffer	= 0;
 
 	GLuint width			= 0;
 	GLuint height			= 0;
@@ -67,6 +67,7 @@ struct ApplicationState {
 	Buffer matBuffer		= { GL_ARRAY_BUFFER, 0 };
 	Buffer wldBuffer		= {	GL_ARRAY_BUFFER, 0 };
 	Buffer indxBuffer		= { GL_ARRAY_BUFFER, 0 };
+	Buffer atomicsBuffer	= { GL_ATOMIC_COUNTER_BUFFER, 0 };
 
 	VAO    VAO_main, VAO_mat;
 	
@@ -288,26 +289,12 @@ auto x = 3;
 void initAtomicCounter(ApplicationState& _State)
 {
 	// From http://www.lighthouse3d.com/tutorials/opengl-atomic-counters/
-	// Declare and generate a buffer object name
-	glGenBuffers(1, &_State.atomicsBuffer);
-
-	// Bind the buffer and define it's initial storage capacity
-	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, _State.atomicsBuffer);
-	glBufferData(GL_ATOMIC_COUNTER_BUFFER, sizeof(GLuint) * 3, NULL, GL_DYNAMIC_DRAW);
-	// Unibind the buffer
-	GLuint *userCounters;
-	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, _State.atomicsBuffer);
-	// Map the buffers. userCounters will point to the buffers area
-	userCounters = (GLuint*)glMapBufferRange(
-		GL_ATOMIC_COUNTER_BUFFER,
-		0,
-		sizeof(GLuint) * 3,
-		GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT
-	);
-	// Set the memory to zeros, resetting the values in the buffer
-	memset(userCounters, 0, sizeof(GLuint) * 3);
-	// unmap the buffer
-	glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
+	// Also see:
+	// https://github.com/gangliao/Order-Independent-Transparency-GPU/blob/master/source%20code/src/shader/oit.fs
+	// http://www.openglsuperbible.com/2013/08/20/is-order-independent-transparency-really-necessary/
+	GLuint initZeros[] = { 5, 5, 5 };
+	_State.atomicsBuffer.SetBindingID(1);
+	_State.atomicsBuffer.Append(sizeof(GLuint) * 3, (void*)initZeros);
 }
 
 void finish_frame (ApplicationState& _State)
@@ -339,6 +326,13 @@ void prepareGeo(ApplicationState& _State)
 	_State.indxBuffer.Upload(_State.sh.depthSort(_State.cam.getPosition()));
 }
 
+void readAtomic(ApplicationState& _State)
+{
+	GLuint initZeros[] = { 8, 8, 8 };
+	_State.atomicsBuffer.ReadBuffer((void*)initZeros);
+	auto x = 0;
+}
+
 void render_frame (ApplicationState& _State)
 {
 	// // Tutorial from http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/ // //
@@ -356,6 +350,7 @@ void render_frame (ApplicationState& _State)
 	 prepareCam(_State);
 	 prepareLight(_State);
 	 prepareGeo(_State);
+	 readAtomic(_State);
 	 
 	 _State.VAO_main.Bind();
 	 _State.indxBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);

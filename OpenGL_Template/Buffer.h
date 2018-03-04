@@ -8,7 +8,7 @@
 struct Buffer
 {
 	// // BIG 6
-	Buffer(std::uint32_t target, std::size_t size);
+	Buffer(std::uint32_t target, std::size_t size, std::uint32_t binding = 0);
 	~Buffer();
 	Buffer(const Buffer&) = delete;
 	Buffer(Buffer&&);
@@ -26,6 +26,7 @@ struct Buffer
 	void Reserve(std::size_t newCapacity); //!!! Is this useful?
 	void Bind() const;
 	void Bind(std::uint32_t target);
+	void SetBindingID(std::uint32_t bindingID);
 
 	// // INPUTTING WITH VECTORS // //
 	template<typename T>
@@ -57,9 +58,10 @@ struct Buffer
 	}
 
 	// // GETTERS // //
-	std::uint32_t bufferID() const noexcept { return m_bufferID; }
-	std::size_t   capacity() const noexcept { return m_capacity; }
-	std::size_t       size() const noexcept { return m_size; }
+	std::uint32_t bufferID() const noexcept		{ return m_bufferID; }
+	std::uint32_t bindingID() const noexcept	{ return m_bindingID; }
+	std::size_t   capacity() const noexcept		{ return m_capacity; }
+	std::size_t       size() const noexcept		{ return m_size; }
 
 private:
 	// // MEMBER VARIABLES // //
@@ -67,4 +69,5 @@ private:
 	std::size_t		m_capacity;
 	std::uint32_t	m_bufferID;
 	std::uint32_t	m_target;
+	std::uint32_t	m_bindingID;
 };

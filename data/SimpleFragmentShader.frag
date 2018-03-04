@@ -19,14 +19,13 @@ layout (binding = 1, offset = 8) uniform atomic_uint atBlue;
 out vec4 color;
 
 void main(){
-	
 	if ((fragmentColor[0] >= fragmentColor[1]) && (fragmentColor[0] >= fragmentColor[2]))
 	{
 		atomicCounterIncrement(atRed);
 	}
 	else if (fragmentColor[1] >= fragmentColor[2])
 	{
-		atomicCounterIncrement(atRed);
+		atomicCounterIncrement(atGreen);
 	}
 	else
 	{

@@ -11,11 +11,12 @@
 
 
 // DEFAULT CONSTRUCTOR //
-Buffer::Buffer(std::uint32_t target, std::size_t size) :
+Buffer::Buffer(std::uint32_t target, std::size_t size, std::uint32_t binding) :
 	m_size(0),
 	m_capacity(size),
 	m_bufferID(0),
-	m_target(target)
+	m_target(target),
+	m_bindingID(binding)
 {
 	std::cout << "Buffer object constructed\n";
 	if (size != 0) {
@@ -36,7 +37,8 @@ Buffer::Buffer(Buffer&& other) :
 	m_size(std::exchange(other.m_size, 0u)),
 	m_capacity(std::exchange(other.m_capacity, 0u)),
 	m_target(std::exchange(other.m_target, 0u)),
-	m_bufferID(std::exchange(other.m_bufferID, 0u))
+	m_bufferID(std::exchange(other.m_bufferID, 0u)),
+	m_bindingID(std::exchange(other.m_bindingID, 0u))
 {
 	std::cout << "Buffer move constructor called\n";
 }
@@ -80,6 +82,14 @@ void Buffer::ReadBuffer(void* dest) {
 void * Buffer::Map(std::size_t size, std::size_t offset) {
 	assert(offset + size <= m_capacity);
 	glBindBuffer(m_target, m_bufferID);
+	if (m_target == GL_ATOMIC_COUNTER_BUFFER)
+	{
+		glBindBufferBase(m_target, m_bindingID, m_bufferID);
+	}
+	else
+	{
+		glBindBuffer(m_target, m_bufferID);
+	}
 	void * out = glMapBufferRange(m_target, offset, size, GL_MAP_WRITE_BIT);
 	return out;
 }
@@ -134,4 +144,8 @@ void Buffer::Bind() const {
 
 void Buffer::Bind(std::uint32_t target) {
 	glBindBuffer(m_target = target, m_bufferID);
+}
+
+void Buffer::SetBindingID(std::uint32_t bindingID) {
+	m_bindingID = bindingID;
 }
