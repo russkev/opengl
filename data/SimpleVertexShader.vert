@@ -27,7 +27,7 @@ mat4[numElements] transformsMoved = transforms;
 // // -1 indicates that that slot is empty
 // // <0,0,0> indicates that the connection is empty
 uniform ivec3[numElements] connections;
-
+uniform int test_int;
 
 // // Output data ; will be interpolated for each fragment
 out vec3 f_world_vertexPosition;
