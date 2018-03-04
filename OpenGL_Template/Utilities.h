@@ -136,11 +136,19 @@ namespace Utilities
 
 	// // ----- TRANSLATE ROTATE SCALE ----- // //
 	template<typename T>
-	glm::tmat4x4<T> trs(const glm::tmat3x3<T>& s_trs)
+	glm::tmat4x4<T> trs(const glm::tmat3x3<T>& s_trs, std::string s_rotate_order = "xyz")//, const char[]& s_rotate_order = 'xyz')
 	{
+		assert(s_rotate_order.size() == 3 && "Rotate order must be exactly three letters");
 		glm::tvec3<T> rotate_radians(glm::radians(s_trs[1][0]), glm::radians(s_trs[1][1]), glm::radians(s_trs[1][2]));
-		int rotate_order[] = { 0, 2, 1 }; //!!!Make this an input
+		std::vector<int> rotate_order; //!!!Make this an input
 		glm::tvec3<T> rotate_vectors[] = { {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0} };
+
+		for (auto & i : s_rotate_order)
+		{
+			assert(i >= 'x' && i <= 'z' && "Rotate order letters must be 'x', 'y' or 'z'");
+			rotate_order.push_back(i - 120);
+			auto test = i;
+		}
 
 		return
 			glm::scale

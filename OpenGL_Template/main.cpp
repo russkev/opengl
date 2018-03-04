@@ -228,10 +228,11 @@ void initGeo(ApplicationState& _State)
 	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_03");
 
 	// // Create transforms
+	glm::vec3 planeScale = glm::vec3(3.0f);
 	//_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, 0.0f)),	"transform_01");
-	_State.sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -1.0f, 0.0 }, { 0.0f, 45.0f, 90.0f }, glm::vec3(3.0f))), "transform_01");
-	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -2.0f, 0.0f)),	"transform_02");
-	_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -3.0f, 0.0f)),	"transform_03");	
+	_State.sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -1.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_01");
+	_State.sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -3.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_02");
+	_State.sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -5.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_03");	
 
 
 	// // Transform Geo 
@@ -241,6 +242,7 @@ void initGeo(ApplicationState& _State)
 
 	// // Send information to graphics card
 	_State.geoBuffer.Append(_State.sh.vertices());
+	auto depthSortedIndices = _State.sh.depthSort(_State.cam.getPosition());
 	_State.indxBuffer.Append(_State.sh.depthSort(_State.cam.getPosition()));
 
 	// // TEST // //
