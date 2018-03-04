@@ -72,7 +72,7 @@ namespace Utilities
 		outVec.x = min_x + (max_x - min_x) / 2;
 		outVec.y = min_y + (max_y - min_y) / 2;
 		outVec.z = min_z + (max_z - min_z) / 2;
-		
+
 		return outVec;
 	}
 
@@ -86,19 +86,19 @@ namespace Utilities
 			return
 				(
 				(s_point_2.x - s_point_1.x) * (s_point_2.x - s_point_1.x) +
-				(s_point_2.y - s_point_1.y) * (s_point_2.y - s_point_1.y));
+					(s_point_2.y - s_point_1.y) * (s_point_2.y - s_point_1.y));
 		}
 		else
 		{
 			return
 				(
 				(s_point_2.x - s_point_1.x) * (s_point_2.x - s_point_1.x) +
-				(s_point_2.y - s_point_1.y) * (s_point_2.y - s_point_1.y) +
-				(s_point_2.z - s_point_1.z) * (s_point_2.z - s_point_1.z));
+					(s_point_2.y - s_point_1.y) * (s_point_2.y - s_point_1.y) +
+					(s_point_2.z - s_point_1.z) * (s_point_2.z - s_point_1.z));
 		}
 	}
 
-	
+
 	template<typename T1, typename T2>
 
 	void quickSortPairVector(std::vector<std::pair<T1, T2>>& s_pairs)
@@ -132,5 +132,44 @@ namespace Utilities
 
 		s_pairs = combineVectors(greater, pivots, less);
 		return;
+	}
+
+	// // ----- TRANSLATE ROTATE SCALE ----- // //
+	template<typename T>
+	glm::tmat4x4<T> trs(const glm::tmat3x3<T>& s_trs, std::string s_rotate_order = "xyz")//, const char[]& s_rotate_order = 'xyz')
+	{
+		assert(s_rotate_order.size() == 3 && "Rotate order must be exactly three letters");
+		glm::tvec3<T> rotate_radians(glm::radians(s_trs[1][0]), glm::radians(s_trs[1][1]), glm::radians(s_trs[1][2]));
+		std::vector<int> rotate_order; //!!!Make this an input
+		glm::tvec3<T> rotate_vectors[] = { {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0} };
+
+		for (auto & i : s_rotate_order)
+		{
+			assert(i >= 'x' && i <= 'z' && "Rotate order letters must be 'x', 'y' or 'z'");
+			rotate_order.push_back(i - 120);
+			auto test = i;
+		}
+
+		return
+			glm::scale
+			(
+				glm::rotate
+				(
+					glm::rotate
+					(
+						glm::rotate
+						(
+							glm::translate
+							(
+								glm::tmat4x4<T>(T(1.0f)), s_trs[0]
+							),
+							rotate_radians[rotate_order[2]], rotate_vectors[rotate_order[2]]
+						),
+						rotate_radians[rotate_order[1]], rotate_vectors[rotate_order[1]]
+					),
+					rotate_radians[rotate_order[0]], rotate_vectors[rotate_order[0]]
+				),
+				s_trs[2]
+			);
 	}
 };

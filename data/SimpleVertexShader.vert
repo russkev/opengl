@@ -2,7 +2,7 @@
 
 #version 330 core
 
-const int numElements = 100;
+const int numElements = 6;
 const int transformSourceLoc	= 0;
 const int transformDestLoc		= 1;
 const int shapeDestLoc			= 2;
@@ -27,30 +27,41 @@ mat4[numElements] transformsMoved = transforms;
 // // -1 indicates that that slot is empty
 // // <0,0,0> indicates that the connection is empty
 uniform ivec3[numElements] connections;
-
+uniform int test_int;
 
 // // Output data ; will be interpolated for each fragment
 out vec3 f_world_vertexPosition;
 out vec3 fragmentColor;
 out vec3 f_world_vertexNormal;
 
-
-// // Uniforms ; values that stay constant for whole mesh
+bool isEmptyConnection(int index)
+{
+	return
+		connections[index][0] == 0 &&
+		connections[index][1] == 0 &&
+		connections[index][2] == 0;
+}
 
 int incomingConnection(int a, int loc)
 {
+	if (a == -1) { return -1; }
+
 	int destination			= -1;
-	bool emptyConnection	= true;
 
 	for(int i = 0; i < numElements; ++i)
 	{
 		destination		= connections[i][loc];
-		emptyConnection	= (connections[i][transformSourceLoc] == 0 && connections[i][transformDestLoc] == 0 && connections[1][shapeDestLoc] == 0);
-		if (emptyConnection)	{ continue; }
-		if (destination == a)	{ return connections[i][transformSourceLoc]; }
+		if (isEmptyConnection(i))	{ continue; }
+		if (destination == -1)		{ continue; }
+		if (destination == a)	
+		{ 
+			return connections[i][transformSourceLoc]; 
+		}
 	}
 	return -1;
 }
+
+
 
 mat4 transformTransform(int endTransformId)
 {
@@ -59,8 +70,8 @@ mat4 transformTransform(int endTransformId)
 
 	while (incomingTransformId != -1)
 	{
-		outTransform = transforms[incomingTransformId] * transforms[endTransformId];
-		incomingTransformId = incomingConnection(incomingTransformId, transformDestLoc);
+		outTransform			= transforms[incomingTransformId] * transforms[endTransformId];
+		incomingTransformId		= incomingConnection(incomingTransformId, transformDestLoc);
 	}
 	return outTransform;
 }
@@ -104,7 +115,7 @@ void main()
 {
 	transformGlPosition();
 
-	fragmentColor			= colorFromIndex(model_id+2) * 0.5;
+	fragmentColor			= colorFromIndex(model_id);
 
 	
 }

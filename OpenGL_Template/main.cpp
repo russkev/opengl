@@ -39,11 +39,6 @@ static constexpr auto WORLD_ATTR	= 8u;
 
 struct ApplicationState {
 	GLuint programID		= 0;
-	GLuint matrixID			= 0;
-	GLuint ambientLightID	= 0;
-	GLuint lightPositionID	= 0;
-	GLuint worldMatrixID	= 0;
-	GLuint camPositionID	= 0;
 
 	GLuint width			= 0;
 	GLuint height			= 0;
@@ -52,12 +47,13 @@ struct ApplicationState {
 
 	glm::mat4 view        = glm::mat4();
 	glm::mat4 projection  = glm::mat4();
-	std::vector<glm::mat4> modelMatrix;
-	std::vector<GLfloat> offsets;
-	Camera cam;
 
-	double time = 0.0;
-	double freqMultiplier = 0.0;
+	std::vector<glm::mat4>	modelMatrix;
+	std::vector<GLfloat>	offsets;
+	Camera					cam;
+
+	double time				= 0.0;
+	double freqMultiplier	= 0.0;
 
 	SDL_Window*		st_window = nullptr;
 	SDL_GLContext	st_opengl = nullptr;
@@ -70,13 +66,7 @@ struct ApplicationState {
 	Buffer wldBuffer		= {	GL_ARRAY_BUFFER, 0 };
 	Buffer indxBuffer		= { GL_ARRAY_BUFFER, 0 };
 
-	Buffer wldMatrices		= { GL_ARRAY_BUFFER, 0 };
-	Buffer viewMatrices		= { GL_ARRAY_BUFFER, 0 };
-	Buffer testMatrices		= { GL_ARRAY_BUFFER, 0 };
-
 	VAO    VAO_main, VAO_mat;
-	GLuint planeVAO			= 0;
-	
 	
 	ApplicationState() {
 		if (st_window) SDL_DestroyWindow(st_window);
@@ -150,8 +140,6 @@ void initWindow(ApplicationState& _State)
 	SDL_Init(SDL_INIT_EVERYTHING);
 	std::atexit(SDL_Quit);
 
-	//typedef std::vector<std::tuple<glm::tvec3<GLfloat>, glm::tvec3<GLfloat>, glm::tvec3<GLfloat>>> vertexType;
-
 	for (const auto& it : st_config)
 	{
 		SDL_GL_SetAttribute(it.key, it.value);
@@ -205,7 +193,6 @@ void initWindow(ApplicationState& _State)
 
 	// // Enable depth test // //
 	glEnable(GL_DEPTH_TEST);
-
 	// // Enable backface culling // //
 	//glEnable(GL_CULL_FACE);
 	// // Set winding direction // // 
@@ -219,8 +206,6 @@ void initWindow(ApplicationState& _State)
 
 void initCam(ApplicationState& _State)
 {
-	_State.worldMatrixID = glGetUniformLocation(_State.programID, "ModelToWorldMatrix");
-	_State.camPositionID = glGetUniformLocation(_State.programID, "camPosition");
 
 	// // Set up camera // //
 	_State.projection	= glm::perspective(glm::radians(50.0f), float(_State.width) / float(_State.height), 0.1f, 100.0f);
@@ -229,8 +214,7 @@ void initCam(ApplicationState& _State)
 
 void initLight(ApplicationState& _State)
 {
-	_State.ambientLightID = glGetUniformLocation(_State.programID, "ambientLight");
-	_State.lightPositionID = glGetUniformLocation(_State.programID, "lightPosition");
+	// // Set up lights // //
 }
 
 void initGeo(ApplicationState& _State)
@@ -238,39 +222,37 @@ void initGeo(ApplicationState& _State)
 	// // Create and compile our GLSL program from the shaders // //
 	_State.programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
 
-	// // Fetch uniforms from vertex shader // //
-	_State.matrixID = glGetUniformLocation(_State.programID, "MVP");
-
 	// // Create Geo
-	_State.sh.appendShape(_State.shapes.makePlane(4), "plane_1");
-	//_State.sh.appendShape(_State.shapes.makePlane(1), "plane_2");
-	//_State.sh.appendShape(_State.shapes.makePlane(1), "plane_3");
+	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_01"); 
+	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_02");
+	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_03");
 
 	// // Create transforms
-	glm::mat4 transformDown_1		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -2, 0));
-	//glm::mat4 transformDown_2		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -3, 0));
-	//glm::mat4 transformDown_3		= glm::translate(glm::mat4(1.0f), glm::vec3(0, -4, 0));
+	glm::vec3 planeScale = glm::vec3(3.0f);
+	//_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, 0.0f)),	"transform_01");
+	_State.sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -1.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_01");
+	_State.sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -3.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_02");
+	_State.sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -5.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_03");	
 
-	_State.sh.appendTransform(std::move(transformDown_1),		"transformDown_1");
-	//_State.sh.appendTransform(std::move(transformDown_2),		"transformDown_2");
-	//_State.sh.appendTransform(std::move(transformDown_3),		"transformDown_3");
 
-	//// // Transform Geo 
-	_State.sh.connect("transformDown_1",	"plane_1");	
-	//_State.sh.connect("transformDown_2",	"plane_2");	
-	//_State.sh.connect("transformDown_3",	"plane_3");
+	// // Transform Geo 
+	_State.sh.connect("transform_01",		"plane_01");
+	_State.sh.connect("transform_02",		"plane_02");
+	_State.sh.connect("transform_03",		"plane_03");
 
 	// // Send information to graphics card
 	_State.geoBuffer.Append(_State.sh.vertices());
+	auto depthSortedIndices = _State.sh.depthSort(_State.cam.getPosition());
 	_State.indxBuffer.Append(_State.sh.depthSort(_State.cam.getPosition()));
 
-	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(5.0f)[0][0]);
-	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(6.0f)[0][0]);
-	_State.matBuffer.Append(sizeof(glm::mat4), &glm::mat4(1.0f)[0][0]);
+	// // TEST // //
+	//auto test_min = _State.sh.minValue(3.4f, 9.6f, 2.1f, 4.4f, 3.3f, 3.4f, 3.4f, -12.9f);
+	//auto test_max = _State.sh.maxValue(3.4f, 9.6f, 2.1f, 4.4f, 3.3f, 3.4f, 3.4f, -12.9f);
 
-	_State.wldBuffer.Append(sizeof(glm::mat4), &transformDown_1);
-	//_State.wldBuffer.Append(sizeof(glm::mat4), &transformDown_2);
-	//_State.wldBuffer.Append(sizeof(glm::mat4), &transformDown_3);
+	// // END TEST // //
+
+	_State.matBuffer.Append(sizeof(glm::mat4), &(_State.projection * _State.cam.getWorldToViewMatrix()[0][0]));
+	_State.wldBuffer.Append(sizeof(glm::mat4), &glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, 0.0f)));
 
 
 	// // Set up standard information for the VAO
@@ -280,13 +262,13 @@ void initGeo(ApplicationState& _State)
 	// // Upload the VAO information
 	_State.VAO_main.GenerateVAO(_State.geoBuffer, 0, shape_info.data(),  shape_info.data()  + shape_info.size(),  POSITION_ATTR);
 	_State.VAO_main.GenerateVAO(_State.matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
-	//_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
+	_State.VAO_main.GenerateVAO(_State.wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
 
 	_State.sh.uploadTransforms(_State.programID);
 	_State.sh.uploadConnections(_State.programID);
 
 #ifdef DEBUG
-	// // Debug matrix array
+	 // Debug matrix array
 	std::vector<glm::mat4> testTransformsUniform;
 	testTransformsUniform = _State.sh.readUniform<glm::mat4>(_State.programID, "transforms", 4);
 	std::vector<glm::ivec3> testConnectionsUniform;
@@ -295,7 +277,7 @@ void initGeo(ApplicationState& _State)
 
 #endif // DEBUG
 
-	auto x = 1;
+auto x = 3;
 
 	return;
 }
@@ -308,18 +290,18 @@ void finish_frame (ApplicationState& _State)
 void prepareLight(ApplicationState& _State) 
 {
 	// // Ambient Lighting // //
-	glm::vec4 ambientLight = { 0.0f, 0.34f, 0.6f, 1.0f };
-	glUniform4fv(_State.ambientLightID, 1, &ambientLight.r);
+	//glm::vec4 ambientLight = { 0.0f, 0.34f, 0.6f, 1.0f };
+	//glUniform4fv(_State.ambientLightID, 1, &ambientLight.r);
 	// // Diffuse Lighting // // 
-	glm::vec3 lightPosition = { 0.0f, 2.0f, 0.0f };
-	glUniform3fv(_State.lightPositionID, 1, &lightPosition.x);
+	//glm::vec3 lightPosition = { 0.0f, 2.0f, 0.0f };
+	//glUniform3fv(_State.lightPositionID, 1, &lightPosition.x);
 }
 
 void prepareCam(ApplicationState& _State)
 {
 	// // Cam position // //
-	glm::vec3 camPositionVec = _State.cam.getPosition();
-	glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
+	//glm::vec3 camPositionVec = _State.cam.getPosition();
+	//glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
 }
 
 void prepareGeo(ApplicationState& _State)
@@ -419,13 +401,9 @@ int main(int, char**)
 	initGeo(_State);
 	while (poll_events (_State))
 	{
-		_State.matBuffer.Upload(0, sizeof(glm::mat4), &(glm::mat4(5.4)));
 		update_camera(_State);
-		_State.matBuffer.Upload(0, sizeof(glm::mat4), &(glm::mat4(5.4)));
 		render_frame (_State);
-		_State.matBuffer.Upload(0, sizeof(glm::mat4), &(glm::mat4(5.4)));
 		finish_frame (_State);
-		_State.matBuffer.Upload(0, sizeof(glm::mat4), &(glm::mat4(5.4)));
 	}
 
 	exit(_State);

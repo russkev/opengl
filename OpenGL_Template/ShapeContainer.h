@@ -48,14 +48,13 @@ struct ShapeContainer
 
 	std::string type(const std::string& s_name);
 	ShapeData::indicesType depthSort(glm::vec3 s_cam_location);
-	//void quickSortDistances(distancesType& s_distances);
 
 	// // ----- Getters ----- // //
 	ShapeData::verticesType vertices();
 	ShapeData::indicesType  indices();
 	std::vector<glm::mat4>  transforms() { return m_transforms; }
-	intType numShapes() { return m_shapes.size(); }
-	intType numTransforms() { return m_transforms.size(); }
+	intType numShapes() {		return intType(m_shapes.size());		}
+	intType numTransforms() {	return intType(m_transforms.size()); }
 
 	intType findString(const std::vector<std::string> &s_vec, const std::string &s_string);
 	intType findString(const std::string &s_type, const std::string &s_string);
@@ -86,7 +85,27 @@ struct ShapeContainer
 		return returnVector;
 	}
 	
-
+	// // ----- Min/Max Values ----- // //
+	template <typename T1, typename T2>
+	T1 minValue(T1 first, T2 second)
+	{
+		return (first < second) ? first : second;
+	}
+	template <typename T1, typename T2, typename ...Args>
+	T1 minValue(T1 first, T2 second, Args ...args)
+	{
+		return (first < second) ? minValue(first, args...) : minValue(second, args...);
+	}
+	template<typename T1, typename T2>
+	T1 maxValue(T1 first, T2 second)
+	{
+		return (first > second) ? first : second;
+	}
+	template<typename T1, typename T2, typename ...Args>
+	T1 maxValue(T1 first, T2 second, Args... args)
+	{
+		return (first > second) ? maxValue(first, args...) : maxValue(second, args...);
+	}
 
 
 private:
