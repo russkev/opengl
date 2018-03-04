@@ -1,4 +1,4 @@
-#version 330 core
+#version 440 core
 
 // // Interpolate values from the vertex shaders // //
 in vec3 f_world_vertexPosition;
@@ -11,10 +11,28 @@ uniform vec4 ambientLight;
 uniform vec3 lightPosition;
 uniform vec3 camPosition;
 
+layout (binding = 1, offset = 0) uniform atomic_uint atRed;
+layout (binding = 1, offset = 4) uniform atomic_uint atGreen;
+layout (binding = 1, offset = 8) uniform atomic_uint atBlue;
+
 // // Output data // //
 out vec4 color;
 
 void main(){
+	
+	if ((fragmentColor[0] >= fragmentColor[1]) && (fragmentColor[0] >= fragmentColor[2]))
+	{
+		atomicCounterIncrement(atRed);
+	}
+	else if (fragmentColor[1] >= fragmentColor[2])
+	{
+		atomicCounterIncrement(atRed);
+	}
+	else
+	{
+		atomicCounterIncrement(atBlue);
+	}
+	
 	vec3 diff_color				= fragmentColor;
 
 	vec3  spec_color			= vec3(1.0, 0.7, 0.5);

@@ -1,6 +1,6 @@
 // shadertype=glsl
 
-#version 330 core
+#version 440 core
 
 const int numElements = 6;
 const int transformSourceLoc	= 0;
