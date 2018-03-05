@@ -34,6 +34,7 @@ out vec3 f_world_vertexPosition;
 out vec3 fragmentColor;
 out vec3 f_world_vertexNormal;
 
+
 bool isEmptyConnection(int index)
 {
 	return
@@ -110,11 +111,18 @@ vec3 colorFromIndex(int a)
 	return colArray[a%6];
 }
 
+vec4 redColor()
+{
+	return vec4(1.0, 0.0, 0.0, 1.0);
+}
+vec4 blueColor()
+{
+	return vec4(0.0, 0.0, 1.0, 1.0);
+}
 
 void main()
 {
 	transformGlPosition();
-
 	fragmentColor			= colorFromIndex(model_id);
 
 	
