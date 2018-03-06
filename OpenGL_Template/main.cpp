@@ -251,12 +251,17 @@ void initGeo(ApplicationState& _State)
 
 	// // TEST // //
 	// http://www.lighthouse3d.com/tutorials/glsl-tutorial/subroutines/
-	auto isRedID		= glGetUniformLocation(_State.programID, "isRed");
+	glUseProgram(_State.programID);
+	//auto isRedID			= glGetUniformLocation(_State.programID, "myRedBlueSelection");
+	GLuint routineC1		= glGetSubroutineIndex(_State.programID, GL_FRAGMENT_SHADER, "redColor");
+	GLuint routineC2		= glGetSubroutineIndex(_State.programID, GL_FRAGMENT_SHADER, "blueColor");
+	GLuint isRedID			= glGetSubroutineUniformLocation(_State.programID, GL_FRAGMENT_SHADER, "myRedBlueSelection");
+	const GLuint isRedNum	= 0;
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &isRedNum);
 	//GLint isRedFragID	= glGetUniformLocation(_State.programID, "isRedFrag");
-	GLfloat isRedNum = 1.0f;
-	glUniform1f(isRedID, isRedNum);
-	GLfloat outRed;
-	glGetUniformfv(_State.programID, isRedID, &outRed);
+	//glUniform1i(isRedID, isRedNum);
+	//GLint outRed;
+	//glGetUniformiv(_State.programID, isRedID, &outRed);
 
 	// // END TEST // //
 
