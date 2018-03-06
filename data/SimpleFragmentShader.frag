@@ -11,7 +11,7 @@ uniform vec4 ambientLight;
 uniform vec3 lightPosition;
 uniform vec3 camPosition;
 
-uniform int isRed;
+uniform float isRed;
 
 layout (binding = 1, offset = 0) uniform atomic_uint atRed;
 layout (binding = 1, offset = 4) uniform atomic_uint atGreen;
@@ -21,11 +21,15 @@ layout (binding = 1, offset = 8) uniform atomic_uint atBlue;
 out vec4 color;
 
 
-void main(){
-	if (isRed == 1) {
+void main()
+{
+	color = vec4(isRed, 0.0, 0.0, 1.0);
+	/*
+ 	if (isRed == 1) {
         color = vec4(1.0, 0.0, 0.0, 1.0); }
     else { 
         color = vec4(0.0, 0.0, 1.0, 1.0); }
+
 
 
 
@@ -69,7 +73,8 @@ void main(){
 
 	vec4 colorRGB				= ambientLight * vec4(diff_color, 1) + clamp(diff_light * lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
 	float alpha					= 0.5;
-	//color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
-	//color						= ambientLight;
+	color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
+	color						= ambientLight;
+	*/
 
 }

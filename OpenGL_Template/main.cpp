@@ -253,9 +253,10 @@ void initGeo(ApplicationState& _State)
 	// http://www.lighthouse3d.com/tutorials/glsl-tutorial/subroutines/
 	auto isRedID		= glGetUniformLocation(_State.programID, "isRed");
 	//GLint isRedFragID	= glGetUniformLocation(_State.programID, "isRedFrag");
-	glUniform1i(isRedID, 1);
-	GLint outRed;
-	glGetUniformiv(_State.programID, isRedID, &outRed);
+	GLfloat isRedNum = 1.0f;
+	glUniform1f(isRedID, isRedNum);
+	GLfloat outRed;
+	glGetUniformfv(_State.programID, isRedID, &outRed);
 
 	// // END TEST // //
 
