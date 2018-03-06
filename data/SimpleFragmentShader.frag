@@ -11,7 +11,22 @@ uniform vec4 ambientLight;
 uniform vec3 lightPosition;
 uniform vec3 camPosition;
 
-uniform float isRed;
+// // Subroutine tutorial
+uniform int isRed;
+// Subroutine signature
+subroutine vec4 colorRedBlue ();
+
+// Option 1
+subroutine (colorRedBlue) vec4 redColor() {
+	return vec4(1.0, 0.0, 0.0, 1.0); }
+// Option 2
+subroutine (colorRedBlue) vec4 blueColor() {
+	return vec4(0.0, 0.0, 1.0, 1.0); }
+
+subroutine uniform colorRedBlue myRedBlueSelection;
+
+// // End subroutine
+
 
 layout (binding = 1, offset = 0) uniform atomic_uint atRed;
 layout (binding = 1, offset = 4) uniform atomic_uint atGreen;
@@ -23,16 +38,11 @@ out vec4 color;
 
 void main()
 {
-	color = vec4(isRed, 0.0, 0.0, 1.0);
+	color = myRedBlueSelection();
+
+
+
 	/*
- 	if (isRed == 1) {
-        color = vec4(1.0, 0.0, 0.0, 1.0); }
-    else { 
-        color = vec4(0.0, 0.0, 1.0, 1.0); }
-
-
-
-
 	if ((fragmentColor[0] >= fragmentColor[1]) && (fragmentColor[0] >= fragmentColor[2]))
 	{
 		atomicCounterIncrement(atRed);
