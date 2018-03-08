@@ -233,7 +233,7 @@ void initGeo(ApplicationState& _State)
 
 	// // Create transforms
 	glm::vec3 planeScale = glm::vec3(3.0f);
-	//_State.sh.appendTransform(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, 0.0f)),	"transform_01");
+
 	_State.sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -1.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_01");
 	_State.sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -3.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_02");
 	_State.sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -5.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_03");	
@@ -262,8 +262,8 @@ void initGeo(ApplicationState& _State)
 	//glUniform1i(isRedID, isRedNum);
 	//GLint outRed;
 	//glGetUniformiv(_State.programID, isRedID, &outRed);
-
 	// // END TEST // //
+	// !!! So what we need to do is sort the objects by what transforms they are attached to
 
 	_State.matBuffer.Append(sizeof(glm::mat4), &(_State.projection * _State.cam.getWorldToViewMatrix()[0][0]));
 	_State.wldBuffer.Append(sizeof(glm::mat4), &glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, 0.0f)));
