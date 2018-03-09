@@ -179,7 +179,7 @@ ShapeData::indicesType ShapeContainer::indices()
 	return t_indices;
 }
 
-std::vector<GLuint> ShapeContainer::inputConnection(const std::string& s_name, std::vector<GLuint> s_existingConnections = std::vector<GLuint>())
+std::vector<GLuint> ShapeContainer::inputConnection(const std::string& s_name, std::vector<GLuint> s_existingConnections)
 {
 	GLint destShapeLoc = -1, destTransformLoc = -1;
 	bool destIsShape = false, destIsTransform = false;
@@ -196,17 +196,26 @@ std::vector<GLuint> ShapeContainer::inputConnection(const std::string& s_name, s
 	{
 		if (m_transform_names.at(i) == s_name)
 		{
-			destShapeLoc = i;
-			destIsTransform = true;
+			destShapeLoc = i;			destIsTransform = true;
 		}
+	}
+
+	if (!destIsTransform && !destIsShape)
+	{
+		return s_existingConnections;
 	}
 
 	for (auto & connection : m_connections)
 	{
-		if (connection[shapeDest] == destShapeLoc || connection[transformDest] == destTransformLoc)
+		if (connection[shapeDest] == destShapeLoc && destShapeLoc > -1 && destIsShape)
 		{
 			s_existingConnections.push_back(connection[transformSource]);
-			inputConnection(m_transform_names[connection[transformSource]]);
+			return inputConnection(m_transform_names[connection[transformSource]], s_existingConnections);
+		}
+		if (connection[transformDest] == destTransformLoc && destTransformLoc > -1 && destIsTransform)
+		{
+			s_existingConnections.push_back(connection[transformSource]);
+			return inputConnection(m_transform_names[connection[transformSource]], s_existingConnections);
 		}
 	}
 	return s_existingConnections;
@@ -214,39 +223,52 @@ std::vector<GLuint> ShapeContainer::inputConnection(const std::string& s_name, s
 
 ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 {
-	for (auto & object : m_shape_names)
+	std::vector<std::pair<GLfloat, GLuint>> distances;
+	for (auto shapeID = 0; shapeID < m_shape_names.size(); ++shapeID)
 	{
-		auto input = inputConnection(object);
-		auto x = 1;
-	}
-	
-	
-	
-	
-	
-	
-	distancesType distances;
-	auto raw_indices = indices();
-	auto raw_vertices = vertices();
-	ShapeData::indicesType outIndices;
-	for (auto i = 0; i < raw_indices.size(); i += 3)
-	{
-		auto t_vertex_1 = std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i)));
-		auto t_vertex_2 = std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i + 1)));
-		auto t_vertex_3 = std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i + 2)));
+		auto input				= inputConnection(m_shape_names.at(shapeID));
+		//std::vector<GLint> input	= { 0, 1, 2 };
+		glm::mat4 matCombined	= glm::mat4(1.0f);
+		
+		for (auto rit = input.rbegin(); rit != input.rend(); rit++)
+		{
+			matCombined *= m_transforms.at(*rit);
+		}
+		glm::vec3 positionVector	= { matCombined[3].x, matCombined[3].y, matCombined[3].z };
+		GLfloat distance			= Utilities::distanceSquared(positionVector, s_cam_location);
 
-		auto t_vertex_loc_avg = Utilities::vectorAverage(t_vertex_1, t_vertex_2, t_vertex_3);
-		GLfloat distance = Utilities::distanceSquared(t_vertex_loc_avg, s_cam_location);
+		distances.push_back(std::make_pair(distance, shapeID));
 
-		distances.push_back(std::make_pair(distance, glm::tvec3<ShapeData::indexType>{raw_indices.at(i), raw_indices.at(i + 1), raw_indices.at(i + 2)}));
 	}
-	Utilities::quickSortPairVector(distances);
-	for (auto & i : distances)
-	{
-		outIndices.push_back(i.second.x);
-		outIndices.push_back(i.second.y);
-		outIndices.push_back(i.second.z);
-	}
+
+	
+	
+	
+	
+	
+	
+	//distancesType distances;
+	//auto raw_indices = indices();
+	//auto raw_vertices = vertices();
+	//ShapeData::indicesType outIndices;
+	//for (auto i = 0; i < raw_indices.size(); i += 3)
+	//{
+	//	auto t_vertex_1 = std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i)));
+	//	auto t_vertex_2 = std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i + 1)));
+	//	auto t_vertex_3 = std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i + 2)));
+
+	//	auto t_vertex_loc_avg = Utilities::vectorAverage(t_vertex_1, t_vertex_2, t_vertex_3);
+	//	GLfloat distance = Utilities::distanceSquared(t_vertex_loc_avg, s_cam_location);
+
+	//	distances.push_back(std::make_pair(distance, glm::tvec3<ShapeData::indexType>{raw_indices.at(i), raw_indices.at(i + 1), raw_indices.at(i + 2)}));
+	//}
+	//Utilities::quickSortPairVector(distances);
+	//for (auto & i : distances)
+	//{
+	//	outIndices.push_back(i.second.x);
+	//	outIndices.push_back(i.second.y);
+	//	outIndices.push_back(i.second.z);
+	//}
 	return outIndices;
 }
 
