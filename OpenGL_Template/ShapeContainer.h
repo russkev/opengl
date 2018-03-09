@@ -22,6 +22,9 @@ struct ShapeContainer
 	typedef std::pair<nameType, std::vector<nameType>>							connectionType;
 	typedef std::vector<std::pair<GLfloat, glm::tvec3<ShapeData::indexType>>>	distancesType;
 
+	// // ----- Attribute Enumeration ----- // //
+	enum connectionLocations { transformSource = 0, transformDest = 1, shapeDest = 2 };
+
 	void appendShape(ShapeData&& s_shape, const std::string& s_name = "poly");
 	void appendTransform(glm::mat4&& s_transform, const std::string& s_name = "transform");
 	void connect(const std::string& source, const std::string& destination);
@@ -47,6 +50,7 @@ struct ShapeContainer
 
 
 	std::string type(const std::string& s_name);
+	std::vector<GLuint> inputConnection(const std::string& s_name, std::vector<GLuint> s_existingConnections = std::vector<GLuint>());
 	ShapeData::indicesType depthSort(glm::vec3 s_cam_location);
 
 	// // ----- Getters ----- // //
