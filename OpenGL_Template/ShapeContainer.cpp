@@ -179,8 +179,52 @@ ShapeData::indicesType ShapeContainer::indices()
 	return t_indices;
 }
 
+std::vector<GLuint> ShapeContainer::inputConnection(const std::string& s_name, std::vector<GLuint> s_existingConnections = std::vector<GLuint>())
+{
+	GLint destShapeLoc = -1, destTransformLoc = -1;
+	bool destIsShape = false, destIsTransform = false;
+	for (auto i = 0; i < m_shapes.size(); ++i)
+	{
+		if (m_shape_names.at(i) == s_name)
+		{
+			destShapeLoc = i;
+			destIsShape = true;
+		}
+	}
+
+	for (auto i = 0; i < m_transforms.size(); ++i)
+	{
+		if (m_transform_names.at(i) == s_name)
+		{
+			destShapeLoc = i;
+			destIsTransform = true;
+		}
+	}
+
+	for (auto & connection : m_connections)
+	{
+		if (connection[shapeDest] == destShapeLoc || connection[transformDest] == destTransformLoc)
+		{
+			s_existingConnections.push_back(connection[transformSource]);
+			inputConnection(m_transform_names[connection[transformSource]]);
+		}
+	}
+	return s_existingConnections;
+}
+
 ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 {
+	for (auto & object : m_shape_names)
+	{
+		auto input = inputConnection(object);
+		auto x = 1;
+	}
+	
+	
+	
+	
+	
+	
 	distancesType distances;
 	auto raw_indices = indices();
 	auto raw_vertices = vertices();
