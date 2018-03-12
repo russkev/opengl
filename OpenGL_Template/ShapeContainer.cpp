@@ -224,6 +224,8 @@ std::vector<GLuint> ShapeContainer::inputConnection(const std::string& s_name, s
 ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 {
 	std::vector<std::pair<GLfloat, GLuint>> distances;
+	ShapeData::indicesType outIndices;
+
 	for (auto shapeID = 0; shapeID < m_shape_names.size(); ++shapeID)
 	{
 		auto input				= inputConnection(m_shape_names.at(shapeID));
@@ -241,8 +243,7 @@ ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 
 	}
 
-	
-	
+	Utilities::quickSortPairVector(distances);
 	
 	
 	
@@ -263,12 +264,21 @@ ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 	//	distances.push_back(std::make_pair(distance, glm::tvec3<ShapeData::indexType>{raw_indices.at(i), raw_indices.at(i + 1), raw_indices.at(i + 2)}));
 	//}
 	//Utilities::quickSortPairVector(distances);
-	//for (auto & i : distances)
-	//{
-	//	outIndices.push_back(i.second.x);
-	//	outIndices.push_back(i.second.y);
-	//	outIndices.push_back(i.second.z);
-	//}
+
+	for (auto & i : distances)
+	{
+		auto numIndices = 0;
+		for (auto j = 0; j < i.second; ++j) 
+		{
+			numIndices += m_shapes.at(j).sizeIndices();
+		}
+		auto shape = std::move(m_shapes.at(i.second));
+		for (auto it = shape.indx_begin(); it != shape.indx_end(); ++it)
+		{
+			outIndices.push_back(*it + numIndices);
+		}
+	}
+	//auto outIndices = std::move(m_shapes.at(0));
 	return outIndices;
 }
 
