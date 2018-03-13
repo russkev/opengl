@@ -16,9 +16,6 @@
     <Filter Include="Primitives">
       <UniqueIdentifier>{81dba1c6-8f73-4346-87ff-f4aa16f256a8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Nodes">
-      <UniqueIdentifier>{5d018d4a-b77a-46a2-8fb7-bea8d1816ffe}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -45,7 +42,7 @@
     <ClCompile Include="ShapeContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BSP_Tree.cpp">
+    <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,16 +89,10 @@
     <ClInclude Include="ShapeContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ShapeNode.h">
-      <Filter>Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="TranformNode.h">
-      <Filter>Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="BSP_Tree.h">
+    <ClInclude Include="Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities.h">
+    <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
