@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/matrix.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <cassert>
 #include <cstdlib>
@@ -21,6 +22,7 @@
 #include "VAO.h"
 #include "ShapeContainer.h"
 #include "Utilities.h"
+#include "Scene.h"
 
 #include "GL_Type_Traits.h"
 #include "GL_Tuple_Introspect.h"
@@ -28,7 +30,7 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 //#define DEBUG
-#include <glm/gtc/matrix_transform.hpp>
+
 
 static constexpr auto POSITION_ATTR = 0u;
 static constexpr auto COLOR_ATTR    = 1u;
@@ -39,8 +41,6 @@ static constexpr auto WORLD_ATTR	= 8u;
 
 struct ApplicationState {
 	GLuint programID		= 0;
-
-	//GLuint atomicsBuffer	= 0;
 
 	GLuint width			= 0;
 	GLuint height			= 0;
@@ -75,7 +75,6 @@ struct ApplicationState {
 		if (st_window) SDL_DestroyWindow(st_window);
 		if (st_opengl) SDL_GL_DeleteContext(st_opengl);
 	}
-
 };
 
 
@@ -208,12 +207,12 @@ void initWindow(ApplicationState& _State)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void initCam(ApplicationState& _State)
+void initCam(ApplicationState& _State, _Scene)
 {
 
 	// // Set up camera // //
-	_State.projection	= glm::perspective(glm::radians(50.0f), float(_State.width) / float(_State.height), 0.1f, 100.0f);
-	_State.view			= _State.cam.getWorldToViewMatrix();
+	//_State.projection	= glm::perspective(glm::radians(50.0f), float(_State.width) / float(_State.height), 0.1f, 100.0f);
+	//_State.view			= _State.cam.getWorldToViewMatrix();
 }
 
 void initLight(ApplicationState& _State)
@@ -278,17 +277,6 @@ void initGeo(ApplicationState& _State)
 auto x = 3;
 
 	return;
-}
-
-void initAtomicCounter(ApplicationState& _State)
-{
-	// From http://www.lighthouse3d.com/tutorials/opengl-atomic-counters/
-	// Also see:
-	// https://github.com/gangliao/Order-Independent-Transparency-GPU/blob/master/source%20code/src/shader/oit.fs
-	// http://www.openglsuperbible.com/2013/08/20/is-order-independent-transparency-really-necessary/
-	GLuint initZeros[] = { 5, 5, 5 };
-	_State.atomicsBuffer.SetBindingID(1);
-	_State.atomicsBuffer.Append(sizeof(GLuint) * 3, (void*)initZeros);
 }
 
 void finish_frame (ApplicationState& _State)
@@ -411,15 +399,15 @@ void update_camera(ApplicationState& _State) {
 
 int main(int, char**)
 {
+	Scene _Scene;
 	ApplicationState _State;
 	initWindow(_State);
-	initCam(_State);
+	initCam(_State, _Scene);
 	initLight(_State);
 	initGeo(_State);
-	initAtomicCounter(_State);
 	while (poll_events (_State))
 	{
-		update_camera(_State);
+		update_camera(_State, _Scene);
 		render_frame (_State);
 		finish_frame (_State);
 	}

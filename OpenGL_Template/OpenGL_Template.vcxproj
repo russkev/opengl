@@ -143,11 +143,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BSP_Tree.cpp" />
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="common\loadShader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShapeContainer.cpp" />
     <ClCompile Include="ShapeData.cpp" />
     <ClCompile Include="ShapeGenerator.cpp" />
@@ -159,18 +159,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BSP_Tree.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="GL_Tuple_Introspect.h" />
     <ClInclude Include="GL_Type_Traits.h" />
     <ClInclude Include="loadBMP_custom.h" />
     <ClInclude Include="loadShader.hpp" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="ShapeContainer.h" />
     <ClInclude Include="ShapeData.h" />
     <ClInclude Include="ShapeGenerator.h" />
-    <ClInclude Include="ShapeNode.h" />
-    <ClInclude Include="TranformNode.h" />
     <ClInclude Include="Utilities.h" />
     <ClInclude Include="VAO.h" />
     <ClInclude Include="Vertex.h" />
