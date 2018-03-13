@@ -227,9 +227,9 @@ void initGeo(ApplicationState& _State)
 	_State.programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
 
 	// // Create Geo
-	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_01"); 
-	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_02");
-	_State.sh.appendShape(_State.shapes.makePlane(1), "plane_03");
+	_State.sh.appendShape(_State.shapes.makePlane(2), "plane_01"); 
+	_State.sh.appendShape(_State.shapes.makePlane(2), "plane_02");
+	_State.sh.appendShape(_State.shapes.makePlane(2), "plane_03");
 
 	// // Create transforms
 	glm::vec3 planeScale = glm::vec3(3.0f);
@@ -248,22 +248,6 @@ void initGeo(ApplicationState& _State)
 	_State.geoBuffer.Append(_State.sh.vertices());
 	auto depthSortedIndices = _State.sh.depthSort(_State.cam.getPosition());
 	_State.indxBuffer.Append(_State.sh.depthSort(_State.cam.getPosition()));
-
-	// // TEST // //
-	// http://www.lighthouse3d.com/tutorials/glsl-tutorial/subroutines/
-	glUseProgram(_State.programID);
-	//auto isRedID			= glGetUniformLocation(_State.programID, "myRedBlueSelection");
-	GLuint routineC1		= glGetSubroutineIndex(_State.programID, GL_FRAGMENT_SHADER, "redColor");
-	GLuint routineC2		= glGetSubroutineIndex(_State.programID, GL_FRAGMENT_SHADER, "blueColor");
-	GLuint isRedID			= glGetSubroutineUniformLocation(_State.programID, GL_FRAGMENT_SHADER, "myRedBlueSelection");
-	const GLuint isRedNum	= 0;
-	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &isRedNum);
-	//GLint isRedFragID	= glGetUniformLocation(_State.programID, "isRedFrag");
-	//glUniform1i(isRedID, isRedNum);
-	//GLint outRed;
-	//glGetUniformiv(_State.programID, isRedID, &outRed);
-	// // END TEST // //
-	// !!! So what we need to do is sort the objects by what transforms they are attached to
 
 	_State.matBuffer.Append(sizeof(glm::mat4), &(_State.projection * _State.cam.getWorldToViewMatrix()[0][0]));
 	_State.wldBuffer.Append(sizeof(glm::mat4), &glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, 0.0f)));
