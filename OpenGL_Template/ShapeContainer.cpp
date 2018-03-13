@@ -229,7 +229,6 @@ ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 	for (auto shapeID = 0; shapeID < m_shape_names.size(); ++shapeID)
 	{
 		auto input				= inputConnection(m_shape_names.at(shapeID));
-		//std::vector<GLint> input	= { 0, 1, 2 };
 		glm::mat4 matCombined	= glm::mat4(1.0f);
 		
 		for (auto rit = input.rbegin(); rit != input.rend(); rit++)
@@ -270,7 +269,7 @@ ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 		auto numIndices = 0;
 		for (auto j = 0; j < i.second; ++j) 
 		{
-			numIndices += m_shapes.at(j).sizeIndices();
+			numIndices += m_shapes.at(j).numVertices();
 		}
 		auto shape = std::move(m_shapes.at(i.second));
 		for (auto it = shape.indx_begin(); it != shape.indx_end(); ++it)
@@ -278,7 +277,6 @@ ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 			outIndices.push_back(*it + numIndices);
 		}
 	}
-	//auto outIndices = std::move(m_shapes.at(0));
 	return outIndices;
 }
 
