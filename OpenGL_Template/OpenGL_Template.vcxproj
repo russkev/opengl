@@ -152,6 +152,7 @@
     <ClCompile Include="ShapeData.cpp" />
     <ClCompile Include="ShapeGenerator.cpp" />
     <ClCompile Include="VAO.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\SimpleFragmentShader.frag" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Utilities.h" />
     <ClInclude Include="VAO.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\data\uvtemplate.bmp" />
