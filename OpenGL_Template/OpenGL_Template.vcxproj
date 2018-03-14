@@ -147,7 +147,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="common\loadShader.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="GL_Scene.cpp" />
     <ClCompile Include="ShapeContainer.cpp" />
     <ClCompile Include="ShapeData.cpp" />
     <ClCompile Include="ShapeGenerator.cpp" />
@@ -165,7 +165,7 @@
     <ClInclude Include="GL_Type_Traits.h" />
     <ClInclude Include="loadBMP_custom.h" />
     <ClInclude Include="loadShader.hpp" />
-    <ClInclude Include="Scene.h" />
+    <ClInclude Include="GL_Scene.h" />
     <ClInclude Include="ShapeContainer.h" />
     <ClInclude Include="ShapeData.h" />
     <ClInclude Include="ShapeGenerator.h" />
