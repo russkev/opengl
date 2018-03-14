@@ -22,7 +22,7 @@
 #include "VAO.h"
 #include "ShapeContainer.h"
 #include "Utilities.h"
-#include "Scene.h"
+#include "GL_Scene.h"
 
 #include "GL_Type_Traits.h"
 #include "GL_Tuple_Introspect.h"
@@ -42,17 +42,17 @@ static constexpr auto WORLD_ATTR	= 8u;
 struct ApplicationState {
 	GLuint programID		= 0;
 
-	GLuint width			= 0;
-	GLuint height			= 0;
+	//GLuint width			= 0;
+	//GLuint height			= 0;
 
 	GLuint numBuffers      = 1;
 
-	glm::mat4 view        = glm::mat4();
-	glm::mat4 projection  = glm::mat4();
+	//glm::mat4 view        = glm::mat4();
+	//glm::mat4 projection  = glm::mat4();
 
 	std::vector<glm::mat4>	modelMatrix;
 	std::vector<GLfloat>	offsets;
-	Camera					cam;
+	//Camera					cam;
 
 	double time				= 0.0;
 	double freqMultiplier	= 0.0;
@@ -134,7 +134,7 @@ static void __stdcall openglCallbackFunction(
 
 
 //// -----INIT----- ////
-void initWindow(ApplicationState& _State)
+void initWindow(ApplicationState& _State, GL_Scene& _Scene)
 {
 #ifdef _DEBUG
 	SDL_LogSetAllPriority(SDL_LOG_PRIORITY_VERBOSE);
@@ -153,9 +153,9 @@ void initWindow(ApplicationState& _State)
 	);
 
 	// // Create window // //
-	_State.width = 1280u;
-	_State.height = 720u;
-	_State.st_window = SDL_CreateWindow("Tutorial 04 - A Cloured Cube", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _State.width, _State.height, SDL_WINDOW_OPENGL);
+	GLuint width	= 1280u;
+	GLuint height	= 720u;
+	_State.st_window = SDL_CreateWindow("Tutorial 04 - A Cloured Cube", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
 	assert(_State.st_window != nullptr);
 	_State.st_opengl = SDL_GL_CreateContext(_State.st_window);
 	assert(_State.st_opengl != nullptr);
@@ -173,46 +173,7 @@ void initWindow(ApplicationState& _State)
 	auto loc_glewok = glewInit();
 	assert(loc_glewok == GLEW_OK);
 
-	// // Check OpenGL properties // //
-	printf("OpenGL loaded\n");
-	//gladLoadGLLoader(SDL_GL_GetProcAddress);
-	printf("Vendor:   %s\n", glGetString(GL_VENDOR));
-	printf("Renderer: %s\n", glGetString(GL_RENDERER));
-	printf("Version:  %s\n", glGetString(GL_VERSION));
-
-#ifdef DEBUG
-	// // Enable the debug callback // //
-	glEnable(GL_DEBUG_OUTPUT);
-	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-	glDebugMessageCallback(openglCallbackFunction, nullptr);
-	glDebugMessageControl(
-		GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE
-	);
-#endif // DEBUG
-
-	// // Dark blue background // //
-	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-
-	// // Enable depth test // //
-	glEnable(GL_DEPTH_TEST);
-	// // Enable backface culling // //
-	//glEnable(GL_CULL_FACE);
-	// // Set winding direction // // 
-	glFrontFace(GL_CCW);
-	// // Accept fragment shader if it closer to the camera than the previous one
-	//glDepthFunc(GL_LESS);
-	glDepthFunc(GL_ALWAYS);
-	// // Enable alpha
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-}
-
-void initCam(ApplicationState& _State, Scene& _Scene)
-{
-	_Scene.initCam(_State.width, _State.height, 0.1f, 100.0f);
-	// // Set up camera // //
-	//_State.projection	= glm::perspective(glm::radians(50.0f), float(_State.width) / float(_State.height), 0.1f, 100.0f);
-	//_State.view			= _State.cam.getWorldToViewMatrix();
+	_Scene.init(width, height);
 }
 
 void initLight(ApplicationState& _State)
@@ -220,7 +181,7 @@ void initLight(ApplicationState& _State)
 	// // Set up lights // //
 }
 
-void initGeo(ApplicationState& _State, Scene& _Scene)
+void initGeo(ApplicationState& _State, GL_Scene& _Scene)
 {
 	// // Create and compile our GLSL program from the shaders // //
 	_State.programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
@@ -305,7 +266,7 @@ void prepareCam(ApplicationState& _State)
 	//glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
 }
 
-void prepareGeo(ApplicationState& _State, Scene& _Scene)
+void prepareGeo(ApplicationState& _State, GL_Scene& _Scene)
 {
 	// // Update matrices // //
 	//_State.matBuffer.Upload( _State.projection * _State.cam.getWorldToViewMatrix());
@@ -321,7 +282,7 @@ void readAtomic(ApplicationState& _State)
 	auto x = 0;
 }
 
-void render_frame (ApplicationState& _State, Scene& _Scene)
+void render_frame (ApplicationState& _State, GL_Scene& _Scene)
 {
 	// // Tutorial from http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/ // //
 	// // Clear both the colour buffer and the depth buffer at the same time // //
@@ -351,7 +312,7 @@ void exit(ApplicationState &_State){
 	glDeleteProgram(_State.programID);
 }
 
-bool poll_events (ApplicationState& _State, Scene& _Scene)
+bool poll_events (ApplicationState& _State, GL_Scene& _Scene)
 {
 	SDL_Event loc_event;
 	static bool mouseDown = false;
@@ -377,7 +338,7 @@ bool poll_events (ApplicationState& _State, Scene& _Scene)
 	return true;
 }
 
-void update_camera(ApplicationState& _State, Scene& _Scene) {
+void update_camera(ApplicationState& _State, GL_Scene& _Scene) {
 	static const auto cMoveSpeed   = glm::vec3(0.02f, 0.01f, 0.1f);
 	static const auto cRotateSpeed = glm::vec2(0.01f, 0.01f);
 
@@ -410,12 +371,12 @@ void update_camera(ApplicationState& _State, Scene& _Scene) {
 
 int main(int, char**)
 {
-	Scene _Scene;
-	ApplicationState _State;
-	initWindow(_State);
-	initCam(_State, _Scene);
-	initLight(_State);
-	initGeo(_State, _Scene);
+	GL_Scene			_Scene;
+	ApplicationState	_State;
+
+	initWindow(	_State, _Scene);
+	initLight(	_State);
+	initGeo(	_State, _Scene);
 	while (poll_events (_State, _Scene))
 	{
 		update_camera(_State, _Scene);
