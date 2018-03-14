@@ -207,9 +207,9 @@ void initWindow(ApplicationState& _State)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void initCam(ApplicationState& _State, _Scene)
+void initCam(ApplicationState& _State, Scene& _Scene)
 {
-
+	_Scene.initCam(_State.width, _State.height, 0.1f, 100.0f);
 	// // Set up camera // //
 	//_State.projection	= glm::perspective(glm::radians(50.0f), float(_State.width) / float(_State.height), 0.1f, 100.0f);
 	//_State.view			= _State.cam.getWorldToViewMatrix();
@@ -220,7 +220,7 @@ void initLight(ApplicationState& _State)
 	// // Set up lights // //
 }
 
-void initGeo(ApplicationState& _State)
+void initGeo(ApplicationState& _State, Scene& _Scene)
 {
 	// // Create and compile our GLSL program from the shaders // //
 	_State.programID = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
@@ -245,10 +245,14 @@ void initGeo(ApplicationState& _State)
 
 	// // Send information to graphics card
 	_State.geoBuffer.Append(_State.sh.vertices());
-	auto depthSortedIndices = _State.sh.depthSort(_State.cam.getPosition());
-	_State.indxBuffer.Append(_State.sh.depthSort(_State.cam.getPosition()));
+	//auto depthSortedIndices = _State.sh.depthSort(_State.cam.getPosition());
+	//_State.indxBuffer.Append(_State.sh.depthSort(_State.cam.getPosition()));
+	auto depthSortedIndices = _State.sh.depthSort(_Scene.m_cam.getPosition());
+	_State.indxBuffer.Append( _State.sh.depthSort(_Scene.m_cam.getPosition()));
 
-	_State.matBuffer.Append(sizeof(glm::mat4), &(_State.projection * _State.cam.getWorldToViewMatrix()[0][0]));
+
+	//_State.matBuffer.Append(sizeof(glm::mat4), &(_State.projection * _State.cam.getWorldToViewMatrix()[0][0]));
+	_State.matBuffer.Append(sizeof(glm::mat4), &(_Scene.m_projection * _Scene.m_cam.getWorldToViewMatrix()[0][0]));
 	_State.wldBuffer.Append(sizeof(glm::mat4), &glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, 0.0f)));
 
 
@@ -301,11 +305,13 @@ void prepareCam(ApplicationState& _State)
 	//glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
 }
 
-void prepareGeo(ApplicationState& _State)
+void prepareGeo(ApplicationState& _State, Scene& _Scene)
 {
 	// // Update matrices // //
-	_State.matBuffer.Upload( _State.projection * _State.cam.getWorldToViewMatrix());
-	_State.indxBuffer.Upload(_State.sh.depthSort(_State.cam.getPosition()));
+	//_State.matBuffer.Upload( _State.projection * _State.cam.getWorldToViewMatrix());
+	//_State.indxBuffer.Upload(_State.sh.depthSort(_State.cam.getPosition()));
+	_State.matBuffer.Upload( _Scene.m_projection * _Scene.m_cam.getWorldToViewMatrix());
+	_State.indxBuffer.Upload(_State.sh.depthSort(_Scene.m_cam.getPosition()));
 }
 
 void readAtomic(ApplicationState& _State)
@@ -315,7 +321,7 @@ void readAtomic(ApplicationState& _State)
 	auto x = 0;
 }
 
-void render_frame (ApplicationState& _State)
+void render_frame (ApplicationState& _State, Scene& _Scene)
 {
 	// // Tutorial from http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/ // //
 	// // Clear both the colour buffer and the depth buffer at the same time // //
@@ -331,7 +337,7 @@ void render_frame (ApplicationState& _State)
 
 	 prepareCam(_State);
 	 prepareLight(_State);
-	 prepareGeo(_State);
+	 prepareGeo(_State, _Scene);
 	 readAtomic(_State);
 	 
 	 _State.VAO_main.Bind();
@@ -345,7 +351,7 @@ void exit(ApplicationState &_State){
 	glDeleteProgram(_State.programID);
 }
 
-bool poll_events (ApplicationState& _State)
+bool poll_events (ApplicationState& _State, Scene& _Scene)
 {
 	SDL_Event loc_event;
 	static bool mouseDown = false;
@@ -362,14 +368,16 @@ bool poll_events (ApplicationState& _State)
 			{
 				glm::mat4 wldBuffer = glm::mat4(1.0f);
 				//_State.wldBuffer.ReadBuffer(&wldBuffer[0][0]);
-				_State.cam.focus(wldBuffer);
+				//_State.cam.focus(wldBuffer);
+				_Scene.m_cam.focus(wldBuffer);
+
 			}
 		}
 	}
 	return true;
 }
 
-void update_camera(ApplicationState& _State) {
+void update_camera(ApplicationState& _State, Scene& _Scene) {
 	static const auto cMoveSpeed   = glm::vec3(0.02f, 0.01f, 0.1f);
 	static const auto cRotateSpeed = glm::vec2(0.01f, 0.01f);
 
@@ -391,8 +399,11 @@ void update_camera(ApplicationState& _State) {
 
 	}
 
-	_State.cam.moveRel(axisDelta * cMoveSpeed);
-	_State.cam.rotateRel(rotateDelta * cRotateSpeed);
+	//_State.cam.moveRel(axisDelta * cMoveSpeed);
+	//_State.cam.rotateRel(rotateDelta * cRotateSpeed);
+	_Scene.m_cam.moveRel(axisDelta * cMoveSpeed);
+	_Scene.m_cam.rotateRel(rotateDelta * cRotateSpeed);
+
 
 }
 
@@ -404,11 +415,11 @@ int main(int, char**)
 	initWindow(_State);
 	initCam(_State, _Scene);
 	initLight(_State);
-	initGeo(_State);
-	while (poll_events (_State))
+	initGeo(_State, _Scene);
+	while (poll_events (_State, _Scene))
 	{
 		update_camera(_State, _Scene);
-		render_frame (_State);
+		render_frame (_State, _Scene);
 		finish_frame (_State);
 	}
 
