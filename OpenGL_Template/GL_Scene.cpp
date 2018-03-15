@@ -176,3 +176,7 @@ void GL_Scene::prepareGeo()
 	m_indxBuffer.Upload(m_sh.depthSort(m_cam.getPosition()));
 }
 
+GL_Scene::~GL_Scene() {
+	glUseProgram(0);
+	glDeleteProgram(m_program_id);
+}

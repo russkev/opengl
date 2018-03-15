@@ -22,6 +22,7 @@
 #include "VAO.h"
 #include "ShapeContainer.h"
 #include "Utilities.h"
+#include "Window.h"
 #include "GL_Scene.h"
 
 #include "GL_Type_Traits.h"
@@ -46,13 +47,13 @@ struct ApplicationState {
 
 
 
-struct opengl_attr_pair
-{
-	SDL_GLattr key;
-	int value;
-};
+//struct opengl_attr_pair
+//{
+//	SDL_GLattr key;
+//	int value;
+//};
 
-opengl_attr_pair st_config [] =
+std::vector<opengl_attr_pair> st_config =
 {
     {SDL_GL_RED_SIZE,					8},
     {SDL_GL_GREEN_SIZE,					8},
@@ -99,57 +100,7 @@ static void __stdcall openglCallbackFunction(
 	}
 }
 
-
-//// -----INIT----- ////
-void initWindow(ApplicationState& _State, GL_Scene& _Scene)
-{
-#ifdef _DEBUG
-	SDL_LogSetAllPriority(SDL_LOG_PRIORITY_VERBOSE);
-#endif
-	SDL_Init(SDL_INIT_EVERYTHING);
-	std::atexit(SDL_Quit);
-
-	for (const auto& it : st_config)
-	{
-		SDL_GL_SetAttribute(it.key, it.value);
-	}
-
-	// // Request a debug context // //
-	SDL_GL_SetAttribute(
-		SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG
-	);
-
-	// // Create window // //
-	GLuint width	= 1280u;
-	GLuint height	= 720u;
-	_State.st_window = SDL_CreateWindow("Tutorial 04 - A Cloured Cube", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
-	assert(_State.st_window != nullptr);
-	_State.st_opengl = SDL_GL_CreateContext(_State.st_window);
-	assert(_State.st_opengl != nullptr);
-
-	SDL_GL_SetSwapInterval(1);
-
-	// High precision clock interval
-	_State.freqMultiplier = 1.0 / SDL_GetPerformanceFrequency();
-
-	// Initial time in clock ticks
-	_State.time = _State.freqMultiplier * SDL_GetPerformanceCounter();
-
-	// // Initialise GLEW // //
-	glewExperimental = true;
-	auto loc_glewok = glewInit();
-	assert(loc_glewok == GLEW_OK);
-
-	_Scene.init(width, height);
-}
-
-void finish_frame (ApplicationState& _State)
-{
-	SDL_GL_SwapWindow (_State.st_window);
-}
-
-
-void exit(ApplicationState &_State, GL_Scene& _Scene){
+void exit(GL_Scene& _Scene){
 	glUseProgram(0);
 	glDeleteProgram(_Scene.m_program_id);
 }
@@ -205,17 +156,22 @@ void update_camera(ApplicationState& _State, GL_Scene& _Scene) {
 
 int main(int, char**)
 {
+	//!!!To do: refactor camera and timer
+	Window				_Window;
 	GL_Scene			_Scene;
 	ApplicationState	_State;
 
-	initWindow(	_State, _Scene);
+	GLuint width	= 1280u;
+	GLuint height	= 720u;
+
+	_Window.init(st_config, width, height);
+	_Scene.init(width, height);
+
 	while (poll_events (_State, _Scene))
 	{
 		update_camera(_State, _Scene);
 		_Scene.render_frame();
-		finish_frame (_State);
+		_Window.finish_frame();
 	}
-
-	exit(_State, _Scene);
 	return 0;
 }
