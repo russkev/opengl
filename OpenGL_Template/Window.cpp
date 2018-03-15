@@ -1,5 +1,11 @@
 #include "Window.h"
 
+Window::Window()
+{
+	if (m_st_window) SDL_DestroyWindow(m_st_window);
+	if (m_st_opengl) SDL_GL_DeleteContext(m_st_opengl);
+}
+
 void Window::init(std::vector<opengl_attr_pair> st_config, GLuint width, GLuint height)
 {
 #ifdef _DEBUG
@@ -26,11 +32,6 @@ void Window::init(std::vector<opengl_attr_pair> st_config, GLuint width, GLuint 
 
 	SDL_GL_SetSwapInterval(1);
 
-	// High precision clock interval
-	//.freqMultiplier = 1.0 / SDL_GetPerformanceFrequency();
-
-	// Initial time in clock ticks
-	//_State.time = _State.freqMultiplier * SDL_GetPerformanceCounter();
 
 	// // Initialise GLEW // //
 	glewExperimental = true;

@@ -24,6 +24,7 @@
 #include "Utilities.h"
 #include "Window.h"
 #include "GL_Scene.h"
+#include "Timer.h"
 
 #include "GL_Type_Traits.h"
 #include "GL_Tuple_Introspect.h"
@@ -32,25 +33,9 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #define DEBUG
 
-struct ApplicationState {
-	double time				= 0.0;
-	double freqMultiplier	= 0.0;
-
-	SDL_Window*		st_window = nullptr;
-	SDL_GLContext	st_opengl = nullptr;
-
-	ApplicationState() {
-		if (st_window) SDL_DestroyWindow(st_window);
-		if (st_opengl) SDL_GL_DeleteContext(st_opengl);
-	}
-};
-
-
-
-//struct opengl_attr_pair
-//{
-//	SDL_GLattr key;
-//	int value;
+//struct ApplicationState {
+//	double time				= 0.0;
+//	double freqMultiplier	= 0.0;
 //};
 
 std::vector<opengl_attr_pair> st_config =
@@ -81,8 +66,6 @@ std::vector<opengl_attr_pair> st_config =
 };
 
 // // Calling custom debug // //
-// // https://bcmpinc.wordpress.com/2015/08/21/debugging-since-opengl-4-3/ // //
-// // More info at above website // //
 static void __stdcall openglCallbackFunction(
 	GLenum source,
 	GLenum type,
@@ -100,77 +83,25 @@ static void __stdcall openglCallbackFunction(
 	}
 }
 
-void exit(GL_Scene& _Scene){
-	glUseProgram(0);
-	glDeleteProgram(_Scene.m_program_id);
-}
-
-bool poll_events (ApplicationState& _State, GL_Scene& _Scene)
-{
-	SDL_Event loc_event;
-	static bool mouseDown = false;
-	static bool altDown = false;
-	while (SDL_PollEvent (&loc_event)) 
-	{
-		
-		if (loc_event.type == SDL_QUIT) 
-		{
-			return false;
-		}
-		if (loc_event.type == SDL_KEYUP) {
-			if (loc_event.key.keysym.scancode == SDL_SCANCODE_F) 
-			{
-				glm::mat4 wldBuffer = glm::mat4(1.0f);
-				_Scene.m_cam.focus(wldBuffer);
-			}
-		}
-	}
-	return true;
-}
-
-void update_camera(ApplicationState& _State, GL_Scene& _Scene) {
-	static const auto cMoveSpeed   = glm::vec3(0.02f, 0.01f, 0.1f);
-	static const auto cRotateSpeed = glm::vec2(0.01f, 0.01f);
-
-	auto const keyboardState = SDL_GetKeyboardState(nullptr);
-	auto mouseDelta  = glm::ivec2();
-	auto mouseButton = SDL_GetRelativeMouseState(&mouseDelta.x, &mouseDelta.y);
-	auto axisDelta	 = glm::vec3();
-	auto rotateDelta = glm::vec2();
-
-	if  (mouseButton & SDL_BUTTON(SDL_BUTTON_LEFT)) {
-		rotateDelta = (glm::vec2)mouseDelta;
-	}
-	if (mouseButton & SDL_BUTTON(SDL_BUTTON_MIDDLE)) {
-		axisDelta.x = -(float)mouseDelta.x;
-		axisDelta.y = (float)mouseDelta.y;
-	}
-	if (mouseButton & SDL_BUTTON(SDL_BUTTON_RIGHT)) {
-		axisDelta.z = (float)mouseDelta.y;
-
-	}
-	_Scene.m_cam.moveRel(axisDelta * cMoveSpeed);
-	_Scene.m_cam.rotateRel(rotateDelta * cRotateSpeed);
-}
-
-
 int main(int, char**)
 {
-	//!!!To do: refactor camera and timer
+	//!!!To do: refactor timer
 	Window				_Window;
 	GL_Scene			_Scene;
-	ApplicationState	_State;
+	Timer				_Timer;
 
 	GLuint width	= 1280u;
 	GLuint height	= 720u;
 
 	_Window.init(st_config, width, height);
 	_Scene.init(width, height);
+	_Timer.init();
 
-	while (poll_events (_State, _Scene))
+	while (_Scene.pollEvents())
 	{
-		update_camera(_State, _Scene);
-		_Scene.render_frame();
+		_Scene.m_cam.update();
+		_Timer.update();
+		_Scene.renderFrame(_Timer);
 		_Window.finish_frame();
 	}
 	return 0;
