@@ -45,6 +45,8 @@ struct GL_Scene
 	void prepareCam();
 	void prepareGeo();
 
+	~GL_Scene();
+
 
 public:
 	GLuint			m_program_id;
