@@ -1,7 +1,5 @@
 #include "GL_Scene.h"
 
-
-
 void GL_Scene::init(const GLuint width, const GLuint height)
 {
 	m_width		= width;
@@ -131,14 +129,34 @@ void GL_Scene::initBuffers()
 #endif
 }
 
-void GL_Scene::render_frame()
+bool GL_Scene::pollEvents()
+{
+	SDL_Event loc_event;
+	static bool mouseDown = false;
+	static bool altDown = false;
+	while (SDL_PollEvent(&loc_event))
+	{
+
+		if (loc_event.type == SDL_QUIT)
+		{
+			return false;
+		}
+		if (loc_event.type == SDL_KEYUP) {
+			if (loc_event.key.keysym.scancode == SDL_SCANCODE_F)
+			{
+				glm::mat4 wldBuffer = glm::mat4(1.0f);
+				m_cam.focus(wldBuffer);
+			}
+		}
+	}
+	return true;
+}
+
+void GL_Scene::renderFrame(const Timer& _Timer)
 {
 	// // Tutorial from http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/ // //
 	// // Clear both the colour buffer and the depth buffer at the same time // //
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	//Get time
-	//_State.time = _State.freqMultiplier * SDL_GetPerformanceCounter();
 
 	GLfloat cmAmplitude = 0.5f;
 	GLfloat cmFreq = 0.1f;

@@ -16,6 +16,7 @@
 #include "loadShader.hpp"
 #include "Buffer.h"
 #include "VAO.h"
+#include "Timer.h"
 
 #include "GL_Type_Traits.h"
 #include "GL_Tuple_Introspect.h"
@@ -40,7 +41,9 @@ struct GL_Scene
 	void initGeo();
 	void initBuffers();
 
-	void render_frame();
+	bool pollEvents();
+
+	void renderFrame(const Timer& _Timer);
 	void prepareLights();
 	void prepareCam();
 	void prepareGeo();

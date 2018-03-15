@@ -16,6 +16,7 @@ struct opengl_attr_pair
 
 struct Window
 {
+	Window();
 	void init(std::vector<opengl_attr_pair> st_config, GLuint width, GLuint height);
 	void finish_frame();
 

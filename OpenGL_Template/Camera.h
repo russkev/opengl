@@ -19,6 +19,7 @@ private:
 	static const float m_rotationSpeed;
 public:
 	Camera();
+	void update();
 	void positionUpdate(const SDL_Scancode& newPosition);
 	void scrollUpdate(const float scrollAmount);
 	void moveRel(const glm::vec3& moveDelta);

@@ -20,6 +20,32 @@ Camera::Camera() :
 {
 }
 
+void Camera::update()
+{
+	static const auto cMoveSpeed	= glm::vec3(0.02f, 0.01f, 0.1f);
+	static const auto cRotateSpeed	= glm::vec2(0.01f, 0.01f);
+
+	auto const keyboardState	= SDL_GetKeyboardState(nullptr);
+	auto mouseDelta				= glm::ivec2();
+	auto mouseButton			= SDL_GetRelativeMouseState(&mouseDelta.x, &mouseDelta.y);
+	auto axisDelta				= glm::vec3();
+	auto rotateDelta			= glm::vec2();
+
+	if (mouseButton & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+		rotateDelta = (glm::vec2)mouseDelta;
+	}
+	if (mouseButton & SDL_BUTTON(SDL_BUTTON_MIDDLE)) {
+		axisDelta.x = -(float)mouseDelta.x;
+		axisDelta.y = (float)mouseDelta.y;
+	}
+	if (mouseButton & SDL_BUTTON(SDL_BUTTON_RIGHT)) {
+		axisDelta.z = (float)mouseDelta.y;
+
+	}
+	moveRel(axisDelta * cMoveSpeed);
+	rotateRel(rotateDelta * cRotateSpeed);
+}
+
 void  Camera::positionUpdate(const SDL_Scancode& newPosition) {
 	switch (newPosition) {
 	case SDL_SCANCODE_W:
