@@ -243,26 +243,6 @@ ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 	}
 
 	Utilities::quickSortPairVector(distances);
-	
-	
-	
-	
-	//distancesType distances;
-	//auto raw_indices = indices();
-	//auto raw_vertices = vertices();
-	//ShapeData::indicesType outIndices;
-	//for (auto i = 0; i < raw_indices.size(); i += 3)
-	//{
-	//	auto t_vertex_1 = std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i)));
-	//	auto t_vertex_2 = std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i + 1)));
-	//	auto t_vertex_3 = std::get<ShapeData::attr::position>(raw_vertices.at(raw_indices.at(i + 2)));
-
-	//	auto t_vertex_loc_avg = Utilities::vectorAverage(t_vertex_1, t_vertex_2, t_vertex_3);
-	//	GLfloat distance = Utilities::distanceSquared(t_vertex_loc_avg, s_cam_location);
-
-	//	distances.push_back(std::make_pair(distance, glm::tvec3<ShapeData::indexType>{raw_indices.at(i), raw_indices.at(i + 1), raw_indices.at(i + 2)}));
-	//}
-	//Utilities::quickSortPairVector(distances);
 
 	for (auto & i : distances)
 	{
@@ -342,4 +322,10 @@ void ShapeContainer::uploadConnections(const intType s_program_id)
 		const intType connectionsLocation = glGetUniformLocation(s_program_id, "connections");
 		glUniform3iv(connectionsLocation, numConnections, &m_connections.at(0)[0]);
 	}
+}
+
+ShapeData ShapeContainer::getShape(const std::string& s_shape_name)
+{
+	auto index = findString(m_transform_names, s_shape_name);
+	return std::move(m_shapes.at(index));
 }

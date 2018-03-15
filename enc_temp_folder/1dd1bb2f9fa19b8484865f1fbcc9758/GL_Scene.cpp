@@ -190,7 +190,7 @@ void GL_Scene::prepareCam()
 
 void GL_Scene::prepareGeo()
 {
-	auto testTransform = m_sh.getShape("transform_01");//!!!This is mixed up!
+	auto testTransform = m_sh.getShape("transform_01");
 	m_matBuffer.Upload(m_projection * m_cam.getWorldToViewMatrix());
 	m_indxBuffer.Upload(m_sh.depthSort(m_cam.getPosition()));
 }

@@ -111,6 +111,13 @@ struct ShapeContainer
 		return (first > second) ? maxValue(first, args...) : maxValue(second, args...);
 	}
 
+	// // ----- GETTERS ----- // //
+	ShapeData getShape(const std::string& s_shape_name);
+	glm::mat4 getTransform(const std::string s_transform_name);
+
+	// // ----- SETTERS ----- // //
+	void setTransform(const std::string& s_transform_name, glm::mat4 s_transform);
+
 
 private:
 	bool nameExists(const std::string& s_name);
