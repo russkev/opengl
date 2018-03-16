@@ -36,6 +36,7 @@ struct GL_Scene
 	void printGLProperties();
 	void initVerboseDebug();
 	void initSettings();
+	void initTimer();
 	void initCam();
 	void initLights();
 	void initGeo();
@@ -43,10 +44,11 @@ struct GL_Scene
 
 	bool pollEvents();
 
-	void renderFrame(const Timer& _Timer);
-	void prepareLights();
-	void prepareCam();
-	void prepareGeo();
+	void renderFrame();
+	void updateTimer();
+	void updateLights();
+	void updateCam();
+	void updateGeo();
 
 	~GL_Scene();
 
@@ -59,6 +61,7 @@ public:
 	ShapeGenerator	m_shapes;
 	ShapeContainer	m_sh;
 	VAO				m_vao_main;// , m_vao_mat;
+	Timer			m_timer;
 
 	// BUFFERS
 	Buffer m_geoBuffer	= { GL_ARRAY_BUFFER, 0 };

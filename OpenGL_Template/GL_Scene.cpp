@@ -8,6 +8,7 @@ void GL_Scene::init(const GLuint width, const GLuint height)
 	printGLProperties();
 	initVerboseDebug();
 	initSettings();
+	initTimer();
 	initCam();
 	initLights();
 	initGeo();
@@ -54,6 +55,11 @@ void GL_Scene::initSettings()
 	// // Enable alpha
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void GL_Scene::initTimer()
+{
+	m_timer.init();
 }
 
 void GL_Scene::initCam()
@@ -152,7 +158,7 @@ bool GL_Scene::pollEvents()
 	return true;
 }
 
-void GL_Scene::renderFrame(const Timer& _Timer)
+void GL_Scene::renderFrame()
 {
 	// // Tutorial from http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/ // //
 	// // Clear both the colour buffer and the depth buffer at the same time // //
@@ -162,16 +168,22 @@ void GL_Scene::renderFrame(const Timer& _Timer)
 	GLfloat cmFreq = 0.1f;
 	GLfloat cmOffset = 0.5f;
 
-	prepareLights();
-	prepareCam();
-	prepareGeo();
+	updateTimer();
+	updateLights();
+	updateCam();
+	updateGeo();
 
 	m_vao_main.Bind();
 	m_indxBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
 	glDrawElements(GL_TRIANGLES, (GLsizei)m_indxBuffer.size(), GL_UNSIGNED_SHORT, 0);
 }
 
-void GL_Scene::prepareLights()
+void GL_Scene::updateTimer()
+{
+	m_timer.update();
+}
+
+void GL_Scene::updateLights()
 {
 	// // Ambient Lighting // //
 	//glm::vec4 ambientLight = { 0.0f, 0.34f, 0.6f, 1.0f };
@@ -181,16 +193,20 @@ void GL_Scene::prepareLights()
 	//glUniform3fv(_State.lightPositionID, 1, &lightPosition.x);
 }
 
-void GL_Scene::prepareCam()
+void GL_Scene::updateCam()
 {
 	// // Cam position // //
 	//glm::vec3 camPositionVec = _State.cam.getPosition();
 	//glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
 }
 
-void GL_Scene::prepareGeo()
+void GL_Scene::updateGeo()
 {
-	auto testTransform = m_sh.getShape("transform_01");//!!!This is mixed up!
+	auto transform_01	= m_sh.getTransformPtr("transform_01");
+	auto time			= m_timer.time();
+	*transform_01		= *transform_01 * Utilities::trs(glm::mat3({ 0,0,0 }, { 0, time/100, 0 }, { 1,1,1 }));
+	
+	m_sh.uploadTransforms(m_program_id);
 	m_matBuffer.Upload(m_projection * m_cam.getWorldToViewMatrix());
 	m_indxBuffer.Upload(m_sh.depthSort(m_cam.getPosition()));
 }

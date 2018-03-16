@@ -1,42 +1,11 @@
 #include <SDL.h>
-#include <GL/glew.h>
-#include <glm/glm.hpp>
-#include <glm/matrix.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#include <cassert>
-#include <cstdlib>
-#include <iostream>
 #include <vector>
-#include <math.h>
-#include <memory>
 
-#include "loadShader.hpp"
-#include "loadBMP_custom.h"
-#include "Vertex.h"
-#include "ShapeData.h"
-#include "ShapeGenerator.h"
-#include "Camera.h"
-#include "Buffer.h"
-#include "VAO.h"
-#include "ShapeContainer.h"
-#include "Utilities.h"
 #include "Window.h"
 #include "GL_Scene.h"
-#include "Timer.h"
-
-#include "GL_Type_Traits.h"
-#include "GL_Tuple_Introspect.h"
-
 
 #define GLM_ENABLE_EXPERIMENTAL
 #define DEBUG
-
-//struct ApplicationState {
-//	double time				= 0.0;
-//	double freqMultiplier	= 0.0;
-//};
 
 std::vector<opengl_attr_pair> st_config =
 {
@@ -85,23 +54,19 @@ static void __stdcall openglCallbackFunction(
 
 int main(int, char**)
 {
-	//!!!To do: refactor timer
-	Window				_Window;
-	GL_Scene			_Scene;
-	Timer				_Timer;
+	Window			_Window;
+	GL_Scene		_Scene;
 
 	GLuint width	= 1280u;
 	GLuint height	= 720u;
 
 	_Window.init(st_config, width, height);
 	_Scene.init(width, height);
-	_Timer.init();
 
 	while (_Scene.pollEvents())
 	{
 		_Scene.m_cam.update();
-		_Timer.update();
-		_Scene.renderFrame(_Timer);
+		_Scene.renderFrame();
 		_Window.finish_frame();
 	}
 	return 0;

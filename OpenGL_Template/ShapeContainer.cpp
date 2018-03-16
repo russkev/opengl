@@ -324,8 +324,17 @@ void ShapeContainer::uploadConnections(const intType s_program_id)
 	}
 }
 
-ShapeData ShapeContainer::getShape(const std::string& s_shape_name)
+ShapeData* ShapeContainer::getShapePtr(const std::string& s_shape_name)
 {
-	auto index = findString(m_transform_names, s_shape_name);
-	return std::move(m_shapes.at(index));
+	GLint index = findString(m_shape_names, s_shape_name);
+	assert(index >= 0 && "Shape could not be found");
+	//return std::move(m_shapes.at(index));
+	return &m_shapes.at(index);
+}
+
+glm::mat4* ShapeContainer::getTransformPtr(const std::string& s_transform_name)
+{
+	GLint index = findString(m_transform_names, s_transform_name);
+	assert(index >= 0 && "Transform could not be found");
+	return &m_transforms.at(index);
 }

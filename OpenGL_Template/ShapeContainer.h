@@ -54,11 +54,7 @@ struct ShapeContainer
 	ShapeData::indicesType depthSort(glm::vec3 s_cam_location);
 
 	// // ----- Getters ----- // //
-	ShapeData::verticesType vertices();
-	ShapeData::indicesType  indices();
-	std::vector<glm::mat4>  transforms() { return m_transforms; }
-	intType numShapes() {		return intType(m_shapes.size());		}
-	intType numTransforms() {	return intType(m_transforms.size()); }
+
 
 	intType findString(const std::vector<std::string> &s_vec, const std::string &s_string);
 	intType findString(const std::string &s_type, const std::string &s_string);
@@ -112,12 +108,15 @@ struct ShapeContainer
 	}
 
 	// // ----- GETTERS ----- // //
-	ShapeData getShape(const std::string& s_shape_name);
-	glm::mat4 getTransform(const std::string s_transform_name);
+	ShapeData::verticesType vertices();
+	ShapeData::indicesType  indices();
+	std::vector<glm::mat4>  transforms() { return m_transforms; }
+	intType numShapes() { return intType(m_shapes.size()); }
+	intType numTransforms() { return intType(m_transforms.size()); }
 
-	// // ----- SETTERS ----- // //
-	void setTransform(const std::string& s_transform_name, glm::mat4 s_transform);
-
+	ShapeData* getShapePtr(const std::string& s_shape_name);
+	glm::mat4* getTransformPtr(const std::string& s_transform_name);
+	
 
 private:
 	bool nameExists(const std::string& s_name);
