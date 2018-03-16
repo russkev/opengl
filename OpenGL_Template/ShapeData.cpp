@@ -57,7 +57,7 @@ ShapeData& ShapeData::operator += (ShapeData& other)
 // // ----- Append ----- // //
 void ShapeData::append_vertices(const vertexDataType s_shape)
 {
-	m_vertices.push_back({ std::get<attr::position>(s_shape),std::get<attr::color>(s_shape), std::get<attr::normal>(s_shape), m_id });
+	m_vertices.push_back({ std::get<position>(s_shape),std::get<color>(s_shape), std::get<normal>(s_shape), std::get<uv>(s_shape), m_id });
 	m_num_vertices++;
 }
 void ShapeData::append_indices(const GLushort s_index)

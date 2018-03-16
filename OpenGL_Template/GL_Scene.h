@@ -17,18 +17,20 @@
 #include "Buffer.h"
 #include "VAO.h"
 #include "Timer.h"
+#include "loadBMP_custom.h"
 
 #include "GL_Type_Traits.h"
 #include "GL_Tuple_Introspect.h"
 
 
 //#define DEBUG
-static constexpr auto POSITION_ATTR = 0u;
-static constexpr auto COLOR_ATTR = 1u;
-static constexpr auto NORMAL_ATTR = 2u;
-static constexpr auto CAM_ATTR = 3u;
-static constexpr auto MODEL_ATTR = 4u;
-static constexpr auto WORLD_ATTR = 8u;
+static constexpr auto POSITION_ATTR		= 0u;
+static constexpr auto COLOR_ATTR		= 1u;
+static constexpr auto NORMAL_ATTR		= 2u;
+static constexpr auto UV_ATTR			= 3u;
+static constexpr auto CAM_ATTR			= 4u;
+static constexpr auto MODEL_ATTR		= 5u;
+static constexpr auto WORLD_ATTR		= 9u;
 
 struct GL_Scene
 {

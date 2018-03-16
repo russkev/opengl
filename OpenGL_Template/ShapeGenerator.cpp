@@ -40,7 +40,7 @@ ShapeData::indicesType ShapeGenerator::indices()
 }
 
 // // TRANSFORM
-void ShapeGenerator::transform(glm::mat4 transformMatrix) 
+void ShapeGenerator::transform(glm::mat4 transformMatrix)
 {
 	for (auto & i : m_shapes)
 	{
@@ -48,67 +48,15 @@ void ShapeGenerator::transform(glm::mat4 transformMatrix)
 	}
 }
 
-// // ----- Append Shapes ----- // //
-//void ShapeGenerator::appendShape(ShapeData& inShape)
-//{
-//	if (m_shapes.size() > 0)
-//	{
-//		std::size_t vertexCount = 0;
-//		for (auto & i : m_shapes)
-//		{ 
-//			vertexCount += i.numVertices(); 
-//		}
-//
-//		for (auto i = 0; i < inShape.numIndices(); ++i)
-//		{
-//			inShape.setIndex(i, inShape.getIndex(i) + vertexCount);
-//		}
-//	}
-//	m_shapes.push_back(std::move(inShape));
-//}
-
-
-//void ShapeGenerator::appendTriangle() 
-//{
-//	appendShape(makeTriangle());
-//}
-//void ShapeGenerator::appendPlane(GLuint dimensions = 10) 
-//{
-//	appendShape(makePlane(dimensions));
-//}
-//void ShapeGenerator::appendCube() 
-//{
-//	appendShape(makeCube());
-//}
-//void ShapeGenerator::appendArrow() {
-//	appendShape(makeArrow());
-//}
-//void ShapeGenerator::appendTube(GLuint resolution = 10, GLfloat radius = 2, GLfloat height = 2)
-//{
-//	appendShape(makeTube(resolution, radius, height));
-//}
-//void ShapeGenerator::appendNormals(ShapeData& inShape) {
-//	appendShape(makeNormals(inShape));
-//}
-//void ShapeGenerator::appendNormals()
-//{
-//	assert(m_shapes.size() > 0);
-//	auto m_shapes_size = m_shapes.size();
-//	for (auto i = 0; i < m_shapes_size; ++i) 
-//	{
-//		appendShape(makeNormals(m_shapes.at(i)));
-//	}
-//}
-
 ShapeData ShapeGenerator::makeTriangle()
 {
 	ShapeData m_triangle;
 
 	glm::vec3 faceNormal = { 0.0f, 1.0f, 0.0f };
 
-	m_triangle.append_vertices({ glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f), faceNormal });
-	m_triangle.append_vertices({ glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), faceNormal });
-	m_triangle.append_vertices({ glm::vec3(0.5f, 0.0f,  0.0f), glm::vec3(0.0f, 0.0f, 1.0f), faceNormal });
+	m_triangle.append_vertices({ glm::vec3(0.0f, 1.0f,  0.0f), glm::vec3(1.0f, 0.0f, 0.0f), faceNormal, glm::vec2(0.5f, 1.0f) });
+	m_triangle.append_vertices({ glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), faceNormal, glm::vec2(0.0f, 0.0f) });
+	m_triangle.append_vertices({ glm::vec3(0.5f, 0.0f,  0.0f), glm::vec3(0.0f, 0.0f, 1.0f), faceNormal, glm::vec2(1.0f, 0.0f) });
 
 	m_triangle.append_indices(0);
 	m_triangle.append_indices(1);
@@ -123,7 +71,7 @@ ShapeData ShapeGenerator::makePlane(GLuint dimensions = 20)
 	GLuint offset = 0;
 	for (GLint x = GLint(dimensions * -0.5f); x < GLint(dimensions*0.5f + 1.5); ++x) {
 		for (GLint z = GLint(dimensions * -0.5f); z < GLint(dimensions*0.5f + 1.5); ++z) {
-			m_plane.append_vertices({ glm::vec3(x, 0, z), randomColor(), glm::vec3(0.0f, 1.0f, 0.0f) });
+			m_plane.append_vertices({ glm::vec3(x, 0, z), randomColor(), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f) });
 			//std::cout << "(" << x << "," << z << ")";
 		}
 	}
@@ -149,20 +97,20 @@ ShapeData ShapeGenerator::makeCube()
 	// // UP FACE // //
 	glm::vec3 faceColor = { 1.0f, 0.5f, 0.0f };
 	glm::vec3 faceNormal = { 0.0f, 1.0f, 0.0f };
-	m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(2)0
-	m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(3)1
-	m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)2
-	m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(7)3
+	m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(2)0
+	m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(3)1
+	m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(6)2
+	m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(7)3
 	m_cube.append_indices(3); m_cube.append_indices(0); m_cube.append_indices(2);
 	m_cube.append_indices(3); m_cube.append_indices(1); m_cube.append_indices(0);
 
 	// // RIGHT FACE // //
 	faceColor = { 0.0f, 1.0f, 0.5f };
 	faceNormal = { 1.0f, 0.0f, 0.0f };
-	m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(1)4
-	m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(2)5
-	m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)6
-	m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(5)7
+	m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(1)4
+	m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(2)5
+	m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(6)6
+	m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(5)7
 	m_cube.append_indices(7); m_cube.append_indices(6); m_cube.append_indices(5);
 	m_cube.append_indices(7); m_cube.append_indices(5); m_cube.append_indices(4);
 
@@ -170,40 +118,40 @@ ShapeData ShapeGenerator::makeCube()
 	// // FRONT FACE // //
 	faceColor = { 0.5f, 0.0f, 1.0f };
 	faceNormal = { 0.0f, 0.0f, -1.0f };
-	m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(4)8
-	m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(5)9
-	m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)10
-	m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(7)11
+	m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(4)8
+	m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(5)9
+	m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(6)10
+	m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(7)11
 	m_cube.append_indices(8); m_cube.append_indices(11); m_cube.append_indices(10);
 	m_cube.append_indices(8); m_cube.append_indices(10); m_cube.append_indices(9);
 
 	// // LEFT FACE // //
 	faceColor = { 0.75f, 0.75f, 0.0f };
 	faceNormal = { -1.0f, 0.0f, 0.0f };
-	m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(0)12
-	m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(3)13
-	m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(4)14
-	m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(7)15
+	m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(0)12
+	m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(3)13
+	m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(4)14
+	m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(7)15
 	m_cube.append_indices(12); m_cube.append_indices(13); m_cube.append_indices(15);
 	m_cube.append_indices(12); m_cube.append_indices(15); m_cube.append_indices(14);
 
 	// // BACK FACE // //
 	faceColor = { 0.75f, 0.0f, 0.75f };
 	faceNormal = { 0.0f, 0.0f, 1.0f };
-	m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(0)16
-	m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(1)17
-	m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(2)18
-	m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(3)19
+	m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(0)16
+	m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(1)17
+	m_cube.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(2)18
+	m_cube.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(3)19
 	m_cube.append_indices(17); m_cube.append_indices(18); m_cube.append_indices(19);
 	m_cube.append_indices(17); m_cube.append_indices(19); m_cube.append_indices(16);
 
 	// // BOTTOM FACE // //
 	faceColor = { 0.0f, 0.75f, 0.75f };
 	faceNormal = { 0.0f, -1.0f, 0.0f };
-	m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(0)20
-	m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(1)21
-	m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(4)22
-	m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(5)23
+	m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(0)20
+	m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(1)21
+	m_cube.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(4)22
+	m_cube.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(5)23
 	m_cube.append_indices(23); m_cube.append_indices(21); m_cube.append_indices(20);
 	m_cube.append_indices(23); m_cube.append_indices(20); m_cube.append_indices(22);
 
@@ -217,13 +165,13 @@ ShapeData ShapeGenerator::makeArrow()
 	// // UP FACE // // 
 	glm::vec3 faceColor = { 1.0f, 0.5f, 0.0f };
 	glm::vec3 faceNormal = { 0.0f, 1.0f, 0.0f };
-	m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //0
-	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //1
-	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +2.0f), faceColor, faceNormal }); //2
-	m_arrow.append_vertices({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal }); //3
-	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -2.0f), faceColor, faceNormal }); //4
-	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //5
-	m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //6
+	m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //0
+	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //1
+	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +2.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //2
+	m_arrow.append_vertices({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //3
+	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -2.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //4
+	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //5
+	m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //6
 
 	m_arrow.append_indices(6), m_arrow.append_indices(0), m_arrow.append_indices(1);
 	m_arrow.append_indices(6), m_arrow.append_indices(1), m_arrow.append_indices(5);
@@ -234,13 +182,13 @@ ShapeData ShapeGenerator::makeArrow()
 	// // BOTTOM FACE // // 
 	faceColor = { 0.0f, 1.0f, 0.5f };
 	faceNormal = { 0.0f, -1.0f, 0.0f };
-	m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //7
-	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //8
-	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +2.0f), faceColor, faceNormal }); //9
-	m_arrow.append_vertices({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal }); //10
-	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -2.0f), faceColor, faceNormal }); //11
-	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //12
-	m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //13
+	m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //7
+	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //8
+	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +2.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //9
+	m_arrow.append_vertices({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //10
+	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -2.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //11
+	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //12
+	m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //13
 
 	m_arrow.append_indices(10), m_arrow.append_indices(9), m_arrow.append_indices(8);
 	m_arrow.append_indices(10), m_arrow.append_indices(8), m_arrow.append_indices(12);
@@ -251,20 +199,20 @@ ShapeData ShapeGenerator::makeArrow()
 	// // BACK FACES // //
 	faceColor = { 0.5f, 0.0f, 1.0f };
 	faceNormal = { -1.0f, 0.0f, 0.0f };
-	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(1)14
-	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +2.0f), faceColor, faceNormal }); //(2)15
-	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(8)16
-	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +2.0f), faceColor, faceNormal }); //(9)17
+	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(1)14
+	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +2.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(2)15
+	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(8)16
+	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +2.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(9)17
 
-	m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(0)18
-	m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)19
-	m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(7)20
-	m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(13)21
+	m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(0)18
+	m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(6)19
+	m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(7)20
+	m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(13)21
 
-	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -2.0f), faceColor, faceNormal }); //(4)22
-	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(5)23
-	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -2.0f), faceColor, faceNormal }); //(11)24
-	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(12)25
+	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -2.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(4)22
+	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(5)23
+	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -2.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(11)24
+	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(12)25
 
 	m_arrow.append_indices(16), m_arrow.append_indices(17), m_arrow.append_indices(15);
 	m_arrow.append_indices(16), m_arrow.append_indices(15), m_arrow.append_indices(14);
@@ -278,10 +226,10 @@ ShapeData ShapeGenerator::makeArrow()
 	// // LEFT FACE // //
 	faceColor = { 0.5f, 1.0f, 0.0f };
 	faceNormal = { 0.0f, 0.0f, -1.0f };
-	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(5)26
-	m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal }); //(6)27
-	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(12)28
-	m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal }); //(13)29
+	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(5)26
+	m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(6)27
+	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(12)28
+	m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, -1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(13)29
 
 	m_arrow.append_indices(29), m_arrow.append_indices(27), m_arrow.append_indices(26);
 	m_arrow.append_indices(29), m_arrow.append_indices(26), m_arrow.append_indices(28);
@@ -289,10 +237,10 @@ ShapeData ShapeGenerator::makeArrow()
 	// // RIGHT FACE // //
 	faceColor = { 0.0f, 0.5f, 1.0f };
 	faceNormal = { 0.0f, 0.0f, +1.0f };
-	m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(0)30
-	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal }); //(1)31
-	m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(7)32
-	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal }); //(8)33
+	m_arrow.append_vertices({ glm::vec3(-1.0f, +1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(0)30
+	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(1)31
+	m_arrow.append_vertices({ glm::vec3(-1.0f, -1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(7)32
+	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +1.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(8)33
 
 	m_arrow.append_indices(30), m_arrow.append_indices(32), m_arrow.append_indices(33);
 	m_arrow.append_indices(30), m_arrow.append_indices(33), m_arrow.append_indices(31);
@@ -303,10 +251,10 @@ ShapeData ShapeGenerator::makeArrow()
 		glm::vec3(+3.0f, -1.0f, +0.0f) - glm::vec3(+1.0f, -1.0f, -2.0f),
 		glm::vec3(+3.0f, -1.0f, +0.0f) - glm::vec3(+3.0f, +1.0f, +0.0f)));
 
-	m_arrow.append_vertices({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal }); //(3)34
-	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -2.0f), faceColor, faceNormal }); //(4)35
-	m_arrow.append_vertices({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal }); //(10)36
-	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -2.0f), faceColor, faceNormal }); //(11)37
+	m_arrow.append_vertices({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(3)34
+	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, -2.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(4)35
+	m_arrow.append_vertices({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(10)36
+	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, -2.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(11)37
 
 	m_arrow.append_indices(37), m_arrow.append_indices(35), m_arrow.append_indices(34);
 	m_arrow.append_indices(37), m_arrow.append_indices(34), m_arrow.append_indices(36);
@@ -317,10 +265,10 @@ ShapeData ShapeGenerator::makeArrow()
 		glm::vec3(+1.0f, -1.0f, +2.0f) - glm::vec3(+3.0f, -1.0f, +0.0f),
 		glm::vec3(+1.0f, -1.0f, +2.0f) - glm::vec3(+1.0f, +1.0f, +2.0f)));
 
-	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +2.0f), faceColor, faceNormal }); //(2)38
-	m_arrow.append_vertices({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal }); //(3)39
-	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +2.0f), faceColor, faceNormal }); //(9)40
-	m_arrow.append_vertices({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal }); //(10)41
+	m_arrow.append_vertices({ glm::vec3(+1.0f, +1.0f, +2.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(2)38
+	m_arrow.append_vertices({ glm::vec3(+3.0f, +1.0f, +0.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(3)39
+	m_arrow.append_vertices({ glm::vec3(+1.0f, -1.0f, +2.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(9)40
+	m_arrow.append_vertices({ glm::vec3(+3.0f, -1.0f, +0.0f), faceColor, faceNormal, glm::vec2(0.0f, 0.0f) }); //(10)41
 
 	m_arrow.append_indices(38), m_arrow.append_indices(40), m_arrow.append_indices(41);
 	m_arrow.append_indices(38), m_arrow.append_indices(41), m_arrow.append_indices(39);
@@ -361,13 +309,15 @@ ShapeData ShapeGenerator::makeNormals(ShapeData& inShape)
 		{
 			inShape.getVertex<inShape.position>(i),
 			glm::vec3(1.0f, 0.0f, 0.0f),
-			glm::vec3(1.0f, 0.0f, 0.0f)
+			glm::vec3(1.0f, 0.0f, 0.0f),
+			glm::vec2(0.0f, 0.0f)
 		});
 		m_normals.append_vertices(
 		{
 			inShape.getVertex<inShape.position>(i) + inShape.getVertex<inShape.normal>(i),
 			glm::vec3(1.0f, 0.0f, 0.0f),
-			glm::vec3(0.0f, 0.0f, 0.0f)
+			glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::vec2(0.0f, 0.0f)
 		});
 		m_normals.append_indices(j);
 		++j;
