@@ -4,12 +4,13 @@
 in vec3 f_world_vertexPosition;
 in vec3 fragmentColor;
 in vec3 f_world_vertexNormal;
-
+//in vec3 uv;
 
 // // Uniforms // //
-uniform vec4 ambientLight;
-uniform vec3 lightPosition;
-uniform vec3 camPosition;
+uniform vec4		ambientLight;
+uniform vec3		lightPosition;
+uniform vec3		camPosition;
+//uniform sampler2d	texture;
 
 // // Output data // //
 out vec4 color;
@@ -18,6 +19,7 @@ out vec4 color;
 void main()
 {	
 	vec3 diff_color				= fragmentColor;
+	//vec3 diff_color				= texture
 
 	vec3  spec_color			= vec3(1.0, 0.7, 0.5);
 	float spec_cosinePower		= 30;

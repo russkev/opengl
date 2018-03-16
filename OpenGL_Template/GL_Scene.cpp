@@ -79,10 +79,13 @@ void GL_Scene::initGeo()
 	// // Create and compile our GLSL program from the shaders // //
 	m_program_id = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
 
+	// // BMP Tecture // //
+	loadBMP_custom bmp_01 = loadBMP_custom("C:\\Users\\kev_k\\Documents\\_DOCS\\PROGRAMMING\\OpenGL\\repos\\data\\uvtemplate.bmp");
+
 	// // Create Geo
-	m_sh.appendShape(m_shapes.makePlane(2), "plane_01");
-	m_sh.appendShape(m_shapes.makePlane(2), "plane_02");
-	m_sh.appendShape(m_shapes.makePlane(2), "plane_03");
+	m_sh.appendShape(m_shapes.makePlane(4), "plane_01");
+	m_sh.appendShape(m_shapes.makePlane(4), "plane_02");
+	m_sh.appendShape(m_shapes.makePlane(4), "plane_03");
 
 	// // Create transforms
 	glm::vec3 planeScale = glm::vec3(3.0f);
@@ -115,7 +118,7 @@ void GL_Scene::initBuffers()
 
 
 	// // Set up standard information for the VAO
-	static const auto shape_info = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, GLint>>::get();
+	static const auto shape_info = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint>>::get();
 	static const auto matrix_info = gl_introspect_tuple<std::tuple<glm::mat4>>::get();
 
 	// // Upload the VAO information
@@ -204,7 +207,7 @@ void GL_Scene::updateGeo()
 {
 	auto transform_01	= m_sh.getTransformPtr("transform_01");
 	auto time			= m_timer.time();
-	*transform_01		= *transform_01 * Utilities::trs(glm::mat3({ 0,0,0 }, { 0, time/100, 0 }, { 1,1,1 }));
+	*transform_01		= *transform_01 * Utilities::trs(glm::mat3({ 0,0,0 }, { 0, time/100000, 0 }, { 1,1,1 }));
 	
 	m_sh.uploadTransforms(m_program_id);
 	m_matBuffer.Upload(m_projection * m_cam.getWorldToViewMatrix());

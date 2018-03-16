@@ -12,17 +12,17 @@ struct ShapeData
 {
 public:	
 	// // ----- Type Definitions ----- // //
-	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3>			vertexDataType;
-	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, GLint>	vertexType;
-	typedef std::vector<vertexType>								verticesType;
-	typedef GLushort											indexType;
-	typedef std::vector<indexType>								indicesType;
-	typedef std::vector<vertexType>::const_iterator				vrt_iterator;
-	typedef std::vector<GLushort>::const_iterator				ind_iterator;
+	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2>			vertexDataType;
+	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint>	vertexType;
+	typedef std::vector<vertexType>											verticesType;
+	typedef GLushort														indexType;
+	typedef std::vector<indexType>											indicesType;
+	typedef std::vector<vertexType>::const_iterator							vrt_iterator;
+	typedef std::vector<GLushort>::const_iterator							ind_iterator;
 
 
 	// // ----- Attribute Enumeration ----- // //
-	enum attr { position = 0, color = 1, normal = 2, id = 3 };
+	enum attr { position = 0, color = 1, normal = 2, uv = 3, id = 4 };
 
 	// // ----- Big 6 ----- // //
 	ShapeData();
