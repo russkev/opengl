@@ -247,7 +247,7 @@ ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 	for (auto & i : distances)
 	{
 		auto numIndices = 0;
-		for (auto j = 0; j < i.second; ++j) 
+		for (GLuint j = 0; j < i.second; ++j) 
 		{
 			numIndices += m_shapes.at(j).numVertices();
 		}

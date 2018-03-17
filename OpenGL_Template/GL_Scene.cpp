@@ -94,12 +94,18 @@ void GL_Scene::initGeo()
 	auto T_09 = Utilities::minMaxLoop(1.6f, 10.0f, 20.0f);
 	auto T_10 = Utilities::minMaxLoop(13.5f, 10.0f, 20.0f);
 	auto T_11 = Utilities::minMaxLoop(-29.2f, 10.0f, 20.0f);
+	auto T_12 = Utilities::minMaxLoop(-29.2, 10.0, 20.0);
+	auto T_13 = Utilities::minMaxLoop(3, 10, 20);
+	auto T_14 = Utilities::minMaxLoop(13, 10, 20);
+	auto T_15 = Utilities::minMaxLoop(33, 10, 20);
+	auto T_16 = Utilities::minMaxLoop(-2, 10, 20);
 
 
 	// // END TEST
 
 
-	// // Create Geo
+	// // Create Geo		T_02	0.500000000	float
+
 	m_sh.appendShape(m_shapes.makePlane(4), "plane_01");
 	m_sh.appendShape(m_shapes.makePlane(4), "plane_02");
 	m_sh.appendShape(m_shapes.makePlane(4), "plane_03");
