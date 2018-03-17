@@ -3,6 +3,7 @@
 #include "ShapeGenerator.h"
 #include "ShapeData.h"
 #include "Vertex.h"
+#include "Utilities.h"
 
 #include <glm/matrix.hpp>
 #include <math.h>
@@ -77,8 +78,8 @@ ShapeData ShapeGenerator::makePlane(GLuint dimensions = 20)
 					randomColor(),					// Color
 					glm::vec3(0.0f, 1.0f, 0.0f),	// Normal
 					glm::vec2(						// UV
-						(float(int(x%2))), 
-						(float(int(z%2)))
+						Utilities::minMaxLoop(x),
+						Utilities::minMaxLoop(z)
 					) 
 				});
 			//std::cout << "(" << x << "," << z << ")";

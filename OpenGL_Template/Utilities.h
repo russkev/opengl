@@ -179,7 +179,7 @@ namespace Utilities
 	{
 		T pmax = max - min;
 		T pNum = num < min ? (T)fmod(num, max) + pmax : num;
-		return (T)fmod(pNum, pmax);
+		return num==max?num:(T)fmod(pNum, pmax);
 	}
 
 };
