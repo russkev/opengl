@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <utility>
+#include <math.h>
 
 #include <GL/glew.h>
 
@@ -172,4 +173,12 @@ namespace Utilities
 				s_trs[2]
 			);
 	}
+	// // ----- MIN MAX LOOP ----- // //
+	template<typename T>
+	T minMaxLoop(T num, T min = 0, T max = 1)
+	{
+		T pNum = num < min ? fmod(num, max) + max : num;
+		return fmod(pNum, max);
+	}
+
 };
