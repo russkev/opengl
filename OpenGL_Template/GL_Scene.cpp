@@ -99,7 +99,8 @@ void GL_Scene::initGeo()
 	auto T_14 = Utilities::minMaxLoop(13, 10, 20);
 	auto T_15 = Utilities::minMaxLoop(33, 10, 20);
 	auto T_16 = Utilities::minMaxLoop(-2, 10, 20);
-
+	auto T_17 = Utilities::minMaxLoop(0.0f);
+	auto T_18 = Utilities::minMaxLoop(1.0f);
 
 	// // END TEST
 
