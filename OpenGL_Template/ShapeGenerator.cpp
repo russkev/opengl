@@ -71,7 +71,16 @@ ShapeData ShapeGenerator::makePlane(GLuint dimensions = 20)
 	GLuint offset = 0;
 	for (GLint x = GLint(dimensions * -0.5f); x < GLint(dimensions*0.5f + 1.5); ++x) {
 		for (GLint z = GLint(dimensions * -0.5f); z < GLint(dimensions*0.5f + 1.5); ++z) {
-			m_plane.append_vertices({ glm::vec3(x, 0, z), randomColor(), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f) });
+			m_plane.append_vertices(
+				{ 
+					glm::vec3(x, 0, z),				// Position
+					randomColor(),					// Color
+					glm::vec3(0.0f, 1.0f, 0.0f),	// Normal
+					glm::vec2(						// UV
+						(float(int(x%2))), 
+						(float(int(z%2)))
+					) 
+				});
 			//std::cout << "(" << x << "," << z << ")";
 		}
 	}
