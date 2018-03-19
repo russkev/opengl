@@ -83,30 +83,36 @@ void GL_Scene::initGeo()
 	loadBMP_custom bmp_01 = loadBMP_custom("C:\\Users\\kev_k\\Documents\\_DOCS\\PROGRAMMING\\OpenGL\\repos\\data\\uvtemplate.bmp");
 
 	// // TEST
-	auto T_01 = Utilities::minMaxLoop(0.5f);
-	auto T_02 = Utilities::minMaxLoop(1.5f);
-	auto T_03 = Utilities::minMaxLoop(3.5f);
-	auto T_04 = Utilities::minMaxLoop(-0.1f);
-	auto T_05 = Utilities::minMaxLoop(-2.8f);
-	auto T_06 = Utilities::minMaxLoop(1.2f, 0.0f, 10.0f);
-	auto T_07 = Utilities::minMaxLoop(33.6f, 0.0f, 10.0f);
-	auto T_08 = Utilities::minMaxLoop(-27.6f, 0.0f, 10.0f);
-	auto T_09 = Utilities::minMaxLoop(1.6f, 10.0f, 20.0f);
-	auto T_10 = Utilities::minMaxLoop(13.5f, 10.0f, 20.0f);
-	auto T_11 = Utilities::minMaxLoop(-29.2f, 10.0f, 20.0f);
-	auto T_12 = Utilities::minMaxLoop(-29.2, 10.0, 20.0);
-	auto T_13 = Utilities::minMaxLoop(3, 10, 20);
-	auto T_14 = Utilities::minMaxLoop(13, 10, 20);
-	auto T_15 = Utilities::minMaxLoop(33, 10, 20);
-	auto T_16 = Utilities::minMaxLoop(-2, 10, 20);
+	//auto T_01 = Utilities::minMaxLoop(0.5f);
+	//auto T_02 = Utilities::minMaxLoop(1.5f);
+	//auto T_03 = Utilities::minMaxLoop(3.5f);
+	//auto T_04 = Utilities::minMaxLoop(-0.1f);
+	//auto T_05 = Utilities::minMaxLoop(-2.8f);
+	//auto T_06 = Utilities::minMaxLoop(1.2f, 0.0f, 10.0f);
+	//auto T_07 = Utilities::minMaxLoop(33.6f, 0.0f, 10.0f);
+	//auto T_08 = Utilities::minMaxLoop(-27.6f, 0.0f, 10.0f);
+	//auto T_09 = Utilities::minMaxLoop(1.6f, 10.0f, 20.0f);
+	//auto T_10 = Utilities::minMaxLoop(13.5f, 10.0f, 20.0f);
+	//auto T_11 = Utilities::minMaxLoop(-29.2f, 10.0f, 20.0f);
+	//auto T_12 = Utilities::minMaxLoop(-29.2, 10.0, 20.0);
+	//auto T_13 = Utilities::minMaxLoop(3, 10, 20);
+	//auto T_14 = Utilities::minMaxLoop(13, 10, 20);
+	//auto T_15 = Utilities::minMaxLoop(33, 10, 20);
+	//auto T_16 = Utilities::minMaxLoop(-2, 10, 20);
 	auto T_17 = Utilities::minMaxLoop(0.0f);
 	auto T_18 = Utilities::minMaxLoop(1.0f);
+	auto T_19 = Utilities::minMaxLoop(2.0f);
+	auto T_20 = Utilities::minMaxLoop(3.0f);
+	auto T_21 = Utilities::minMaxLoop(-1.0f);
+	auto T_22 = Utilities::minMaxLoop(-2.0f);
+	auto T_23 = Utilities::minMaxLoop(-3.0f);
 
 	// // END TEST
 
 
 	// // Create Geo		T_02	0.500000000	float
 
+	auto t2_1 = fmod(1.5, 2.0);
 	m_sh.appendShape(m_shapes.makePlane(4), "plane_01");
 	m_sh.appendShape(m_shapes.makePlane(4), "plane_02");
 	m_sh.appendShape(m_shapes.makePlane(4), "plane_03");
