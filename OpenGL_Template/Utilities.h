@@ -177,9 +177,18 @@ namespace Utilities
 	template<typename T>
 	T minMaxLoop(T num, T min = 0, T max = 1)
 	{
+		//T p_min = (T)0;
 		T p_max = max - min;
-		T p_num = num < min ? (T)fmod(num, max) + p_max : num;
-		return fmod(abs(p_num), p_max*2) == p_max?max:(T)fmod(p_num, p_max);
+		T p_num = num - min;
+		//T p_num = num < 0 ? 0 - num : num;
+
+
+		//T p_num = num < min ? (T)fmod(num, max) + p_max : num;
+		//return fmod(abs(p_num), p_max*2) == p_max?max:(T)fmod(p_num, p_max);
+
+		//auto test = p_max + fmod(p_num, p_max);
+		T out = p_num < 0 ?  p_max + fmod(p_num, p_max) : fmod(p_num, p_max);
+		return out;
 	}
 
 };
