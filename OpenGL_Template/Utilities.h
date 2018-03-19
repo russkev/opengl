@@ -177,9 +177,9 @@ namespace Utilities
 	template<typename T>
 	T minMaxLoop(T num, T min = 0, T max = 1)
 	{
-		T pmax = max - min;
-		T pNum = num < min ? (T)fmod(num, max) + pmax : num;
-		return num==max?num:(T)fmod(pNum, pmax);
+		T p_max = max - min;
+		T p_num = num < min ? (T)fmod(num, max) + p_max : num;
+		return fmod(abs(p_num), p_max*2) == p_max?max:(T)fmod(p_num, p_max);
 	}
 
 };
