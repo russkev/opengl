@@ -187,7 +187,15 @@ namespace Utilities
 		//return fmod(abs(p_num), p_max*2) == p_max?max:(T)fmod(p_num, p_max);
 
 		//auto test = p_max + fmod(p_num, p_max);
-		T out = p_num < 0 ?  p_max + fmod(p_num, p_max) : fmod(p_num, p_max);
+		T out;
+		if (!fmod(p_num, p_max))
+		{
+			out = abs(fmod(p_num, p_max * 2));
+		}
+		else
+		{
+			out = p_num < 0 ? p_max + fmod(p_num, p_max) : fmod(p_num, p_max);
+		}
 		return out;
 	}
 
