@@ -20,6 +20,8 @@ void main()
 {	
 	vec3 diff_color				= fragmentColor;
 	//vec3 diff_color				= texture
+	color						= texture2D( texture, uv ).rgba;
+	//vec3 diff_color				texture( texture, uv ).rgb;
 
 	vec3  spec_color			= vec3(1.0, 0.7, 0.5);
 	float spec_cosinePower		= 30;
@@ -44,8 +46,9 @@ void main()
 	spec_brightness				= pow(spec_brightness, spec_cosinePower);
 	vec4 spec_light				= vec4(spec_color*spec_brightness, 1.0);
 
-	vec4 colorRGB				= ambientLight * vec4(diff_color, 1) + clamp(diff_light * lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
-	float alpha					= 0.5;
-	color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
+	//vec4 colorRGB				= ambientLight * vec4(diff_color, 1) + clamp(diff_light * lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
+	vec4 colorRGB				= vec4(diff_color, 1.0);
+	float alpha					= 1.0;
+	//color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
 
 }

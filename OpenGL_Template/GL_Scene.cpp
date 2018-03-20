@@ -81,8 +81,12 @@ void GL_Scene::initGeo()
 
 	// // BMP Texture
 	loadBMP_custom bmp_01 = loadBMP_custom("C:\\Users\\kev_k\\Documents\\_DOCS\\PROGRAMMING\\OpenGL\\repos\\data\\uvtemplate.bmp");
+	auto test = bmp_01.m_data.get();
+	//GLuint tex;
+	//glGenTextures(1, &tex);
 	GLint texture_loc = glGetUniformLocation(m_program_id, "texture");
-	glUniform1i(texture_loc, bmp_01.m_data());
+	glActiveTexture(GL_TEXTURE0 + texture_loc);
+	glUniform1i(texture_loc, 0);
 
 	//glUniform2fv()
 
@@ -212,7 +216,7 @@ void GL_Scene::updateGeo()
 {
 	auto transform_01	= m_sh.getTransformPtr("transform_01");
 	auto time			= m_timer.time();
-	*transform_01		= *transform_01 * Utilities::trs(glm::mat3({ 0,0,0 }, { 0, time/100000, 0 }, { 1,1,1 }));
+	*transform_01		= *transform_01 * Utilities::trs(glm::mat3({ 0,0,0 }, { 0, time/1000000, 0 }, { 1,1,1 }));
 	
 	m_sh.uploadTransforms(m_program_id);
 	m_matBuffer.Upload(m_projection * m_cam.getWorldToViewMatrix());
