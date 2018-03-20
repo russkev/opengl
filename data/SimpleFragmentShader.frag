@@ -4,13 +4,13 @@
 in vec3 f_world_vertexPosition;
 in vec3 fragmentColor;
 in vec3 f_world_vertexNormal;
-//in vec3 uv;
+in vec2 uv;
 
 // // Uniforms // //
 uniform vec4		ambientLight;
 uniform vec3		lightPosition;
 uniform vec3		camPosition;
-//uniform sampler2d	texture;
+uniform sampler2D	texture;
 
 // // Output data // //
 out vec4 color;

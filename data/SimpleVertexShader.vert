@@ -34,6 +34,7 @@ uniform int test_int;
 out vec3 f_world_vertexPosition;
 out vec3 fragmentColor;
 out vec3 f_world_vertexNormal;
+out vec2 uv;
 
 
 bool isEmptyConnection(int index)
@@ -125,6 +126,7 @@ void main()
 {
 	transformGlPosition();
 	fragmentColor			= colorFromIndex(model_id);
+	uv						= model_uv;
 
 	
 }
