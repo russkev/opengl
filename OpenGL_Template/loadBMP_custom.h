@@ -44,8 +44,21 @@ public:
 		if (m_dataPos   == 0) { m_dataPos = 54; }
 
 		// Create a Buffer //
+
 		m_data = std::make_unique<unsigned char[]>(m_imageSize);
-		//m_data = new unsigned char[m_imageSize];
+
+
+		// // TEST // //
+
+		FILE * testFile;
+		testFile = fopen(imagepath, "r");
+		std::vector<unsigned char> data;//[786432];
+		data.resize(m_imageSize);
+		fread(data.data(), 1, m_imageSize, testFile);
+
+		// // END TEST // //
+
+
 		// Read the actual data from the file into the buffer //
 		fread(m_data.get(), 1, m_imageSize, m_file);
 		// Everything is in memory now, close the file //
