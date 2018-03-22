@@ -8,25 +8,22 @@
 struct loadBMP_custom {
 public:
 	// // MEMBER VARIABLES // //
-	FILE * m_file;
-	unsigned char m_header[54];					// Each BMP file begins with a 54 byte header
-	unsigned int  m_dataPos;					// Popsition in file where actual data begins
-	unsigned int  m_width, m_height;	 
-	unsigned int  m_imageSize;					// = width * height * 3
+	FILE			* m_file;
+	unsigned char	m_header[54];				// Each BMP file begins with a 54 byte header
+	unsigned int	m_dataPos;					// Popsition in file where actual data begins
+	unsigned int	m_width, m_height;	 
+	unsigned int	m_imageSize;				// = width * height * 3
 	
-	std::unique_ptr<unsigned char[]> m_data;	// Actual RGB data
+	//std::unique_ptr<unsigned char[]> m_data;	// Actual RGB data
+	std::vector<unsigned char>	m_data;
 
 public:
 	// // CONSTRUCTOR // //
-	loadBMP_custom(const char * imagepath) /*: m_file(fopen(imagepath, "r"))*/ {
-		m_file = fopen(imagepath, "rb");
+	loadBMP_custom(const char * imagepath) : m_file(fopen(imagepath, "rb")) {
 		if (!m_file) { 
 			perror("ERROR: Image could not be opened");
 			return;
 		};
-		//std::vector<unsigned char> data;//[786432];
-		//data.resize(786432);
-		//auto testFread = fread(data.data(), 1, 786432, m_file);
 		if (fread(m_header, 1, 54, m_file) != 54) {
 			printf("ERROR: Not a correct BMP file : Header not correct size\n");
 			return;
@@ -48,22 +45,14 @@ public:
 
 		// Create a Buffer //
 
-		m_data = std::make_unique<unsigned char[]>(m_imageSize);
-
-
-		// // TEST // //
-
-		FILE * testFile;
-		testFile = fopen(imagepath, "r");
-		std::vector<unsigned char> data;//[786432];
-		data.resize(m_imageSize);
-		fread(data.data(), 1, m_imageSize, m_file);
-
-		// // END TEST // //
-
+		//m_data = std::make_unique<unsigned char[]>(m_imageSize);
+		m_data.resize(m_imageSize);
 
 		// Read the actual data from the file into the buffer //
-		fread(m_data.get(), 1, m_imageSize, m_file);
+		if (fread(m_data.data(), 1, m_imageSize, m_file) != m_imageSize)
+		{
+			printf("ERROR: Image data not read correctly \n");
+		}
 		// Everything is in memory now, close the file //
 		fclose(m_file);
 
@@ -71,10 +60,11 @@ public:
 		GLuint textureID;
 		glGenTextures(1, &textureID);
 		// "Bind" the newly created texture : all future texture functions will modify this texture //
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, textureID);
 
 		// Give the image to OpenGL //
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_BGR, GL_UNSIGNED_BYTE, m_data.get());
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_BGR, GL_UNSIGNED_BYTE, m_data.data());
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	};

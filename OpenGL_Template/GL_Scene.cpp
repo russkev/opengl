@@ -81,7 +81,7 @@ void GL_Scene::initGeo()
 
 	// // BMP Texture
 	loadBMP_custom bmp_01 = loadBMP_custom("C:\\Users\\kev_k\\Documents\\_DOCS\\PROGRAMMING\\OpenGL\\repos\\data\\uvtemplate.bmp");
-	auto test = bmp_01.m_data.get();
+	//auto test = bmp_01.m_data.get();
 	//GLuint tex;
 	//glGenTextures(1, &tex);
 	GLint texture_loc = glGetUniformLocation(m_program_id, "texture");
