@@ -18,12 +18,15 @@ public:
 
 public:
 	// // CONSTRUCTOR // //
-	loadBMP_custom(const char * imagepath) : m_file(fopen(imagepath, "r")) {
-
+	loadBMP_custom(const char * imagepath) /*: m_file(fopen(imagepath, "r"))*/ {
+		m_file = fopen(imagepath, "rb");
 		if (!m_file) { 
 			perror("ERROR: Image could not be opened");
 			return;
 		};
+		//std::vector<unsigned char> data;//[786432];
+		//data.resize(786432);
+		//auto testFread = fread(data.data(), 1, 786432, m_file);
 		if (fread(m_header, 1, 54, m_file) != 54) {
 			printf("ERROR: Not a correct BMP file : Header not correct size\n");
 			return;
@@ -54,7 +57,7 @@ public:
 		testFile = fopen(imagepath, "r");
 		std::vector<unsigned char> data;//[786432];
 		data.resize(m_imageSize);
-		fread(data.data(), 1, m_imageSize, testFile);
+		fread(data.data(), 1, m_imageSize, m_file);
 
 		// // END TEST // //
 
