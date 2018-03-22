@@ -6,7 +6,7 @@
 #include <memory>
 
 struct loadBMP_custom {
-public:
+private:
 	// // MEMBER VARIABLES // //
 	FILE			* m_file;
 	unsigned char	m_header[54];				// Each BMP file begins with a 54 byte header
@@ -14,8 +14,7 @@ public:
 	unsigned int	m_width, m_height;	 
 	unsigned int	m_imageSize;				// = width * height * 3
 	
-	//std::unique_ptr<unsigned char[]> m_data;	// Actual RGB data
-	std::vector<unsigned char>	m_data;
+	std::unique_ptr<unsigned char[]> m_data;	// Actual RGB data
 
 public:
 	// // CONSTRUCTOR // //
@@ -45,11 +44,10 @@ public:
 
 		// Create a Buffer //
 
-		//m_data = std::make_unique<unsigned char[]>(m_imageSize);
-		m_data.resize(m_imageSize);
+		m_data = std::make_unique<unsigned char[]>(m_imageSize);
 
 		// Read the actual data from the file into the buffer //
-		if (fread(m_data.data(), 1, m_imageSize, m_file) != m_imageSize)
+		if (fread(m_data.get(), 1, m_imageSize, m_file) != m_imageSize)
 		{
 			printf("ERROR: Image data not read correctly \n");
 		}
@@ -57,15 +55,17 @@ public:
 		fclose(m_file);
 
 		// Create one OpenGL texture //
-		GLuint textureID;
-		glGenTextures(1, &textureID);
-		// "Bind" the newly created texture : all future texture functions will modify this texture //
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textureID);
-
-		// Give the image to OpenGL //
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_BGR, GL_UNSIGNED_BYTE, m_data.data());
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	};
+	unsigned int width()
+	{
+		return m_width;
+	};
+	unsigned int height()
+	{
+		return m_height;
+	};
+	auto data()
+	{
+		return m_data.get();
+	}
 };
