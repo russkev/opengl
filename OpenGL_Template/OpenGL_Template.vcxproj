@@ -153,7 +153,7 @@
     <ClCompile Include="ShapeContainer.cpp" />
     <ClCompile Include="ShapeData.cpp" />
     <ClCompile Include="ShapeGenerator.cpp" />
-    <ClCompile Include="targa\targa.c" />
+    <ClCompile Include="targa\targa.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VAO.cpp" />

@@ -54,7 +54,7 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="targa\targa.c">
+    <ClCompile Include="targa\targa.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

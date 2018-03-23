@@ -77,12 +77,8 @@ ShapeData ShapeGenerator::makePlane(GLuint dimensions = 20)
 					glm::vec3(x, 0, z),				// Position
 					randomColor(),					// Color
 					glm::vec3(0.0f, 1.0f, 0.0f),	// Normal
-					glm::vec2(						// UV
-						Utilities::minMaxLoop(x),
-						Utilities::minMaxLoop(z)
-					) 
+					glm::vec2(x,z)					// UV
 				});
-			//std::cout << "(" << x << "," << z << ")";
 		}
 	}
 	for (GLushort y = 0; y < dimensions; ++y) {
