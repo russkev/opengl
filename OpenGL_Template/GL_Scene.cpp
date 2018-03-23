@@ -79,17 +79,10 @@ void GL_Scene::initGeo()
 	// // Create and compile our GLSL program from the shaders // //
 	m_program_id = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
 
-	// // BMP Texture
-	//loadBMP_custom bmp_01 = loadBMP_custom("C:\\Users\\kev_k\\Documents\\_DOCS\\PROGRAMMING\\OpenGL\\repos\\data\\uvtemplate.bmp");
-	tga_image uv_image;
-	tga_read(&uv_image, "C:\\Users\\kev_k\\Documents\\_DOCS\\PROGRAMMING\\OpenGL\\repos\\data\\uvtemplate.bmp");
-	auto tga_width = uv_image.width;
-	auto tga_height = uv_image.height;
-	auto tga_data = uv_image.image_data;
-	//Texture(uv_image, GL_NEAREST, GL_REPEAT);
-	//GLint texture_loc = glGetUniformLocation(m_program_id, "texture");
-	//glActiveTexture(GL_TEXTURE0 + texture_loc);
-	//glUniform1i(texture_loc, 0);
+	// // Texture
+	Texture(m_program_id, "uvtemplate.tga", "texture", GL_NEAREST, GL_REPEAT);
+	// !!!get two textures working together
+
 
 	// // Create Geo
 
