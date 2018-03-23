@@ -10,7 +10,8 @@ in vec2 uv;
 uniform vec4		ambientLight;
 uniform vec3		lightPosition;
 uniform vec3		camPosition;
-uniform sampler2D	texture;
+uniform sampler2D	textureA;
+uniform sampler2D	textureB;
 
 // // Output data // //
 out vec4 color;
@@ -18,7 +19,7 @@ out vec4 color;
 
 void main()
 {	
-	vec3 diff_color				= texture2D( texture, uv ).rgb;
+	vec3 diff_color				= mix(texture2D( textureA, uv ).rgb, texture2D( textureB, uv ).rgb, 0.0);
 
 	vec3  spec_color			= vec3(1.0, 0.7, 0.5);
 	float spec_cosinePower		= 30;

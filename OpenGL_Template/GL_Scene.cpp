@@ -80,8 +80,9 @@ void GL_Scene::initGeo()
 	m_program_id = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
 
 	// // Texture
-	Texture(m_program_id, "uvtemplate.tga", "texture", GL_NEAREST, GL_REPEAT);
-	// !!!get two textures working together
+	Texture(m_program_id, "uvtemplate.tga",  "textureA", GL_NEAREST, GL_REPEAT, 0);
+	Texture(m_program_id, "uvtemplateC.tga", "textureB", GL_NEAREST, GL_REPEAT, 1);
+
 
 
 	// // Create Geo
