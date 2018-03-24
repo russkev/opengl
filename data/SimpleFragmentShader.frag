@@ -19,7 +19,11 @@ out vec4 color;
 
 void main()
 {	
-	vec3 diff_color				= mix(texture2D( textureA, uv ).rgb, texture2D( textureB, uv ).rgb, 0.0);
+	vec3 tex_a					= texture2D( textureA, uv ).rgb;
+	vec3 tex_b					= texture2D( textureB, uv ).rgb;
+
+	vec3 diff_color				= mix(tex_a, tex_b, 0.5);
+	//vec3 diff_color				= texture2D(textureA, uv).rgb * fragmentColor;
 
 	vec3  spec_color			= vec3(1.0, 0.7, 0.5);
 	float spec_cosinePower		= 30;
