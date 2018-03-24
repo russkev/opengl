@@ -125,7 +125,7 @@ vec4 blueColor()
 void main()
 {
 	transformGlPosition();
-	fragmentColor			= colorFromIndex(model_id);
+	fragmentColor			= model_vertexColor;
 	uv						= model_uv;
 
 	

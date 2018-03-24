@@ -1,6 +1,6 @@
 #include "Texture.h"
 
-Texture::Texture(unsigned int program_id, const char *filename, const char *gl_texturename, GLint s_minMagFilter, GLint s_tiling, GLint s_num)
+Texture::Texture(unsigned int program_id, const char *filename, const char *gl_texturename, GLint s_minMagFilter, GLint s_tiling, GLint s_num, GLuint s_tex_id)
 {
 	// Targa info: https://unix4lyfe.org/targa/
 	tga_image image;
@@ -14,11 +14,11 @@ Texture::Texture(unsigned int program_id, const char *filename, const char *gl_t
 	tga_convert_depth(&image, 32);
 	auto colorFormat = GL_RGBA;
 
-	GLuint textureID;
-	glGenTextures(1, &textureID);
+	//GLuint textureID;
+	//glGenTextures(1, &textureID);
 	glActiveTexture(GL_TEXTURE0 + s_num);
 	// "Bind" the newly created texture : all future texture functions will modify this texture //
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBindTexture(GL_TEXTURE_2D, s_tex_id);
 	// Give the image to OpenGL //
 	glTexImage2D
 	(
@@ -39,5 +39,5 @@ Texture::Texture(unsigned int program_id, const char *filename, const char *gl_t
 
 	GLint texture_loc = glGetUniformLocation(program_id, gl_texturename);
 
-	glUniform1i(texture_loc, 0);
+	glUniform1i(texture_loc, s_num);
 }
