@@ -107,7 +107,7 @@
       <PreprocessorDefinitions>SDL_MAIN_HANDLED;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\kev_k\Documents\_DOCS\PROGRAMMING\OpenGL\repos\OpenGL_Template\targa;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\OpenGL_Template\targa;C:\Users\kev_k\Documents\_DOCS\PROGRAMMING\OpenGL\repos\OpenGL_Template\targa;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
