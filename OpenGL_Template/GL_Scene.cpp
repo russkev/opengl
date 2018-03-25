@@ -78,16 +78,20 @@ void GL_Scene::initGeo()
 {
 	// // Create and compile our GLSL program from the shaders // //
 	m_program_id = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
+	glUseProgram(m_program_id);
+
 
 	// // Texture
 	GLuint texture_ids[2];
 	glGenTextures(2, texture_ids);
 
 	auto uniformLocationA = glGetUniformLocation(m_program_id, "textureA");
-	glUniform1i(uniformLocationA, 1);
+	glUniform1i(uniformLocationA, 0);
 
 	auto uniformLocationB = glGetUniformLocation(m_program_id, "textureB");
 	glUniform1i(uniformLocationB, 1);
+
+
 
 
 	tga_image img_1;
@@ -99,10 +103,11 @@ void GL_Scene::initGeo()
 	glBindTexture(GL_TEXTURE_2D, texture_ids[0]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_1.width, img_1.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_1.image_data);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 
 
 
