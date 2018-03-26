@@ -78,12 +78,13 @@ void GL_Scene::initGeo()
 {
 	// // Create and compile our GLSL program from the shaders // //
 	m_program_id = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
-	glUseProgram(m_program_id);
-
 
 	// // Texture
-	Texture(m_program_id, "oneg.tga", "textureA", GL_LINEAR, GL_REPEAT, 0);
-	Texture(m_program_id, "two.tga", "textureB", GL_LINEAR, GL_REPEAT, 1);
+	Texture texture1("uvtemplate.tga");
+	Texture texture2("")
+
+	Texture(m_program_id, "uvtemplate.tga", "textureA", 0);
+	Texture(m_program_id, "uvtemplateB.tga", "textureB", 1);
 
 	// // Create Geo
 

@@ -5,7 +5,8 @@
 
 struct Texture
 {
-	Texture(unsigned int program_id, const char *filename, const char *gl_texturename, GLint s_minMagFilter, GLint s_tiling, GLint s_texture_num);
+	Texture(const char *filename);
+	void upload_to_shader(unsigned int s_program_id, const char *gl_texture_name, const GLint s_texture_num);
 private:
 	void init_targa(const char *filename);
 private:
