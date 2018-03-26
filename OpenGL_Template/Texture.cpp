@@ -1,43 +1,56 @@
 #include "Texture.h"
 
-Texture::Texture(unsigned int program_id, const char *filename, const char *gl_texturename, GLint s_minMagFilter, GLint s_tiling, GLint s_num, GLuint s_tex_id)
+Texture::Texture(unsigned int s_program_id, const char *s_filename, const char *gl_texturename, GLint s_minMagFilter, GLint s_tiling, GLint s_texture_num):
+	m_program_id(s_program_id), m_tex_num(s_texture_num)
 {
 	// Targa info: https://unix4lyfe.org/targa/
-	tga_image image;
-	tga_read(&image, filename);
-	if (!tga_is_top_to_bottom(&image))	tga_flip_vert(&image);
-	if (tga_is_right_to_left(&image))	tga_flip_horiz(&image);
-	if (tga_is_colormapped(&image))		tga_color_unmap(&image);
-	if (tga_is_mono(&image))			tga_desaturate_avg(&image);
+	init_targa(s_filename);
+	glUseProgram(m_program_id);
 
-	tga_swap_red_blue(&image);
-	tga_convert_depth(&image, 32);
-	auto colorFormat = GL_RGBA;
+	//GLuint tex_id;
+	glGenTextures(1, &m_tex_id);
 
-	//GLuint textureID;
-	//glGenTextures(1, &textureID);
-	glActiveTexture(GL_TEXTURE0 + s_num);
+	m_tex_loc = glGetUniformLocation(m_program_id, gl_texturename);
+	glUniform1i(m_tex_loc, m_tex_num);
+
+	glActiveTexture(GL_TEXTURE0 + m_tex_num);
 	// "Bind" the newly created texture : all future texture functions will modify this texture //
-	glBindTexture(GL_TEXTURE_2D, s_tex_id);
+	glBindTexture(GL_TEXTURE_2D, m_tex_id);
 	// Give the image to OpenGL //
 	glTexImage2D
 	(
 		GL_TEXTURE_2D,		// Target
 		0,					// Level
-		colorFormat,		// Internal Format
-		image.width,		// Width
-		image.height,		// Height
+		GL_RGBA,			// Internal Format
+		m_image.width,		// Width
+		m_image.height,		// Height
 		0,					// Border
-		colorFormat,		// Format
+		GL_RGBA,			// Format
 		GL_UNSIGNED_BYTE,	// Type
-		image.image_data	// * Data
+		m_image.image_data	// * Data
 	);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, s_minMagFilter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, s_minMagFilter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, s_tiling);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, s_tiling);
+}
 
-	GLint texture_loc = glGetUniformLocation(program_id, gl_texturename);
+void Texture::init_targa(const char *filename)
+{
+	tga_image img;
+	tga_result result;
+	result = tga_read(&m_image, filename);
+	if (result != TGA_NOERR)
+	{
+		fprintf(stderr, "ERROR: Opening '%s' failed: %s\n", filename, tga_error(result));
+	}
 
-	glUniform1i(texture_loc, s_num);
+	
+	if (!tga_is_top_to_bottom(&m_image))	tga_flip_vert(&m_image);
+	if (tga_is_right_to_left(&m_image))		tga_flip_horiz(&m_image);
+	if (tga_is_colormapped(&m_image))		tga_color_unmap(&m_image);
+	if (tga_is_mono(&m_image))				tga_desaturate_avg(&m_image);
+
+	tga_swap_red_blue(&m_image);
+	tga_convert_depth(&m_image, 32);
 }

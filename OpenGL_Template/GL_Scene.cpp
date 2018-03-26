@@ -82,52 +82,8 @@ void GL_Scene::initGeo()
 
 
 	// // Texture
-	GLuint texture_ids[2];
-	glGenTextures(2, texture_ids);
-
-	auto uniformLocationA = glGetUniformLocation(m_program_id, "textureA");
-	glUniform1i(uniformLocationA, 0);
-
-	auto uniformLocationB = glGetUniformLocation(m_program_id, "textureB");
-	glUniform1i(uniformLocationB, 1);
-
-
-
-
-	tga_image img_1;
-	tga_read(&img_1, "one.tga");
-	tga_swap_red_blue(&img_1);
-	tga_convert_depth(&img_1, 32);
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture_ids[0]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_1.width, img_1.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_1.image_data);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-
-
-
-	tga_image img_2;
-	tga_read(&img_2, "two.tga");
-	tga_swap_red_blue(&img_2);
-	tga_convert_depth(&img_2, 32);
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, texture_ids[1]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_2.width, img_2.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_2.image_data);
-	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-
-
-	//Texture(m_program_id, "uvtemplate.tga",  "textureA", GL_LINEAR, GL_REPEAT, 0, textures[1]);
-	//Texture(m_program_id, "uvtemplateC.tga", "textureB", GL_LINEAR, GL_REPEAT, 1, textures[2]);
+	Texture(m_program_id, "oneg.tga", "textureA", GL_LINEAR, GL_REPEAT, 0);
+	Texture(m_program_id, "two.tga", "textureB", GL_LINEAR, GL_REPEAT, 1);
 
 	// // Create Geo
 
