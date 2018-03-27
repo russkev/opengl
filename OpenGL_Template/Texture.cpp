@@ -4,9 +4,13 @@ Texture::Texture(const char *s_filename)
 {
 	// Targa info: https://unix4lyfe.org/targa/
 	init_targa(s_filename);
-
 }
 
+// // CONSTRUCTOR // //
+Texture::Texture():m_image(tga_image())
+{}
+
+// // CONSTRUCTOR // //
 void Texture::init_targa(const char *filename)
 {
 	tga_image img;
@@ -27,21 +31,39 @@ void Texture::init_targa(const char *filename)
 	tga_convert_depth(&m_image, 32);
 }
 
+// // DESTRUCTOR // //
+Texture::~Texture()
+{
+	tga_free_buffers(&m_image);
+}
+
+// // MOVE CONSTRUCTOR // //
+Texture::Texture(Texture&& other) :
+	m_image(std::exchange(other.m_image, tga_image()))
+{}
+
+// // MOVE ASSIGN // //
+Texture& Texture::operator = (Texture&& other)
+{
+	(*this).~Texture();
+	return *new (this) Texture(std::move(other));
+}
+
+
+
 void Texture::upload_to_shader(unsigned int s_program_id, const char *gl_texture_name, const GLint s_texture_num)
 {
-	m_program_id = s_program_id;
-	m_tex_num = s_texture_num;
-	glUseProgram(m_program_id);
+	glUseProgram(s_program_id);
 
-	//GLuint tex_id;
-	glGenTextures(1, &m_tex_id);
+	GLuint tex_id, tex_loc;
+	glGenTextures(1, &tex_id);
 
-	m_tex_loc = glGetUniformLocation(m_program_id, gl_texture_name);
-	glUniform1i(m_tex_loc, m_tex_num);
+	tex_loc = glGetUniformLocation(s_program_id, gl_texture_name);
+	glUniform1i(tex_loc, s_texture_num);
 
-	glActiveTexture(GL_TEXTURE0 + m_tex_num);
+	glActiveTexture(GL_TEXTURE0 + s_texture_num);
 	// "Bind" the newly created texture : all future texture functions will modify this texture //
-	glBindTexture(GL_TEXTURE_2D, m_tex_id);
+	glBindTexture(GL_TEXTURE_2D, tex_id);
 	// Give the image to OpenGL //
 	glTexImage2D
 	(
