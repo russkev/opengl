@@ -81,10 +81,14 @@ void GL_Scene::initGeo()
 
 	// // Texture
 	Texture texture1("uvtemplate.tga");
-	Texture texture2("")
+	Texture texture2("two.tga");
 
-	Texture(m_program_id, "uvtemplate.tga", "textureA", 0);
-	Texture(m_program_id, "uvtemplateB.tga", "textureB", 1);
+	texture1.upload_to_shader(m_program_id, "textureA", 0);
+	texture2.upload_to_shader(m_program_id, "textureB", 1);
+
+
+	//Texture(m_program_id, "uvtemplate.tga", "textureA", 0);
+	//Texture(m_program_id, "uvtemplateB.tga", "textureB", 1);
 
 	// // Create Geo
 

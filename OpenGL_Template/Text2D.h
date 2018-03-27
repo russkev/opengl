@@ -9,8 +9,13 @@
 
 struct Text2D
 {
+	// // TYPES // //
 	typedef std::tuple< glm::vec2, glm::vec2> vertex2DType;
+
+	// // CONSTRUCTOR // //
 	Text2D(const char* s_texture_path);
+
+
 	void print(const char* s_text, int x, int y, int size);
 	void cleanup();
 private:
