@@ -164,6 +164,8 @@
     <None Include="..\data\SimpleFragmentShader.frag" />
     <None Include="..\data\SimpleVertexShader.vert" />
     <None Include="packages.config" />
+    <None Include="Text2D.frag" />
+    <None Include="Text2D.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
