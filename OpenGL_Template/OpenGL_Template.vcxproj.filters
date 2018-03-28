@@ -69,10 +69,10 @@
     <None Include="..\data\SimpleVertexShader.vert">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="Text2D.frag">
+    <None Include="..\data\Text2D.vert">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="Text2D.vert">
+    <None Include="..\data\Text2D.frag">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

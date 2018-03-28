@@ -20,6 +20,7 @@
 #include "loadBMP_custom.h"
 #include "Texture.h"
 #include "targa.h"
+#include "Text2D.h"
 
 #include "GL_Type_Traits.h"
 #include "GL_Tuple_Introspect.h"
