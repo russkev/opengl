@@ -1,5 +1,3 @@
-// shadertype=glsl
-
 #version 440 core
 
 const int numElements			= 6;

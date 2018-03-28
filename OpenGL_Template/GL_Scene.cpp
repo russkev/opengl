@@ -86,9 +86,8 @@ void GL_Scene::initGeo()
 	texture1.upload_to_shader(m_program_id, "textureA", 0);
 	texture2.upload_to_shader(m_program_id, "textureB", 1);
 
-
-	//Texture(m_program_id, "uvtemplate.tga", "textureA", 0);
-	//Texture(m_program_id, "uvtemplateB.tga", "textureB", 1);
+	Text2D text1("font_calibri_01.tga");
+	text1.print("Hello World! Hello World! Hello World! Hello World! Hello World!", 100, 100, 20);
 
 	// // Create Geo
 

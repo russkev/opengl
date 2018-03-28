@@ -7,6 +7,11 @@
 
 #include "Texture.h"
 #include "Buffer.h"
+#include "loadShader.hpp"
+#include "VAO.h"
+
+#include "GL_Type_Traits.h"
+#include "GL_Tuple_Introspect.h"
 
 struct Text2D
 {
