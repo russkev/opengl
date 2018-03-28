@@ -87,9 +87,8 @@ void GL_Scene::initGeo()
 	texture1.upload_to_shader(m_program_id, "textureA", 0);
 	texture2.upload_to_shader(m_program_id, "textureB", 1);
 
-	//Text2D text1("uvtemplate.tga");
+	Text2D text1("uvtemplate.tga");
 	//Text2D text1("font_calibri_01.tga");
-	Texture text1("one.tga");
 	text1.print("Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! ", 10, 500, 60, m_textBuffer, m_text_program_id);
 	static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2>>::get();
 	m_vao_text.GenerateVAO(m_textBuffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());

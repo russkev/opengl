@@ -5,7 +5,7 @@ Text2D::Text2D(const char* s_texture_path):
 	m_texture(Texture(s_texture_path))
 {}
 
-void Text2D::print(const char* s_text, int s_x, int s_y, int s_size)
+void Text2D::print(const char* s_text, int s_x, int s_y, int s_size, Buffer& s_text_buffer, GLuint s_program_id)
 {
 	unsigned int offset = 32;
 	unsigned int length = strlen(s_text);
@@ -29,12 +29,15 @@ void Text2D::print(const char* s_text, int s_x, int s_y, int s_size)
 		m_vertices.push_back(bottom_left);
 		m_vertices.push_back(bottom_right);
 	}
-	LoadShaders("Text2D.vert", "Text2D.frag");
-	Buffer text_buffer = { GL_ARRAY_BUFFER, 0 };
-	text_buffer.Append(m_vertices);
-	static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2>>::get();
-	VAO text2D_VAO;
-	text2D_VAO.GenerateVAO(text_buffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
+	//GLuint program_id = LoadShaders("Text2D.vert", "Text2D.frag");
+	glUseProgram(s_program_id);
+	m_texture.upload_to_shader(s_program_id, "fontTexture", 0);
+
+	//Buffer text_buffer = { GL_ARRAY_BUFFER, 0 };
+	s_text_buffer.Append(m_vertices);
+	//static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2>>::get();
+	//VAO text2D_VAO;
+	//text2D_VAO.GenerateVAO(s_text_buffer, 1, text2D_info.data(), text2D_info.data() + text2D_info.size());
 	auto c = 1;
 }
 void Text2D::cleanup()

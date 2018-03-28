@@ -59,13 +59,13 @@ struct GL_Scene
 
 
 public:
-	GLuint			m_program_id;
+	GLuint			m_program_id, m_text_program_id;
 	glm::mat4		m_projection	= glm::mat4();
 	Camera			m_cam;
 	GLuint			m_width, m_height;
 	ShapeGenerator	m_shapes;
 	ShapeContainer	m_sh;
-	VAO				m_vao_main;// , m_vao_mat;
+	VAO				m_vao_main, m_vao_text;
 	Timer			m_timer;
 
 	// BUFFERS
@@ -73,4 +73,5 @@ public:
 	Buffer m_matBuffer	= { GL_ARRAY_BUFFER, 0 };
 	Buffer m_wldBuffer	= { GL_ARRAY_BUFFER, 0 };
 	Buffer m_indxBuffer	= { GL_ARRAY_BUFFER, 0 };
+	Buffer m_textBuffer = { GL_ARRAY_BUFFER, 0 };
 };

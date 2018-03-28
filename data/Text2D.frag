@@ -1,7 +1,9 @@
 #version 440 core
 
 in vec2 uv;
-layout(location = 0) uniform sampler2D	fontTexture;
+//layout(location = 0) uniform sampler2D	fontTexture;
+uniform sampler2D	fontTexture;
+
 
 out vec4 color;
 
