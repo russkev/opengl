@@ -57,8 +57,8 @@ int main(int, char**)
 	Window			_Window;
 	GL_Scene		_Scene;
 
-	GLuint width	= 1280u;
-	GLuint height	= 720u;
+	GLuint width	= 800u;
+	GLuint height	= 600u;
 
 	_Window.init(st_config, width, height);
 	_Scene.init(width, height);

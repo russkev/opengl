@@ -29,7 +29,7 @@ struct Text2D
 
 	void print(const char* s_text, int s_x, int s_y, int size, Buffer& s_text_buffer, GLuint s_program_id);
 	void cleanup();
-public:
+private:
 	Texture			m_texture;
 	vertices2DType	m_vertices;
 };
