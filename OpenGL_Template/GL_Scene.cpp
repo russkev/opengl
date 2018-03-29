@@ -101,7 +101,7 @@ void GL_Scene::initGeo()
 
 	text1.m_texture.upload_to_shader(m_text_program_id, "fontTexture", 0);
 	m_textBuffer.Append(text1.m_vertices);
-	static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2>>::get();
+	static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2, GLuint>>::get();
 	m_vao_text.GenerateVAO(m_textBuffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
 	// // Create Geo
 
