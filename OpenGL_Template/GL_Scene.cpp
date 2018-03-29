@@ -89,8 +89,18 @@ void GL_Scene::initGeo()
 
 	//Text2D text1("uvtemplate.tga");
 	//Text2D text1("font_calibri_01.tga");
-	Texture text1("one.tga");
-	text1.print("Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! ", 10, 500, 60, m_textBuffer, m_text_program_id);
+	Text2D text1("font_calibri_01.tga");
+	//tga_flip_vert(&text1.m_texture);
+	text1.print("Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! ", 5, m_height - 25, 20, m_textBuffer, m_text_program_id);
+	glUseProgram(m_text_program_id);
+	GLuint uniform_width	= glGetUniformLocation(m_text_program_id, "width");
+	GLuint uniform_height	= glGetUniformLocation(m_text_program_id, "height");
+
+	glUniform1i(uniform_width, m_width);
+	glUniform1i(uniform_height, m_height);
+
+	text1.m_texture.upload_to_shader(m_text_program_id, "fontTexture", 0);
+	m_textBuffer.Append(text1.m_vertices);
 	static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2>>::get();
 	m_vao_text.GenerateVAO(m_textBuffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
 	// // Create Geo
@@ -183,6 +193,8 @@ void GL_Scene::renderFrame()
 	GLfloat cmFreq = 0.1f;
 	GLfloat cmOffset = 0.5f;
 
+
+
 	updateTimer();
 	updateLights();
 	updateCam();
@@ -191,6 +203,10 @@ void GL_Scene::renderFrame()
 	m_vao_main.Bind();
 	m_indxBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
 	glDrawElements(GL_TRIANGLES, (GLsizei)m_indxBuffer.size(), GL_UNSIGNED_SHORT, 0);
+
+	glUseProgram(m_text_program_id);
+	m_vao_text.Bind();
+	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)m_textBuffer.size());
 }
 
 void GL_Scene::updateTimer()
