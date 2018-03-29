@@ -17,8 +17,8 @@
 struct Text2D
 {
 	// // TYPES // //
-	typedef std::tuple< glm::vec2, glm::vec2>	vertex2DType;
-	typedef std::vector<vertex2DType>			vertices2DType;
+	typedef std::tuple< glm::vec2, glm::vec2, GLuint>	vertex2DType;
+	typedef std::vector<vertex2DType>					vertices2DType;
 
 	// // ENUMERATION // //
 	enum attr { position2D = 0, uv2D = 1 };
