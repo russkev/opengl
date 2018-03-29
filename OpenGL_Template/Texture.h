@@ -19,8 +19,4 @@ private:
 	void init_targa(const char *filename);
 private:
 	tga_image	m_image;
-	//GLuint		m_program_id;
-	//GLuint		m_tex_id;
-	//GLuint		m_tex_loc;
-	//GLuint		m_tex_num;
 };
