@@ -9,7 +9,7 @@ uniform int height;
 
 int half_width			= width / 2;
 int half_height			= height / 2;
-const int max_digits	= 24;
+const int max_digits	= 12;
 int num_digits			= 0;
 
 out vec2 uv;
@@ -37,7 +37,7 @@ vec2 text_uv(int[max_digits] s_int)
 	if (corner == 3) { return vec2( uv_x + uv_size, 1.0 - uv_y - uv_size);	}	
 }
 
-int[max_digits] reverse_digits(int[max_digits] digits, int start, int end)
+ void reverse_digits(inout int[max_digits] digits, in int start, in int end)
 {
 	for (; start < end; ++ start, -- end)
 	{
@@ -62,21 +62,24 @@ int[max_digits] float_to_ints(float num)
 	// Integral digits
 	for (; num > 0.0 && num_digits < max_digits; ++num_digits)
 	{
-		float new_value = floor(num / base);
-		digits[num_digits] = int(num - base * num);
-		num = new_value;
+		float new_num		= floor(num / base);
+		digits[num_digits]	= int(num - base * new_num);
+		num = new_num;
 	}
 
-	digits = reverse_digits(digits, start
+	reverse_digits(digits, start, num_digits - 1);
+	digits[num_digits] = -2; //ASCII for full stop
+	num_digits++;
 
 	// Fractional digits
 	for ( ; frac > 0.0 && num_digits < max_digits; ++num_digits)
 	{
-		frac *= base;
-		float digit = floor(frac);
-		frac -= digit;
-		digits[num_digits] = int(digit);
+		frac				*= base;
+		float digit			= floor(frac);
+		frac				-= digit;
+		digits[num_digits]	= int(digit);
 	}
+	//digits[2] = -2;
 	return digits;
 }
 
@@ -89,5 +92,5 @@ void main()
 
 	gl_Position			= vec4(outPosition, 0, 1);
 	//uv					= model_uv;
-	uv					= text_uv(float_to_ints(3.456) );
+	uv					= text_uv(float_to_ints(1.0) );
 }
