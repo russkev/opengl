@@ -7,15 +7,21 @@ in layout(location = 2) int vertex_id;
 uniform int width;
 uniform int height;
 
-int half_width		= width / 2;
-int half_height		= height / 2;
-const int num_length		= 8;
+int half_width			= width / 2;
+int half_height			= height / 2;
+const int max_digits	= 24;
+int num_digits			= 0;
 
 out vec2 uv;
 out vec3 vertex_color;
 
-vec2 text_uv(int[num_length] s_int)
+vec2 text_uv(int[max_digits] s_int)
 {
+	if (vertex_id > max_digits * 4)
+	{
+		return vec2( 0.0f, 0.0f );
+	}
+
 	int i			= vertex_id/4;
 	int offset		= 32;
 	int num			= s_int[i] + 48 - offset;
@@ -28,9 +34,50 @@ vec2 text_uv(int[num_length] s_int)
 	if (corner == 0) { return vec2( uv_x,			1.0 - uv_y			);	}
 	if (corner == 1) { return vec2( uv_x + uv_size,	1.0 - uv_y			);	}
 	if (corner == 2) { return vec2( uv_x,			1.0 - uv_y - uv_size);	}
-	if (corner == 3) { return vec2( uv_x + uv_size, 1.0 - uv_y - uv_size);	}
+	if (corner == 3) { return vec2( uv_x + uv_size, 1.0 - uv_y - uv_size);	}	
+}
 
-	return vec2( 0.0f, 0.0f );
+int[max_digits] reverse_digits(int[max_digits] digits, int start, int end)
+{
+	for (; start < end; ++ start, -- end)
+	{
+		int digit		= digits[start];
+		digits[start]	= digits[end];
+		digits[end]		= digit;
+	}
+}
+
+int[max_digits] float_to_ints(float num)
+{
+	int[max_digits]	digits;
+
+	const float base	= 10;
+	int start			= num_digits;
+
+	num			= abs(num);
+	float frac	= num;
+	num			= floor(num);
+	frac		-= num;
+
+	// Integral digits
+	for (; num > 0.0 && num_digits < max_digits; ++num_digits)
+	{
+		float new_value = floor(num / base);
+		digits[num_digits] = int(num - base * num);
+		num = new_value;
+	}
+
+	digits = reverse_digits(digits, start
+
+	// Fractional digits
+	for ( ; frac > 0.0 && num_digits < max_digits; ++num_digits)
+	{
+		frac *= base;
+		float digit = floor(frac);
+		frac -= digit;
+		digits[num_digits] = int(digit);
+	}
+	return digits;
 }
 
 void main()
@@ -42,5 +89,5 @@ void main()
 
 	gl_Position			= vec4(outPosition, 0, 1);
 	//uv					= model_uv;
-	uv					= text_uv(int[num_length](1, 2, 3, 4, 5, 6, 7, 8) );
+	uv					= text_uv(float_to_ints(3.456) );
 }
