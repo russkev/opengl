@@ -6,13 +6,16 @@ const int transformDestLoc		= 1;
 const int shapeDestLoc			= 2;
 
 // // Input vertex data, different for all executions of this shader.
-in layout(location = 0) vec4 model_vertexPosition;
-in layout(location = 1) vec3 model_vertexColor;
-in layout(location = 2) vec3 model_vertexNormal;
-in layout(location = 3) vec2 model_uv;
-in layout(location = 4) int  model_id;
-in layout(location = 5) mat4 mat_modelToProjection;
-in layout(location = 9) mat4 mat_modelToWorld;
+in layout(location = 0 ) vec4 model_vertexPosition;
+in layout(location = 1 ) vec3 model_vertexColor;
+in layout(location = 2 ) vec3 model_vertexNormal;
+in layout(location = 3 ) vec2 model_uv;
+in layout(location = 4 ) int  model_id;
+in layout(location = 5 ) mat4 mat_modelToProjection;
+in layout(location = 9 ) mat4 mat_modelToWorld;
+in layout(location = 13) vec2 text_vertexPosition;
+in layout(location = 14) vec2 text_uv;
+in layout(location = 15) int  text_id;
 
 // // Array of transforms
 // // Numbers in the transform slots of the connections array
@@ -27,6 +30,10 @@ mat4[numElements] transformsMoved = transforms;
 // // <0,0,0> indicates that the connection is empty
 uniform ivec3[numElements] connections;
 uniform int test_int;
+
+// // Uniforms for working out text position
+uniform int width;
+uniform int height;
 
 // // Output data ; will be interpolated for each fragment
 out vec3 f_world_vertexPosition;
@@ -111,21 +118,10 @@ vec3 colorFromIndex(int a)
 	return colArray[a%6];
 }
 
-vec4 redColor()
-{
-	return vec4(1.0, 0.0, 0.0, 1.0);
-}
-vec4 blueColor()
-{
-	return vec4(0.0, 0.0, 1.0, 1.0);
-}
-
 void main()
 {
 	transformGlPosition();
 	fragmentColor			= model_vertexColor;
 	uv						= model_uv;
-
-	
 }
 

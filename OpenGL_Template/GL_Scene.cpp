@@ -95,9 +95,12 @@ void GL_Scene::initGeo()
 	glUseProgram(m_text_program_id);
 	GLuint uniform_width	= glGetUniformLocation(m_text_program_id, "width");
 	GLuint uniform_height	= glGetUniformLocation(m_text_program_id, "height");
+	GLuint uniform_string = glGetUniformLocation(m_text_program_id, "text_string");
 
 	glUniform1i(uniform_width, m_width);
 	glUniform1i(uniform_height, m_height);
+	int test_string[] = { 'A', 'r', 's', 'e' };
+	glUniform1iv(uniform_string, 4, test_string);
 
 	text1.m_texture.upload_to_shader(m_text_program_id, "fontTexture", 0);
 	m_textBuffer.Append(text1.m_vertices);

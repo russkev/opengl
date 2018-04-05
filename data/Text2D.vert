@@ -4,8 +4,9 @@ in layout(location = 0) vec2 model_vertexPosition;
 in layout(location = 1) vec2 model_uv;
 in layout(location = 2) int vertex_id;
 
-uniform int width;
-uniform int height;
+uniform int			width;
+uniform int			height;
+uniform int[200]	text_string;
 
 int half_width			= width / 2;
 int half_height			= height / 2;
@@ -96,5 +97,6 @@ void main()
 
 	gl_Position			= vec4(outPosition, 0, 1);
 	//uv					= model_uv;
-	uv					= text_uv(float_to_ints(1.0) );
+	//uv					= text_uv(float_to_ints(1.0) );
+	uv					= text_uv(text_string);
 }
