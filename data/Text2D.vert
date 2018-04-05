@@ -10,22 +10,21 @@ uniform int height;
 int half_width			= width / 2;
 int half_height			= height / 2;
 const int max_digits	= 12;
-int num_digits			= 0;
+int num_digits			= 1;
 
 out vec2 uv;
 out vec3 vertex_color;
 
 vec2 text_uv(int[max_digits] s_int)
 {
-	if (vertex_id > max_digits * 4)
-	{
-		return vec2( 0.0f, 0.0f );
-	}
+
 
 	int i			= vertex_id/4;
 	int offset		= 32;
 	int num			= s_int[i] + 48 - offset;
 	int corner		= vertex_id%4;
+
+	if (vertex_id > max_digits * 4) num = -16;
 
 	float uv_size	= 1.0f / 16.0f;
 	float uv_x		= (num % 16) * uv_size;
@@ -49,6 +48,9 @@ vec2 text_uv(int[max_digits] s_int)
 
 int[max_digits] float_to_ints(float num)
 {
+	int num_sign = -16;
+	if ( num < 0.0 ) num_sign = -3;
+
 	int[max_digits]	digits;
 
 	const float base	= 10;
@@ -79,7 +81,9 @@ int[max_digits] float_to_ints(float num)
 		frac				-= digit;
 		digits[num_digits]	= int(digit);
 	}
-	//digits[2] = -2;
+
+	digits[0] = num_sign;
+
 	return digits;
 }
 
