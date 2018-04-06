@@ -99,6 +99,8 @@ void GL_Scene::initGeo()
 
 	glUniform1i(uniform_width, m_width);
 	glUniform1i(uniform_height, m_height);
+	unsigned int max_letters = 200;
+	char stringToRender[200];
 	int test_string[] = { 'A', 'r', 's', 'e' };
 	glUniform1iv(uniform_string, 4, test_string);
 

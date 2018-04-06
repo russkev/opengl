@@ -11,6 +11,7 @@ uniform int[200]	text_string;
 int half_width			= width / 2;
 int half_height			= height / 2;
 const int max_digits	= 12;
+const int max_letters	= 12;
 int num_digits			= 1;
 
 out vec2 uv;
@@ -47,8 +48,26 @@ vec2 text_uv(int[max_digits] s_int)
 	}
 }
 
+int[max_letters] string_array()
+{
+	int[max_letters] letters;
+	for (int i = 0; i < max_letters; i++)
+	{
+		letters[i] = text_string[i] - 48;
+	}
+	return letters;
+}
+
 int[max_digits] float_to_ints(float num)
 {
+	int[max_digits] letters;
+	for (int i = 0; i < max_digits; i++)
+	{
+		letters[i] = text_string[i] - 48;
+	}
+	return letters;
+
+
 	int num_sign = -16;
 	if ( num < 0.0 ) num_sign = -3;
 
@@ -96,7 +115,6 @@ void main()
 	vertex_color		= vec3(1.0f, 0.0f, 0.0f);
 
 	gl_Position			= vec4(outPosition, 0, 1);
-	//uv					= model_uv;
 	//uv					= text_uv(float_to_ints(1.0) );
-	uv					= text_uv(text_string);
+	uv					= text_uv(string_array());
 }
