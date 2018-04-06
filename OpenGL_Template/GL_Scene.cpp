@@ -99,8 +99,17 @@ void GL_Scene::initGeo()
 
 	glUniform1i(uniform_width, m_width);
 	glUniform1i(uniform_height, m_height);
-	unsigned int max_letters = 200;
-	char stringToRender[200];
+	const unsigned int max_letters = 200;
+	char charArray[max_letters] = { " " };
+	char renderString[] = "Untumble";
+	bool end = false;
+	for (auto i = 0; i < max_letters; i++)
+	{
+		if (renderString[i] == *"\0") {
+			end = true;
+		}
+		end == false ? charArray[i] = renderString[i] : charArray[i] = *" ";
+	}
 	int test_string[] = { 'A', 'r', 's', 'e' };
 	glUniform1iv(uniform_string, 4, test_string);
 
