@@ -67,6 +67,7 @@ public:
 	ShapeContainer	m_sh;
 	VAO				m_vao_main, m_vao_text;
 	Timer			m_timer;
+	Text2D			m_text;
 
 	// BUFFERS
 	Buffer m_geoBuffer	= { GL_ARRAY_BUFFER, 0 };
