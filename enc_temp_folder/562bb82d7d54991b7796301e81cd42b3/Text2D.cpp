@@ -77,7 +77,6 @@ void Text2D::initVertices()
 		m_vertices.push_back(bottom_left);
 		m_vertices.push_back(bottom_right);
 	}
-	//!!!This doesn't seem to be working correctly
 }
 
 void Text2D::initShaders()
