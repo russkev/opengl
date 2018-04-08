@@ -3,7 +3,6 @@
 // // CONSTRUCTOR
 Text2D::Text2D()
 {
-	initVertices();
 }
 
 void Text2D::init(const char* s_texture_path, int s_x, int s_y, int s_size, int s_screen_width, int s_screen_height)
@@ -14,8 +13,8 @@ void Text2D::init(const char* s_texture_path, int s_x, int s_y, int s_size, int 
 	m_size = s_size;
 	m_screen_width = s_screen_width;
 	m_screen_height = s_screen_height;
+	initVertices();
 	initShaders();
-	
 }
 
 void Text2D::print(const char* s_text)
@@ -76,8 +75,12 @@ void Text2D::initVertices()
 		m_vertices.push_back(top_right);
 		m_vertices.push_back(bottom_left);
 		m_vertices.push_back(bottom_right);
+
+		auto test = m_x;
+		auto x = 0;
 	}
 	//!!!This doesn't seem to be working correctly
+	
 }
 
 void Text2D::initShaders()
