@@ -24,10 +24,15 @@ struct Text2D
 	enum attr { position2D = 0, uv2D = 1 };
 
 	// // CONSTRUCTOR // //
-	Text2D(const char* s_texture_path);
+	Text2D();
 
+	void init(const char* s_texture_path, int s_x, int s_y, int s_size, int s_screen_width, int s_screen_height);
+	void initVertices();
+	void initShaders();
+	void draw();
+	int* string_to_array(const char* s_text);
 
-	void print(const char* s_text, int s_x, int s_y, int size, Buffer& s_text_buffer, GLuint s_program_id);
+	void print(const char* s_text);
 	void cleanup();
 public:
 	Texture			m_texture;
