@@ -1,9 +1,7 @@
 #include "Text2D.h"
 
 // // CONSTRUCTOR
-Text2D::Text2D()
-{
-}
+Text2D::Text2D() {};
 
 void Text2D::init(const char* s_texture_path, int s_x, int s_y, int s_size, int s_screen_width, int s_screen_height)
 {

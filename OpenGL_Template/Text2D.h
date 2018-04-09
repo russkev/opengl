@@ -14,6 +14,8 @@
 #include "GL_Type_Traits.h"
 #include "GL_Tuple_Introspect.h"
 
+static constexpr auto MAX_LETTERS = 200u;
+
 struct Text2D
 {
 	// // TYPES // //
@@ -26,15 +28,20 @@ struct Text2D
 	// // CONSTRUCTOR // //
 	Text2D();
 
-	void init(const char* s_texture_path, int s_x, int s_y, int s_size, int s_screen_width, int s_screen_height);
+	void init(const char* s_texture_path, int s_x, int s_y, int size, int s_screen_width, int s_screen_height);
 	void initVertices();
 	void initShaders();
+
+	void print(const char* s_text);
 	void draw();
 	int* string_to_array(const char* s_text);
 
-	void print(const char* s_text);
 	void cleanup();
 public:
 	Texture			m_texture;
 	vertices2DType	m_vertices;
+	int				m_x, m_y, m_size;
+	GLuint			m_program_id, m_width_uniform_id, m_height_uniform_id, m_string_uniform_id, m_screen_width, m_screen_height;
+	Buffer			m_buffer = { GL_ARRAY_BUFFER, 0 };
+	VAO				m_vao;
 };
