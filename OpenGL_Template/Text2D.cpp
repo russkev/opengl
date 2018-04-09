@@ -79,7 +79,6 @@ void Text2D::initVertices()
 		auto test = m_x;
 		auto x = 0;
 	}
-	//!!!This doesn't seem to be working correctly
 	
 }
 
