@@ -3,7 +3,7 @@
 // // CONSTRUCTOR
 Text2D::Text2D()
 {
-	initVertices();
+	
 }
 
 void Text2D::init(const char* s_texture_path, int s_x, int s_y, int s_size, int s_screen_width, int s_screen_height)
@@ -14,6 +14,7 @@ void Text2D::init(const char* s_texture_path, int s_x, int s_y, int s_size, int 
 	m_size = s_size;
 	m_screen_width = s_screen_width;
 	m_screen_height = s_screen_height;
+	initVertices();
 	initShaders();
 	
 }
@@ -77,12 +78,12 @@ void Text2D::initVertices()
 		m_vertices.push_back(bottom_left);
 		m_vertices.push_back(bottom_right);
 	}
-	//!!!This doesn't seem to be working correctly
 }
 
 void Text2D::initShaders()
 {
 	m_program_id		= LoadShaders("Text2d.vert", "Text2D.frag");
+	glUseProgram(m_program_id);
 	m_width_uniform_id	= glGetUniformLocation(m_program_id, "width");
 	m_height_uniform_id = glGetUniformLocation(m_program_id, "height");
 	m_string_uniform_id = glGetUniformLocation(m_program_id, "text_string");
