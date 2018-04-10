@@ -99,28 +99,29 @@ void GL_Scene::initGeo()
 
 
 
-	//glUseProgram(m_text_program_id);
-	//glUniform1i(uniform_width, m_width);
-	//glUniform1i(uniform_height, m_height);
+	glUseProgram(m_text_program_id);
+	glUniform1i(uniform_width, m_width);
+	glUniform1i(uniform_height, m_height);
 	
-	//const unsigned int max_letters = 200;
-	//int charArray[max_letters] = { (int)" " };
-	//char renderString[] = "Untxfd";
-	//bool end = false;
-	//for (auto i = 0; i < max_letters; i++)
-	//{
-	//	if (renderString[i] == *"\0") {
-	//		end = true;
-	//	}
-	//	end == false ? charArray[i] = (int)renderString[i] : charArray[i] = (int)" ";
-	//}
-	//glUniform1iv(uniform_string, max_letters, charArray);
-	m_text.print("asdas");
+	const unsigned int max_letters = 200;
+	int charArray[max_letters] = { (int)" " };
+	char renderString[] = "Untxfd";
+	bool end = false;
+	for (auto i = 0; i < max_letters; i++)
+	{
+		if (renderString[i] == *"\0") {
+			end = true;
+		}
+		end == false ? charArray[i] = (int)renderString[i] : charArray[i] = (int)" ";
+	}
+	glUniform1iv(uniform_string, max_letters, charArray);
+	//m_text.print("asdas");
 
-	//text1.m_texture.upload_to_shader(m_text_program_id, "fontTexture", 0);
-	//m_textBuffer.Append(text1.m_vertices);
-	//static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2, GLuint>>::get();
-	//m_vao_text.GenerateVAO(m_textBuffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
+	m_text.m_texture.upload_to_shader(m_text_program_id, "fontTexture", 0);
+	m_textBuffer.Append(m_text.m_vertices);
+	static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2, GLuint>>::get();
+	m_vao_text.GenerateVAO(m_textBuffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
+	
 	// // Create Geo
 
 	m_sh.appendShape(m_shapes.makePlane(4), "plane_01");
@@ -225,7 +226,8 @@ void GL_Scene::renderFrame()
 	//glUseProgram(m_text_program_id);
 	//m_vao_text.Bind();
 	//glDrawArrays(GL_TRIANGLES, 0, (GLsizei)m_textBuffer.size());
-	m_text.draw();
+
+	//m_text.draw();
 
 }
 
