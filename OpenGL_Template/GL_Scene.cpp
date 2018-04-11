@@ -89,38 +89,27 @@ void GL_Scene::initGeo()
 
 	//Text2D text1("uvtemplate.tga");
 	//Text2D text1("font_calibri_01.tga");
-	m_text.init("font_calibri_01.tga", 5, m_height - 25, 20, m_width, m_height);
+	m_text.init(5, m_height - 25, 20, m_width, m_height);
 	//tga_flip_vert(&text1.m_texture);
-	//text1.print("Hel");
+	//text1.print("Hello world!", 5, m_height - 25, 20, m_textBuffer, m_text_program_id);
+	//glUseProgram(m_text.m_program_id);
+	//GLuint uniform_width	= m_text.m_width_uniform_id;		//glGetUniformLocation(m_text.m_program_id, "width");
+	//GLuint uniform_height	= m_text.m_height_uniform_id;		//glGetUniformLocation(m_text.m_program_id, "height");
+	//GLuint uniform_string	= m_text.m_string_uniform_id;		//glGetUniformLocation(m_text.m_program_id, "text_string");
+
+	//glUniform1i(m_text.m_width_uniform_id, m_width);
+	//glUniform1i(m_text.m_height_uniform_id, m_height);
+	m_text.print("asssajhvbjhhhh");
+	//unsigned int max_letters = 200;
+	//char stringToRender[200];
+	//int test_string[] = { 'A', 'r', 's', 'e' };
+	//glUniform1iv(m_text.m_string_uniform_id, 4, test_string);
+
+	//m_text.m_texture.upload_to_shader(m_text.m_program_id, "fontTexture", 0);
+	//m_textBuffer.Append(m_text.m_vertices);
+	//static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2, GLuint>>::get();
+	//m_vao_text.GenerateVAO(m_textBuffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
 	
-	GLuint uniform_width	= glGetUniformLocation(m_text_program_id, "width");
-	GLuint uniform_height	= glGetUniformLocation(m_text_program_id, "height");
-	GLuint uniform_string	= glGetUniformLocation(m_text_program_id, "text_string");
-
-
-
-	glUseProgram(m_text_program_id);
-	glUniform1i(uniform_width, m_width);
-	glUniform1i(uniform_height, m_height);
-	
-	const unsigned int max_letters = 200;
-	int charArray[max_letters] = { (int)" " };
-	char renderString[] = "Untxfd";
-	bool end = false;
-	for (auto i = 0; i < max_letters; i++)
-	{
-		if (renderString[i] == *"\0") {
-			end = true;
-		}
-		end == false ? charArray[i] = (int)renderString[i] : charArray[i] = (int)" ";
-	}
-	glUniform1iv(uniform_string, max_letters, charArray);
-	//m_text.print("asdas");
-
-	m_text.m_texture.upload_to_shader(m_text_program_id, "fontTexture", 0);
-	m_textBuffer.Append(m_text.m_vertices);
-	static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2, GLuint>>::get();
-	m_vao_text.GenerateVAO(m_textBuffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
 	
 	// // Create Geo
 
@@ -223,12 +212,7 @@ void GL_Scene::renderFrame()
 	m_indxBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
 	glDrawElements(GL_TRIANGLES, (GLsizei)m_indxBuffer.size(), GL_UNSIGNED_SHORT, 0);
 
-	//glUseProgram(m_text_program_id);
-	//m_vao_text.Bind();
-	//glDrawArrays(GL_TRIANGLES, 0, (GLsizei)m_textBuffer.size());
-
-	//m_text.draw();
-
+	m_text.draw();
 }
 
 void GL_Scene::updateTimer()

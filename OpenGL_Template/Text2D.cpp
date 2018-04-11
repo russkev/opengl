@@ -1,14 +1,12 @@
 #include "Text2D.h"
 
 // // CONSTRUCTOR
-Text2D::Text2D()
-{
-	
-}
+Text2D::Text2D(const char* s_texture_path):
+	m_texture(Texture(s_texture_path)) 
+{};
 
-void Text2D::init(const char* s_texture_path, int s_x, int s_y, int s_size, int s_screen_width, int s_screen_height)
+void Text2D::init(int s_x, int s_y, int s_size, int s_screen_width, int s_screen_height)
 {
-	m_texture = Texture(s_texture_path);
 	m_x = s_x;
 	m_y = s_y;
 	m_size = s_size;
@@ -16,7 +14,6 @@ void Text2D::init(const char* s_texture_path, int s_x, int s_y, int s_size, int 
 	m_screen_height = s_screen_height;
 	initVertices();
 	initShaders();
-	
 }
 
 void Text2D::print(const char* s_text)
@@ -25,29 +22,24 @@ void Text2D::print(const char* s_text)
 	glUseProgram(m_program_id);
 	glUniform1i(m_width_uniform_id, m_screen_width);
 	glUniform1i(m_height_uniform_id, m_screen_height);
-	int testLetters[] = { (int)"a", (int)"b", (int)"c" };
-	glUniform1iv(m_string_uniform_id, 3, testLetters);
-	m_texture.upload_to_shader(m_program_id, "fontTexture", 0);
-	m_buffer.Append(m_vertices);
 
+	//unsigned int max_letters = 200;
+	char stringToRender[MAX_LETTERS];
+	int test_string[] = { 'A', 'r', 's', 'e' };
+	//int test_string[] = string_to_array(s_text);
+
+
+	glUniform1iv(m_string_uniform_id, MAX_LETTERS, charArray);
+	m_texture.upload_to_shader(m_program_id, "fontTexture", 0);
+
+	m_buffer.Append(m_vertices);
 	static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2, GLuint>>::get();
 	m_vao.GenerateVAO(m_buffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
-
-
-	//GLuint program_id = LoadShaders("Text2D.vert", "Text2D.frag");
-	//glUseProgram(s_program_id);
-	//m_texture.upload_to_shader(s_program_id, "fontTexture", 0);
-
-	//Buffer text_buffer = { GL_ARRAY_BUFFER, 0 };
-	//s_text_buffer.Append(m_vertices);
-	//static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2>>::get();
-	//VAO text2D_VAO;
-	//text2D_VAO.GenerateVAO(s_text_buffer, 1, text2D_info.data(), text2D_info.data() + text2D_info.size());
 
 	auto c = 1;
 }
 
-void Text2D::draw() 
+void Text2D::draw()
 {
 	glUseProgram(m_program_id);
 	m_vao.Bind();
@@ -65,10 +57,10 @@ void Text2D::initVertices()
 		float uv_x = (character % 16) * uv_size;
 		float uv_y = (character / 16) * uv_size;
 
-		vertex2DType top_left =		{ { m_x + i * m_size,			m_y + m_size },{ uv_x,				1.0 - uv_y			 }, i*num_points + 0 };
-		vertex2DType top_right =	{ { m_x + i * m_size + m_size,	m_y + m_size },{ uv_x + uv_size,	1.0 - uv_y			 }, i*num_points + 1 };
-		vertex2DType bottom_left =	{ { m_x + i * m_size,			m_y			 },{ uv_x,				1.0 - uv_y - uv_size }, i*num_points + 2 };
-		vertex2DType bottom_right = { { m_x + i * m_size + m_size,	m_y			 },{ uv_x + uv_size,	1.0 - uv_y - uv_size }, i*num_points + 3 };
+		vertex2DType top_left = { { m_x + i * m_size,			m_y + m_size },{ uv_x,				1.0 - uv_y }, i*num_points + 0 };
+		vertex2DType top_right = { { m_x + i * m_size + m_size,	m_y + m_size },{ uv_x + uv_size,	1.0 - uv_y }, i*num_points + 1 };
+		vertex2DType bottom_left = { { m_x + i * m_size,			m_y },{ uv_x,				1.0 - uv_y - uv_size }, i*num_points + 2 };
+		vertex2DType bottom_right = { { m_x + i * m_size + m_size,	m_y },{ uv_x + uv_size,	1.0 - uv_y - uv_size }, i*num_points + 3 };
 
 		m_vertices.push_back(top_left);
 		m_vertices.push_back(bottom_left);
@@ -77,14 +69,17 @@ void Text2D::initVertices()
 		m_vertices.push_back(top_right);
 		m_vertices.push_back(bottom_left);
 		m_vertices.push_back(bottom_right);
+
+		auto test = m_x;
+		auto x = 0;
 	}
 }
 
 void Text2D::initShaders()
 {
-	m_program_id		= LoadShaders("Text2d.vert", "Text2D.frag");
+	m_program_id = LoadShaders("Text2d.vert", "Text2D.frag");
 	glUseProgram(m_program_id);
-	m_width_uniform_id	= glGetUniformLocation(m_program_id, "width");
+	m_width_uniform_id = glGetUniformLocation(m_program_id, "width");
 	m_height_uniform_id = glGetUniformLocation(m_program_id, "height");
 	m_string_uniform_id = glGetUniformLocation(m_program_id, "text_string");
 }
@@ -95,11 +90,8 @@ int* Text2D::string_to_array(const char* s_text)
 	bool end = false;
 	for (auto i = 0; i < MAX_LETTERS; ++i)
 	{
-		if (s_text[i] == *"\0")
-		{
-			end = true;
-		}
-		end == false ? charArray[i] = (int)s_text[i] : charArray[i] = (int)" ";
+		if (s_text[i] == *"\0")	end = true;
+		end == false ? charArray[i] = (int)s_text[i] : charArray[i] = (int)" ";	
 	}
 	return charArray;
 }
