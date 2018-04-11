@@ -26,9 +26,9 @@ struct Text2D
 	enum attr { position2D = 0, uv2D = 1 };
 
 	// // CONSTRUCTOR // //
-	Text2D();
+	Text2D(const char* s_texture_path);
 
-	void init(const char* s_texture_path, int s_x, int s_y, int size, int s_screen_width, int s_screen_height);
+	void init(int s_x, int s_y, int size, int s_screen_width, int s_screen_height);
 	void initVertices();
 	void initShaders();
 

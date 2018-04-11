@@ -75,5 +75,5 @@ public:
 	Buffer m_indxBuffer	= { GL_ARRAY_BUFFER, 0 };
 	Buffer m_textBuffer = { GL_ARRAY_BUFFER, 0 };
 
-	Text2D m_text;
+	Text2D m_text = Text2D("font_calibri_01.tga");
 };
