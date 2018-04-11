@@ -99,16 +99,18 @@ void GL_Scene::initGeo()
 
 	//glUniform1i(m_text.m_width_uniform_id, m_width);
 	//glUniform1i(m_text.m_height_uniform_id, m_height);
-	m_text.print("asssa");
-	unsigned int max_letters = 200;
-	char stringToRender[200];
-	int test_string[] = { 'A', 'r', 's', 'e' };
-	glUniform1iv(m_text.m_string_uniform_id, 4, test_string);
+	m_text.print("asssajhvbjhhhh");
+	//unsigned int max_letters = 200;
+	//char stringToRender[200];
+	//int test_string[] = { 'A', 'r', 's', 'e' };
+	//glUniform1iv(m_text.m_string_uniform_id, 4, test_string);
 
-	m_text.m_texture.upload_to_shader(m_text.m_program_id, "fontTexture", 0);
-	m_textBuffer.Append(m_text.m_vertices);
-	static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2, GLuint>>::get();
-	m_vao_text.GenerateVAO(m_textBuffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
+	//m_text.m_texture.upload_to_shader(m_text.m_program_id, "fontTexture", 0);
+	//m_textBuffer.Append(m_text.m_vertices);
+	//static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2, GLuint>>::get();
+	//m_vao_text.GenerateVAO(m_textBuffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
+	
+	
 	// // Create Geo
 
 	m_sh.appendShape(m_shapes.makePlane(4), "plane_01");
@@ -210,9 +212,7 @@ void GL_Scene::renderFrame()
 	m_indxBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
 	glDrawElements(GL_TRIANGLES, (GLsizei)m_indxBuffer.size(), GL_UNSIGNED_SHORT, 0);
 
-	glUseProgram(m_text.m_program_id);
-	m_vao_text.Bind();
-	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)m_textBuffer.size());
+	m_text.draw();
 }
 
 void GL_Scene::updateTimer()
