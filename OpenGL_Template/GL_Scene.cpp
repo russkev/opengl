@@ -89,7 +89,7 @@ void GL_Scene::initGeo()
 
 	//Text2D text1("uvtemplate.tga");
 	//Text2D text1("font_calibri_01.tga");
-	m_text.init("font_calibri_01.tga", 5, m_height - 25, 20, m_width, m_height);
+	m_text.init(5, m_height - 25, 20, m_width, m_height);
 	//tga_flip_vert(&text1.m_texture);
 	//text1.print("Hello world!", 5, m_height - 25, 20, m_textBuffer, m_text_program_id);
 	//glUseProgram(m_text.m_program_id);

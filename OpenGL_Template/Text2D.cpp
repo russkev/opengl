@@ -1,11 +1,12 @@
 #include "Text2D.h"
 
 // // CONSTRUCTOR
-Text2D::Text2D() {};
+Text2D::Text2D(const char* s_texture_path):
+	m_texture(Texture(s_texture_path)) 
+{};
 
-void Text2D::init(const char* s_texture_path, int s_x, int s_y, int s_size, int s_screen_width, int s_screen_height)
+void Text2D::init(int s_x, int s_y, int s_size, int s_screen_width, int s_screen_height)
 {
-	m_texture = Texture(s_texture_path);
 	m_x = s_x;
 	m_y = s_y;
 	m_size = s_size;
