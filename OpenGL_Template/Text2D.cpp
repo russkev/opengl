@@ -22,24 +22,19 @@ void Text2D::print(const char* s_text)
 	glUseProgram(m_program_id);
 	glUniform1i(m_width_uniform_id, m_screen_width);
 	glUniform1i(m_height_uniform_id, m_screen_height);
-	int testLetters[] = { (int)"a", (int)"b", (int)"c" };
-	glUniform1iv(m_string_uniform_id, 3, testLetters);
-	m_texture.upload_to_shader(m_program_id, "fontTexture", 0);
-	m_buffer.Append(m_vertices);
 
+	//unsigned int max_letters = 200;
+	char stringToRender[MAX_LETTERS];
+	int test_string[] = { 'A', 'r', 's', 'e' };
+	//int test_string[] = string_to_array(s_text);
+
+
+	glUniform1iv(m_string_uniform_id, MAX_LETTERS, charArray);
+	m_texture.upload_to_shader(m_program_id, "fontTexture", 0);
+
+	m_buffer.Append(m_vertices);
 	static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2, GLuint>>::get();
 	m_vao.GenerateVAO(m_buffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
-
-
-	//GLuint program_id = LoadShaders("Text2D.vert", "Text2D.frag");
-	//glUseProgram(s_program_id);
-	//m_texture.upload_to_shader(s_program_id, "fontTexture", 0);
-
-	//Buffer text_buffer = { GL_ARRAY_BUFFER, 0 };
-	//s_text_buffer.Append(m_vertices);
-	//static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2>>::get();
-	//VAO text2D_VAO;
-	//text2D_VAO.GenerateVAO(s_text_buffer, 1, text2D_info.data(), text2D_info.data() + text2D_info.size());
 
 	auto c = 1;
 }
@@ -95,11 +90,8 @@ int* Text2D::string_to_array(const char* s_text)
 	bool end = false;
 	for (auto i = 0; i < MAX_LETTERS; ++i)
 	{
-		if (s_text[i] == *"\0")
-		{
-			end = true;
-		}
-		end == false ? charArray[i] = (int)s_text[i] : charArray[i] = (int)" ";
+		if (s_text[i] == *"\0")	end = true;
+		end == false ? charArray[i] = (int)s_text[i] : charArray[i] = (int)" ";	
 	}
 	return charArray;
 }
