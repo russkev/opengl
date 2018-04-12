@@ -94,6 +94,7 @@ int* Text2D::string_to_array(const char* s_text)
 		if (s_text[i] == *"\0")	end = true;
 		end == false ? charArray[i] = (int)s_text[i] : charArray[i] = (int)" ";	
 	}
+	auto test = char(charArray);
 	return charArray;
 
 }
