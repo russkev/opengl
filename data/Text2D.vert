@@ -10,8 +10,8 @@ uniform int[200]	text_string;
 
 int half_width			= width / 2;
 int half_height			= height / 2;
-const int max_digits	= 12;
-const int max_letters	= 12;
+const int max_digits	= 200;
+const int max_letters	= 200;
 int num_digits			= 1;
 
 out vec2 uv;
