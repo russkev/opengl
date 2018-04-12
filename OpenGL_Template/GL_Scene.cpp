@@ -99,7 +99,7 @@ void GL_Scene::initGeo()
 
 	//glUniform1i(m_text.m_width_uniform_id, m_width);
 	//glUniform1i(m_text.m_height_uniform_id, m_height);
-	m_text.print("asssajhvbjhhhh");
+	m_text.print("asjbkjbkh");
 	//unsigned int max_letters = 200;
 	//char stringToRender[200];
 	//int test_string[] = { 'A', 'r', 's', 'e' };

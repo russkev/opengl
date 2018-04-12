@@ -19,7 +19,7 @@ void Text2D::init(int s_x, int s_y, int s_size, int s_screen_width, int s_screen
 void Text2D::print(const char* s_text)
 {
 	int* charArray = string_to_array(s_text);
-	printToConsole(charArray);
+	//printToConsole(charArray);
 	glUseProgram(m_program_id);
 	glUniform1i(m_width_uniform_id, m_screen_width);
 	glUniform1i(m_height_uniform_id, m_screen_height);
@@ -87,27 +87,28 @@ void Text2D::initShaders()
 
 int* Text2D::string_to_array(const char* s_text)
 {
-	int charArray[MAX_LETTERS] = { (int)" " };
-	bool end = false;
+	auto space					= 96;
+	bool end					= false;
+	int charArray[MAX_LETTERS];
+
+	
 	for (auto i = 0; i < MAX_LETTERS; ++i)
 	{
+		auto letter = (int)s_text[i];
 		if (s_text[i] == *"\0")	end = true;
-		end == false ? charArray[i] = (int)s_text[i] : charArray[i] = (int)" ";	
+		end == false ? charArray[i] = letter : charArray[i] = space;	
 	}
 	return charArray;
-
 }
 
 void Text2D::printToConsole(const int* charArray)
 {
-	//auto length = sizeof(charArray) / sizeof(*charArray);
-	//int outValue = charArray[1];
-	//std::cout << outValue << ", " << outValue;
-
-	for (auto i = 0; i < MAX_LETTERS; ++i)
-	{
-		std::cout << charArray[i] << ", ";
-	}
+	std::cout << charArray[4] << "\n";
+	std::cout << charArray[5] << "\n";
+	//for (auto i = 0; i < MAX_LETTERS; ++i)
+	//{
+	//	std::cout << charArray[i] << ", ";
+	//}
 }
 
 void Text2D::cleanup()
