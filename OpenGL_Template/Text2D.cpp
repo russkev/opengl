@@ -19,6 +19,8 @@ void Text2D::init(int s_x, int s_y, int s_size, int s_screen_width, int s_screen
 void Text2D::print(const char* s_text)
 {
 	int* charArray = string_to_array(s_text);
+	auto charVector = string_to_vector(s_text);
+	int* charVectorArray = &charVector[0];
 	//printToConsole(charArray);
 	glUseProgram(m_program_id);
 	glUniform1i(m_width_uniform_id, m_screen_width);
@@ -87,18 +89,33 @@ void Text2D::initShaders()
 
 int* Text2D::string_to_array(const char* s_text)
 {
-	auto space					= 96;
+	auto space					= 32;
 	bool end					= false;
-	int charArray[MAX_LETTERS];
+	std::vector<int> tempVector;
 
 	
 	for (auto i = 0; i < MAX_LETTERS; ++i)
 	{
 		auto letter = (int)s_text[i];
 		if (s_text[i] == *"\0")	end = true;
-		end == false ? charArray[i] = letter : charArray[i] = space;	
+		end == false ? tempVector.push_back(letter) : tempVector.push_back(space);
 	}
-	return charArray;
+	return &tempVector[0];
+}
+
+std::vector<int> Text2D::string_to_vector(const char* s_text)
+{
+	std::vector<int> outVector;
+	auto space = 32;
+	bool end = false;
+
+	for (auto i = 0; i < MAX_LETTERS; ++i)
+	{
+		auto letter = (int)s_text[i];
+		if (s_text[i] == *"\0")	end = true;
+		end == false ? outVector.push_back(letter) : outVector.push_back(space);
+	}
+	return outVector;
 }
 
 void Text2D::printToConsole(const int* charArray)

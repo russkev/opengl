@@ -17,6 +17,16 @@ int num_digits			= 1;
 out vec2 uv;
 out vec3 vertex_color;
 
+int[200] test()
+{
+	int[200] outArray;
+	for (int i = 0; i < 200; i++)
+	{
+		outArray[i] = 9;
+	}
+	return outArray;
+}
+
 vec2 text_uv(int[max_digits] s_int)
 {
 
@@ -117,4 +127,5 @@ void main()
 	gl_Position			= vec4(outPosition, 0, 1);
 	//uv					= text_uv(float_to_ints(1.0) );
 	uv					= text_uv(string_array());
+	//uv =				text_uv(test());
 }
