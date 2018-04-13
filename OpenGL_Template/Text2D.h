@@ -36,6 +36,7 @@ struct Text2D
 	void printToConsole(const int* charArray);
 	void draw();
 	int* string_to_array(const char* s_text);
+	std::vector<int> string_to_vector(const char* s_text);
 
 	void cleanup();
 public:
