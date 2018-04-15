@@ -18,28 +18,18 @@ void Text2D::init(int s_x, int s_y, int s_size, int s_screen_width, int s_screen
 
 void Text2D::print(const char* s_text)
 {
-	int* charArray = string_to_array(s_text);
-	auto charVector = string_to_vector(s_text);
-	int* charVectorArray = &charVector[0];
-	//printToConsole(charArray);
 	glUseProgram(m_program_id);
+	m_texture.upload_to_shader(m_program_id, "fontTexture");
+	convert_string(s_text);
+	
 	glUniform1i(m_width_uniform_id, m_screen_width);
 	glUniform1i(m_height_uniform_id, m_screen_height);
-
-	//unsigned int max_letters = 200;
-	char stringToRender[MAX_LETTERS];
-	int test_string[] = { 'A', 'r', 's', 'e' };
-	//int test_string[] = string_to_array(s_text);
-
-
-	glUniform1iv(m_string_uniform_id, MAX_LETTERS, charArray);
-	m_texture.upload_to_shader(m_program_id, "fontTexture", 0);
-
+	glUniform1iv(m_string_uniform_id, MAX_LETTERS, m_text_array);
+	m_buffer.Bind();
 	m_buffer.Append(m_vertices);
 	static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2, GLuint>>::get();
 	m_vao.GenerateVAO(m_buffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
-
-	auto c = 1;
+	glUseProgram(0);
 }
 
 void Text2D::draw()
@@ -87,25 +77,8 @@ void Text2D::initShaders()
 	m_string_uniform_id = glGetUniformLocation(m_program_id, "text_string");
 }
 
-int* Text2D::string_to_array(const char* s_text)
+void Text2D::convert_string(const char* s_text)
 {
-	auto space					= 32;
-	bool end					= false;
-	std::vector<int> tempVector;
-
-	
-	for (auto i = 0; i < MAX_LETTERS; ++i)
-	{
-		auto letter = (int)s_text[i];
-		if (s_text[i] == *"\0")	end = true;
-		end == false ? tempVector.push_back(letter) : tempVector.push_back(space);
-	}
-	return &tempVector[0];
-}
-
-std::vector<int> Text2D::string_to_vector(const char* s_text)
-{
-	std::vector<int> outVector;
 	auto space = 32;
 	bool end = false;
 
@@ -113,19 +86,9 @@ std::vector<int> Text2D::string_to_vector(const char* s_text)
 	{
 		auto letter = (int)s_text[i];
 		if (s_text[i] == *"\0")	end = true;
-		end == false ? outVector.push_back(letter) : outVector.push_back(space);
+		end == false ? m_text_array[i] = letter : m_text_array[i] = space;
 	}
-	return outVector;
-}
-
-void Text2D::printToConsole(const int* charArray)
-{
-	std::cout << charArray[4] << "\n";
-	std::cout << charArray[5] << "\n";
-	//for (auto i = 0; i < MAX_LETTERS; ++i)
-	//{
-	//	std::cout << charArray[i] << ", ";
-	//}
+	return;
 }
 
 void Text2D::cleanup()

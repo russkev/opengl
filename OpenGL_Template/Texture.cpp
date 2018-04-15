@@ -4,6 +4,7 @@ Texture::Texture(const char *s_filename)
 {
 	// Targa info: https://unix4lyfe.org/targa/
 	init_targa(s_filename);
+	m_id = Texture::m_next_id++;
 }
 
 // // CONSTRUCTOR // //
@@ -13,7 +14,6 @@ Texture::Texture():m_image(tga_image())
 // // CONSTRUCTOR // //
 void Texture::init_targa(const char *filename)
 {
-	tga_image img;
 	tga_result result;
 	result = tga_read(&m_image, filename);
 	if (result != TGA_NOERR)
@@ -51,7 +51,7 @@ Texture& Texture::operator = (Texture&& other)
 
 
 
-void Texture::upload_to_shader(unsigned int s_program_id, const char *gl_texture_name, const GLint s_texture_num)
+void Texture::upload_to_shader(unsigned int s_program_id, const char *gl_texture_name)
 {
 	glUseProgram(s_program_id);
 
@@ -59,9 +59,9 @@ void Texture::upload_to_shader(unsigned int s_program_id, const char *gl_texture
 	glGenTextures(1, &tex_id);
 
 	tex_loc = glGetUniformLocation(s_program_id, gl_texture_name);
-	glUniform1i(tex_loc, s_texture_num);
+	glUniform1i(tex_loc, m_id);
 
-	glActiveTexture(GL_TEXTURE0 + s_texture_num);
+	glActiveTexture(GL_TEXTURE0 + m_id);
 	// "Bind" the newly created texture : all future texture functions will modify this texture //
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 	// Give the image to OpenGL //
@@ -83,3 +83,5 @@ void Texture::upload_to_shader(unsigned int s_program_id, const char *gl_texture
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
+
+int Texture::m_next_id = 0;
