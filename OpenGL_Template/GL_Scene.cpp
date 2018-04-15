@@ -11,6 +11,7 @@ void GL_Scene::init(const GLuint width, const GLuint height)
 	initTimer();
 	initCam();
 	initLights();
+	initText();
 	initGeo();
 	initBuffers();
 }
@@ -74,42 +75,24 @@ void GL_Scene::initLights()
 	// Initialize lights
 }
 
+void GL_Scene::initText()
+{
+	m_text.init(5, m_height - 25, 20, m_width, m_height);
+	m_text.print("!@#$%^&*()_+");
+}
+
 void GL_Scene::initGeo()
 {
 	// // Create and compile our GLSL program from the shaders // //
 	m_program_id		= LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
-	m_text_program_id	= LoadShaders("Text2D.vert", "Text2D.frag");
-
+	
 	// // Texture
 	Texture texture1("uvtemplate.tga");
 	Texture texture2("two.tga");
-
-	texture1.upload_to_shader(m_program_id, "textureA", 0);
-	texture2.upload_to_shader(m_program_id, "textureB", 1);
-
-	//Text2D text1("uvtemplate.tga");
-	//Text2D text1("font_calibri_01.tga");
-	m_text.init(5, m_height - 25, 20, m_width, m_height);
-	//tga_flip_vert(&text1.m_texture);
-	//text1.print("Hello world!", 5, m_height - 25, 20, m_textBuffer, m_text_program_id);
-	//glUseProgram(m_text.m_program_id);
-	//GLuint uniform_width	= m_text.m_width_uniform_id;		//glGetUniformLocation(m_text.m_program_id, "width");
-	//GLuint uniform_height	= m_text.m_height_uniform_id;		//glGetUniformLocation(m_text.m_program_id, "height");
-	//GLuint uniform_string	= m_text.m_string_uniform_id;		//glGetUniformLocation(m_text.m_program_id, "text_string");
-
-	//glUniform1i(m_text.m_width_uniform_id, m_width);
-	//glUniform1i(m_text.m_height_uniform_id, m_height);
-	m_text.print("asjbkjbkh");
-	//unsigned int max_letters = 200;
-	//char stringToRender[200];
-	//int test_string[] = { 'A', 'r', 's', 'e' };
-	//glUniform1iv(m_text.m_string_uniform_id, 4, test_string);
-
-	//m_text.m_texture.upload_to_shader(m_text.m_program_id, "fontTexture", 0);
-	//m_textBuffer.Append(m_text.m_vertices);
-	//static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2, GLuint>>::get();
-	//m_vao_text.GenerateVAO(m_textBuffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
 	
+
+	texture1.upload_to_shader(m_program_id, "textureA");
+	texture2.upload_to_shader(m_program_id, "textureB");
 	
 	// // Create Geo
 

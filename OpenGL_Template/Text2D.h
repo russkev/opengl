@@ -35,14 +35,14 @@ struct Text2D
 	void print(const char* s_text);
 	void printToConsole(const int* charArray);
 	void draw();
-	int* string_to_array(const char* s_text);
-	std::vector<int> string_to_vector(const char* s_text);
+	void convert_string(const char* s_text);
 
 	void cleanup();
 public:
 	Texture			m_texture;
 	vertices2DType	m_vertices;
 	int				m_x, m_y, m_size;
+	int				m_text_array[MAX_LETTERS];
 	GLuint			m_program_id, m_width_uniform_id, m_height_uniform_id, m_string_uniform_id, m_screen_width, m_screen_height;
 	Buffer			m_buffer = { GL_ARRAY_BUFFER, 0 };
 	VAO				m_vao;

@@ -44,6 +44,7 @@ struct GL_Scene
 	void initTimer();
 	void initCam();
 	void initLights();
+	void initText();
 	void initGeo();
 	void initBuffers();
 
