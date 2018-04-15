@@ -12,6 +12,7 @@ SDL for window display.
 
 Current features:
  - Timer for animation
+ - Maya-like controls for camera
  - Creation and display of various 3D primitives
  - Lighting:
     - Diffuse
