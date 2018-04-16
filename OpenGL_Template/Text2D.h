@@ -25,15 +25,20 @@ struct Text2D
 	// // ENUMERATION // //
 	enum attr { position2D = 0, uv2D = 1 };
 
-	// // CONSTRUCTOR // //
-	Text2D(const char* s_texture_path);
+	Text2D(const char* s_texture_path);				// Constructor
+	~Text2D();										// Destructor
+	Text2D(const Text2D&) = delete;					// Copy constructor
+	Text2D(Text2D&&);								// Move constructor
+	Text2D& operator = (const Text2D&) = delete;	// Copy assign
+	Text2D& operator = (Text2D&&);					// Move assign
+
+
 
 	void init(int s_x, int s_y, int size, int s_screen_width, int s_screen_height);
 	void initVertices();
 	void initShaders();
 
 	void print(const char* s_text);
-	void printToConsole(const int* charArray);
 	void draw();
 	void convert_string(const char* s_text);
 

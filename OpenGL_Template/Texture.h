@@ -16,7 +16,6 @@ struct Texture
 	Texture& operator = (Texture&&);				//Move assign
 
 	void upload_to_shader(unsigned int s_program_id, const char *gl_texture_name);
-	//static int next_texture_id();
 
 private:
 	void init_targa(const char *filename);
