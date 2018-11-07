@@ -16,9 +16,9 @@ Text2D::~Text2D()
 Text2D::Text2D(Text2D&& other) :
 	m_texture(std::exchange(other.m_texture, Texture())),
 	m_vertices(std::exchange(other.m_vertices, vertices2DType())),
-	m_x(other.m_x),
-	m_y(other.m_y),
-	m_size(other.m_size),
+	m_x(std::exchange(other.m_x, 0)),
+	m_y(std::exchange(other.m_y, 0)),
+	m_size(std::exchange(other.m_size, 0)),
 	m_program_id(other.m_program_id),
 	m_width_uniform_id(other.m_width_uniform_id),
 	m_height_uniform_id(other.m_height_uniform_id),
