@@ -77,7 +77,15 @@ void GL_Scene::initLights()
 
 void GL_Scene::initText()
 {
-	m_text.init(5, m_height - 25, 20, m_width, m_height);
+	//m_text = Text2D("font_calibri_01.tga");
+	Text2D temp_text = Text2D("font_calibri_01.tga");
+	//m_text = std::move(temp_text);
+
+	temp_text.init(5, m_height - 25, 20, m_width, m_height);
+	m_text = std::move(temp_text);
+
+	//m_text.init(5, m_height - 25, 20, m_width, m_height);
+	
 	m_text.print("!@#$%^&*()_+");
 }
 
@@ -183,8 +191,6 @@ void GL_Scene::renderFrame()
 	GLfloat cmAmplitude = 0.5f;
 	GLfloat cmFreq = 0.1f;
 	GLfloat cmOffset = 0.5f;
-
-
 
 	updateTimer();
 	updateLights();
