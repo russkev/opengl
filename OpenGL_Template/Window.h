@@ -3,9 +3,11 @@
 #include <cstdlib>
 #include <vector>
 #include <cassert>
+#include <csignal>
 
 #include <SDL.h>
 #include <GL/glew.h>
+
 
 struct opengl_attr_pair
 {
