@@ -75,6 +75,7 @@ public:
 	Buffer m_geoBuffer	= { GL_ARRAY_BUFFER, 0 };
 	Buffer m_matBuffer	= { GL_ARRAY_BUFFER, 0 };
 	Buffer m_wldBuffer	= { GL_ARRAY_BUFFER, 0 };
+	Buffer m_viewBuffer = { GL_ARRAY_BUFFER, 0 };
 	Buffer m_indxBuffer	= { GL_ARRAY_BUFFER, 0 };
 	Buffer m_textBuffer = { GL_ARRAY_BUFFER, 0 };
 

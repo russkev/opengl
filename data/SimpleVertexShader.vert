@@ -37,12 +37,23 @@ uniform int test_int;
 uniform int width;
 uniform int height;
 
+// // Uniform for light position
+uniform vec3 lightPosition;
+uniform mat4 mat_view;
+
 // // Output data ; will be interpolated for each fragment
 out vec3 f_world_vertexPosition;
 out vec3 fragmentColor;
 out vec3 f_world_vertexNormal;
 out vec2 uv;
 
+out vec3 worldSpace_lightPosition;
+
+out vec3 cameraSpace_eyeDirection;
+out vec3 cameraSpace_lightDirection;
+
+out vec3 tangentSpace_eyeDirection;
+out vec3 tangentSpace_lightDirection;
 
 bool isEmptyConnection(int index)
 {
@@ -120,10 +131,42 @@ vec3 colorFromIndex(int a)
 	return colArray[a%6];
 }
 
+
+
+
+mat3 tangent_bitangent_normal_matrix()
+{
+	vec3 vertexTangent_cameraSpace = mat3(mat_modelToProjection) * model_vertexTangent;
+	vec3 vertexBiTangent_cameraSpace = mat3(mat_modelToProjection) * model_vertexBitangent;
+	vec3 vertexNormal_cameraSpace = mat3(mat_modelToProjection) * model_vertexNormal;
+
+	return transpose(mat3(
+		vertexTangent_cameraSpace,
+		vertexBiTangent_cameraSpace,
+		vertexNormal_cameraSpace
+	));
+}
+
+void sendLightAndNormalMap()
+{
+	vec3 cameraSpace_vertexPosition = ( mat_view * mat_modelToWorld * model_vertexPosition).xyz;
+	cameraSpace_eyeDirection = vec3(0,0,0) - cameraSpace_vertexPosition;
+	vec3 cameraSpace_lightPosition = (mat_view * vec4(worldSpace_lightPosition, 1)).xyz;
+	cameraSpace_lightDirection = cameraSpace_lightPosition + cameraSpace_eyeDirection;
+	
+	mat3 TBN = tangent_bitangent_normal_matrix();
+
+	tangentSpace_lightDirection = TBN * cameraSpace_lightDirection;
+	tangentSpace_eyeDirection = TBN * cameraSpace_eyeDirection;
+}
+
 void main()
 {
 	transformGlPosition();
-	fragmentColor			= model_vertexColor;
-	uv						= model_uv;
+	fragmentColor				= model_vertexColor;
+	uv							= model_uv;
+	worldSpace_lightPosition	= lightPosition;
+	sendLightAndNormalMap();
+
 }
 
