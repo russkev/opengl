@@ -78,6 +78,60 @@ void ShapeData::setIndex(std::size_t loc, const indexType& data)
 	m_indices.at(loc) = data;
 }
 
+// // ----- TANGENTS AND BITANGENTS ----- // //
+void ShapeData::makeTangents()
+{
+	assert(m_vertices.size() > 0);
+	assert(m_indices.size() > 0);
+	std::vector<GLushort> existingIndices;
+	for (auto i = 0; i < m_indices.size(); i += 3)
+	{		
+		// Get vertices
+		glm::vec3 & v0 = std::get<attr::position>(m_vertices.at(m_indices.at(i + 0)));
+		glm::vec3 & v1 = std::get<attr::position>(m_vertices.at(m_indices.at(i + 1)));
+		glm::vec3 & v2 = std::get<attr::position>(m_vertices.at(m_indices.at(i + 2)));
+
+		// Get UVs
+		glm::vec2 & uv0 = std::get<attr::uv>(m_vertices.at(m_indices.at(i + 0)));
+		glm::vec2 & uv1 = std::get<attr::uv>(m_vertices.at(m_indices.at(i + 1)));
+		glm::vec2 & uv2 = std::get<attr::uv>(m_vertices.at(m_indices.at(i + 2)));
+		
+		// Edges of the triangle, position delta
+		glm::vec3 deltaPos1 = v1 - v0;
+		glm::vec3 deltaPos2 = v2 - v0;
+
+		// UV delta
+		glm::vec2 deltaUV1 = uv1 - uv0;
+		glm::vec2 deltaUV2 = uv2 - uv0;
+
+		float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+		glm::vec3 newTangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y)*r;
+		glm::vec3 newBitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x)*r;
+
+		for (auto j = 0; j < 3; ++j){
+			if (std::find(existingIndices.begin(), existingIndices.end(), m_indices.at(i + j)) != existingIndices.end()) {
+				int temp = m_indices.at(i + j);
+				glm::vec3 existingtangent	= std::get<attr::tangent>(m_vertices.at(m_indices.at(i + j)));
+				glm::vec3 existingBitangent = std::get<attr::bitangent>(m_vertices.at(m_indices.at(i + j)));
+
+				std::get<attr::tangent>(m_vertices.at(m_indices.at(i + j))) = (existingtangent + newTangent) / 2.0f;
+				std::get<attr::bitangent>(m_vertices.at(m_indices.at(i + j))) = (existingBitangent + newBitangent) / 2.0f;
+			}
+			else {
+				std::get<attr::tangent>(m_vertices.at(m_indices.at(i + j))) = newTangent;
+				std::get<attr::bitangent>(m_vertices.at(m_indices.at(i + j))) = newBitangent;
+			}
+			
+		}
+		
+		// Register used indices
+		for (auto j = 0; j < 3; ++j) {
+			existingIndices.push_back(m_indices.at(i + j));
+		}
+		auto k = 0;
+	}
+}
+
 void ShapeData::setId(GLuint s_id) 
 {
 	if (m_num_vertices > 0)

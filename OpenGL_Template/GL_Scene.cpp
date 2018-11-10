@@ -10,10 +10,10 @@ void GL_Scene::init(const GLuint width, const GLuint height)
 	initSettings();
 	initTimer();
 	initCam();
-	initLights();
 	initText();
 	initGeo();
 	initBuffers();
+	initLights();
 }
 
 void GL_Scene::printGLProperties()
@@ -72,7 +72,9 @@ void GL_Scene::initCam()
 
 void GL_Scene::initLights()
 {
-	// Initialize lights
+	glUseProgram(m_program_id);
+	const ShapeContainer::intType lightPositionLocation = glGetUniformLocation(m_program_id, "lightPosition");
+	glUniform3f(lightPositionLocation, 0.0f, 8.0f, 5.0f);
 }
 
 void GL_Scene::initText()
@@ -145,6 +147,11 @@ void GL_Scene::initBuffers()
 	m_matBuffer.Append(sizeof(glm::mat4), &(m_projection * m_cam.getWorldToViewMatrix()[0][0]));
 	m_wldBuffer.Append(sizeof(glm::mat4), &glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, 0.0f)));
 
+	//!!! Create uniform upload function
+	glUseProgram(m_program_id);
+	const ShapeContainer::intType viewMatrixLocation = glGetUniformLocation(m_program_id, "mat_view");
+	glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &matBufferMatrix[0][0]);
+
 
 	// // Set up standard information for the VAO
 	static const auto shape_info = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
@@ -154,6 +161,7 @@ void GL_Scene::initBuffers()
 	m_vao_main.GenerateVAO(m_geoBuffer, 0, shape_info.data(), shape_info.data() + shape_info.size(), POSITION_ATTR);
 	m_vao_main.GenerateVAO(m_matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
 	m_vao_main.GenerateVAO(m_wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
+
 
 	m_sh.uploadTransforms(m_program_id);
 	m_sh.uploadConnections(m_program_id);
@@ -223,7 +231,7 @@ void GL_Scene::updateLights()
 	//glm::vec4 ambientLight = { 0.0f, 0.34f, 0.6f, 1.0f };
 	//glUniform4fv(_State.ambientLightID, 1, &ambientLight.r);
 	// // Diffuse Lighting // // 
-	//glm::vec3 lightPosition = { 0.0f, 2.0f, 0.0f };
+	//glm::vec3 lightPosition = { 2.0f, 2.0f, 0.0f };
 	//glUniform3fv(_State.lightPositionID, 1, &lightPosition.x);
 }
 

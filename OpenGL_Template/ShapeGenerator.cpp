@@ -77,8 +77,6 @@ ShapeData ShapeGenerator::makePlane(GLuint dimensions = 20)
 					randomColor(),					// Color
 					glm::vec3(0.0f, 1.0f, 0.0f),	// Normal
 					glm::vec2(x,z),					// UV
-					//glm::vec3(0,0,0),				// Tangent
-					//glm::vec3(0,0,0)				// BiTangent
 				});
 		}
 	}
@@ -94,6 +92,7 @@ ShapeData ShapeGenerator::makePlane(GLuint dimensions = 20)
 			//		  << c << "," << d << "," << b << "\n";
 		}
 	}
+	m_plane.makeTangents();
 	return m_plane;
 }
 
@@ -162,6 +161,7 @@ ShapeData ShapeGenerator::makeCube()
 	m_cube.append_indices(23); m_cube.append_indices(21); m_cube.append_indices(20);
 	m_cube.append_indices(23); m_cube.append_indices(20); m_cube.append_indices(22);
 
+	m_cube.makeTangents();
 	return m_cube;
 }
 
@@ -280,6 +280,7 @@ ShapeData ShapeGenerator::makeArrow()
 	m_arrow.append_indices(38), m_arrow.append_indices(40), m_arrow.append_indices(41);
 	m_arrow.append_indices(38), m_arrow.append_indices(41), m_arrow.append_indices(39);
 
+	m_arrow.makeTangents();
 	return m_arrow;
 }
 
@@ -304,6 +305,7 @@ ShapeData ShapeGenerator::makeTube(GLuint resolution = 10, GLfloat radius = 2, G
 			outTube.setVertex<2>(vertex, { cos(angle), 0, sin(angle) });
 		}
 	}
+	outTube.makeTangents();
 	return outTube;
 }
 

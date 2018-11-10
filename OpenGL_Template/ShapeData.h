@@ -57,6 +57,9 @@ public:
 	// // ----- IDs ----- // //
 	void updateIds();
 
+	// // ----- TANGENTS AND BITANGENTS ----- // //
+	void makeTangents();
+
 	// // ----- Getters ----- // //
 	vertexType getVertex(std::size_t i);
 	template <std::size_t attr>
