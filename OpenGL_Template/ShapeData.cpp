@@ -1,6 +1,5 @@
 #pragma once
 #include "ShapeData.h"
-#include "Vertex.h"
 
 #include <GL\glew.h>
 #include <glm/glm.hpp>
@@ -57,7 +56,7 @@ ShapeData& ShapeData::operator += (ShapeData& other)
 // // ----- Append ----- // //
 void ShapeData::append_vertices(const vertexDataType s_shape)
 {
-	m_vertices.push_back({ std::get<position>(s_shape),std::get<color>(s_shape), std::get<normal>(s_shape), std::get<uv>(s_shape), m_id });
+	m_vertices.push_back(vertexType{ std::get<position>(s_shape), std::get<color>(s_shape), std::get<normal>(s_shape), std::get<uv>(s_shape), m_id, glm::vec3(0,0,0), glm::vec3(0,0,0) });
 	m_num_vertices++;
 }
 void ShapeData::append_indices(const GLushort s_index)
@@ -120,6 +119,8 @@ void ShapeData::transform(ShapeData::verticesType& inVertices, const glm::mat4 t
 		auto normal   = transformMatrix * glm::vec4(std::get<attr::normal>(vertex),   1);
 		std::get<attr::position>(vertex) = (glm::vec3)position;
 		std::get<attr::normal>(vertex) = (glm::vec3)normal;
+		std::get<attr::tangent>(vertex) = (glm::vec3)tangent;
+		std::get<attr::bitangent>(vertex) = (glm::vec3)bitangent;
 
 	}
 }

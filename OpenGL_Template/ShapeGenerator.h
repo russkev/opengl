@@ -7,7 +7,6 @@
 #include <algorithm>
 
 #include "ShapeData.h"
-#include "Vertex.h"
 
 #define PI 3.1415927
 

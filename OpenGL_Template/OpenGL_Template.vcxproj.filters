@@ -83,9 +83,6 @@
     <ClInclude Include="loadBMP_custom.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vertex.h">
-      <Filter>Primitives</Filter>
-    </ClInclude>
     <ClInclude Include="ShapeData.h">
       <Filter>Primitives</Filter>
     </ClInclude>
