@@ -11,11 +11,13 @@ in layout(location = 1 ) vec3 model_vertexColor;
 in layout(location = 2 ) vec3 model_vertexNormal;
 in layout(location = 3 ) vec2 model_uv;
 in layout(location = 4 ) int  model_id;
-in layout(location = 5 ) mat4 mat_modelToProjection;
-in layout(location = 9 ) mat4 mat_modelToWorld;
-in layout(location = 13) vec2 text_vertexPosition;
-in layout(location = 14) vec2 text_uv;
-in layout(location = 15) int  text_id;
+in layout(location = 5 ) vec3 model_vertexTangent;
+in layout(location = 6 ) vec3 model_vertexBitangent;
+in layout(location = 7 ) mat4 mat_modelToProjection;
+in layout(location = 11) mat4 mat_modelToWorld;
+in layout(location = 15) vec2 text_vertexPosition;
+in layout(location = 16) vec2 text_uv;
+in layout(location = 17) int  text_id;
 
 // // Array of transforms
 // // Numbers in the transform slots of the connections array
