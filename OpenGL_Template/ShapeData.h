@@ -1,5 +1,4 @@
 #pragma once
-#include "Vertex.h"
 #include <GL\glew.h>
 #include <glm/glm.hpp>
 #include <vector>
@@ -12,17 +11,17 @@ struct ShapeData
 {
 public:	
 	// // ----- Type Definitions ----- // //
-	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2>			vertexDataType;
-	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint>	vertexType;
-	typedef std::vector<vertexType>											verticesType;
-	typedef GLushort														indexType;
-	typedef std::vector<indexType>											indicesType;
-	typedef std::vector<vertexType>::const_iterator							vrt_iterator;
-	typedef std::vector<GLushort>::const_iterator							ind_iterator;
+	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2>								vertexDataType;
+	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>	vertexType;
+	typedef std::vector<vertexType>																verticesType;
+	typedef GLushort																			indexType;
+	typedef std::vector<indexType>																indicesType;
+	typedef std::vector<vertexType>::const_iterator												vrt_iterator;
+	typedef std::vector<GLushort>::const_iterator												ind_iterator;
 
 
 	// // ----- Attribute Enumeration ----- // //
-	enum attr { position = 0, color = 1, normal = 2, uv = 3, id = 4 };
+	enum attr { position = 0, color = 1, normal = 2, uv = 3, id = 4, tangent = 5, bitangent = 6 };
 
 	// // ----- Big 6 ----- // //
 	ShapeData();
@@ -74,7 +73,7 @@ public:
 	indicesType indices()		{ return m_indices; }
 
 	// // ----- Size Getters ----- // //
-	GLsizeiptr sizeVertices()	{ return m_vertices.size() * sizeof(Vertex); }
+	GLsizeiptr sizeVertices()	{ return m_vertices.size() * sizeof(vertexType); }
 	GLsizeiptr sizeIndices()	{ return m_indices.size()  * sizeof(GLushort); }
 	GLsizeiptr sizeShape()		{ return sizeVertices()    + sizeIndices(); }
 

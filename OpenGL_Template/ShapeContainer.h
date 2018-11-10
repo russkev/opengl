@@ -84,6 +84,8 @@ struct ShapeContainer
 		}
 		return returnVector;
 	}
+
+
 	
 	// // ----- Min/Max Values ----- // //
 	template <typename T1, typename T2>

@@ -83,6 +83,18 @@ void GL_Scene::initText()
 	m_text.print("HELLO THERE");
 }
 
+void computeTangentBasis(
+	// inputs
+	const std::vector<glm::vec3> & vertices,
+	const std::vector<glm::vec2> & uvs,
+	const std::vector<glm::vec3> & normals,
+	//outputs
+	const std::vector<glm::vec3> & tangents,
+	const std::vector<glm::vec3> & bitangents
+) {
+	int i = 0;
+}
+
 void GL_Scene::initGeo()
 {
 	// // Create and compile our GLSL program from the shaders // //
@@ -91,10 +103,12 @@ void GL_Scene::initGeo()
 	// // Texture
 	Texture texture1("uvtemplate.tga");
 	Texture texture2("two.tga");
+	Texture normalTexture("rockNormalMap_01.tga");
 	
 
 	texture1.upload_to_shader(m_program_id, "textureA");
 	texture2.upload_to_shader(m_program_id, "textureB");
+	normalTexture.upload_to_shader(m_program_id, "normalMap");
 	
 	// // Create Geo
 

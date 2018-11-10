@@ -184,7 +184,6 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Utilities.h" />
     <ClInclude Include="VAO.h" />
-    <ClInclude Include="Vertex.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

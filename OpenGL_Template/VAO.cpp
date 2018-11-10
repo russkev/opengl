@@ -38,8 +38,7 @@ void VAO::GenerateVAO(const Buffer& inBuffer, std::size_t divisor, const member_
 }
 
 void VAO::Bind() {
-	//glBindVertexArray(m_VAO_ID);
-	glBindVertexArray(89);
+	glBindVertexArray(m_VAO_ID);
 }
 
 // // GENERATE ID
