@@ -32,8 +32,10 @@ static constexpr auto COLOR_ATTR		= 1u;
 static constexpr auto NORMAL_ATTR		= 2u;
 static constexpr auto UV_ATTR			= 3u;
 static constexpr auto CAM_ATTR			= 4u;
-static constexpr auto MODEL_ATTR		= 5u;
-static constexpr auto WORLD_ATTR		= 9u;
+static constexpr auto TANGENT_ATTR		= 5u;
+static constexpr auto BITANGENT_ATTR	= 6u;
+static constexpr auto MODEL_ATTR		= 7u;
+static constexpr auto WORLD_ATTR		= 11u;
 
 struct GL_Scene
 {
