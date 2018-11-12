@@ -70,10 +70,14 @@ void main()
 		// Ambient
 		ambientLight * vec4(diff_color, 1) + 
 		// Diffuse
-		clamp(diff_light * lightIntensity, 0, 1) * cosTheta + 
+		clamp(diff_light * lightIntensity, 0, 1) + // + //* cosTheta + 
 		// Specular
+		//clamp(spec_light, 0, 1) * pow(cosAlpha, 5);
 		cosAlpha;
 		//clamp(spec_light, 0, 1) * pow(cosAlpha,5);
+		
+		
+		//ambientLight * vec4(diff_color, 1) + clamp(diff_light * lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
 
 	//vec4 colorRGB				= vec4(diff_color, 1.0);
 	float alpha					= 1.0;

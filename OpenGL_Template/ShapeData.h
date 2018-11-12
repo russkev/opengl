@@ -12,7 +12,7 @@ struct ShapeData
 public:	
 	// // ----- Type Definitions ----- // //
 	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2>								vertexDataType;
-	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>	vertexType;
+	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>	vertexType; // Don't forget to update the gl_introspect_tuple call when changing this
 	typedef std::vector<vertexType>																verticesType;
 	typedef GLushort																			indexType;
 	typedef std::vector<indexType>																indicesType;
@@ -56,6 +56,9 @@ public:
 
 	// // ----- IDs ----- // //
 	void updateIds();
+
+	// // ----- NORMALS ----- // //
+	void makeNormals();
 
 	// // ----- TANGENTS AND BITANGENTS ----- // //
 	void makeTangents();

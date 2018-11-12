@@ -16,17 +16,6 @@ struct ShapeGenerator
 	ShapeData::verticesType vertices();
 	ShapeData::indicesType indices();
 
-
-	// // APPEND THE SHAPES
-	//void appendShape(ShapeData& inShape);
-	//void appendTriangle();
-	//void appendPlane(GLuint dimensions);
-	//void appendCube();
-	//void appendArrow();
-	//void appendTube(GLuint resolution, GLfloat radius, GLfloat height);
-	//void appendNormals(ShapeData& inShape);
-	//void appendNormals();
-
 	// // TRANSFORM
 	void transform(glm::mat4 transformMatrix);
 
@@ -43,5 +32,5 @@ public:
 	ShapeData makeCube();
 	ShapeData makeArrow();
 	ShapeData makeTube(GLuint resolution, GLfloat radius, GLfloat height);
-	ShapeData makeNormals(ShapeData& inShape);
+	//ShapeData makeNormals(ShapeData& inShape);
 };
