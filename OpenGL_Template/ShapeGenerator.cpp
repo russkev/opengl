@@ -308,7 +308,7 @@ ShapeData ShapeGenerator::makeTube(GLuint resolution = 10, GLfloat radius = 2, G
 	outTube.makeTangents();
 	return outTube;
 }
-
+/*
 ShapeData ShapeGenerator::makeNormals(ShapeData& inShape) 
 {
 	ShapeData m_normals;
@@ -334,7 +334,7 @@ ShapeData ShapeGenerator::makeNormals(ShapeData& inShape)
 		++j;
 	}
 	return m_normals;
-}
+}*/
 
 
 glm::vec3 ShapeGenerator::randomColor()
