@@ -54,6 +54,9 @@ static void __stdcall openglCallbackFunction(
 
 int main(int, char**)
 {
+	int test = 0;
+	test = 0.3f;
+
 	Window			_Window;
 	GL_Scene		_Scene;
 
