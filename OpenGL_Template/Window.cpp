@@ -25,6 +25,12 @@ void DebugOutputCallback(GLenum source, GLenum type, GLuint id, GLenum severity,
 	if (severity == GL_DEBUG_SEVERITY_HIGH_ARB)				printf("Severity: HIGH ; ");
 	else if (severity == GL_DEBUG_SEVERITY_MEDIUM_ARB)		printf("Severity: MEDIUM ; ");
 	else if (severity == GL_DEBUG_SEVERITY_LOW_ARB)			printf("Severity: LOW ; ");
+	else if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
+	{
+		printf("Severity: NOTIFICATION ; ");
+		printf("\nMessage : %s\n", message);
+		return;
+	}
 
 	printf("\nMessage : %s\n", message);
 	__debugbreak();
