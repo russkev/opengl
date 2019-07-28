@@ -175,6 +175,7 @@
     <ClInclude Include="loadBMP_custom.h" />
     <ClInclude Include="loadShader.hpp" />
     <ClInclude Include="GL_Scene.h" />
+    <ClInclude Include="OBJ_Loader.h" />
     <ClInclude Include="ShapeContainer.h" />
     <ClInclude Include="ShapeData.h" />
     <ClInclude Include="ShapeGenerator.h" />

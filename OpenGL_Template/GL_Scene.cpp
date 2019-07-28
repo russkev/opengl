@@ -1,4 +1,5 @@
 #include "GL_Scene.h"
+#include "OBJ_Loader.h"
 
 void GL_Scene::init(const GLuint width, const GLuint height)
 {
@@ -101,10 +102,19 @@ void GL_Scene::initGeo()
 	normalTexture.upload_to_shader(m_program_id, "normalMap");
 	
 	// // Create Geo
-
 	m_sh.appendShape(m_shapes.makePlane(4), "plane_01");
 	m_sh.appendShape(m_shapes.makePlane(4), "plane_02");
 	m_sh.appendShape(m_shapes.makeTube(10,2,5), "plane_03");
+
+	// // OBJ Loader
+	objl::Loader Loader;
+	bool loadout = Loader.LoadFile("shaderball_lowpoly_01.obj");
+	std::cout << "\nLoadout value: " << loadout << '\n';
+	for (int i = 0; i < Loader.LoadedMeshes.size(); i++)
+	{
+		objl::Mesh curMesh = Loader.LoadedMeshes[i];
+		std::cout << "Mesh " << i << ": " << curMesh.MeshName << "\n";
+	}
 
 	// // Create transforms
 	glm::vec3 planeScale = glm::vec3(3.0f);
