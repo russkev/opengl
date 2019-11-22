@@ -104,11 +104,8 @@ void GL_Scene::initGeo()
 	// // Create Geo
 	m_sh.appendShape(m_shapes.makePlane(4), "plane_01");
 	m_sh.appendShape(m_shapes.makePlane(4), "plane_02");
-	m_sh.appendShape(m_shapes.makeTube(10,2,5), "plane_03");
-
-	// // OBJ Loader
-	OBJ_Loader Loader;
-	Loader.load_obj("blah");
+	//m_sh.appendShape(m_shapes.makeTube(10,2,5), "plane_03");
+	m_sh.appendShape(OBJ_Loader::load_obj("shaderball_lowpoly_01_tris.obj"), "shader_ball");
 
 
 	// // Create transforms
@@ -122,7 +119,7 @@ void GL_Scene::initGeo()
 	// // Transform Geo 
 	m_sh.connect("transform_01", "plane_01");
 	m_sh.connect("transform_02", "plane_02");
-	m_sh.connect("transform_03", "plane_03");
+	m_sh.connect("transform_03", "shader_ball");
 }
 
 void GL_Scene::initBuffers()

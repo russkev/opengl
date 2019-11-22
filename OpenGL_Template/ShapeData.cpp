@@ -72,6 +72,20 @@ void ShapeData::setVertex(std::size_t loc, const vertexType& data)
 	m_vertex.at(loc) = data;
 }
 
+// // ------INDICES ----- // //
+
+// Used for the case when no indices are defined
+void ShapeData::makeIndices()
+{
+	if (m_num_indices == 0 && m_num_vertices > 0)
+	{
+		for (int i = 0; i < m_num_vertices; ++i)
+		{
+			m_indices.push_back(i);
+		}
+	}
+}
+
 void ShapeData::setIndex(std::size_t loc, const indexType& data)
 {
 	assert(m_num_indices >= loc);

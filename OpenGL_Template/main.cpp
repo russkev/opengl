@@ -5,7 +5,7 @@
 #include "GL_Scene.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
-#define DEBUG
+//#define DEBUG
 
 std::vector<opengl_attr_pair> st_config =
 {
@@ -54,9 +54,6 @@ static void __stdcall openglCallbackFunction(
 
 int main(int, char**)
 {
-	int test = 0;
-	test = 0.3f;
-
 	Window			_Window;
 	GL_Scene		_Scene;
 

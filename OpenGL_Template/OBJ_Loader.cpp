@@ -1,66 +1,69 @@
 #include "OBJ_Loader.h"
 
-//OBJ_Loader::DEFAULT_COLOUR = { 0.5, 0.5, 0.5 };
-OBJ_Loader::numnum = 5.234;
+const glm::vec3 OBJ_Loader::DEFAULT_COLOUR = { 0.5, 0.5, 0.5 };
 
-bool OBJ_Loader::load_obj(const char *path)
+ShapeData OBJ_Loader::load_obj(const char *path)
 {
 	// Create temp variables
 	std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
-	std::vector< glm::vec3 > temp_vertices;
-	std::vector< glm::vec2 > temp_uvs;
-	std::vector< glm::vec3 > temp_normals;
+	std::vector< glm::vec3 > tempVertices;
+	std::vector< glm::vec2 > tempUVs;
+	std::vector< glm::vec3 > tempNormals;
 	ShapeData new_shape;
 
 	// Attempt to open file
 	FILE * file = fopen(path, "r");
 	if (file == NULL)
 	{
-		printf("Unable to open file: %s\n", path);
-		return false;
+		throw std::invalid_argument(std::string("Unable to open file: ") + path);
 	}
 
 	// Read the contents of the file into the temp variables
 	while (true)
 	{
 		char lineHeader[128];
-		// Read first line in file
-		int res = fscanf(file, "&s", lineHeader);
+		// Read first word in line
+		int res = fscanf(file, "%s", &lineHeader);
 		if (res == EOF)
 			break;
 		else
 		{
-			// Compare the beginning of the line to the chars
-			if (strcmp(lineHeader, "v ") == 0)
+			// Deal with vertex coordinates
+			if (strcmp(lineHeader, "v") == 0)
 			{
 				glm::vec3 vertex;
 				fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-				temp_vertices.push_back(vertex);
+				tempVertices.push_back(vertex);
 			}
+
+			// Deal with UV coordinates
 			else if (strcmp(lineHeader, "vt") == 0)
 			{
 				glm::vec2 uv;
 				fscanf(file, "%f %f\n", &uv.s, &uv.t);
-				temp_uvs.push_back(uv);
+				tempUVs.push_back(uv);
 			}
+
+			// Deal with normal coordinates
 			else if (strcmp(lineHeader, "vn") == 0)
 			{
 				glm::vec3 normal;
 				fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
-				temp_normals.push_back(normal);
+				tempNormals.push_back(normal);
 			}
+
+			// Deal with face indices
 			else if (strcmp(lineHeader, "f") == 0)
 			{
-				std::string vertex1, vertex2, vertex3;
+				// Should come in the form index 1, index 2, index 3
 				unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-				int matches = fscanf(file, "%d/%d/%d %d/%d %d/%d/%d\n",
-					vertexIndex[0], vertexIndex[1], vertexIndex[2],
-					uvIndex[0], uvIndex[1], uvIndex[2],
-					normalIndex[0], normalIndex[1], normalIndex[2]);
+				int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n",
+					&vertexIndex[0], &uvIndex[0], &normalIndex[0],
+					&vertexIndex[1], &uvIndex[1], &normalIndex[1],
+					&vertexIndex[2], &uvIndex[2], &normalIndex[2]);
 				if (matches != 9)
 				{
-					printf("%s cannot be read by the parser. Try exporting with other options");
-					return false;
+					throw std::invalid_argument(path + std::string(" cannot be read by the parser. Try exporting with other options"));
 				}
 				for (int i = 0; i < 3; ++i)
 				{
@@ -74,19 +77,26 @@ bool OBJ_Loader::load_obj(const char *path)
 	}
 
 	// Indexing
-	for (unsigned int i = 0; i < vertexIndices.size; ++i)
+	for (unsigned int i = 0; i < vertexIndices.size(); ++i)
 	{
-		unsigned int locationIndex = vertexIndices[i];
-		assert locationIndex <= temp_vertices.
-		unsigned int uvIndex = uvIndices[i];
-		unsigned int normalIndex = normalIndices[i];
+		ShapeData::vertexDataType newVertex;
 
-		glm::vec3 locationVertex = temp_vertices[locationIndex - 1];
-		glm::vec2 uvVertex = temp_uvs[uvIndex - 1];
-		glm::vec3 normalVertex = temp_normals[normalIndex - 1];
+		unsigned int locationIndex = vertexIndices[i] - 1;
+		unsigned int uvIndex = uvIndices[i] - 1;
+		unsigned int normalIndex = normalIndices[i] - 1;
+
+		assert(locationIndex <= tempVertices.size() && tempVertices.size() != 0);
+		assert(uvIndex <= tempUVs.size() && tempUVs.size() != 0);
+		assert(normalIndex <= tempNormals.size() && tempNormals.size() != 0 );
+
+		glm::vec3 locationVertex = tempVertices.at(locationIndex);
+		glm::vec2 uvVertex = tempUVs.at(uvIndex);
+		glm::vec3 normalVertex = tempNormals.at(normalIndex);
 
 		new_shape.append_vertices({ locationVertex, DEFAULT_COLOUR, normalVertex, uvVertex });
 	}
 
-	return true;
+	new_shape.makeIndices();
+	new_shape.makeTangents();
+	return new_shape;
 }

@@ -70,7 +70,9 @@ void Window::init(std::vector<opengl_attr_pair> st_config, GLuint width, GLuint 
 	assert(loc_glewok == GLEW_OK);
 	if (GLEW_ARB_debug_output) {
 		printf("The OpenGL implementation provides debug output. Let's use it! \n");
+#ifdef DEBUG
 		glDebugMessageCallbackARB(&DebugOutputCallback, NULL);
+#endif
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
 	}
 }

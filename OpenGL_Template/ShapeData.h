@@ -60,6 +60,9 @@ public:
 	// // ----- IDs ----- // //
 	void updateIds();
 
+	// // ------INDICES ----- // //
+	void makeIndices();
+
 	// // ----- NORMALS ----- // //
 	void makeNormals();
 
