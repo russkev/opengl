@@ -22,3 +22,5 @@ Current features:
     - TGA load
     - Diffuse
 - Text display in window
+- Models
+    - OBJ Loader
