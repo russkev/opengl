@@ -107,14 +107,9 @@ void GL_Scene::initGeo()
 	m_sh.appendShape(m_shapes.makeTube(10,2,5), "plane_03");
 
 	// // OBJ Loader
-	objl::Loader Loader;
-	bool loadout = Loader.LoadFile("shaderball_lowpoly_01.obj");
-	std::cout << "\nLoadout value: " << loadout << '\n';
-	for (int i = 0; i < Loader.LoadedMeshes.size(); i++)
-	{
-		objl::Mesh curMesh = Loader.LoadedMeshes[i];
-		std::cout << "Mesh " << i << ": " << curMesh.MeshName << "\n";
-	}
+	OBJ_Loader Loader;
+	Loader.load_obj("blah");
+
 
 	// // Create transforms
 	glm::vec3 planeScale = glm::vec3(3.0f);
