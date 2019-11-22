@@ -150,6 +150,7 @@
     <ClCompile Include="common\loadShader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GL_Scene.cpp" />
+    <ClCompile Include="OBJ_Loader.cpp" />
     <ClCompile Include="ShapeContainer.cpp" />
     <ClCompile Include="ShapeData.cpp" />
     <ClCompile Include="ShapeGenerator.cpp" />

@@ -11,14 +11,17 @@ struct ShapeData
 {
 public:	
 	// // ----- Type Definitions ----- // //
+	//                  Position    Colour     Normal      UV
 	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2>								vertexDataType;
-	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>	vertexType; // Don't forget to update the gl_introspect_tuple call when changing this
+
+	// --- Don't forget to update the gl_introspect_tuple call when changing this --- //
+	//                  Position,   Colour,    Normal,      UV,     ID,    Tangent,  Bitangent
+	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>	vertexType;
 	typedef std::vector<vertexType>																verticesType;
 	typedef GLushort																			indexType;
 	typedef std::vector<indexType>																indicesType;
 	typedef std::vector<vertexType>::const_iterator												vrt_iterator;
 	typedef std::vector<GLushort>::const_iterator												ind_iterator;
-
 
 	// // ----- Attribute Enumeration ----- // //
 	enum attr { position = 0, color = 1, normal = 2, uv = 3, id = 4, tangent = 5, bitangent = 6 };
@@ -45,7 +48,7 @@ public:
 	void setVertex(std::size_t loc, const glm::vec3& data)
 	{
 		assert(m_num_vertices >= loc);
-		std::get<attr>(m_vertices.at(loc)) = data;
+		std::get<attr>(m_vertex.at(loc)) = data;
 	}
 	void setIndex(std::size_t loc, const indexType& data);
 	void setId(GLuint s_id);
@@ -69,30 +72,30 @@ public:
 	glm::vec3 getVertex(const std::size_t i)
 	{
 		assert(m_num_vertices > 0);
-		return std::get<attr>(m_vertices.at(i));
+		return std::get<attr>(m_vertex.at(i));
 	}
 	indexType getIndex(std::size_t i);
 
 	std::size_t numIndices()	{ return m_num_indices; }
 	std::size_t numVertices()	{ return m_num_vertices; }
-	verticesType vertices()		{ return m_vertices; }
+	verticesType vertices()		{ return m_vertex; }
 	indicesType indices()		{ return m_indices; }
 
 	// // ----- Size Getters ----- // //
-	GLsizeiptr sizeVertices()	{ return m_vertices.size() * sizeof(vertexType); }
+	GLsizeiptr sizeVertices()	{ return m_vertex.size() * sizeof(vertexType); }
 	GLsizeiptr sizeIndices()	{ return m_indices.size()  * sizeof(GLushort); }
 	GLsizeiptr sizeShape()		{ return sizeVertices()    + sizeIndices(); }
 
 	// // ----- Iterators ----- // //
-	vrt_iterator vert_begin()	{ return m_vertices.begin(); }
-	vrt_iterator vert_end()		{ return m_vertices.end(); }
+	vrt_iterator vert_begin()	{ return m_vertex.begin(); }
+	vrt_iterator vert_end()		{ return m_vertex.end(); }
 	ind_iterator indx_begin()	{ return m_indices.begin(); }
 	ind_iterator indx_end()		{ return m_indices.end(); }
 	
 
 private:
 	// // ----- Member Variables ----- // //
-	verticesType	m_vertices;
+	verticesType	m_vertex;
 	indicesType		m_indices;
 	std::size_t		m_num_vertices;
 	std::size_t		m_num_indices;
