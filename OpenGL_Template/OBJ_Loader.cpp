@@ -1,5 +1,8 @@
 #include "OBJ_Loader.h"
 
+//OBJ_Loader::DEFAULT_COLOUR = { 0.5, 0.5, 0.5 };
+OBJ_Loader::numnum = 5.234;
+
 bool OBJ_Loader::load_obj(const char *path)
 {
 	// Create temp variables
@@ -73,12 +76,17 @@ bool OBJ_Loader::load_obj(const char *path)
 	// Indexing
 	for (unsigned int i = 0; i < vertexIndices.size; ++i)
 	{
-		unsigned int vertexIndex = vertexIndices[i];
-		glm::vec3 vertex = temp_vertices[vertexIndex - 1];
-		ShapeData.
+		unsigned int locationIndex = vertexIndices[i];
+		assert locationIndex <= temp_vertices.
+		unsigned int uvIndex = uvIndices[i];
+		unsigned int normalIndex = normalIndices[i];
+
+		glm::vec3 locationVertex = temp_vertices[locationIndex - 1];
+		glm::vec2 uvVertex = temp_uvs[uvIndex - 1];
+		glm::vec3 normalVertex = temp_normals[normalIndex - 1];
+
+		new_shape.append_vertices({ locationVertex, DEFAULT_COLOUR, normalVertex, uvVertex });
 	}
 
-	
-	new_shape.append_vertices({ glm::vec3(+1.0f, +1.0f, +1.0f), glm::vec3(+1.0f, +1.0f, +1.0f), glm::vec3(+1.0f, +1.0f, +1.0f), glm::vec2(0.0f, 0.0f) });
-
+	return true;
 }
