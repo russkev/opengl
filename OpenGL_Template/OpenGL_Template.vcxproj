@@ -159,6 +159,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VAO.cpp" />
+    <ClCompile Include="VBO_Indexer.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -174,7 +175,7 @@
     <ClInclude Include="GL_Tuple_Introspect.h" />
     <ClInclude Include="GL_Type_Traits.h" />
     <ClInclude Include="loadBMP_custom.h" />
-    <ClInclude Include="loadShader.hpp" />
+    <ClInclude Include="loadShader.h" />
     <ClInclude Include="GL_Scene.h" />
     <ClInclude Include="OBJ_Loader.h" />
     <ClInclude Include="ShapeContainer.h" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Utilities.h" />
     <ClInclude Include="VAO.h" />
+    <ClInclude Include="VBO_Indexer.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

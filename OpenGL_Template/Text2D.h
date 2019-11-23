@@ -8,7 +8,7 @@
 
 #include "Texture.h"
 #include "Buffer.h"
-#include "loadShader.hpp"
+#include "loadShader.h"
 #include "VAO.h"
 
 #include "GL_Type_Traits.h"

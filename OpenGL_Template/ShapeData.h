@@ -48,7 +48,7 @@ public:
 	void setVertex(std::size_t loc, const glm::vec3& data)
 	{
 		assert(m_num_vertices >= loc);
-		std::get<attr>(m_vertex.at(loc)) = data;
+		std::get<attr>(m_vertices.at(loc)) = data;
 	}
 	void setIndex(std::size_t loc, const indexType& data);
 	void setId(GLuint s_id);
@@ -62,6 +62,7 @@ public:
 
 	// // ------INDICES ----- // //
 	void makeIndices();
+	int findSimilarVertex(ShapeData::vertexType);
 
 	// // ----- NORMALS ----- // //
 	void makeNormals();
@@ -75,30 +76,30 @@ public:
 	glm::vec3 getVertex(const std::size_t i)
 	{
 		assert(m_num_vertices > 0);
-		return std::get<attr>(m_vertex.at(i));
+		return std::get<attr>(m_vertices.at(i));
 	}
 	indexType getIndex(std::size_t i);
 
 	std::size_t numIndices()	{ return m_num_indices; }
 	std::size_t numVertices()	{ return m_num_vertices; }
-	verticesType vertices()		{ return m_vertex; }
+	verticesType vertices()		{ return m_vertices; }
 	indicesType indices()		{ return m_indices; }
 
 	// // ----- Size Getters ----- // //
-	GLsizeiptr sizeVertices()	{ return m_vertex.size() * sizeof(vertexType); }
+	GLsizeiptr sizeVertices()	{ return m_vertices.size() * sizeof(vertexType); }
 	GLsizeiptr sizeIndices()	{ return m_indices.size()  * sizeof(GLushort); }
 	GLsizeiptr sizeShape()		{ return sizeVertices()    + sizeIndices(); }
 
 	// // ----- Iterators ----- // //
-	vrt_iterator vert_begin()	{ return m_vertex.begin(); }
-	vrt_iterator vert_end()		{ return m_vertex.end(); }
+	vrt_iterator vert_begin()	{ return m_vertices.begin(); }
+	vrt_iterator vert_end()		{ return m_vertices.end(); }
 	ind_iterator indx_begin()	{ return m_indices.begin(); }
 	ind_iterator indx_end()		{ return m_indices.end(); }
 	
 
 private:
 	// // ----- Member Variables ----- // //
-	verticesType	m_vertex;
+	verticesType	m_vertices;
 	indicesType		m_indices;
 	std::size_t		m_num_vertices;
 	std::size_t		m_num_indices;

@@ -94,12 +94,12 @@ void GL_Scene::initGeo()
 	// // Create Texture
 	Texture texture1("uvtemplate.tga");
 	Texture texture2("two.tga");
-	Texture normalTexture("brickNormalMap_01.tga");
+	//Texture normalTexture("brickNormalMap_01.tga");
 	
 	// // Upload textures 
 	texture1.upload_to_shader(m_program_id, "textureA");
 	texture2.upload_to_shader(m_program_id, "textureB");
-	normalTexture.upload_to_shader(m_program_id, "normalMap");
+	//normalTexture.upload_to_shader(m_program_id, "normalMap");
 	
 	// // Create Geo
 	m_sh.appendShape(OBJ_Loader::load_obj("shaderball_lowpoly_01_tris.obj"), "shader_ball");
@@ -109,7 +109,7 @@ void GL_Scene::initGeo()
 	glm::vec3 planeScale = glm::vec3(1.0f);
 
 	// // Append transforms
-	m_sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -1.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_01");
+	m_sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -5.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_01");
 
 	// // Transform Geo 
 	m_sh.connect("transform_01", "shader_ball");
