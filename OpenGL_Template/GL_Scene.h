@@ -13,7 +13,7 @@
 #include "ShapeGenerator.h"
 #include "ShapeContainer.h"
 #include "Utilities.h"
-#include "loadShader.hpp"
+#include "loadShader.h"
 #include "Buffer.h"
 #include "VAO.h"
 #include "Timer.h"

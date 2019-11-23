@@ -99,9 +99,15 @@ namespace Utilities
 		}
 	}
 
+	// // ----- IS NEAR ----- // //
+	template <typename T>
+	bool isNear(T s_point_1, T s_point_2, float threshold)
+	{
+		return distanceSquared(s_point_1, s_point_2) < threshold * threshold;
+	}
 
+	// // ----- QUICK SORT VECTOR OF PAIRS ----- // //
 	template<typename T1, typename T2>
-
 	void quickSortPairVector(std::vector<std::pair<T1, T2>>& s_pairs)
 	{
 		typedef std::vector<std::pair<T1, T2>> pairType;
