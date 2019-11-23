@@ -48,12 +48,12 @@ void GL_Scene::initSettings()
 	// // Enable depth test // //
 	glEnable(GL_DEPTH_TEST);
 	// // Enable backface culling // //
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	// // Set winding direction // // 
 	glFrontFace(GL_CCW);
 	// // Accept fragment shader if it closer to the camera than the previous one
-	//glDepthFunc(GL_LESS);
-	glDepthFunc(GL_ALWAYS);
+	glDepthFunc(GL_LESS);
+	//glDepthFunc(GL_ALWAYS);
 	// // Enable alpha
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -91,35 +91,28 @@ void GL_Scene::initGeo()
 	// // Create and compile our GLSL program from the shaders // //
 	m_program_id		= LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
 	
-	// // Texture
+	// // Create Texture
 	Texture texture1("uvtemplate.tga");
 	Texture texture2("two.tga");
 	Texture normalTexture("brickNormalMap_01.tga");
 	
-
+	// // Upload textures 
 	texture1.upload_to_shader(m_program_id, "textureA");
 	texture2.upload_to_shader(m_program_id, "textureB");
 	normalTexture.upload_to_shader(m_program_id, "normalMap");
 	
 	// // Create Geo
-	m_sh.appendShape(m_shapes.makePlane(4), "plane_01");
-	m_sh.appendShape(m_shapes.makePlane(4), "plane_02");
-	//m_sh.appendShape(m_shapes.makeTube(10,2,5), "plane_03");
 	m_sh.appendShape(OBJ_Loader::load_obj("shaderball_lowpoly_01_tris.obj"), "shader_ball");
 
 
 	// // Create transforms
-	glm::vec3 planeScale = glm::vec3(3.0f);
+	glm::vec3 planeScale = glm::vec3(1.0f);
 
+	// // Append transforms
 	m_sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -1.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_01");
-	m_sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -3.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_02");
-	m_sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -5.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_03");
-
 
 	// // Transform Geo 
-	m_sh.connect("transform_01", "plane_01");
-	m_sh.connect("transform_02", "plane_02");
-	m_sh.connect("transform_03", "shader_ball");
+	m_sh.connect("transform_01", "shader_ball");
 }
 
 void GL_Scene::initBuffers()
