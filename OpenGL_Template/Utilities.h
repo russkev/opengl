@@ -82,7 +82,7 @@ namespace Utilities
 	template <typename T>
 	GLfloat distanceSquared(T s_point_1, T s_point_2)
 	{
-		if (typeid(T) == typeid(glm::vec2))
+		if (typeid(T) == typeid(glm::vec2) || typeid(T) == typeid(glm::vec2<2, float, 0>))
 		{
 			return
 				(
@@ -103,7 +103,7 @@ namespace Utilities
 	template <typename T>
 	bool isNear(T s_point_1, T s_point_2, float threshold)
 	{
-		return distanceSquared(s_point_1, s_point_2) < threshold * threshold;
+		return distanceSquared<T>(s_point_1, s_point_2) < threshold * threshold;
 	}
 
 	// // ----- QUICK SORT VECTOR OF PAIRS ----- // //
