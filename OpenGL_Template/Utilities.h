@@ -4,7 +4,7 @@
 #include <math.h>
 
 #include <GL/glew.h>
-
+#include <glm/glm.hpp>
 
 
 namespace Utilities
@@ -78,32 +78,15 @@ namespace Utilities
 	}
 
 
-	// // ----- DISTANCE SQUARED ----- // //
-	template <typename T>
-	GLfloat distanceSquared(T s_point_1, T s_point_2)
-	{
-		if (typeid(T) == typeid(glm::vec2) || typeid(T) == typeid(glm::vec2<2, float, 0>))
-		{
-			return
-				(
-				(s_point_2.x - s_point_1.x) * (s_point_2.x - s_point_1.x) +
-					(s_point_2.y - s_point_1.y) * (s_point_2.y - s_point_1.y));
-		}
-		else
-		{
-			return
-				(
-				(s_point_2.x - s_point_1.x) * (s_point_2.x - s_point_1.x) +
-					(s_point_2.y - s_point_1.y) * (s_point_2.y - s_point_1.y) +
-					(s_point_2.z - s_point_1.z) * (s_point_2.z - s_point_1.z));
-		}
-	}
+	//// // ----- DISTANCE SQUARED ----- // //
+	GLfloat distanceSquared(glm::vec2, glm::vec2);
+	GLfloat distanceSquared(glm::vec3, glm::vec3);
 
 	// // ----- IS NEAR ----- // //
 	template <typename T>
 	bool isNear(T s_point_1, T s_point_2, float threshold)
 	{
-		return distanceSquared<T>(s_point_1, s_point_2) < threshold * threshold;
+		return distanceSquared(s_point_1, s_point_2) < (threshold * threshold);
 	}
 
 	// // ----- QUICK SORT VECTOR OF PAIRS ----- // //

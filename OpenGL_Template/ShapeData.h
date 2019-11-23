@@ -7,10 +7,12 @@
 #include <string>
 
 
+
+
 struct ShapeData 
 {
 public:
-	static constexpr float DISTANCE_THRESHOLD = 0.01;
+	static constexpr float DISTANCE_THRESHOLD = 0.01f;
 	// // ----- Type Definitions ----- // //
 	//                  Position    Colour     Normal      UV
 	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2>								vertexDataType;
