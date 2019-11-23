@@ -9,7 +9,8 @@
 
 struct ShapeData 
 {
-public:	
+public:
+	static constexpr float DISTANCE_THRESHOLD = 0.01;
 	// // ----- Type Definitions ----- // //
 	//                  Position    Colour     Normal      UV
 	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2>								vertexDataType;
@@ -62,7 +63,7 @@ public:
 
 	// // ------INDICES ----- // //
 	void makeIndices();
-	int findSimilarVertex(ShapeData::vertexType);
+	int findSimilarVertex(const indexType, verticesType&, const indicesType&);
 
 	// // ----- NORMALS ----- // //
 	void makeNormals();
