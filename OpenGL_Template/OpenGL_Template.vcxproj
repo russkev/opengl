@@ -189,6 +189,7 @@
     <ClInclude Include="VectorUtils.h" />
     <ClInclude Include="VAO.h" />
     <ClInclude Include="VBO_Indexer.h" />
+    <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexIsSimilar.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
