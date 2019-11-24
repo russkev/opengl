@@ -6,6 +6,9 @@
 #include <cassert>
 #include <string>
 #include <map>
+#include <cstdlib>
+
+#include "VectorUtils.h"
 
 
 
@@ -66,7 +69,7 @@ public:
 
 	// // ------INDICES ----- // //
 	void makeIndices();
-	int findSimilarVertex(const indexType, const std::map<vertexType, indexType, bool(*)(vertexType, vertexType)>);
+	//int findSimilarVertex(const indexType, const std::map<vertexType, indexType, VertexCompare>);
 
 	// // ----- NORMALS ----- // //
 	void makeNormals();
@@ -100,7 +103,7 @@ public:
 	ind_iterator indx_begin()	{ return m_indices.begin(); }
 	ind_iterator indx_end()		{ return m_indices.end(); }
 	
-
+	// // ----- Operator Overload ----- // //
 private:
 	// // ----- Member Variables ----- // //
 	verticesType	m_vertices;
@@ -111,22 +114,37 @@ private:
 };
 
 
-//struct VertexIsSimilar
-//{
-//	//static constexpr float DISTANCE_THRESHOLD = 0.01f;
-//	bool operator () (const ShapeData::vertexType& v1, const ShapeData::vertexType& v2) const 
-//	{
-//		//glm::vec3 v1_p = std::get<ShapeData::attr::position>(*v1);
-//		//glm::vec3 v2_p = std::get<ShapeData::attr::position>(*v2);
-//		//glm::vec2 v1_uv = std::get<ShapeData::attr::uv>(*v1);
-//		//glm::vec2 v2_uv = std::get<ShapeData::attr::uv>(*v2);
-//		//glm::vec3 v1_n = std::get<ShapeData::attr::normal>(*v1);
-//		//glm::vec3 v2_n = std::get<ShapeData::attr::normal>(*v2);
-//
-//		//return
-//		//	VectorUtils::isNear(v1_p, v2_p, DISTANCE_THRESHOLD) &&
-//		//	VectorUtils::isNear(v1_uv, v2_uv, DISTANCE_THRESHOLD) &&
-//		//	VectorUtils::isNear(v1_n, v2_n, DISTANCE_THRESHOLD);
-//		return false;
-//	}
-//};
+struct VertexCompare
+{
+	//static constexpr float DISTANCE_THRESHOLD = 0.01f;
+	bool operator () (const ShapeData::vertexType& v1, const ShapeData::vertexType& v2) const 
+	{
+		glm::vec3 v1_p = std::get<ShapeData::attr::position>(v1);
+		glm::vec3 v2_p = std::get<ShapeData::attr::position>(v2);
+		glm::vec2 v1_uv = std::get<ShapeData::attr::uv>(v1);
+		glm::vec2 v2_uv = std::get<ShapeData::attr::uv>(v2);
+		glm::vec3 v1_n = std::get<ShapeData::attr::normal>(v1);
+		glm::vec3 v2_n = std::get<ShapeData::attr::normal>(v2);
+
+		//if (
+		//	VectorUtils::isNear(v1_p, v2_p, ShapeData::DISTANCE_THRESHOLD) &&
+		//	VectorUtils::isNear(v1_uv, v2_uv, ShapeData::DISTANCE_THRESHOLD) &&
+		//	VectorUtils::isNear(v1_n, v2_n, ShapeData::DISTANCE_THRESHOLD))
+		//{
+		//	return false;
+		//}
+		/*return v1_p.x <= v2_p.x;*/
+		return
+			//v1_p.x < v2_p.x - ShapeData::DISTANCE_THRESHOLD / 2 &&
+			//v1_p.y < v2_p.y - ShapeData::DISTANCE_THRESHOLD / 2 &&
+			//v1_p.z < v2_p.z - ShapeData::DISTANCE_THRESHOLD / 2 /*&&
+			//v1_uv.s < v2_uv.s - ShapeData::DISTANCE_THRESHOLD / 2 &&
+			//v1_uv.t < v2_uv.t - ShapeData::DISTANCE_THRESHOLD / 2 &&
+			//v1_n.x < v2_n.x - ShapeData::DISTANCE_THRESHOLD / 2 &&
+			//v1_n.y < v2_n.y - ShapeData::DISTANCE_THRESHOLD / 2 &&
+			//v1_n.z < v2_n.z - ShapeData::DISTANCE_THRESHOLD / 2*/;
+			v1_p.x < v2_p.x &&
+			v1_p.y < v2_p.y &&
+			v1_p.z < v2_p.z;
+	}
+};

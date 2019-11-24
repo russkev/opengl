@@ -6,6 +6,7 @@
 #include <cassert>
 #include <string>
 #include <map>
+#include <string>
 
 #include "ShapeData.h"
 #include "VectorUtils.h"
@@ -86,44 +87,58 @@ bool tempCompare(ShapeData::vertexType v1, ShapeData::vertexType v2)
 // Guess shared indices based on proximity
 void ShapeData::makeIndices()
 {
-	verticesType newVertices;
-	indicesType newIndices;
-	bool(*fn_pt)(vertexType, vertexType) = tempCompare;
-	std::map<vertexType, indexType, bool(*)(vertexType, vertexType)> vertexMap(fn_pt);
-
-	for (int i = 0; i < m_vertices.size(); i++)
+	for (auto i = 0; i < m_vertices.size(); i++)
 	{
-		int existingIndex = newVertices.size() == 0 ? -1 : findSimilarVertex(i, vertexMap);
-		if (existingIndex >= 0)
-		{
-			newIndices.push_back((indexType)existingIndex);
-		}
-		else
-		{
-
-			newVertices.push_back(m_vertices.at(i));
-			indexType newIndex = (indexType)newVertices.size() - 1;
-			newIndices.push_back(newIndex);
-			vertexMap[m_vertices.at(i)] = newIndex;
-		}
+		m_indices.push_back((indexType)i);
 	}
-	std::swap(newVertices, m_vertices);
-	std::swap(newIndices, m_indices);
+	//verticesType newVertices;
+	//indicesType newIndices;
+	//bool(*fn_pt)(vertexType, vertexType) = tempCompare;
+	////std::map<vertexType, indexType, std::function<bool(const vertexType &, const vertexType &)>> vertexMap(tempCompare);
+
+	//std::map<vertexType, indexType> vertexMap;
+
+	//for (int i = 0; i < m_vertices.size(); i++)
+	//{
+	//	int existingIndex = -1;
+	//	//if (newVertices.size() != 0)
+	//	//{
+	//	//	auto iterator = vertexMap.find(m_vertices.at(i));
+	//	//	if (iterator != vertexMap.end())
+	//	//	{
+	//	//		existingIndex = iterator->second;
+	//	//	}
+	//	//}
+	//	if (existingIndex >= 0)
+	//	{
+	//		newIndices.push_back((indexType)existingIndex);
+	//	}
+	//	else
+	//	{
+
+	//		newVertices.push_back(m_vertices.at(i));
+	//		indexType newIndex = (indexType)newVertices.size() - 1;
+	//		newIndices.push_back(newIndex);
+	//		vertexMap[m_vertices.at(i)] = newIndex;
+	//	}
+	//}
+	//std::swap(newVertices, m_vertices);
+	//std::swap(newIndices, m_indices);
 }
 
-int ShapeData::findSimilarVertex(const indexType s_currentVertIndex, const std::map<vertexType, indexType, bool(*)(vertexType, vertexType)> s_vertexMap)
-{
-	auto iterator = s_vertexMap.find(m_vertices.at(s_currentVertIndex));
-	if (iterator == s_vertexMap.end())
-	{
-		return -1;
-	}
-	else
-	{
-		return iterator->second;
-	}
-	return -1;
-}
+//int ShapeData::findSimilarVertex(const indexType s_currentVertIndex, std::map<vertexType, indexType, VertexCompare> s_vertexMap)
+//{
+//	auto iterator = s_vertexMap.find(m_vertices.at(s_currentVertIndex));
+//	if (iterator == s_vertexMap.end())
+//	{
+//		return -1;
+//	}
+//	else
+//	{
+//		return iterator->second;
+//	}
+//	return -1;
+//}
 
 void ShapeData::setIndex(std::size_t loc, const indexType& data)
 {
