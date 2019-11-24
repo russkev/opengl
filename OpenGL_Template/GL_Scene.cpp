@@ -228,12 +228,12 @@ void GL_Scene::updateCam()
 void GL_Scene::updateGeo()
 {
 	//auto transform_01	= m_sh.getTransformPtr("transform_01");
-	//auto time			= m_timer.time();
+	auto time			= m_timer.time();
 	//*transform_01		= *transform_01 * VectorUtils::trs(glm::mat3({ 0,0,0 }, { 0, time/1000000, 0 }, { 1,1,1 }));
-	//
-	//m_sh.uploadTransforms(m_program_id);
-	//m_matBuffer.Upload(m_projection * m_cam.getWorldToViewMatrix());
-	//m_indxBuffer.Upload(m_sh.depthSort(m_cam.getPosition()));
+	
+	m_sh.uploadTransforms(m_program_id);
+	m_matBuffer.Upload(m_projection * m_cam.getWorldToViewMatrix());
+	m_indxBuffer.Upload(m_sh.depthSort(m_cam.getPosition()));
 }
 
 GL_Scene::~GL_Scene() {

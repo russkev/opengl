@@ -154,8 +154,8 @@ void ShapeData::makeTangents()
 		//glm::vec2 & uv1 = std::get<attr::uv>(m_vertices.at(m_indices.at(i + 1)));
 		//glm::vec2 & uv2 = std::get<attr::uv>(m_vertices.at(m_indices.at(i + 2)));
 		glm::vec2 & uv0 = m_vertices.at(m_indices.at(i + 0)).getUV();
-		glm::vec2 & uv1 = m_vertices.at(m_indices.at(i + 0)).getUV();
-		glm::vec2 & uv2 = m_vertices.at(m_indices.at(i + 0)).getUV();
+		glm::vec2 & uv1 = m_vertices.at(m_indices.at(i + 1)).getUV();
+		glm::vec2 & uv2 = m_vertices.at(m_indices.at(i + 2)).getUV();
 
 		
 		// Edges of the triangle, position delta
