@@ -143,7 +143,7 @@ void ShapeContainer::incrementString(std::string& s_name)
 	}
 }
 // // ----- Getters ----- // //
-ShapeData::verticesType ShapeContainer::vertices()
+std::vector<Vertex::vertexType> ShapeContainer::vertices()
 {
 	/*
 	make vector of vertices, check for input as you go
@@ -154,11 +154,20 @@ ShapeData::verticesType ShapeContainer::vertices()
 	go through connections list and apply transform to the appropriate vertices
 	
 	*/
-	ShapeData::verticesType t_vertices;
+	//ShapeData::verticesType t_vertices;
+	//for (auto i = 0; i < m_shapes.size(); ++i)
+	//{
+	//	ShapeData::verticesType shapeVerts = m_shapes.at(i).vertices();
+	//	t_vertices.insert(t_vertices.end(), shapeVerts.begin(), shapeVerts.end());
+	//}
+	//return t_vertices;
+	std::vector<Vertex::vertexType> t_vertices;
 	for (auto i = 0; i < m_shapes.size(); ++i)
 	{
-		ShapeData::verticesType shapeVerts = m_shapes.at(i).vertices();
-		t_vertices.insert(t_vertices.end(), shapeVerts.begin(), shapeVerts.end());
+		for (auto j = 0; j < m_shapes.at(i).numVertices(); ++j)
+		{
+			t_vertices.push_back(m_shapes.at(i).getVertex(j)->getVertexTuple());
+		}
 	}
 	return t_vertices;
 }

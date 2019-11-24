@@ -110,7 +110,7 @@ struct ShapeContainer
 	}
 
 	// // ----- GETTERS ----- // //
-	ShapeData::verticesType vertices();
+	std::vector<Vertex::vertexType> vertices();
 	ShapeData::indicesType  indices();
 	std::vector<glm::mat4>  transforms() { return m_transforms; }
 	intType numShapes() { return intType(m_shapes.size()); }
