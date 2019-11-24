@@ -1,4 +1,5 @@
 #include "OBJ_Loader.h"
+#include "Vertex.h"
 
 const glm::vec3 OBJ_Loader::DEFAULT_COLOUR = { 0.5, 0.5, 0.5 };
 
@@ -79,8 +80,6 @@ ShapeData OBJ_Loader::load_obj(const char *path)
 	// Indexing
 	for (unsigned int i = 0; i < vertexIndices.size(); ++i)
 	{
-		ShapeData::vertexDataType newVertex;
-
 		unsigned int locationIndex = vertexIndices[i] - 1;
 		unsigned int uvIndex = uvIndices[i] - 1;
 		unsigned int normalIndex = normalIndices[i] - 1;
@@ -94,6 +93,8 @@ ShapeData OBJ_Loader::load_obj(const char *path)
 		glm::vec3 normalVertex = tempNormals.at(normalIndex);
 
 		new_shape.append_vertices({ locationVertex, DEFAULT_COLOUR, normalVertex, uvVertex });
+		new_shape.append_vertices(Vertex(locationVertex, normalVertex, uvVertex));
+
 	}
 
 	new_shape.makeIndices();
