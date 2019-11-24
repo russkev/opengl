@@ -161,6 +161,7 @@
     <ClCompile Include="VectorUtils.cpp" />
     <ClCompile Include="VAO.cpp" />
     <ClCompile Include="VBO_Indexer.cpp" />
+    <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>

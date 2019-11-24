@@ -16,24 +16,18 @@
 ShapeData::ShapeData() :
 	m_vertices(verticesType{}),
 	m_indices(indexType{}),
-	m_num_vertices(0u),
-	m_num_indices(0u),
 	m_id(0u)
 {};
 
 ShapeData::ShapeData(const verticesType s_vertices, const indicesType s_indices) :
 	m_vertices(s_vertices),
-	m_indices(s_indices),
-	m_num_vertices(m_num_vertices + s_vertices.size()),
-	m_num_indices(m_num_indices + s_indices.size())
+	m_indices(s_indices)
 {};
 
 // // ----- Move Constructor ----- // //
 ShapeData::ShapeData(const ShapeData&& other) :
 	m_vertices(std::move(other.m_vertices)),
 	m_indices(std::move(other.m_indices)),
-	m_num_vertices(std::move(other.m_num_vertices)),
-	m_num_indices(std::move(other.m_num_indices)),
 	m_id(std::move(other.m_id))
 {};
 
@@ -47,42 +41,34 @@ ShapeData& ShapeData::operator = (ShapeData&& other)
 // // ----- Addition Assign ----- // //
 ShapeData& ShapeData::operator += (ShapeData& other)
 {
+	auto currentNumVertices = (indexType)numVertices();
 	for (std::size_t i = 0u; i < other.numIndices(); ++i)
 	{
-		m_indices.push_back(other.m_indices.at(i) + (GLushort)m_num_vertices);
+		m_indices.push_back(other.m_indices.at(i) + currentNumVertices);
 	}
 	m_vertices.insert(m_vertices.end(), other.m_vertices.begin(), other.m_vertices.end());
-	m_num_indices += other.m_num_indices;
-	m_num_vertices += other.m_num_vertices;
 	updateIds();
 	return *this;
 }
 
 // // ----- Append ----- // //
-void ShapeData::append_vertices(const vertexDataType s_shape)
+void ShapeData::append_vertices(const Vertex s_vertex)
 {
-	m_vertices.push_back(vertexType{ std::get<position>(s_shape), std::get<color>(s_shape), std::get<normal>(s_shape), std::get<uv>(s_shape), m_id, glm::vec3(0,0,0), glm::vec3(0,0,0) });
-	m_num_vertices++;
+	m_vertices.push_back(s_vertex);
 }
 void ShapeData::append_indices(const GLushort s_index)
 {
 	m_indices.push_back(s_index);
-	m_num_indices++;
 }
 
 // // ----- Setters ----- // //
-void ShapeData::setVertex(std::size_t loc, const vertexType& data)
+void ShapeData::setVertex(std::size_t loc, Vertex& vertex)
 {
-	assert(m_num_vertices >= loc);
-	m_vertices.at(loc) = data;
+	assert(numVertices() >= loc);
+	m_vertices.at(loc) = std::move(vertex);
 }
 
 // // ------INDICES ----- // //
-
-bool tempCompare(ShapeData::vertexType v1, ShapeData::vertexType v2)
-{
-	return true;
-}
 
 // Guess shared indices based on proximity
 void ShapeData::makeIndices()
@@ -142,7 +128,7 @@ void ShapeData::makeIndices()
 
 void ShapeData::setIndex(std::size_t loc, const indexType& data)
 {
-	assert(m_num_indices >= loc);
+	assert(numIndices() >= loc);
 	m_indices.at(loc) = data;
 }
 
@@ -155,14 +141,22 @@ void ShapeData::makeTangents()
 	for (auto i = 0; i < m_indices.size(); i += 3)
 	{		
 		// Get vertices
-		glm::vec3 & v0 = std::get<attr::position>(m_vertices.at(m_indices.at(i + 0)));
-		glm::vec3 & v1 = std::get<attr::position>(m_vertices.at(m_indices.at(i + 1)));
-		glm::vec3 & v2 = std::get<attr::position>(m_vertices.at(m_indices.at(i + 2)));
+		//glm::vec3 & v0 = std::get<attr::position>(m_vertices.at(m_indices.at(i + 0)));
+		//glm::vec3 & v1 = std::get<attr::position>(m_vertices.at(m_indices.at(i + 1)));
+		//glm::vec3 & v2 = std::get<attr::position>(m_vertices.at(m_indices.at(i + 2)));
+		glm::vec3 & v0 = m_vertices.at(m_indices.at(i + 0)).getPosition();
+		glm::vec3 & v1 = m_vertices.at(m_indices.at(i + 1)).getPosition();
+		glm::vec3 & v2 = m_vertices.at(m_indices.at(i + 2)).getPosition();
+
 
 		// Get UVs
-		glm::vec2 & uv0 = std::get<attr::uv>(m_vertices.at(m_indices.at(i + 0)));
-		glm::vec2 & uv1 = std::get<attr::uv>(m_vertices.at(m_indices.at(i + 1)));
-		glm::vec2 & uv2 = std::get<attr::uv>(m_vertices.at(m_indices.at(i + 2)));
+		//glm::vec2 & uv0 = std::get<attr::uv>(m_vertices.at(m_indices.at(i + 0)));
+		//glm::vec2 & uv1 = std::get<attr::uv>(m_vertices.at(m_indices.at(i + 1)));
+		//glm::vec2 & uv2 = std::get<attr::uv>(m_vertices.at(m_indices.at(i + 2)));
+		glm::vec2 & uv0 = m_vertices.at(m_indices.at(i + 0)).getUV();
+		glm::vec2 & uv1 = m_vertices.at(m_indices.at(i + 0)).getUV();
+		glm::vec2 & uv2 = m_vertices.at(m_indices.at(i + 0)).getUV();
+
 		
 		// Edges of the triangle, position delta
 		glm::vec3 deltaPos1 = v1 - v0;
@@ -179,15 +173,23 @@ void ShapeData::makeTangents()
 		for (auto j = 0; j < 3; ++j){
 			if (std::find(existingIndices.begin(), existingIndices.end(), m_indices.at(i + j)) != existingIndices.end()) {
 				int temp = m_indices.at(i + j);
-				glm::vec3 existingtangent	= std::get<attr::tangent>(m_vertices.at(m_indices.at(i + j)));
-				glm::vec3 existingBitangent = std::get<attr::bitangent>(m_vertices.at(m_indices.at(i + j)));
+				//glm::vec3 existingtangent	= std::get<attr::tangent>(m_vertices.at(m_indices.at(i + j)));
+				//glm::vec3 existingBitangent = std::get<attr::bitangent>(m_vertices.at(m_indices.at(i + j)));
 
-				std::get<attr::tangent>(m_vertices.at(m_indices.at(i + j))) = (existingtangent + newTangent) / 2.0f;
-				std::get<attr::bitangent>(m_vertices.at(m_indices.at(i + j))) = (existingBitangent + newBitangent) / 2.0f;
+				glm::vec3 existingTangent = m_vertices.at(m_indices.at(i + j)).getTangent();
+				glm::vec3 existingBitangent = m_vertices.at(m_indices.at(i + j)).getBitangent();
+
+				//std::get<attr::tangent>(m_vertices.at(m_indices.at(i + j))) = (existingtangent + newTangent) / 2.0f;
+				//std::get<attr::bitangent>(m_vertices.at(m_indices.at(i + j))) = (existingBitangent + newBitangent) / 2.0f;
+				m_vertices.at(m_indices.at(i + j)).setTangent((existingTangent + newTangent) / 2.0f);
+				m_vertices.at(m_indices.at(i + j)).setBitangent((existingBitangent + newBitangent) / 2.0f);
+
 			}
 			else {
-				std::get<attr::tangent>(m_vertices.at(m_indices.at(i + j))) = newTangent;
-				std::get<attr::bitangent>(m_vertices.at(m_indices.at(i + j))) = newBitangent;
+				//std::get<attr::tangent>(m_vertices.at(m_indices.at(i + j))) = newTangent;
+				//std::get<attr::bitangent>(m_vertices.at(m_indices.at(i + j))) = newBitangent;
+				m_vertices.at(m_indices.at(i + j)).setTangent(newTangent);
+				m_vertices.at(m_indices.at(i + j)).setBitangent(newBitangent);
 			}
 			
 		}
@@ -202,26 +204,26 @@ void ShapeData::makeTangents()
 
 void ShapeData::setId(GLuint s_id) 
 {
-	if (m_num_vertices > 0)
+	if (numVertices() > 0)
 	{
 		for (auto & vertex : m_vertices)
 		{
-			std::get<attr::id>(vertex) = s_id;
+			vertex.setID(s_id);
 		}
 	}
 
 }
 
 // // ----- Getters ----- // //
-ShapeData::vertexType ShapeData::getVertex(std::size_t i)
+Vertex* ShapeData::getVertex(std::size_t loc)
 {
-	assert(m_num_vertices >= i);
-	return m_vertices.at(i);
+	assert(numVertices() >= loc);
+	return &m_vertices.at(loc);
 }
 
 ShapeData::indexType ShapeData::getIndex(std::size_t i)
 {
-	assert(m_num_indices >= i);
+	assert(numIndices() >= i);
 	return m_indices.at(i);
 }
 
@@ -237,22 +239,28 @@ void ShapeData::transform(ShapeData::verticesType& inVertices, const glm::mat4 t
 	assert(inVertices.size() > 0);
 	for (auto & vertex : inVertices)
 	{
-		auto position = transformMatrix * glm::vec4(std::get<attr::position>(vertex), 1);
-		auto normal   = transformMatrix * glm::vec4(std::get<attr::normal>(vertex),   1);
-		std::get<attr::position>(vertex) = (glm::vec3)position;
-		std::get<attr::normal>(vertex) = (glm::vec3)normal;
-		std::get<attr::tangent>(vertex) = (glm::vec3)tangent;
-		std::get<attr::bitangent>(vertex) = (glm::vec3)bitangent;
+		// Transform the vertex
+		auto position  = transformMatrix * glm::vec4(vertex.getPosition(), 1);
+		auto normal    = transformMatrix * glm::vec4(vertex.getNormal(),   1);
+		auto tangent   = transformMatrix * glm::vec4(vertex.getTangent(), 1);
+		auto bitangent = transformMatrix * glm::vec4(vertex.getBitangent(), 1);
+
+		// Set the new vertex attributes
+		vertex.setPosition((glm::vec3)position);
+		vertex.setNormal((glm::vec3)normal);
+		vertex.setNormal((glm::vec3)tangent);
+		vertex.setNormal((glm::vec3)bitangent);
+
 	}
 }
 
 void ShapeData::updateIds()
 {
-	if (m_num_vertices > 0)
+	if (numVertices() > 0)
 	{
 		for (auto & vertex : m_vertices)
 		{
-			std::get<attr::id>(vertex) = m_id;
+			vertex.setID(m_id);
 		}
 	}
 
