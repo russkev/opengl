@@ -5,9 +5,11 @@
 #include <tuple>
 #include <cassert>
 #include <string>
+#include <map>
 
 #include "ShapeData.h"
-#include "Utilities.h"
+#include "VectorUtils.h"
+#include "VertexIsSimilar.h"
 
 // // ----- Constructors ----- // //
 ShapeData::ShapeData() :
@@ -76,49 +78,50 @@ void ShapeData::setVertex(std::size_t loc, const vertexType& data)
 
 // // ------INDICES ----- // //
 
+bool tempCompare(ShapeData::vertexType v1, ShapeData::vertexType v2)
+{
+	return true;
+}
+
 // Guess shared indices based on proximity
 void ShapeData::makeIndices()
 {
 	verticesType newVertices;
 	indicesType newIndices;
+	bool(*fn_pt)(vertexType, vertexType) = tempCompare;
+	std::map<vertexType, indexType, bool(*)(vertexType, vertexType)> vertexMap(fn_pt);
+
 	for (int i = 0; i < m_vertices.size(); i++)
 	{
-		int existingIndex = newVertices.size() == 0 ? -1 : findSimilarVertex(i, newVertices, newIndices);
+		int existingIndex = newVertices.size() == 0 ? -1 : findSimilarVertex(i, vertexMap);
 		if (existingIndex >= 0)
 		{
 			newIndices.push_back((indexType)existingIndex);
 		}
 		else
 		{
+
 			newVertices.push_back(m_vertices.at(i));
-			newIndices.push_back((indexType)newVertices.size() - 1);
+			indexType newIndex = (indexType)newVertices.size() - 1;
+			newIndices.push_back(newIndex);
+			vertexMap[m_vertices.at(i)] = newIndex;
 		}
 	}
 	std::swap(newVertices, m_vertices);
 	std::swap(newIndices, m_indices);
 }
 
-int ShapeData::findSimilarVertex(const indexType s_currentVertIndex, verticesType& s_vertices, const indicesType& s_indices)
+int ShapeData::findSimilarVertex(const indexType s_currentVertIndex, const std::map<vertexType, indexType, bool(*)(vertexType, vertexType)> s_vertexMap)
 {
-	//// Get current vertex information
-	//glm::vec3* currentPosition = &std::get<attr::position>(m_vertices.at(s_currentVertIndex));
-	//glm::vec2* currentUV = &std::get<attr::uv>(m_vertices.at(s_currentVertIndex));
-	//glm::vec3* currentNormal = &std::get<attr::normal>(m_vertices.at(s_currentVertIndex));
-
-	//// Cycle through all the vertices already indexed and look for verticies that have sufficiently similar positions, UVs and normals
-	//for (indexType index : s_indices)
-	//{
-	//	glm::vec3* comparePosition = &std::get<attr::position>(s_vertices.at(index));
-	//	glm::vec2* compareUV = &std::get<attr::uv>(s_vertices.at(index));
-	//	glm::vec3* compareNormal = &std::get<attr::normal>(s_vertices.at(index));
-	//	if (
-	//		index != s_currentVertIndex &&
-	//		Utilities::isNear<glm::vec3>(*currentPosition, *comparePosition, DISTANCE_THRESHOLD) &&
-	//		Utilities::isNear<glm::vec2>(*currentUV, *compareUV, DISTANCE_THRESHOLD) &&
-	//		Utilities::isNear<glm::vec3>(*currentNormal, *compareNormal, DISTANCE_THRESHOLD)
-	//		)
-	//		return (int)index;
-	//}
+	auto iterator = s_vertexMap.find(m_vertices.at(s_currentVertIndex));
+	if (iterator == s_vertexMap.end())
+	{
+		return -1;
+	}
+	else
+	{
+		return iterator->second;
+	}
 	return -1;
 }
 
@@ -225,7 +228,6 @@ void ShapeData::transform(ShapeData::verticesType& inVertices, const glm::mat4 t
 		std::get<attr::normal>(vertex) = (glm::vec3)normal;
 		std::get<attr::tangent>(vertex) = (glm::vec3)tangent;
 		std::get<attr::bitangent>(vertex) = (glm::vec3)bitangent;
-
 	}
 }
 

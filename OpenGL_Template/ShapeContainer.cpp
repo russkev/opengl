@@ -1,6 +1,6 @@
 #include "ShapeContainer.h"
 #include "ShapeData.h"
-#include "Utilities.h"
+#include "VectorUtils.h"
 
 void ShapeContainer::appendShape(ShapeData&& s_shape, const std::string& s_name)
 {
@@ -236,13 +236,13 @@ ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 			matCombined *= m_transforms.at(*rit);
 		}
 		glm::vec3 positionVector	= { matCombined[3].x, matCombined[3].y, matCombined[3].z };
-		GLfloat distance			= Utilities::distanceSquared(positionVector, s_cam_location);
+		GLfloat distance			= VectorUtils::distanceSquared(positionVector, s_cam_location);
 
 		distances.push_back(std::make_pair(distance, shapeID));
 
 	}
 
-	Utilities::quickSortPairVector(distances);
+	VectorUtils::quickSortPairVector(distances);
 
 	for (auto & i : distances)
 	{

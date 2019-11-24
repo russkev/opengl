@@ -7,7 +7,7 @@
 #include <glm/glm.hpp>
 
 
-namespace Utilities
+namespace VectorUtils
 {
 	// // ----- COMBINE VECTORS ----- // //
 	template<typename T, typename ...Args>
