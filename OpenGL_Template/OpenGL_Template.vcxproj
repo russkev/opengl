@@ -158,7 +158,7 @@
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="Utilities.cpp" />
+    <ClCompile Include="VectorUtils.cpp" />
     <ClCompile Include="VAO.cpp" />
     <ClCompile Include="VBO_Indexer.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -186,9 +186,10 @@
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="Utilities.h" />
+    <ClInclude Include="VectorUtils.h" />
     <ClInclude Include="VAO.h" />
     <ClInclude Include="VBO_Indexer.h" />
+    <ClInclude Include="VertexIsSimilar.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

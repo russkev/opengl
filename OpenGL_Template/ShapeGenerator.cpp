@@ -2,7 +2,7 @@
 
 #include "ShapeGenerator.h"
 #include "ShapeData.h"
-#include "Utilities.h"
+#include "VectorUtils.h"
 
 
 #include <glm/matrix.hpp>

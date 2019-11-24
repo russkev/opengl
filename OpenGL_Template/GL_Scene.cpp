@@ -109,7 +109,7 @@ void GL_Scene::initGeo()
 	glm::vec3 planeScale = glm::vec3(1.0f);
 
 	// // Append transforms
-	m_sh.appendTransform(Utilities::trs(glm::mat3({ 0.0f, -5.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_01");
+	m_sh.appendTransform(VectorUtils::trs(glm::mat3({ 0.0f, -1.5f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_01");
 
 	// // Transform Geo 
 	m_sh.connect("transform_01", "shader_ball");
@@ -229,7 +229,7 @@ void GL_Scene::updateGeo()
 {
 	auto transform_01	= m_sh.getTransformPtr("transform_01");
 	auto time			= m_timer.time();
-	*transform_01		= *transform_01 * Utilities::trs(glm::mat3({ 0,0,0 }, { 0, time/1000000, 0 }, { 1,1,1 }));
+	*transform_01		= *transform_01 * VectorUtils::trs(glm::mat3({ 0,0,0 }, { 0, time/1000000, 0 }, { 1,1,1 }));
 	
 	m_sh.uploadTransforms(m_program_id);
 	m_matBuffer.Upload(m_projection * m_cam.getWorldToViewMatrix());
