@@ -92,7 +92,7 @@ ShapeData OBJ_Loader::load_obj(const char *path)
 		glm::vec2 uvVertex = tempUVs.at(uvIndex);
 		glm::vec3 normalVertex = tempNormals.at(normalIndex);
 
-		new_shape.append_vertices({ locationVertex, DEFAULT_COLOUR, normalVertex, uvVertex });
+		//new_shape.append_vertices({ locationVertex, DEFAULT_COLOUR, normalVertex, uvVertex });
 		new_shape.append_vertices(Vertex(locationVertex, normalVertex, uvVertex));
 
 	}
