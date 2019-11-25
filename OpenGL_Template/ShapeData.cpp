@@ -131,14 +131,14 @@ void ShapeData::makeTangents()
 	for (auto i = 0; i < m_indices.size(); i += 3)
 	{		
 		// Get vertices
-		const glm::vec3& v0 = m_vertices.at(m_indices.at(i + 0)).getPosition();
-		const glm::vec3& v1 = m_vertices.at(m_indices.at(i + 1)).getPosition();
-		const glm::vec3& v2 = m_vertices.at(m_indices.at(i + 2)).getPosition();
+		const glm::vec3& v0 = m_vertices.at(m_indices.at(i + 0)).position();
+		const glm::vec3& v1 = m_vertices.at(m_indices.at(i + 1)).position();
+		const glm::vec3& v2 = m_vertices.at(m_indices.at(i + 2)).position();
 
 		// Get UVs
-		glm::vec2& uv0 = m_vertices.at(m_indices.at(i + 0)).getUV();
-		glm::vec2& uv1 = m_vertices.at(m_indices.at(i + 1)).getUV();
-		glm::vec2& uv2 = m_vertices.at(m_indices.at(i + 2)).getUV();
+		const glm::vec2& uv0 = m_vertices.at(m_indices.at(i + 0)).uv();
+		const glm::vec2& uv1 = m_vertices.at(m_indices.at(i + 1)).uv();
+		const glm::vec2& uv2 = m_vertices.at(m_indices.at(i + 2)).uv();
 
 		// Edges of the triangle, position delta
 		glm::vec3 deltaPos1 = v1 - v0;
@@ -158,18 +158,18 @@ void ShapeData::makeTangents()
 			if (std::find(existingIndices.begin(), existingIndices.end(), m_indices.at(i + j)) != existingIndices.end()) {
 
 				// Get existing tangents
-				glm::vec3 existingTangent = m_vertices.at(m_indices.at(i + j)).getTangent();
-				glm::vec3 existingBitangent = m_vertices.at(m_indices.at(i + j)).getBitangent();
+				glm::vec3 existingTangent = m_vertices.at(m_indices.at(i + j)).tangent();
+				glm::vec3 existingBitangent = m_vertices.at(m_indices.at(i + j)).bitangent();
 
 				// Calculate and set the average of the tangents. Good for them to be non-normalised here.
-				m_vertices.at(m_indices.at(i + j)).setTangent((existingTangent + newTangent) / 2.0f);
-				m_vertices.at(m_indices.at(i + j)).setBitangent((existingBitangent + newBitangent) / 2.0f);
+				m_vertices.at(m_indices.at(i + j)).tangent() = (existingTangent + newTangent) / 2.0f;
+				m_vertices.at(m_indices.at(i + j)).bitangent() = (existingBitangent + newBitangent) / 2.0f;
 
 			}
 			else {
 				// Set the new tangents
-				m_vertices.at(m_indices.at(i + j)).setTangent(newTangent);
-				m_vertices.at(m_indices.at(i + j)).setBitangent(newBitangent);
+				m_vertices.at(m_indices.at(i + j)).tangent() = newTangent;
+				m_vertices.at(m_indices.at(i + j)).bitangent() = newBitangent;
 			}
 			
 		}
@@ -187,7 +187,7 @@ void ShapeData::setId(GLuint s_id)
 	{
 		for (auto & vertex : m_vertices)
 		{
-			vertex.setID(s_id);
+			vertex.id() = s_id;
 		}
 	}
 
@@ -219,17 +219,16 @@ void ShapeData::transform(ShapeData::verticesType& inVertices, const glm::mat4 t
 	for (auto & vertex : inVertices)
 	{
 		// Transform the vertex
-		auto position  = transformMatrix * glm::vec4(vertex.getPosition(), 1);
-		auto normal    = transformMatrix * glm::vec4(vertex.getNormal(),   1);
-		auto tangent   = transformMatrix * glm::vec4(vertex.getTangent(), 1);
-		auto bitangent = transformMatrix * glm::vec4(vertex.getBitangent(), 1);
+		auto position  = transformMatrix * glm::vec4(vertex.position(), 1);
+		auto normal    = transformMatrix * glm::vec4(vertex.normal(),   1);
+		auto tangent   = transformMatrix * glm::vec4(vertex.tangent(), 1);
+		auto bitangent = transformMatrix * glm::vec4(vertex.bitangent(), 1);
 
 		// Set the new vertex attributes
-		vertex.setPosition((glm::vec3)position);
-		vertex.setNormal((glm::vec3)normal);
-		vertex.setNormal((glm::vec3)tangent);
-		vertex.setNormal((glm::vec3)bitangent);
-
+		vertex.position() = (glm::vec3)position;
+		vertex.normal() = (glm::vec3)normal;
+		vertex.tangent() = (glm::vec3)tangent;
+		vertex.bitangent() = (glm::vec3)bitangent;
 	}
 }
 
@@ -239,7 +238,7 @@ void ShapeData::updateIds()
 	{
 		for (auto & vertex : m_vertices)
 		{
-			vertex.setID(m_id);
+			vertex.id() = m_id;
 		}
 	}
 

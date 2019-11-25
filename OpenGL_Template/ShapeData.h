@@ -53,8 +53,7 @@ public:
 	void setVertex(std::size_t loc, const glm::vec3& data)
 	{
 		assert(numVertices() >= loc);
-		m_vertices.at(loc).setPosition(data);
-		//std::get<attr>(m_vertices.at(loc)) = data;
+		m_vertices.at(loc).position() = data;
 	}
 	void setIndex(std::size_t loc, const indexType& data);
 	void setId(GLuint s_id);

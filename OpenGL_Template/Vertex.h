@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
-enum vertexAttr { position = 0, color = 1, normal = 2, uv = 3, id = 4, tangent = 5, bitangent = 6 };
+enum vertexAttr { position_loc = 0, color_loc = 1, normal_loc = 2, uv_loc = 3, id_loc = 4, tangent_loc = 5, bitangent_loc = 6 };
 
 struct Vertex
 {
@@ -27,27 +27,26 @@ struct Vertex
 	~Vertex() {};
 
 	// // ----- OPERATOR OVERLOADS ----- // //
-	//bool operator < (Vertex);
 	bool operator < (const Vertex&) const;
 
 	// // ----- GETTERS ----- // //
-	const vertexType& getVertexTuple();
-	const glm::vec3& getPosition();
-	glm::vec3 getColor();
-	glm::vec3 getNormal();
-	glm::vec2 getUV();
-	GLint getID();
-	glm::vec3 getTangent();
-	glm::vec3 getBitangent();
+	const vertexType& vertexTuple() const;
+	const glm::vec3& position() const;
+	const glm::vec3& color() const;
+	const glm::vec3& normal() const;
+	const glm::vec2& uv() const;
+	const GLint& id() const;
+	const glm::vec3& tangent() const;
+	const glm::vec3& bitangent() const;
 
 	// // ----- SETTERS ----- // //
-	void setPosition(glm::vec3);
-	void setColor(glm::vec3);
-	void setNormal(glm::vec3);
-	void setUV(glm::vec2);
-	void setID(GLint);
-	void setTangent(glm::vec3);
-	void setBitangent(glm::vec3);
+	glm::vec3& position();
+	glm::vec3& color();
+	glm::vec3& normal();
+	glm::vec2& uv();
+	GLint& id();
+	glm::vec3& tangent();
+	glm::vec3& bitangent();
 
 private:
 	// // ----- MEMBER VARIABLES ----- // //
