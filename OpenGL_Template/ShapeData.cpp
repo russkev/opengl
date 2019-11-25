@@ -10,7 +10,6 @@
 
 #include "ShapeData.h"
 #include "VectorUtils.h"
-#include "VertexIsSimilar.h"
 
 // // ----- Constructors ----- // //
 ShapeData::ShapeData() :

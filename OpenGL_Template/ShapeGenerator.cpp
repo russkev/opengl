@@ -1,9 +1,7 @@
 #pragma once
-
 #include "ShapeGenerator.h"
 #include "ShapeData.h"
 #include "VectorUtils.h"
-
 
 #include <glm/matrix.hpp>
 #include <math.h>
