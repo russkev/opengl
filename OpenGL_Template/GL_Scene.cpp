@@ -75,7 +75,7 @@ void GL_Scene::initLights()
 {
 	glUseProgram(m_program_id);
 	const ShapeContainer::intType lightPositionLocation = glGetUniformLocation(m_program_id, "lightPosition");
-	glUniform3f(lightPositionLocation, 0.0f, 8.0f, 5.0f);
+	glUniform3f(lightPositionLocation, 10.0f, 5.0f, 0.0f);
 }
 
 void GL_Scene::initText()
@@ -214,8 +214,9 @@ void GL_Scene::updateLights()
 	//glm::vec4 ambientLight = { 0.0f, 0.34f, 0.6f, 1.0f };
 	//glUniform4fv(_State.ambientLightID, 1, &ambientLight.r);
 	// // Diffuse Lighting // // 
-	//glm::vec3 lightPosition = { 2.0f, 2.0f, 0.0f };
-	//glUniform3fv(_State.lightPositionID, 1, &lightPosition.x);
+	//glm::vec3 lightPosition = { 2.0f, -20.0f, 0.0f };
+	//const auto lightPositionLocation = glGetUniformLocation(m_program_id, "lightPosition");
+	//glUniform3fv(lightPositionLocation, 1, &lightPosition.x);
 }
 
 void GL_Scene::updateCam()

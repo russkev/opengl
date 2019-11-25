@@ -170,9 +170,6 @@
     <ClInclude Include="VectorUtils.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="VertexIsSimilar.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Vertex.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
