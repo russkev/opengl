@@ -166,7 +166,7 @@ std::vector<Vertex::vertexType> ShapeContainer::vertices()
 	{
 		for (auto j = 0; j < m_shapes.at(i).numVertices(); ++j)
 		{
-			t_vertices.push_back(m_shapes.at(i).getVertex(j)->getVertexTuple());
+			t_vertices.push_back(m_shapes.at(i).getVertex(j)->vertexTuple());
 		}
 	}
 	return t_vertices;

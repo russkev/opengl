@@ -38,111 +38,85 @@ Vertex& Vertex::operator = (Vertex&& other)
 }
 
 // // ----- OPERATOR OVERLOADS ----- // //
-//bool Vertex::operator < (Vertex other)
-//{
-//	return
-//		VectorUtils::isLessThan(this->getPosition(), other.getPosition(), DISTANCE_THRESHOLD) &&
-//		VectorUtils::isLessThan(this->getUV(), other.getUV(), DISTANCE_THRESHOLD) &&
-//		VectorUtils::isLessThan(this->getNormal(), other.getNormal(), DISTANCE_THRESHOLD);
-//}
 bool Vertex::operator<(const Vertex& other) const
 {
-	//const glm::vec3& test = other.getPosition();
-	//auto tuple = other.m_vertex;
-	//auto vkj = 45;
-	////auto b = std::get<1>(tuple);
-
-	return
-		VectorUtils::isLessThan(
-			std::get<vertexAttr::position>(m_vertex),
-			std::get<vertexAttr::position>(other.m_vertex),
-			DISTANCE_THRESHOLD) &&
-		VectorUtils::isLessThan(
-			std::get<vertexAttr::uv>(m_vertex),
-			std::get<vertexAttr::uv>(other.m_vertex),
-			DISTANCE_THRESHOLD) &&
-		VectorUtils::isLessThan(
-			std::get<vertexAttr::normal>(m_vertex),
-			std::get<vertexAttr::normal>(other.m_vertex),
-			DISTANCE_THRESHOLD);
-	//return std::get<vertexAttr::position>(m_vertex).x < std::get<vertexAttr::position>(other.m_vertex).x;
-	//return false;
+	return memcmp((void*)this, (void*)&other, sizeof(Vertex)) > 0;
 }
 
 
 // // ----- GETTERS ----- // //
-const Vertex::vertexType& Vertex::getVertexTuple()
+const Vertex::vertexType& Vertex::vertexTuple() const
 {
 	return m_vertex;
 }
 
-const glm::vec3& Vertex::getPosition()
+const glm::vec3& Vertex::position() const
 {
-	return std::get<vertexAttr::position>(m_vertex);
+	return std::get<vertexAttr::position_loc>(m_vertex);
 }
 
-glm::vec3 Vertex::getColor()
+const glm::vec3& Vertex::color() const
 {
-	return std::get<color>(m_vertex);
+	return std::get<color_loc>(m_vertex);
 }
 
-glm::vec3 Vertex::getNormal()
+const glm::vec3& Vertex::normal() const
 {
-	return std::get<normal>(m_vertex);
+	return std::get<normal_loc>(m_vertex);
 }
 
-glm::vec2 Vertex::getUV()
+const glm::vec2& Vertex::uv() const
 {
-	return std::get<uv>(m_vertex);
+	return std::get<uv_loc>(m_vertex);
 }
 
-GLint Vertex::getID()
+const GLint& Vertex::id() const
 {
-	return std::get<id>(m_vertex);
+	return std::get<id_loc>(m_vertex);
 }
 
-glm::vec3 Vertex::getTangent()
+const glm::vec3& Vertex::tangent() const
 {
-	return std::get<tangent>(m_vertex);
+	return std::get<tangent_loc>(m_vertex);
 }
 
-glm::vec3 Vertex::getBitangent()
+const glm::vec3& Vertex::bitangent() const
 {
-	return std::get<bitangent>(m_vertex);
+	return std::get<bitangent_loc>(m_vertex);
 }
 
 // // ----- SETTERS ----- // //
-void Vertex::setPosition(glm::vec3 s_position)
+glm::vec3& Vertex::position ()
 {
-	std::get<vertexAttr::position>(m_vertex) = s_position;
+	return std::get<vertexAttr::position_loc>(m_vertex);
 }
 
-void Vertex::setColor(glm::vec3 s_color)
+glm::vec3& Vertex::color()
 {
-	std::get<color>(m_vertex) = s_color;
+	return std::get<vertexAttr::color_loc>(m_vertex);
 }
 
-void Vertex::setNormal(glm::vec3 s_normal)
+glm::vec3& Vertex::normal()
 {
-	std::get<normal>(m_vertex) = s_normal;
+	return std::get<vertexAttr::normal_loc>(m_vertex);
 }
 
-void Vertex::setUV(glm::vec2 s_uv)
+glm::vec2& Vertex::uv()
 {
-	std::get<uv>(m_vertex) = s_uv;
+	return std::get<vertexAttr::uv_loc>(m_vertex);
 }
 
-void Vertex::setID(GLint s_id)
+GLint& Vertex::id()
 {
-	std::get<id>(m_vertex) = s_id;
+	return std::get<vertexAttr::id_loc>(m_vertex);
 }
 
-void Vertex::setTangent(glm::vec3 s_tangent)
+glm::vec3& Vertex::tangent()
 {
-	std::get<tangent>(m_vertex) = s_tangent;
+	return std::get<vertexAttr::tangent_loc>(m_vertex);
 }
 
-void Vertex::setBitangent(glm::vec3 s_bitangent)
+glm::vec3& Vertex::bitangent()
 {
-	std::get<bitangent>(m_vertex) = s_bitangent;
+	return std::get<vertexAttr::bitangent_loc>(m_vertex);
 }
