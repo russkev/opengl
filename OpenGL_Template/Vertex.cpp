@@ -1,11 +1,17 @@
 #pragma once
 #include <tuple>
+#include <cmath>
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
 #include "Vertex.h"
+#include "VectorUtils.h"
 
-// // ----- Big 6 ----- // //
+// // ----- CONSTRUCTORS ----- // //
+Vertex::Vertex() :
+	Vertex(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f))
+{}
+
 Vertex::Vertex(glm::vec3 s_position, glm::vec3 s_normal, glm::vec2 s_uv) :
 	Vertex(s_position, glm::vec3(0.0f, 0.0f, 0.0f), s_normal, s_uv)
 {}
@@ -31,15 +37,48 @@ Vertex& Vertex::operator = (Vertex&& other)
 	return *new (this) Vertex(std::move(other));
 }
 
-// // ----- Getters ----- // //
-Vertex::vertexType Vertex::getVertexTuple()
+// // ----- OPERATOR OVERLOADS ----- // //
+//bool Vertex::operator < (Vertex other)
+//{
+//	return
+//		VectorUtils::isLessThan(this->getPosition(), other.getPosition(), DISTANCE_THRESHOLD) &&
+//		VectorUtils::isLessThan(this->getUV(), other.getUV(), DISTANCE_THRESHOLD) &&
+//		VectorUtils::isLessThan(this->getNormal(), other.getNormal(), DISTANCE_THRESHOLD);
+//}
+bool Vertex::operator<(const Vertex& other) const
+{
+	//const glm::vec3& test = other.getPosition();
+	//auto tuple = other.m_vertex;
+	//auto vkj = 45;
+	////auto b = std::get<1>(tuple);
+
+	return
+		VectorUtils::isLessThan(
+			std::get<vertexAttr::position>(m_vertex),
+			std::get<vertexAttr::position>(other.m_vertex),
+			DISTANCE_THRESHOLD) &&
+		VectorUtils::isLessThan(
+			std::get<vertexAttr::uv>(m_vertex),
+			std::get<vertexAttr::uv>(other.m_vertex),
+			DISTANCE_THRESHOLD) &&
+		VectorUtils::isLessThan(
+			std::get<vertexAttr::normal>(m_vertex),
+			std::get<vertexAttr::normal>(other.m_vertex),
+			DISTANCE_THRESHOLD);
+	//return std::get<vertexAttr::position>(m_vertex).x < std::get<vertexAttr::position>(other.m_vertex).x;
+	//return false;
+}
+
+
+// // ----- GETTERS ----- // //
+const Vertex::vertexType& Vertex::getVertexTuple()
 {
 	return m_vertex;
 }
 
-glm::vec3 Vertex::getPosition()
+const glm::vec3& Vertex::getPosition()
 {
-	return std::get<position>(m_vertex);
+	return std::get<vertexAttr::position>(m_vertex);
 }
 
 glm::vec3 Vertex::getColor()
@@ -72,10 +111,10 @@ glm::vec3 Vertex::getBitangent()
 	return std::get<bitangent>(m_vertex);
 }
 
-// // ----- Setters ----- // //
+// // ----- SETTERS ----- // //
 void Vertex::setPosition(glm::vec3 s_position)
 {
-	std::get<position>(m_vertex) = s_position;
+	std::get<vertexAttr::position>(m_vertex) = s_position;
 }
 
 void Vertex::setColor(glm::vec3 s_color)
