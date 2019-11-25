@@ -77,54 +77,42 @@ void ShapeData::makeIndices()
 	{
 		m_indices.push_back((indexType)i);
 	}
-	//verticesType newVertices;
-	//indicesType newIndices;
-	//bool(*fn_pt)(vertexType, vertexType) = tempCompare;
-	////std::map<vertexType, indexType, std::function<bool(const vertexType &, const vertexType &)>> vertexMap(tempCompare);
+	verticesType newVertices;
+	indicesType newIndices;
+	std::map<Vertex, indexType> vertexMap;
 
-	//std::map<vertexType, indexType> vertexMap;
+	for (int i = 0; i < m_vertices.size(); i++)
+	{
+		int existingIndex = findSimilarVertex(i, vertexMap);
+		if (existingIndex >= 0)
+		{
+			newIndices.push_back((indexType)existingIndex);
+		}
+		else
+		{
 
-	//for (int i = 0; i < m_vertices.size(); i++)
-	//{
-	//	int existingIndex = -1;
-	//	//if (newVertices.size() != 0)
-	//	//{
-	//	//	auto iterator = vertexMap.find(m_vertices.at(i));
-	//	//	if (iterator != vertexMap.end())
-	//	//	{
-	//	//		existingIndex = iterator->second;
-	//	//	}
-	//	//}
-	//	if (existingIndex >= 0)
-	//	{
-	//		newIndices.push_back((indexType)existingIndex);
-	//	}
-	//	else
-	//	{
-
-	//		newVertices.push_back(m_vertices.at(i));
-	//		indexType newIndex = (indexType)newVertices.size() - 1;
-	//		newIndices.push_back(newIndex);
-	//		vertexMap[m_vertices.at(i)] = newIndex;
-	//	}
-	//}
-	//std::swap(newVertices, m_vertices);
-	//std::swap(newIndices, m_indices);
+			newVertices.push_back(m_vertices.at(i));
+			indexType newIndex = (indexType)newVertices.size() - 1;
+			newIndices.push_back(newIndex);
+			vertexMap[m_vertices.at(i)] = newIndex;
+		}
+	}
+	std::swap(newVertices, m_vertices);
+	std::swap(newIndices, m_indices);
 }
 
-//int ShapeData::findSimilarVertex(const indexType s_currentVertIndex, std::map<vertexType, indexType, VertexCompare> s_vertexMap)
-//{
-//	auto iterator = s_vertexMap.find(m_vertices.at(s_currentVertIndex));
-//	if (iterator == s_vertexMap.end())
-//	{
-//		return -1;
-//	}
-//	else
-//	{
-//		return iterator->second;
-//	}
-//	return -1;
-//}
+int ShapeData::findSimilarVertex(const indexType s_currentVertIndex, const std::map<Vertex, indexType>& s_vertexMap)
+{
+	auto iterator = s_vertexMap.find(m_vertices.at(s_currentVertIndex));
+	if (iterator == s_vertexMap.end())
+	{
+		return -1;
+	}
+	else
+	{
+		return iterator->second;
+	}
+}
 
 void ShapeData::setIndex(std::size_t loc, const indexType& data)
 {
@@ -137,27 +125,21 @@ void ShapeData::makeTangents()
 {
 	assert(m_vertices.size() > 0);
 	assert(m_indices.size() > 0);
-	std::vector<GLushort> existingIndices;
+	std::vector<indexType> existingIndices;
+
+	// Cycle through sets of three indices
 	for (auto i = 0; i < m_indices.size(); i += 3)
 	{		
 		// Get vertices
-		//glm::vec3 & v0 = std::get<attr::position>(m_vertices.at(m_indices.at(i + 0)));
-		//glm::vec3 & v1 = std::get<attr::position>(m_vertices.at(m_indices.at(i + 1)));
-		//glm::vec3 & v2 = std::get<attr::position>(m_vertices.at(m_indices.at(i + 2)));
-		glm::vec3 & v0 = m_vertices.at(m_indices.at(i + 0)).getPosition();
-		glm::vec3 & v1 = m_vertices.at(m_indices.at(i + 1)).getPosition();
-		glm::vec3 & v2 = m_vertices.at(m_indices.at(i + 2)).getPosition();
-
+		const glm::vec3& v0 = m_vertices.at(m_indices.at(i + 0)).getPosition();
+		const glm::vec3& v1 = m_vertices.at(m_indices.at(i + 1)).getPosition();
+		const glm::vec3& v2 = m_vertices.at(m_indices.at(i + 2)).getPosition();
 
 		// Get UVs
-		//glm::vec2 & uv0 = std::get<attr::uv>(m_vertices.at(m_indices.at(i + 0)));
-		//glm::vec2 & uv1 = std::get<attr::uv>(m_vertices.at(m_indices.at(i + 1)));
-		//glm::vec2 & uv2 = std::get<attr::uv>(m_vertices.at(m_indices.at(i + 2)));
-		glm::vec2 & uv0 = m_vertices.at(m_indices.at(i + 0)).getUV();
-		glm::vec2 & uv1 = m_vertices.at(m_indices.at(i + 1)).getUV();
-		glm::vec2 & uv2 = m_vertices.at(m_indices.at(i + 2)).getUV();
+		glm::vec2& uv0 = m_vertices.at(m_indices.at(i + 0)).getUV();
+		glm::vec2& uv1 = m_vertices.at(m_indices.at(i + 1)).getUV();
+		glm::vec2& uv2 = m_vertices.at(m_indices.at(i + 2)).getUV();
 
-		
 		// Edges of the triangle, position delta
 		glm::vec3 deltaPos1 = v1 - v0;
 		glm::vec3 deltaPos2 = v2 - v0;
@@ -166,28 +148,26 @@ void ShapeData::makeTangents()
 		glm::vec2 deltaUV1 = uv1 - uv0;
 		glm::vec2 deltaUV2 = uv2 - uv0;
 
+		// Calculate tangent and bitangent
 		float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
 		glm::vec3 newTangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y)*r;
 		glm::vec3 newBitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x)*r;
 
+		// If tangent and bitangents exist, calculate the average of the current and the new tangents, otherwise just set the new tangent
 		for (auto j = 0; j < 3; ++j){
 			if (std::find(existingIndices.begin(), existingIndices.end(), m_indices.at(i + j)) != existingIndices.end()) {
-				int temp = m_indices.at(i + j);
-				//glm::vec3 existingtangent	= std::get<attr::tangent>(m_vertices.at(m_indices.at(i + j)));
-				//glm::vec3 existingBitangent = std::get<attr::bitangent>(m_vertices.at(m_indices.at(i + j)));
 
+				// Get existing tangents
 				glm::vec3 existingTangent = m_vertices.at(m_indices.at(i + j)).getTangent();
 				glm::vec3 existingBitangent = m_vertices.at(m_indices.at(i + j)).getBitangent();
 
-				//std::get<attr::tangent>(m_vertices.at(m_indices.at(i + j))) = (existingtangent + newTangent) / 2.0f;
-				//std::get<attr::bitangent>(m_vertices.at(m_indices.at(i + j))) = (existingBitangent + newBitangent) / 2.0f;
+				// Calculate and set the average of the tangents. Good for them to be non-normalised here.
 				m_vertices.at(m_indices.at(i + j)).setTangent((existingTangent + newTangent) / 2.0f);
 				m_vertices.at(m_indices.at(i + j)).setBitangent((existingBitangent + newBitangent) / 2.0f);
 
 			}
 			else {
-				//std::get<attr::tangent>(m_vertices.at(m_indices.at(i + j))) = newTangent;
-				//std::get<attr::bitangent>(m_vertices.at(m_indices.at(i + j))) = newBitangent;
+				// Set the new tangents
 				m_vertices.at(m_indices.at(i + j)).setTangent(newTangent);
 				m_vertices.at(m_indices.at(i + j)).setBitangent(newBitangent);
 			}
@@ -198,7 +178,6 @@ void ShapeData::makeTangents()
 		for (auto j = 0; j < 3; ++j) {
 			existingIndices.push_back(m_indices.at(i + j));
 		}
-		auto k = 0;
 	}
 }
 

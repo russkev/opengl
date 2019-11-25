@@ -7,27 +7,32 @@ enum vertexAttr { position = 0, color = 1, normal = 2, uv = 3, id = 4, tangent =
 
 struct Vertex
 {
-	// // ----- Consts ----- // //
+	// // ----- CONSTS ----- // //
 	static constexpr float DISTANCE_THRESHOLD = 0.01f;
 
+	// // ----- TYPEDEF ----- // //
 	// --- Don't forget to update the gl_introspect_tuple call when changing this --- //
 	//                   Position,   Colour,    Normal,      UV,     ID,    Tangent,  Bitangent    //
 	typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>	vertexType;
 
-	// // ----- Big 6 ----- // //
+	// // ----- CONSTRUCTORS ----- // //
+	Vertex();
 	Vertex(glm::vec3, glm::vec3, glm::vec2);
 	Vertex(glm::vec3, glm::vec3, glm::vec3, glm::vec2);
 	Vertex(glm::vec3 s_position, glm::vec3 s_color, glm::vec3 s_normal, glm::vec2 s_uv, GLint id, glm::vec3 tangent, glm::vec3 bitangent);
-	//Vertex();
-	//~Vertex() {};
 	Vertex(const Vertex&);
 	Vertex(const Vertex&& other);
-	//Vertex& operator = (const Vertex&) = delete;
+	Vertex& operator = (const Vertex&) = delete;
 	Vertex& operator = (Vertex&& other);
+	~Vertex() {};
 
-	// // ----- Getters ----- // //
-	vertexType getVertexTuple();
-	glm::vec3 getPosition();
+	// // ----- OPERATOR OVERLOADS ----- // //
+	//bool operator < (Vertex);
+	bool operator < (const Vertex&) const;
+
+	// // ----- GETTERS ----- // //
+	const vertexType& getVertexTuple();
+	const glm::vec3& getPosition();
 	glm::vec3 getColor();
 	glm::vec3 getNormal();
 	glm::vec2 getUV();
@@ -35,7 +40,7 @@ struct Vertex
 	glm::vec3 getTangent();
 	glm::vec3 getBitangent();
 
-	// // ----- Setters ----- // //
+	// // ----- SETTERS ----- // //
 	void setPosition(glm::vec3);
 	void setColor(glm::vec3);
 	void setNormal(glm::vec3);
@@ -45,5 +50,6 @@ struct Vertex
 	void setBitangent(glm::vec3);
 
 private:
+	// // ----- MEMBER VARIABLES ----- // //
 	vertexType m_vertex;
 };

@@ -89,6 +89,11 @@ namespace VectorUtils
 		return distanceSquared(s_point_1, s_point_2) < (threshold * threshold);
 	}
 
+	// // ----- IS LESS THAN ----- // //
+	bool isLessThan(const glm::vec2&, const glm::vec2&, const float threshold);
+	bool isLessThan(const glm::vec3&, const glm::vec3&, float threshold);
+
+
 	// // ----- QUICK SORT VECTOR OF PAIRS ----- // //
 	template<typename T1, typename T2>
 	void quickSortPairVector(std::vector<std::pair<T1, T2>>& s_pairs)

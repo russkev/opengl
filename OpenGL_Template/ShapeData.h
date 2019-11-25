@@ -68,7 +68,7 @@ public:
 
 	// // ------INDICES ----- // //
 	void makeIndices();
-	//int findSimilarVertex(const indexType, const std::map<vertexType, indexType, VertexCompare>);
+	int findSimilarVertex(const indexType, const std::map<Vertex, indexType>&);
 
 	// // ----- NORMALS ----- // //
 	void makeNormals();
