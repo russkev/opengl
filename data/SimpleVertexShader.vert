@@ -46,14 +46,23 @@ out vec3 f_world_vertexPosition;
 out vec3 fragmentColor;
 out vec3 f_world_vertexNormal;
 out vec2 uv;
+//out mat4 transform_matrix;
 
 out vec3 worldSpace_lightPosition;
 
 out vec3 cameraSpace_eyeDirection;
 out vec3 cameraSpace_lightDirection;
 
+out mat3 TBN_matrix;
 out vec3 tangentSpace_eyeDirection;
 out vec3 tangentSpace_lightDirection;
+
+mat4 transform = mat4(
+		vec4(1.0f, 0.0f, 0.0f, 0.0f),
+		vec4(0.0f, 1.0f, 0.0f, 0.0f),
+		vec4(0.0f, 0.0f, 1.0f, 0.0f),
+		vec4(0.0f, 0.0f, 0.0f, 1.0f)
+	);
 
 bool isEmptyConnection(int index)
 {
@@ -101,13 +110,6 @@ void transformGlPosition()
 {
 	int incoming = incomingConnection(model_id, shapeDestLoc);
 
-	mat4 transform = mat4(
-		vec4(1.0f, 0.0f, 0.0f, 0.0f),
-		vec4(0.0f, 1.0f, 0.0f, 0.0f),
-		vec4(0.0f, 0.0f, 1.0f, 0.0f),
-		vec4(0.0f, 0.0f, 0.0f, 1.0f)
-	);
-
 	if (incoming > -1)
 	{
 		transform = transformTransform(incoming);
@@ -136,9 +138,9 @@ vec3 colorFromIndex(int a)
 
 mat3 tangent_bitangent_normal_matrix()
 {
-	vec3 T	= normalize(vec3(mat_modelToProjection * vec4(model_vertexTangent, 0.0)));
-	vec3 B	= normalize(vec3(mat_modelToProjection * vec4(model_vertexBitangent, 0.0)));
-	vec3 N	= normalize(vec3(mat_modelToProjection * vec4(model_vertexNormal, 0.0)));
+	vec3 T	= normalize(vec3(transform * vec4(model_vertexTangent, 0.0)));
+	vec3 B	= normalize(vec3(transform * vec4(model_vertexBitangent, 0.0)));
+	vec3 N	= normalize(vec3(transform * vec4(model_vertexNormal, 0.0)));
 
 	//vec3 vertexNormal_cameraSpace		= mat3(mat_modelToProjection) * normalize(model_vertexNormal);
 	//vec3 vertexTangent_cameraSpace		= mat3(mat_modelToProjection) * normalize(model_vertexTangent);
@@ -161,6 +163,7 @@ void sendLightAndNormalMap()
 	
 	mat3 TBN = tangent_bitangent_normal_matrix();
 
+	TBN_matrix = TBN;
 	tangentSpace_lightDirection		= TBN * cameraSpace_lightDirection;
 	tangentSpace_eyeDirection		= TBN * cameraSpace_eyeDirection;
 }
