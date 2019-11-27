@@ -6,10 +6,12 @@ in vec3 fragmentColor;
 in vec3 f_world_vertexNormal;
 in vec2 uv;
 in vec3 worldSpace_lightPosition;
+//in mat4 transform;
 
 in vec3 cameraSpace_eyeDirection;
 in vec3 cameraSpace_lightDirection;
 
+in mat3 TBN_matrix;
 in vec3 tangentSpace_eyeDirection;
 in vec3 tangentSpace_lightDirection;
 
@@ -31,7 +33,10 @@ void main()
 	// Process textures
 	vec3 tex_a					= texture2D( textureA, uv ).rgb;
 	vec3 tex_b					= texture2D( textureB, uv ).rgb;
-	vec3 tex_normal				= normalize(texture( normalMap, vec2(uv.x, -uv.y) ).rgb * 2.0 - 1.0) ;
+//	vec3 tex_normal				= normalize(texture( normalMap, vec2(uv.x, -uv.y) ).rgb * 2.0 - 1.0) ;
+	vec3 tex_normal				= texture(normalMap, vec2(uv.x, -uv.y)).rgb;
+	tex_normal					= normalize(tex_normal * 2.0 - 1.0);
+	tex_normal					= normalize(TBN_matrix * tex_normal);
 	vec3 diff_color				= mix(tex_a, tex_b, 0.5);
 
 	// Initialise light properties
@@ -53,7 +58,7 @@ void main()
 	// // ----- DIFFUSE ----- // //
 
 	// Calculate the intensity of the illumination based on angle between the notmal and the light
-	float cos_theta					= dot(tangentSpace_lightDirection, f_world_vertexNormal);
+	float cos_theta					= clamp(dot(tex_normal, light_direction), 0, 1);
 	//float cos_theta				= dot(tangentSpace_lightDirection, f_world_vertexNormal);
 
 	// Calculate the final illumination colour using the diffuse colour and the illumination intensity
@@ -128,8 +133,10 @@ void main()
 //		diff_light * lightIntensity * pow(cos_alpha, spec_cosinePower);
 
 	//vec3 colorRGB = normalize(clamp(vec3(cos_theta, cos_theta, cos_theta), 0, 1));
-	//vec3 colorRGB = (vec3(cos_theta, cos_theta, cos_theta));
-	vec3 colorRGB = normalize(tangentSpace_lightDirection);
+//	vec3 colorRGB = (vec3(cos_theta, cos_theta, cos_theta));
+	//vec3 colorRGB = normalize(light_direction);
+	//vec4 colorRGB = diff_light;
+	vec3 colorRGB = normalize(tex_normal);
 
 	float alpha					= 1.0;
 	color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
