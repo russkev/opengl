@@ -34,31 +34,23 @@ void main()
 	vec3 tex_normal				= normalize(texture( normalMap, vec2(uv.x, -uv.y) ).rgb * 2.0 - 1.0) ;
 	vec3 diff_color				= mix(tex_a, tex_b, 0.5);
 
-	// Initialise specular attributes
-	vec3  spec_color			= vec3(1.0, 0.7, 0.5);
-	float spec_cosinePower		= 30;
-
 	// Initialise light properties
 	float lightDistance			= distance(worldSpace_lightPosition, f_world_vertexPosition);
 	float lightRadius			= 1;
 	float lightIntensity		= 300;
 	lightIntensity				= lightIntensity / pow(((lightDistance / lightRadius) + 1), 2);
 
+	// Initialise specular attributes
+	vec3  spec_color			= vec3(1.0, 0.7, 0.5);
+	float spec_cosinePower		= 20;
+
 	// Initialise world vectors
 	vec3 world_lightVector		= normalize(worldSpace_lightPosition - f_world_vertexPosition);
 	vec3 world_normalVector		= normalize(f_world_vertexNormal);
 	vec3 light_direction		= normalize(tangentSpace_lightDirection);
 
-	// Calculate the cos of the angle between the fragment and the light
-	float cosTheta				= clamp( dot( tex_normal, light_direction), 0, 1);
-
-	vec3 eye_direction			= normalize(tangentSpace_eyeDirection);
-
-	// Calculate the vector representing light direction reflected off the texture normal
-	vec3 texture_reflection		= reflect(-light_direction, tex_normal);
-
-	// Calculate the cos of the angle between the eye fragment vector and the texture reflection vector
-	float cosAlpha				= clamp( dot(eye_direction, texture_reflection), 0, 1);
+	
+	// // ----- DIFFUSE ----- // //
 
 	// Calculate the intensity of the illumination based on angle between the notmal and the light
 	float diff_brightness		= dot(world_lightVector, world_normalVector);
@@ -67,12 +59,38 @@ void main()
 	vec4 diff_light				= vec4(diff_color * diff_brightness, 1.0);
 
 
-	vec3 reflectedLightVector	= reflect(-world_lightVector, world_normalVector);
-	vec3 camVector				= normalize(camPosition - f_world_vertexPosition);
+	
+	// // ----- SPECULAR ----- // //
 
-	float spec_brightness		= clamp(dot(reflectedLightVector, camVector), 0, 1);
-	spec_brightness				= pow(spec_brightness, spec_cosinePower);
-	vec4 spec_light				= vec4(spec_color*spec_brightness, 1.0);
+	// Eye vector (towards camera)
+	vec3 eye_vector				= normalize(cameraSpace_eyeDirection);
+
+	// Calculate the vector representing light direction reflected off the texture normal
+	vec3 texture_reflection		= reflect(-light_direction, tex_normal);
+
+	// Calculate the cos of the angle between the eye fragment vector and the texture reflection vector
+	float cos_alpha				= clamp( dot(eye_vector, texture_reflection), 0, 1);
+
+	// Calculate the cos of the angle between the surface normal and the light
+	//float cosTheta				= clamp( dot( tex_normal, light_direction), 0, 1);
+
+
+
+	//vec3 eye_direction			= normalize(tangentSpace_eyeDirection);
+
+
+
+;
+
+
+
+
+	//vec3 reflectedLightVector	= reflect(-world_lightVector, world_normalVector);
+	//vec3 camVector				= normalize(camPosition - f_world_vertexPosition);
+
+	//float spec_brightness		= clamp(dot(reflectedLightVector, camVector), 0, 1);
+	//spec_brightness				= pow(spec_brightness, spec_cosinePower);
+	//vec4 spec_light				= vec4(spec_color*spec_brightness, 1.0);
 
 	//vec4 colorRGB				= 
 	//	// Ambient
@@ -87,9 +105,16 @@ void main()
 		
 	//	//ambientLight * vec4(diff_color, 1) + clamp(diff_light * lightIntensity, 0, 1) + clamp(spec_light, 0, 1);
 
-	////vec4 colorRGB				= vec4(diff_color, 1.0);
+	//vec4 colorRGB				= vec4(diff_color, 1.0);
 
-	vec4 colorRGB = clamp(diff_light * lightIntensity, 0, 1);
+	//vec4 colorRGB = clamp(diff_light * lightIntensity, 0, 1);
+	vec4 colorRGB = 
+
+		// Diffuse //
+		clamp(diff_light * lightIntensity, 0, 1) + 
+
+		// Specular //
+		diff_light * lightIntensity * pow(cos_alpha, spec_cosinePower);
 
 	float alpha					= 1.0;
 	color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
