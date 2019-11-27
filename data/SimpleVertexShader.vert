@@ -136,9 +136,10 @@ vec3 colorFromIndex(int a)
 
 mat3 tangent_bitangent_normal_matrix()
 {
-	vec3 vertexTangent_cameraSpace = mat3(mat_modelToProjection) * model_vertexTangent;
-	vec3 vertexBiTangent_cameraSpace = mat3(mat_modelToProjection) * model_vertexBitangent;
-	vec3 vertexNormal_cameraSpace = mat3(mat_modelToProjection) * model_vertexNormal;
+	vec3 vertexNormal_cameraSpace		= mat3(mat_modelToProjection) * normalize(model_vertexNormal);
+	vec3 vertexTangent_cameraSpace		= mat3(mat_modelToProjection) * normalize(model_vertexTangent);
+	vec3 vertexBiTangent_cameraSpace	= mat3(mat_modelToProjection) * normalize(model_vertexBitangent);
+	
 
 	return transpose(mat3(
 		vertexTangent_cameraSpace,
@@ -149,15 +150,15 @@ mat3 tangent_bitangent_normal_matrix()
 
 void sendLightAndNormalMap()
 {
-	vec3 cameraSpace_vertexPosition = ( mat_view * mat_modelToWorld * model_vertexPosition).xyz;
-	cameraSpace_eyeDirection = vec3(0,0,0) - cameraSpace_vertexPosition;
-	vec3 cameraSpace_lightPosition = (mat_view * vec4(worldSpace_lightPosition, 1)).xyz;
-	cameraSpace_lightDirection = cameraSpace_lightPosition + cameraSpace_eyeDirection;
+	vec3 cameraSpace_vertexPosition	= ( mat_view * mat_modelToWorld * model_vertexPosition).xyz;
+	cameraSpace_eyeDirection		= vec3(0,0,0) - cameraSpace_vertexPosition;
+	vec3 cameraSpace_lightPosition	= (mat_view * vec4(worldSpace_lightPosition, 1)).xyz;
+	cameraSpace_lightDirection		= cameraSpace_lightPosition + cameraSpace_eyeDirection;
 	
 	mat3 TBN = tangent_bitangent_normal_matrix();
 
-	tangentSpace_lightDirection = TBN * cameraSpace_lightDirection;
-	tangentSpace_eyeDirection = TBN * cameraSpace_eyeDirection;
+	tangentSpace_lightDirection		= TBN * cameraSpace_lightDirection;
+	tangentSpace_eyeDirection		= TBN * cameraSpace_eyeDirection;
 }
 
 void main()
