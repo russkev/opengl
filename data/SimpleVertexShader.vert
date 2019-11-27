@@ -136,16 +136,20 @@ vec3 colorFromIndex(int a)
 
 mat3 tangent_bitangent_normal_matrix()
 {
-	vec3 vertexNormal_cameraSpace		= mat3(mat_modelToProjection) * normalize(model_vertexNormal);
-	vec3 vertexTangent_cameraSpace		= mat3(mat_modelToProjection) * normalize(model_vertexTangent);
-	vec3 vertexBiTangent_cameraSpace	= mat3(mat_modelToProjection) * normalize(model_vertexBitangent);
-	
+	vec3 T	= normalize(vec3(mat_modelToProjection * vec4(model_vertexTangent, 0.0)));
+	vec3 B	= normalize(vec3(mat_modelToProjection * vec4(model_vertexBitangent, 0.0)));
+	vec3 N	= normalize(vec3(mat_modelToProjection * vec4(model_vertexNormal, 0.0)));
 
-	return transpose(mat3(
-		vertexTangent_cameraSpace,
-		vertexBiTangent_cameraSpace,
-		vertexNormal_cameraSpace
-	));
+	//vec3 vertexNormal_cameraSpace		= mat3(mat_modelToProjection) * normalize(model_vertexNormal);
+	//vec3 vertexTangent_cameraSpace		= mat3(mat_modelToProjection) * normalize(model_vertexTangent);
+	//vec3 vertexBiTangent_cameraSpace	= mat3(mat_modelToProjection) * normalize(model_vertexBitangent);
+	
+	return mat3(T, B, N);
+	//return transpose(mat3(
+	//	vertexTangent_cameraSpace,
+	//	vertexBiTangent_cameraSpace,
+	//	vertexNormal_cameraSpace
+	//));
 }
 
 void sendLightAndNormalMap()
