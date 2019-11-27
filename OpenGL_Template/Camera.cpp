@@ -13,9 +13,9 @@ Camera::Camera() :
 	m_viewDirection(-0.0, -1.0f, -1.0f),
 	m_camRight(glm::vec3(-1.0f, 0.0f, 0.0f)),
 	m_yAxis(glm::vec3(0.0f, 1.0f, 0.0f)),
-	m_position(-0.5f, 4.0f,8.0f),
+	m_position(0.0f, 8.0f,8.0f),
 	m_camUp(cross(m_viewDirection, m_camRight)),
-	m_lookTarget(/*glm::vec3(0.0f, 0.0f, 0.0f)*/m_position + m_viewDirection)
+	m_lookTarget(m_position + m_viewDirection)
 
 {
 }
