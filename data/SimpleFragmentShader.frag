@@ -128,6 +128,7 @@ void main()
 //		diff_light * lightIntensity * pow(cos_alpha, spec_cosinePower);
 
 	//vec3 colorRGB = normalize(clamp(vec3(cos_theta, cos_theta, cos_theta), 0, 1));
+	//vec3 colorRGB = (vec3(cos_theta, cos_theta, cos_theta));
 	vec3 colorRGB = normalize(tangentSpace_lightDirection);
 
 	float alpha					= 1.0;
