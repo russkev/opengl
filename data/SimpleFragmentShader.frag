@@ -53,10 +53,11 @@ void main()
 	// // ----- DIFFUSE ----- // //
 
 	// Calculate the intensity of the illumination based on angle between the notmal and the light
-	float diff_brightness		= dot(world_lightVector, world_normalVector);
+	float cos_theta					= dot(tangentSpace_lightDirection, f_world_vertexNormal);
+	//float cos_theta				= dot(tangentSpace_lightDirection, f_world_vertexNormal);
 
 	// Calculate the final illumination colour using the diffuse colour and the illumination intensity
-	vec4 diff_light				= vec4(diff_color * diff_brightness, 1.0);
+	vec4 diff_light				= vec4(diff_color * cos_theta, 1.0);
 
 
 	
@@ -70,6 +71,13 @@ void main()
 
 	// Calculate the cos of the angle between the eye fragment vector and the texture reflection vector
 	float cos_alpha				= clamp( dot(eye_vector, texture_reflection), 0, 1);
+
+	// // ----- NORMAL MAP ----- // //
+
+	// Local normal, in tangent space
+	//float tangentSpace_textureNormal = normalize(texture(Nor
+
+
 
 	// Calculate the cos of the angle between the surface normal and the light
 	//float cosTheta				= clamp( dot( tex_normal, light_direction), 0, 1);
@@ -108,13 +116,19 @@ void main()
 	//vec4 colorRGB				= vec4(diff_color, 1.0);
 
 	//vec4 colorRGB = clamp(diff_light * lightIntensity, 0, 1);
-	vec4 colorRGB = 
+//	vec4 colorRGB = 
+//
+//		// Ambient //
+//		ambientLight * vec4(diff_color, 1) +
+//
+//		// Diffuse //
+//		clamp(diff_light * lightIntensity, 0, 1) + 
+//
+//		// Specular //
+//		diff_light * lightIntensity * pow(cos_alpha, spec_cosinePower);
 
-		// Diffuse //
-		clamp(diff_light * lightIntensity, 0, 1) + 
-
-		// Specular //
-		diff_light * lightIntensity * pow(cos_alpha, spec_cosinePower);
+	//vec3 colorRGB = normalize(clamp(vec3(cos_theta, cos_theta, cos_theta), 0, 1));
+	vec3 colorRGB = normalize(tangentSpace_lightDirection);
 
 	float alpha					= 1.0;
 	color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
