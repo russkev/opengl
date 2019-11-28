@@ -31,42 +31,32 @@ mat4[numElements] transformsMoved = transforms;
 // // -1 indicates that that slot is empty
 // // <0,0,0> indicates that the connection is empty
 uniform ivec3[numElements] connections;
-uniform int test_int;
-
-// // Uniforms for working out text position
-uniform int width;
-uniform int height;
 
 // // Uniform for light position
 uniform vec3 lightPosition;
 uniform vec3 camPosition;
 uniform mat4 mat_view;
 
-// // Output data ; will be interpolated for each fragment
-out vec3 f_world_vertexPosition;
-out vec3 fragmentColor;
-out vec3 f_world_vertexNormal;
-out vec2 uv;
-//out mat4 transform_matrix;
+// // Output data - will be interpolated for each fragment
+out vec3 worldSpace_vertexPosition;
+out vec3 worldSpace_vertexNormal;
+//out vec3 worldSpace_lightPosition;
 
-out vec3 worldSpace_lightPosition;
+out vec3 fragmentColor;
+out vec2 uv;
 
 out vec3 cameraSpace_vertexPosition;
 out vec3 cameraSpace_normalDirection;
 out vec3 cameraSpace_eyeDirection;
 out vec3 cameraSpace_lightDirection;
 
-out mat3 TBN_matrix;
+out mat3 mat_tangentToWorld;
 out vec3 tangentSpace_lightPosition;
 out vec3 tangentSpace_camPosition;
 out vec3 tangentSpace_fragPosition;
+out vec3 tangentSpace_cDirection;
 
-mat4 transform = mat4(
-		vec4(1.0f, 0.0f, 0.0f, 0.0f),
-		vec4(0.0f, 1.0f, 0.0f, 0.0f),
-		vec4(0.0f, 0.0f, 1.0f, 0.0f),
-		vec4(0.0f, 0.0f, 0.0f, 1.0f)
-	);
+mat4 transform = mat4(1.0);
 
 bool isEmptyConnection(int index)
 {
@@ -95,8 +85,7 @@ int incomingConnection(int a, int loc)
 	return -1;
 }
 
-
-
+// Calculate final transform matrix
 mat4 transformTransform(int endTransformId)
 {
 	mat4 outTransform = transforms[endTransformId];
@@ -110,6 +99,7 @@ mat4 transformTransform(int endTransformId)
 	return outTransform;
 }
 
+// Calculate final vertex position
 void transformGlPosition()
 {
 	int incoming = incomingConnection(model_id, shapeDestLoc);
@@ -118,11 +108,12 @@ void transformGlPosition()
 	{
 		transform = transformTransform(incoming);
 	}
-	gl_Position	= mat_modelToProjection * transform * model_vertexPosition;
-	f_world_vertexPosition	= vec3(mat_modelToWorld * transform * model_vertexPosition);
-	f_world_vertexNormal	= normalize(vec3(mat_modelToWorld * transform * vec4(model_vertexNormal, 0)));
+	gl_Position					= mat_modelToProjection * transform * model_vertexPosition;
+	worldSpace_vertexPosition	= vec3(mat_modelToWorld * transform * model_vertexPosition);
+	worldSpace_vertexNormal		= normalize(vec3(mat_modelToWorld * transform * vec4(model_vertexNormal, 0)));
 }
-	
+
+
 vec3 colorFromIndex(int a)
 {
 	vec3 colArray[6] = vec3[6]
@@ -140,53 +131,48 @@ vec3 colorFromIndex(int a)
 
 
 
-mat3 tangent_bitangent_normal_matrix()
+void sendTangendSpaceInformation()
 {
-	vec3 T	= normalize(vec3(transform * vec4(model_vertexTangent, 0.0)));
-	//vec3 B	= normalize(vec3(transform * vec4(model_vertexBitangent, 0.0)));
-	vec3 N	= normalize(vec3(transform * vec4(model_vertexNormal, 0.0)));
+	// Tangent vector
+	vec3 tangentBasis	= normalize(vec3(transform * vec4(model_vertexTangent, 0.0)));
 
-	T = normalize(T - dot(T,N) * N);
-	vec3 B = cross(N, T);
+	// Normal vector
+	vec3 normalBasis	= normalize(vec3(transform * vec4(model_vertexNormal, 0.0)));
 
-	//vec3 vertexNormal_cameraSpace		= mat3(mat_modelToProjection) * normalize(model_vertexNormal);
-	//vec3 vertexTangent_cameraSpace		= mat3(mat_modelToProjection) * normalize(model_vertexTangent);
-	//vec3 vertexBiTangent_cameraSpace	= mat3(mat_modelToProjection) * normalize(model_vertexBitangent);
+	// Orthogonalize the tangent vector use Gram Schmidt procedure 
+	tangentBasis = normalize(tangentBasis - dot(tangentBasis, normalBasis) * normalBasis);
+
+	// Calculate the bitangent (bitangent from model not required)
+	vec3 bitangentBasis = cross(normalBasis, tangentBasis);
 	
-	return mat3(T, B, N);
-	//return transpose(mat3(
-	//	vertexTangent_cameraSpace,
-	//	vertexBiTangent_cameraSpace,
-	//	vertexNormal_cameraSpace
-	//));
+	// Calculate the tangent to world transition matrix
+	mat_tangentToWorld = mat3(tangentBasis, bitangentBasis, normalBasis);
+
+	// World to tangent matrix is inverse of TBN_matrix
+	mat3 mat_worldToTangent = transpose(mat_tangentToWorld);
+
+	// Convert important coordinates to their tangent space values
+	tangentSpace_lightPosition	= mat_worldToTangent * lightPosition;
+	tangentSpace_camPosition	= mat_worldToTangent * camPosition;
+	tangentSpace_fragPosition	= mat_worldToTangent * worldSpace_vertexPosition;
+
+
+	vec3 c_a		= (mat_view * vec4(worldSpace_vertexPosition, 0.0)).xyz;
+	vec3 c_b		= vec3(0.0, 0.0, 0.0) - c_a;
+	tangentSpace_cDirection = mat_worldToTangent * c_b;
 }
 
-void sendLightAndNormalMap()
+void sendCameraSpaceInformation()
 {
-	//cameraSpace_vertexPosition		= ( mat_view * mat_modelToWorld * model_vertexPosition).xyz;
-	cameraSpace_vertexPosition		= (mat_view * vec4(f_world_vertexPosition, 0.0)).xyz;
+	// Convert important coordinates to their camera space values
+	cameraSpace_vertexPosition		= (mat_view * vec4(worldSpace_vertexPosition, 0.0)).xyz;
+	cameraSpace_eyeDirection		= vec3(0.0, 0.0, 0.0) - cameraSpace_vertexPosition;
+	cameraSpace_lightDirection		= (mat_view * vec4(lightPosition, 0.0)).xyz - cameraSpace_vertexPosition;
+	cameraSpace_normalDirection		= (mat_view * vec4(worldSpace_vertexNormal, 0.0)).xyz;
 
-	cameraSpace_eyeDirection		= -cameraSpace_vertexPosition;
 
-	vec3 cameraSpace_lightPosition	= (mat_view * vec4(lightPosition, 0.0)).xyz;
-	cameraSpace_lightDirection		= cameraSpace_lightPosition - cameraSpace_vertexPosition;
 
-	cameraSpace_normalDirection		= (mat_view * vec4(f_world_vertexNormal, 0.0)).xyz;
-//	cameraSpace_normalDirection		= mat_view * 
-	
-	//cameraSpace_normalDirection		= cameraSpace_normalPosition + cameraSpace_eyeDirection;
-	
-	mat3 TBN = tangent_bitangent_normal_matrix();
 
-	TBN_matrix = TBN;
-
-	// Transposing the TBN matrix gives the inverse, i.e. the world to tangent matrix.
-	// This can be used to provide vectors to the fragment shader all in tangent space.
-	// This means less calculations for the fragment shader
-	TBN = transpose(TBN);
-	tangentSpace_lightPosition		= TBN * lightPosition;
-	tangentSpace_camPosition		= TBN * camPosition;
-	tangentSpace_fragPosition		= TBN * f_world_vertexPosition;//vec3(transform * model_vertexPosition);
 }
 
 void main()
@@ -194,8 +180,8 @@ void main()
 	transformGlPosition();
 	fragmentColor				= model_vertexColor;
 	uv							= model_uv;
-	worldSpace_lightPosition	= lightPosition;
-	sendLightAndNormalMap();
+	sendTangendSpaceInformation();		
+	sendCameraSpaceInformation();
 
 }
 
