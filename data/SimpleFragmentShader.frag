@@ -12,8 +12,9 @@ in vec3 cameraSpace_eyeDirection;
 in vec3 cameraSpace_lightDirection;
 
 in mat3 TBN_matrix;
-in vec3 tangentSpace_eyeDirection;
-in vec3 tangentSpace_lightDirection;
+in vec3 tangentSpace_lightPosition;
+in vec3 tangentSpace_eyePosition;
+in vec3 tangentSpace_fragPosition;
 
 // // Uniforms // //
 uniform vec4		ambientLight;
@@ -34,9 +35,10 @@ void main()
 	vec3 tex_a					= texture2D( textureA, uv ).rgb;
 	vec3 tex_b					= texture2D( textureB, uv ).rgb;
 //	vec3 tex_normal				= normalize(texture( normalMap, vec2(uv.x, -uv.y) ).rgb * 2.0 - 1.0) ;
-	vec3 tex_normal				= texture(normalMap, vec2(uv.x, -uv.y)).rgb;
+	//vec3 tex_normal				= texture(normalMap, vec2(uv.x, -uv.y)).rgb;
+	vec3 tex_normal				= texture(normalMap, uv).rgb;
 	tex_normal					= normalize(tex_normal * 2.0 - 1.0);
-	tex_normal					= normalize(TBN_matrix * tex_normal);
+	//tex_normal					= normalize(TBN_matrix * tex_normal);
 	vec3 diff_color				= mix(tex_a, tex_b, 0.5);
 
 	// Initialise light properties
@@ -52,17 +54,21 @@ void main()
 	// Initialise world vectors
 	vec3 world_lightVector		= normalize(worldSpace_lightPosition - f_world_vertexPosition);
 	vec3 world_normalVector		= normalize(f_world_vertexNormal);
-	vec3 light_direction		= normalize(tangentSpace_lightDirection);
+	vec3 light_direction		= normalize(tangentSpace_lightPosition);
 
 	
 	// // ----- DIFFUSE ----- // //
 
 	// Calculate the intensity of the illumination based on angle between the notmal and the light
-	float cos_theta					= clamp(dot(tex_normal, light_direction), 0, 1);
-	//float cos_theta				= dot(tangentSpace_lightDirection, f_world_vertexNormal);
+	float cos_theta					= dot(normalize(world_lightVector), world_normalVector);
+	
+	vec3 ld = normalize(tangentSpace_lightPosition - tangentSpace_fragPosition);
+	//float cos_theta		= max(dot(tex_normal, ld), 0.0);
+	//float cos_theta				= dot(tangentSpace_lightPosition, f_world_vertexNormal);
 
 	// Calculate the final illumination colour using the diffuse colour and the illumination intensity
-	vec4 diff_light				= vec4(diff_color * cos_theta, 1.0);
+	//vec3 diff_light				= diff_color * cos_theta;
+	vec3 diff_light = vec3(1.0, 1.0, 1.0) * cos_theta;
 
 
 	
@@ -135,8 +141,8 @@ void main()
 	//vec3 colorRGB = normalize(clamp(vec3(cos_theta, cos_theta, cos_theta), 0, 1));
 //	vec3 colorRGB = (vec3(cos_theta, cos_theta, cos_theta));
 	//vec3 colorRGB = normalize(light_direction);
-	//vec4 colorRGB = diff_light;
-	vec3 colorRGB = normalize(tex_normal);
+	vec3 colorRGB = diff_light;
+	//vec3 colorRGB = normalize(world_lightVector);
 
 	float alpha					= 1.0;
 	color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
