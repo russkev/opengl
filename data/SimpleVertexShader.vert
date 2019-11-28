@@ -51,6 +51,8 @@ out vec2 uv;
 
 out vec3 worldSpace_lightPosition;
 
+out vec3 cameraSpace_vertexPosition;
+out vec3 cameraSpace_normalDirection;
 out vec3 cameraSpace_eyeDirection;
 out vec3 cameraSpace_lightDirection;
 
@@ -161,10 +163,18 @@ mat3 tangent_bitangent_normal_matrix()
 
 void sendLightAndNormalMap()
 {
-	vec3 cameraSpace_vertexPosition	= ( mat_view * mat_modelToWorld * model_vertexPosition).xyz;
-	cameraSpace_eyeDirection		= vec3(0,0,0) - cameraSpace_vertexPosition;
-	vec3 cameraSpace_lightPosition	= (mat_view * vec4(worldSpace_lightPosition, 1)).xyz;
-	cameraSpace_lightDirection		= cameraSpace_lightPosition + cameraSpace_eyeDirection;
+	//cameraSpace_vertexPosition		= ( mat_view * mat_modelToWorld * model_vertexPosition).xyz;
+	cameraSpace_vertexPosition		= (mat_view * vec4(f_world_vertexPosition, 0.0)).xyz;
+
+	cameraSpace_eyeDirection		= -cameraSpace_vertexPosition;
+
+	vec3 cameraSpace_lightPosition	= (mat_view * vec4(lightPosition, 0.0)).xyz;
+	cameraSpace_lightDirection		= cameraSpace_lightPosition - cameraSpace_vertexPosition;
+
+	cameraSpace_normalDirection		= (mat_view * vec4(f_world_vertexNormal, 0.0)).xyz;
+//	cameraSpace_normalDirection		= mat_view * 
+	
+	//cameraSpace_normalDirection		= cameraSpace_normalPosition + cameraSpace_eyeDirection;
 	
 	mat3 TBN = tangent_bitangent_normal_matrix();
 
@@ -176,7 +186,7 @@ void sendLightAndNormalMap()
 	TBN = transpose(TBN);
 	tangentSpace_lightPosition		= TBN * lightPosition;
 	tangentSpace_camPosition		= TBN * camPosition;
-	tangentSpace_fragPosition		= TBN * vec3(transform * model_vertexPosition);
+	tangentSpace_fragPosition		= TBN * f_world_vertexPosition;//vec3(transform * model_vertexPosition);
 }
 
 void main()

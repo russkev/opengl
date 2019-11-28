@@ -98,7 +98,7 @@ void GL_Scene::initGeo()
 	// // Create Texture
 	Texture texture1("uvtemplate.tga");
 	Texture texture2("two.tga");
-	Texture normalTexture("flatNormalMap.tga");
+	Texture normalTexture("brickNormalMap_02.tga");
 	
 	// // Upload textures 
 	texture1.upload_to_shader(m_program_id, "textureA");

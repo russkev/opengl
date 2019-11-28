@@ -8,6 +8,8 @@ in vec2 uv;
 in vec3 worldSpace_lightPosition;
 //in mat4 transform;
 
+in vec3 cameraSpace_vertexPosition;
+in vec3 cameraSpace_normalDirection;
 in vec3 cameraSpace_eyeDirection;
 in vec3 cameraSpace_lightDirection;
 
@@ -52,18 +54,31 @@ void main()
 	float spec_cosinePower		= 20;
 
 	// Initialise world vectors
-	vec3 world_lightVector		= normalize(worldSpace_lightPosition - f_world_vertexPosition);
-	vec3 world_normalVector		= normalize(f_world_vertexNormal);
+	vec3 world_lightVector			= normalize(worldSpace_lightPosition - f_world_vertexPosition);
+	vec3 world_normalVector			= normalize(f_world_vertexNormal);
+	vec3 world_texNormalVector		= normalize(TBN_matrix * tex_normal).xyz;
+
+	vec3 cameraSpace_lightVector	= normalize(cameraSpace_lightDirection);// - cameraSpace_vertexPosition);
+	vec3 cameraSpace_normalVector	= normalize(cameraSpace_normalDirection);
+
+	vec3 tangentSpace_lightVector	= normalize(tangentSpace_lightPosition - tangentSpace_fragPosition);
+	vec3 tangentSpace_normalVector	= tex_normal;
+
+
+
+
 	vec3 light_direction		= normalize(tangentSpace_lightPosition);
 
 	
 	// // ----- DIFFUSE ----- // //
 
-	// Calculate the intensity of the illumination based on angle between the notmal and the light
-	float cos_theta					= dot(normalize(world_lightVector), world_normalVector);
+	// Calculate the intensity of the illumination based on angle between the normal and the light
+	//float cos_theta					= max(dot(world_lightVector, world_texNormalVector), 0.0);
+	float cos_theta = max(dot(cameraSpace_lightVector, cameraSpace_normalVector), 0.0);
+	//float cos_theta		= max(dot(tangentSpace_lightVector, tangentSpace_normalVector), 0.0);
 	
-	vec3 ld = normalize(tangentSpace_lightPosition - tangentSpace_fragPosition);
-	//float cos_theta		= max(dot(tex_normal, ld), 0.0);
+	//vec3 ld = normalize(tangentSpace_lightPosition - tangentSpace_fragPosition);
+
 	//float cos_theta				= dot(tangentSpace_lightPosition, f_world_vertexNormal);
 
 	// Calculate the final illumination colour using the diffuse colour and the illumination intensity
@@ -88,21 +103,10 @@ void main()
 	// Local normal, in tangent space
 	//float tangentSpace_textureNormal = normalize(texture(Nor
 
-
-
 	// Calculate the cos of the angle between the surface normal and the light
 	//float cosTheta				= clamp( dot( tex_normal, light_direction), 0, 1);
 
-
-
 	//vec3 eye_direction			= normalize(tangentSpace_eyeDirection);
-
-
-
-;
-
-
-
 
 	//vec3 reflectedLightVector	= reflect(-world_lightVector, world_normalVector);
 	//vec3 camVector				= normalize(camPosition - f_world_vertexPosition);
@@ -142,7 +146,7 @@ void main()
 //	vec3 colorRGB = (vec3(cos_theta, cos_theta, cos_theta));
 	//vec3 colorRGB = normalize(light_direction);
 	vec3 colorRGB = diff_light;
-	//vec3 colorRGB = normalize(world_lightVector);
+	//vec3 colorRGB = normalize(tex_normal);
 
 	float alpha					= 1.0;
 	color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
