@@ -70,7 +70,7 @@ void GL_Scene::initCam()
 	GLfloat far		= 100.0f;
 	m_projection	= glm::perspective(glm::radians(50.0f), float(m_width) / float(m_height), near, far);
 	glUseProgram(m_program_id);
-	const GLuint camPositionLocation = glGetUniformLocation(m_program_id, "cameraPosition");
+	const GLuint camPositionLocation = glGetUniformLocation(m_program_id, "camPosition");
 	glm::vec3 cam_position = m_cam.getPosition();
 	glUniform3fv(camPositionLocation, 1, &cam_position.x);
 }
@@ -225,10 +225,17 @@ void GL_Scene::updateLights()
 
 void GL_Scene::updateCam()
 {
+	// Update camera position
 	glUseProgram(m_program_id);
-	const GLuint camPositionLocation = glGetUniformLocation(m_program_id, "cameraPosition");
+	const GLuint camPositionLocation = glGetUniformLocation(m_program_id, "camPosition");
 	glm::vec3 cam_position = m_cam.getPosition();
 	glUniform3fv(camPositionLocation, 1, &cam_position.x);
+
+	// Update view matrix
+	auto matBufferMatrix = m_cam.getWorldToViewMatrix();
+	glUseProgram(m_program_id);
+	const ShapeContainer::intType viewMatrixLocation = glGetUniformLocation(m_program_id, "mat_view");
+	glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &matBufferMatrix[0][0]);
 	// // Cam position // //
 	//glm::vec3 camPositionVec = _State.cam.getPosition();
 	//glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
