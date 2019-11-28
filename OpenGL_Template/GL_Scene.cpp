@@ -69,6 +69,10 @@ void GL_Scene::initCam()
 	GLfloat near	= 0.1f;
 	GLfloat far		= 100.0f;
 	m_projection	= glm::perspective(glm::radians(50.0f), float(m_width) / float(m_height), near, far);
+	glUseProgram(m_program_id);
+	const GLuint camPositionLocation = glGetUniformLocation(m_program_id, "cameraPosition");
+	glm::vec3 cam_position = m_cam.getPosition();
+	glUniform3fv(camPositionLocation, 1, &cam_position.x);
 }
 
 void GL_Scene::initLights()
@@ -94,7 +98,7 @@ void GL_Scene::initGeo()
 	// // Create Texture
 	Texture texture1("uvtemplate.tga");
 	Texture texture2("two.tga");
-	Texture normalTexture("brickNormalMap_01.tga");
+	Texture normalTexture("flatNormalMap.tga");
 	
 	// // Upload textures 
 	texture1.upload_to_shader(m_program_id, "textureA");
@@ -221,6 +225,10 @@ void GL_Scene::updateLights()
 
 void GL_Scene::updateCam()
 {
+	glUseProgram(m_program_id);
+	const GLuint camPositionLocation = glGetUniformLocation(m_program_id, "cameraPosition");
+	glm::vec3 cam_position = m_cam.getPosition();
+	glUniform3fv(camPositionLocation, 1, &cam_position.x);
 	// // Cam position // //
 	//glm::vec3 camPositionVec = _State.cam.getPosition();
 	//glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
