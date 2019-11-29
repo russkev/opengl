@@ -1,6 +1,13 @@
 #include "GL_Scene.h"
 #include "OBJ_Loader.h"
 #include "primitives/Sphere.h"
+#include "primitives/Plane.h"
+#include "primitives/Cylinder.h"
+#include "primitives/Cube.h"
+#include "primitives/Arrow.h"
+
+
+
 
 void GL_Scene::init(const GLuint width, const GLuint height)
 {
@@ -82,7 +89,7 @@ void GL_Scene::initLights()
 	const ShapeContainer::intType lightPositionLocation = glGetUniformLocation(m_program_id, "lightPosition");
 	glUniform3f(lightPositionLocation, 10.0f, 5.0f, 0.0f);
 	const ShapeContainer::intType ambientLightLocation = glGetUniformLocation(m_program_id, "ambientLight");
-	glUniform3f(ambientLightLocation, 0.2, 0.2, 0.4);
+	glUniform3f(ambientLightLocation, 0.2f, 0.2f, 0.4f);
 }
 
 void GL_Scene::initText()
@@ -111,18 +118,24 @@ void GL_Scene::initGeo()
 	// // Create Geo
 	//m_sh.appendShape(OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj"), "shader_ball");
 	//ShapeData newSphere = Sphere::createSphere(3.0, 20, 20);
-	m_sh.appendShape(Sphere::createSphere(3.0, 20, 20), "sphere");
+	//m_sh.appendShape(Sphere::createSphere(3.0, 50), "sphere");
+	//m_sh.appendShape(Plane::createPlane(10.0f, 10.0f), "plane");
+	//m_sh.appendShape(Cylinder::createCylinder(), "cylinder");
+	//m_sh.appendShape(Cube::createCube(4.0f));
+	m_sh.appendShape(Arrow::createArrow());
 
 
 	// // Create transforms
 	glm::vec3 planeScale = glm::vec3(1.0f);
 
 	// // Append transforms
-	m_sh.appendTransform(VectorUtils::trs(glm::mat3({ 0.0f, -1.5f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_01");
+	m_sh.appendTransform(VectorUtils::trs(glm::mat3({ 0.0f, -1.5f, 0.0 }, { 0.0f, 0.0f, 0.0f }, { 1.0, 1.0, 1.0 })), "transform_01");
+	m_sh.appendTransform(VectorUtils::trs(glm::mat3({ 0.0f, -2.0f, 0.0 }, { 0.0f, 0.0f, 0.0f }, { 1.0, 1.0, 1.0 })), "transform_02");
+
 
 	// // Transform Geo 
 	//m_sh.connect("transform_01", "shader_ball");
-	m_sh.connect("transform_01", "sphere");
+	//m_sh.connect("transform_02", "sphere");
 }
 
 void GL_Scene::initBuffers()

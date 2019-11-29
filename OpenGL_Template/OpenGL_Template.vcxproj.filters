@@ -40,6 +40,12 @@
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{5d4416cb-7e8b-4b98-ac7d-b2ca74752079}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Primitives">
+      <UniqueIdentifier>{354713ec-c114-4204-998f-f82897f1b400}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Primitives">
+      <UniqueIdentifier>{d98a082e-0ca0-4aa8-a2e4-b9aaf77a5b17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -97,7 +103,19 @@
       <Filter>Source Files\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="primitives\Sphere.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="primitives\Plane.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="primitives\Cylinder.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="primitives\Cube.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="primitives\Arrow.cpp">
+      <Filter>Source Files\Primitives</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -177,7 +195,19 @@
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="primitives\Sphere.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="primitives\Plane.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="primitives\Cylinder.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="primitives\Cube.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="primitives\Arrow.h">
+      <Filter>Header Files\Primitives</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

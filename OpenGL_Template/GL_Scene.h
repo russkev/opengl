@@ -19,7 +19,7 @@
 #include "Timer.h"
 #include "loadBMP_custom.h"
 #include "Texture.h"
-#include "targa.h"
+#include "targa/targa.h"
 #include "Text2D.h"
 
 
