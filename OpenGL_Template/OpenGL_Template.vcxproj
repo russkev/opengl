@@ -158,7 +158,6 @@
     <ClCompile Include="primitives\Sphere.cpp" />
     <ClCompile Include="ShapeContainer.cpp" />
     <ClCompile Include="ShapeData.cpp" />
-    <ClCompile Include="ShapeGenerator.cpp" />
     <ClCompile Include="targa\targa.cpp" />
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -192,7 +191,6 @@
     <ClInclude Include="primitives\Sphere.h" />
     <ClInclude Include="ShapeContainer.h" />
     <ClInclude Include="ShapeData.h" />
-    <ClInclude Include="ShapeGenerator.h" />
     <ClInclude Include="targa\targa.h" />
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="Texture.h" />

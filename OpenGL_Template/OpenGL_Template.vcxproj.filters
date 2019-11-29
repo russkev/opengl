@@ -87,9 +87,6 @@
     <ClCompile Include="ShapeData.cpp">
       <Filter>Source Files\Shapes</Filter>
     </ClCompile>
-    <ClCompile Include="ShapeGenerator.cpp">
-      <Filter>Source Files\Shapes</Filter>
-    </ClCompile>
     <ClCompile Include="Text2D.cpp">
       <Filter>Source Files\Textures</Filter>
     </ClCompile>
@@ -135,9 +132,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShapeData.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="ShapeGenerator.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
