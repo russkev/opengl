@@ -47,7 +47,7 @@ void ShapeContainer::connect(const std::string& source, const std::string& desti
 
 	if (existingInput != "") // If destination already has an incoming connection
 	{
-		for (auto i = 0; i < m_connections.size(); ++i)
+		for (size_t i = 0; i < m_connections.size(); ++i)
 		{
 			if (connectionExists(i, existingInputLoc, destLoc, destType))
 			{
