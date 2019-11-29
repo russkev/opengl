@@ -151,6 +151,10 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GL_Scene.cpp" />
     <ClCompile Include="OBJ_Loader.cpp" />
+    <ClCompile Include="primitives\Arrow.cpp" />
+    <ClCompile Include="primitives\Cube.cpp" />
+    <ClCompile Include="primitives\Cylinder.cpp" />
+    <ClCompile Include="primitives\Plane.cpp" />
     <ClCompile Include="primitives\Sphere.cpp" />
     <ClCompile Include="ShapeContainer.cpp" />
     <ClCompile Include="ShapeData.cpp" />
@@ -181,6 +185,10 @@
     <ClInclude Include="loadShader.h" />
     <ClInclude Include="GL_Scene.h" />
     <ClInclude Include="OBJ_Loader.h" />
+    <ClInclude Include="primitives\Arrow.h" />
+    <ClInclude Include="primitives\Cube.h" />
+    <ClInclude Include="primitives\Cylinder.h" />
+    <ClInclude Include="primitives\Plane.h" />
     <ClInclude Include="primitives\Sphere.h" />
     <ClInclude Include="ShapeContainer.h" />
     <ClInclude Include="ShapeData.h" />

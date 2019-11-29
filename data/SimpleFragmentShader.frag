@@ -157,7 +157,7 @@ void main()
 	//vec3 colorRGB = normalize(light_direction);
 	//vec3 colorRGB = diff_light;
 	//vec3 colorRGB = normalize(eye_vector);
-	//vec3 colorRGB = vec3(1.0, 1.0, 1.0) * spec;
+//	vec3 colorRGB = vec3(1.0, 1.0, 1.0) * diff_light;
 
 	float alpha					= 1.0;
 	color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
