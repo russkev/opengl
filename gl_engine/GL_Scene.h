@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "Camera.h"
+#include "ShapeGenerator.h"
 #include "ShapeContainer.h"
 #include "VectorUtils.h"
 #include "loadShader.h"
@@ -66,6 +67,7 @@ public:
 	glm::mat4		m_projection	= glm::mat4();
 	Camera			m_cam;
 	GLuint			m_width, m_height;
+	ShapeGenerator	m_shapes;
 	ShapeContainer	m_sh;
 	VAO				m_vao_main, m_vao_text;
 	Timer			m_timer;
