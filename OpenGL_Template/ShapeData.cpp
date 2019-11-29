@@ -51,11 +51,19 @@ ShapeData& ShapeData::operator += (ShapeData& other)
 }
 
 // // ----- Append ----- // //
-void ShapeData::append_vertices(const Vertex s_vertex)
+void ShapeData::appendVertex(const Vertex s_vertex)
 {
 	m_vertices.push_back(s_vertex);
 }
-void ShapeData::append_indices(const GLushort s_index)
+
+void ShapeData::appendTriangle(const Vertex s_v1, const Vertex s_v2, const Vertex s_v3)
+{
+	m_vertices.push_back(s_v1);
+	m_vertices.push_back(s_v2);
+	m_vertices.push_back(s_v3);
+}
+
+void ShapeData::appendIndex(const GLushort s_index)
 {
 	m_indices.push_back(s_index);
 }
@@ -70,12 +78,9 @@ void ShapeData::setVertex(std::size_t loc, Vertex& vertex)
 // // ------INDICES ----- // //
 
 // Guess shared indices based on proximity
-void ShapeData::makeIndices()
+void ShapeData::makeIndicesSmooth()
 {
-	for (auto i = 0; i < m_vertices.size(); i++)
-	{
-		m_indices.push_back((indexType)i);
-	}
+	makeIndicesFaceted();
 	verticesType newVertices;
 	indicesType newIndices;
 	std::map<Vertex, indexType> vertexMap;
@@ -98,6 +103,14 @@ void ShapeData::makeIndices()
 	}
 	std::swap(newVertices, m_vertices);
 	std::swap(newIndices, m_indices);
+}
+
+void ShapeData::makeIndicesFaceted()
+{
+	for (auto i = 0; i < m_vertices.size(); i++)
+	{
+		m_indices.push_back((indexType)i);
+	}
 }
 
 int ShapeData::findSimilarVertex(const indexType s_currentVertIndex, const std::map<Vertex, indexType>& s_vertexMap)

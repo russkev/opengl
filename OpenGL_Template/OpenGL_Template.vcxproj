@@ -151,6 +151,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GL_Scene.cpp" />
     <ClCompile Include="OBJ_Loader.cpp" />
+    <ClCompile Include="primitives\Sphere.cpp" />
     <ClCompile Include="ShapeContainer.cpp" />
     <ClCompile Include="ShapeData.cpp" />
     <ClCompile Include="ShapeGenerator.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="loadShader.h" />
     <ClInclude Include="GL_Scene.h" />
     <ClInclude Include="OBJ_Loader.h" />
+    <ClInclude Include="primitives\Sphere.h" />
     <ClInclude Include="ShapeContainer.h" />
     <ClInclude Include="ShapeData.h" />
     <ClInclude Include="ShapeGenerator.h" />

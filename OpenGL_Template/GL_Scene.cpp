@@ -1,5 +1,6 @@
 #include "GL_Scene.h"
 #include "OBJ_Loader.h"
+#include "primitives/Sphere.h"
 
 void GL_Scene::init(const GLuint width, const GLuint height)
 {
@@ -80,6 +81,8 @@ void GL_Scene::initLights()
 	glUseProgram(m_program_id);
 	const ShapeContainer::intType lightPositionLocation = glGetUniformLocation(m_program_id, "lightPosition");
 	glUniform3f(lightPositionLocation, 10.0f, 5.0f, 0.0f);
+	const ShapeContainer::intType ambientLightLocation = glGetUniformLocation(m_program_id, "ambientLight");
+	glUniform3f(ambientLightLocation, 0.2, 0.2, 0.4);
 }
 
 void GL_Scene::initText()
@@ -106,7 +109,9 @@ void GL_Scene::initGeo()
 	normalTexture.upload_to_shader(m_program_id, "normalMap");
 	
 	// // Create Geo
-	m_sh.appendShape(OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj"), "shader_ball");
+	//m_sh.appendShape(OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj"), "shader_ball");
+	//ShapeData newSphere = Sphere::createSphere(3.0, 20, 20);
+	m_sh.appendShape(Sphere::createSphere(3.0, 20, 20), "sphere");
 
 
 	// // Create transforms
@@ -116,7 +121,8 @@ void GL_Scene::initGeo()
 	m_sh.appendTransform(VectorUtils::trs(glm::mat3({ 0.0f, -1.5f, 0.0 }, { 0.0f, 0.0f, 0.0f }, planeScale)), "transform_01");
 
 	// // Transform Geo 
-	m_sh.connect("transform_01", "shader_ball");
+	//m_sh.connect("transform_01", "shader_ball");
+	m_sh.connect("transform_01", "sphere");
 }
 
 void GL_Scene::initBuffers()

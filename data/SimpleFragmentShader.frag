@@ -20,7 +20,7 @@ in vec3 tangentSpace_cDirection;
 in vec3 tangentSpace_fragPosition;
 
 // // Uniforms // //
-uniform vec4		ambientLight;
+uniform vec3		ambientLight;
 uniform vec3		lightPosition;
 uniform vec3		camPosition;
 layout(location = 0) uniform sampler2D	textureA;
@@ -52,9 +52,9 @@ void main()
 	float spec_cosinePower		= 20;
 
 	// Initialise world vectors
-	vec3 worldSpace_lightVector			= normalize(lightPosition - worldSpace_vertexPosition);
-	vec3 worldSpace_normalVector			= normalize(worldSpace_vertexNormal);
-	vec3 worldSpace_texNormalVector		= normalize(mat_tangentToWorld * tex_normal).xyz;
+	vec3 worldSpace_lightVector		= normalize(lightPosition - worldSpace_vertexPosition);
+	vec3 worldSpace_normalVector	= normalize(worldSpace_vertexNormal);
+	vec3 worldSpace_texNormalVector	= normalize(mat_tangentToWorld * tex_normal).xyz;
 
 	vec3 cameraSpace_lightVector	= normalize(cameraSpace_lightDirection);
 	vec3 cameraSpace_normalVector	= normalize(cameraSpace_normalDirection);
@@ -140,24 +140,24 @@ void main()
 	//vec4 colorRGB				= vec4(diff_color, 1.0);
 
 	//vec4 colorRGB = clamp(diff_light * lightIntensity, 0, 1);
-//	vec3 colorRGB = 
+	vec3 colorRGB = 
 //
-//		// Ambient //
-//		//ambientLight.xyz * diff_color +
+		// Ambient //
+		ambientLight * diff_color +
 //
-//		// Diffuse //
-//		clamp(diff_light, 0, 1) + 
+		// Diffuse //
+		clamp(diff_light, 0, 1) + 
 //
-//		// Specular //
-//		//diff_light * pow(cos_alpha, spec_cosinePower);
-//		spec;
+		// Specular //
+		//diff_light * pow(cos_alpha, spec_cosinePower);
+		spec;
 
 	//vec3 colorRGB = normalize(clamp(vec3(cos_theta, cos_theta, cos_theta), 0, 1));
 	//vec3 colorRGB = (vec3(texture_reflection.z, texture_reflection.z, texture_reflection.z));
 	//vec3 colorRGB = normalize(light_direction);
 	//vec3 colorRGB = diff_light;
 	//vec3 colorRGB = normalize(eye_vector);
-	vec3 colorRGB = vec3(1.0, 1.0, 1.0) * spec;
+	//vec3 colorRGB = vec3(1.0, 1.0, 1.0) * spec;
 
 	float alpha					= 1.0;
 	color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
