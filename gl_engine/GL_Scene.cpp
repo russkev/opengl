@@ -104,6 +104,7 @@ void GL_Scene::initGeo()
 {
 	// // Create and compile our GLSL program from the shaders // //
 	m_program_id		= LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
+	m_light_program_id	= LoadShaders("LightShader.vert", "LightFragmentShader.frag");
 	
 	// // Create Texture
 	Texture texture1("uvtemplate.tga");
