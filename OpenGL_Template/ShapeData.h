@@ -44,8 +44,9 @@ public:
 	ShapeData& operator += (ShapeData& other);
 
 	// // ----- Append ----- // //
-	void append_vertices(const Vertex s_shape);
-	void append_indices(const GLushort s_index);
+	void appendVertex(const Vertex s_shape);
+	void appendTriangle(const Vertex v1, const Vertex v2, const Vertex v3);
+	void appendIndex(const GLushort s_index);
 
 	// // ----- Setters ----- // //
 	void setVertex(std::size_t loc, Vertex& data);
@@ -66,7 +67,8 @@ public:
 	void updateIds();
 
 	// // ------INDICES ----- // //
-	void makeIndices();
+	void makeIndicesSmooth();
+	void makeIndicesFaceted();
 	int findSimilarVertex(const indexType, const std::map<Vertex, indexType>&);
 
 	// // ----- NORMALS ----- // //
