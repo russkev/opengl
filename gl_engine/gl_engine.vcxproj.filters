@@ -46,9 +46,6 @@
     <Filter Include="Header Files\Primitives">
       <UniqueIdentifier>{d98a082e-0ca0-4aa8-a2e4-b9aaf77a5b17}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Lighting">
-      <UniqueIdentifier>{41dc46b2-1c7c-4544-ba71-2a1b94f390cd}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -130,12 +127,6 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="..\data\Text2D.vert">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\data\LightShader.frag">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\data\LightShader.vert">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>
