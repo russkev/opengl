@@ -10,7 +10,6 @@
 #include <iostream>
 
 #include "Camera.h"
-#include "ShapeGenerator.h"
 #include "ShapeContainer.h"
 #include "VectorUtils.h"
 #include "loadShader.h"
@@ -63,11 +62,10 @@ struct GL_Scene
 
 
 public:
-	GLuint			m_program_id, m_text_program_id, m_light_program_id;
+	GLuint			m_program_id, m_text_program_id;
 	glm::mat4		m_projection	= glm::mat4();
 	Camera			m_cam;
 	GLuint			m_width, m_height;
-	ShapeGenerator	m_shapes;
 	ShapeContainer	m_sh;
 	VAO				m_vao_main, m_vao_text;
 	Timer			m_timer;
