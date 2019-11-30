@@ -7,12 +7,12 @@
 #include <glm/glm.hpp>
 
 #include "Texture.h"
-#include "Buffer.h"
-#include "loadShader.h"
-#include "VAO.h"
+#include "LoadShader.h"
 
-#include "GL_Type_Traits.h"
-#include "GL_Tuple_Introspect.h"
+#include "../Buffer.h"
+#include "../VAO.h"
+#include "../GL_Type_Traits.h"
+#include "../GL_Tuple_Introspect.h"
 
 static constexpr auto MAX_LETTERS = 200u;
 

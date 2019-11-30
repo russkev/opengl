@@ -4,20 +4,20 @@
 #include <cassert>
 
 #include "Sphere.h"
-#include "../Vertex.h"
+#include "Vertex.h"
 
 
-ShapeData Sphere::createSphere(const float radius, const uint16_t segments)
+Mesh Sphere::createSphere(const float radius, const uint16_t segments)
 {
 	return createSphere(radius, segments, segments/2);
 }
 
-ShapeData Sphere::createSphere(const float radius, const uint16_t widthSegments, const uint16_t heightSegments)
+Mesh Sphere::createSphere(const float radius, const uint16_t widthSegments, const uint16_t heightSegments)
 {
 	assert (radius > 0);
 	assert (widthSegments > 1);
 	assert (heightSegments > 1);
-	ShapeData newSphere;
+	Mesh newSphere;
 	// Thanks to user bobobobo on stackexchange
 	// Source found here: 
 	// https://gamedev.stackexchange.com/questions/16585/how-do-you-programmatically-generate-a-sphere

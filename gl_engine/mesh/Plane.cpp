@@ -1,26 +1,26 @@
 #include <cassert>
 
 #include "Plane.h"
-#include "../Vertex.h"
+#include "Vertex.h"
 
-ShapeData Plane::createPlane()
+Mesh Plane::createPlane()
 {
 	return createPlane(1.0f, 1.0f, 1, 1);
 }
 
-ShapeData Plane::createPlane(const float width, const float height)
+Mesh Plane::createPlane(const float width, const float height)
 {
 	return createPlane(width, height, 1, 1);
 }
 
-ShapeData Plane::createPlane(const float width, const float height, const uint16_t widthSegments, const uint16_t heightSegments)
+Mesh Plane::createPlane(const float width, const float height, const uint16_t widthSegments, const uint16_t heightSegments)
 {
 	assert(width > 0);
 	assert(height > 0);
 	assert(widthSegments > 0);
 	assert(heightSegments > 0);
 
-	ShapeData newPlane;
+	Mesh newPlane;
 	float widthOffset = width / (float)widthSegments;
 	float heightOffset = height / (float)heightSegments;
 	float widthUVOffset = 1 / (float)widthSegments;

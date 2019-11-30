@@ -1,16 +1,16 @@
-#include "OBJ_Loader.h"
+#include "OBJ.h"
 #include "Vertex.h"
 
 const glm::vec3 OBJ_Loader::DEFAULT_COLOUR = { 0.5, 0.5, 0.5 };
 
-ShapeData OBJ_Loader::load_obj(const char *path)
+Mesh OBJ_Loader::load_obj(const char *path)
 {
 	// Create temp variables
 	std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
 	std::vector< glm::vec3 > tempVertices;
 	std::vector< glm::vec2 > tempUVs;
 	std::vector< glm::vec3 > tempNormals;
-	ShapeData new_shape;
+	Mesh new_shape;
 
 	// Attempt to open file
 	FILE * file = fopen(path, "r");

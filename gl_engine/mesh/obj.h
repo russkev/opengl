@@ -1,4 +1,4 @@
-#include "mesh/Mesh.h"
+#include "Mesh.h"
 
 #include <stdexcept>
 #include <glm/matrix.hpp>
@@ -10,6 +10,6 @@ struct OBJ_Loader
 	const static glm::vec3 DEFAULT_COLOUR;
 
 	// Static methods
-	static ShapeData load_obj(const char *path);
+	static Mesh load_obj(const char *path);
 
 };

@@ -148,24 +148,24 @@
   <ItemGroup>
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
-    <ClCompile Include="loadShader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GL_Scene.cpp" />
     <ClCompile Include="mesh\Arrow.cpp" />
     <ClCompile Include="mesh\Cube.cpp" />
     <ClCompile Include="mesh\Cylinder.cpp" />
     <ClCompile Include="mesh\Mesh.cpp" />
+    <ClCompile Include="mesh\OBJ.cpp" />
     <ClCompile Include="mesh\Plane.cpp" />
     <ClCompile Include="mesh\Sphere.cpp" />
-    <ClCompile Include="OBJ_Loader.cpp" />
+    <ClCompile Include="mesh\Vertex.cpp" />
+    <ClCompile Include="shading\LoadShader.cpp" />
+    <ClCompile Include="shading\Targa.cpp" />
+    <ClCompile Include="shading\Text2D.cpp" />
+    <ClCompile Include="shading\Texture.cpp" />
     <ClCompile Include="ShapeContainer.cpp" />
-    <ClCompile Include="targa\targa.cpp" />
-    <ClCompile Include="Text2D.cpp" />
-    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VectorUtils.cpp" />
     <ClCompile Include="VAO.cpp" />
-    <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -180,24 +180,25 @@
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="GL_Tuple_Introspect.h" />
     <ClInclude Include="GL_Type_Traits.h" />
-    <ClInclude Include="loadBMP_custom.h" />
     <ClInclude Include="loadShader.h" />
     <ClInclude Include="GL_Scene.h" />
     <ClInclude Include="mesh\Arrow.h" />
     <ClInclude Include="mesh\Cube.h" />
     <ClInclude Include="mesh\Cylinder.h" />
     <ClInclude Include="mesh\Mesh.h" />
+    <ClInclude Include="mesh\OBJ.h" />
     <ClInclude Include="mesh\Plane.h" />
     <ClInclude Include="mesh\Sphere.h" />
-    <ClInclude Include="OBJ_Loader.h" />
+    <ClInclude Include="mesh\Vertex.h" />
+    <ClInclude Include="shading\Bitmap.h" />
+    <ClInclude Include="shading\LoadShader.h" />
+    <ClInclude Include="shading\Targa.h" />
+    <ClInclude Include="shading\Text2D.h" />
+    <ClInclude Include="shading\Texture.h" />
     <ClInclude Include="ShapeContainer.h" />
-    <ClInclude Include="targa\targa.h" />
-    <ClInclude Include="Text2D.h" />
-    <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="VectorUtils.h" />
     <ClInclude Include="VAO.h" />
-    <ClInclude Include="Vertex.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,11 @@
 #include <cassert>
 
 #include "Arrow.h"
-#include "../Vertex.h"
+#include "Vertex.h"
 
-ShapeData Arrow::createArrow()
+Mesh Arrow::createArrow()
 {
-	ShapeData newArrow;
+	Mesh newArrow;
 	
 	// Up face
 	newArrow += createArrowFace(
@@ -82,7 +82,7 @@ ShapeData Arrow::createArrow()
 
 	return newArrow;
 }
-ShapeData Arrow::createRectangleFace(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, glm::vec3 br)
+Mesh Arrow::createRectangleFace(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, glm::vec3 br)
 {
 	// Vertix order is like this:
 	//
@@ -91,7 +91,7 @@ ShapeData Arrow::createRectangleFace(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, g
 	//		   |     |
 	//		  bl-----br
 	//
-	ShapeData newFace;
+	Mesh newFace;
 
 	// Vertex Normals
 	glm::vec3 faceNormal = glm::cross(tr - tl, bl - tl);
@@ -113,7 +113,7 @@ ShapeData Arrow::createRectangleFace(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, g
 
 	return newFace;
 }
-ShapeData Arrow::createArrowFace(glm::vec3 t, glm::vec3 cl, glm::vec3 cr, glm::vec3 il, glm::vec3 ir, glm::vec3 bl, glm::vec3 br)
+Mesh Arrow::createArrowFace(glm::vec3 t, glm::vec3 cl, glm::vec3 cr, glm::vec3 il, glm::vec3 ir, glm::vec3 bl, glm::vec3 br)
 {
 	// Vertix order is like this:
 	//            t
@@ -127,7 +127,7 @@ ShapeData Arrow::createArrowFace(glm::vec3 t, glm::vec3 cl, glm::vec3 cr, glm::v
 	//		  bl-----br
 	//
 
-	ShapeData newFace;
+	Mesh newFace;
 
 	// Vertex Normals
 	glm::vec3 faceNormal = glm::cross(ir - il, bl - il);

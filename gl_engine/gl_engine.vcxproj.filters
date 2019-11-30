@@ -16,12 +16,6 @@
     <Filter Include="Source Files\Shaders">
       <UniqueIdentifier>{2f184491-156c-426b-adff-2ac4c252245d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Textures">
-      <UniqueIdentifier>{bd1e1868-85a0-4a91-bc86-fb3a3011b8c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GL">
-      <UniqueIdentifier>{777e6055-c5ca-4179-8759-3875023fd147}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\GL">
       <UniqueIdentifier>{a4c24823-1528-41f8-a4e1-74eb996e4d98}</UniqueIdentifier>
     </Filter>
@@ -46,6 +40,12 @@
     <Filter Include="Header Files\Mesh">
       <UniqueIdentifier>{d98a082e-0ca0-4aa8-a2e4-b9aaf77a5b17}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shading">
+      <UniqueIdentifier>{dd4cc01a-5a70-4148-a11b-dc86ae6c31e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shading">
+      <UniqueIdentifier>{ba19c47e-e203-4bb0-b0cc-fbd123f18c2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -60,9 +60,6 @@
     <ClCompile Include="VectorUtils.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="loadShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Buffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -72,22 +69,7 @@
     <ClCompile Include="VAO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OBJ_Loader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ShapeContainer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Vertex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="targa\targa.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Text2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="camera\Camera.cpp">
@@ -111,6 +93,24 @@
     <ClCompile Include="mesh\Sphere.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="mesh\Vertex.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh\OBJ.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="shading\LoadShader.cpp">
+      <Filter>Source Files\Shading</Filter>
+    </ClCompile>
+    <ClCompile Include="shading\Targa.cpp">
+      <Filter>Source Files\Shading</Filter>
+    </ClCompile>
+    <ClCompile Include="shading\Text2D.cpp">
+      <Filter>Source Files\Shading</Filter>
+    </ClCompile>
+    <ClCompile Include="shading\Texture.cpp">
+      <Filter>Source Files\Shading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -133,36 +133,6 @@
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targa\targa.h">
-      <Filter>Header Files\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Header Files\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Text2D.h">
-      <Filter>Header Files\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="GL_Scene.h">
-      <Filter>Header Files\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="Buffer.h">
-      <Filter>Header Files\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="GL_Tuple_Introspect.h">
-      <Filter>Header Files\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="GL_Type_Traits.h">
-      <Filter>Header Files\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="VAO.h">
-      <Filter>Header Files\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="loadBMP_custom.h">
-      <Filter>Header Files\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="loadShader.h">
-      <Filter>Header Files\GL</Filter>
     </ClInclude>
     <ClInclude Include="VectorUtils.h">
       <Filter>Header Files\Utils</Filter>
@@ -188,13 +158,46 @@
     <ClInclude Include="mesh\Sphere.h">
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="OBJ_Loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ShapeContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vertex.h">
+    <ClInclude Include="mesh\Vertex.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh\OBJ.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\Bitmap.h">
+      <Filter>Header Files\Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\LoadShader.h">
+      <Filter>Header Files\Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\Targa.h">
+      <Filter>Header Files\Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\Text2D.h">
+      <Filter>Header Files\Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\Texture.h">
+      <Filter>Header Files\Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="Buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GL_Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GL_Tuple_Introspect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GL_Type_Traits.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="loadShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VAO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

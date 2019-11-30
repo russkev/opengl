@@ -2,7 +2,7 @@
 #include "mesh/Mesh.h"
 #include "VectorUtils.h"
 
-void ShapeContainer::appendShape(ShapeData&& s_shape, const std::string& s_name)
+void ShapeContainer::appendShape(Mesh&& s_shape, const std::string& s_name)
 {
 	auto id = (GLuint)m_shapes.size();
 	auto t_name = s_name;
@@ -89,9 +89,9 @@ void ShapeContainer::transform(glm::mat4& sourceMatrix, const glm::mat4& transfo
 	sourceMatrix = transformMatrix * sourceMatrix;
 }
 
-void ShapeContainer::transform(ShapeData::verticesType& sourceVerts, const glm::mat4& transformMatrix)
+void ShapeContainer::transform(Mesh::verticesType& sourceVerts, const glm::mat4& transformMatrix)
 {
-	ShapeData t_shape;
+	Mesh t_shape;
 	t_shape.transform(sourceVerts, transformMatrix);
 }
 
@@ -173,15 +173,15 @@ std::vector<Vertex::vertexType> ShapeContainer::vertices()
 }
 
 
-ShapeData::indicesType ShapeContainer::indices()
+Mesh::indicesType ShapeContainer::indices()
 {
-	ShapeData::indicesType t_indices;
+	Mesh::indicesType t_indices;
 	std::size_t numVertices = 0;
 	for (auto & shape : m_shapes)
 	{
 		for (auto j = 0; j < shape.numIndices(); ++j)
 		{
-			t_indices.push_back(shape.indices().at(j) + (ShapeData::indexType)numVertices);
+			t_indices.push_back(shape.indices().at(j) + (Mesh::indexType)numVertices);
 		}
 		numVertices += shape.numVertices();
 	}
@@ -230,10 +230,10 @@ std::vector<GLuint> ShapeContainer::inputConnection(const std::string& s_name, s
 	return s_existingConnections;
 }
 
-ShapeData::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
+Mesh::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 {
 	std::vector<std::pair<GLfloat, GLuint>> distances;
-	ShapeData::indicesType outIndices;
+	Mesh::indicesType outIndices;
 
 	for (auto shapeID = 0; shapeID < m_shape_names.size(); ++shapeID)
 	{
@@ -333,7 +333,7 @@ void ShapeContainer::uploadConnections(const intType s_program_id)
 	}
 }
 
-ShapeData* ShapeContainer::getShapePtr(const std::string& s_shape_name)
+Mesh* ShapeContainer::getShapePtr(const std::string& s_shape_name)
 {
 	GLint index = findString(m_shape_names, s_shape_name);
 	assert(index >= 0 && "Shape could not be found");
