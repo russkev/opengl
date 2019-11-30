@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
+    <ClCompile Include="light\PointLight.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GL_Scene.cpp" />
     <ClCompile Include="mesh\Arrow.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="GL_Tuple_Introspect.h" />
     <ClInclude Include="GL_Type_Traits.h" />
+    <ClInclude Include="light\PointLight.h" />
     <ClInclude Include="loadShader.h" />
     <ClInclude Include="GL_Scene.h" />
     <ClInclude Include="mesh\Arrow.h" />

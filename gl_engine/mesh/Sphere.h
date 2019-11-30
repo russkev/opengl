@@ -4,6 +4,7 @@
 
 struct Sphere
 {
+	static Mesh createSphere(const float radius);
 	static Mesh createSphere(const float radius, const uint16_t segments);
 	static Mesh createSphere(const float radius, const uint16_t widthSegments, const uint16_t heightSegments);
 private:
