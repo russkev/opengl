@@ -104,7 +104,6 @@ void GL_Scene::initGeo()
 {
 	// // Create and compile our GLSL program from the shaders // //
 	m_program_id		= LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
-	//m_light_program_id	= LoadShaders("LightShader.vert", "LightFragmentShader.frag");
 	
 	// // Create Texture
 	Texture texture1("uvtemplate.tga");
@@ -117,13 +116,13 @@ void GL_Scene::initGeo()
 	normalTexture.upload_to_shader(m_program_id, "normalMap");
 	
 	// // Create Geo
-	// m_sh.appendShape(OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj"), "shader_ball");
+	//m_sh.appendShape(OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj"), "shader_ball");
 	//ShapeData newSphere = Sphere::createSphere(3.0, 20, 20);
 	//m_sh.appendShape(Sphere::createSphere(3.0, 50), "sphere");
 	//m_sh.appendShape(Plane::createPlane(10.0f, 10.0f), "plane");
 	//m_sh.appendShape(Cylinder::createCylinder(), "cylinder");
 	//m_sh.appendShape(Cube::createCube(4.0f));
-	//m_sh.appendShape(Arrow::createArrow());
+	m_sh.appendShape(Arrow::createArrow());
 
 
 	// // Create transforms
