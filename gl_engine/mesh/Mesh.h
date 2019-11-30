@@ -9,9 +9,9 @@
 #include <cstdlib>
 
 #include "../VectorUtils.h"
-#include "../Vertex.h"
+#include "Vertex.h"
 
-struct ShapeData 
+struct Mesh 
 {
 public:
 	
@@ -32,16 +32,16 @@ public:
 	//enum attr { position = 0, color = 1, normal = 2, uv = 3, id = 4, tangent = 5, bitangent = 6 };
 
 	// // ----- Big 6 ----- // //
-	ShapeData();
-	ShapeData(const verticesType s_vertices, const indicesType s_indices);
-	~ShapeData() {};
-	ShapeData(const ShapeData&) = delete;
-	ShapeData(const ShapeData&& other);
-	ShapeData& operator = (const ShapeData&) = delete;
-	ShapeData& operator = (ShapeData&& other);
+	Mesh();
+	Mesh(const verticesType s_vertices, const indicesType s_indices);
+	~Mesh() {};
+	Mesh(const Mesh&) = delete;
+	Mesh(const Mesh&& other);
+	Mesh& operator = (const Mesh&) = delete;
+	Mesh& operator = (Mesh&& other);
 
 	// // ----- Addition Assign ----- // //
-	ShapeData& operator += (ShapeData& other);
+	Mesh& operator += (Mesh& other);
 
 	// // ----- Append ----- // //
 	void appendVertex(const Vertex s_shape);

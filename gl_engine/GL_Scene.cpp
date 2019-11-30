@@ -1,5 +1,5 @@
 #include "GL_Scene.h"
-#include "OBJ_Loader.h"
+#include "mesh/OBJ.h"
 #include "mesh/Sphere.h"
 #include "mesh/Plane.h"
 #include "mesh/Cylinder.h"

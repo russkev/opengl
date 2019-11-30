@@ -5,7 +5,7 @@
 #include <GL/glew.h>
 
 #include "Vertex.h"
-#include "VectorUtils.h"
+#include "../VectorUtils.h"
 
 // // ----- CONSTRUCTORS ----- // //
 Vertex::Vertex() :

@@ -12,33 +12,33 @@
 #include "../VectorUtils.h"
 
 // // ----- Constructors ----- // //
-ShapeData::ShapeData() :
+Mesh::Mesh() :
 	m_vertices(verticesType{}),
 	m_indices(indexType{}),
 	m_id(0u)
 {};
 
-ShapeData::ShapeData(const verticesType s_vertices, const indicesType s_indices) :
+Mesh::Mesh(const verticesType s_vertices, const indicesType s_indices) :
 	m_vertices(s_vertices),
 	m_indices(s_indices)
 {};
 
 // // ----- Move Constructor ----- // //
-ShapeData::ShapeData(const ShapeData&& other) :
+Mesh::Mesh(const Mesh&& other) :
 	m_vertices(std::move(other.m_vertices)),
 	m_indices(std::move(other.m_indices)),
 	m_id(std::move(other.m_id))
 {};
 
 // // ----- Move Assign ----- // //
-ShapeData& ShapeData::operator = (ShapeData&& other)
+Mesh& Mesh::operator = (Mesh&& other)
 {
-	(*this).~ShapeData();
-	return *new (this) ShapeData(std::move(other));
+	(*this).~Mesh();
+	return *new (this) Mesh(std::move(other));
 }
 
 // // ----- Addition Assign ----- // //
-ShapeData& ShapeData::operator += (ShapeData& other)
+Mesh& Mesh::operator += (Mesh& other)
 {
 	auto currentNumVertices = (indexType)numVertices();
 	for (std::size_t i = 0u; i < other.numIndices(); ++i)
@@ -51,25 +51,25 @@ ShapeData& ShapeData::operator += (ShapeData& other)
 }
 
 // // ----- Append ----- // //
-void ShapeData::appendVertex(const Vertex s_vertex)
+void Mesh::appendVertex(const Vertex s_vertex)
 {
 	m_vertices.push_back(s_vertex);
 }
 
-void ShapeData::appendTriangle(const Vertex s_v1, const Vertex s_v2, const Vertex s_v3)
+void Mesh::appendTriangle(const Vertex s_v1, const Vertex s_v2, const Vertex s_v3)
 {
 	m_vertices.push_back(s_v1);
 	m_vertices.push_back(s_v2);
 	m_vertices.push_back(s_v3);
 }
 
-void ShapeData::appendIndex(const GLushort s_index)
+void Mesh::appendIndex(const GLushort s_index)
 {
 	m_indices.push_back(s_index);
 }
 
 // // ----- Setters ----- // //
-void ShapeData::setVertex(std::size_t loc, Vertex& vertex)
+void Mesh::setVertex(std::size_t loc, Vertex& vertex)
 {
 	assert(numVertices() >= loc);
 	m_vertices.at(loc) = std::move(vertex);
@@ -78,7 +78,7 @@ void ShapeData::setVertex(std::size_t loc, Vertex& vertex)
 // // ------INDICES ----- // //
 
 // Guess shared indices based on proximity
-void ShapeData::makeIndicesSmooth()
+void Mesh::makeIndicesSmooth()
 {
 	makeIndicesFaceted();
 	verticesType newVertices;
@@ -105,7 +105,7 @@ void ShapeData::makeIndicesSmooth()
 	std::swap(newIndices, m_indices);
 }
 
-void ShapeData::makeIndicesFaceted()
+void Mesh::makeIndicesFaceted()
 {
 	for (auto i = 0; i < m_vertices.size(); i++)
 	{
@@ -113,7 +113,7 @@ void ShapeData::makeIndicesFaceted()
 	}
 }
 
-int ShapeData::findSimilarVertex(const indexType s_currentVertIndex, const std::map<Vertex, indexType>& s_vertexMap)
+int Mesh::findSimilarVertex(const indexType s_currentVertIndex, const std::map<Vertex, indexType>& s_vertexMap)
 {
 	auto iterator = s_vertexMap.find(m_vertices.at(s_currentVertIndex));
 	if (iterator == s_vertexMap.end())
@@ -126,14 +126,14 @@ int ShapeData::findSimilarVertex(const indexType s_currentVertIndex, const std::
 	}
 }
 
-void ShapeData::setIndex(std::size_t loc, const indexType& data)
+void Mesh::setIndex(std::size_t loc, const indexType& data)
 {
 	assert(numIndices() >= loc);
 	m_indices.at(loc) = data;
 }
 
 // // ----- TANGENTS AND BITANGENTS ----- // //
-void ShapeData::makeTangents()
+void Mesh::makeTangents()
 {
 	assert(m_vertices.size() > 0);
 	assert(m_indices.size() > 0);
@@ -193,7 +193,7 @@ void ShapeData::makeTangents()
 	}
 }
 
-void ShapeData::setId(GLuint s_id) 
+void Mesh::setId(GLuint s_id) 
 {
 	if (numVertices() > 0)
 	{
@@ -206,25 +206,25 @@ void ShapeData::setId(GLuint s_id)
 }
 
 // // ----- Getters ----- // //
-Vertex* ShapeData::getVertex(std::size_t loc)
+Vertex* Mesh::getVertex(std::size_t loc)
 {
 	assert(numVertices() >= loc);
 	return &m_vertices.at(loc);
 }
 
-ShapeData::indexType ShapeData::getIndex(std::size_t i)
+Mesh::indexType Mesh::getIndex(std::size_t i)
 {
 	assert(numIndices() >= i);
 	return m_indices.at(i);
 }
 
  // ----- Transform ----- // //
-void ShapeData::transform(glm::mat4 transformMatrix) 
+void Mesh::transform(glm::mat4 transformMatrix) 
 {
 	transform(m_vertices, transformMatrix);
 }
 
-void ShapeData::transform(ShapeData::verticesType& inVertices, const glm::mat4 transformMatrix)
+void Mesh::transform(Mesh::verticesType& inVertices, const glm::mat4 transformMatrix)
 {
 
 	assert(inVertices.size() > 0);
@@ -244,7 +244,7 @@ void ShapeData::transform(ShapeData::verticesType& inVertices, const glm::mat4 t
 	}
 }
 
-void ShapeData::updateIds()
+void Mesh::updateIds()
 {
 	if (numVertices() > 0)
 	{

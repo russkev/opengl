@@ -17,21 +17,21 @@ struct ShapeContainer
 	// // ----- Type Definitions ----- // //
 	typedef std::string															nameType;
 	typedef GLuint																intType;
-	typedef std::pair<nameType, ShapeData>										shapeType;
+	typedef std::pair<nameType, Mesh>										shapeType;
 	typedef std::pair<nameType, glm::mat4>										matType;
 	typedef std::pair<nameType, std::vector<nameType>>							connectionType;
-	typedef std::vector<std::pair<GLfloat, glm::tvec3<ShapeData::indexType>>>	distancesType;
+	typedef std::vector<std::pair<GLfloat, glm::tvec3<Mesh::indexType>>>	distancesType;
 
 	// // ----- Attribute Enumeration ----- // //
 	enum connectionLocations { transformSource = 0, transformDest = 1, shapeDest = 2 };
 
-	void appendShape(ShapeData&& s_shape, const std::string& s_name = "poly");
+	void appendShape(Mesh&& s_shape, const std::string& s_name = "poly");
 	void appendTransform(glm::mat4&& s_transform, const std::string& s_name = "transform");
 	void connect(const std::string& source, const std::string& destination);
 	std::string input(const std::string& destination, const std::vector<std::string>& s_destination_strings);
 	bool sourceConnectionExists(const intType source);
 	void transform(glm::mat4& sourceMatrix, const glm::mat4& transformMatrix);
-	void transform(ShapeData::verticesType&, const glm::mat4& transformMatrix);
+	void transform(Mesh::verticesType&, const glm::mat4& transformMatrix);
 	template <typename T>
 	void transformFromConnection(const std::string& name, T& s_object)
 	{
@@ -51,7 +51,7 @@ struct ShapeContainer
 
 	std::string type(const std::string& s_name);
 	std::vector<GLuint> inputConnection(const std::string& s_name, std::vector<GLuint> s_existingConnections = std::vector<GLuint>());
-	ShapeData::indicesType depthSort(glm::vec3 s_cam_location);
+	Mesh::indicesType depthSort(glm::vec3 s_cam_location);
 
 	// // ----- Getters ----- // //
 
@@ -111,12 +111,12 @@ struct ShapeContainer
 
 	// // ----- GETTERS ----- // //
 	std::vector<Vertex::vertexType> vertices();
-	ShapeData::indicesType  indices();
+	Mesh::indicesType  indices();
 	std::vector<glm::mat4>  transforms() { return m_transforms; }
 	intType numShapes() { return intType(m_shapes.size()); }
 	intType numTransforms() { return intType(m_transforms.size()); }
 
-	ShapeData* getShapePtr(const std::string& s_shape_name);
+	Mesh* getShapePtr(const std::string& s_shape_name);
 	glm::mat4* getTransformPtr(const std::string& s_transform_name);
 	
 
@@ -124,7 +124,7 @@ private:
 	bool nameExists(const std::string& s_name);
 	void incrementString(std::string& s_name);
 	// // ----- Member Variables ----- // //
-	std::vector<ShapeData>		m_shapes;
+	std::vector<Mesh>		m_shapes;
 	std::vector<nameType>		m_shape_names;
 	std::vector<glm::mat4>		m_transforms;
 	std::vector<nameType>		m_transform_names;

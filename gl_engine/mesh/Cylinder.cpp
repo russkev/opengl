@@ -6,23 +6,23 @@
 #include "Cylinder.h"
 #include "Plane.h"
 
-ShapeData Cylinder::createCylinder()
+Mesh Cylinder::createCylinder()
 {
 	return createCylinder(0.5f, 2.0f);
 }
-ShapeData Cylinder::createCylinder(const float radius, const float height)
+Mesh Cylinder::createCylinder(const float radius, const float height)
 {
 	return createCylinder(radius, height, 24, 1);
 }
 
-ShapeData Cylinder::createCylinder(const float radius, const float height, const uint16_t widthSegments, const uint16_t heightSegments)
+Mesh Cylinder::createCylinder(const float radius, const float height, const uint16_t widthSegments, const uint16_t heightSegments)
 {
 	assert(radius > 0);
 	assert(height > 0);
 	assert(widthSegments > 2);
 	assert(heightSegments > 0);
 
-	ShapeData newCylinder;
+	Mesh newCylinder;
 	float heightOffset = height / (float)heightSegments;
 	float widthUVOffset = 1 / (float)widthSegments;
 	float heightUVOffset = 1 / (float)heightSegments;

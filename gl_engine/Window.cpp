@@ -57,9 +57,16 @@ void Window::init(std::vector<opengl_attr_pair> st_config, GLuint width, GLuint 
 	// // Create window // //
 	m_st_window = SDL_CreateWindow("Tutorial 04 - A Cloured Cube", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
 	assert(m_st_window != nullptr);
+
+	
 	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 	m_st_opengl = SDL_GL_CreateContext(m_st_window);
-	assert(m_st_opengl != nullptr);
+	if (m_st_opengl == nullptr)
+	{
+		printf("Error couldn't create GL Context. Possible cause: Open GL version available is too low");
+		__debugbreak();
+	}
+	//assert(m_st_opengl != nullptr);
 
 	SDL_GL_SetSwapInterval(1);
 
@@ -74,7 +81,10 @@ void Window::init(std::vector<opengl_attr_pair> st_config, GLuint width, GLuint 
 		glDebugMessageCallbackARB(&DebugOutputCallback, NULL);
 #endif
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
+
+
 	}
+
 }
 
 void Window::finish_frame()

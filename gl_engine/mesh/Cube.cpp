@@ -1,17 +1,17 @@
 #include <cassert>
 
 #include "Cube.h"
-#include "../Vertex.h"
+#include "Vertex.h"
 
-ShapeData Cube::createCube()
+Mesh Cube::createCube()
 {
 	return createCube(1.0f);
 }
 
-ShapeData Cube::createCube(const float width)
+Mesh Cube::createCube(const float width)
 {
 	float halfWidth = width / 2.0f;
-	ShapeData newCube;
+	Mesh newCube;
 
 	// Up Face
 	newCube += createCubeFace(
@@ -67,7 +67,7 @@ ShapeData Cube::createCube(const float width)
 	return newCube;
 }
 
-ShapeData Cube::createCubeFace(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, glm::vec3 br) 
+Mesh Cube::createCubeFace(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, glm::vec3 br) 
 {
 	// Vertix order is like this:
 	//
@@ -76,7 +76,7 @@ ShapeData Cube::createCubeFace(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, glm::ve
 	//		   |     |
 	//		  bl-----br
 	//
-	ShapeData newFace;
+	Mesh newFace;
 
 	// Vertex Normals
 	glm::vec3 faceNormal = glm::cross(tr - tl, bl - tl);

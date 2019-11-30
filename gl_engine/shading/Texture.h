@@ -1,7 +1,7 @@
 #pragma once
 
-#include "loadBMP_custom.h"
-#include "targa/targa.h"
+#include "Bitmap.h"
+#include "Targa.h"
 
 struct Texture
 {
