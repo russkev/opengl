@@ -20,9 +20,8 @@ void Texture::init_targa(const char *filename)
 	{
 		fprintf(stderr, "ERROR: Opening '%s' failed: %s\n", filename, tga_error(result));
 	}
-
 	
-	if (tga_is_top_to_bottom(&m_image))	tga_flip_vert(&m_image);
+	if (tga_is_top_to_bottom(&m_image))		tga_flip_vert(&m_image);
 	if (tga_is_right_to_left(&m_image))		tga_flip_horiz(&m_image);
 	if (tga_is_colormapped(&m_image))		tga_color_unmap(&m_image);
 	if (tga_is_mono(&m_image))				tga_desaturate_avg(&m_image);

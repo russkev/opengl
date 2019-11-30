@@ -1,6 +1,6 @@
 #include <math.h>
 
-#include "../ShapeData.h"
+#include "Mesh.h"
 
 struct Sphere
 {

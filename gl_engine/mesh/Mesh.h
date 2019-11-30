@@ -8,8 +8,8 @@
 #include <map>
 #include <cstdlib>
 
-#include "VectorUtils.h"
-#include "Vertex.h"
+#include "../VectorUtils.h"
+#include "../Vertex.h"
 
 struct ShapeData 
 {
