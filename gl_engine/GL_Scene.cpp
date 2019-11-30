@@ -1,10 +1,10 @@
 #include "GL_Scene.h"
 #include "OBJ_Loader.h"
-#include "primitives/Sphere.h"
-#include "primitives/Plane.h"
-#include "primitives/Cylinder.h"
-#include "primitives/Cube.h"
-#include "primitives/Arrow.h"
+#include "mesh/Sphere.h"
+#include "mesh/Plane.h"
+#include "mesh/Cylinder.h"
+#include "mesh/Cube.h"
+#include "mesh/Arrow.h"
 
 
 

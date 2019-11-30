@@ -1,4 +1,4 @@
-#include "ShapeData.h"
+#include "mesh/Mesh.h"
 
 #include <stdexcept>
 #include <glm/matrix.hpp>

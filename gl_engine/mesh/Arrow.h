@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ShapeData.h"
+#include "Mesh.h"
 
 struct Arrow
 {

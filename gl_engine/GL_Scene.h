@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-#include "Camera.h"
+#include "Camera/Camera.h"
 #include "ShapeContainer.h"
 #include "VectorUtils.h"
 #include "loadShader.h"

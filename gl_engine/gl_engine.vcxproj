@@ -147,25 +147,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Buffer.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="common\loadShader.cpp" />
+    <ClCompile Include="camera\Camera.cpp" />
+    <ClCompile Include="loadShader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GL_Scene.cpp" />
+    <ClCompile Include="mesh\Arrow.cpp" />
+    <ClCompile Include="mesh\Cube.cpp" />
+    <ClCompile Include="mesh\Cylinder.cpp" />
+    <ClCompile Include="mesh\Mesh.cpp" />
+    <ClCompile Include="mesh\Plane.cpp" />
+    <ClCompile Include="mesh\Sphere.cpp" />
     <ClCompile Include="OBJ_Loader.cpp" />
-    <ClCompile Include="primitives\Arrow.cpp" />
-    <ClCompile Include="primitives\Cube.cpp" />
-    <ClCompile Include="primitives\Cylinder.cpp" />
-    <ClCompile Include="primitives\Plane.cpp" />
-    <ClCompile Include="primitives\Sphere.cpp" />
     <ClCompile Include="ShapeContainer.cpp" />
-    <ClCompile Include="ShapeData.cpp" />
     <ClCompile Include="targa\targa.cpp" />
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VectorUtils.cpp" />
     <ClCompile Include="VAO.cpp" />
-    <ClCompile Include="VBO_Indexer.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -178,27 +177,26 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="GL_Tuple_Introspect.h" />
     <ClInclude Include="GL_Type_Traits.h" />
     <ClInclude Include="loadBMP_custom.h" />
     <ClInclude Include="loadShader.h" />
     <ClInclude Include="GL_Scene.h" />
+    <ClInclude Include="mesh\Arrow.h" />
+    <ClInclude Include="mesh\Cube.h" />
+    <ClInclude Include="mesh\Cylinder.h" />
+    <ClInclude Include="mesh\Mesh.h" />
+    <ClInclude Include="mesh\Plane.h" />
+    <ClInclude Include="mesh\Sphere.h" />
     <ClInclude Include="OBJ_Loader.h" />
-    <ClInclude Include="primitives\Arrow.h" />
-    <ClInclude Include="primitives\Cube.h" />
-    <ClInclude Include="primitives\Cylinder.h" />
-    <ClInclude Include="primitives\Plane.h" />
-    <ClInclude Include="primitives\Sphere.h" />
     <ClInclude Include="ShapeContainer.h" />
-    <ClInclude Include="ShapeData.h" />
     <ClInclude Include="targa\targa.h" />
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="VectorUtils.h" />
     <ClInclude Include="VAO.h" />
-    <ClInclude Include="VBO_Indexer.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

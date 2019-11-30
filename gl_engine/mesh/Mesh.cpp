@@ -8,8 +8,8 @@
 #include <map>
 #include <string>
 
-#include "ShapeData.h"
-#include "VectorUtils.h"
+#include "Mesh.h"
+#include "../VectorUtils.h"
 
 // // ----- Constructors ----- // //
 ShapeData::ShapeData() :
