@@ -119,7 +119,7 @@ void GL_Scene::initGeo()
 	//m_sh.appendShape(OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj"), "shader_ball");
 	//ShapeData newSphere = Sphere::createSphere(3.0, 20, 20);
 	//m_sh.appendShape(Sphere::createSphere(3.0, 50), "sphere");
-	//m_sh.appendShape(Plane::createPlane(10.0f, 10.0f), "plane");
+	m_sh.appendShape(Plane::createPlane(10.0f, 10.0f), "plane");
 	//m_sh.appendShape(Cylinder::createCylinder(), "cylinder");
 	//m_sh.appendShape(Cube::createCube(4.0f));
 	m_sh.appendShape(Arrow::createArrow());
