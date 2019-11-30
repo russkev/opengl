@@ -6,6 +6,10 @@
 #include "Sphere.h"
 #include "Vertex.h"
 
+Mesh Sphere::createSphere(const float radius)
+{
+	return createSphere(radius, 32);
+}
 
 Mesh Sphere::createSphere(const float radius, const uint16_t segments)
 {
