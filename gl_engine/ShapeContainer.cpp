@@ -4,15 +4,15 @@
 
 void ShapeContainer::appendShape(Mesh&& s_shape, const std::string& s_name)
 {
-	auto id = (GLuint)m_shapes.size();
+	auto id = (GLuint)m_meshes.size();
 	auto t_name = s_name;
 
 	while ( nameExists(t_name) ) { incrementString(t_name); }
 
-	m_shapes.push_back(std::move(s_shape));
+	m_meshes.push_back(std::move(s_shape));
 	m_shape_names.push_back(std::move(t_name));
-	m_shapes.at(id).setId(id);
-	assert(m_shapes.size() == m_shape_names.size());
+	m_meshes.at(id).setId(id);
+	assert(m_meshes.size() == m_shape_names.size());
 }
 
 void ShapeContainer::appendTransform(glm::mat4&& s_transform, const std::string& s_name)
@@ -154,19 +154,12 @@ std::vector<Vertex::vertexType> ShapeContainer::vertices()
 	go through connections list and apply transform to the appropriate vertices
 	
 	*/
-	//ShapeData::verticesType t_vertices;
-	//for (auto i = 0; i < m_shapes.size(); ++i)
-	//{
-	//	ShapeData::verticesType shapeVerts = m_shapes.at(i).vertices();
-	//	t_vertices.insert(t_vertices.end(), shapeVerts.begin(), shapeVerts.end());
-	//}
-	//return t_vertices;
 	std::vector<Vertex::vertexType> t_vertices;
-	for (auto i = 0; i < m_shapes.size(); ++i)
+	for (auto i = 0; i < m_meshes.size(); ++i)
 	{
-		for (auto j = 0; j < m_shapes.at(i).numVertices(); ++j)
+		for (auto j = 0; j < m_meshes.at(i).numVertices(); ++j)
 		{
-			t_vertices.push_back(m_shapes.at(i).getVertex(j)->vertexTuple());
+			t_vertices.push_back(m_meshes.at(i).getVertex(j)->vertexTuple());
 		}
 	}
 	return t_vertices;
@@ -177,7 +170,7 @@ Mesh::indicesType ShapeContainer::indices()
 {
 	Mesh::indicesType t_indices;
 	std::size_t numVertices = 0;
-	for (auto & shape : m_shapes)
+	for (auto & shape : m_meshes)
 	{
 		for (auto j = 0; j < shape.numIndices(); ++j)
 		{
@@ -192,7 +185,7 @@ std::vector<GLuint> ShapeContainer::inputConnection(const std::string& s_name, s
 {
 	GLint destShapeLoc = -1, destTransformLoc = -1;
 	bool destIsShape = false, destIsTransform = false;
-	for (auto i = 0; i < m_shapes.size(); ++i)
+	for (auto i = 0; i < m_meshes.size(); ++i)
 	{
 		if (m_shape_names.at(i) == s_name)
 		{
@@ -258,9 +251,9 @@ Mesh::indicesType ShapeContainer::depthSort(glm::vec3 s_cam_location)
 		auto numIndices = 0;
 		for (GLuint j = 0; j < i.second; ++j) 
 		{
-			numIndices += (int)m_shapes.at(j).numVertices();
+			numIndices += (int)m_meshes.at(j).numVertices();
 		}
-		auto shape = std::move(m_shapes.at(i.second));
+		auto shape = std::move(m_meshes.at(i.second));
 		for (auto it = shape.indx_begin(); it != shape.indx_end(); ++it)
 		{
 			outIndices.push_back(*it + numIndices);
@@ -338,7 +331,7 @@ Mesh* ShapeContainer::getShapePtr(const std::string& s_shape_name)
 	GLint index = findString(m_shape_names, s_shape_name);
 	assert(index >= 0 && "Shape could not be found");
 	//return std::move(m_shapes.at(index));
-	return &m_shapes.at(index);
+	return &m_meshes.at(index);
 }
 
 glm::mat4* ShapeContainer::getTransformPtr(const std::string& s_transform_name)

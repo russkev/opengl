@@ -63,14 +63,15 @@ struct GL_Scene
 
 
 public:
-	GLuint			m_program_id, m_text_program_id;
+	GLuint			m_program_id, m_text_program_id, m_light_program_id;
 	glm::mat4		m_projection	= glm::mat4();
 	Camera			m_cam;
 	PointLight		m_light;
 	GLuint			m_width, m_height;
-	ShapeContainer	m_sh;
-	VAO				m_vao_main, m_vao_text;
+	ShapeContainer	m_sh, m_light_sh;
+	VAO				m_vao_main, m_vao_text, m_vao_light;
 	Timer			m_timer;
+	bool			m_displayWireframe = false;
 
 	// BUFFERS
 	Buffer m_geoBuffer	= { GL_ARRAY_BUFFER, 0 };
@@ -78,7 +79,12 @@ public:
 	Buffer m_wldBuffer	= { GL_ARRAY_BUFFER, 0 };
 	Buffer m_viewBuffer = { GL_ARRAY_BUFFER, 0 };
 	Buffer m_indxBuffer	= { GL_ARRAY_BUFFER, 0 };
+
 	Buffer m_textBuffer = { GL_ARRAY_BUFFER, 0 };
+
+	Buffer m_light_indexBuffer	= { GL_ARRAY_BUFFER, 0 };
+	Buffer m_light_geoBuffer	= { GL_ARRAY_BUFFER, 0 };
+	Buffer m_light_matBuffer	= { GL_ARRAY_BUFFER, 0 };
 
 	Text2D m_text		= { "font_calibri_01.tga" };
 };

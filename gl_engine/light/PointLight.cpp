@@ -49,18 +49,28 @@ const glm::vec3& PointLight::position() const
 {
 	return m_position;
 }
-const glm::mat4& PointLight::transformMatrix() const
+const glm::mat4 PointLight::transformMatrix() const
 {
 	return glm::translate(glm::mat4(), m_position);
 }
 
+const Mesh& PointLight::mesh() const
+{
+	return m_lightMesh;
+}
+
+const GLuint& PointLight::programID() const
+{
+	return m_programID;
+}
+
 // // ----- SETTERS ----- // //
-float PointLight::brightness()
+float& PointLight::brightness()
 {
 	return m_brightness;
 }
 
-float PointLight::radius()
+float& PointLight::radius()
 {
 	return m_radius;
 }
@@ -73,4 +83,14 @@ glm::vec3& PointLight::position()
 void PointLight::transform(const glm::mat4& transformMatrix)
 {
 	m_position = { transformMatrix[3][0], transformMatrix[3][1], transformMatrix[3][2] };
+}
+
+Mesh& PointLight::mesh()
+{
+	return m_lightMesh;
+}
+
+GLuint& PointLight::programID()
+{
+	return m_programID;
 }
