@@ -42,6 +42,6 @@ private:
 	float m_radius			= 1.0f;
 	glm::vec3 m_position	= { 0.0f, 0.0f, 0.0f };
 	bool m_displayMesh		= true;
-	Mesh m_lightMesh		= Cube::createCube();
+	Mesh m_lightMesh		= Sphere::createSphere(1.0f);
 	GLuint m_programID;
 };
