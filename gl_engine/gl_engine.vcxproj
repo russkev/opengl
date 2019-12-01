@@ -159,13 +159,14 @@
     <ClCompile Include="mesh\Plane.cpp" />
     <ClCompile Include="mesh\Sphere.cpp" />
     <ClCompile Include="mesh\Vertex.cpp" />
+    <ClCompile Include="node\Node.cpp" />
     <ClCompile Include="shading\LoadShader.cpp" />
     <ClCompile Include="shading\Targa.cpp" />
     <ClCompile Include="shading\Text2D.cpp" />
     <ClCompile Include="shading\Texture.cpp" />
     <ClCompile Include="ShapeContainer.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="VectorUtils.cpp" />
+    <ClCompile Include="utils\VectorUtils.cpp" />
     <ClCompile Include="VAO.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -194,6 +195,7 @@
     <ClInclude Include="mesh\Plane.h" />
     <ClInclude Include="mesh\Sphere.h" />
     <ClInclude Include="mesh\Vertex.h" />
+    <ClInclude Include="node\Node.h" />
     <ClInclude Include="shading\Bitmap.h" />
     <ClInclude Include="shading\LoadShader.h" />
     <ClInclude Include="shading\Targa.h" />
@@ -201,7 +203,7 @@
     <ClInclude Include="shading\Texture.h" />
     <ClInclude Include="ShapeContainer.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="VectorUtils.h" />
+    <ClInclude Include="utils\VectorUtils.h" />
     <ClInclude Include="VAO.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
