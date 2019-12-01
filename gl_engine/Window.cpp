@@ -63,7 +63,7 @@ void Window::init(std::vector<opengl_attr_pair> st_config, GLuint width, GLuint 
 	m_st_opengl = SDL_GL_CreateContext(m_st_window);
 	if (m_st_opengl == nullptr)
 	{
-		printf("Error couldn't create GL Context. Possible cause: Open GL version available is too low");
+		printf("Error couldn't create GL Context. Possible cause: Open GL version not supported");
 		__debugbreak();
 	}
 	//assert(m_st_opengl != nullptr);
