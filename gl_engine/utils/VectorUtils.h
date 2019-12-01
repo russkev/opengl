@@ -4,7 +4,9 @@
 #include <math.h>
 
 #include <GL/glew.h>
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 
 
 namespace VectorUtils
@@ -130,6 +132,13 @@ namespace VectorUtils
 	}
 
 	// // ----- TRANSLATE ROTATE SCALE ----- // //
+	/*
+	
+		Creates a 4x4 transform matrix for a 3x3 translate rotate scale matrix
+		Input matrix should be of the form {translate vector, rotate vector, scale vector}
+		Optionally take a string specifying the rotate order.
+
+	*/
 	template<typename T>
 	glm::tmat4x4<T> trs(const glm::tmat3x3<T>& s_trs, std::string s_rotate_order = "xyz")//, const char[]& s_rotate_order = 'xyz')
 	{

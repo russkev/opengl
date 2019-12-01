@@ -25,6 +25,9 @@
     <Filter Include="Uncategorised">
       <UniqueIdentifier>{c40b2bc9-3b10-43d7-9f76-02ff8f88a69c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Node">
+      <UniqueIdentifier>{584eb497-1997-4d96-b47a-5902d9adce2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mesh\Arrow.cpp">
@@ -63,9 +66,6 @@
     <ClCompile Include="shading\Texture.cpp">
       <Filter>Shading</Filter>
     </ClCompile>
-    <ClCompile Include="VectorUtils.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="light\PointLight.cpp">
       <Filter>Light</Filter>
     </ClCompile>
@@ -93,6 +93,12 @@
     <ClCompile Include="Window.cpp">
       <Filter>Uncategorised</Filter>
     </ClCompile>
+    <ClCompile Include="node\Node.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\VectorUtils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\SimpleFragmentShader.frag">
@@ -118,9 +124,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="VectorUtils.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="camera\Camera.h">
       <Filter>Camera</Filter>
     </ClInclude>
@@ -192,6 +195,12 @@
     </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Uncategorised</Filter>
+    </ClInclude>
+    <ClInclude Include="node\Node.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\VectorUtils.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

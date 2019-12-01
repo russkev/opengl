@@ -1,6 +1,6 @@
 #include "ShapeContainer.h"
 #include "mesh/Mesh.h"
-#include "VectorUtils.h"
+#include "utils/VectorUtils.h"
 
 void ShapeContainer::appendShape(Mesh&& s_shape, const std::string& s_name)
 {

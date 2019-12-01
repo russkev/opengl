@@ -12,7 +12,7 @@
 #include "Camera/Camera.h"
 #include "Light/PointLight.h"
 #include "ShapeContainer.h"
-#include "VectorUtils.h"
+#include "utils/VectorUtils.h"
 #include "shading/LoadShader.h"
 #include "Buffer.h"
 #include "VAO.h"

@@ -8,7 +8,7 @@
 #include <map>
 #include <cstdlib>
 
-#include "../VectorUtils.h"
+#include "../utils/VectorUtils.h"
 #include "Vertex.h"
 
 struct Mesh 

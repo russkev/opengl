@@ -9,7 +9,7 @@
 #include <string>
 
 #include "Mesh.h"
-#include "../VectorUtils.h"
+#include "../utils/VectorUtils.h"
 
 // // ----- Constructors ----- // //
 Mesh::Mesh() :
