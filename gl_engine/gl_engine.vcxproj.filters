@@ -135,6 +135,12 @@
     <None Include="..\data\Text2D.vert">
       <Filter>Source Files\Shaders</Filter>
     </None>
+    <None Include="..\data\LightShader.frag">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\data\LightShader.vert">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">

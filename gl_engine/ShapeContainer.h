@@ -15,11 +15,11 @@
 struct ShapeContainer
 {
 	// // ----- Type Definitions ----- // //
-	typedef std::string															nameType;
-	typedef GLuint																intType;
+	typedef std::string														nameType;
+	typedef GLuint															intType;
 	typedef std::pair<nameType, Mesh>										shapeType;
-	typedef std::pair<nameType, glm::mat4>										matType;
-	typedef std::pair<nameType, std::vector<nameType>>							connectionType;
+	typedef std::pair<nameType, glm::mat4>									matType;
+	typedef std::pair<nameType, std::vector<nameType>>						connectionType;
 	typedef std::vector<std::pair<GLfloat, glm::tvec3<Mesh::indexType>>>	distancesType;
 
 	// // ----- Attribute Enumeration ----- // //
@@ -113,18 +113,18 @@ struct ShapeContainer
 	std::vector<Vertex::vertexType> vertices();
 	Mesh::indicesType  indices();
 	std::vector<glm::mat4>  transforms() { return m_transforms; }
-	intType numShapes() { return intType(m_shapes.size()); }
+	intType numShapes() { return intType(m_meshes.size()); }
 	intType numTransforms() { return intType(m_transforms.size()); }
-
 	Mesh* getShapePtr(const std::string& s_shape_name);
 	glm::mat4* getTransformPtr(const std::string& s_transform_name);
+	const std::vector<Mesh>& meshes() const { return m_meshes; }
 	
 
 private:
 	bool nameExists(const std::string& s_name);
 	void incrementString(std::string& s_name);
 	// // ----- Member Variables ----- // //
-	std::vector<Mesh>		m_shapes;
+	std::vector<Mesh>			m_meshes;
 	std::vector<nameType>		m_shape_names;
 	std::vector<glm::mat4>		m_transforms;
 	std::vector<nameType>		m_transform_names;

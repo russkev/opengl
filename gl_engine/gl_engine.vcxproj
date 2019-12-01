@@ -170,6 +170,8 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\data\LightShader.frag" />
+    <None Include="..\data\LightShader.vert" />
     <None Include="..\data\SimpleFragmentShader.frag" />
     <None Include="..\data\SimpleVertexShader.vert" />
     <None Include="..\data\Text2D.frag" />

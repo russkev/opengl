@@ -6,7 +6,7 @@ const int transformDestLoc		= 1;
 const int shapeDestLoc			= 2;
 
 // // Input vertex data, different for all executions of this shader.
-in layout(location = 0 ) vec4 model_vertexPosition;
+in layout(location = 0 ) vec3 model_vertexPosition;
 in layout(location = 1 ) vec3 model_vertexColor;
 in layout(location = 2 ) vec3 model_vertexNormal;
 in layout(location = 3 ) vec2 model_uv;
@@ -108,8 +108,8 @@ void transformGlPosition()
 	{
 		transform = transformTransform(incoming);
 	}
-	gl_Position					= mat_modelToProjection * transform * model_vertexPosition;
-	worldSpace_vertexPosition	= vec3(mat_modelToWorld * transform * model_vertexPosition);
+	gl_Position					= mat_modelToProjection * transform * vec4(model_vertexPosition, 1.0);
+	worldSpace_vertexPosition	= vec3(mat_modelToWorld * transform * vec4(model_vertexPosition, 1.0));
 	worldSpace_vertexNormal		= normalize(vec3(mat_modelToWorld * transform * vec4(model_vertexNormal, 0)));
 }
 

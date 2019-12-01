@@ -34,10 +34,10 @@ public:
 	// // ----- Big 6 ----- // //
 	Mesh();
 	Mesh(const verticesType s_vertices, const indicesType s_indices);
-	~Mesh() {};
-	Mesh(const Mesh&) = delete;
+	//~Mesh() {};
+	//Mesh(const Mesh&) = delete;
 	Mesh(const Mesh&& other);
-	Mesh& operator = (const Mesh&) = delete;
+	//Mesh& operator = (const Mesh&) = delete;
 	Mesh& operator = (Mesh&& other);
 
 	// // ----- Addition Assign ----- // //
@@ -90,7 +90,7 @@ public:
 	std::size_t numIndices()	{ return m_indices.size(); }
 	std::size_t numVertices()	{ return m_vertices.size(); }
 	verticesType vertices()		{ return m_vertices; }
-	indicesType indices()		{ return m_indices; }
+	const indicesType& indices() const { return m_indices; }
 
 	// // ----- Size Getters ----- // //
 	GLsizeiptr sizeVertices()	{ return m_vertices.size() * sizeof(Vertex); }
