@@ -8,7 +8,7 @@
 
 Mesh Sphere::createSphere(const float radius)
 {
-	return createSphere(radius, 4);
+	return createSphere(radius, 32);
 }
 
 Mesh Sphere::createSphere(const float radius, const uint16_t segments)

@@ -68,7 +68,7 @@ public:
 	Camera			m_cam;
 	PointLight		m_light;
 	GLuint			m_width, m_height;
-	ShapeContainer	m_sh, m_light_sh;
+	ShapeContainer	m_sh;// , m_light_sh;
 	VAO				m_vao_main, m_vao_text, m_vao_light;
 	Timer			m_timer;
 	bool			m_displayWireframe = false;

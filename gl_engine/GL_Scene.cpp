@@ -85,26 +85,32 @@ void GL_Scene::initCam()
 
 void GL_Scene::initLights()
 {
-	m_light = PointLight{ { 0.0f, 0.0f, 0.0f } };
+	m_light = PointLight{ { 20.0f, 1.0f, 0.0f } };
 	//m_light.programID() = LoadShaders("LightShader.vert", "LightShader.frag");
 	//m_light.programID() = LoadShaders("LightShader.vert", "LightShader.frag");
 	m_light_program_id = LoadShaders("LightShader.vert", "LightShader.frag");
 
-	m_light_sh.appendShape(Cube::createCube());
+	//m_light_sh.appendShape(Sphere::createSphere(5));
 
-	auto vertices = m_light_sh.vertices();
+	std::vector<Vertex> vertices;
+	for (Vertex vertex : m_light.mesh().vertices())
+	{
+		vertices.push_back(vertex);
+	}
+
 	m_light_geoBuffer.Append(vertices);
 
-	auto depthSortedIndices = m_light_sh.depthSort(m_cam.getPosition());
-	m_light_indexBuffer.Append(depthSortedIndices);
+	//auto depthSortedIndices = m_light_sh.depthSort(m_cam.getPosition());
+	m_light_indexBuffer.Append(m_light.mesh().indices());
 
-	m_light_matBuffer.Append(sizeof(glm::mat4), &(m_projection * m_cam.getWorldToViewMatrix()[0][0]));
+	//m_light_matBuffer.Append(sizeof(glm::mat4), &(m_projection * m_cam.getWorldToViewMatrix()[0][0]));
 
-	auto lightProgramID = m_light.programID();
-	glUseProgram(m_light.programID());
-	//const ShapeContainer::intType transfromLocation = glGetUniformLocation(m_light.programID(), "mat_modelToProjection");
-	//auto matBufferMatrix = m_projection * m_cam.getWorldToViewMatrix();
-	//glUniformMatrix4fv(transfromLocation, 1, GL_FALSE, &matBufferMatrix[0][0]);
+	auto lightProgramID = m_light_program_id;
+	glUseProgram(m_light_program_id);
+
+	const ShapeContainer::intType transfromLocation = glGetUniformLocation(m_light_program_id, "mat_modelToProjection");
+	auto matBufferMatrix = m_projection * m_cam.getWorldToViewMatrix() * m_light.transformMatrix();
+	glUniformMatrix4fv(transfromLocation, 1, GL_FALSE, &matBufferMatrix[0][0]);
 
 	// // Set up standard information for the VAO
 	static const auto shape_info = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
@@ -112,7 +118,7 @@ void GL_Scene::initLights()
 
 	// // Upload the VAO information
 	m_vao_light.GenerateVAO(m_light_geoBuffer, 0, shape_info.data(), shape_info.data() + shape_info.size(), POSITION_ATTR);
-	m_vao_light.GenerateVAO(m_light_matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
+	//m_vao_light.GenerateVAO(m_light_matBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), MODEL_ATTR);
 
 
 	glUseProgram(m_program_id);
@@ -310,10 +316,10 @@ void GL_Scene::updateCam()
 	glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &matBufferMatrix[0][0]);
 
 	// LIGHT
-	//glUseProgram(m_light.programID());
-	//const ShapeContainer::intType transfromLocation = glGetUniformLocation(m_light.programID(), "mat_modelToProjection");
-	//auto lightMatrix = m_projection * m_cam.getWorldToViewMatrix();
-	//glUniformMatrix4fv(transfromLocation, 1, GL_FALSE, &lightMatrix[0][0]);
+	glUseProgram(m_light_program_id);
+	const ShapeContainer::intType transfromLocation = glGetUniformLocation(m_light_program_id, "mat_modelToProjection");
+	auto lightMatrix = m_projection * m_cam.getWorldToViewMatrix() * m_light.transformMatrix();
+	glUniformMatrix4fv(transfromLocation, 1, GL_FALSE, &lightMatrix[0][0]);
 
 	// // Cam position // //
 	//glm::vec3 camPositionVec = _State.cam.getPosition();
@@ -332,8 +338,8 @@ void GL_Scene::updateGeo()
 
 
 
-	m_light_matBuffer.Upload(m_projection * m_cam.getWorldToViewMatrix());
-	m_light_indexBuffer.Upload(m_light_sh.depthSort(m_cam.getPosition()));
+	//m_light_matBuffer.Upload(m_projection * m_cam.getWorldToViewMatrix());
+	m_light_indexBuffer.Upload(m_light.mesh().indices());
 }
 
 GL_Scene::~GL_Scene() {
