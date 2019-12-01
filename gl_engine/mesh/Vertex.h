@@ -20,11 +20,6 @@ struct Vertex
 	Vertex(glm::vec3, glm::vec3, glm::vec2);
 	Vertex(glm::vec3, glm::vec3, glm::vec3, glm::vec2);
 	Vertex(glm::vec3 s_position, glm::vec3 s_color, glm::vec3 s_normal, glm::vec2 s_uv, GLint id, glm::vec3 tangent, glm::vec3 bitangent);
-	Vertex(const Vertex&);
-	Vertex(const Vertex&& other);
-	Vertex& operator = (const Vertex&) = delete;
-	Vertex& operator = (Vertex&& other);
-	~Vertex() {};
 
 	// // ----- OPERATOR OVERLOADS ----- // //
 	bool operator < (const Vertex&) const;

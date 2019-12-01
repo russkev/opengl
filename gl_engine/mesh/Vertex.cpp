@@ -24,19 +24,6 @@ Vertex::Vertex(glm::vec3 s_position, glm::vec3 s_colour, glm::vec3 s_normal, glm
 	m_vertex({ s_position, s_colour, s_normal, s_uv, s_id, s_tangent, s_bitangent })
 {}
 
-Vertex::Vertex(const Vertex& other) : m_vertex(other.m_vertex)
-{}
-
-Vertex::Vertex(const Vertex&& other) : 
-	m_vertex(std::move(other.m_vertex))
-{}
-
-Vertex& Vertex::operator = (Vertex&& other)
-{
-	(*this).~Vertex();
-	return *new (this) Vertex(std::move(other));
-}
-
 // // ----- OPERATOR OVERLOADS ----- // //
 bool Vertex::operator<(const Vertex& other) const
 {

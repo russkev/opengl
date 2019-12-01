@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "Camera/Camera.h"
+#include "Light/PointLight.h"
 #include "ShapeContainer.h"
 #include "VectorUtils.h"
 #include "shading/LoadShader.h"
@@ -65,6 +66,7 @@ public:
 	GLuint			m_program_id, m_text_program_id;
 	glm::mat4		m_projection	= glm::mat4();
 	Camera			m_cam;
+	PointLight		m_light;
 	GLuint			m_width, m_height;
 	ShapeContainer	m_sh;
 	VAO				m_vao_main, m_vao_text;

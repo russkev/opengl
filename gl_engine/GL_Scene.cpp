@@ -85,9 +85,10 @@ void GL_Scene::initCam()
 
 void GL_Scene::initLights()
 {
+	m_light = PointLight{ { 10.0f, 5.0f, 0.0f } };
 	glUseProgram(m_program_id);
 	const ShapeContainer::intType lightPositionLocation = glGetUniformLocation(m_program_id, "lightPosition");
-	glUniform3f(lightPositionLocation, 10.0f, 5.0f, 0.0f);
+	glUniform3fv(lightPositionLocation, 1, &m_light.position()[0]);
 	const ShapeContainer::intType ambientLightLocation = glGetUniformLocation(m_program_id, "ambientLight");
 	glUniform3f(ambientLightLocation, 0.2f, 0.2f, 0.4f);
 }
