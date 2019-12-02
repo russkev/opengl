@@ -148,7 +148,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\test\Test.cpp" />
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="light\PointLight.cpp" />
