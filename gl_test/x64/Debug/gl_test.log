@@ -1,5 +1,2 @@
-﻿  pch.cpp
-  gl_test.cpp
-  Test.cpp
-  Generating Code...
+﻿  NodeTest.cpp
   gl_test.vcxproj -> E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\x64\Debug\gl_test.exe
