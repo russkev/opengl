@@ -99,6 +99,16 @@
     <ClCompile Include="utils\VectorUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="node\MeshNode.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="shading\Shader.cpp">
+      <Filter>Shading</Filter>
+    </ClCompile>
+    <ClCompile Include="shading\Material.cpp">
+      <Filter>Shading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test\Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\SimpleFragmentShader.frag">
@@ -201,6 +211,15 @@
     </ClInclude>
     <ClInclude Include="utils\VectorUtils.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="node\MeshNode.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\Shader.h">
+      <Filter>Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\Material.h">
+      <Filter>Shading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

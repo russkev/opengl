@@ -4,9 +4,11 @@
 #include <math.h>
 
 #include <GL/glew.h>
-#define GLM_ENABLE_EXPERIMENTAL
+//#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
+
+//#include <glm/gtx/transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 
 namespace VectorUtils
@@ -143,17 +145,23 @@ namespace VectorUtils
 	glm::tmat4x4<T> trs(const glm::tmat3x3<T>& s_trs, std::string s_rotate_order = "xyz")//, const char[]& s_rotate_order = 'xyz')
 	{
 		assert(s_rotate_order.size() == 3 && "Rotate order must be exactly three letters");
-		glm::tvec3<T> rotate_radians(glm::radians(s_trs[1][0]), glm::radians(s_trs[1][1]), glm::radians(s_trs[1][2]));
-		std::vector<int> rotate_order; //!!!Make this an input
-		glm::tvec3<T> rotate_vectors[] = { {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0} };
+		
+		std::vector<int> rotate_order;
+		glm::tvec3<T> rotate_axes[] = { {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0} };
 
+		// Break out the various vectors
+		const glm::tvec3<T>* translate_vec	= &s_trs[0];
+		glm::tvec3<T> rotate_vec_radians(glm::radians(s_trs[1][0]), glm::radians(s_trs[1][1]), glm::radians(s_trs[1][2]));
+		const glm::tvec3<T>* scale_vec		= &s_trs[2];
+
+		// Parse rotate order
 		for (auto & i : s_rotate_order)
 		{
 			assert(i >= 'x' && i <= 'z' && "Rotate order letters must be 'x', 'y' or 'z'");
 			rotate_order.push_back(i - 120);
-			auto test = i;
 		}
 
+		// Do transformation all at once
 		return
 			glm::scale
 			(
@@ -165,15 +173,15 @@ namespace VectorUtils
 						(
 							glm::translate
 							(
-								glm::tmat4x4<T>(T(1.0f)), s_trs[0]
+								glm::tmat4x4<T>(T(1.0f)), *translate_vec
 							),
-							rotate_radians[rotate_order[2]], rotate_vectors[rotate_order[2]]
+							rotate_vec_radians[rotate_order[2]], rotate_axes[rotate_order[2]]
 						),
-						rotate_radians[rotate_order[1]], rotate_vectors[rotate_order[1]]
+						rotate_vec_radians[rotate_order[1]], rotate_axes[rotate_order[1]]
 					),
-					rotate_radians[rotate_order[0]], rotate_vectors[rotate_order[0]]
+					rotate_vec_radians[rotate_order[0]], rotate_axes[rotate_order[0]]
 				),
-				s_trs[2]
+				*scale_vec
 			);
 	}
 	// // ----- MIN MAX LOOP ----- // //
