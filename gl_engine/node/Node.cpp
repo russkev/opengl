@@ -47,7 +47,6 @@ void Node::addChild(Node* child)
 
 glm::mat4 Node::localTransform()
 {
-	glm::mat4 outMatrix = VectorUtils::trs(glm::mat3{ m_position, m_rotation, m_scale });
 	return VectorUtils::trs(glm::mat3{ m_position, m_rotation, m_scale });
 }
 

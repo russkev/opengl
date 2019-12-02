@@ -34,7 +34,7 @@ private:
 	std::string m_name;
 	glm::vec3 m_position{ 0.0f, 0.0f, 0.0f };
 	glm::vec3 m_rotation{ 0.0f, 0.0f, 0.0f };
-	glm::vec3 m_scale{ 0.0f, 0.0f, 0.0f };
+	glm::vec3 m_scale{ 1.0f, 1.0f, 1.0f };
 
 	Node* m_parent = NULL;
 	std::vector<Node*> m_children;
