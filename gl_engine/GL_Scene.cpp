@@ -6,9 +6,6 @@
 #include "mesh/Cube.h"
 #include "mesh/Arrow.h"
 
-
-
-
 void GL_Scene::init(const GLuint width, const GLuint height)
 {
 	m_width		= width;
@@ -86,9 +83,9 @@ void GL_Scene::initCam()
 void GL_Scene::initLights()
 {
 	m_light = PointLight{ { 20.0f, 1.0f, 0.0f } };
-	//m_light.programID() = LoadShaders("LightShader.vert", "LightShader.frag");
-	//m_light.programID() = LoadShaders("LightShader.vert", "LightShader.frag");
-	m_light_program_id = LoadShaders("LightShader.vert", "LightShader.frag");
+	//m_light.programID() = LoadShaders::load("LightShader.vert", "LightShader.frag");
+	//m_light.programID() = LoadShaders::load("LightShader.vert", "LightShader.frag");
+	m_light_program_id = LoadShaders::load("LightShader.vert", "LightShader.frag");
 
 	//m_light_sh.appendShape(Sphere::createSphere(5));
 
@@ -139,7 +136,7 @@ void GL_Scene::initText()
 void GL_Scene::initGeo()
 {
 	// // Create and compile our GLSL program from the shaders // //
-	m_program_id		= LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
+	m_program_id		= LoadShaders::load("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
 	
 	// // Create Texture
 	Texture texture1("uvtemplate.tga");

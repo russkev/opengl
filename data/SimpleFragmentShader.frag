@@ -23,6 +23,8 @@ in vec3 tangentSpace_fragPosition;
 uniform vec3		ambientLight;
 uniform vec3		lightPosition;
 uniform vec3		camPosition;
+uniform float		someFloat;
+uniform bool		someBool;
 layout(location = 0) uniform sampler2D	textureA;
 layout(location = 1) uniform sampler2D	textureB;
 layout(location = 2) uniform sampler2D  normalMap;
@@ -143,7 +145,7 @@ void main()
 	vec3 colorRGB = 
 //
 		// Ambient //
-		ambientLight * diff_color +
+		ambientLight * diff_color * someFloat +
 //
 		// Diffuse //
 		clamp(diff_light, 0, 1) + 
@@ -158,7 +160,10 @@ void main()
 	//vec3 colorRGB = diff_light;
 	//vec3 colorRGB = normalize(eye_vector);
 //	vec3 colorRGB = vec3(1.0, 1.0, 1.0) * diff_light;
-
-	float alpha					= 1.0;
+	float alpha					= 0.0;
+	if(someBool)
+	{
+		alpha					= 1.0;
+	}
 	color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
 }

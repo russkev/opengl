@@ -190,9 +190,6 @@
     <ClInclude Include="GL_Type_Traits.h">
       <Filter>Uncategorised</Filter>
     </ClInclude>
-    <ClInclude Include="loadShader.h">
-      <Filter>Uncategorised</Filter>
-    </ClInclude>
     <ClInclude Include="ShapeContainer.h">
       <Filter>Uncategorised</Filter>
     </ClInclude>

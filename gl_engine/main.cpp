@@ -5,6 +5,7 @@
 #include "GL_Scene.h"
 
 #include "node/Node.h"
+#include "shading/Shader.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 //#define DEBUG
@@ -56,37 +57,6 @@ static void __stdcall openglCallbackFunction(
 
 int main(int, char**)
 {
-	/*
-		
-		Testing area
-	
-	*/
-	Node P1("P_1");
-	Node C1("C_1");
-	Node C2("C_2");
-	Node C3("C_3");
-	P1.addChild(&C1);
-	P1.addChild(&C2);
-	P1.addChild(&C3);
-
-	P1.position() = { 3.2, 1.5, 2.6 };
-	P1.rotation() = { 30.0, 0.0, 0.0 };
-
-	C1.position() = { 5.0, 0.0, 0.0 };
-
-	auto mat1 = P1.worldTransform();
-	auto mat2 = C1.worldTransform();
-
-
-	
-
-
-	/*
-	
-		End testing area
-	
-	*/
-
 	Window			_Window;
 	GL_Scene		_Scene;
 
@@ -94,6 +64,26 @@ int main(int, char**)
 	GLuint height	= 600u;
 
 	_Window.init(st_config, width, height);
+
+	/*
+
+	Testing area
+
+	*/
+
+	Shader newShader = Shader("simpleShader", "SimpleVertexShader.vert", "SimpleFragmentShader.frag");
+	newShader.setUniform("ambientLight", glm::vec3(0.4f));
+	newShader.setUniform("someFloat", 1.0f);
+	newShader.setUniform("someBool", true);
+
+	/*
+
+		End testing area
+
+	*/
+	
+
+
 	_Scene.init(width, height);
 
 	while (_Scene.pollEvents())
