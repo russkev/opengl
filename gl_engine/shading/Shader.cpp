@@ -2,6 +2,7 @@
 #include "LoadShader.h"
 #include <glm/glm.hpp>
 
+// // ----- CONSTRUCTOR ----- // //
 Shader::Shader(const std::string& name, const char* vertexShader, const char* fragmentShader) :
 	m_name(name)
 {
@@ -11,24 +12,12 @@ Shader::Shader(const std::string& name, const char* vertexShader, const char* fr
 	auto sdfs = 345;
 }
 
-// // ----- GETTERS ----- // //
-const GLuint Shader::programID() const
-{
-	return m_programID;
-}
-
-const std::string Shader::name() const
-{
-	return m_name;
-}
-
-// // ----- SETTERS ----- // //
-std::string& Shader::name()
-{
-	return m_name;
-}
-
 // // ----- GENERAL METHODS ----- // //
+/*
+
+	Tell opengl to use this shader for upcoming commands
+
+*/
 void Shader::use()
 {
 	glUseProgram(m_programID);
@@ -57,3 +46,21 @@ void Shader::getUniforms()
 		m_uniforms[uniformNameString] = newUniform;
 	}
 }
+
+// // ----- GETTERS ----- // //
+const GLuint Shader::programID() const
+{
+	return m_programID;
+}
+
+const std::string Shader::name() const
+{
+	return m_name;
+}
+
+// // ----- SETTERS ----- // //
+std::string& Shader::name()
+{
+	return m_name;
+}
+
