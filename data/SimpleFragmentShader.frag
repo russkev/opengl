@@ -141,11 +141,22 @@ void main()
 
 	//vec4 colorRGB				= vec4(diff_color, 1.0);
 
+	float someFloat2;
+
+	if(someFloat != 1.0)
+	{
+		someFloat2 = 1.0;
+	}
+	else
+	{
+		someFloat2 = someFloat;
+	}
+
 	//vec4 colorRGB = clamp(diff_light * lightIntensity, 0, 1);
 	vec3 colorRGB = 
 //
 		// Ambient //
-		ambientLight * diff_color * someFloat +
+		ambientLight * diff_color * someFloat2 +
 //
 		// Diffuse //
 		clamp(diff_light, 0, 1) + 
@@ -160,10 +171,15 @@ void main()
 	//vec3 colorRGB = diff_light;
 	//vec3 colorRGB = normalize(eye_vector);
 //	vec3 colorRGB = vec3(1.0, 1.0, 1.0) * diff_light;
-	float alpha					= 0.0;
+
+
+
+	float alpha					= 1.0;
 	if(someBool)
 	{
 		alpha					= 1.0;
 	}
 	color						= vec4(colorRGB[0], colorRGB[1], colorRGB[2], alpha);
+
+
 }
