@@ -107,7 +107,7 @@ void Text2D::initVertices()
 
 void Text2D::initShaders()
 {
-	m_program_id = LoadShaders("Text2d.vert", "Text2D.frag");
+	m_program_id = LoadShaders::load("Text2d.vert", "Text2D.frag");
 	glUseProgram(m_program_id);
 	m_width_uniform_id = glGetUniformLocation(m_program_id, "width");
 	m_height_uniform_id = glGetUniformLocation(m_program_id, "height");
