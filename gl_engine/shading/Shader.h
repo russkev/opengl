@@ -27,18 +27,19 @@ struct Uniform
 */
 struct Shader
 {
+	// // ----- MEMBER ATTRIBUTES ----- // //
+private:
+	std::string m_name;
+	GLuint m_programID;
+	std::map<std::string, Uniform> m_uniforms;
+
 	// // ----- CONSTRUCTOR ----- // //
+public:
 	Shader(const std::string& name, const char* vertexShader, const char* fragmentShader);
 
-	// // ----- GETTERS ----- // //
-	const GLuint programID() const;
-	const std::string name() const;
-
-	// // ----- SETTERS ----- // //
-	std::string& name();
-
+	// // ----- GENERAL METHODS ----- // //
 	/*
-	
+
 		Set uniform of shader.
 		Automatically choose correct upload path based on data type
 		Defined in header because of template usage
@@ -60,7 +61,7 @@ struct Shader
 			printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Uniform not found (%s)\n", name_s.c_str(), m_name.c_str(), e.what());
 			return;
 		}
-		
+
 		if (thisUniform->type != dataEnumType)
 		{
 			printf("Warning: Setting uniform \"%s\" for shader \"%s\" failed. Incorrect data type\n", name.c_str(), m_name.c_str());
@@ -70,14 +71,22 @@ struct Shader
 		uploadUniform(thisUniform, data);
 	}
 
-	// // ----- GENERAL METHODS ----- // //
 	void use();
 
 
 private:
 	void getUniforms();
 
+public:
+	// // ----- GETTERS ----- // //
+	const GLuint programID() const;
+	const std::string name() const;
+
+	// // ----- SETTERS ----- // //
+	std::string& name();
+
 	// // ----- UNIFORM UPLOAD METHODS ----- // //
+private:
 	void uploadUniform(Uniform* uniform, const GLfloat& data) { glUniform1f(uniform->location, data); };
 	void uploadUniform(Uniform* uniform, const glm::vec2& data) { glUniform2fv(uniform->location, 1, &data[0]); };
 	void uploadUniform(Uniform* uniform, const glm::vec3& data) { glUniform3fv(uniform->location, 1, &data[0]); };
@@ -108,11 +117,6 @@ private:
 	void uploadUniform(Uniform* uniform, const glm::dmat3x4& data) { glUniformMatrix3x4dv(uniform->location, 1, false, &data[0][0]); };
 	void uploadUniform(Uniform* uniform, const glm::dmat4x2& data) { glUniformMatrix4x2dv(uniform->location, 1, false, &data[0][0]); };
 	void uploadUniform(Uniform* uniform, const glm::dmat4x3& data) { glUniformMatrix4x3dv(uniform->location, 1, false, &data[0][0]); };
-
-private:
-	std::string m_name;
-	GLuint m_programID;
-	std::map<std::string, Uniform> m_uniforms;
 };
 
 

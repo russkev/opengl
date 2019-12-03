@@ -7,6 +7,12 @@
 Node::Node(const std::string name) : m_name(name)
 {}
 
+
+/*
+
+	Add new child to list of children in the node
+
+*/
 void Node::addChild(Node* child)
 {
 	if (m_children.find(child->m_name) == m_children.end())
@@ -20,6 +26,12 @@ void Node::addChild(Node* child)
 	}
 }
 
+
+/*
+
+	Change the existing parent. All children will come along.
+
+*/
 void Node::setParent(Node* parent)
 {
 	m_parent = parent;
