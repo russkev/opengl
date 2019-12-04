@@ -1,9 +1,11 @@
-#pragma once
+#ifndef GL_ENGINE_NODE_NODE_H
+#define GL_ENGINE_NODE_NODE_H
 
 #include <string>
 #include <unordered_map>
 
 #include <glm/glm.hpp>
+
 /*
 	
 	Base node class. All other nodes derive from this. It can also be used as a transform node itself.
@@ -20,6 +22,7 @@ struct Node
 	Node* disconnectChild(const std::string nodeName);
 	glm::mat4 localTransform();
 	glm::mat4 worldTransform();
+	void updateView(void*) {};
 
 
 	// // ----- GETTERS ----- // //
@@ -47,3 +50,5 @@ private:
 	Node* m_parent = NULL;
 	std::unordered_map<std::string, Node*> m_children;
 };
+
+#endif

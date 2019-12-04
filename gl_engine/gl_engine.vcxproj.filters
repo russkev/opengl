@@ -28,6 +28,9 @@
     <Filter Include="Node">
       <UniqueIdentifier>{584eb497-1997-4d96-b47a-5902d9adce2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{8076be69-4ff2-47a8-aa7b-46d85333bbdb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mesh\Arrow.cpp">
@@ -107,6 +110,12 @@
     </ClCompile>
     <ClCompile Include="shading\Material.cpp">
       <Filter>Shading</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Renderer.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="node\CameraNode.cpp">
+      <Filter>Node</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -216,6 +225,12 @@
     </ClInclude>
     <ClInclude Include="shading\Material.h">
       <Filter>Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Renderer.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="node\CameraNode.h">
+      <Filter>Node</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

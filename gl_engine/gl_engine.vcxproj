@@ -161,8 +161,10 @@
     <ClCompile Include="mesh\Plane.cpp" />
     <ClCompile Include="mesh\Sphere.cpp" />
     <ClCompile Include="mesh\Vertex.cpp" />
+    <ClCompile Include="node\CameraNode.cpp" />
     <ClCompile Include="node\MeshNode.cpp" />
     <ClCompile Include="node\Node.cpp" />
+    <ClCompile Include="render\Renderer.cpp" />
     <ClCompile Include="shading\LoadShader.cpp" />
     <ClCompile Include="shading\Material.cpp" />
     <ClCompile Include="shading\Shader.cpp" />
@@ -199,8 +201,10 @@
     <ClInclude Include="mesh\Plane.h" />
     <ClInclude Include="mesh\Sphere.h" />
     <ClInclude Include="mesh\Vertex.h" />
+    <ClInclude Include="node\CameraNode.h" />
     <ClInclude Include="node\MeshNode.h" />
     <ClInclude Include="node\Node.h" />
+    <ClInclude Include="render\Renderer.h" />
     <ClInclude Include="shading\Bitmap.h" />
     <ClInclude Include="shading\LoadShader.h" />
     <ClInclude Include="shading\Material.h" />

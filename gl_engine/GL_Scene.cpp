@@ -83,8 +83,6 @@ void GL_Scene::initCam()
 void GL_Scene::initLights()
 {
 	m_light = PointLight{ { 20.0f, 1.0f, 0.0f } };
-	//m_light.programID() = LoadShaders::load("LightShader.vert", "LightShader.frag");
-	//m_light.programID() = LoadShaders::load("LightShader.vert", "LightShader.frag");
 	m_light_program_id = LoadShaders::load("LightShader.vert", "LightShader.frag");
 
 	//m_light_sh.appendShape(Sphere::createSphere(5));
@@ -95,10 +93,11 @@ void GL_Scene::initLights()
 		vertices.push_back(vertex);
 	}
 
-	m_light_geoBuffer.Append(vertices);
+	m_light_geoBuffer.append(vertices);
+	//m_light_geoBuffer.append(m_light.mesh().vertices());
 
 	//auto depthSortedIndices = m_light_sh.depthSort(m_cam.getPosition());
-	m_light_indexBuffer.Append(m_light.mesh().indices());
+	m_light_indexBuffer.append(m_light.mesh().indices());
 
 	//m_light_matBuffer.Append(sizeof(glm::mat4), &(m_projection * m_cam.getWorldToViewMatrix()[0][0]));
 
@@ -106,7 +105,7 @@ void GL_Scene::initLights()
 	glUseProgram(m_light_program_id);
 
 	const ShapeContainer::intType transfromLocation = glGetUniformLocation(m_light_program_id, "mat_modelToProjection");
-	auto matBufferMatrix = m_projection * m_cam.getWorldToViewMatrix() * m_light.transformMatrix();
+	auto matBufferMatrix = m_projection * m_cam.worldToViewMatrix() * m_light.transformMatrix();
 	glUniformMatrix4fv(transfromLocation, 1, GL_FALSE, &matBufferMatrix[0][0]);
 
 	// // Set up standard information for the VAO
@@ -176,14 +175,14 @@ void GL_Scene::initBuffers()
 	// // Send information to graphics card
 	auto vertices = m_sh.vertices();
 	//auto meshes = m_sh.meshes();
-	m_geoBuffer.Append(vertices);
+	m_geoBuffer.append(vertices);
 
 	auto depthSortedIndices = m_sh.depthSort(m_cam.getPosition());
-	m_indxBuffer.Append(depthSortedIndices);
+	m_indxBuffer.append(depthSortedIndices);
 
-	auto matBufferMatrix = m_cam.getWorldToViewMatrix();
-	m_matBuffer.Append(sizeof(glm::mat4), &(m_projection * m_cam.getWorldToViewMatrix()[0][0]));
-	m_wldBuffer.Append(sizeof(glm::mat4), &glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, 0.0f)));
+	auto matBufferMatrix = m_cam.worldToViewMatrix();
+	m_matBuffer.append(sizeof(glm::mat4), &(m_projection * m_cam.worldToViewMatrix()[0][0]));
+	m_wldBuffer.append(sizeof(glm::mat4), &glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, 0.0f)));
 
 	//!!! Create uniform upload function
 	glUseProgram(m_program_id);
@@ -261,7 +260,7 @@ void GL_Scene::renderFrame()
 	updateGeo();
 
 	m_vao_main.Bind();
-	m_indxBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
+	m_indxBuffer.bind(GL_ELEMENT_ARRAY_BUFFER);
 
 	glUseProgram(m_program_id);
 	if (m_displayWireframe)
@@ -275,7 +274,7 @@ void GL_Scene::renderFrame()
 
 	glUseProgram(m_light_program_id);
 	m_vao_light.Bind();
-	m_light_indexBuffer.Bind(GL_ELEMENT_ARRAY_BUFFER);
+	m_light_indexBuffer.bind(GL_ELEMENT_ARRAY_BUFFER);
 	glDrawElements(GL_TRIANGLES, (GLsizei)m_light_indexBuffer.size(), GL_UNSIGNED_SHORT, 0);
 
 
@@ -307,7 +306,7 @@ void GL_Scene::updateCam()
 	glUniform3fv(camPositionLocation, 1, &cam_position.x);
 
 	// Update view matrix
-	auto matBufferMatrix = m_cam.getWorldToViewMatrix();
+	auto matBufferMatrix = m_cam.worldToViewMatrix();
 	glUseProgram(m_program_id);
 	const ShapeContainer::intType viewMatrixLocation = glGetUniformLocation(m_program_id, "mat_view");
 	glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &matBufferMatrix[0][0]);
@@ -315,7 +314,7 @@ void GL_Scene::updateCam()
 	// LIGHT
 	glUseProgram(m_light_program_id);
 	const ShapeContainer::intType transfromLocation = glGetUniformLocation(m_light_program_id, "mat_modelToProjection");
-	auto lightMatrix = m_projection * m_cam.getWorldToViewMatrix() * m_light.transformMatrix();
+	auto lightMatrix = m_projection * m_cam.worldToViewMatrix() * m_light.transformMatrix();
 	glUniformMatrix4fv(transfromLocation, 1, GL_FALSE, &lightMatrix[0][0]);
 
 	// // Cam position // //
@@ -330,13 +329,18 @@ void GL_Scene::updateGeo()
 	//*transform_01		= *transform_01 * VectorUtils::trs(glm::mat3({ 0,0,0 }, { 0, time/1000000, 0 }, { 1,1,1 }));
 	
 	m_sh.uploadTransforms(m_program_id);
-	m_matBuffer.Upload(m_projection * m_cam.getWorldToViewMatrix());
-	m_indxBuffer.Upload(m_sh.depthSort(m_cam.getPosition()));
+
+	auto tempWorldToViewMatrix = m_cam.worldToViewMatrix();
+	auto tempProjectionMatrix = m_projection;
+	auto tempMatrixA = tempProjectionMatrix * m_cam.worldToViewMatrix();
+	auto tempMatrixB = m_projection * m_cam.worldToViewMatrix();
+	m_matBuffer.upload(m_projection * m_cam.worldToViewMatrix());
+	m_indxBuffer.upload(m_sh.depthSort(m_cam.getPosition()));
 
 
 
 	//m_light_matBuffer.Upload(m_projection * m_cam.getWorldToViewMatrix());
-	m_light_indexBuffer.Upload(m_light.mesh().indices());
+	m_light_indexBuffer.upload(m_light.mesh().indices());
 }
 
 GL_Scene::~GL_Scene() {

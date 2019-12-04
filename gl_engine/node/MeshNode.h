@@ -1,9 +1,12 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include "Node.h"
 #include "../mesh/Mesh.h"
 #include "../shading/Material.h"
 #include "../shading/Shader.h"
+#include "../Buffer.h"
 
 /*
 
@@ -12,8 +15,20 @@
 */
 struct MeshNode : public Node
 {
-	MeshNode(const std::string name, Mesh* mesh, Material* material);
+	// // ----- MEMBER VARIABLES ----- // //
 private:
 	Mesh* m_mesh;
 	Material* m_material;
+	Buffer m_vertexBuffer	= { GL_ARRAY_BUFFER, 0 };
+	Buffer m_indexBuffer	= { GL_ARRAY_BUFFER, 0 };
+	glm::mat4 m_viewMatrixBuffer = glm::mat4(1.0f);
+
+
+	// // ----- CONSTRUCTOR ----- // //
+public:
+	MeshNode(const std::string name, Mesh* mesh, Material* material);
+
+
+	//void updateView(CameraNode* camera);
+
 };

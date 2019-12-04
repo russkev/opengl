@@ -20,7 +20,7 @@ Buffer::Buffer(std::uint32_t target, std::size_t size, std::uint32_t binding) :
 {
 	std::cout << "Buffer object constructed\n";
 	if (size != 0) {
-		m_bufferID = GenerateBuffer(size);
+		m_bufferID = generateBuffer(size);
 	}
 };
 
@@ -52,15 +52,15 @@ Buffer& Buffer::operator=(Buffer&& other)
 }
 
 // // UPLOAD
-void Buffer::Upload(std::size_t offset, std::size_t size, void* data) {
+void Buffer::upload(std::size_t offset, std::size_t size, void* data) {
 	assert(offset + size <= m_capacity);
-	void * dest = Map(size, offset);
+	void * dest = mapBuffer(size, offset);
 	std::memcpy(dest, data, size);
-	Unmap();
+	unmap();
 }
 
 // // GENERATE BUFFER
-std::uint32_t Buffer::GenerateBuffer(std::size_t size) {
+std::uint32_t Buffer::generateBuffer(std::size_t size) {
 	std::uint32_t tempID = 0;
 	glGenBuffers(1, &tempID);
 	assert(tempID != 0u);
@@ -72,14 +72,14 @@ std::uint32_t Buffer::GenerateBuffer(std::size_t size) {
 }
 
 // // READ BUFFER
-void Buffer::ReadBuffer(void* dest) {
-	void * src = Map(m_size, 0);
+void Buffer::readBuffer(void* dest) {
+	void * src = mapBuffer(m_size, 0);
 	std::memcpy(dest, src, m_size);
-	Unmap();
+	unmap();
 }
 
 // // MAP
-void * Buffer::Map(std::size_t size, std::size_t offset) {
+void * Buffer::mapBuffer(std::size_t size, std::size_t offset) {
 	assert(offset + size <= m_capacity);
 	glBindBuffer(m_target, m_bufferID);
 	if (m_target == GL_ATOMIC_COUNTER_BUFFER)
@@ -95,23 +95,23 @@ void * Buffer::Map(std::size_t size, std::size_t offset) {
 }
 
 // // UNMAP
-void Buffer::Unmap() {
+void Buffer::unmap() {
 	glBindBuffer(m_target, m_bufferID);
 	glUnmapBuffer(m_target);
 }
 
 // // APPEND
-std::uint32_t Buffer::Append(std::size_t size, void* data) {
+std::uint32_t Buffer::append(std::size_t size, void* data) {
 	std::size_t offset = m_size;
-	Resize(offset + size);
-	Upload(offset, size, data);
+	resize(offset + size);
+	upload(offset, size, data);
 	return (uint32_t)offset;
 }
 
 // // RESIZE
-void Buffer::Resize(std::size_t newSize) {
+void Buffer::resize(std::size_t newSize) {
 	if (newSize > m_capacity){
-		std::uint32_t tempID = GenerateBuffer(newSize);
+		std::uint32_t tempID = generateBuffer(newSize);
 		if (m_bufferID != 0) {
 			glBindBuffer(GL_COPY_READ_BUFFER, m_bufferID);
 			glBindBuffer(GL_COPY_WRITE_BUFFER, tempID);
@@ -129,23 +129,23 @@ void Buffer::Resize(std::size_t newSize) {
 }
 
 // // RESERVE
-void Buffer::Reserve(std::size_t newCapacity) {
+void Buffer::reserve(std::size_t newCapacity) {
 	auto currentSize = m_size;
 	if (newCapacity > m_capacity) {
-		Resize(newCapacity);
-		Resize(currentSize);
+		resize(newCapacity);
+		resize(currentSize);
 	}
 }
 
 // // BIND
-void Buffer::Bind() const {
+void Buffer::bind() const {
 	glBindBuffer(m_target, m_bufferID);
 }
 
-void Buffer::Bind(std::uint32_t target) {
+void Buffer::bind(std::uint32_t target) {
 	glBindBuffer(m_target = target, m_bufferID);
 }
 
-void Buffer::SetBindingID(std::uint32_t bindingID) {
+void Buffer::setBindingID(std::uint32_t bindingID) {
 	m_bindingID = bindingID;
 }

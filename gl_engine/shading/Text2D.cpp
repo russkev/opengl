@@ -62,8 +62,8 @@ void Text2D::print(const char* s_text)
 	glUniform1i(m_width_uniform_id, m_screen_width);
 	glUniform1i(m_height_uniform_id, m_screen_height);
 	glUniform1iv(m_string_uniform_id, MAX_LETTERS, m_text_array);
-	m_buffer.Bind();
-	m_buffer.Append(m_vertices);
+	m_buffer.bind();
+	m_buffer.append(m_vertices);
 	static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2, GLuint>>::get();
 	m_vao.GenerateVAO(m_buffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
 	glUseProgram(0);

@@ -16,45 +16,45 @@ struct Buffer
 	Buffer& operator = (Buffer&&);
 
 	// // GENERAL FUNCTIONS
-	std::uint32_t GenerateBuffer(std::size_t size);
-	void ReadBuffer(void* dest);
-	void Upload(std::size_t offset, std::size_t size, void* data);
-	void* Map(std::size_t size, std::size_t offset = 0u);
-	void Unmap();
-	std::uint32_t Append(std::size_t size, void* data);
-	void Resize(std::size_t newSize);
-	void Reserve(std::size_t newCapacity); //!!! Is this useful?
-	void Bind() const;
-	void Bind(std::uint32_t target);
-	void SetBindingID(std::uint32_t bindingID);
+	std::uint32_t generateBuffer(std::size_t size);
+	void readBuffer(void* dest);
+	void upload(std::size_t offset, std::size_t size, void* data);
+	void* mapBuffer(std::size_t size, std::size_t offset = 0u);
+	void unmap();
+	std::uint32_t append(std::size_t size, void* data);
+	void resize(std::size_t newSize);
+	void reserve(std::size_t newCapacity); //!!! Is this useful?
+	void bind() const;
+	void bind(std::uint32_t target);
+	void setBindingID(std::uint32_t bindingID);
 
 	// // INPUTTING WITH VECTORS // //
 	template<typename T>
-	auto Append(std::vector<std::vector<T>> data)
+	auto append(std::vector<std::vector<T>> data)
 	{
 		std::size_t numElements = 0;
 		for (auto & i : data) { numElements += i.size(); }
-		return Append(numElements * sizeof(T), data.data());
+		return append(numElements * sizeof(T), data.data());
 	}
 	template<typename T>
-	auto Append(std::vector<T> data) 
+	auto append(std::vector<T> data) 
 	{ 
-		return Append(data.size() * sizeof(T), data.data());
+		return append(data.size() * sizeof(T), data.data());
 	}
 	template<typename T>
-	auto Upload(std::vector<T> data) 
+	auto upload(std::vector<T> data) 
 	{
-		return Upload(0, data.size() * sizeof(T), data.data());
+		return upload(0, data.size() * sizeof(T), data.data());
 	}
 	template<typename T>
-	auto Upload(T data)
+	auto upload(T data)
 	{
-		return Upload(0, sizeof(T), &data);
+		return upload(0, sizeof(T), &data);
 	}
 
 	template<typename T> 
-	T* Map(std::size_t size, std::size_t offset = 0u) {
-		return (T*)Map(size * sizeof(T), offset * sizeof(T));
+	T* mapBuffer(std::size_t size, std::size_t offset = 0u) {
+		return (T*)mapBuffer(size * sizeof(T), offset * sizeof(T));
 	}
 
 	// // GETTERS // //
