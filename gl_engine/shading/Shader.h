@@ -1,4 +1,7 @@
-#pragma once
+#ifndef GL_ENGINE_SHADING_SHADER_H
+#define GL_ENGINE_SHADING_SHADER_H
+
+
 #include <map>
 #include <string>
 #include <stdexcept>
@@ -35,6 +38,7 @@ private:
 
 	// // ----- CONSTRUCTOR ----- // //
 public:
+	Shader() {};
 	Shader(const std::string& name, const char* vertexShader, const char* fragmentShader);
 
 	// // ----- GENERAL METHODS ----- // //
@@ -46,12 +50,18 @@ public:
 
 	*/
 	template<typename T>
-	void setUniform(const std::string& name, const T& data)
+	void setUniform(const std::string& name, T data)
 	{
 		GLenum dataEnumType = ShaderType::glTypes.at(&typeid(T));
 		Uniform* thisUniform;
 		std::string name_s = name;
 
+		glm::mat4 t1 = glm::mat4(data);
+
+		if (m_uniforms.size() == 0)
+		{
+			printf("WARNING: No uniforms stored in \"%s\". \"%s\" will not be set", m_name.c_str(), name.c_str());
+		}
 		try
 		{
 			thisUniform = &m_uniforms.at(name);
@@ -62,9 +72,10 @@ public:
 			return;
 		}
 
+
 		if (thisUniform->type != dataEnumType)
 		{
-			printf("Warning: Setting uniform \"%s\" for shader \"%s\" failed. Incorrect data type\n", name.c_str(), m_name.c_str());
+			printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Incorrect data type\n", name.c_str(), m_name.c_str());
 			return;
 		}
 
@@ -178,3 +189,4 @@ namespace ShaderType
 }
 
 
+#endif

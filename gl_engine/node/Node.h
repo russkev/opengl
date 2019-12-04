@@ -14,6 +14,7 @@
 struct Node
 {
 	// // ----- CONSTRUCTOR ----- // //
+	Node() {};
 	Node(const std::string name);
 
 
@@ -22,8 +23,6 @@ struct Node
 	Node* disconnectChild(const std::string nodeName);
 	glm::mat4 localTransform();
 	glm::mat4 worldTransform();
-	void updateView(void*) {};
-
 
 	// // ----- GETTERS ----- // //
 	const glm::vec3& position() const;

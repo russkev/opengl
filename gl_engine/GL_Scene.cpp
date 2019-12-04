@@ -6,6 +6,8 @@
 #include "mesh/Cube.h"
 #include "mesh/Arrow.h"
 
+#include "shading/Shader.h"
+
 void GL_Scene::init(const GLuint width, const GLuint height)
 {
 	m_width		= width;
@@ -71,13 +73,7 @@ void GL_Scene::initTimer()
 
 void GL_Scene::initCam()
 {
-	GLfloat near	= 0.1f;
-	GLfloat far		= 200.0f;
-	m_projection	= glm::perspective(glm::radians(50.0f), float(m_width) / float(m_height), near, far);
-	glUseProgram(m_program_id);
-	const GLuint camPositionLocation = glGetUniformLocation(m_program_id, "camPosition");
-	glm::vec3 cam_position = m_cam.getPosition();
-	glUniform3fv(camPositionLocation, 1, &cam_position.x);
+	m_camNode = CameraNode("cam1", &m_cam);
 }
 
 void GL_Scene::initLights()
@@ -105,8 +101,8 @@ void GL_Scene::initLights()
 	glUseProgram(m_light_program_id);
 
 	const ShapeContainer::intType transfromLocation = glGetUniformLocation(m_light_program_id, "mat_modelToProjection");
-	auto matBufferMatrix = m_projection * m_cam.worldToViewMatrix() * m_light.transformMatrix();
-	glUniformMatrix4fv(transfromLocation, 1, GL_FALSE, &matBufferMatrix[0][0]);
+	//auto matBufferMatrix = m_projection * m_cam.worldToViewMatrix() * m_light.transformMatrix();
+	glUniformMatrix4fv(transfromLocation, 1, GL_FALSE, &m_cam.worldToProjectionMatrix()[0][0]);
 
 	// // Set up standard information for the VAO
 	static const auto shape_info = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
@@ -168,6 +164,10 @@ void GL_Scene::initGeo()
 	// // Transform Geo 
 	//m_sh.connect("transform_01", "shader_ball");
 	//m_sh.connect("transform_02", "sphere");
+
+	m_material1 = Material("Material", "LightShader.vert", "LightShader.frag");
+	m_mesh1 = Arrow::createArrow();
+	m_meshNode1 = MeshNode("Arrow1", &m_mesh1, &m_material1);
 }
 
 void GL_Scene::initBuffers()
@@ -180,14 +180,10 @@ void GL_Scene::initBuffers()
 	auto depthSortedIndices = m_sh.depthSort(m_cam.getPosition());
 	m_indxBuffer.append(depthSortedIndices);
 
-	auto matBufferMatrix = m_cam.worldToViewMatrix();
-	m_matBuffer.append(sizeof(glm::mat4), &(m_projection * m_cam.worldToViewMatrix()[0][0]));
-	m_wldBuffer.append(sizeof(glm::mat4), &glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, 0.0f)));
 
-	//!!! Create uniform upload function
-	glUseProgram(m_program_id);
-	const ShapeContainer::intType viewMatrixLocation = glGetUniformLocation(m_program_id, "mat_view");
-	glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &matBufferMatrix[0][0]);
+	// // Reserve space in buffers
+	m_matBuffer.append(sizeof(glm::mat4), &glm::mat4(1.0f));
+	m_wldBuffer.append(sizeof(glm::mat4), &glm::mat4(1.0f));
 
 
 	// // Set up standard information for the VAO
@@ -200,7 +196,7 @@ void GL_Scene::initBuffers()
 	m_vao_main.GenerateVAO(m_wldBuffer, 1, matrix_info.data(), matrix_info.data() + matrix_info.size(), WORLD_ATTR);
 
 
-	m_sh.uploadTransforms(m_program_id);
+	//m_sh.uploadTransforms(m_program_id);
 	m_sh.uploadConnections(m_program_id);
 
 #ifdef DEBUG
@@ -277,7 +273,7 @@ void GL_Scene::renderFrame()
 	m_light_indexBuffer.bind(GL_ELEMENT_ARRAY_BUFFER);
 	glDrawElements(GL_TRIANGLES, (GLsizei)m_light_indexBuffer.size(), GL_UNSIGNED_SHORT, 0);
 
-
+	m_meshNode1.draw();
 	m_text.draw();
 }
 
@@ -306,20 +302,24 @@ void GL_Scene::updateCam()
 	glUniform3fv(camPositionLocation, 1, &cam_position.x);
 
 	// Update view matrix
-	auto matBufferMatrix = m_cam.worldToViewMatrix();
+	//auto matBufferMatrix = m_cam.worldToViewMatrix();
 	glUseProgram(m_program_id);
 	const ShapeContainer::intType viewMatrixLocation = glGetUniformLocation(m_program_id, "mat_view");
-	glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &matBufferMatrix[0][0]);
+	glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &m_cam.worldToProjectionMatrix()[0][0]);
 
 	// LIGHT
 	glUseProgram(m_light_program_id);
 	const ShapeContainer::intType transfromLocation = glGetUniformLocation(m_light_program_id, "mat_modelToProjection");
-	auto lightMatrix = m_projection * m_cam.worldToViewMatrix() * m_light.transformMatrix();
-	glUniformMatrix4fv(transfromLocation, 1, GL_FALSE, &lightMatrix[0][0]);
+	//auto lightMatrix = m_projection * m_cam.worldToViewMatrix() * m_light.transformMatrix();
+	glUniformMatrix4fv(transfromLocation, 1, GL_FALSE, &(m_cam.worldToProjectionMatrix() * m_light.transformMatrix())[0][0]);
+	//glUniformMatrix4fv(transfromLocation, 1, GL_FALSE, &lightMatrix[0][0]);
+
 
 	// // Cam position // //
 	//glm::vec3 camPositionVec = _State.cam.getPosition();
 	//glUniform3fv(_State.camPositionID, 1, &camPositionVec.x);
+
+	m_meshNode1.updateView(&m_camNode);
 }
 
 void GL_Scene::updateGeo()
@@ -330,13 +330,12 @@ void GL_Scene::updateGeo()
 	
 	m_sh.uploadTransforms(m_program_id);
 
-	auto tempWorldToViewMatrix = m_cam.worldToViewMatrix();
-	auto tempProjectionMatrix = m_projection;
-	auto tempMatrixA = tempProjectionMatrix * m_cam.worldToViewMatrix();
-	auto tempMatrixB = m_projection * m_cam.worldToViewMatrix();
-	m_matBuffer.upload(m_projection * m_cam.worldToViewMatrix());
+
+	//m_matBuffer.upload(m_projection * m_cam.worldToViewMatrix());
+	m_matBuffer.upload(m_cam.worldToProjectionMatrix());
 	m_indxBuffer.upload(m_sh.depthSort(m_cam.getPosition()));
 
+	m_meshNode1.updateView(&m_camNode);
 
 
 	//m_light_matBuffer.Upload(m_projection * m_cam.getWorldToViewMatrix());

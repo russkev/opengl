@@ -122,7 +122,7 @@ glm::vec3 Camera::getPosition() const
 
 // // ----- GETTERS ----- // //
 
-const glm::ivec2& Camera::dimensions() const
+const glm::uvec2& Camera::dimensions() const
 {
 	return m_dimensions;
 }
@@ -163,7 +163,7 @@ void Camera::setCamRight(glm::vec3 camRight)
 	setCamUp();
 }
 	 
-void Camera::setDimensions(glm::ivec2 dimensions)
+void Camera::setDimensions(glm::uvec2 dimensions)
 {
 	m_dimensions = dimensions;
 }

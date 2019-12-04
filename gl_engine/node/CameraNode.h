@@ -13,8 +13,6 @@
 
 struct CameraNode : public Node
 {
-	inline static const std::string MODEL_TO_VIEW_UNIFORM_NAME = "mat_modelToProjection";
-
 	// // ----- MEMBER VARIABLES ----- // //
 private:
 	std::string m_name;
@@ -22,6 +20,7 @@ private:
 
 	// // ----- CONSTRUCTOR ----- // //
 public:
+	CameraNode() {};
 	CameraNode(const std::string name, Camera* camera);
 
 	// // ----- SETTERS ----- // //
