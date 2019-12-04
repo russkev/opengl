@@ -5,7 +5,12 @@
 #include "GL_Scene.h"
 
 #include "node/Node.h"
+#include "node/MeshNode.h"
 #include "shading/Shader.h"
+#include "shading/Material.h"
+#include "mesh/Mesh.h"
+#include "mesh/Sphere.h"
+
 
 #define GLM_ENABLE_EXPERIMENTAL
 //#define DEBUG
@@ -71,10 +76,10 @@ int main(int, char**)
 
 	*/
 
-	Shader newShader = Shader("simpleShader", "SimpleVertexShader.vert", "SimpleFragmentShader.frag");
-	newShader.setUniform("ambientLight", glm::vec3(0.4f));
-	newShader.setUniform("someFloat", 1.0f);
-	newShader.setUniform("someBool", true);
+	//Material mat1("mat1", "SimpleVertexShader.vert", "SimpleFragmentShader.frag");
+	//Mesh mesh1 = Sphere::createSphere(3.0f);
+	//MeshNode node1("sphere1", &mesh1, &mat1);
+
 
 	/*
 

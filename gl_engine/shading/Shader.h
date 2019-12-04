@@ -68,6 +68,7 @@ public:
 			return;
 		}
 
+		use();
 		uploadUniform(thisUniform, data);
 	}
 

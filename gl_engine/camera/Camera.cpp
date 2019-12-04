@@ -9,16 +9,13 @@ const float Camera::m_mouseMoveSpeed = 0.05f;
 const float Camera::m_rotationSpeed  = 0.007f;
 
 Camera::Camera() :
-
 	m_viewDirection(-0.0, -1.0f, -1.0f),
 	m_camRight(glm::vec3(-1.0f, 0.0f, 0.0f)),
-	m_yAxis(glm::vec3(0.0f, 1.0f, 0.0f)),
-	m_position(0.0f, 8.0f,8.0f),
+	//m_yAxis(glm::vec3(0.0f, 1.0f, 0.0f)),
+	m_position(0.0f, 8.0f, 8.0f),
 	m_camUp(cross(m_viewDirection, m_camRight)),
 	m_lookTarget(m_position + m_viewDirection)
-
-{
-}
+{}
 
 void Camera::update()
 {
@@ -46,8 +43,10 @@ void Camera::update()
 	rotateRel(rotateDelta * cRotateSpeed);
 }
 
-void  Camera::positionUpdate(const SDL_Scancode& newPosition) {
-	switch (newPosition) {
+void  Camera::positionUpdate(const SDL_Scancode& newPosition) 
+{
+	switch (newPosition) 
+	{
 	case SDL_SCANCODE_W:
 		m_position += m_moveSpeed * m_viewDirection;
 		break;
@@ -63,8 +62,8 @@ void  Camera::positionUpdate(const SDL_Scancode& newPosition) {
 	}
 }
 
-void Camera::moveRel(const glm::vec3& mouseDelta) {
-
+void Camera::moveRel(const glm::vec3& mouseDelta)
+{
 	glm::vec3 positionDelta =
 		- m_camRight * mouseDelta.x
 		+ m_camUp * mouseDelta.y
@@ -72,14 +71,12 @@ void Camera::moveRel(const glm::vec3& mouseDelta) {
 	
 	m_position += positionDelta;
 	m_lookTarget += positionDelta;
-	
 }
 
-void Camera::rotateRel(const glm::vec2& rotateDelta) {
-
-
+void Camera::rotateRel(const glm::vec2& rotateDelta) 
+{
 	glm::mat3 r_pitch = (glm::mat3)glm::rotate( rotateDelta.y, m_camRight);
-	glm::mat3 r_yaw   = (glm::mat3)glm::rotate(-rotateDelta.x, m_yAxis);
+	glm::mat3 r_yaw   = (glm::mat3)glm::rotate(-rotateDelta.x, UP_AXIS);
 	m_position -= m_lookTarget;
 	m_position = r_pitch * r_yaw * m_position;
 	m_position += m_lookTarget;
@@ -91,7 +88,8 @@ void Camera::rotateRel(const glm::vec2& rotateDelta) {
 	//printData(rotateDelta);
 }
 
-void Camera::printData(const glm::vec2& rotateDelta) {
+void Camera::printData(const glm::vec2& rotateDelta)
+{
 	if (rotateDelta.y != 0) {
 		std::cout << "rotateDelta,     y: " << rotateDelta.y << "\n";
 		std::cout << "rotateDelta, sin y: " << sin(rotateDelta.y) << "\n";
@@ -104,19 +102,93 @@ void Camera::printData(const glm::vec2& rotateDelta) {
 	}
 }
 
-void Camera::focus(const glm::mat4& wldMatrix) {
+void Camera::focus(const glm::mat4& wldMatrix) 
+{
 	m_lookTarget = {wldMatrix[3][0], wldMatrix[3][1], wldMatrix[3][2]};
 }
 
 
-void Camera::scrollUpdate(const float scrollAmount) {
+void Camera::scrollUpdate(const float scrollAmount) 
+{
 	m_position += scrollAmount * m_viewDirection;
 }
 
-glm::mat4 Camera::getWorldToViewMatrix() const {
+
+
+glm::vec3 Camera::getPosition() const
+{
+	return m_position;
+}
+
+// // ----- GETTERS ----- // //
+
+const glm::ivec2& Camera::dimensions() const
+{
+	return m_dimensions;
+}
+
+glm::mat4 Camera::worldToViewMatrix() 
+{
 	return glm::lookAt(m_position, m_lookTarget, m_camUp);
 }
 
-glm::vec3 Camera::getPosition() const {
-	return m_position;
+glm::mat4 Camera::viewToProjectionMatrix() 
+{
+	return glm::perspective(glm::radians(m_angleOfView), (GLfloat)m_dimensions.x / (GLfloat)m_dimensions.y, m_clipNear, m_clipFar);
+}
+
+glm::mat4 Camera::worldToProjectionMatrix()  
+{
+	return viewToProjectionMatrix() * worldToViewMatrix();
+}
+
+
+// // ----- SETTERS ----- // //
+void Camera::setPosition(glm::vec3 position)
+{
+	m_position = position;
+}
+
+void Camera::setViewDirection(glm::vec3 viewDirection)
+{
+	m_viewDirection = viewDirection;
+	setLookTarget();
+	setCamUp();
+}
+
+void Camera::setCamRight(glm::vec3 camRight)
+{
+	m_camRight = camRight;
+	setLookTarget();
+	setCamUp();
+}
+	 
+void Camera::setDimensions(glm::ivec2 dimensions)
+{
+	m_dimensions = dimensions;
+}
+
+void Camera::setClipNear(GLfloat clipNear)
+{
+	m_clipNear = clipNear;
+}
+
+void Camera::setClipFar(GLfloat clipFar)
+{
+	m_clipFar = clipFar;
+}
+
+void Camera::setAngleOfView(GLfloat angleOfView)
+{
+	m_angleOfView = angleOfView;
+}
+
+void Camera::setLookTarget()
+{
+	m_lookTarget = m_viewDirection + m_camRight;
+}
+
+void Camera::setCamUp()
+{
+	m_camUp = glm::cross(m_viewDirection, m_camRight);
 }

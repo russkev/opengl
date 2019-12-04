@@ -16,7 +16,7 @@ VAO::VAO() :
 void VAO::GenerateVAO(const Buffer& inBuffer, std::size_t divisor, const member_info_type* begin, const member_info_type* end, std::uint32_t id_offset) {
 	GenerateID();
 	Bind();
-	inBuffer.Bind();
+	inBuffer.bind();
 
 	std::for_each(begin, end, [&](const member_info_type& mi)
 	{
