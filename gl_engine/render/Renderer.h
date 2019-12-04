@@ -17,11 +17,11 @@ struct Renderer
 	// // ----- MEMBER VARIABLES ----- // //
 	CameraNode* m_camera_node;
 	std::map<std::string, Node*> m_root_nodes;
-	glm::ivec2 m_dimensions = { 1024, 576 };
+	glm::uvec2 m_dimensions = { 800, 600 };
 
 	// // ----- CONSTRUCTOR ----- // //
 	Renderer(CameraNode* camera);
-	Renderer(CameraNode* camera, const glm::ivec2& dimensions);
+	Renderer(CameraNode* camera, const glm::uvec2& dimensions);
 
 	// // ----- RENDER ----- // //
 	void render();

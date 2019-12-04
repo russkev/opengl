@@ -21,10 +21,10 @@ private:
 
 	glm::vec2 m_oldMousePosition;
 
-	glm::ivec2 m_dimensions = { 1024, 576 };
+	glm::uvec2 m_dimensions = { 800u, 600u };
 	GLfloat m_clipNear		= 0.1f;
 	GLfloat m_clipFar		= 100.0f;
-	GLfloat m_angleOfView	= 60.0f; // In degrees
+	GLfloat m_angleOfView	= 50.0f; // In degrees
 
 	static const float m_moveSpeed;
 	static const float m_mouseMoveSpeed;
@@ -54,7 +54,7 @@ public:
 
 	//glm::vec2 m_oldMousePosition;
 
-	const glm::ivec2& dimensions() const;
+	const glm::uvec2& dimensions() const;
 	//GLfloat m_clipNear = 0.1f;
 	//GLfloat m_clipFar = 100.0f;
 	//GLfloat m_angleOfView = 60.0f; // In degrees
@@ -68,7 +68,7 @@ public:
 	void setViewDirection(glm::vec3);
 	void setCamRight(glm::vec3);
 
-	void setDimensions(glm::ivec2);
+	void setDimensions(glm::uvec2);
 	void setClipNear(GLfloat);
 	void setClipFar(GLfloat);
 	void setAngleOfView(GLfloat);

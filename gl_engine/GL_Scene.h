@@ -21,7 +21,11 @@
 #include "shading/Texture.h"
 #include "shading/Targa.h"
 #include "shading/Text2D.h"
-
+#include "shading/Shader.h"
+#include "mesh/Mesh.h"
+#include "shading/Material.h"
+#include "node/MeshNode.h"
+#include "node/CameraNode.h"
 
 #include "GL_Type_Traits.h"
 #include "GL_Tuple_Introspect.h"
@@ -66,6 +70,7 @@ public:
 	GLuint			m_program_id, m_text_program_id, m_light_program_id;
 	glm::mat4		m_projection	= glm::mat4();
 	Camera			m_cam;
+
 	PointLight		m_light;
 	GLuint			m_width, m_height;
 	ShapeContainer	m_sh;// , m_light_sh;
@@ -87,4 +92,10 @@ public:
 	Buffer m_light_matBuffer	= { GL_ARRAY_BUFFER, 0 };
 
 	Text2D m_text		= { "font_calibri_01.tga" };
+
+
+	Mesh m_mesh1;
+	CameraNode m_camNode;
+	Material m_material1;
+	MeshNode m_meshNode1;
 };

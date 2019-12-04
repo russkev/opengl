@@ -5,11 +5,11 @@
 	Constructor
 
 */
-Renderer::Renderer(CameraNode* camera) : 
-	m_camera_node(camera)
+Renderer::Renderer(CameraNode* cameraNode) : 
+	m_camera_node(cameraNode), m_dimensions(cameraNode->camera()->dimensions())
 {}
 
-Renderer::Renderer(CameraNode* camera, const glm::ivec2& dimensions) :
+Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
 	m_camera_node(camera), m_dimensions(dimensions)
 {
 	m_camera_node->camera()->setDimensions(dimensions);

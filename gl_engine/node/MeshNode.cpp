@@ -1,7 +1,6 @@
-#ifndef GL_ENGINE_NODE_MESH_H
-#define GL_ENGINE_NODE_MESH_H
-
 #include "MeshNode.h"
+#include "../GL_Tuple_Introspect.h"
+
 
 /*
 
@@ -14,11 +13,27 @@ MeshNode::MeshNode(const std::string name, Mesh* mesh, Material* material) :
 {
 	m_vertexBuffer.append(m_mesh->vertices());
 	m_indexBuffer.append(m_mesh->indices());
+
+	// // Upload the VAO information
+	m_vao.GenerateVAO(m_vertexBuffer, 0, MESH_VAO_INFO.data(), MESH_VAO_INFO.data() + MESH_VAO_INFO.size(), POSITION_ATTR);
 }
 
-//void MeshNode::updateView(CameraNode* camera)
-//{
-//	//
-//}
+void MeshNode::updateView(CameraNode* camerNode)
+{
+	glm::mat4 modelToPerspectiveMatrix = camerNode->camera()->worldToProjectionMatrix() * Node::worldTransform();
 
-#endif
+	m_material->shader().setUniform(MODEL_TO_PROJECTION_UNIFORM_NAME, modelToPerspectiveMatrix);
+
+}
+
+void MeshNode::draw()
+{
+	m_material->shader().use();
+	m_vao.Bind();
+	m_indexBuffer.bind(GL_ELEMENT_ARRAY_BUFFER);
+	glDrawElements(GL_TRIANGLES, (GLsizei)m_indexBuffer.size(), GL_UNSIGNED_SHORT, 0);
+}
+
+
+
+
