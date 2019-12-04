@@ -7,9 +7,7 @@ Shader::Shader(const std::string& name, const char* vertexShader, const char* fr
 	m_name(name)
 {
 	m_programID = LoadShaders::load(vertexShader, fragmentShader);
-	
-	getUniforms();
-	auto sdfs = 345;
+	fetchUniforms();
 }
 
 // // ----- GENERAL METHODS ----- // //
@@ -29,7 +27,7 @@ void Shader::use()
 	Get all the uniforms from the shader and store their information with the shader
 
 */
-void Shader::getUniforms()
+void Shader::fetchUniforms()
 {
 	int numUniforms;
 	glGetProgramiv(m_programID, GL_ACTIVE_UNIFORMS, &numUniforms);
@@ -40,6 +38,7 @@ void Shader::getUniforms()
 		GLsizei uniformNameLength;
 
 		glGetActiveUniform(m_programID, i, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformNameLength, &newUniform.dataSize, &newUniform.type, uniformNameChars);
+		newUniform.location = glGetUniformLocation(m_programID, uniformNameChars);
 
 		std::string uniformNameString(uniformNameChars);
 
@@ -56,6 +55,11 @@ const GLuint Shader::programID() const
 const std::string Shader::name() const
 {
 	return m_name;
+}
+
+const std::map<std::string, Uniform>& Shader::uniforms() const
+{
+	return m_uniforms;
 }
 
 // // ----- SETTERS ----- // //

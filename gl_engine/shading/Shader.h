@@ -71,8 +71,6 @@ public:
 			printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Uniform not found (%s)\n", name_s.c_str(), m_name.c_str(), e.what());
 			return;
 		}
-
-
 		if (thisUniform->type != dataEnumType)
 		{
 			printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Incorrect data type\n", name.c_str(), m_name.c_str());
@@ -87,12 +85,13 @@ public:
 
 
 private:
-	void getUniforms();
+	void fetchUniforms();
 
 public:
 	// // ----- GETTERS ----- // //
 	const GLuint programID() const;
 	const std::string name() const;
+	const std::map<std::string, Uniform>& uniforms() const;
 
 	// // ----- SETTERS ----- // //
 	std::string& name();

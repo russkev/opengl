@@ -18,10 +18,10 @@ MeshNode::MeshNode(const std::string name, Mesh* mesh, Material* material) :
 	m_vao.GenerateVAO(m_vertexBuffer, 0, MESH_VAO_INFO.data(), MESH_VAO_INFO.data() + MESH_VAO_INFO.size(), POSITION_ATTR);
 }
 
+
 void MeshNode::updateView(CameraNode* camerNode)
 {
 	glm::mat4 modelToPerspectiveMatrix = camerNode->camera()->worldToProjectionMatrix() * Node::worldTransform();
-
 	m_material->shader().setUniform(MODEL_TO_PROJECTION_UNIFORM_NAME, modelToPerspectiveMatrix);
 
 }
