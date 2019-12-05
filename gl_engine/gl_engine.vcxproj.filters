@@ -78,13 +78,7 @@
     <ClCompile Include="Buffer.cpp">
       <Filter>Uncategorised</Filter>
     </ClCompile>
-    <ClCompile Include="GL_Scene.cpp">
-      <Filter>Uncategorised</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Uncategorised</Filter>
-    </ClCompile>
-    <ClCompile Include="ShapeContainer.cpp">
       <Filter>Uncategorised</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
@@ -190,16 +184,10 @@
     <ClInclude Include="Buffer.h">
       <Filter>Uncategorised</Filter>
     </ClInclude>
-    <ClInclude Include="GL_Scene.h">
-      <Filter>Uncategorised</Filter>
-    </ClInclude>
     <ClInclude Include="GL_Tuple_Introspect.h">
       <Filter>Uncategorised</Filter>
     </ClInclude>
     <ClInclude Include="GL_Type_Traits.h">
-      <Filter>Uncategorised</Filter>
-    </ClInclude>
-    <ClInclude Include="ShapeContainer.h">
       <Filter>Uncategorised</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">

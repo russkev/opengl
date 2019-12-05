@@ -152,7 +152,6 @@
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="light\PointLight.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="GL_Scene.cpp" />
     <ClCompile Include="mesh\Arrow.cpp" />
     <ClCompile Include="mesh\Cube.cpp" />
     <ClCompile Include="mesh\Cylinder.cpp" />
@@ -171,7 +170,6 @@
     <ClCompile Include="shading\Targa.cpp" />
     <ClCompile Include="shading\Text2D.cpp" />
     <ClCompile Include="shading\Texture.cpp" />
-    <ClCompile Include="ShapeContainer.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="utils\VectorUtils.cpp" />
     <ClCompile Include="VAO.cpp" />
@@ -192,7 +190,6 @@
     <ClInclude Include="GL_Tuple_Introspect.h" />
     <ClInclude Include="GL_Type_Traits.h" />
     <ClInclude Include="light\PointLight.h" />
-    <ClInclude Include="GL_Scene.h" />
     <ClInclude Include="mesh\Arrow.h" />
     <ClInclude Include="mesh\Cube.h" />
     <ClInclude Include="mesh\Cylinder.h" />
@@ -212,7 +209,6 @@
     <ClInclude Include="shading\Targa.h" />
     <ClInclude Include="shading\Text2D.h" />
     <ClInclude Include="shading\Texture.h" />
-    <ClInclude Include="ShapeContainer.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="utils\VectorUtils.h" />
     <ClInclude Include="VAO.h" />
