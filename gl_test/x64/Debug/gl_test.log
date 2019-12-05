@@ -1,10 +1,12 @@
-﻿  NodeTest.cpp
-e:\docs\programming\cpp\opengl\repos\opengl\gl_engine\camera\camera.h(12): error C7525: inline variables require at least '/std:c++17'
-e:\docs\programming\cpp\opengl\repos\opengl\gl_engine\camera\camera.h(12): error C2864: 'Camera::UP_AXIS': a static data member with an in-class initializer must have non-volatile const integral type or be specified as 'inline'
-  e:\docs\programming\cpp\opengl\repos\opengl\gl_engine\camera\camera.h(12): note: type is 'const glm::vec3'
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\nodetest.cpp(25): error C2678: binary '=': no operator found which takes a left-hand operand of type 'const glm::vec3' (or there is no acceptable conversion)
-  e:\docs\programming\cpp\opengl\repos\opengl\external\glm\glm\detail\type_vec3.hpp(153): note: could be 'glm::vec<3,float,0> &glm::vec<3,float,0>::operator =(const glm::vec<3,float,0> &)'
-  e:\docs\programming\cpp\opengl\repos\opengl\gl_test\nodetest.cpp(25): note: while trying to match the argument list '(const glm::vec3, initializer list)'
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\nodetest.cpp(26): error C2678: binary '=': no operator found which takes a left-hand operand of type 'const glm::vec3' (or there is no acceptable conversion)
-  e:\docs\programming\cpp\opengl\repos\opengl\external\glm\glm\detail\type_vec3.hpp(153): note: could be 'glm::vec<3,float,0> &glm::vec<3,float,0>::operator =(const glm::vec<3,float,0> &)'
-  e:\docs\programming\cpp\opengl\repos\opengl\gl_test\nodetest.cpp(26): note: while trying to match the argument list '(const glm::vec3, initializer list)'
+﻿  pch.cpp
+  gl_test.cpp
+  NodeTest.cpp
+  ShaderTest.cpp
+  Test.cpp
+c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(72): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Compiling...
+  Generating Code...
+  gl_test.vcxproj -> C:\Users\kev_k\Documents\_DOCS\PROGRAMMING\OpenGL\repo\opengl\x64\Debug\gl_test.exe
+c:\users\kev_k\documents\_docs\programming\libraries\vcpkg\installed\x64-windows\include\boost\function\function_base.hpp(603): warning C26495: Variable 'boost::function_base::functor' is uninitialized. Always initialize a member variable (type.6).
+c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\external\glm\glm\detail\type_vec4.inl(182): warning C26495: Variable 'glm::vec<4,float,5>::<anonymous-tag>::<anonymous-tag>::x' is uninitialized. Always initialize a member variable (type.6).
+c:\users\kev_k\documents\_docs\programming\libraries\vcpkg\installed\x64-windows\include\boost\test\tools\assertion.hpp(261): warning C26439: This kind of function may not throw. Declare it 'noexcept' (f.6).

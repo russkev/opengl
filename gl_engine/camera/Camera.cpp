@@ -4,9 +4,11 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 
-const float Camera::m_moveSpeed      = 0.5f;
-const float Camera::m_mouseMoveSpeed = 0.05f;
-const float Camera::m_rotationSpeed  = 0.007f;
+const glm::vec3 Camera::UP_AXIS = { 0.0f, 1.0f, 0.0f };
+
+const float Camera::MOVE_SPEED			= 0.5f;
+const float Camera::MOUSE_MOVE_SPEED	= 0.05f;
+const float Camera::ROTATION_SPEED		= 0.007f;
 
 Camera::Camera()
 {}
@@ -29,6 +31,7 @@ void Camera::update()
 		axisDelta.x = -(float)mouseDelta.x;
 		axisDelta.y = (float)mouseDelta.y;
 	}
+
 	if (mouseButton & SDL_BUTTON(SDL_BUTTON_RIGHT)) {
 		axisDelta.z = (float)mouseDelta.y;
 
@@ -42,16 +45,16 @@ void  Camera::positionUpdate(const SDL_Scancode& newPosition)
 	switch (newPosition) 
 	{
 	case SDL_SCANCODE_W:
-		m_position += m_moveSpeed * m_viewDirection;
+		m_position += MOVE_SPEED * m_viewDirection;
 		break;
 	case SDL_SCANCODE_S:
-		m_position += -m_moveSpeed * m_viewDirection;
+		m_position += -MOVE_SPEED * m_viewDirection;
 		break;
 	case SDL_SCANCODE_A:
-		m_position += -m_moveSpeed * m_camRight;
+		m_position += -MOVE_SPEED * m_camRight;
 		break;
 	case SDL_SCANCODE_D:
-		m_position += m_moveSpeed * m_camRight;
+		m_position += MOVE_SPEED * m_camRight;
 		break;
 	case SDL_SCANCODE_F:
 		focus(glm::mat4(1.0f));

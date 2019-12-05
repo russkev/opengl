@@ -22,8 +22,8 @@ struct nodeTestContext
 		N2.addChild(&N3);
 		N2.addChild(&N4);
 
-		N1.position() = { 3.0f, 2.0f, 1.0f };
-		N4.position() = { 2.0f, 1.0f, 3.0f };
+		N1.setPosition({ 3.0f, 2.0f, 1.0f });
+		N4.setPosition({ 2.0f, 1.0f, 3.0f });
 
 		expectedMatrix1 = glm::mat4(1.0f);
 		expectedMatrix1[3][0] = 3.0f;

@@ -9,7 +9,10 @@ struct Camera
 {
 
 private:
-	inline static const glm::vec3 UP_AXIS = { 0.0f, 1.0f, 0.0f };
+	static const glm::vec3 UP_AXIS;
+	static const float MOVE_SPEED;
+	static const float MOUSE_MOVE_SPEED;
+	static const float ROTATION_SPEED;
 
 	// // ----- MEMBER VARIABLES ----- // //
 	glm::vec3 m_position = { 0.0f, 8.0f, 8.0f };
@@ -26,9 +29,7 @@ private:
 	GLfloat m_clipFar		= 100.0f;
 	GLfloat m_angleOfView	= 50.0f; // In degrees
 
-	static const float m_moveSpeed;
-	static const float m_mouseMoveSpeed;
-	static const float m_rotationSpeed;
+
 public:
 	// // ----- CONSTRUCTOR ----- // //
 	Camera();
