@@ -8,11 +8,7 @@ Node::Node(const std::string name) : m_name(name)
 {}
 
 
-/*
-
-	Add new child to list of children in the node
-
-*/
+// Add new child to list of children in the node
 void Node::addChild(Node* child)
 {
 	if (m_children.find(child->m_name) == m_children.end())
@@ -27,22 +23,13 @@ void Node::addChild(Node* child)
 }
 
 
-/*
-
-	Change the existing parent. All children will come along.
-
-*/
+// Change the existing parent. All children will come along.
 void Node::setParent(Node* parent)
 {
 	m_parent = parent;
 }
 
-/*
-
-	Disconnect child and return a pointer to that child. 
-	The children of the child will stay connected to the child
-
-*/
+// Disconnect child and return a pointer to that child. 
 Node* Node::disconnectChild(const std::string childName)
 {
 	if (m_children.find(childName) != m_children.end())
@@ -55,23 +42,17 @@ Node* Node::disconnectChild(const std::string childName)
 	return NULL;
 }
 
-/*
-
-	Calculate the transform matrix in local space
-
-*/
+// Calculate the transform matrix in local space
 glm::mat4 Node::localTransform()
 {
 	return VectorUtils::trs(glm::mat3{ m_position, m_rotation, m_scale });
 }
 
-/*
-
-	Calculate the transform matrix in world space
-
-*/
+// Calculate the transform matrix in world space
 glm::mat4 Node::worldTransform()
 {
+	//return localTransform();
+
 	std::stack<glm::mat4> transforms;
 	Node* currentNode = this;
 	glm::mat4 outTransform(1.0f);
@@ -79,16 +60,10 @@ glm::mat4 Node::worldTransform()
 	// Collect all transforms
 	while (currentNode != NULL)
 	{
-		transforms.push(currentNode->localTransform());
+		outTransform = currentNode->localTransform() * outTransform;
 		currentNode = currentNode->m_parent;
 	}
 
-	// Apply transforms
-	while (!transforms.empty())
-	{
-		outTransform *= transforms.top();
-		transforms.pop();
-	}
 	return outTransform;
 }
 
