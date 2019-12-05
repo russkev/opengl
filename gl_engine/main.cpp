@@ -94,7 +94,6 @@ int main(int, char**)
 	Renderer Render1 = Renderer(&camNode1, glm::uvec2(width, height));
 	Render1.addNode(&meshNode1);
 	Render1.addNode(&meshNode2);
-	Render1.addNode(&meshNode2);
 
 
 	/*
