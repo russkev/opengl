@@ -42,7 +42,7 @@ public:
 	void printData(const glm::vec2& rotateDelta);
 	void focus(const glm::mat4& wldMatrix);
 
-	glm::vec3 getPosition() const;
+	virtual const glm::vec3 position() const;
 
 	// // ----- GETTERS ----- // //
 	//glm::vec3 m_position = { 0.0f, 8.0f, 8.0f };
@@ -58,9 +58,9 @@ public:
 	//GLfloat m_clipNear = 0.1f;
 	//GLfloat m_clipFar = 100.0f;
 	//GLfloat m_angleOfView = 60.0f; // In degrees
-	glm::mat4 worldToViewMatrix();
+	virtual glm::mat4 worldToViewMatrix();
 	glm::mat4 viewToProjectionMatrix();
-	glm::mat4 worldToProjectionMatrix();
+	virtual glm::mat4 worldToProjectionMatrix();
 
 
 	// // ----- SETTERS ----- // //

@@ -104,17 +104,17 @@ const std::string& Node::name() const
 }
 
 
-const glm::vec3& Node::position() const
+const glm::vec3 Node::position() const
 {
 	return m_position;
 }
 
-const glm::vec3& Node::rotation() const
+const glm::vec3 Node::rotation() const
 {
 	return m_rotation;
 }
 
-const glm::vec3& Node::scale() const
+const glm::vec3 Node::scale() const
 {
 	return m_scale;
 }
@@ -130,17 +130,17 @@ const std::unordered_map<std::string, Node*> Node::children() const
 }
 
 // // ----- SETTERS ----- // //
-glm::vec3& Node::position()
+void Node::setPosition(const glm::vec3& position)
 {
-	return m_position;
+	m_position = position;
 }
 
-glm::vec3& Node::rotation()
+void Node::setRotation(const glm::vec3& rotation)
 {
-	return m_rotation;
+	m_rotation = rotation;
 }
 
-glm::vec3& Node::scale()
+void Node::sestScale(const glm::vec3& scale)
 {
-	return m_scale;
+	m_scale = scale;
 }

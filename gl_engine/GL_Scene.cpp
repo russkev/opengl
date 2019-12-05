@@ -73,7 +73,7 @@ void GL_Scene::initTimer()
 
 void GL_Scene::initCam()
 {
-	m_camNode = CameraNode("cam1", &m_cam);
+	m_camNode = CameraNode("cam1");
 }
 
 void GL_Scene::initLights()
@@ -160,7 +160,7 @@ void GL_Scene::initBuffers()
 	//auto meshes = m_sh.meshes();
 	m_geoBuffer.append(vertices);
 
-	auto depthSortedIndices = m_sh.depthSort(m_cam.getPosition());
+	auto depthSortedIndices = m_sh.depthSort(m_camNode.position());
 	m_indxBuffer.append(depthSortedIndices);
 
 
@@ -207,7 +207,7 @@ bool GL_Scene::pollEvents()
 			if (loc_event.key.keysym.scancode == SDL_SCANCODE_F)
 			{
 				glm::mat4 wldBuffer = glm::mat4(1.0f);
-				m_cam.focus(wldBuffer);
+				m_camNode.focus(wldBuffer);
 			}
 			if (loc_event.key.keysym.scancode == SDL_SCANCODE_4)
 			{
@@ -285,21 +285,21 @@ void GL_Scene::updateCam()
 	// Update camera position
 	glUseProgram(m_program_id);
 	const GLuint camPositionLocation = glGetUniformLocation(m_program_id, "camPosition");
-	glm::vec3 cam_position = m_cam.getPosition();
+	glm::vec3 cam_position = m_camNode.position();
 	glUniform3fv(camPositionLocation, 1, &cam_position.x);
 
 	// Update view matrix
-	//auto matBufferMatrix = m_cam.worldToViewMatrix();
+	//auto matBufferMatrix = m_camNode.worldToViewMatrix();
 	glUseProgram(m_program_id);
 	const ShapeContainer::intType viewMatrixLocation = glGetUniformLocation(m_program_id, "mat_view");
-	glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &m_cam.worldToProjectionMatrix()[0][0]);
+	glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &m_camNode.worldToProjectionMatrix()[0][0]);
 
 	// LIGHT
 	//------------------------------------------------------------------------------------------------------------------------------------------------//
 	
 	glUseProgram(m_light_program_id);
 	const ShapeContainer::intType transfromLocation = glGetUniformLocation(m_light_program_id, "mat_modelToProjection");
-	glUniformMatrix4fv(transfromLocation, 1, GL_FALSE, &(m_cam.worldToProjectionMatrix() * m_light.transformMatrix())[0][0]);
+	glUniformMatrix4fv(transfromLocation, 1, GL_FALSE, &(m_camNode.worldToProjectionMatrix() * m_light.transformMatrix())[0][0]);
 	
 	//------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -321,8 +321,8 @@ void GL_Scene::updateGeo()
 
 
 	//m_matBuffer.upload(m_projection * m_cam.worldToViewMatrix());
-	m_matBuffer.upload(m_cam.worldToProjectionMatrix());
-	m_indxBuffer.upload(m_sh.depthSort(m_cam.getPosition()));
+	m_matBuffer.upload(m_camNode.worldToProjectionMatrix());
+	m_indxBuffer.upload(m_sh.depthSort(m_camNode.position()));
 
 	m_meshNode1.updateView(&m_camNode);
 

@@ -69,7 +69,7 @@ struct GL_Scene
 public:
 	GLuint			m_program_id, m_text_program_id, m_light_program_id;
 	glm::mat4		m_projection	= glm::mat4();
-	Camera			m_cam;
+	//Camera			m_cam;
 
 	PointLight		m_light;
 	GLuint			m_width, m_height;

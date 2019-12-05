@@ -1,6 +1,8 @@
 #ifndef GL_ENGINE_NODE_CAMERA_H
 #define GL_ENGINE_NODE_CAMERA_H
 
+#include <glm/glm.hpp>
+
 #include "Node.h"
 #include "../camera/Camera.h"
 #include "../Buffer.h"
@@ -11,25 +13,30 @@
 
 */
 
-struct CameraNode : public Node
+struct CameraNode : public Node, public Camera
 {
 	// // ----- MEMBER VARIABLES ----- // //
 private:
-	std::string m_name;
-	Camera* m_camera;
+	//std::string m_name;
+	//Camera* m_camera;
 
 	// // ----- CONSTRUCTOR ----- // //
 public:
 	CameraNode() {};
-	CameraNode(const std::string name, Camera* camera);
+	CameraNode(const std::string name);
 
 	// // ----- SETTERS ----- // //
-	Camera* camera();
+	//Camera* camera();
 
 	// // ----- GETTERS ----- // //
-	const std::string& name() const;
-	const Camera* camera() const;
+	//const std::string& name() const;
+	//const Camera* camera() const;
 
+	// // ----- OVERRIDES ----- // //
+	const glm::vec3 position() const override;
+	void setPosition(const glm::vec3&) override;
+	glm::mat4 worldToViewMatrix() override;
+	glm::mat4 worldToProjectionMatrix() override;
 
 };
 
