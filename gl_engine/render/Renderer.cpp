@@ -22,11 +22,13 @@ Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
 */
 void Renderer::render()
 {
-	// Update object to perspective view buffer
-	//for (auto const& node : m_root_nodes)
-	//{
-	//	node.second->updateView(m_camera, m_dimensions);
-	//}
+	 //Update object to perspective view buffer
+	for (auto const& node : m_root_nodes)
+	{
+
+		node.second
+		node.second->updateVew(m_camera_node);
+	}
 }
 
 // // ----- GENERAL METHODS ----- // //
