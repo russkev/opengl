@@ -14,11 +14,13 @@
 */
 struct Renderer
 {
+private:
 	// // ----- MEMBER VARIABLES ----- // //
 	CameraNode* m_camera_node;
 	std::map<std::string, Node*> m_root_nodes;
 	glm::uvec2 m_dimensions = { 800, 600 };
 
+public:
 	// // ----- CONSTRUCTOR ----- // //
 	Renderer(CameraNode* camera);
 	Renderer(CameraNode* camera, const glm::uvec2& dimensions);

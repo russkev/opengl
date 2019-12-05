@@ -10,6 +10,9 @@
 #include "shading/Material.h"
 #include "mesh/Mesh.h"
 #include "mesh/Sphere.h"
+#include "render/Renderer.h"
+#include "mesh/Arrow.h"
+#include "mesh/Plane.h"
 
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -76,9 +79,22 @@ int main(int, char**)
 
 	*/
 
-	//Material mat1("mat1", "SimpleVertexShader.vert", "SimpleFragmentShader.frag");
-	//Mesh mesh1 = Sphere::createSphere(3.0f);
-	//MeshNode node1("sphere1", &mesh1, &mat1);
+
+	Camera cam1 = Camera();
+	CameraNode camNode1 = CameraNode("CamNode1", &cam1);
+	
+	Material material1 = Material("Material", "LightShader.vert", "LightShader.frag");
+
+	Mesh mesh1 = Arrow::createArrow();
+	MeshNode meshNode1 = MeshNode("Arrow1", &mesh1, &material1);
+
+	Mesh mesh2 = Plane::createPlane(10.0f, 10.0f);
+	MeshNode meshNode2 = MeshNode("Plane1", &mesh2, &material1);
+
+	Renderer Render1 = Renderer(&camNode1, glm::uvec2(width, height));
+	Render1.addNode(&meshNode1);
+	Render1.addNode(&meshNode2);
+	Render1.addNode(&meshNode2);
 
 
 	/*

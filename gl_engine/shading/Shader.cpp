@@ -11,22 +11,14 @@ Shader::Shader(const std::string& name, const char* vertexShader, const char* fr
 }
 
 // // ----- GENERAL METHODS ----- // //
-/*
-
-	Tell opengl to use this shader for upcoming commands
-
-*/
+// Tell opengl to use this shader for upcoming commands
 void Shader::use()
 {
 	glUseProgram(m_programID);
 }
 
 
-/*
-
-	Get all the uniforms from the shader and store their information with the shader
-
-*/
+//Get all the uniforms from the shader and store their information with the shader
 void Shader::fetchUniforms()
 {
 	int numUniforms;

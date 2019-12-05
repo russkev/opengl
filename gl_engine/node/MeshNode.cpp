@@ -22,13 +22,13 @@ MeshNode::MeshNode(const std::string name, Mesh* mesh, Material* material) :
 void MeshNode::updateView(CameraNode* camerNode)
 {
 	glm::mat4 modelToPerspectiveMatrix = camerNode->camera()->worldToProjectionMatrix() * Node::worldTransform();
-	m_material->shader().setUniform(MODEL_TO_PROJECTION_UNIFORM_NAME, modelToPerspectiveMatrix);
+	m_material->setUniform(MODEL_TO_PROJECTION_UNIFORM_NAME, modelToPerspectiveMatrix);
 
 }
 
 void MeshNode::draw()
 {
-	m_material->shader().use();
+	m_material->use();
 	m_vao.Bind();
 	m_indexBuffer.bind(GL_ELEMENT_ARRAY_BUFFER);
 	glDrawElements(GL_TRIANGLES, (GLsizei)m_indexBuffer.size(), GL_UNSIGNED_SHORT, 0);
