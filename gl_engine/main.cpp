@@ -79,9 +79,9 @@ int main(int, char**)
 
 	*/
 
+	CameraNode camNode1 = CameraNode("CamNode1");
 
-	Camera cam1 = Camera();
-	CameraNode camNode1 = CameraNode("CamNode1", &cam1);
+	//camNode1.setPosition(glm::vec3( 9.0f, 9.0f, 9.0f ));
 	
 	Material material1 = Material("Material", "LightShader.vert", "LightShader.frag");
 
@@ -96,6 +96,14 @@ int main(int, char**)
 	Render1.addNode(&meshNode2);
 
 
+
+
+
+	//_Scene.initSettings();
+
+	Render1.go(&_Window);
+
+
 	/*
 
 		End testing area
@@ -104,13 +112,13 @@ int main(int, char**)
 	
 
 
-	_Scene.init(width, height);
+	//_Scene.init(width, height);
 
-	while (_Scene.pollEvents())
-	{
-		_Scene.m_cam.update();
-		_Scene.renderFrame();
-		_Window.finish_frame();
-	}
+	//while (_Scene.pollEvents())
+	//{
+	//	_Scene.m_camNode.update();
+	//	_Scene.renderFrame();
+	//	_Window.finish_frame();
+	//}
 	return 0;
 }

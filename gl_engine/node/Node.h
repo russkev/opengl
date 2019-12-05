@@ -6,6 +6,8 @@
 
 #include <glm/glm.hpp>
 
+#include "../camera/Camera.h"
+
 /*
 	
 	Base node class. All other nodes derive from this. It can also be used as a transform node itself.
@@ -34,19 +36,23 @@ public:
 	Node* disconnectChild(const std::string nodeName);
 	glm::mat4 localTransform();
 	glm::mat4 worldTransform();
+	virtual void updateView(Camera*) {};
+	virtual void draw() {};
 
 	// // ----- GETTERS ----- // //
 	const std::string& name() const;
-	const glm::vec3& position() const;
-	const glm::vec3& rotation() const;
-	const glm::vec3& scale() const;
+
+	virtual const glm::vec3 position() const;
+	const glm::vec3 rotation() const;
+	const glm::vec3 scale() const;
+
 	const Node* parent() const;
 	const std::unordered_map<std::string, Node*> children() const;
 
 	// // ----- SETTERS ----- // //
-	glm::vec3& position();
-	glm::vec3& rotation();
-	glm::vec3& scale();
+	virtual void setPosition(const glm::vec3&);
+	virtual void setRotation(const glm::vec3&);
+	virtual void sestScale(const glm::vec3&);
 
 
 private:

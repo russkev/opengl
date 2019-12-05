@@ -8,13 +8,7 @@ const float Camera::m_moveSpeed      = 0.5f;
 const float Camera::m_mouseMoveSpeed = 0.05f;
 const float Camera::m_rotationSpeed  = 0.007f;
 
-Camera::Camera() :
-	m_viewDirection(-0.0, -1.0f, -1.0f),
-	m_camRight(glm::vec3(-1.0f, 0.0f, 0.0f)),
-	//m_yAxis(glm::vec3(0.0f, 1.0f, 0.0f)),
-	m_position(0.0f, 8.0f, 8.0f),
-	m_camUp(cross(m_viewDirection, m_camRight)),
-	m_lookTarget(m_position + m_viewDirection)
+Camera::Camera()
 {}
 
 void Camera::update()
@@ -58,6 +52,9 @@ void  Camera::positionUpdate(const SDL_Scancode& newPosition)
 		break;
 	case SDL_SCANCODE_D:
 		m_position += m_moveSpeed * m_camRight;
+		break;
+	case SDL_SCANCODE_F:
+		focus(glm::mat4(1.0f));
 		break;
 	}
 }
@@ -115,7 +112,7 @@ void Camera::scrollUpdate(const float scrollAmount)
 
 
 
-glm::vec3 Camera::getPosition() const
+const glm::vec3 Camera::position() const
 {
 	return m_position;
 }

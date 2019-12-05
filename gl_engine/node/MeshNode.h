@@ -36,8 +36,8 @@ public:
 	MeshNode(const std::string name, Mesh* mesh, Material* material);
 
 	// // ----- GENERAL METHODS ----- // //
-	void updateView(CameraNode* camera);
-	void draw();
+	void updateView(Camera* camera) override;
+	void draw() override;
 
 };
 

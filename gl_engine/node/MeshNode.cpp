@@ -19,9 +19,9 @@ MeshNode::MeshNode(const std::string name, Mesh* mesh, Material* material) :
 }
 
 
-void MeshNode::updateView(CameraNode* camerNode)
+void MeshNode::updateView(Camera* camerNode)
 {
-	glm::mat4 modelToPerspectiveMatrix = camerNode->camera()->worldToProjectionMatrix() * Node::worldTransform();
+	glm::mat4 modelToPerspectiveMatrix = camerNode->worldToProjectionMatrix() * Node::worldTransform();
 	m_material->setUniform(MODEL_TO_PROJECTION_UNIFORM_NAME, modelToPerspectiveMatrix);
 
 }
