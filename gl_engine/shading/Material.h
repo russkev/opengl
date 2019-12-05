@@ -8,19 +8,19 @@
 	A material node links a shader to various textures and other attributs
 
 */
-struct Material
+struct Material : public Shader
 {
 	// // ----- MEMBER ATTRIBUTES ----- // //
-private:
-	Shader m_shader;
-
+//private:
+//	Shader m_shader;
+//
 	// // ----- CONSTRUCTOR ----- // //
 public:
 	Material() {};
 	Material(const std::string name, const char* vertexShader, const char* fragmentShader);
-
-	// // ----- GETTER ----- // //
-	Shader& shader();
+//
+//	// // ----- GETTER ----- // //
+//	Shader& shader();
 };
 
 #endif

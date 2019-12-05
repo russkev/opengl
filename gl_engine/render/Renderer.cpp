@@ -30,7 +30,16 @@ void Renderer::render()
 }
 
 // // ----- GENERAL METHODS ----- // //
-//void addNode(Node* node);
+void Renderer::addNode(Node* node)
+{
+	auto search = m_root_nodes.find(node->name());
+	if (m_root_nodes.find(node->name()) != m_root_nodes.end())
+	{
+		std::printf("WARNING: \"%s\" not added. Node with that name already exists\n", node->name().c_str());
+		return;
+	}
+	m_root_nodes[node->name()] = node;
+}
 
 // // ----- GETTERS ----- // //
 //const CameraNode* camera() const;

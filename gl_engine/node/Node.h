@@ -13,11 +13,22 @@
 */
 struct Node
 {
+	// // ----- MEMBER VARIABLES ----- // //
+private:
+	std::string m_name;
+	glm::vec3 m_position{ 0.0f, 0.0f, 0.0f };
+	glm::vec3 m_rotation{ 0.0f, 0.0f, 0.0f };
+	glm::vec3 m_scale{ 1.0f, 1.0f, 1.0f };
+
+	Node* m_parent = NULL;
+	std::unordered_map<std::string, Node*> m_children;
+
 	// // ----- CONSTRUCTOR ----- // //
+public:
 	Node() {};
 	Node(const std::string name);
 
-
+	// // ----- GENERAL METHODS ----- // //
 	void addChild(Node* child);
 	void setParent(Node* parent);
 	Node* disconnectChild(const std::string nodeName);
@@ -25,6 +36,7 @@ struct Node
 	glm::mat4 worldTransform();
 
 	// // ----- GETTERS ----- // //
+	const std::string& name() const;
 	const glm::vec3& position() const;
 	const glm::vec3& rotation() const;
 	const glm::vec3& scale() const;
@@ -39,15 +51,6 @@ struct Node
 
 private:
 	void addParent(Node* parent);
-
-private:
-	std::string m_name;
-	glm::vec3 m_position{ 0.0f, 0.0f, 0.0f };
-	glm::vec3 m_rotation{ 0.0f, 0.0f, 0.0f };
-	glm::vec3 m_scale{ 1.0f, 1.0f, 1.0f };
-
-	Node* m_parent = NULL;
-	std::unordered_map<std::string, Node*> m_children;
 };
 
 #endif

@@ -98,6 +98,12 @@ void Node::addParent(Node* parent)
 }
 
 // // ----- GETTERS ----- // //
+const std::string& Node::name() const
+{
+	return m_name;
+}
+
+
 const glm::vec3& Node::position() const
 {
 	return m_position;
