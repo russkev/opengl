@@ -3,12 +3,15 @@
 // // ----- CONSTRUCTOR ----- // //
 Renderer::Renderer(CameraNode* cameraNode) : 
 	m_cameraNode(cameraNode), m_dimensions(cameraNode->dimensions())
-{}
+{
+	initSettings();
+}
 
 Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
 	m_cameraNode(camera), m_dimensions(dimensions)
 {
 	m_cameraNode->setDimensions(dimensions);
+	initSettings();
 }
 
 // // ----- GENERAL METHODS ----- // //
@@ -35,6 +38,7 @@ void Renderer::initSettings()
 //Draw all nodes to screen
 void Renderer::render()
 {
+	//glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	 //Update object to perspective view buffer
 	for (auto const& node : m_root_nodes)
