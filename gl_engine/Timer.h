@@ -12,11 +12,15 @@
 struct Timer
 {
 private:
-	Uint64 m_start = 0;
-	Uint64 m_current = 0;
+	Uint64 m_start = 0, m_current = 0;
 	double m_delta_time_ms = 0.0;
 	double m_multiplier = 1.0;
-	char m_fps[16];
+
+	float m_fps = 0.0f;
+	char m_fps_chars[16];
+	int m_fps_counter = 0;
+	double m_delta_fps_ms = 0.0;
+	float m_fps_update_time_ms = 200.0f;
 
 public:
 	Timer();
@@ -31,6 +35,7 @@ public:
 	const double delta_time_ms() const;
 
 	void set_multiplier(const double multiplier);
+	void set_fps_update_time(const float update_time);
 
 	const char* fps();
 };
