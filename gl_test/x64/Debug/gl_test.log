@@ -1,12 +1,2 @@
-﻿  pch.cpp
-  gl_test.cpp
-  NodeTest.cpp
-  ShaderTest.cpp
-  Test.cpp
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(72): warning C4305: 'initializing': truncation from 'double' to 'float'
-  Compiling...
-  Generating Code...
+﻿  TimerTest.cpp
   gl_test.vcxproj -> C:\Users\kev_k\Documents\_DOCS\PROGRAMMING\OpenGL\repo\opengl\x64\Debug\gl_test.exe
-c:\users\kev_k\documents\_docs\programming\libraries\vcpkg\installed\x64-windows\include\boost\function\function_base.hpp(603): warning C26495: Variable 'boost::function_base::functor' is uninitialized. Always initialize a member variable (type.6).
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\external\glm\glm\detail\type_vec4.inl(182): warning C26495: Variable 'glm::vec<4,float,5>::<anonymous-tag>::<anonymous-tag>::x' is uninitialized. Always initialize a member variable (type.6).
-c:\users\kev_k\documents\_docs\programming\libraries\vcpkg\installed\x64-windows\include\boost\test\tools\assertion.hpp(261): warning C26439: This kind of function may not throw. Declare it 'noexcept' (f.6).

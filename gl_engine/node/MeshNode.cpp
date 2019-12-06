@@ -1,13 +1,10 @@
 #include "MeshNode.h"
 #include "../GL_Tuple_Introspect.h"
 
+#include "../Timer.h"
 
-/*
 
-	Constructor
-	Set member variables and upload mesh vertices and indices buffers
-
-*/
+//Set member variables and upload mesh vertices and indices buffers
 MeshNode::MeshNode(const std::string name, Mesh* mesh, Material* material) :
 	Node(name), m_mesh(mesh), m_material(material)
 {
@@ -28,10 +25,32 @@ void MeshNode::updateView(Camera* camerNode)
 
 void MeshNode::draw()
 {
-	m_material->use();
+	Timer timer;
+	//timer.debug_update();
+	//m_material->use();
+	//timer.debug_update();
+	//glUseProgram(3);
+	timer.update();
 	m_vao.Bind();
+	//timer.debug_update();
+
 	m_indexBuffer.bind(GL_ELEMENT_ARRAY_BUFFER);
+	//timer.debug_update();
+
 	glDrawElements(GL_TRIANGLES, (GLsizei)m_indexBuffer.size(), GL_UNSIGNED_SHORT, 0);
+	//timer.debug_update();
+
+}
+
+
+Mesh* MeshNode::mesh()
+{
+	return m_mesh;
+}
+
+Material* MeshNode::material()
+{
+	return m_material;
 }
 
 

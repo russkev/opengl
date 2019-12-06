@@ -35,7 +35,7 @@
     <ClCompile Include="NodeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderTest.cpp">
+    <ClCompile Include="TimerTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

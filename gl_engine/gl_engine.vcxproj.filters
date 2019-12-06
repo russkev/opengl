@@ -134,6 +134,12 @@
     <None Include="packages.config">
       <Filter>Uncategorised</Filter>
     </None>
+    <None Include="..\data\cShader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\data\cShader.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera\Camera.h">
