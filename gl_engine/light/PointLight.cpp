@@ -8,89 +8,37 @@
 
 
 // // ----- CONSTRUCTORS ----- // //
-PointLight::PointLight()
-{}
 
-PointLight::PointLight(const glm::vec3& position) :
-	m_position(position)
-{}
-
-PointLight::PointLight(const float brightness, const glm::vec3& position) :
-	m_brightness(brightness > 0 ? brightness : 0),
-	m_position(position)
-{}
-
-PointLight::PointLight(const float brightness, const float radius, const glm::vec3& position) :
-	m_brightness(brightness > 0 ? brightness : 0),
-	m_radius(radius > 0 ? radius : 0.1f),
-	m_position(position)
-{}
-
-PointLight::PointLight(const float brightness, const float radius, const glm::vec3& position, const bool displayMesh) :
-	m_brightness(brightness > 0? brightness : 0), 
-	m_radius(radius > 0? radius : 0.1f), 
-	m_position(position),
-	m_displayMesh(displayMesh)
+PointLight::PointLight(const GLfloat brightness, const glm::vec3 color, const float radius) :
+	Light(brightness, color),
+	m_radius(radius > 0 ? radius : 0.1f)
 {}
 
 
 // // ----- GETTERS ----- // //
-const float& PointLight::brightness() const
-{
-	return m_brightness;
-}
-
 const float& PointLight::radius() const
-{
-	return m_brightness;
-}
-
-const glm::vec3& PointLight::position() const
-{
-	return m_position;
-}
-const glm::mat4 PointLight::transformMatrix() const
-{
-	return glm::translate(glm::mat4(), m_position);
-}
-
-const Mesh& PointLight::mesh() const
-{
-	return m_lightMesh;
-}
-
-const GLuint& PointLight::programID() const
-{
-	return m_programID;
-}
-
-// // ----- SETTERS ----- // //
-float& PointLight::brightness()
-{
-	return m_brightness;
-}
-
-float& PointLight::radius()
 {
 	return m_radius;
 }
 
-glm::vec3& PointLight::position()
+const Mesh* PointLight::mesh_ptr() const
 {
-	return m_position;
+	return &m_lightMesh;
+}
+const Shader* PointLight::shader_ptr() const
+{
+	return &m_shader;
 }
 
-void PointLight::transform(const glm::mat4& transformMatrix)
+// // ----- SETTERS ----- // //
+void PointLight::setRadius(const GLfloat radius)
 {
-	m_position = { transformMatrix[3][0], transformMatrix[3][1], transformMatrix[3][2] };
-}
-
-Mesh& PointLight::mesh()
-{
-	return m_lightMesh;
-}
-
-GLuint& PointLight::programID()
-{
-	return m_programID;
+	if (radius < 0)
+	{
+		std::printf("WARNING: unable to set radius to %.3f, can't set to negative", radius);
+	}
+	else
+	{
+		m_radius = radius;
+	}
 }

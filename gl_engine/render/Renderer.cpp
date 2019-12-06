@@ -9,11 +9,12 @@
 Renderer::Renderer(CameraNode* cameraNode) : 
 	m_cameraNode(cameraNode), m_dimensions(cameraNode->dimensions())
 {
+	m_cameraNode->setDimensions(m_dimensions);
 	initSettings();
 }
 
 Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
-	m_cameraNode(camera), m_dimensions(dimensions), m_timer(Timer())
+	m_cameraNode(camera), m_dimensions(dimensions)
 {
 	m_cameraNode->setDimensions(dimensions);
 	initSettings();
@@ -22,6 +23,12 @@ Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
 // // ----- GENERAL METHODS ----- // //
 void Renderer::initSettings()
 {
+	/*
+	
+		!!! Eventually this should be abstracted out to be a part of the material settings
+
+	*/
+
 	// // Dark blue background // //
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 	// // Enable depth test // //
@@ -78,37 +85,14 @@ bool Renderer::pollEvents()
 	return true;
 }
 
-void Renderer::go(Window* window)
+
+void Renderer::update(Window * window, Timer * timer)
 {
-
-	while (pollEvents())
-	{
-		/*
-		
-			Animation section
-
-		*/
-		Node* arrowNode = m_root_nodes["Arrow1"];
-
-		float new_y_rotation = arrowNode->rotation().y + (float)m_timer.delta_time_s() * 10;
-		arrowNode->setRotation({ 0.0, new_y_rotation, 0.0 });
-
-		glm::vec4 newColor = { 0.3, (std::cos(m_timer.total_time_s() * 5) + 1) / 2, 0.8, 1.0 };
-		MeshNode *arrowNode2 = (MeshNode*)arrowNode;
-		arrowNode2->material()->setUniform("uColor", newColor);
-
-
-		/*
-		
-			Normal update section
-
-		*/
-		m_timer.update();
-		m_cameraNode->update();
-		render();
-		window->finish_frame();
-		window->appendTitle(("FPS: " + (std::string)m_timer.fps()));
-	}
+	timer->update();
+	m_cameraNode->update();
+	render();
+	window->finish_frame();
+	window->appendTitle(("FPS: " + (std::string)timer->fps()));
 }
 
 // // ----- GETTERS ----- // //

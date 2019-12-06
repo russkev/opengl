@@ -23,7 +23,8 @@ private:
 	CameraNode* m_cameraNode;
 	std::map<std::string, Node*> m_root_nodes;
 	glm::uvec2 m_dimensions = { 800, 600 };
-	Timer m_timer;
+	//Timer m_timer;
+	//Window* m_window;
 
 public:
 	// // ----- CONSTRUCTOR ----- // //
@@ -37,8 +38,7 @@ public:
 	void initSettings();
 	void addNode(Node* node);
 	bool pollEvents();
-
-	void go(Window*);
+	void update(Window * window, Timer* timer);
 
 	// // ----- GETTERS ----- // //
 	const CameraNode* camera() const;

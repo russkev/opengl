@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
+    <ClCompile Include="light\Light.cpp" />
     <ClCompile Include="light\PointLight.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh\Arrow.cpp" />
@@ -161,6 +162,7 @@
     <ClCompile Include="mesh\Sphere.cpp" />
     <ClCompile Include="mesh\Vertex.cpp" />
     <ClCompile Include="node\CameraNode.cpp" />
+    <ClCompile Include="node\LightNode.cpp" />
     <ClCompile Include="node\MeshNode.cpp" />
     <ClCompile Include="node\Node.cpp" />
     <ClCompile Include="render\Renderer.cpp" />
@@ -191,6 +193,7 @@
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="GL_Tuple_Introspect.h" />
     <ClInclude Include="GL_Type_Traits.h" />
+    <ClInclude Include="light\Light.h" />
     <ClInclude Include="light\PointLight.h" />
     <ClInclude Include="mesh\Arrow.h" />
     <ClInclude Include="mesh\Cube.h" />
@@ -201,6 +204,7 @@
     <ClInclude Include="mesh\Sphere.h" />
     <ClInclude Include="mesh\Vertex.h" />
     <ClInclude Include="node\CameraNode.h" />
+    <ClInclude Include="node\LightNode.h" />
     <ClInclude Include="node\MeshNode.h" />
     <ClInclude Include="node\Node.h" />
     <ClInclude Include="render\Renderer.h" />

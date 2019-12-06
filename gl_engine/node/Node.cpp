@@ -120,3 +120,8 @@ void Node::setScale(const glm::vec3& scale)
 {
 	m_scale = scale;
 }
+
+void Node::setScale(const GLfloat scale)
+{
+	m_scale = { scale, scale, scale };
+}
