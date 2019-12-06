@@ -1,9 +1,11 @@
 #include "Window.h"
 
-Window::Window()
+Window::Window(std::string name, std::vector<opengl_attr_pair> st_config, GLuint width, GLuint height) :
+	m_name(name)
 {
 	if (m_st_window) SDL_DestroyWindow(m_st_window);
 	if (m_st_opengl) SDL_GL_DeleteContext(m_st_opengl);
+	init(st_config, width, height);
 }
 
 
@@ -55,7 +57,7 @@ void Window::init(std::vector<opengl_attr_pair> st_config, GLuint width, GLuint 
 	);
 
 	// // Create window // //
-	m_st_window = SDL_CreateWindow("Tutorial 04 - A Cloured Cube", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
+	m_st_window = SDL_CreateWindow("GL Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
 	assert(m_st_window != nullptr);
 
 	
@@ -90,4 +92,13 @@ void Window::init(std::vector<opengl_attr_pair> st_config, GLuint width, GLuint 
 void Window::finish_frame()
 {
 	SDL_GL_SwapWindow(m_st_window);
+}
+
+void Window::appendTitle(std::string str/*const char* title*/)
+{
+	std::string concat_title_str = (m_name + " | " + str);
+	char concat_title_char[256];
+	strncpy(concat_title_char, concat_title_str.c_str(), sizeof(concat_title_char));
+	
+	SDL_SetWindowTitle(m_st_window, concat_title_char);
 }

@@ -64,18 +64,17 @@ static void __stdcall openglCallbackFunction(
 
 int main(int, char**)
 {
-	Window			_Window;
 	GLuint width	= 800u;
 	GLuint height	= 600u;
-
-	_Window.init(st_config, width, height);
+	Window window("GL Engine", st_config, width, height);
 
 	CameraNode camNode1 = CameraNode("CamNode1");
 	
 	Material material1 = Material("Material", "LightShader.vert", "LightShader.frag");
+	Material material2 = Material("cMat", "cShader.vert", "cShader.frag");
 
 	Mesh mesh1 = Arrow::createArrow();
-	MeshNode meshNode1 = MeshNode("Arrow1", &mesh1, &material1);
+	MeshNode meshNode1 = MeshNode("Arrow1", &mesh1, &material2);
 
 	Mesh mesh2 = Plane::createPlane(10.0f, 10.0f);
 	MeshNode meshNode2 = MeshNode("Plane1", &mesh2, &material1);
@@ -84,7 +83,7 @@ int main(int, char**)
 	Render1.addNode(&meshNode1);
 	Render1.addNode(&meshNode2);
 
-	Render1.go(&_Window);
+	Render1.go(&window);
 
 	return 0;
 }

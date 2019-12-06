@@ -56,8 +56,6 @@ public:
 		Uniform* thisUniform;
 		std::string name_s = name;
 
-		glm::mat4 t1 = glm::mat4(data);
-
 		if (m_uniforms.size() == 0)
 		{
 			printf("WARNING: No uniforms stored in \"%s\". \"%s\" will not be set", m_name.c_str(), name.c_str());
@@ -78,6 +76,7 @@ public:
 		}
 
 		use();
+		//glUniformMatrix4fv(thisUniform->location, 1, false, &data[0][0]);
 		uploadUniform(thisUniform, data);
 	}
 

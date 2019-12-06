@@ -39,6 +39,9 @@ public:
 	void updateView(Camera* camera) override;
 	void draw() override;
 
+	// // ----- GETTER ----- // //
+	Mesh* mesh();
+	Material* material();
 };
 
 #endif

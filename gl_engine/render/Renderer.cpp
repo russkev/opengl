@@ -1,4 +1,9 @@
+#include <stdio.h>
+
 #include "Renderer.h"
+
+#include "../node/MeshNode.h"
+
 
 // // ----- CONSTRUCTOR ----- // //
 Renderer::Renderer(CameraNode* cameraNode) : 
@@ -8,7 +13,7 @@ Renderer::Renderer(CameraNode* cameraNode) :
 }
 
 Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
-	m_cameraNode(camera), m_dimensions(dimensions)
+	m_cameraNode(camera), m_dimensions(dimensions), m_timer(Timer())
 {
 	m_cameraNode->setDimensions(dimensions);
 	initSettings();
@@ -19,7 +24,6 @@ void Renderer::initSettings()
 {
 	// // Dark blue background // //
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-
 	// // Enable depth test // //
 	glEnable(GL_DEPTH_TEST);
 	// // Enable backface culling // //
@@ -76,11 +80,34 @@ bool Renderer::pollEvents()
 
 void Renderer::go(Window* window)
 {
+	//Uint64 counter = 0;
+	//double max_delta_time = 0;
+	//char counter_char[256];
 	while (pollEvents())
 	{
+		Node* arrowNode = m_root_nodes["Arrow1"];
+
+		float new_y_rotation = arrowNode->rotation().y + (float)m_timer.delta_time_s() * 10;
+		arrowNode->setRotation({ 0.0, new_y_rotation, 0.0 });
+
+		glm::vec4 newColor = { 0.3, (std::cos(m_timer.total_time_s() * 5) + 1) / 2, 0.8, 1.0 };
+		MeshNode *arrowNode2 = (MeshNode*)arrowNode;
+		arrowNode2->material()->setUniform("uColor", newColor);
+
+		//counter++;
+		m_timer.update();
+
 		m_cameraNode->update();
 		render();
 		window->finish_frame();
+
+
+
+
+		window->appendTitle(("FPS: " + (std::string)m_timer.fps()));
+		//max_delta_time = m_timer.delta_time_s() > max_delta_time ? m_timer.delta_time_s() : max_delta_time;
+		//sprintf_s(counter_char, "counter: %d, max deltaTime: %.3f", counter, max_delta_time);
+		//window->setTitle(counter_char);
 	}
 }
 
