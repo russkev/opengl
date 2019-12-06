@@ -79,6 +79,10 @@ int main(int, char**)
 	Mesh mesh2 = Plane::createPlane(10.0f, 10.0f);
 	MeshNode meshNode2 = MeshNode("Plane1", &mesh2, &material1);
 
+	MeshNode meshNode3 = MeshNode("Arrow2", &mesh1, &material1);
+	meshNode3.setPosition({ 5.0, 0.0, 0.0 });
+	meshNode3.setParent(&meshNode1);
+
 	Renderer Render1 = Renderer(&camNode1, glm::uvec2(width, height));
 	Render1.addNode(&meshNode1);
 	Render1.addNode(&meshNode2);

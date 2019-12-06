@@ -80,11 +80,14 @@ bool Renderer::pollEvents()
 
 void Renderer::go(Window* window)
 {
-	//Uint64 counter = 0;
-	//double max_delta_time = 0;
-	//char counter_char[256];
+
 	while (pollEvents())
 	{
+		/*
+		
+			Animation section
+
+		*/
 		Node* arrowNode = m_root_nodes["Arrow1"];
 
 		float new_y_rotation = arrowNode->rotation().y + (float)m_timer.delta_time_s() * 10;
@@ -94,20 +97,17 @@ void Renderer::go(Window* window)
 		MeshNode *arrowNode2 = (MeshNode*)arrowNode;
 		arrowNode2->material()->setUniform("uColor", newColor);
 
-		//counter++;
-		m_timer.update();
 
+		/*
+		
+			Normal update section
+
+		*/
+		m_timer.update();
 		m_cameraNode->update();
 		render();
 		window->finish_frame();
-
-
-
-
 		window->appendTitle(("FPS: " + (std::string)m_timer.fps()));
-		//max_delta_time = m_timer.delta_time_s() > max_delta_time ? m_timer.delta_time_s() : max_delta_time;
-		//sprintf_s(counter_char, "counter: %d, max deltaTime: %.3f", counter, max_delta_time);
-		//window->setTitle(counter_char);
 	}
 }
 
