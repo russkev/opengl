@@ -26,19 +26,12 @@ void MeshNode::updateView(Camera* camerNode)
 void MeshNode::draw()
 {
 	Timer timer;
-	//timer.debug_update();
-	//m_material->use();
-	//timer.debug_update();
-	//glUseProgram(3);
 	timer.update();
 	m_vao.Bind();
-	//timer.debug_update();
 
 	m_indexBuffer.bind(GL_ELEMENT_ARRAY_BUFFER);
-	//timer.debug_update();
 
 	glDrawElements(GL_TRIANGLES, (GLsizei)m_indexBuffer.size(), GL_UNSIGNED_SHORT, 0);
-	//timer.debug_update();
 
 }
 
