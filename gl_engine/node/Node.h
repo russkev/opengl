@@ -47,12 +47,13 @@ public:
 	const glm::vec3 scale() const;
 
 	const Node* parent() const;
-	const std::unordered_map<std::string, Node*> children() const;
+	std::unordered_map<std::string, Node*>& children();
+
 
 	// // ----- SETTERS ----- // //
 	virtual void setPosition(const glm::vec3&);
 	virtual void setRotation(const glm::vec3&);
-	virtual void sestScale(const glm::vec3&);
+	virtual void setScale(const glm::vec3&);
 
 
 private:

@@ -27,6 +27,7 @@ void Node::addChild(Node* child)
 void Node::setParent(Node* parent)
 {
 	m_parent = parent;
+	parent->addChild(this);
 }
 
 // Disconnect child and return a pointer to that child. 
@@ -99,7 +100,7 @@ const Node* Node::parent() const
 	return m_parent;
 }
 
-const std::unordered_map<std::string, Node*> Node::children() const
+std::unordered_map<std::string, Node*>& Node::children()
 {
 	return m_children;
 }
@@ -115,7 +116,7 @@ void Node::setRotation(const glm::vec3& rotation)
 	m_rotation = rotation;
 }
 
-void Node::sestScale(const glm::vec3& scale)
+void Node::setScale(const glm::vec3& scale)
 {
 	m_scale = scale;
 }
