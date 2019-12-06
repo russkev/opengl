@@ -111,6 +111,12 @@
     <ClCompile Include="node\CameraNode.cpp">
       <Filter>Node</Filter>
     </ClCompile>
+    <ClCompile Include="light\Light.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="node\LightNode.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\SimpleFragmentShader.frag">
@@ -224,6 +230,12 @@
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="node\CameraNode.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="light\Light.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="node\LightNode.h">
       <Filter>Node</Filter>
     </ClInclude>
   </ItemGroup>

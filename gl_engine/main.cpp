@@ -9,9 +9,11 @@
 #include "shading/Material.h"
 #include "mesh/Mesh.h"
 #include "mesh/Sphere.h"
-#include "render/Renderer.h"
 #include "mesh/Arrow.h"
 #include "mesh/Plane.h"
+#include "mesh/obj.h"
+#include "render/Renderer.h"
+#include "Timer.h"
 
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -70,24 +72,35 @@ int main(int, char**)
 
 	CameraNode camNode1 = CameraNode("CamNode1");
 	
-	Material material1 = Material("Material", "LightShader.vert", "LightShader.frag");
-	Material material2 = Material("cMat", "cShader.vert", "cShader.frag");
+	Material whiteMat = Material("Material", "LightShader.vert", "LightShader.frag");
+	Material cShadMat = Material("cMat", "cShader.vert", "cShader.frag");
 
-	Mesh mesh1 = Arrow::createArrow();
-	MeshNode meshNode1 = MeshNode("Arrow1", &mesh1, &material2);
+	Mesh arrow1 = Arrow::createArrow();
+	MeshNode arrow1_node = MeshNode("Arrow1", &arrow1, &cShadMat);
 
-	Mesh mesh2 = Plane::createPlane(10.0f, 10.0f);
-	MeshNode meshNode2 = MeshNode("Plane1", &mesh2, &material1);
+	Mesh plane = Plane::createPlane(10.0f, 10.0f);
+	MeshNode plane_node = MeshNode("Plane1", &plane, &whiteMat);
 
-	MeshNode meshNode3 = MeshNode("Arrow2", &mesh1, &material1);
-	meshNode3.setPosition({ 5.0, 0.0, 0.0 });
-	meshNode3.setParent(&meshNode1);
+	MeshNode arrow2_node = MeshNode("Arrow2", &arrow1, &whiteMat);
+	arrow2_node.setPosition({ 5.0, 0.0, 0.0 });
+	arrow2_node.setParent(&arrow1_node);
 
-	Renderer Render1 = Renderer(&camNode1, glm::uvec2(width, height));
-	Render1.addNode(&meshNode1);
-	Render1.addNode(&meshNode2);
+	Renderer render = Renderer(&camNode1, glm::uvec2(width, height));
+	render.addNode(&arrow1_node);
+	render.addNode(&plane_node);
 
-	Render1.go(&window);
+	Timer timer;
+
+	while (render.pollEvents())
+	{
+		float new_y_rotation = arrow1_node.rotation().y + (float)timer.delta_time_s() * 10;
+		arrow1_node.setRotation({ 0.0, new_y_rotation, 0.0 });
+
+		glm::vec4 newColor = { 0.3, (std::cos(timer.total_time_s() * 5) + 1) / 2, 0.8, 1.0 };
+		arrow1_node.material()->setUniform("uColor", newColor);
+
+		render.update(&window, &timer);
+	}
 
 	return 0;
 }

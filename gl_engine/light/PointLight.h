@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include "Light.h"
+
 #include "../shading/LoadShader.h"
 #include "../mesh/Sphere.h"
 #include "../mesh/Cube.h"
@@ -10,38 +12,22 @@
 	Emits light in all directions.
 	Uses sphere mesh to display location and size in scene
 */
-
-struct PointLight
+struct PointLight : Light
 {
+	// // ----- MEMBER VARIABLES ----- // //
+private:
+	float m_radius = 1.0f;
+	Mesh m_lightMesh = Sphere::createSphere(1.0f);
+	const static Shader m_shader;
+
 	// // ----- CONSTRUCTORS ----- // //
-	PointLight();
-	PointLight(const glm::vec3& position);
-	PointLight(const float brightness, const glm::vec3& position);
-	PointLight(const float brightness, const float radius, const glm::vec3& position);
-	PointLight(const float brightness, const float radius, const glm::vec3& position, const bool displayMesh); 
+	PointLight(const float brightness, const glm::vec3 color, const GLfloat radius);
 
 	// // ----- GETTERS ----- // //
-	const float& brightness() const;
 	const float& radius() const;
-	const glm::vec3& position() const;
-	const glm::mat4 transformMatrix() const;
-	const Mesh& mesh() const;
-	const GLuint& programID() const;
+	const Mesh* mesh_ptr() const;
+	const Shader* shader_ptr() const;
 
 	// // ----- SETTERS ----- // //
-	float& brightness();
-	float& radius();
-	glm::vec3& position();
-	void transform(const glm::mat4&);
-	Mesh& mesh();
-	GLuint& programID();
-
-
-private:
-	float m_brightness		= 1.0f;
-	float m_radius			= 1.0f;
-	glm::vec3 m_position	= { 0.0f, 0.0f, 0.0f };
-	bool m_displayMesh		= true;
-	Mesh m_lightMesh		= Sphere::createSphere(1.0f);
-	GLuint m_programID;
+	void setRadius(const GLfloat radius);
 };

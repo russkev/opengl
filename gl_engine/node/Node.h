@@ -54,6 +54,7 @@ public:
 	virtual void setPosition(const glm::vec3&);
 	virtual void setRotation(const glm::vec3&);
 	virtual void setScale(const glm::vec3&);
+	virtual void setScale(const GLfloat scale);
 
 
 private:
