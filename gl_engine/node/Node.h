@@ -42,6 +42,7 @@ public:
 	Node* disconnectChild(const std::string nodeName);
 	const glm::mat4 localTransform();
 	const glm::mat4 worldTransform();
+	const glm::mat3 worldNormalTransform();
 
 	virtual void update_view(Camera*) {};
 	virtual void draw() {};
@@ -70,3 +71,5 @@ private:
 };
 
 #endif
+
+const glm::mat3 worldNormalTransform();

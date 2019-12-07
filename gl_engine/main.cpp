@@ -78,16 +78,17 @@ int main(int, char**)
 
 	Mesh shaderBall = OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
 	MeshNode shaderBall_node = MeshNode("shader ball", &shaderBall, &cShadMat);
+	shaderBall_node.setScale({ 1.0, 10.0, 1.0 });
 
-	Mesh plane = Plane::createPlane(10.0f, 10.0f, 20, 20);
+	Mesh plane = Plane::createPlane(100.0f, 100.0f);
 	MeshNode plane_node = MeshNode("Plane1", &plane, &cShadMat);
 
 	PointLight pointLight = PointLight(1.0f, { 1.0f, 0.5f, 0.3f }, 0.5f);
 	LightNode pointLight_node = LightNode("pointLight1", &pointLight);
-	pointLight_node.setPosition({ -6.0f, 0.5f, 0.0f });
+	pointLight_node.setPosition({ -6.0f, 3.0f, 0.0f });
 
 	Node lightRotate1 = Node("light rotate 01");
-	lightRotate1.addChild(&pointLight_node);
+	//lightRotate1.addChild(&pointLight_node);
 
 	Node lightRotate2 = Node("light rotate 02");
 	lightRotate2.addChild(&lightRotate1);

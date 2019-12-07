@@ -43,6 +43,8 @@ void Renderer::initSettings()
 	// // Enable alpha
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	// // Enable gamma correction
+	glEnable(GL_FRAMEBUFFER_SRGB);
 }
 
 
@@ -54,12 +56,13 @@ void Renderer::render()
 	 //Update object to perspective view buffer
 	for (auto const& node : m_root_nodes)
 	{
+		glm::vec3 lightWorldPosition = m_lightNode->worldPosition();
+
 		node.second->update_view(m_cameraNode);
 		if (MeshNode* derived_meshNode = dynamic_cast<MeshNode*>(node.second))
 		{
 			if (derived_meshNode->material()->containsUniform("light_position"))
 			{
-				glm::vec3 lightWorldPosition = m_lightNode->worldPosition();
 				derived_meshNode->material()->setUniform("light_position", m_lightNode->worldPosition());
 			}
 		}
