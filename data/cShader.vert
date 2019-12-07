@@ -13,6 +13,7 @@ in layout(location = 6 ) vec3 model_vertexBitangent;
 // // UNIFORMS // //
 uniform mat4 mat_modelToProjection;
 uniform mat4 mat_modelToWorld;
+uniform mat3 mat_modelToWorld_normal;
 uniform mat4 mat_worldToCam;
 uniform vec3 light_position;
 uniform vec3 cam_position;
@@ -31,7 +32,9 @@ out vec3 camSpace_normalDirection;
 void send_worldSpaceCoordinates()
 {
 	worldSpace_vertexPosition	= (mat_modelToWorld * vec4(model_vertexPosition, 1.0)).xyz;
-	worldSpace_vertexNormal		= (mat_modelToWorld * vec4(model_vertexNormal,   1.0)).xyz;
+	worldSpace_vertexNormal		= (mat_modelToWorld * vec4(model_vertexNormal,   0.0)).xyz;
+	//worldSpace_vertexNormal		= mat_modelToWorld_normal * model_vertexNormal;
+
 }
 
 void send_camSpaceCoordinates()

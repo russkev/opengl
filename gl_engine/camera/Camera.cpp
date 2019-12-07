@@ -24,43 +24,49 @@ void Camera::update()
 	auto axisDelta				= glm::vec3();
 	auto rotateDelta			= glm::vec2();
 
-	if (mouseButton & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+	if (mouseButton & SDL_BUTTON(SDL_BUTTON_LEFT)) 
+	{
 		rotateDelta = (glm::vec2)mouseDelta;
 	}
-	if (mouseButton & SDL_BUTTON(SDL_BUTTON_MIDDLE)) {
+	if (mouseButton & SDL_BUTTON(SDL_BUTTON_MIDDLE)) 
+	{
 		axisDelta.x = -(float)mouseDelta.x;
 		axisDelta.y = (float)mouseDelta.y;
 	}
 
-	if (mouseButton & SDL_BUTTON(SDL_BUTTON_RIGHT)) {
+	if (mouseButton & SDL_BUTTON(SDL_BUTTON_RIGHT)) 
+	{
 		axisDelta.z = (float)mouseDelta.y;
-
+	}
+	if (keyboardState[SDL_SCANCODE_F])
+	{
+		focus(glm::mat4(1.0f));
 	}
 	moveRel(axisDelta * cMoveSpeed);
 	rotateRel(rotateDelta * cRotateSpeed);
 }
 
-void  Camera::positionUpdate(const SDL_Scancode& newPosition) 
-{
-	switch (newPosition) 
-	{
-	case SDL_SCANCODE_W:
-		m_position += MOVE_SPEED * m_viewDirection;
-		break;
-	case SDL_SCANCODE_S:
-		m_position += -MOVE_SPEED * m_viewDirection;
-		break;
-	case SDL_SCANCODE_A:
-		m_position += -MOVE_SPEED * m_camRight;
-		break;
-	case SDL_SCANCODE_D:
-		m_position += MOVE_SPEED * m_camRight;
-		break;
-	case SDL_SCANCODE_F:
-		focus(glm::mat4(1.0f));
-		break;
-	}
-}
+//void  Camera::positionUpdate(const SDL_Scancode& newPosition) 
+//{
+//	switch (newPosition) 
+//	{
+//	case SDL_SCANCODE_W:
+//		m_position += MOVE_SPEED * m_viewDirection;
+//		break;
+//	case SDL_SCANCODE_S:
+//		m_position += -MOVE_SPEED * m_viewDirection;
+//		break;
+//	case SDL_SCANCODE_A:
+//		m_position += -MOVE_SPEED * m_camRight;
+//		break;
+//	case SDL_SCANCODE_D:
+//		m_position += MOVE_SPEED * m_camRight;
+//		break;
+//	case SDL_SCANCODE_F:
+//		focus(glm::mat4(1.0f));
+//		break;
+//	}
+//}
 
 void Camera::moveRel(const glm::vec3& mouseDelta)
 {

@@ -3,9 +3,9 @@
 #include "../Timer.h"
 
 const std::string MeshNode::U_MODEL_TO_WORLD = "mat_modelToWorld";
+const std::string MeshNode::U_MODEL_TO_WORLD_NORMAL = "mat_modelToWorld_normal";
 const std::string MeshNode::U_WORLD_TO_CAM  = "mat_worldToCam";
 const std::string MeshNode::U_CAM = "cam_position";
-
 
 
 //Set member variables and upload mesh vertices and indices buffers
@@ -23,8 +23,10 @@ MeshNode::MeshNode(const std::string name, Mesh* mesh, Material* material) :
 void MeshNode::update_view(Camera* camera)
 {
 	glm::mat4 modelToPerspective_matrix = camera->worldToProjection_matrix() * Node::worldTransform();
+
 	m_material->setUniform(U_MODEL_TO_PROJECTION, modelToPerspective_matrix);
 	m_material->setUniform(U_MODEL_TO_WORLD, Node::worldTransform());
+	m_material->setUniform(U_MODEL_TO_WORLD_NORMAL, Node::worldNormalTransform());
 	m_material->setUniform(U_WORLD_TO_CAM, camera->worldToCam_matrix());
 	m_material->setUniform(U_CAM, camera->position());
 

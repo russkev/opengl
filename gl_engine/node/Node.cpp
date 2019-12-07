@@ -72,6 +72,11 @@ const glm::mat4 Node::worldTransform()
 	return outTransform;
 }
 
+const glm::mat3 Node::worldNormalTransform()
+{
+	return glm::mat3(glm::transpose(glm::inverse(worldTransform())));
+}
+
 void Node::addParent(Node* parent)
 {
 	m_parent = parent;
