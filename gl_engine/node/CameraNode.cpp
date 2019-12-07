@@ -43,12 +43,12 @@ void CameraNode::setPosition(const glm::vec3& position)
 	Node::setPosition(position);
 }
 
-glm::mat4 CameraNode::worldToViewMatrix()
+glm::mat4 CameraNode::worldToCam_matrix()
 {
-	return Camera::worldToViewMatrix() * Node::worldTransform();
+	return Camera::worldToCam_matrix() * Node::worldTransform();
 }
 
-glm::mat4 CameraNode::worldToProjectionMatrix()
+glm::mat4 CameraNode::worldToProjection_matrix()
 {
-	return Camera::worldToProjectionMatrix() * Node::worldTransform();
+	return Camera::worldToProjection_matrix() * Node::worldTransform();
 }

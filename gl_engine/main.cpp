@@ -74,42 +74,42 @@ int main(int, char**)
 
 	CameraNode camNode1 = CameraNode("CamNode1");
 	
-	Material whiteMat = Material("Material", "LightShader.vert", "LightShader.frag");
 	Material cShadMat = Material("cMat", "cShader.vert", "cShader.frag");
 
-	Mesh arrow1 = Arrow::createArrow();
-	MeshNode arrow1_node = MeshNode("Arrow1", &arrow1, &cShadMat);
+	Mesh shaderBall = OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
+	MeshNode shaderBall_node = MeshNode("shader ball", &shaderBall, &cShadMat);
 
-	Mesh plane = Plane::createPlane(10.0f, 10.0f);
-	MeshNode plane_node = MeshNode("Plane1", &plane, &whiteMat);
-
-	MeshNode arrow2_node = MeshNode("Arrow2", &arrow1, &whiteMat);
-	arrow2_node.setPosition({ 5.0, 0.0, 0.0 });
-	arrow2_node.setParent(&arrow1_node);
-
-	Mesh sphere = Sphere::createSphere(2.0);
-	MeshNode sphere_node = MeshNode("Sphere1", &sphere, &cShadMat);
-	sphere_node.setPosition({ 0.0, 2.0, 0.0 });
+	Mesh plane = Plane::createPlane(10.0f, 10.0f, 20, 20);
+	MeshNode plane_node = MeshNode("Plane1", &plane, &cShadMat);
 
 	PointLight pointLight = PointLight(1.0f, { 1.0f, 0.5f, 0.3f }, 0.5f);
 	LightNode pointLight_node = LightNode("pointLight1", &pointLight);
-	pointLight_node.setPosition({ 0.0f, 3.0f, 8.0f });
+	pointLight_node.setPosition({ -6.0f, 0.5f, 0.0f });
+
+	Node lightRotate1 = Node("light rotate 01");
+	lightRotate1.addChild(&pointLight_node);
+
+	Node lightRotate2 = Node("light rotate 02");
+	lightRotate2.addChild(&lightRotate1);
+	lightRotate2.setPosition({ 2.0, 0.0, 0.0 });
 
 	Renderer render = Renderer(&camNode1, glm::uvec2(width, height));
-	render.addNode(&arrow1_node);
+	render.addNode(&shaderBall_node);
 	render.addNode(&plane_node);
-	render.addNode(&sphere_node);
 	render.addLightNode(&pointLight_node);
 
 	Timer timer;
 
 	while (render.pollEvents())
 	{
-		float new_y_rotation = arrow1_node.rotation().y + (float)timer.delta_time_s() * 10;
-		arrow1_node.setRotation({ 0.0, new_y_rotation, 0.0 });
+		float new_y_rotation = shaderBall_node.rotation().y + (float)timer.delta_time_s() * 30;
+		shaderBall_node.setRotation({ 0.0, new_y_rotation, 0.0 });
 
-		glm::vec4 newColor = { 0.3, (std::cos(timer.total_time_s() * 5) + 1) / 2, 0.8, 1.0 };
-		arrow1_node.material()->setUniform("uColor", newColor);
+		float l1_rotate = lightRotate1.rotation().z + (float)timer.delta_time_s() * 100;
+		lightRotate1.setRotation({ 0.0 , 0.0, l1_rotate });
+
+		float l2_rotate = lightRotate2.rotation().y - (float)timer.delta_time_s() * 60;
+		lightRotate2.setRotation({ 0.0, l2_rotate, 0.0 });
 
 		render.update(&window, &timer);
 	}

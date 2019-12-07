@@ -59,9 +59,9 @@ public:
 	//GLfloat m_clipNear = 0.1f;
 	//GLfloat m_clipFar = 100.0f;
 	//GLfloat m_angleOfView = 60.0f; // In degrees
-	virtual glm::mat4 worldToViewMatrix();
+	virtual glm::mat4 worldToCam_matrix();
 	glm::mat4 viewToProjectionMatrix();
-	virtual glm::mat4 worldToProjectionMatrix();
+	virtual glm::mat4 worldToProjection_matrix();
 
 
 	// // ----- SETTERS ----- // //

@@ -58,7 +58,10 @@ void Renderer::render()
 		if (MeshNode* derived_meshNode = dynamic_cast<MeshNode*>(node.second))
 		{
 			if (derived_meshNode->material()->containsUniform("light_position"))
-			derived_meshNode->material()->setUniform("light_position", m_lightNode->worldPosition());
+			{
+				glm::vec3 lightWorldPosition = m_lightNode->worldPosition();
+				derived_meshNode->material()->setUniform("light_position", m_lightNode->worldPosition());
+			}
 		}
 		node.second->draw();
 	}
