@@ -32,6 +32,11 @@ const glm::vec3 CameraNode::position() const
 {
 	return glm::vec3(Camera::position() + Node::position());
 }
+const glm::vec3 CameraNode::worldPosition()
+{
+	glm::mat4 wTransform = worldTransform();
+	return Camera::position() + glm::vec3(wTransform[3][0], wTransform[3][1], wTransform[3][2]);
+}
 
 void CameraNode::setPosition(const glm::vec3& position)
 {

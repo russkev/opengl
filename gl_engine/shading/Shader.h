@@ -6,6 +6,7 @@
 #include <string>
 #include <stdexcept>
 #include <stdio.h>
+#include <set>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
@@ -35,6 +36,7 @@ private:
 	std::string m_name;
 	GLuint m_programID;
 	std::map<std::string, Uniform> m_uniforms;
+	std::set<std::string> hasBeenWarned;
 
 	// // ----- CONSTRUCTOR ----- // //
 public:
@@ -42,13 +44,10 @@ public:
 	Shader(const std::string& name, const char* vertexShader, const char* fragmentShader);
 
 	// // ----- GENERAL METHODS ----- // //
-	/*
-
-		Set uniform of shader.
-		Automatically choose correct upload path based on data type
-		Defined in header because of template usage
-
-	*/
+	
+	// Set uniform of shader.
+	// Automatically choose correct upload path based on data type
+	// Defined in header because of template usage
 	template<typename T>
 	void setUniform(const std::string& name, T data)
 	{
@@ -58,7 +57,12 @@ public:
 
 		if (m_uniforms.size() == 0)
 		{
-			printf("WARNING: No uniforms stored in \"%s\". \"%s\" will not be set", m_name.c_str(), name.c_str());
+			if (hasBeenWarned.find(name_s) == hasBeenWarned.end())
+			{
+				printf("WARNING: No uniforms stored in \"%s\". \"%s\" will not be set\n", m_name.c_str(), name.c_str());
+				hasBeenWarned.insert(name_s);
+			}
+			return;
 		}
 		try
 		{
@@ -66,21 +70,29 @@ public:
 		}
 		catch (const std::out_of_range& e)
 		{
-			printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Uniform not found (%s)\n", name_s.c_str(), m_name.c_str(), e.what());
+			if (hasBeenWarned.find(name_s) == hasBeenWarned.end())
+			{
+				printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Uniform not found (%s)\n", name_s.c_str(), m_name.c_str(), e.what());
+				hasBeenWarned.insert(name_s);
+			}
 			return;
 		}
 		if (thisUniform->type != dataEnumType)
 		{
-			printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Incorrect data type\n", name.c_str(), m_name.c_str());
+			if (hasBeenWarned.find(name_s) == hasBeenWarned.end())
+			{
+				printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Incorrect data type\n", name.c_str(), m_name.c_str());
+				hasBeenWarned.insert(name_s);
+			}
 			return;
 		}
 
 		use();
-		//glUniformMatrix4fv(thisUniform->location, 1, false, &data[0][0]);
 		uploadUniform(thisUniform, data);
 	}
 
 	void use();
+	bool containsUniform(const std::string uniform_name);
 
 
 private:

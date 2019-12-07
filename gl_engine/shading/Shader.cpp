@@ -17,6 +17,11 @@ void Shader::use()
 	glUseProgram(m_programID);
 }
 
+bool Shader::containsUniform(std::string uniform_name)
+{
+	return m_uniforms.find(uniform_name) != m_uniforms.end();
+}
+
 
 //Get all the uniforms from the shader and store their information with the shader
 void Shader::fetchUniforms()

@@ -6,13 +6,19 @@
 #include "PointLight.h"
 
 
+// // ----- STATICS ----- // //
+
+//Shader PointLight::m_shader = Shader("lightShader", "LightMesh.vert", "LightMesh.frag");
 
 // // ----- CONSTRUCTORS ----- // //
 
-PointLight::PointLight(const GLfloat brightness, const glm::vec3 color, const float radius) :
+PointLight::PointLight(const GLfloat brightness, const glm::vec3 color, const GLfloat radius) :
 	Light(brightness, color),
-	m_radius(radius > 0 ? radius : 0.1f)
-{}
+	m_radius(radius > 0 ? radius : 0.1f),
+	m_light_mesh(Sphere::createSphere(m_radius))
+{
+	m_shader = Shader("lightShader", "lightShader.vert", "lightShader.frag");
+}
 
 
 // // ----- GETTERS ----- // //
@@ -21,11 +27,11 @@ const float& PointLight::radius() const
 	return m_radius;
 }
 
-const Mesh* PointLight::mesh_ptr() const
+Mesh* PointLight::mesh_ptr()
 {
-	return &m_lightMesh;
+	return &m_light_mesh;
 }
-const Shader* PointLight::shader_ptr() const
+Shader* PointLight::shader_ptr()
 {
 	return &m_shader;
 }

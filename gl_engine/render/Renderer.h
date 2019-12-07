@@ -9,6 +9,7 @@
 #include "../Window.h"
 #include "../node/Node.h"
 #include "../node/CameraNode.h"
+#include "../node/LightNode.h"
 
 
 /*
@@ -21,6 +22,7 @@ struct Renderer
 private:
 	// // ----- MEMBER VARIABLES ----- // //
 	CameraNode* m_cameraNode;
+	LightNode* m_lightNode;
 	std::map<std::string, Node*> m_root_nodes;
 	glm::uvec2 m_dimensions = { 800, 600 };
 	//Timer m_timer;
@@ -37,6 +39,7 @@ public:
 	// // ----- GENERAL METHODS ----- // //
 	void initSettings();
 	void addNode(Node* node);
+	void addLightNode(LightNode* lightNode);
 	bool pollEvents();
 	void update(Window * window, Timer* timer);
 

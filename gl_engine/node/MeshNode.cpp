@@ -1,8 +1,8 @@
 #include "MeshNode.h"
-#include "../GL_Tuple_Introspect.h"
 
 #include "../Timer.h"
 
+const std::string MeshNode::U_MODEL_TO_WORLD = "mat_modelToWorld";
 
 //Set member variables and upload mesh vertices and indices buffers
 MeshNode::MeshNode(const std::string name, Mesh* mesh, Material* material) :
@@ -16,14 +16,15 @@ MeshNode::MeshNode(const std::string name, Mesh* mesh, Material* material) :
 }
 
 
-void MeshNode::updateView(Camera* cameraNode)
+void MeshNode::update_view(Camera* camera)
 {
-	glm::mat4 modelToPerspectiveMatrix = cameraNode->worldToProjectionMatrix() * Node::worldTransform();
-	m_material->setUniform(MODEL_TO_PROJECTION_UNIFORM_NAME, modelToPerspectiveMatrix);
+	glm::mat4 modelToPerspectiveMatrix = camera->worldToProjectionMatrix() * Node::worldTransform();
+	m_material->setUniform(U_MODEL_TO_PROJECTION, modelToPerspectiveMatrix);
+	m_material->setUniform(U_MODEL_TO_WORLD, Node::worldTransform());
 
 	for (auto child : Node::children())
 	{
-		child.second->updateView(cameraNode);
+		child.second->update_view(camera);
 	}
 
 }

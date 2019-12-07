@@ -4,6 +4,10 @@
 
 #include "../utils/VectorUtils.h"
 
+
+const std::string Node::U_MODEL_TO_PROJECTION = "mat_modelToProjection";
+
+
 Node::Node(const std::string name) : m_name(name)
 {}
 
@@ -44,13 +48,13 @@ Node* Node::disconnectChild(const std::string childName)
 }
 
 // Calculate the transform matrix in local space
-glm::mat4 Node::localTransform()
+const glm::mat4 Node::localTransform()
 {
 	return VectorUtils::trs(glm::mat3{ m_position, m_rotation, m_scale });
 }
 
 // Calculate the transform matrix in world space
-glm::mat4 Node::worldTransform()
+const glm::mat4 Node::worldTransform()
 {
 	//return localTransform();
 
@@ -83,6 +87,12 @@ const std::string& Node::name() const
 const glm::vec3 Node::position() const
 {
 	return m_position;
+}
+
+const glm::vec3 Node::worldPosition()
+{
+	glm::mat4 wTransform = worldTransform();
+	return glm::vec3(wTransform[3][0], wTransform[3][1], wTransform[3][2]);
 }
 
 const glm::vec3 Node::rotation() const

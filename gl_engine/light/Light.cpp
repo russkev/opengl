@@ -16,13 +16,12 @@ const glm::vec3& Light::color() const
 	return m_color;
 }
 
-const Mesh* Light::mesh_ptr() const
+Mesh* Light::mesh_ptr()
 {
 	return NULL;
 }
 
-const Shader* Light::shader_ptr() const
-{
+Shader* Light::shader_ptr() {
 	return NULL;
 }
 

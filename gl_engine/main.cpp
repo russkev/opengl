@@ -5,6 +5,7 @@
 
 #include "node/Node.h"
 #include "node/MeshNode.h"
+#include "node/LightNode.h"
 #include "shading/Shader.h"
 #include "shading/Material.h"
 #include "mesh/Mesh.h"
@@ -12,6 +13,7 @@
 #include "mesh/Arrow.h"
 #include "mesh/Plane.h"
 #include "mesh/obj.h"
+#include "light/PointLight.h"
 #include "render/Renderer.h"
 #include "Timer.h"
 
@@ -85,9 +87,19 @@ int main(int, char**)
 	arrow2_node.setPosition({ 5.0, 0.0, 0.0 });
 	arrow2_node.setParent(&arrow1_node);
 
+	Mesh sphere = Sphere::createSphere(2.0);
+	MeshNode sphere_node = MeshNode("Sphere1", &sphere, &cShadMat);
+	sphere_node.setPosition({ 0.0, 2.0, 0.0 });
+
+	PointLight pointLight = PointLight(1.0f, { 1.0f, 0.5f, 0.3f }, 0.5f);
+	LightNode pointLight_node = LightNode("pointLight1", &pointLight);
+	pointLight_node.setPosition({ 0.0f, 3.0f, 8.0f });
+
 	Renderer render = Renderer(&camNode1, glm::uvec2(width, height));
 	render.addNode(&arrow1_node);
 	render.addNode(&plane_node);
+	render.addNode(&sphere_node);
+	render.addLightNode(&pointLight_node);
 
 	Timer timer;
 
