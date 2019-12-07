@@ -19,6 +19,10 @@
 struct MeshNode : public Node
 {
 	static const std::string U_MODEL_TO_WORLD;
+	static const std::string U_WORLD_TO_CAM;
+	static const std::string U_CAM;
+
+
 	// // ----- MEMBER VARIABLES ----- // //
 private:
 	Mesh* m_mesh;

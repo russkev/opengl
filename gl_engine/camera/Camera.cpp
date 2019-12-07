@@ -127,7 +127,7 @@ const glm::uvec2& Camera::dimensions() const
 	return m_dimensions;
 }
 
-glm::mat4 Camera::worldToViewMatrix() 
+glm::mat4 Camera::worldToCam_matrix() 
 {
 	return glm::lookAt(m_position, m_lookTarget, m_camUp);
 }
@@ -137,9 +137,9 @@ glm::mat4 Camera::viewToProjectionMatrix()
 	return glm::perspective(glm::radians(m_angleOfView), (GLfloat)m_dimensions.x / (GLfloat)m_dimensions.y, m_clipNear, m_clipFar);
 }
 
-glm::mat4 Camera::worldToProjectionMatrix()  
+glm::mat4 Camera::worldToProjection_matrix()  
 {
-	return viewToProjectionMatrix() * worldToViewMatrix();
+	return viewToProjectionMatrix() * worldToCam_matrix();
 }
 
 

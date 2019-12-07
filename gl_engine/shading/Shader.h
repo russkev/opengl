@@ -36,7 +36,9 @@ private:
 	std::string m_name;
 	GLuint m_programID;
 	std::map<std::string, Uniform> m_uniforms;
-	std::set<std::string> hasBeenWarned;
+	std::set<std::string> m_hasBeenWarned;
+	std::set<std::string> m_used;
+	//std::set<std::string> m_not_used;
 
 	// // ----- CONSTRUCTOR ----- // //
 public:
@@ -57,10 +59,10 @@ public:
 
 		if (m_uniforms.size() == 0)
 		{
-			if (hasBeenWarned.find(name_s) == hasBeenWarned.end())
+			if (m_hasBeenWarned.find(name_s) == m_hasBeenWarned.end())
 			{
 				printf("WARNING: No uniforms stored in \"%s\". \"%s\" will not be set\n", m_name.c_str(), name.c_str());
-				hasBeenWarned.insert(name_s);
+				m_hasBeenWarned.insert(name_s);
 			}
 			return;
 		}
@@ -70,19 +72,19 @@ public:
 		}
 		catch (const std::out_of_range& e)
 		{
-			if (hasBeenWarned.find(name_s) == hasBeenWarned.end())
+			if (m_hasBeenWarned.find(name_s) == m_hasBeenWarned.end())
 			{
 				printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Uniform not found (%s)\n", name_s.c_str(), m_name.c_str(), e.what());
-				hasBeenWarned.insert(name_s);
+				m_hasBeenWarned.insert(name_s);
 			}
 			return;
 		}
 		if (thisUniform->type != dataEnumType)
 		{
-			if (hasBeenWarned.find(name_s) == hasBeenWarned.end())
+			if (m_hasBeenWarned.find(name_s) == m_hasBeenWarned.end())
 			{
 				printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Incorrect data type\n", name.c_str(), m_name.c_str());
-				hasBeenWarned.insert(name_s);
+				m_hasBeenWarned.insert(name_s);
 			}
 			return;
 		}

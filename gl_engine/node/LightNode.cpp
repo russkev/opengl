@@ -13,7 +13,7 @@ LightNode::LightNode(const std::string name, Light* light) :
 
 void LightNode::update_view(Camera* camera)
 {
-	m_modelToPerspectiveMatrix = camera->worldToProjectionMatrix() * Node::worldTransform();
+	m_modelToPerspectiveMatrix = camera->worldToProjection_matrix() * Node::worldTransform();
 	for (auto child : Node::children())
 	{
 		child.second->update_view(camera);
