@@ -54,10 +54,14 @@ void Renderer::render()
 	 //Update object to perspective view buffer
 	for (auto const& node : m_root_nodes)
 	{
-		node.second->updateView(m_cameraNode);
+		node.second->update_view(m_cameraNode);
+		if (MeshNode* derived_meshNode = dynamic_cast<MeshNode*>(node.second))
+		{
+			if (derived_meshNode->material()->containsUniform("light_position"))
+			derived_meshNode->material()->setUniform("light_position", m_lightNode->worldPosition());
+		}
 		node.second->draw();
 	}
-	
 }
 
 
@@ -70,6 +74,12 @@ void Renderer::addNode(Node* node)
 		return;
 	}
 	m_root_nodes[node->name()] = node;
+}
+
+void Renderer::addLightNode(LightNode* lightNode)
+{
+	m_lightNode = lightNode;
+	addNode(lightNode);
 }
 
 bool Renderer::pollEvents()

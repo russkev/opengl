@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE(nonNormalSpeed, * utf::tolerance(0.01))
 	timer.update();
 	BOOST_TEST(timer.delta_time_ms() == 100.0);
 	BOOST_TEST(timer.delta_time_s() == 0.1);
-	timer.setMultiplier(10.0);
+	timer.set_multiplier(10.0);
 	Sleep(1000);
 	timer.update();
 	BOOST_TEST(timer.delta_time_ms() == 10000.0);

@@ -29,8 +29,8 @@ public:
 	const GLfloat& brightness() const;
 	const glm::vec3& color() const;
 	
-	virtual const Mesh* mesh_ptr() const;
-	virtual const Shader* shader_ptr() const;
+	virtual Mesh* mesh_ptr();
+	virtual Shader* shader_ptr();
 
 	// // ----- SETTERS ----- // //
 	void setBrightness(const GLfloat brightness);

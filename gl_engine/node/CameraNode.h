@@ -34,6 +34,7 @@ public:
 
 	// // ----- OVERRIDES ----- // //
 	const glm::vec3 position() const override;
+	const glm::vec3 worldPosition() override;
 	void setPosition(const glm::vec3&) override;
 	glm::mat4 worldToViewMatrix() override;
 	glm::mat4 worldToProjectionMatrix() override;

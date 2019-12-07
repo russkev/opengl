@@ -7,6 +7,8 @@
 #include <glm/glm.hpp>
 
 #include "../camera/Camera.h"
+#include "../GL_Tuple_Introspect.h"
+
 
 /*
 	
@@ -15,6 +17,10 @@
 */
 struct Node
 {
+	static const std::string U_MODEL_TO_PROJECTION;
+	static constexpr auto POSITION_ATTR = 0u;
+	inline static const auto MESH_VAO_INFO = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
+
 	// // ----- MEMBER VARIABLES ----- // //
 private:
 	std::string m_name;
@@ -34,15 +40,17 @@ public:
 	void addChild(Node* child);
 	void setParent(Node* parent);
 	Node* disconnectChild(const std::string nodeName);
-	glm::mat4 localTransform();
-	glm::mat4 worldTransform();
-	virtual void updateView(Camera*) {};
+	const glm::mat4 localTransform();
+	const glm::mat4 worldTransform();
+
+	virtual void update_view(Camera*) {};
 	virtual void draw() {};
 
 	// // ----- GETTERS ----- // //
 	const std::string& name() const;
 
 	virtual const glm::vec3 position() const;
+	virtual const glm::vec3 worldPosition();
 	const glm::vec3 rotation() const;
 	const glm::vec3 scale() const;
 
