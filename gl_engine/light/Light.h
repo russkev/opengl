@@ -36,7 +36,7 @@ public:
 	const glm::vec3& color() const;
 	
 	virtual Mesh* mesh_ptr();
-	virtual Material* shader_ptr() {};
+	virtual Shader* shader_ptr();
 
 	// // ----- SETTERS ----- // //
 	void setBrightness(const GLfloat brightness);

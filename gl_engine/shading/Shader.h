@@ -13,7 +13,7 @@
 
 #include "../shading/Texture.h"
 //#include "../node/LightNode.h"
-#include "../light/Light.h"
+//#include "../light/Light.h"
 
 
 /*
