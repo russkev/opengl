@@ -7,10 +7,13 @@
 #include <stdexcept>
 #include <stdio.h>
 #include <set>
+#include <vector>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
 #include "../shading/Texture.h"
+//#include "../node/LightNode.h"
+#include "../light/Light.h"
 
 
 /*

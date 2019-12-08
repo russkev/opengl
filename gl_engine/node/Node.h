@@ -71,5 +71,3 @@ private:
 };
 
 #endif
-
-const glm::mat3 worldNormalTransform();

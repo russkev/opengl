@@ -27,7 +27,7 @@ public:
 	// // ----- GETTERS ----- // //
 	const float& radius() const;
 	Mesh* mesh_ptr() override;
-	Shader* shader_ptr() override;
+	//Shader* shader_ptr() override;
 
 	// // ----- SETTERS ----- // //
 	void setRadius(const GLfloat radius);

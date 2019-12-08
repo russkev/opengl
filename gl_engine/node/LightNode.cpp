@@ -27,15 +27,15 @@ void LightNode::update_view(Camera* camera)
 
 void LightNode::draw()
 {
-	m_light->shader_ptr()->setUniform(U_MODEL_TO_PROJECTION, m_modelToPerspectiveMatrix);
+	//m_light->shader_ptr()->setUniform(U_MODEL_TO_PROJECTION, m_modelToPerspectiveMatrix);
+	//m_light->shader_ptr()->use();
 
-	m_light->shader_ptr()->use();
-	m_vao.Bind();
-	m_indexBuffer.bind(GL_ELEMENT_ARRAY_BUFFER);
-	glDrawElements(GL_TRIANGLES, (GLsizei)m_indexBuffer.size(), GL_UNSIGNED_SHORT, 0);
+	//m_vao.Bind();
+	//m_indexBuffer.bind(GL_ELEMENT_ARRAY_BUFFER);
+	//glDrawElements(GL_TRIANGLES, (GLsizei)m_indexBuffer.size(), GL_UNSIGNED_SHORT, 0);
 
-	for (auto child : Node::children())
-	{
-		child.second->draw();
-	}
+	//for (auto child : Node::children())
+	//{
+	//	child.second->draw();
+	//}
 }
