@@ -12,35 +12,6 @@ Text2D::~Text2D()
 	glDeleteProgram(m_program_id);
 }
 
-//// // MOVE CONSTRUCTOR
-//Text2D::Text2D(Text2D&& other) :
-//	m_texture(std::exchange(other.m_texture, Texture(""))),
-//	m_vertices(std::exchange(other.m_vertices, vertices2DType())),
-//	m_x(std::exchange(other.m_x, 0)),
-//	m_y(std::exchange(other.m_y, 0)),
-//	m_size(std::exchange(other.m_size, 0)),
-//	m_program_id(other.m_program_id),
-//	m_width_uniform_id(other.m_width_uniform_id),
-//	m_height_uniform_id(other.m_height_uniform_id),
-//	m_string_uniform_id(other.m_string_uniform_id),
-//	m_screen_width(other.m_screen_width),
-//	m_screen_height(other.m_screen_height),
-//	m_vao(std::exchange(other.m_vao, VAO())),
-//	m_buffer(std::exchange(other.m_buffer, Buffer(GL_ARRAY_BUFFER, 0)))
-//{
-//	for (auto i = 0; i < MAX_LETTERS; ++i)
-//	{
-//		m_text_array[i] = other.m_text_array[i];
-//	}
-//}
-//
-//// // MOVE ASSIGN
-//Text2D& Text2D::operator = (Text2D&& other)
-//{
-//	(*this).~Text2D();
-//	return *new (this) Text2D(std::move(other));
-//}
-
 void Text2D::init(int s_x, int s_y, int s_size, int s_screen_width, int s_screen_height)
 {
 	m_x = s_x;
