@@ -13,10 +13,12 @@ in vec3 tangentSpace_camPosition;
 in vec3 tangentSpace_lightPosition;
 in vec3 tangentSpace_fragPosition;
 
+in vec2 uv;
+
 // // UNIFORMS // //
 struct Material
 {
-	vec3 diffuse;
+	sampler2D diffuse;
 	vec3 specular;
 	float spec_power;
 };
@@ -31,7 +33,8 @@ struct Camera
 	vec3 position;
 };
 
-uniform Material material = { vec3(1.0), vec3(1.0), 32 };
+//uniform Material material = { vec3(1.0), vec3(1.0), 32 };
+uniform Material material;
 uniform Light light = { vec3(0.0), 10.0, vec3(1.0) };
 uniform Camera camera;
 
@@ -136,7 +139,7 @@ void main ()
 	vec3 specular_lighting = specular_lighting_camSpace();
 
 	vec3 outColor = 
-		diffuse_lighting * material.diffuse * out_brightness * light.color
+		diffuse_lighting * texture(material.diffuse, uv).rgb * out_brightness * light.color
 		+ 
 		specular_lighting * material.specular * light.color
 		* vec3(1.0);

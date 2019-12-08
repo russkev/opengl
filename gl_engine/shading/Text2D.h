@@ -6,7 +6,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Texture.h"
+#include "Texture_old.h"
 #include "LoadShader.h"
 
 #include "../Buffer.h"
@@ -44,7 +44,7 @@ struct Text2D
 
 	void cleanup();
 public:
-	Texture			m_texture;
+	Texture_old			m_texture;
 	vertices2DType	m_vertices;
 	int				m_x, m_y, m_size;
 	int				m_text_array[MAX_LETTERS];

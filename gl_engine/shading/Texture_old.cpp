@@ -1,18 +1,18 @@
-#include "Texture.h"
+#include "Texture_old.h"
 
-Texture::Texture(const char *s_filename)	
+Texture_old::Texture_old(const char *s_filename)	
 {
 	// Targa info: https://unix4lyfe.org/targa/
 	init_targa(s_filename);
-	m_id = Texture::m_next_id++;
+	m_id = Texture_old::m_next_id++;
 }
 
 // // CONSTRUCTOR // //
-Texture::Texture():m_image(tga_image())
+Texture_old::Texture_old():m_image(tga_image())
 {}
 
 // // CONSTRUCTOR // //
-void Texture::init_targa(const char *filename)
+void Texture_old::init_targa(const char *filename)
 {
 	tga_result result;
 	result = tga_read(&m_image, filename);
@@ -31,26 +31,26 @@ void Texture::init_targa(const char *filename)
 }
 
 // // DESTRUCTOR // //
-Texture::~Texture()
+Texture_old::~Texture_old()
 {
 	tga_free_buffers(&m_image);
 }
 
 // // MOVE CONSTRUCTOR // //
-Texture::Texture(Texture&& other) :
+Texture_old::Texture_old(Texture_old&& other) :
 	m_image(std::exchange(other.m_image, tga_image()))
 {}
 
 // // MOVE ASSIGN // //
-Texture& Texture::operator = (Texture&& other)
+Texture_old& Texture_old::operator = (Texture_old&& other)
 {
-	(*this).~Texture();
-	return *new (this) Texture(std::move(other));
+	(*this).~Texture_old();
+	return *new (this) Texture_old(std::move(other));
 }
 
 
 
-void Texture::upload_to_shader(unsigned int s_program_id, const char *gl_texture_name)
+void Texture_old::upload_to_shader(unsigned int s_program_id, const char *gl_texture_name)
 {
 	glUseProgram(s_program_id);
 
@@ -83,4 +83,4 @@ void Texture::upload_to_shader(unsigned int s_program_id, const char *gl_texture
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
-int Texture::m_next_id = 0;
+int Texture_old::m_next_id = 0;

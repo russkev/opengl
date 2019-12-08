@@ -10,6 +10,8 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
+#include "../shading/Texture_old.h"
+
 
 /*
 
@@ -37,8 +39,6 @@ private:
 	GLuint m_programID;
 	std::map<std::string, Uniform> m_uniforms;
 	std::set<std::string> m_hasBeenWarned;
-	std::set<std::string> m_used;
-	//std::set<std::string> m_not_used;
 
 	// // ----- CONSTRUCTOR ----- // //
 public:
@@ -92,6 +92,8 @@ public:
 		use();
 		uploadUniform(thisUniform, data);
 	}
+
+	void setTexture(const std::string& location_name, Texture_old& texture);
 
 	void use();
 	bool containsUniform(const std::string uniform_name);
