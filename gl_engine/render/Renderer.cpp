@@ -61,9 +61,9 @@ void Renderer::render()
 		node.second->update_view(m_cameraNode);
 		if (MeshNode* derived_meshNode = dynamic_cast<MeshNode*>(node.second))
 		{
-			derived_meshNode->material()->setUniform("light.position", m_lightNode->worldPosition());
-			derived_meshNode->material()->setUniform("light.brightness", m_lightNode->light()->brightness());
-			derived_meshNode->material()->setUniform("light.color", m_lightNode->light()->color());
+			derived_meshNode->material()->setUniform("point_light.position", m_lightNode->worldPosition());
+			derived_meshNode->material()->setUniform("point_light.brightness", m_lightNode->light()->brightness());
+			derived_meshNode->material()->setUniform("point_light.color", m_lightNode->light()->color());
 
 		}
 		node.second->draw();

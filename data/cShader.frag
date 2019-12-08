@@ -1,4 +1,5 @@
 #version 440 core
+#define NUM_LIGHTS 10
 
 // // INS // //
 in vec3 worldSpace_vertexPosition;
@@ -22,7 +23,7 @@ struct Material
 	vec3 specular;
 	float spec_power;
 };
-struct Light
+struct Point_Light
 {
 	vec3 position;
 	float brightness;
@@ -33,9 +34,8 @@ struct Camera
 	vec3 position;
 };
 
-//uniform Material material = { vec3(1.0), vec3(1.0), 32 };
 uniform Material material;
-uniform Light light = { vec3(0.0), 10.0, vec3(1.0) };
+uniform Point_Light point_light;
 uniform Camera camera;
 
 // // OUTS // //
@@ -65,7 +65,7 @@ float dot_vec3(vec3 v1, vec3 v2)
 
 float attenuation()
 {
-	float light_distance = distance(worldSpace_vertexPosition, light.position);
+	float light_distance = distance(worldSpace_vertexPosition, point_light.position);
 	return 1 / (light_distance * light_distance);
 }
 
@@ -80,7 +80,7 @@ vec3 diffuse_lighting_worldSpace()
 {
 	return diffuse_lighting(
 		worldSpace_vertexNormal, 
-		normalize(light.position));
+		normalize(point_light.position));
 }
 
 vec3 diffuse_lighting_camSpace()
@@ -107,7 +107,7 @@ vec3 specular_lighting(vec3 light, vec3 normal, vec3 cam)
 
 vec3 specular_lighting_worldSpace()
 {
-	vec3 light		= normalize(light.position - worldSpace_vertexPosition);
+	vec3 light		= normalize(point_light.position - worldSpace_vertexPosition);
 	vec3 normal		= normalize(worldSpace_vertexNormal);
 	vec3 cam		= normalize(camera.position - worldSpace_vertexPosition);
 	return specular_lighting(light, normal, cam);
@@ -132,16 +132,16 @@ vec3 specular_lighting_tangentSpace()
 // // MAIN // //
 void main ()
 {
-	float out_brightness	= light.brightness * light.brightness;
+	float out_brightness	= point_light.brightness * point_light.brightness;
 	float light_attenuation	= attenuation();
 
 	vec3 diffuse_lighting = diffuse_lighting_camSpace();
 	vec3 specular_lighting = specular_lighting_camSpace();
 
 	vec3 outColor = 
-		diffuse_lighting * texture(material.diffuse, uv).rgb * out_brightness * light.color
+		diffuse_lighting * texture(material.diffuse, uv).rgb * out_brightness * point_light.color
 		+ 
-		specular_lighting * material.specular * light.color
+		specular_lighting * material.specular * point_light.color
 		* vec3(1.0);
 
 	fragColor = vec4(outColor.xyz, 1.0);

@@ -69,6 +69,7 @@ bool Shader::containsUniform(std::string uniform_name)
 //Get all the uniforms from the shader and store their information with the shader
 void Shader::fetchUniforms()
 {
+	use();
 	int numUniforms;
 	glGetProgramiv(m_programID, GL_ACTIVE_UNIFORMS, &numUniforms);
 	for (int i = 0; i < numUniforms; ++i)
