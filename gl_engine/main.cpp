@@ -75,7 +75,7 @@ int main(int, char**)
 	CameraNode camNode1 = CameraNode("CamNode1");
 	
 	Material cShadMat = Material("cMat", "cShader.vert", "cShader.frag");
-	cShadMat.setUniform("material.spec_power", 10.0f);
+	cShadMat.setUniform("material.spec_power", 32.0f);
 	cShadMat.setUniform("material.diffuse", glm::vec3(0.8, 0.9, 0.7));
 	cShadMat.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
 
@@ -86,8 +86,9 @@ int main(int, char**)
 	Mesh plane = Plane::createPlane(100.0f, 100.0f);
 	MeshNode plane_node = MeshNode("Plane1", &plane, &cShadMat);
 
-	PointLight pointLight = PointLight(1.0f, { 1.0f, 0.5f, 0.3f }, 0.5f);
-	pointLight.setBrightness(6.0f);
+	PointLight pointLight = PointLight(1.0f, { 1.0f, 0.0f, 0.0f }, 0.5f);
+	pointLight.setBrightness(1.2f);
+	pointLight.setColor(glm::vec3(1.0, 0.7, 0.2));
 	LightNode pointLight_node = LightNode("pointLight1", &pointLight);
 	pointLight_node.setPosition({ -6.0f, 3.0f, 0.0f });
 

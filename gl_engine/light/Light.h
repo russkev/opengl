@@ -13,6 +13,9 @@
 */
 struct Light
 {
+	static const std::string LIGHT_COLOR;
+	static const std::string LIGHT_BRIGHTNESS;
+
 	// // ----- MEMBER VARIABLES ----- // //
 private:
 	GLfloat m_brightness = 1.0f;

@@ -152,8 +152,8 @@ void sendTangendSpaceInformation()
 	mat3 mat_worldToTangent = transpose(mat_tangentToWorld);
 
 	// Convert important coordinates to their tangent space values
-	tangentSpace_lightPosition	= mat_worldToTangent * lightPosition;
 	tangentSpace_camPosition	= mat_worldToTangent * camPosition;
+	tangentSpace_lightPosition	= mat_worldToTangent * lightPosition;
 	tangentSpace_fragPosition	= mat_worldToTangent * worldSpace_vertexPosition;
 
 

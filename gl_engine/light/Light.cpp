@@ -1,9 +1,13 @@
 #include "Light.h"
 
-Light::Light(const GLfloat brightness, const glm::vec3& color) :
-	m_brightness(brightness > 0 ? brightness : 0),
-	m_color(color)
-{}
+const std::string Light::LIGHT_COLOR		= "light.color";
+const std::string Light::LIGHT_BRIGHTNESS	= "light.brightness";
+
+Light::Light(const GLfloat brightness, const glm::vec3& color)
+{
+	setBrightness(brightness);
+	setColor(color);
+}
 
 // // ----- GETTERS ----- // //
 const GLfloat& Light::brightness() const
@@ -29,11 +33,21 @@ Shader* Light::shader_ptr() {
 void Light::setBrightness(const GLfloat brightness)
 {
 	m_brightness = brightness;
+	if (shader_ptr() != NULL)
+	{
+		shader_ptr()->setUniform(LIGHT_BRIGHTNESS, m_brightness);
+	}
 }
+
 void Light::setColor(const glm::vec3 color)
 {
 	m_color = color;
+	if (shader_ptr() != NULL)
+	{
+		shader_ptr()->setUniform(LIGHT_COLOR, m_color);
+	}
 }
+
 void Light::enable_mesh()
 {
 	m_mesh_enabled = true;
