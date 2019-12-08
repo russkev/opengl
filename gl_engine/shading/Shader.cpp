@@ -11,6 +11,12 @@ Shader::Shader(const std::string& name, const char* vertexShader, const char* fr
 }
 
 // // ----- GENERAL METHODS ----- // //
+void Shader::setTexture(const std::string& location_name, Texture_old& texture)
+{
+	texture.upload_to_shader(m_programID, "material.diffuse");
+}
+
+
 // Tell opengl to use this shader for upcoming commands
 void Shader::use()
 {

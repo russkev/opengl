@@ -2,7 +2,7 @@
 
 // // CONSTRUCTOR
 Text2D::Text2D(const char* s_texture_path):
-	m_texture(Texture(s_texture_path)) 
+	m_texture(Texture_old(s_texture_path)) 
 {};
 
 // // DESTRUCTOR
@@ -14,7 +14,7 @@ Text2D::~Text2D()
 
 // // MOVE CONSTRUCTOR
 Text2D::Text2D(Text2D&& other) :
-	m_texture(std::exchange(other.m_texture, Texture())),
+	m_texture(std::exchange(other.m_texture, Texture_old())),
 	m_vertices(std::exchange(other.m_vertices, vertices2DType())),
 	m_x(std::exchange(other.m_x, 0)),
 	m_y(std::exchange(other.m_y, 0)),

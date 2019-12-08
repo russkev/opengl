@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <SDL_image.h>
 #include <vector>
 
 #include "Window.h"
@@ -15,6 +16,7 @@
 #include "mesh/obj.h"
 #include "light/PointLight.h"
 #include "render/Renderer.h"
+#include "shading/Texture_old.h"
 #include "Timer.h"
 
 
@@ -78,6 +80,11 @@ int main(int, char**)
 	cShadMat.setUniform("material.spec_power", 32.0f);
 	cShadMat.setUniform("material.diffuse", glm::vec3(0.8, 0.9, 0.7));
 	cShadMat.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
+
+	
+
+	Texture_old tex1("uvtemplate.tga");
+	cShadMat.setTexture("material.diffuse", tex1);
 
 	Mesh shaderBall = OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
 	MeshNode shaderBall_node = MeshNode("shader ball", &shaderBall, &cShadMat);

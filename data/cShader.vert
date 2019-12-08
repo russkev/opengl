@@ -48,6 +48,12 @@ out vec3 tangentSpace_camPosition;
 out vec3 tangentSpace_lightPosition;
 out vec3 tangentSpace_fragPosition;
 
+out vec2 uv;
+
+void send_uvCoordinates()
+{
+	uv = model_uv;
+}
 
 void send_worldSpaceCoordinates()
 {
@@ -96,6 +102,7 @@ void send_tangentSpaceCoordinates()
 
 void main()
 {
+	send_uvCoordinates();
 	send_worldSpaceCoordinates();
 	send_camSpaceCoordinates();
 	send_tangentSpaceCoordinates();
