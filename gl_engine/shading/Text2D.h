@@ -27,11 +27,6 @@ struct Text2D
 
 	Text2D(const char* s_texture_path);				// Constructor
 	~Text2D();										// Destructor
-	//Text2D(const Text2D&) = delete;					// Copy constructor
-	//Text2D(Text2D&&);								// Move constructor
-	//Text2D& operator = (const Text2D&) = delete;	// Copy assign
-	//Text2D& operator = (Text2D&&);					// Move assign
-
 
 
 	void init(int s_x, int s_y, int size, int s_screen_width, int s_screen_height);
