@@ -114,9 +114,6 @@
     <ClCompile Include="node\LightNode.cpp">
       <Filter>Node</Filter>
     </ClCompile>
-    <ClCompile Include="shading\Texture_old.cpp">
-      <Filter>Shading</Filter>
-    </ClCompile>
     <ClCompile Include="shading\Texture.cpp">
       <Filter>Shading</Filter>
     </ClCompile>
@@ -237,9 +234,6 @@
     </ClInclude>
     <ClInclude Include="node\LightNode.h">
       <Filter>Node</Filter>
-    </ClInclude>
-    <ClInclude Include="shading\Texture_old.h">
-      <Filter>Shading</Filter>
     </ClInclude>
     <ClInclude Include="shading\Texture.h">
       <Filter>Shading</Filter>
