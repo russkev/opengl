@@ -171,6 +171,7 @@
     <ClCompile Include="shading\Shader.cpp" />
     <ClCompile Include="shading\Targa.cpp" />
     <ClCompile Include="shading\Text2D.cpp" />
+    <ClCompile Include="shading\Texture.cpp" />
     <ClCompile Include="shading\Texture_old.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="utils\VectorUtils.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="shading\Shader.h" />
     <ClInclude Include="shading\Targa.h" />
     <ClInclude Include="shading\Text2D.h" />
+    <ClInclude Include="shading\Texture.h" />
     <ClInclude Include="shading\Texture_old.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="utils\VectorUtils.h" />

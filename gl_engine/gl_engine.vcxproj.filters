@@ -117,6 +117,9 @@
     <ClCompile Include="shading\Texture_old.cpp">
       <Filter>Shading</Filter>
     </ClCompile>
+    <ClCompile Include="shading\Texture.cpp">
+      <Filter>Shading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\SimpleFragmentShader.frag">
@@ -236,6 +239,9 @@
       <Filter>Node</Filter>
     </ClInclude>
     <ClInclude Include="shading\Texture_old.h">
+      <Filter>Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\Texture.h">
       <Filter>Shading</Filter>
     </ClInclude>
   </ItemGroup>

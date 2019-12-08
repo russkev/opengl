@@ -10,7 +10,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-#include "../shading/Texture_old.h"
+#include "../shading/Texture.h"
 
 
 /*
@@ -93,7 +93,7 @@ public:
 		uploadUniform(thisUniform, data);
 	}
 
-	void setTexture(const std::string& location_name, Texture_old& texture);
+	void setTexture(const std::string& location_name, Texture& texture);
 
 	void use();
 	bool containsUniform(const std::string uniform_name);
