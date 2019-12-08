@@ -11,6 +11,11 @@ LightNode::LightNode(const std::string name, Light* light) :
 	m_vao.GenerateVAO(m_vertexBuffer, 0, MESH_VAO_INFO.data(), MESH_VAO_INFO.data() + MESH_VAO_INFO.size(), POSITION_ATTR);
 }
 
+Light* LightNode::light()
+{
+	return m_light;
+}
+
 void LightNode::update_view(Camera* camera)
 {
 	m_modelToPerspectiveMatrix = camera->worldToProjection_matrix() * Node::worldTransform();
