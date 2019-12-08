@@ -19,6 +19,7 @@ public:
 	LightNode() {};
 	LightNode(const std::string name, Light* light);
 
+	Light* light();
 	void update_view(Camera* camera) override;
 	void draw() override;
 

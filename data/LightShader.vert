@@ -2,9 +2,14 @@
 
 in layout(location = 0 ) vec3 model_vertexPosition;
 
-uniform mat4 mat_modelToProjection;
+struct Transform
+{
+	mat4 modelToProjection;
+};
+
+uniform Transform transform;
 
 void main()
 {
-	gl_Position = mat_modelToProjection * vec4(model_vertexPosition, 1.0);
+	gl_Position = transform.modelToProjection * vec4(model_vertexPosition, 1.0);
 }

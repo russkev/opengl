@@ -75,15 +75,19 @@ int main(int, char**)
 	CameraNode camNode1 = CameraNode("CamNode1");
 	
 	Material cShadMat = Material("cMat", "cShader.vert", "cShader.frag");
+	cShadMat.setUniform("material.spec_power", 10.0f);
+	cShadMat.setUniform("material.diffuse", glm::vec3(0.8, 0.9, 0.7));
+	cShadMat.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
 
 	Mesh shaderBall = OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
 	MeshNode shaderBall_node = MeshNode("shader ball", &shaderBall, &cShadMat);
-	shaderBall_node.setScale({ 1.0, 10.0, 1.0 });
+	//shaderBall_node.setScale({ 1.0, 10.0, 1.0 });
 
 	Mesh plane = Plane::createPlane(100.0f, 100.0f);
 	MeshNode plane_node = MeshNode("Plane1", &plane, &cShadMat);
 
 	PointLight pointLight = PointLight(1.0f, { 1.0f, 0.5f, 0.3f }, 0.5f);
+	pointLight.setBrightness(6.0f);
 	LightNode pointLight_node = LightNode("pointLight1", &pointLight);
 	pointLight_node.setPosition({ -6.0f, 3.0f, 0.0f });
 

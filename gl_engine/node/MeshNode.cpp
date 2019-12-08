@@ -2,10 +2,10 @@
 
 #include "../Timer.h"
 
-const std::string MeshNode::U_MODEL_TO_WORLD = "mat_modelToWorld";
-const std::string MeshNode::U_MODEL_TO_WORLD_NORMAL = "mat_modelToWorld_normal";
-const std::string MeshNode::U_WORLD_TO_CAM  = "mat_worldToCam";
-const std::string MeshNode::U_CAM = "cam_position";
+const std::string MeshNode::U_MODEL_TO_WORLD = "transform.modelToWorld";
+const std::string MeshNode::U_MODEL_TO_WORLD_NORMAL = "transform.modelToWorld_normal";
+const std::string MeshNode::U_WORLD_TO_CAM  = "transform.worldToCam";
+const std::string MeshNode::U_CAM = "camera.position";
 
 
 //Set member variables and upload mesh vertices and indices buffers

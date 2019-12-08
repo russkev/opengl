@@ -5,7 +5,7 @@
 #include "../utils/VectorUtils.h"
 
 
-const std::string Node::U_MODEL_TO_PROJECTION = "mat_modelToProjection";
+const std::string Node::U_MODEL_TO_PROJECTION = "transform.modelToProjection";
 
 
 Node::Node(const std::string name) : m_name(name)
