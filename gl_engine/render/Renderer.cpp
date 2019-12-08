@@ -63,6 +63,8 @@ void Renderer::render()
 		{
 			derived_meshNode->material()->setUniform("light.position", m_lightNode->worldPosition());
 			derived_meshNode->material()->setUniform("light.brightness", m_lightNode->light()->brightness());
+			derived_meshNode->material()->setUniform("light.color", m_lightNode->light()->color());
+
 		}
 		node.second->draw();
 	}

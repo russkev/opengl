@@ -72,7 +72,8 @@ void send_camSpaceCoordinates()
 
 void send_tangentSpaceCoordinates()
 {
-	vec3 tangent_basis		= normalize((transform.modelToWorld * vec4(model_vertexTangent, 1.0)).xyz);
+//	vec3 tangent_basis	= normalize(vec3(transform.modelToWorld * vec4(model_vertexTangent, 0.0)));
+	vec3 tangent_basis		= normalize((transform.modelToWorld * vec4(model_vertexTangent, 0.0)).xyz);
 	vec3 normal_basis		= normalize((transform.modelToWorld * vec4(model_vertexNormal, 1.0)).xyz);
 
 	//
@@ -80,8 +81,9 @@ void send_tangentSpaceCoordinates()
 	// to accurately calculate the basis vectors
 	//
 
-	tangent_basis			= normalize(dot(tangent_basis, normal_basis) * normal_basis);
+	tangent_basis			= normalize(tangent_basis - dot(tangent_basis, normal_basis) * normal_basis);
 	vec3 bitangent_basis	= cross(normal_basis, tangent_basis);
+
 
 	mat3 tangentToWorld		= mat3(tangent_basis, bitangent_basis, normal_basis);
 	mat3 worldToTangent		= transpose(tangentToWorld);

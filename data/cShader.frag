@@ -30,12 +30,24 @@ struct Camera
 {
 	vec3 position;
 };
+
 uniform Material material = { vec3(1.0), vec3(1.0), 32 };
 uniform Light light = { vec3(0.0), 10.0, vec3(1.0) };
-uniform Camera camera = { vec3(0.0) };
+uniform Camera camera;
 
 // // OUTS // //
 out vec4 fragColor;
+
+// // LOCALS // //
+vec3 camSpace_camNormalized		= normalize(camSpace_camDirection);
+vec3 camSpace_lightNormalized	= normalize(camSpace_lightDirection);
+vec3 camSpace_normalNormalized	= normalize(camSpace_normalDirection);
+
+vec3 tangentSpace_lightDirection	= normalize(tangentSpace_lightPosition - tangentSpace_fragPosition);
+vec3 tangentSpace_normal			= vec3(0.0, 0.0, 1.0);
+vec3 tangentSpace_camDirection		= normalize(tangentSpace_camPosition - tangentSpace_fragPosition);
+
+
 
 // // UTILITY FUNCTIONS // //
 bool vec_is_zero(vec3 v)
@@ -63,18 +75,23 @@ vec3 diffuse_lighting(vec3 normal, vec3 light)
 
 vec3 diffuse_lighting_worldSpace()
 {
-	return diffuse_lighting(worldSpace_vertexNormal, normalize(light.position));
+	return diffuse_lighting(
+		worldSpace_vertexNormal, 
+		normalize(light.position));
 }
 
 vec3 diffuse_lighting_camSpace()
 {
-	return diffuse_lighting(camSpace_normalDirection, normalize(camSpace_lightDirection));
+	return diffuse_lighting(
+		camSpace_normalNormalized, 
+		camSpace_lightNormalized);
 }
 
 vec3 diffuse_lighting_tangentSpace()
 {
-	return tangentSpace_lightPosition;
-	//return diffuse_lighting(vec3(0.0, 1.0, 0.0), normalize(tangentSpace_lightPosition));
+	return diffuse_lighting(
+		tangentSpace_normal, 
+		tangentSpace_lightDirection);
 }
 
 // // SPECULAR LIGHTING // //
@@ -95,27 +112,34 @@ vec3 specular_lighting_worldSpace()
 
 vec3 specular_lighting_camSpace()
 {
-	vec3 light		= normalize(camSpace_lightDirection);
-	vec3 normal		= normalize(camSpace_normalDirection);
-	vec3 cam		= normalize(camSpace_camDirection);
-	return specular_lighting(light, normal, cam);
+	return specular_lighting(
+		camSpace_lightNormalized,
+		camSpace_normalNormalized,
+		camSpace_camNormalized);
+}
+
+vec3 specular_lighting_tangentSpace()
+{
+	return specular_lighting(
+		tangentSpace_lightDirection, 
+		tangentSpace_normal, 
+		tangentSpace_camDirection);
 }
 
 // // MAIN // //
 void main ()
 {
-	float light_attenuation = attenuation();
+	float out_brightness	= light.brightness * light.brightness;
+	float light_attenuation	= attenuation();
 
-
-
-	vec3 diffuse_lighting = diffuse_lighting_tangentSpace();
+	vec3 diffuse_lighting = diffuse_lighting_camSpace();
 	vec3 specular_lighting = specular_lighting_camSpace();
 
 	vec3 outColor = 
-		diffuse_lighting
-		//diffuse_lighting * material.diffuse * light.brightness * light_attenuation
-		//+ 
-		//specular_lighting * material.specular
+		diffuse_lighting * material.diffuse * out_brightness * light.color
+		+ 
+		specular_lighting * material.specular * light.color
 		* vec3(1.0);
+
 	fragColor = vec4(outColor.xyz, 1.0);
 }
