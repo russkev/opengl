@@ -31,10 +31,10 @@ Mesh* PointLight::mesh_ptr()
 {
 	return &m_light_mesh;
 }
-Shader* PointLight::shader_ptr()
-{
-	return &m_shader;
-}
+//Shader* PointLight::shader_ptr()
+//{
+//	return &m_shader;
+//}
 
 // // ----- SETTERS ----- // //
 void PointLight::setRadius(const GLfloat radius)

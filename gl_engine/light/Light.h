@@ -1,10 +1,13 @@
 #ifndef GL_ENGINE_LIGHT_LIGHT_H
 #define GL_ENGINE_LIGHT_LIGHT_H
 
+#pragma once
+
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <../mesh/Mesh.h>
 #include <../shading/Shader.h>
+#include <../shading/Material.h>
 
 /*
 
@@ -33,7 +36,7 @@ public:
 	const glm::vec3& color() const;
 	
 	virtual Mesh* mesh_ptr();
-	virtual Shader* shader_ptr();
+	virtual Material* shader_ptr() {};
 
 	// // ----- SETTERS ----- // //
 	void setBrightness(const GLfloat brightness);
