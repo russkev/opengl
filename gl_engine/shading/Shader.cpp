@@ -11,9 +11,46 @@ Shader::Shader(const std::string& name, const char* vertexShader, const char* fr
 }
 
 // // ----- GENERAL METHODS ----- // //
-void Shader::setTexture(const std::string& location_name, Texture_old& texture)
+void Shader::setTexture(const std::string& location_name, Texture& texture)
 {
-	texture.upload_to_shader(m_programID, "material.diffuse");
+	Uniform* thisUniform;
+	
+	use();
+	thisUniform = &m_uniforms.at(location_name);
+
+	GLuint tex_id;
+	GLint tex_loc;
+	GLenum mode = texture.hasAlpha() ? GL_RGBA : GL_RGB;
+
+	glGenTextures(1, &tex_id);
+
+	tex_loc = thisUniform->location;
+	glUniform1i(tex_loc, (GLint)texture.tex_id());
+
+	glActiveTexture(GLenum(GL_TEXTURE0 + texture.tex_id()));
+
+	glBindTexture(GL_TEXTURE_2D, (GLuint)texture.tex_id());
+
+	glTexImage2D
+	(
+		GL_TEXTURE_2D,
+		0,
+		mode,
+		(GLsizei)texture.width(),
+		(GLsizei)texture.height(),
+		0,
+		GL_RGB,
+		GL_UNSIGNED_BYTE,
+		texture.data()
+	);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
 }
 
 
