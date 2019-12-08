@@ -19,7 +19,7 @@ struct Transform
 	mat4 worldToCam;
 };
 
-struct Light
+struct Point_Light
 {
 	vec3 position;
 	float brightness;
@@ -31,7 +31,7 @@ struct Camera
 };
 
 uniform Transform transform;
-uniform Light light = { vec3(0.0), 10.0, vec3(1.0) };
+uniform Point_Light point_light;
 uniform Camera camera;
 
 
@@ -66,7 +66,7 @@ void send_camSpaceCoordinates()
 {
 	camSpace_vertexPosition		= ((transform.worldToCam * vec4(worldSpace_vertexPosition, 1.0)).xyz);
 	camSpace_camDirection		= (- camSpace_vertexPosition);
-	camSpace_lightDirection		= ((transform.worldToCam * vec4(light.position, 1.0)).xyz - camSpace_vertexPosition);
+	camSpace_lightDirection		= ((transform.worldToCam * vec4(point_light.position, 1.0)).xyz - camSpace_vertexPosition);
 	camSpace_normalDirection	= ((transform.worldToCam * vec4(worldSpace_vertexNormal, 0.0)).xyz);
 	
 	//
@@ -95,7 +95,7 @@ void send_tangentSpaceCoordinates()
 	mat3 worldToTangent		= transpose(tangentToWorld);
 
 	tangentSpace_camPosition	= worldToTangent * camera.position;
-	tangentSpace_lightPosition	= worldToTangent * light.position;
+	tangentSpace_lightPosition	= worldToTangent * point_light.position;
 	tangentSpace_fragPosition	= worldToTangent * worldSpace_vertexPosition;
 }
 
