@@ -6,7 +6,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Texture_old.h"
+#include "Texture.h"
 #include "LoadShader.h"
 
 #include "../Buffer.h"
@@ -27,10 +27,10 @@ struct Text2D
 
 	Text2D(const char* s_texture_path);				// Constructor
 	~Text2D();										// Destructor
-	Text2D(const Text2D&) = delete;					// Copy constructor
-	Text2D(Text2D&&);								// Move constructor
-	Text2D& operator = (const Text2D&) = delete;	// Copy assign
-	Text2D& operator = (Text2D&&);					// Move assign
+	//Text2D(const Text2D&) = delete;					// Copy constructor
+	//Text2D(Text2D&&);								// Move constructor
+	//Text2D& operator = (const Text2D&) = delete;	// Copy assign
+	//Text2D& operator = (Text2D&&);					// Move assign
 
 
 
@@ -44,7 +44,7 @@ struct Text2D
 
 	void cleanup();
 public:
-	Texture_old			m_texture;
+	Texture			m_texture;
 	vertices2DType	m_vertices;
 	int				m_x, m_y, m_size;
 	int				m_text_array[MAX_LETTERS];

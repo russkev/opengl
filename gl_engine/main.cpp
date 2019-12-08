@@ -16,7 +16,6 @@
 #include "mesh/obj.h"
 #include "light/PointLight.h"
 #include "render/Renderer.h"
-#include "shading/Texture_old.h"
 #include "shading/Texture.h"
 #include "Timer.h"
 
