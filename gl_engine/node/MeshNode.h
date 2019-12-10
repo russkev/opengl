@@ -4,12 +4,15 @@
 #include <glm/glm.hpp>
 
 #include "Node.h"
-#include "../mesh/Mesh.h"
-#include "../shading/Material.h"
-#include "../shading/Shader.h"
 #include "../Buffer.h"
-#include "CameraNode.h"
 #include "../VAO.h"
+
+
+// Forward declare structs
+struct Mesh;
+struct Material;
+struct Shader;
+struct CameraNode;
 
 /*
 

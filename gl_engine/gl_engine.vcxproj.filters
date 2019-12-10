@@ -238,6 +238,9 @@
     <ClInclude Include="shading\Texture.h">
       <Filter>Shading</Filter>
     </ClInclude>
+    <ClInclude Include="render\LightsToMat.h">
+      <Filter>Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\data\uvtemplate.bmp">

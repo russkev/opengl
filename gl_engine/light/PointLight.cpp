@@ -8,6 +8,8 @@
 
 // // ----- STATICS ----- // //
 
+const std::string PointLight::TYPE = "point_light";
+
 //Shader PointLight::m_shader = Shader("lightShader", "LightMesh.vert", "LightMesh.frag");
 
 // // ----- CONSTRUCTORS ----- // //
@@ -27,14 +29,30 @@ const float& PointLight::radius() const
 	return m_radius;
 }
 
-Mesh* PointLight::mesh_ptr()
+const std::string& PointLight::type() const
+{
+	return TYPE;
+}
+
+//std::vector<std::string> PointLight::shader_commands()
+//{
+//	//std::map<std::string, void*> to_send;
+//	//to_send.insert("point_light.brightness", (void*)Light::brightness());
+//	//return
+//	//{
+//	//	std::string(TYPE + ".brightness"
+//	//	"sdsds"
+//	//};
+//}
+
+Mesh* PointLight::mesh()
 {
 	return &m_light_mesh;
 }
-//Shader* PointLight::shader_ptr()
-//{
-//	return &m_shader;
-//}
+Shader* PointLight::shader()
+{
+	return &m_shader;
+}
 
 // // ----- SETTERS ----- // //
 void PointLight::setRadius(const GLfloat radius)

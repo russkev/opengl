@@ -207,6 +207,7 @@
     <ClInclude Include="node\LightNode.h" />
     <ClInclude Include="node\MeshNode.h" />
     <ClInclude Include="node\Node.h" />
+    <ClInclude Include="render\LightsToMat.h" />
     <ClInclude Include="render\Renderer.h" />
     <ClInclude Include="shading\Bitmap.h" />
     <ClInclude Include="shading\LoadShader.h" />

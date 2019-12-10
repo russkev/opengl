@@ -1,3 +1,5 @@
+#include "../node/LightNode.h"
+
 #include "Shader.h"
 #include "LoadShader.h"
 #include <glm/glm.hpp>
@@ -62,6 +64,11 @@ void Shader::use()
 bool Shader::containsUniform(std::string uniform_name)
 {
 	return m_uniforms.find(uniform_name) != m_uniforms.end();
+}
+
+void Shader::updateLights(const std::vector<LightNode*>& light_nodes)
+{
+
 }
 
 

@@ -20,31 +20,36 @@ const glm::vec3& Light::color() const
 	return m_color;
 }
 
-Mesh* Light::mesh_ptr()
+Mesh* Light::mesh()
 {
 	return NULL;
 }
 
-Shader* Light::shader_ptr() {
+Shader* Light::shader() {
 	return NULL;
+}
+
+const bool& Light::isEnabled() const
+{
+	return m_mesh_enabled;
 }
 
 // // ----- SETTERS ----- // //
 void Light::setBrightness(const GLfloat brightness)
 {
 	m_brightness = brightness;
-	if (shader_ptr() != NULL)
+	if (shader() != NULL)
 	{
-		shader_ptr()->setUniform(LIGHT_BRIGHTNESS, m_brightness);
+		shader()->setUniform(LIGHT_BRIGHTNESS, m_brightness);
 	}
 }
 
 void Light::setColor(const glm::vec3 color)
 {
 	m_color = color;
-	if (shader_ptr() != NULL)
+	if (shader() != NULL)
 	{
-		shader_ptr()->setUniform(LIGHT_COLOR, m_color);
+		shader()->setUniform(LIGHT_COLOR, m_color);
 	}
 }
 

@@ -13,6 +13,13 @@
 
 */
 
+
+/*
+
+	!!! Should change this so it doesn't inherit from camera so that it
+	is consistant with the other nodes
+
+*/
 struct CameraNode : public Node, public Camera
 {
 	// // ----- MEMBER VARIABLES ----- // //
