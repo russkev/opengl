@@ -2,12 +2,14 @@
 #define GL_ENGINE_LIGHT_LIGHT_H
 
 #pragma once
+#include <vector>
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <../mesh/Mesh.h>
 #include <../shading/Shader.h>
 #include <../shading/Material.h>
+
 
 /*
 
@@ -30,13 +32,17 @@ public:
 	Light() {};
 	Light(const GLfloat brightness, const glm::vec3& color);
 
-
 	// // ----- GETTERS ----- // //
 	const GLfloat& brightness() const;
 	const glm::vec3& color() const;
+	const bool& isEnabled() const;
+	virtual Mesh* mesh();
+	virtual Shader* shader();
 	
-	virtual Mesh* mesh_ptr();
-	virtual Shader* shader_ptr();
+	// // ----- SHADER COMMANDS ----- // //
+	virtual const std::string& type() const = 0;
+	//virtual std::vector<std::string> shader_commands() = 0;
+	//virtual void update_shader_commands() = 0;
 
 	// // ----- SETTERS ----- // //
 	void setBrightness(const GLfloat brightness);

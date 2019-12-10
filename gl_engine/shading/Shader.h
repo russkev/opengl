@@ -15,6 +15,9 @@
 //#include "../node/LightNode.h"
 //#include "../light/Light.h"
 
+// Forward decleration
+struct LightNode;
+
 
 /*
 
@@ -100,6 +103,7 @@ public:
 
 	void use();
 	bool containsUniform(const std::string uniform_name);
+	void updateLights(const std::vector<LightNode*>& light_nodes);
 
 
 private:

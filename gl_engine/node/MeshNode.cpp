@@ -1,5 +1,11 @@
 #include "MeshNode.h"
 
+#include "../mesh/Mesh.h"
+#include "../shading/Material.h"
+#include "../shading/Shader.h"
+#include "CameraNode.h"
+
+
 #include "../Timer.h"
 
 const std::string MeshNode::U_MODEL_TO_WORLD = "transform.modelToWorld";

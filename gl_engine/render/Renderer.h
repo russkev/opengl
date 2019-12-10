@@ -12,6 +12,10 @@
 #include "../node/LightNode.h"
 
 
+#include "../light/PointLight.h"
+#include "../shading/Material.h"
+
+
 /*
 
 	Renderer object for rendering all objects
@@ -25,8 +29,6 @@ private:
 	LightNode* m_lightNode;
 	std::map<std::string, Node*> m_root_nodes;
 	glm::uvec2 m_dimensions = { 800, 600 };
-	//Timer m_timer;
-	//Window* m_window;
 
 public:
 	// // ----- CONSTRUCTOR ----- // //

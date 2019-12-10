@@ -2,7 +2,3 @@
 c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_engine\node\node.h(22): error C7525: inline variables require at least '/std:c++17'
 c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_engine\node\node.h(22): error C2864: 'Node::MESH_VAO_INFO': a static data member with an in-class initializer must have non-volatile const integral type or be specified as 'inline'
   c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_engine\node\node.h(22): note: type is 'const std::array<member_info_type,7>'
-  Test.cpp
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(72): warning C4305: 'initializing': truncation from 'double' to 'float'
-  gl_test.cpp
-  Generating Code...

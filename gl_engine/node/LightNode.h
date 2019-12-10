@@ -2,10 +2,18 @@
 #define GL_ENGINE_NODE_LIGHT_H
 
 #include "Node.h"
-#include "../light/Light.h"
 #include "../VAO.h"
 
 
+// Forward declare light
+struct Light;
+
+
+/*
+	
+	Light node type.
+
+*/
 struct LightNode : public Node
 {
 private:
@@ -14,6 +22,7 @@ private:
 	Buffer m_vertexBuffer = { GL_ARRAY_BUFFER, 0 };
 	Buffer m_indexBuffer = { GL_ARRAY_BUFFER, 0 };
 	glm::mat4 m_modelToPerspectiveMatrix;
+	bool m_shader_warned = false;
 
 public:
 	LightNode() {};
