@@ -78,9 +78,9 @@ int main(int, char**)
 	CameraNode camNode1 = CameraNode("CamNode1");
 	
 	Material cShadMat = Material("cMat", "cShader.vert", "cShader.frag");
-	cShadMat.setUniform("material.spec_power", 32.0f);
-	cShadMat.setUniform("material.diffuse", glm::vec3(0.8, 0.9, 0.7));
-	cShadMat.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
+	//cShadMat.setUniform("material.spec_power", 32.0f);
+	//cShadMat.setUniform("material.diffuse", glm::vec3(0.8, 0.9, 0.7));
+	//cShadMat.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
 
 	Texture tex1("uvtemplate.tga");
 	//cShadMat.setTexture("material.diffuse", tex1);
