@@ -12,8 +12,6 @@
 #include <glm/glm.hpp>
 
 #include "../shading/Texture.h"
-//#include "../node/LightNode.h"
-//#include "../light/Light.h"
 
 // Forward decleration
 struct LightNode;

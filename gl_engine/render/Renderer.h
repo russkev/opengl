@@ -2,19 +2,19 @@
 #define GL_ENGINE_RENDER_RENDERER_H
 
 #include <map>
-
+#include <vector>
+#include <glm/glm.hpp>
 #include <GL/glew.h>
 
-#include "../Timer.h"
-#include "../Window.h"
-#include "../node/Node.h"
-#include "../node/CameraNode.h"
-#include "../node/LightNode.h"
 
-
-#include "../light/PointLight.h"
-#include "../shading/Material.h"
-
+// Forward declerations
+struct CameraNode;
+struct LightNode;
+struct Node;
+struct LightNode;
+struct Material;
+struct Window;
+struct Timer;
 
 /*
 
@@ -26,7 +26,9 @@ struct Renderer
 private:
 	// // ----- MEMBER VARIABLES ----- // //
 	CameraNode* m_cameraNode;
-	LightNode* m_lightNode;
+	//LightNode* m_lightNode;
+	std::vector<LightNode*> m_lightNodes;
+	std::vector<Material*> m_materials;
 	std::map<std::string, Node*> m_root_nodes;
 	glm::uvec2 m_dimensions = { 800, 600 };
 
@@ -40,12 +42,17 @@ public:
 
 	// // ----- GENERAL METHODS ----- // //
 	void initSettings();
-	void addNode(Node* node);
 	void addLightNode(LightNode* lightNode);
+	void addNode(Node* node);
 	bool pollEvents();
 	void update(Window * window, Timer* timer);
 
+private:
+	void addMaterial(Material* material);
+
+
 	// // ----- GETTERS ----- // //
+public:
 	const CameraNode* camera() const;
 
 	// // ----- SETTERS ----- // //
