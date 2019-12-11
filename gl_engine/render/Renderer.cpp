@@ -2,7 +2,16 @@
 
 #include "Renderer.h"
 
+#include "../Timer.h"
+#include "../Window.h"
+#include "../node/Node.h"
 #include "../node/MeshNode.h"
+#include "../node/CameraNode.h"
+#include "../node/LightNode.h"
+#include "../light/PointLight.h"
+#include "../shading/Material.h"
+
+
 
 
 // // ----- CONSTRUCTOR ----- // //
@@ -51,41 +60,67 @@ void Renderer::initSettings()
 //Draw all nodes to screen
 void Renderer::render()
 {
-	//glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	 //Update object to perspective view buffer
+
+	for (Material* material : m_materials)
+	{
+		material->updateLights(m_lightNodes);
+	}
+
 	for (auto const& node : m_root_nodes)
 	{
-		glm::vec3 lightWorldPosition = m_lightNode->worldPosition();
+		//glm::vec3 lightWorldPosition = m_lightNode->worldPosition();
 
-		node.second->update_view(m_cameraNode);
-		if (MeshNode* derived_meshNode = dynamic_cast<MeshNode*>(node.second))
-		{
-			derived_meshNode->material()->setUniform("point_light.position", m_lightNode->worldPosition());
-			derived_meshNode->material()->setUniform("point_light.brightness", m_lightNode->light()->brightness());
-			derived_meshNode->material()->setUniform("point_light.color", m_lightNode->light()->color());
+		//node.second->update_view(m_cameraNode);
+		//if (MeshNode* derived_meshNode = dynamic_cast<MeshNode*>(node.second))
+		//{
+		//	derived_meshNode->material()->setUniform("point_light.position", m_lightNode->worldPosition());
+		//	derived_meshNode->material()->setUniform("point_light.brightness", m_lightNode->light()->brightness());
+		//	derived_meshNode->material()->setUniform("point_light.color", m_lightNode->light()->color());
 
-		}
+		//}
+
 		node.second->draw();
 	}
+
+	//for (Shader* shader : m_shaders)
 }
 
+void Renderer::addLightNode(LightNode* lightNode)
+{
+	m_lightNodes.push_back(lightNode);
+	//m_lightNode = lightNode;
+	addNode(lightNode);
+}
 
 void Renderer::addNode(Node* node)
 {
 	auto search = m_root_nodes.find(node->name());
+
+	// Check if node exists in m_root_nodes
 	if (m_root_nodes.find(node->name()) != m_root_nodes.end())
 	{
 		std::printf("WARNING: \"%s\" not added. Node with that name already exists\n", node->name().c_str());
 		return;
 	}
+
+	// Add material from mesh node
+	if (MeshNode* derived_meshNode = dynamic_cast<MeshNode*>(node))
+	{
+		addMaterial(derived_meshNode->material());
+	}
+
 	m_root_nodes[node->name()] = node;
 }
 
-void Renderer::addLightNode(LightNode* lightNode)
+
+void Renderer::addMaterial(Material* material)
 {
-	m_lightNode = lightNode;
-	addNode(lightNode);
+	if (std::find(m_materials.begin(), m_materials.end(), material) == m_materials.end())
+	{
+		m_materials.push_back(material);
+	}
 }
 
 bool Renderer::pollEvents()

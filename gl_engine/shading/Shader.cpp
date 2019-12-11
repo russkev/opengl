@@ -1,4 +1,5 @@
 #include "../node/LightNode.h"
+#include "../light/PointLight.h"
 
 #include "Shader.h"
 #include "LoadShader.h"
@@ -68,7 +69,17 @@ bool Shader::containsUniform(std::string uniform_name)
 
 void Shader::updateLights(const std::vector<LightNode*>& light_nodes)
 {
-
+	int point_index = 0;
+	for (LightNode* light_node : light_nodes)
+	{
+		if (PointLight* derived_light = dynamic_cast<PointLight*>(light_node->light()))
+		{
+			setUniform("point_light[" + std::to_string(point_index) + "].position", light_node->worldPosition());
+			setUniform("point_light[" + std::to_string(point_index) + "].brightness", derived_light->brightness());
+			setUniform("point_light[" + std::to_string(point_index) + "].color", derived_light->brightness());
+			point_index++;
+		}
+	}
 }
 
 

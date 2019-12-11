@@ -7,6 +7,7 @@
 #include "node/Node.h"
 #include "node/MeshNode.h"
 #include "node/LightNode.h"
+#include "node/CameraNode.h"
 #include "shading/Shader.h"
 #include "shading/Material.h"
 #include "mesh/Mesh.h"
@@ -82,7 +83,7 @@ int main(int, char**)
 	cShadMat.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
 
 	Texture tex1("uvtemplate.tga");
-	cShadMat.setTexture("material.diffuse", tex1);
+	//cShadMat.setTexture("material.diffuse", tex1);
 
 	Texture tex2("uvtemplate.tga");
 

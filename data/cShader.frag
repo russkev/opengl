@@ -34,7 +34,7 @@ struct Camera
 	vec3 position;
 };
 
-uniform Material material;
+uniform Material material[NUM_LIGHTS];
 uniform Point_Light point_light;
 uniform Camera camera;
 
