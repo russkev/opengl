@@ -1,4 +1,5 @@
 #version 440 core
+#define NUM_LIGHTS 10
 
 // // INS // //
 in layout(location = 0 ) vec3 model_vertexPosition;
@@ -31,7 +32,7 @@ struct Camera
 };
 
 uniform Transform transform;
-uniform Point_Light point_light;
+uniform Point_Light point_light[NUM_LIGHTS];
 uniform Camera camera;
 
 
@@ -66,7 +67,7 @@ void send_camSpaceCoordinates()
 {
 	camSpace_vertexPosition		= ((transform.worldToCam * vec4(worldSpace_vertexPosition, 1.0)).xyz);
 	camSpace_camDirection		= (- camSpace_vertexPosition);
-	camSpace_lightDirection		= ((transform.worldToCam * vec4(point_light.position, 1.0)).xyz - camSpace_vertexPosition);
+	camSpace_lightDirection		= ((transform.worldToCam * vec4(point_light[0].position, 1.0)).xyz - camSpace_vertexPosition);
 	camSpace_normalDirection	= ((transform.worldToCam * vec4(worldSpace_vertexNormal, 0.0)).xyz);
 	
 	//
@@ -95,7 +96,7 @@ void send_tangentSpaceCoordinates()
 	mat3 worldToTangent		= transpose(tangentToWorld);
 
 	tangentSpace_camPosition	= worldToTangent * camera.position;
-	tangentSpace_lightPosition	= worldToTangent * point_light.position;
+	tangentSpace_lightPosition	= worldToTangent * point_light[0].position;
 	tangentSpace_fragPosition	= worldToTangent * worldSpace_vertexPosition;
 }
 

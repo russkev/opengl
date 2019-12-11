@@ -34,8 +34,8 @@ struct Camera
 	vec3 position;
 };
 
-uniform Material material[NUM_LIGHTS];
-uniform Point_Light point_light;
+uniform Material material;
+uniform Point_Light point_light[NUM_LIGHTS];
 uniform Camera camera;
 
 // // OUTS // //
@@ -65,8 +65,9 @@ float dot_vec3(vec3 v1, vec3 v2)
 
 float attenuation()
 {
-	float light_distance = distance(worldSpace_vertexPosition, point_light.position);
-	return 1 / (light_distance * light_distance);
+	//float light_distance = distance(worldSpace_vertexPosition, point_light.position);
+	//return 1 / (light_distance * light_distance);
+	return 1;
 }
 
 // // DIFFUSE LIGHTING // //
@@ -76,72 +77,78 @@ vec3 diffuse_lighting(vec3 normal, vec3 light)
 	return vec3(cos_theta);
 }
 
-vec3 diffuse_lighting_worldSpace()
-{
-	return diffuse_lighting(
-		worldSpace_vertexNormal, 
-		normalize(point_light.position));
-}
+//vec3 diffuse_lighting_worldSpace()
+//{
+//	return diffuse_lighting(
+//		worldSpace_vertexNormal, 
+//		normalize(point_light.position));
+//}
 
-vec3 diffuse_lighting_camSpace()
-{
-	return diffuse_lighting(
-		camSpace_normalNormalized, 
-		camSpace_lightNormalized);
-}
+//vec3 diffuse_lighting_camSpace()
+//{
+//	return diffuse_lighting(
+//		camSpace_normalNormalized, 
+//		camSpace_lightNormalized);
+//}
 
-vec3 diffuse_lighting_tangentSpace()
-{
-	return diffuse_lighting(
-		tangentSpace_normal, 
-		tangentSpace_lightDirection);
-}
+//vec3 diffuse_lighting_tangentSpace()
+//{
+//	return diffuse_lighting(
+//		tangentSpace_normal, 
+//		tangentSpace_lightDirection);
+//}
 
 // // SPECULAR LIGHTING // //
-vec3 specular_lighting(vec3 light, vec3 normal, vec3 cam)
-{
-	vec3 reflection = reflect(-light, normal);
-	float cos_alpha = clamp( dot_vec3( cam, reflection ), 0, 1);
-	return vec3(pow(cos_alpha, material.spec_power));
-}
+//vec3 specular_lighting(vec3 light, vec3 normal, vec3 cam)
+//{
+//	vec3 reflection = reflect(-light, normal);
+//	float cos_alpha = clamp( dot_vec3( cam, reflection ), 0, 1);
+//	return vec3(pow(cos_alpha, material.spec_power));
+//}
 
-vec3 specular_lighting_worldSpace()
-{
-	vec3 light		= normalize(point_light.position - worldSpace_vertexPosition);
-	vec3 normal		= normalize(worldSpace_vertexNormal);
-	vec3 cam		= normalize(camera.position - worldSpace_vertexPosition);
-	return specular_lighting(light, normal, cam);
-}
+//vec3 specular_lighting_worldSpace()
+//{
+//	vec3 light		= normalize(point_light.position - worldSpace_vertexPosition);
+//	vec3 normal		= normalize(worldSpace_vertexNormal);
+//	vec3 cam		= normalize(camera.position - worldSpace_vertexPosition);
+//	return specular_lighting(light, normal, cam);
+//}
 
-vec3 specular_lighting_camSpace()
-{
-	return specular_lighting(
-		camSpace_lightNormalized,
-		camSpace_normalNormalized,
-		camSpace_camNormalized);
-}
+//vec3 specular_lighting_camSpace()
+//{
+//	return specular_lighting(
+//		camSpace_lightNormalized,
+//		camSpace_normalNormalized,
+//		camSpace_camNormalized);
+//}
 
-vec3 specular_lighting_tangentSpace()
-{
-	return specular_lighting(
-		tangentSpace_lightDirection, 
-		tangentSpace_normal, 
-		tangentSpace_camDirection);
-}
+//vec3 specular_lighting_tangentSpace()
+//{
+//	return specular_lighting(
+//		tangentSpace_lightDirection, 
+//		tangentSpace_normal, 
+//		tangentSpace_camDirection);
+//}
 
 // // MAIN // //
 void main ()
 {
-	float out_brightness	= point_light.brightness * point_light.brightness;
+	float out_brightness	= point_light[0].brightness * point_light[0].brightness;
 	float light_attenuation	= attenuation();
 
-	vec3 diffuse_lighting = diffuse_lighting_camSpace();
-	vec3 specular_lighting = specular_lighting_camSpace();
+	vec3 diffuse_lighting = vec3(0.0);
+	for (int i = 0; i < NUM_LIGHTS; i++)
+	{
+		diffuse_lighting += diffuse_lighting(worldSpace_vertexNormal, normalize(point_light[i].position));
+	}
+
+	//vec3 diffuse_lighting = diffuse_lighting_camSpace();
+	//vec3 specular_lighting = specular_lighting_camSpace();
 
 	vec3 outColor = 
-		diffuse_lighting * texture(material.diffuse, uv).rgb * out_brightness * point_light.color
-		+ 
-		specular_lighting * material.specular * point_light.color
+		diffuse_lighting * texture(material.diffuse, uv).rgb * out_brightness * point_light[0].color
+		//+ 
+		//specular_lighting * material.specular * point_light.color
 		* vec3(1.0);
 
 	fragColor = vec4(outColor.xyz, 1.0);

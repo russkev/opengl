@@ -141,6 +141,10 @@ void Renderer::update(Window * window, Timer * timer)
 {
 	timer->update();
 	m_cameraNode->update();
+	for (const auto& node : m_root_nodes)
+	{
+		node.second->update_view(m_cameraNode);
+	}
 	render();
 	window->finish_frame();
 	window->appendTitle(("FPS: " + (std::string)timer->fps()));
