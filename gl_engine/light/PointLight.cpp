@@ -17,11 +17,14 @@ const std::string PointLight::LIGHT_BRIGHTNESS = std::string(TYPE + ".brightness
 // // ----- CONSTRUCTORS ----- // //
 
 PointLight::PointLight(const GLfloat brightness, const glm::vec3 color) :
-	m_brightness(brightness),
-	m_color(brightness),
+	//m_brightness(brightness),
+	//m_color(color),
 	m_light_mesh(Sphere::createSphere(m_radius)),
 	m_shader(Shader("lightShader", "lightShader.vert", "lightShader.frag"))
-{}
+{
+	setBrightness(brightness);
+	setColor(color);
+}
 
 
 // // ----- GETTERS ----- // //

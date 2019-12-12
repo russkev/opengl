@@ -42,11 +42,11 @@ out vec3 worldSpace_vertexNormal;
 
 out vec3 camSpace_vertexPosition;
 out vec3 camSpace_camDirection;
-out vec3 camSpace_lightDirection;
+out vec3 camSpace_lightDirection[NUM_LIGHTS];
 out vec3 camSpace_normalDirection;
 
 out vec3 tangentSpace_camPosition;
-out vec3 tangentSpace_lightPosition;
+out vec3 tangentSpace_lightPosition[NUM_LIGHTS];
 out vec3 tangentSpace_fragPosition;
 
 out vec2 uv;
@@ -67,7 +67,10 @@ void send_camSpaceCoordinates()
 {
 	camSpace_vertexPosition		= ((transform.worldToCam * vec4(worldSpace_vertexPosition, 1.0)).xyz);
 	camSpace_camDirection		= (- camSpace_vertexPosition);
-	camSpace_lightDirection		= ((transform.worldToCam * vec4(point_light[0].position, 1.0)).xyz - camSpace_vertexPosition);
+	for (int i = 0; i < NUM_LIGHTS; i++)
+	{
+		camSpace_lightDirection[i] = ((transform.worldToCam * vec4(point_light[i].position, 1.0)).xyz - camSpace_vertexPosition);
+	}
 	camSpace_normalDirection	= ((transform.worldToCam * vec4(worldSpace_vertexNormal, 0.0)).xyz);
 	
 	//
@@ -96,7 +99,10 @@ void send_tangentSpaceCoordinates()
 	mat3 worldToTangent		= transpose(tangentToWorld);
 
 	tangentSpace_camPosition	= worldToTangent * camera.position;
-	tangentSpace_lightPosition	= worldToTangent * point_light[0].position;
+	for (int i = 0; i < NUM_LIGHTS; i++)
+	{
+		tangentSpace_lightPosition[i]	= worldToTangent * point_light[i].position;
+	}
 	tangentSpace_fragPosition	= worldToTangent * worldSpace_vertexPosition;
 }
 
