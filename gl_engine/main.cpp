@@ -94,11 +94,17 @@ int main(int, char**)
 	Mesh plane = Plane::createPlane(100.0f, 100.0f);
 	MeshNode plane_node = MeshNode("Plane1", &plane, &cShadMat);
 
+	// Light 1
 	PointLight pointLight = PointLight(1.0f, { 1.0f, 0.0f, 0.0f });
-	pointLight.setBrightness(1.2f);
+	pointLight.setBrightness(2.1f);
 	pointLight.setColor(glm::vec3(1.0, 0.7, 0.2));
-	LightNode pointLight_node = LightNode("pointLight1", &pointLight);
-	pointLight_node.setPosition({ -6.0f, 3.0f, 0.0f });
+	LightNode pointLight_node = LightNode("Point Light 1", &pointLight);
+	pointLight_node.setPosition({ -6.0f, 0.3f, 0.0f });
+
+	// Light 2
+	PointLight pointLight2 = PointLight(3.0f, { 0.2f, 0.1f, 1.0f });
+	LightNode pointLight_node2 = LightNode("Point Light 2", &pointLight2);
+	pointLight_node2.setPosition({ 0.0f, 4.0f, -5.0f });
 
 	Node lightRotate1 = Node("light rotate 01");
 	//lightRotate1.addChild(&pointLight_node);
@@ -111,6 +117,7 @@ int main(int, char**)
 	render.addNode(&shaderBall_node);
 	render.addNode(&plane_node);
 	render.addLightNode(&pointLight_node);
+	render.addLightNode(&pointLight_node2);
 
 	Timer timer;
 
