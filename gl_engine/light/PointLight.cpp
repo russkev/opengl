@@ -7,23 +7,35 @@
 
 
 // // ----- STATICS ----- // //
+const std::string PointLight::TYPE = "light";
 
-const std::string PointLight::TYPE = "point_light";
+const std::string PointLight::LIGHT_COLOR = std::string(TYPE + ".color");
+const std::string PointLight::LIGHT_BRIGHTNESS = std::string(TYPE + ".brightness");
 
 //Shader PointLight::m_shader = Shader("lightShader", "LightMesh.vert", "LightMesh.frag");
 
 // // ----- CONSTRUCTORS ----- // //
 
-PointLight::PointLight(const GLfloat brightness, const glm::vec3 color, const GLfloat radius) :
-	Light(brightness, color),
-	m_radius(radius > 0 ? radius : 0.1f),
-	m_light_mesh(Sphere::createSphere(m_radius))
-{
-	m_shader = Shader("lightShader", "lightShader.vert", "lightShader.frag");
-}
+PointLight::PointLight(const GLfloat brightness, const glm::vec3 color) :
+	m_brightness(brightness),
+	m_color(brightness),
+	m_light_mesh(Sphere::createSphere(m_radius)),
+	m_shader(Shader("lightShader", "lightShader.vert", "lightShader.frag"))
+{}
 
 
 // // ----- GETTERS ----- // //
+const GLfloat& PointLight::brightness() const
+{
+	return m_brightness;
+}
+
+const glm::vec3& PointLight::color() const
+{
+	return m_color;
+}
+
+
 const float& PointLight::radius() const
 {
 	return m_radius;
@@ -64,5 +76,23 @@ void PointLight::setRadius(const GLfloat radius)
 	else
 	{
 		m_radius = radius;
+	}
+}
+
+void PointLight::setBrightness(const GLfloat brightness)
+{
+	m_brightness = brightness;
+	if (shader() != NULL)
+	{
+		shader()->setUniform(LIGHT_BRIGHTNESS, m_brightness);
+	}
+}
+
+void PointLight::setColor(const glm::vec3 color)
+{
+	m_color = color;
+	if (shader() != NULL)
+	{
+		shader()->setUniform(LIGHT_COLOR, m_color);
 	}
 }

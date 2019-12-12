@@ -23,19 +23,22 @@ struct Material
 	vec3 specular;
 	float spec_power;
 };
+uniform Material material;
+
 struct Point_Light
 {
 	vec3 position;
 	float brightness;
 	vec3 color;
 };
+uniform Point_Light point_light[NUM_LIGHTS];
+
 struct Camera
 {
 	vec3 position;
 };
 
-uniform Material material;
-uniform Point_Light point_light[NUM_LIGHTS];
+
 uniform Camera camera;
 
 // // OUTS // //
@@ -99,20 +102,20 @@ vec3 diffuse_lighting(vec3 normal, vec3 light)
 //}
 
 // // SPECULAR LIGHTING // //
-//vec3 specular_lighting(vec3 light, vec3 normal, vec3 cam)
-//{
-//	vec3 reflection = reflect(-light, normal);
-//	float cos_alpha = clamp( dot_vec3( cam, reflection ), 0, 1);
-//	return vec3(pow(cos_alpha, material.spec_power));
-//}
+vec3 specular_lighting(vec3 light, vec3 normal, vec3 cam)
+{
+	vec3 reflection = reflect(-light, normal);
+	float cos_alpha = clamp( dot_vec3( cam, reflection ), 0, 1);
+	return vec3(pow(cos_alpha, material.spec_power));
+}
 
-//vec3 specular_lighting_worldSpace()
-//{
-//	vec3 light		= normalize(point_light.position - worldSpace_vertexPosition);
-//	vec3 normal		= normalize(worldSpace_vertexNormal);
-//	vec3 cam		= normalize(camera.position - worldSpace_vertexPosition);
-//	return specular_lighting(light, normal, cam);
-//}
+vec3 specular_lighting_worldSpace(int index)
+{
+	vec3 light		= normalize(point_light[index].position - worldSpace_vertexPosition);
+	vec3 normal		= normalize(worldSpace_vertexNormal);
+	vec3 cam		= normalize(camera.position - worldSpace_vertexPosition);
+	return specular_lighting(light, normal, cam);
+}
 
 //vec3 specular_lighting_camSpace()
 //{
@@ -137,9 +140,11 @@ void main ()
 	float light_attenuation	= attenuation();
 
 	vec3 diffuse_lighting = vec3(0.0);
-	for (int i = 0; i < NUM_LIGHTS; i++)
+	vec3 specular_lighting = vec3(0.0);
+	for (int i = 0; i < 2; i++)
 	{
 		diffuse_lighting += diffuse_lighting(worldSpace_vertexNormal, normalize(point_light[i].position));
+		specular_lighting += specular_lighting_worldSpace(i);
 	}
 
 	//vec3 diffuse_lighting = diffuse_lighting_camSpace();
@@ -147,8 +152,10 @@ void main ()
 
 	vec3 outColor = 
 		diffuse_lighting * texture(material.diffuse, uv).rgb * out_brightness * point_light[0].color
-		//+ 
+		+ 
+		specular_lighting
 		//specular_lighting * material.specular * point_light.color
+		//diffuse_lighting * texture(material.diffuse, uv).rgb * out_brightness * point_light[0].color.xyz
 		* vec3(1.0);
 
 	fragColor = vec4(outColor.xyz, 1.0);

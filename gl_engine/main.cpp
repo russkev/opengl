@@ -78,12 +78,12 @@ int main(int, char**)
 	CameraNode camNode1 = CameraNode("CamNode1");
 	
 	Material cShadMat = Material("cMat", "cShader.vert", "cShader.frag");
-	//cShadMat.setUniform("material.spec_power", 32.0f);
+	cShadMat.setUniform("material.spec_power", 32.0f);
 	//cShadMat.setUniform("material.diffuse", glm::vec3(0.8, 0.9, 0.7));
-	//cShadMat.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
+	cShadMat.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
 
 	Texture tex1("uvtemplate.tga");
-	//cShadMat.setTexture("material.diffuse", tex1);
+	cShadMat.setTexture("material.diffuse", tex1);
 
 	Texture tex2("uvtemplate.tga");
 
@@ -94,7 +94,7 @@ int main(int, char**)
 	Mesh plane = Plane::createPlane(100.0f, 100.0f);
 	MeshNode plane_node = MeshNode("Plane1", &plane, &cShadMat);
 
-	PointLight pointLight = PointLight(1.0f, { 1.0f, 0.0f, 0.0f }, 0.5f);
+	PointLight pointLight = PointLight(1.0f, { 1.0f, 0.0f, 0.0f });
 	pointLight.setBrightness(1.2f);
 	pointLight.setColor(glm::vec3(1.0, 0.7, 0.2));
 	LightNode pointLight_node = LightNode("pointLight1", &pointLight);
@@ -119,11 +119,11 @@ int main(int, char**)
 		float new_y_rotation = shaderBall_node.rotation().y + (float)timer.delta_time_s() * 30;
 		shaderBall_node.setRotation({ 0.0, new_y_rotation, 0.0 });
 
-		float l1_rotate = lightRotate1.rotation().z + (float)timer.delta_time_s() * 100;
-		lightRotate1.setRotation({ 0.0 , 0.0, l1_rotate });
+		//float l1_rotate = lightRotate1.rotation().z + (float)timer.delta_time_s() * 100;
+		//lightRotate1.setRotation({ 0.0 , 0.0, l1_rotate });
 
-		float l2_rotate = lightRotate2.rotation().y - (float)timer.delta_time_s() * 60;
-		lightRotate2.setRotation({ 0.0, l2_rotate, 0.0 });
+		//float l2_rotate = lightRotate2.rotation().y - (float)timer.delta_time_s() * 60;
+		//lightRotate2.setRotation({ 0.0, l2_rotate, 0.0 });
 
 		render.update(&window, &timer);
 	}
