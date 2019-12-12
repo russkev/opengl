@@ -18,23 +18,19 @@
 */
 struct Light
 {
-	static const std::string LIGHT_COLOR;
-	static const std::string LIGHT_BRIGHTNESS;
 
 	// // ----- MEMBER VARIABLES ----- // //
 private:
-	GLfloat m_brightness = 1.0f;
-	glm::vec3 m_color = { 1.0f, 1.0f, 1.0f };
 	bool m_mesh_enabled = true;
 
 	// // ----- CONSTRUCTORS ----- // //
 public:
 	Light() {};
-	Light(const GLfloat brightness, const glm::vec3& color);
+	//Light(const GLfloat brightness, const glm::vec3& color);
 
 	// // ----- GETTERS ----- // //
-	const GLfloat& brightness() const;
-	const glm::vec3& color() const;
+	virtual const GLfloat& brightness() const = 0;
+	virtual const glm::vec3& color() const = 0;
 	const bool& isEnabled() const;
 	virtual Mesh* mesh();
 	virtual Shader* shader();
@@ -45,8 +41,8 @@ public:
 	//virtual void update_shader_commands() = 0;
 
 	// // ----- SETTERS ----- // //
-	void setBrightness(const GLfloat brightness);
-	void setColor(const glm::vec3 color);
+	virtual void setBrightness(const GLfloat brightness) = 0;
+	virtual void setColor(const glm::vec3 color) = 0;
 	void enable_mesh();
 	void disable_mesh();
 };

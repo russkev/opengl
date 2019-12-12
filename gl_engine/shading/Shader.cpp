@@ -16,6 +16,12 @@ Shader::Shader(const std::string& name, const char* vertexShader, const char* fr
 // // ----- GENERAL METHODS ----- // //
 void Shader::setTexture(const std::string& location_name, Texture& texture)
 {
+	if (m_uniforms.find(location_name) == m_uniforms.end())
+	{
+		printf("WARNING: Unable to set texture: \"%s\", uniform not found\n", location_name.c_str());
+		return;
+	}
+
 	Uniform* thisUniform;
 	
 	use();
@@ -76,7 +82,7 @@ void Shader::updateLights(const std::vector<LightNode*>& light_nodes)
 		{
 			setUniform("point_light[" + std::to_string(point_index) + "].position", light_node->worldPosition());
 			setUniform("point_light[" + std::to_string(point_index) + "].brightness", derived_light->brightness());
-			setUniform("point_light[" + std::to_string(point_index) + "].color", derived_light->brightness());
+			setUniform("point_light[" + std::to_string(point_index) + "].color", derived_light->color());
 			point_index++;
 		}
 	}
