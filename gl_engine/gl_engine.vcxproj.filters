@@ -117,6 +117,9 @@
     <ClCompile Include="shading\Texture.cpp">
       <Filter>Shading</Filter>
     </ClCompile>
+    <ClCompile Include="light\DirectionalLight.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\SimpleFragmentShader.frag">
@@ -240,6 +243,9 @@
     </ClInclude>
     <ClInclude Include="render\LightsToMat.h">
       <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="light\DirectionalLight.h">
+      <Filter>Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
