@@ -45,6 +45,10 @@ uniform Camera camera;
 out vec4 fragColor;
 
 // // LOCALS // //
+vec3 worldSpace_camDirection;
+vec3 worldSpace_lightDirection[NUM_LIGHTS];
+vec3 worldSpace_normalDirection;
+
 vec3 camSpace_camNormalized;
 vec3 camSpace_lightNormalized[NUM_LIGHTS];
 vec3 camSpace_normalNormalized;
@@ -55,10 +59,20 @@ vec3 tangentSpace_normal;
 
 
 // INITIALIZATION OF LOCALS //
+void init_worldSpace()
+{
+	worldSpace_camDirection = normalize(camera.position - worldSpace_vertexPosition);
+	for (int i = 0; i < NUM_LIGHTS; i++)
+	{
+		worldSpace_lightDirection[i] = normalize(point_light[i].position - worldSpace_vertexPosition);
+	}
+	worldSpace_normalDirection = normalize(worldSpace_vertexNormal);
+}
+
 void init_camSpace()
 {
 	camSpace_camNormalized = normalize(camSpace_camDirection);
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
 		camSpace_lightNormalized[i] = normalize(camSpace_lightDirection[i]);
 	}
@@ -92,7 +106,6 @@ float attenuation(int index)
 {
 	float light_distance = distance(worldSpace_vertexPosition, point_light[index].position);
 	return 1 / (light_distance * light_distance);
-//	return 1;
 }
 
 // // DIFFUSE LIGHTING // //
@@ -105,8 +118,8 @@ vec3 diffuse_lighting(vec3 normal, vec3 light)
 vec3 diffuse_lighting_worldSpace(int index)
 {
 	return diffuse_lighting(
-		worldSpace_vertexNormal, 
-		normalize(point_light[index].position));
+		worldSpace_normalDirection,
+		worldSpace_lightDirection[index]);
 }
 
 vec3 diffuse_lighting_camSpace(int index)
@@ -133,69 +146,58 @@ vec3 specular_lighting(vec3 light, vec3 normal, vec3 cam)
 
 vec3 specular_lighting_worldSpace(int index)
 {
-	vec3 light		= normalize(point_light[index].position - worldSpace_vertexPosition);
-	vec3 normal		= normalize(worldSpace_vertexNormal);
-	vec3 cam		= normalize(camera.position - worldSpace_vertexPosition);
-	return specular_lighting(light, normal, cam);
+	return specular_lighting(
+		worldSpace_lightDirection[index], 
+		worldSpace_normalDirection, 
+		worldSpace_camDirection);
 }
 
-//vec3 specular_lighting_camSpace()
-//{
-//	return specular_lighting(
-//		camSpace_lightNormalized,
-//		camSpace_normalNormalized,
-//		camSpace_camNormalized);
-//}
+vec3 specular_lighting_camSpace(int index)
+{
+	return specular_lighting(
+		camSpace_lightNormalized[index],
+		camSpace_normalNormalized,
+		camSpace_camNormalized);
+}
 
-//vec3 specular_lighting_tangentSpace()
-//{
-//	return specular_lighting(
-//		tangentSpace_lightDirection, 
-//		tangentSpace_normal, 
-//		tangentSpace_camDirection);
-//}
+vec3 specular_lighting_tangentSpace(int index)
+{
+	return specular_lighting(
+		tangentSpace_lightDirection[index], 
+		tangentSpace_normal, 
+		tangentSpace_camDirection);
+}
 
 // // MAIN // //
 void main ()
 {
-
-	float out_brightness	= point_light[0].brightness * point_light[0].brightness;
-//	float light_attenuation	= attenuation();
-
 	vec3 diffuse_out = vec3(0.0);
 	vec3 specular_out = vec3(0.0);
 
+	init_worldSpace();
 	init_camSpace();
 	init_tangentSpace();
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
 		float temp_attenuation = attenuation(i);
+
 		diffuse_out += 
-			diffuse_lighting_worldSpace(i) * //(worldSpace_vertexNormal, normalize(point_light[i].position)) *
+			diffuse_lighting_worldSpace(i) *
 			point_light[i].brightness * point_light[i].brightness *
 			point_light[i].color * 
 			temp_attenuation;
+
 		specular_out +=
-			specular_lighting_worldSpace(i) * 
+			specular_lighting_tangentSpace(i) * 
 			material.specular * 
 			point_light[i].color;
-
-
-
-//		diffuse_out += diffuse_lighting_worldSpace(i);
-//		specular_lighting += specular_lighting_worldSpace(i);
 	}
 
-	//vec3 diffuse_lighting = diffuse_lighting_camSpace();
-	//vec3 specular_lighting = specular_lighting_camSpace();
 
 	vec3 outColor = 
 		diffuse_out * texture(material.diffuse, uv).rgb
-//		diffuse_out * texture(material.diffuse, uv).rgb * out_brightness * point_light[0].color
 		+ 
 		specular_out
-		//specular_lighting * material.specular * point_light.color
-		//diffuse_lighting * texture(material.diffuse, uv).rgb * out_brightness * point_light[0].color.xyz
 		* vec3(1.0);
 
 	fragColor = vec4(outColor.xyz, 1.0);

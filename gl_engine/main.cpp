@@ -91,7 +91,7 @@ int main(int, char**)
 	MeshNode shaderBall_node = MeshNode("shader ball", &shaderBall, &cShadMat);
 	//shaderBall_node.setScale({ 1.0, 10.0, 1.0 });
 
-	Mesh plane = Plane::createPlane(100.0f, 100.0f);
+	Mesh plane = Plane::createPlane(20.0f, 20.0f, 20, 20);
 	MeshNode plane_node = MeshNode("Plane1", &plane, &cShadMat);
 
 	// Light 1
@@ -99,7 +99,7 @@ int main(int, char**)
 	pointLight.setBrightness(2.1f);
 	pointLight.setColor(glm::vec3(1.0, 0.7, 0.2));
 	LightNode pointLight_node = LightNode("Point Light 1", &pointLight);
-	pointLight_node.setPosition({ -6.0f, 0.3f, 0.0f });
+	pointLight_node.setPosition({ -6.0f, 1.2f, 0.0f });
 
 	// Light 2
 	PointLight pointLight2 = PointLight(3.0f, { 0.2f, 0.1f, 1.0f });
