@@ -120,6 +120,9 @@
     <ClCompile Include="light\DirectionalLight.cpp">
       <Filter>Light</Filter>
     </ClCompile>
+    <ClCompile Include="light\SpotLight.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\SimpleFragmentShader.frag">
@@ -245,6 +248,9 @@
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="light\DirectionalLight.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\SpotLight.h">
       <Filter>Light</Filter>
     </ClInclude>
   </ItemGroup>

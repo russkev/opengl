@@ -17,6 +17,7 @@
 #include "mesh/obj.h"
 #include "light/PointLight.h"
 #include "light/DirectionalLight.h"
+#include "light/SpotLight.h"
 #include "render/Renderer.h"
 #include "shading/Texture.h"
 #include "Timer.h"
@@ -78,6 +79,7 @@ int main(int, char**)
 
 	// Camera
 	CameraNode camNode1 = CameraNode("CamNode1");
+	camNode1.setClipFar(1000.0f);
 	
 	// Shader 1
 	Material cShadMat = Material("cMat", "cShader.vert", "cShader.frag");
@@ -96,13 +98,14 @@ int main(int, char**)
 	MeshNode shaderBall_node{ "shader ball", &shaderBall, &cShadMat };
 
 	// Mesh 2
-	Mesh plane = Plane::createPlane(20.0f, 20.0f, 1, 1);
+	Mesh plane = Plane::createPlane(100.0f, 100.0f, 1, 1);
 	MeshNode plane_node{ "Plane1", &plane, &cShadMat };
 
 	// Light 1
 	PointLight pointLight{ 1.0f, { 1.0f, 0.0f, 0.0f } };
 	pointLight.setBrightness(2.1f);
 	pointLight.setColor(glm::vec3(1.0, 0.7, 0.2));
+	pointLight.disable_mesh();
 	LightNode pointLight_node{ "Point Light 1", &pointLight };
 	pointLight_node.setPosition({ -6.0f, 1.2f, 0.0f });
 
@@ -112,10 +115,19 @@ int main(int, char**)
 	pointLight_node2.setPosition({ 0.0f, 4.0f, -5.0f });
 
 	// Light 3
-	DirectionalLight directionalLight1{ 0.5f, { 0.2f, 1.0f, 0.1f } };
+	DirectionalLight directionalLight1{ 0.2f, { 0.2f, 1.0f, 0.1f } };
 	LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
 	directionalLight_node1.setPosition({ 0.0, 7.0, 0.0 });
 	directionalLight_node1.setRotation({ 30.0f, -100.0f, 0.0f });
+
+	// Light 4
+	SpotLight spotLight1{ 6.0f, { 1.0f, 0.0f, 0.0f } };
+	LightNode spotLight_node1{ "Spot Light 1", &spotLight1 };
+	spotLight_node1.setRotation({ 60.0f, 0.0f, 0.0f });
+	spotLight_node1.setPosition({ -3.0f, 10.0f, -2.0f });
+	spotLight1.set_innerAngle(30.0f);
+	spotLight1.set_outerAngle(33.0f);
+	spotLight_node1.setParent(&camNode1);
 
 	// Null node 1
 	Node lightRotate1 = Node("light rotate 01");
@@ -133,6 +145,8 @@ int main(int, char**)
 	render.addLightNode(&pointLight_node);
 	render.addLightNode(&pointLight_node2);
 	render.addLightNode(&directionalLight_node1);
+	render.addLightNode(&spotLight_node1);
+
 
 	Timer timer;
 

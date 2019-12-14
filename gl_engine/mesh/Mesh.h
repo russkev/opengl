@@ -77,7 +77,7 @@ public:
 	// // ----- TANGENTS AND BITANGENTS ----- // //
 	void makeTangents();
 
-	// // ----- Getters ----- // //
+	// // ----- GETTERS ----- // //
 	Vertex* getVertex(std::size_t i);
 	template <std::size_t attr>
 	glm::vec3 getVertex(const std::size_t i)
@@ -92,19 +92,19 @@ public:
 	verticesType vertices()		{ return m_vertices; }
 	const indicesType& indices() const { return m_indices; }
 
-	// // ----- Size Getters ----- // //
+	// // ----- SIZE GETTERS----- // //
 	GLsizeiptr sizeVertices()	{ return m_vertices.size() * sizeof(Vertex); }
 	GLsizeiptr sizeIndices()	{ return m_indices.size()  * sizeof(indexType); }
 	GLsizeiptr sizeShape()		{ return sizeVertices()    + sizeIndices(); }
 
-	// // ----- Iterators ----- // //
+	// // ----- ITERATORS ----- // //
 	vrt_iterator vert_begin()	{ return m_vertices.begin(); }
 	vrt_iterator vert_end()		{ return m_vertices.end(); }
 	ind_iterator indx_begin()	{ return m_indices.begin(); }
 	ind_iterator indx_end()		{ return m_indices.end(); }
 	
 private:
-	// // ----- Member Variables ----- // //
+	// // ----- MEMBER VARIABLES----- // //
 	verticesType	m_vertices;
 	indicesType		m_indices;
 	GLuint			m_id;

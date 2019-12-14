@@ -26,7 +26,7 @@ private:
 
 	glm::uvec2 m_dimensions = { 800u, 600u };
 	GLfloat m_clipNear		= 0.1f;
-	GLfloat m_clipFar		= 100.0f;
+	GLfloat m_clipFar		= 10.0f;
 	GLfloat m_angleOfView	= 50.0f; // In degrees
 
 
@@ -46,15 +46,6 @@ public:
 	virtual const glm::vec3 position() const;
 
 	// // ----- GETTERS ----- // //
-	//glm::vec3 m_position = { 0.0f, 8.0f, 8.0f };
-	//glm::vec3 m_viewDirection = { 0.0f, -1.0f, -1.0f };
-	//glm::vec3 m_camRight = { -1.0f, 0.0f, 0.0f };
-
-	//glm::vec3 m_lookTarget = m_viewDirection + m_camRight;
-	//glm::vec3 m_camUp = glm::cross(m_viewDirection, m_camRight);
-
-	//glm::vec2 m_oldMousePosition;
-
 	const glm::uvec2& dimensions() const;
 	//GLfloat m_clipNear = 0.1f;
 	//GLfloat m_clipFar = 100.0f;

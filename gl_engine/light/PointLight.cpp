@@ -21,17 +21,6 @@ PointLight::PointLight(const GLfloat brightness, const glm::vec3 color) :
 
 
 // // ----- GETTERS ----- // //
-//const GLfloat& PointLight::brightness() const
-//{
-//	return m_brightness;
-//}
-//
-//const glm::vec3& PointLight::color() const
-//{
-//	return m_color;
-//}
-
-
 const float& PointLight::radius() const
 {
 	return m_radius;

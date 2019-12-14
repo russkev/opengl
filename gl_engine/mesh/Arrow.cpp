@@ -5,6 +5,11 @@
 
 Mesh Arrow::createArrow()
 {
+	return createArrow(1.0f);
+}
+
+Mesh Arrow::createArrow(const float length)
+{
 	Mesh newArrow;
 	
 	// Up face
@@ -14,8 +19,8 @@ Mesh Arrow::createArrow()
 		glm::vec3(+2.0f, +2.0f, +1.0f),
 		glm::vec3(-1.0f, +2.0f, +1.0f),
 		glm::vec3(+1.0f, +2.0f, +1.0f),
-		glm::vec3(-1.0f, +2.0f, -1.0f),
-		glm::vec3(+1.0f, +2.0f, -1.0f));
+		glm::vec3(-1.0f, +2.0f, -length),
+		glm::vec3(+1.0f, +2.0f, -length));
 
 	// Down face
 	newArrow += createArrowFace(
@@ -24,15 +29,15 @@ Mesh Arrow::createArrow()
 		glm::vec3(-2.0f, +0.0f, +1.0f),
 		glm::vec3(+1.0f, +0.0f, +1.0f),
 		glm::vec3(-1.0f, +0.0f, +1.0f),
-		glm::vec3(+1.0f, +0.0f, -1.0f),
-		glm::vec3(-1.0f, +0.0f, -1.0f));
+		glm::vec3(+1.0f, +0.0f, -length),
+		glm::vec3(-1.0f, +0.0f, -length));
 
 	// Back face 1
 	newArrow += createRectangleFace(
-		glm::vec3(-1.0, +2.0, -1.0),
-		glm::vec3(+1.0, +2.0, -1.0),
-		glm::vec3(-1.0, +0.0, -1.0),
-		glm::vec3(+1.0, +0.0, -1.0));
+		glm::vec3(-1.0, +2.0, -length),
+		glm::vec3(+1.0, +2.0, -length),
+		glm::vec3(-1.0, +0.0, -length),
+		glm::vec3(+1.0, +0.0, -length));
 
 	// Back face 2
 	newArrow += createRectangleFace(
@@ -51,15 +56,15 @@ Mesh Arrow::createArrow()
 	// Left face
 	newArrow += createRectangleFace(
 		glm::vec3(-1.0, +2.0, +1.0),
-		glm::vec3(-1.0, +2.0, -1.0),
+		glm::vec3(-1.0, +2.0, -length),
 		glm::vec3(-1.0, +0.0, +1.0),
-		glm::vec3(-1.0, +0.0, -1.0));
+		glm::vec3(-1.0, +0.0, -length));
 
 	// Right face
 	newArrow += createRectangleFace(
-		glm::vec3(+1.0, +2.0, -1.0),
+		glm::vec3(+1.0, +2.0, -length),
 		glm::vec3(+1.0, +2.0, +1.0),
-		glm::vec3(+1.0, +0.0, -1.0),
+		glm::vec3(+1.0, +0.0, -length),
 		glm::vec3(+1.0, +0.0, +1.0));
 
 	// Left diagonal face

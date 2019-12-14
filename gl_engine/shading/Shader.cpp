@@ -1,6 +1,7 @@
 #include "../node/LightNode.h"
 #include "../light/PointLight.h"
 #include "../light/DirectionalLight.h"
+#include "../light/SpotLight.h"
 
 #include "Shader.h"
 #include "LoadShader.h"
@@ -76,26 +77,49 @@ bool Shader::containsUniform(std::string uniform_name)
 
 void Shader::updateLights(const std::vector<LightNode*>& light_nodes)
 {
-	int index = 0, point_index = 0, directional_index = 0;
+	int index = 0, point_index = 0, directional_index = 0, spot_index = 0;
 	std::string type = "";
 
 	for (LightNode* light_node : light_nodes)
 	{
-		if (PointLight* derived_light = dynamic_cast<PointLight*>(light_node->light()))
+		PointLight* point_light = dynamic_cast<PointLight*>(light_node->light());
+		DirectionalLight* directional_light = dynamic_cast<DirectionalLight*>(light_node->light());
+		SpotLight* spot_light = dynamic_cast<SpotLight*>(light_node->light());
+
+		// Adjust indices
+		if (point_light)
 		{
-			type = derived_light->type();
+			type = point_light->type();
 			index = point_index;
 			point_index++;
 		}
-		if (DirectionalLight* derived_light = dynamic_cast<DirectionalLight*>(light_node->light()))
+		if (directional_light)
 		{
-			type = derived_light->type();
+			type = directional_light->type();
 			index = directional_index;
 			directional_index++;
 		}
+		if (spot_light)
+		{
+			type = spot_light->type();
+			index = spot_index;
+			spot_index++;
+		}
 
-		setUniform(std::string(type + "[" + std::to_string(index) + "]" + LightNode::LIGHT_POSITION), light_node->worldPosition());
-		setUniform(std::string(type + "[" + std::to_string(index) + "]" + LightNode::LIGHT_DIRECTION), light_node->directionVector());
+		// Set uniforms
+		if (point_light || spot_light)
+		{
+			setUniform(std::string(type + "[" + std::to_string(index) + "]" + LightNode::LIGHT_POSITION), light_node->worldPosition());
+		}
+		if (directional_light || spot_light)
+		{
+			setUniform(std::string(type + "[" + std::to_string(index) + "]" + LightNode::LIGHT_DIRECTION), light_node->directionVector());
+		}
+		if (spot_light)
+		{
+			setUniform(std::string(type + "[" + std::to_string(index) + "]" + SpotLight::INNER), spot_light->cos_innerAngle());
+			setUniform(std::string(type + "[" + std::to_string(index) + "]" + SpotLight::OUTER), spot_light->cos_outerAngle());
+		}		
 		setUniform(std::string(type + "[" + std::to_string(index) + "]" + Light::LIGHT_BRIGHTNESS), light_node->light()->brightness());
 		setUniform(std::string(type + "[" + std::to_string(index) + "]" + Light::LIGHT_COLOR), light_node->light()->color());
 	}
