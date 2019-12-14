@@ -38,9 +38,12 @@ void LightNode::init_shadowMap()
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// Create depth shader
+	m_depthShader = Shader("Depth shader", "DepthShader.vert", "DepthShader.frag");
 }
 
-void LightNode::render_shadowMap()
+void LightNode::render_shadowMap(const glm::mat4& model_matrix)
 {
 	// 1. Render depth map
 	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
@@ -54,11 +57,18 @@ void LightNode::render_shadowMap()
 		glm::vec3(-2.0f, 4.0f, -1.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 lightSpace_matrix = lightProjection * lightView;
 
-	// !!! Render fro m light perspective
+	// Render shadow map
+	m_depthShader.setUniform("lightSpace_matrix", lightSpace_matrix);
+	m_depthShader.setUniform("model", model_matrix);
 
+	m_depthShader.use();
+	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
+		glClear(GL_DEPTH_BUFFER_BIT);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	
 
 	// 2. Render
 }

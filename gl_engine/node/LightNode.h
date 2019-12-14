@@ -3,6 +3,7 @@
 
 #include "Node.h"
 #include "../VAO.h"
+#include "../shading/Shader.h"
 
 
 // Forward declare light
@@ -28,6 +29,7 @@ private:
 
 	GLuint m_depthMap_FBO;
 	GLuint m_depthMap_ID;
+	Shader m_depthShader;
 
 public:
 	LightNode() {};
@@ -39,7 +41,7 @@ public:
 	static constexpr GLuint SHADOW_HEIGHT = 1024;
 
 	void init_shadowMap();
-	void render_shadowMap();
+	void render_shadowMap(const glm::mat4 & model_matrix);
 
 	// // ----- GENERAL ----- // //
 	void update_view(Camera* camera) override;

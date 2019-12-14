@@ -182,6 +182,8 @@
   <ItemGroup>
     <None Include="..\data\cShader.frag" />
     <None Include="..\data\cShader.vert" />
+    <None Include="..\data\DepthShader.frag" />
+    <None Include="..\data\DepthShader.vert" />
     <None Include="..\data\LightShader.frag" />
     <None Include="..\data\LightShader.vert" />
     <None Include="..\data\SimpleFragmentShader.frag" />
