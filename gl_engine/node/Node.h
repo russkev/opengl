@@ -20,6 +20,7 @@ struct Node
 	static const std::string U_MODEL_TO_PROJECTION;
 	static constexpr auto POSITION_ATTR = 0u;
 	inline static const auto MESH_VAO_INFO = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
+	static const glm::vec3 FORWARD_DIRECTION;
 
 	// // ----- MEMBER VARIABLES ----- // //
 private:
@@ -43,6 +44,7 @@ public:
 	const glm::mat4 localTransform();
 	const glm::mat4 worldTransform();
 	const glm::mat3 worldNormalTransform();
+	const glm::vec3 directionVector();
 
 	virtual void update_view(Camera*) {};
 	virtual void draw() {};

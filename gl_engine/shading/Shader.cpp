@@ -1,5 +1,6 @@
 #include "../node/LightNode.h"
 #include "../light/PointLight.h"
+#include "../light/DirectionalLight.h"
 
 #include "Shader.h"
 #include "LoadShader.h"
@@ -75,16 +76,28 @@ bool Shader::containsUniform(std::string uniform_name)
 
 void Shader::updateLights(const std::vector<LightNode*>& light_nodes)
 {
-	int point_index = 0;
+	int index = 0, point_index = 0, directional_index = 0;
+	std::string type = "";
+
 	for (LightNode* light_node : light_nodes)
 	{
 		if (PointLight* derived_light = dynamic_cast<PointLight*>(light_node->light()))
 		{
-			setUniform("point_light[" + std::to_string(point_index) + "].position", light_node->worldPosition());
-			setUniform("point_light[" + std::to_string(point_index) + "].brightness", derived_light->brightness());
-			setUniform("point_light[" + std::to_string(point_index) + "].color", derived_light->color());
+			type = derived_light->type();
+			index = point_index;
 			point_index++;
 		}
+		if (DirectionalLight* derived_light = dynamic_cast<DirectionalLight*>(light_node->light()))
+		{
+			type = derived_light->type();
+			index = directional_index;
+			directional_index++;
+		}
+
+		setUniform(std::string(type + "[" + std::to_string(index) + "]" + LightNode::LIGHT_POSITION), light_node->worldPosition());
+		setUniform(std::string(type + "[" + std::to_string(index) + "]" + LightNode::LIGHT_DIRECTION), light_node->directionVector());
+		setUniform(std::string(type + "[" + std::to_string(index) + "]" + Light::LIGHT_BRIGHTNESS), light_node->light()->brightness());
+		setUniform(std::string(type + "[" + std::to_string(index) + "]" + Light::LIGHT_COLOR), light_node->light()->color());
 	}
 }
 

@@ -1,6 +1,9 @@
 #include "LightNode.h"
 #include "../light/Light.h"
 
+const std::string LightNode::LIGHT_POSITION = ".position";
+const std::string LightNode::LIGHT_DIRECTION = ".direction";
+
 LightNode::LightNode(const std::string name, Light* light) :
 	Node(name),
 	m_light(light)

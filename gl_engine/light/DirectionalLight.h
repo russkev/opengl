@@ -17,8 +17,6 @@ struct DirectionalLight : public Light
 {
 private:
 	static const std::string TYPE;
-	//static const std::string LIGHT_COLOR;
-	//static const std::string LIGHT_BRIGHTNESS;
 
 	// // ----- MEMBER VARIABLES ----- // //
 private:

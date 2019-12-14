@@ -18,6 +18,7 @@
 */
 struct Light
 {
+	static const std::string LIGHT_SHADER_TYPE;
 	static const std::string LIGHT_COLOR;
 	static const std::string LIGHT_BRIGHTNESS;
 

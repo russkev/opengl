@@ -70,27 +70,14 @@ void Renderer::render()
 
 	for (auto const& node : m_root_nodes)
 	{
-		//glm::vec3 lightWorldPosition = m_lightNode->worldPosition();
-
-		//node.second->update_view(m_cameraNode);
-		//if (MeshNode* derived_meshNode = dynamic_cast<MeshNode*>(node.second))
-		//{
-		//	derived_meshNode->material()->setUniform("point_light.position", m_lightNode->worldPosition());
-		//	derived_meshNode->material()->setUniform("point_light.brightness", m_lightNode->light()->brightness());
-		//	derived_meshNode->material()->setUniform("point_light.color", m_lightNode->light()->color());
-
-		//}
 		node.second->update_view(m_cameraNode);
 		node.second->draw();
 	}
-
-	//for (Shader* shader : m_shaders)
 }
 
 void Renderer::addLightNode(LightNode* lightNode)
 {
 	m_lightNodes.push_back(lightNode);
-	//m_lightNode = lightNode;
 	addNode(lightNode);
 }
 
@@ -142,10 +129,6 @@ void Renderer::update(Window * window, Timer * timer)
 
 	timer->update();
 	m_cameraNode->update();
-	//for (const auto& node : m_root_nodes)
-	//{
-	//	node.second->update_view(m_cameraNode);
-	//}
 	render();
 	window->finish_frame();
 	window->appendTitle(("FPS: " + (std::string)timer->fps()));
