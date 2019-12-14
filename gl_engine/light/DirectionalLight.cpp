@@ -1,6 +1,6 @@
 #include "DirectionalLight.h"
 
-const std::string DirectionalLight::TYPE = "light";
+const std::string DirectionalLight::TYPE = "directional_light";
 
 DirectionalLight::DirectionalLight(GLfloat brightness, glm::vec3 color) :
 	m_light_mesh(Arrow::createArrow()),

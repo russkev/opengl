@@ -16,6 +16,7 @@
 #include "mesh/Plane.h"
 #include "mesh/obj.h"
 #include "light/PointLight.h"
+#include "light/DirectionalLight.h"
 #include "render/Renderer.h"
 #include "shading/Texture.h"
 #include "Timer.h"
@@ -75,49 +76,63 @@ int main(int, char**)
 	GLuint height	= 600u;
 	Window window("GL Engine", st_config, width, height);
 
+	// Camera
 	CameraNode camNode1 = CameraNode("CamNode1");
 	
+	// Shader 1
 	Material cShadMat = Material("cMat", "cShader.vert", "cShader.frag");
 	cShadMat.setUniform("material.spec_power", 32.0f);
-	//cShadMat.setUniform("material.diffuse", glm::vec3(0.8, 0.9, 0.7));
 	cShadMat.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
 
+	// Texture 1
 	Texture tex1("uvtemplate.tga");
 	cShadMat.setTexture("material.diffuse", tex1);
 
+	// Texture 2
 	Texture tex2("uvtemplate.tga");
 
+	// Mesh 1
 	Mesh shaderBall = OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
-	MeshNode shaderBall_node = MeshNode("shader ball", &shaderBall, &cShadMat);
-	//shaderBall_node.setScale({ 1.0, 10.0, 1.0 });
+	MeshNode shaderBall_node{ "shader ball", &shaderBall, &cShadMat };
 
+	// Mesh 2
 	Mesh plane = Plane::createPlane(20.0f, 20.0f, 20, 20);
-	MeshNode plane_node = MeshNode("Plane1", &plane, &cShadMat);
+	MeshNode plane_node{ "Plane1", &plane, &cShadMat };
 
 	// Light 1
-	PointLight pointLight = PointLight(1.0f, { 1.0f, 0.0f, 0.0f });
+	PointLight pointLight{ 1.0f, { 1.0f, 0.0f, 0.0f } };
 	pointLight.setBrightness(2.1f);
 	pointLight.setColor(glm::vec3(1.0, 0.7, 0.2));
-	LightNode pointLight_node = LightNode("Point Light 1", &pointLight);
+	LightNode pointLight_node{ "Point Light 1", &pointLight };
 	pointLight_node.setPosition({ -6.0f, 1.2f, 0.0f });
 
 	// Light 2
-	PointLight pointLight2 = PointLight(3.0f, { 0.2f, 0.1f, 1.0f });
-	LightNode pointLight_node2 = LightNode("Point Light 2", &pointLight2);
+	PointLight pointLight2{ 3.0f, { 0.2f, 0.1f, 1.0f } };
+	LightNode pointLight_node2{ "Point Light 2", &pointLight2 };
 	pointLight_node2.setPosition({ 0.0f, 4.0f, -5.0f });
 
+	// Light 3
+	DirectionalLight directionalLight1{ 0.5f, { 0.2f, 1.0f, 0.1f } };
+	LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
+	directionalLight_node1.setPosition({ 0.0, 7.0, 0.0 });
+	directionalLight_node1.setRotation({ 30.0f, -100.0f, 0.0f });
+
+	// Null node 1
 	Node lightRotate1 = Node("light rotate 01");
 	//lightRotate1.addChild(&pointLight_node);
 
+	// Null node 2
 	Node lightRotate2 = Node("light rotate 02");
 	lightRotate2.addChild(&lightRotate1);
 	lightRotate2.setPosition({ 2.0, 0.0, 0.0 });
 
+	// Renderer
 	Renderer render = Renderer(&camNode1, glm::uvec2(width, height));
 	render.addNode(&shaderBall_node);
 	render.addNode(&plane_node);
 	render.addLightNode(&pointLight_node);
 	render.addLightNode(&pointLight_node2);
+	render.addLightNode(&directionalLight_node1);
 
 	Timer timer;
 

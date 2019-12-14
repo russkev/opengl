@@ -7,7 +7,7 @@
 
 
 // // ----- STATICS ----- // //
-const std::string PointLight::TYPE = "light";
+const std::string PointLight::TYPE = "point_light";
 
 // // ----- CONSTRUCTORS ----- // //
 

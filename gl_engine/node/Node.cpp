@@ -6,6 +6,7 @@
 
 
 const std::string Node::U_MODEL_TO_PROJECTION = "transform.modelToProjection";
+const glm::vec3 Node::FORWARD_DIRECTION = { 0.0, 0.0, -1.0 };
 
 
 Node::Node(const std::string name) : m_name(name)
@@ -75,6 +76,11 @@ const glm::mat4 Node::worldTransform()
 const glm::mat3 Node::worldNormalTransform()
 {
 	return glm::mat3(glm::transpose(glm::inverse(worldTransform())));
+}
+
+const glm::vec3 Node::directionVector()
+{
+	return glm::mat3(worldTransform()) * FORWARD_DIRECTION;
 }
 
 void Node::addParent(Node* parent)

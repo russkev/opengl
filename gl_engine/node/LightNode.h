@@ -16,6 +16,8 @@ struct Light;
 */
 struct LightNode : public Node
 {
+	static const std::string LIGHT_POSITION;
+	static const std::string LIGHT_DIRECTION;
 private:
 	Light* m_light = NULL;
 	VAO m_vao;
