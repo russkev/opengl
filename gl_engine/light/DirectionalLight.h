@@ -5,7 +5,6 @@
 
 #include "Light.h"
 
-#include "../mesh/Arrow.h"
 #include "../shading/LoadShader.h"
 
 /*
@@ -20,8 +19,6 @@ private:
 
 	// // ----- MEMBER VARIABLES ----- // //
 private:
-	//GLfloat m_brightness = 1.0f;
-	//glm::vec3 m_color = { 1.0f, 1.0f, 1.0f };
 	Mesh m_light_mesh;
 	Shader m_shader;
 
@@ -30,15 +27,10 @@ public:
 	DirectionalLight(GLfloat brightness, glm::vec3 color);
 
 	// // ----- GETTERS ----- // //
-	//const GLfloat& brightness() const override;
-	//const glm::vec3& color() const override;
 	const std::string& type() const override;
 
 	Mesh* mesh() override;
 	Shader* shader() override;
-
-	// // ----- SETTERS ----- // //	
-	//void setBrightness(const GLfloat brightness) override;
-	//void setColor(const glm::vec3 color) override;
 };
+
 #endif

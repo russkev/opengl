@@ -21,7 +21,7 @@ struct PointLight : public Light
 
 	// // ----- MEMBER VARIABLES ----- // //
 private:
-	float m_radius = 1.0f;
+	float m_radius = 0.5f;
 	Mesh m_light_mesh;
 	Shader m_shader;
 

@@ -38,35 +38,13 @@ void Camera::update()
 	{
 		axisDelta.z = (float)mouseDelta.y;
 	}
-	if (keyboardState[SDL_SCANCODE_F])
+	if (keyboardState[SDL_SCANCODE_F] || keyboardState[SDL_SCANCODE_Z])
 	{
 		focus(glm::mat4(1.0f));
 	}
 	moveRel(axisDelta * cMoveSpeed);
 	rotateRel(rotateDelta * cRotateSpeed);
 }
-
-//void  Camera::positionUpdate(const SDL_Scancode& newPosition) 
-//{
-//	switch (newPosition) 
-//	{
-//	case SDL_SCANCODE_W:
-//		m_position += MOVE_SPEED * m_viewDirection;
-//		break;
-//	case SDL_SCANCODE_S:
-//		m_position += -MOVE_SPEED * m_viewDirection;
-//		break;
-//	case SDL_SCANCODE_A:
-//		m_position += -MOVE_SPEED * m_camRight;
-//		break;
-//	case SDL_SCANCODE_D:
-//		m_position += MOVE_SPEED * m_camRight;
-//		break;
-//	case SDL_SCANCODE_F:
-//		focus(glm::mat4(1.0f));
-//		break;
-//	}
-//}
 
 void Camera::moveRel(const glm::vec3& mouseDelta)
 {
@@ -83,11 +61,12 @@ void Camera::rotateRel(const glm::vec2& rotateDelta)
 {
 	glm::mat3 r_pitch = (glm::mat3)glm::rotate( rotateDelta.y, m_camRight);
 	glm::mat3 r_yaw   = (glm::mat3)glm::rotate(-rotateDelta.x, UP_AXIS);
+
 	m_position -= m_lookTarget;
 	m_position = r_pitch * r_yaw * m_position;
 	m_position += m_lookTarget;
 
-	m_viewDirection   = m_position - m_lookTarget;
+	m_viewDirection = m_position - m_lookTarget;
 	m_camRight		= r_yaw * m_camRight;
 	m_camUp			= cross(m_camRight, m_viewDirection);
 

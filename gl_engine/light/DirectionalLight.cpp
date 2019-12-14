@@ -1,13 +1,19 @@
 #include "DirectionalLight.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "../mesh/Arrow.h"
+
+
 const std::string DirectionalLight::TYPE = "directional_light";
 
 DirectionalLight::DirectionalLight(GLfloat brightness, glm::vec3 color) :
-	m_light_mesh(Arrow::createArrow()),
+	m_light_mesh(Arrow::createArrow(10.0)),
 	m_shader(Shader("lightShader", "lightShader.vert", "lightShader.frag"))
 {
 	setBrightness(brightness);
 	setColor(color);
+	m_light_mesh.transform(glm::scale(glm::mat4(1.0f), glm::vec3(0.2, 0.05, 0.2)));
 }
 
 // // ----- GETTERS ----- // //
