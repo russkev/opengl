@@ -2,19 +2,28 @@
 #define NUM_LIGHTS 5
 
 // // INS // //
-in vec3 worldSpace_vertex_position;
-in vec3 worldSpace_vertex_normal;
+in WorldSpace
+{
+	vec3 vertex_position;
+	vec3 vertex_normal;
+} worldSpace;
 
-in vec3 camSpace_vertex_position;
-in vec3 camSpace_cam_direction;
-in vec3 camSpace_light_direction[NUM_LIGHTS];
-in vec3 camSpace_normal_direction;
+in CamSpace
+{
+	vec3 vertex_position;
+	vec3 cam_direction;
+	vec3 light_direction[NUM_LIGHTS];
+	vec3 normal_direction;
+} camSpace;
 
-in vec3 tangentSpace_cam_position;
-in vec3 tangentSpace_pointLight_position[NUM_LIGHTS];
-in vec3 tangentSpace_directionalLight_direction[NUM_LIGHTS];
-in vec3 tangentSpace_spotLight_position[NUM_LIGHTS];
-in vec3 tangentSpace_frag_position;
+in TangentSpace
+{
+	vec3 cam_position;
+	vec3 pointLight_position[NUM_LIGHTS];
+	vec3 directionalLight_direction[NUM_LIGHTS];
+	vec3 spotLight_position[NUM_LIGHTS];
+	vec3 frag_position;
+} tangentSpace;
 
 in vec2 uv;
 
@@ -96,7 +105,7 @@ float dot_vec3(vec3 v1, vec3 v2)
 
 float attenuation(vec3 position)
 {
-	float light_distance = distance(worldSpace_vertex_position, position);
+	float light_distance = distance(worldSpace.vertex_position, position);
 	return 1 / (light_distance * light_distance);
 }
 
@@ -114,41 +123,41 @@ float spot_intensity(vec3 vertex_position, vec3 light_position, vec3 light_aim, 
 // INITIALIZATION OF LOCALS //
 void init_worldSpace()
 {
-	worldSpace_cam_direction = normalize(camera.position - worldSpace_vertex_position);
+	worldSpace_cam_direction = normalize(camera.position - worldSpace.vertex_position);
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		worldSpace_pointLight_direction[i] = normalize(point_light[i].position - worldSpace_vertex_position);
-		worldSpace_spotLight_direction[i] = normalize(spot_light[i].position - worldSpace_vertex_position);
+		worldSpace_pointLight_direction[i] = normalize(point_light[i].position - worldSpace.vertex_position);
+		worldSpace_spotLight_direction[i] = normalize(spot_light[i].position - worldSpace.vertex_position);
 		worldSpace_spotLight_intensity[i] = spot_intensity(
-			worldSpace_vertex_position,
+			worldSpace.vertex_position,
 			spot_light[i].position, 
 			spot_light[i].direction, 
 			spot_light[i].inner, 
 			spot_light[i].outer);
 	}
-	worldSpace_normal_direction = normalize(worldSpace_vertex_normal);
+	worldSpace_normal_direction = normalize(worldSpace.vertex_normal);
 }
 
 void init_camSpace()
 {
-	camSpace_cam_normalized = normalize(camSpace_cam_direction);
+	camSpace_cam_normalized = normalize(camSpace.cam_direction);
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		camSpace_light_normalized[i] = normalize(camSpace_light_direction[i]);
+		camSpace_light_normalized[i] = normalize(camSpace.light_direction[i]);
 	}
-	camSpace_normal_normalized = normalize(camSpace_normal_direction);
+	camSpace_normal_normalized = normalize(camSpace.normal_direction);
 }
 
 void init_tangentSpace()
 {
-	tangentSpace_cam_direction = normalize(tangentSpace_cam_position - tangentSpace_frag_position);
+	tangentSpace_cam_direction = normalize(tangentSpace.cam_position - tangentSpace.frag_position);
 	for (int i = 0; i < NUM_LIGHTS; i++) 
 	{
-		tangentSpace_pointLight_direction[i] = normalize(tangentSpace_pointLight_position[i] - tangentSpace_frag_position);
-		tangentSpace_directionalLight_normalized[i] = -normalize(tangentSpace_directionalLight_direction[i]);
-		tangentSpace_spotLight_direction[i] = normalize(tangentSpace_spotLight_position[i] - tangentSpace_frag_position);
+		tangentSpace_pointLight_direction[i] = normalize(tangentSpace.pointLight_position[i] - tangentSpace.frag_position);
+		tangentSpace_directionalLight_normalized[i] = -normalize(tangentSpace.directionalLight_direction[i]);
+		tangentSpace_spotLight_direction[i] = normalize(tangentSpace.spotLight_position[i] - tangentSpace.frag_position);
 		tangentSpace_spotLight_intensity[i] = spot_intensity(
-			worldSpace_vertex_position,
+			worldSpace.vertex_position,
 			spot_light[i].position, 
 			spot_light[i].direction, 
 			spot_light[i].inner, 
