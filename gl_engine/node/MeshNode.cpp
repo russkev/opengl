@@ -26,19 +26,19 @@ MeshNode::MeshNode(const std::string name, Mesh* mesh, Material* material) :
 }
 
 
-void MeshNode::update_view(Camera* camera)
+void MeshNode::update_view(CameraNode* cameraNode)
 {
-	glm::mat4 modelToPerspective_matrix = camera->worldToProjection_matrix() * Node::worldTransform();
+	glm::mat4 modelToPerspective_matrix = cameraNode->worldToProjection_matrix() * Node::worldTransform();
 
 	m_material->setUniform(U_MODEL_TO_PROJECTION, modelToPerspective_matrix);
 	m_material->setUniform(U_MODEL_TO_WORLD, Node::worldTransform());
 	m_material->setUniform(U_MODEL_TO_WORLD_NORMAL, Node::worldNormalTransform());
-	m_material->setUniform(U_WORLD_TO_CAM, camera->worldToCam_matrix());
-	m_material->setUniform(U_CAM, camera->position());
+	m_material->setUniform(U_WORLD_TO_CAM, cameraNode->worldToCam_matrix());
+	m_material->setUniform(U_CAM, cameraNode->position());
 
 	for (auto child : Node::children())
 	{
-		child.second->update_view(camera);
+		child.second->update_view(cameraNode);
 	}
 
 }

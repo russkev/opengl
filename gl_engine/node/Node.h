@@ -6,9 +6,10 @@
 
 #include <glm/glm.hpp>
 
-#include "../camera/Camera.h"
 #include "../GL_Tuple_Introspect.h"
 
+// // ----- FORWARD DECLERATION ----- // //
+struct CameraNode;
 
 /*
 	
@@ -46,7 +47,7 @@ public:
 	const glm::mat3 worldNormalTransform();
 	const glm::vec3 directionVector();
 
-	virtual void update_view(Camera*) {};
+	virtual void update_view(CameraNode*) {};
 	virtual void draw() {};
 
 	// // ----- GETTERS ----- // //

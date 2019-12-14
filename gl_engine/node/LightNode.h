@@ -27,24 +27,12 @@ private:
 	glm::mat4 m_modelToPerspectiveMatrix;
 	bool m_shader_warned = false;
 
-	GLuint m_depthMap_FBO;
-	GLuint m_depthMap_ID;
-	Shader m_depthShader;
-
 public:
 	LightNode() {};
 	LightNode(const std::string name, Light* light);
 
-	// // ----- SHADOW MAP ----- // //
-public:
-	static constexpr GLuint SHADOW_WIDTH = 1024;
-	static constexpr GLuint SHADOW_HEIGHT = 1024;
-
-	void init_shadowMap();
-	void render_shadowMap(const glm::mat4 & model_matrix);
-
 	// // ----- GENERAL ----- // //
-	void update_view(Camera* camera) override;
+	void update_view(CameraNode* cameraNode) override;
 	void draw() override;
 
 	// // ----- GETTERS ----- // //

@@ -8,6 +8,7 @@
 #include "../node/MeshNode.h"
 #include "../node/CameraNode.h"
 #include "../node/LightNode.h"
+#include "../camera/Camera.h"
 #include "../light/PointLight.h"
 #include "../shading/Material.h"
 
@@ -16,16 +17,16 @@
 
 // // ----- CONSTRUCTOR ----- // //
 Renderer::Renderer(CameraNode* cameraNode) : 
-	m_cameraNode(cameraNode), m_dimensions(cameraNode->dimensions())
+	m_cameraNode(cameraNode), m_dimensions(cameraNode->camera()->dimensions())
 {
-	m_cameraNode->setDimensions(m_dimensions);
+	m_cameraNode->camera()->setDimensions(m_dimensions);
 	initSettings();
 }
 
 Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
 	m_cameraNode(camera), m_dimensions(dimensions)
 {
-	m_cameraNode->setDimensions(dimensions);
+	m_cameraNode->camera()->setDimensions(dimensions);
 	initSettings();
 }
 
@@ -128,7 +129,7 @@ void Renderer::update(Window * window, Timer * timer)
 {
 
 	timer->update();
-	m_cameraNode->update();
+	m_cameraNode->camera()->update();
 	render();
 	window->finish_frame();
 	window->appendTitle(("FPS: " + (std::string)timer->fps()));
