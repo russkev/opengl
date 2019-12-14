@@ -67,7 +67,7 @@ out CamSpace
 	vec3 vertex_position;
 	vec3 cam_direction;
 	vec3 light_direction[NUM_LIGHTS];
-	vec3 normalDirection;
+	vec3 normal_direction;
 } camSpace;
 
 out TangentSpace
@@ -101,7 +101,7 @@ void send_camSpaceCoordinates()
 	{
 		camSpace.light_direction[i] = ((transform.worldToCam * vec4(point_light[i].position, 1.0)).xyz - camSpace.vertex_position);
 	}
-	camSpace.normalDirection	= ((transform.worldToCam * vec4(worldSpace.vertex_normal, 0.0)).xyz);
+	camSpace.normal_direction	= ((transform.worldToCam * vec4(worldSpace.vertex_normal, 0.0)).xyz);
 	
 	//
 	// Side not about vectors:

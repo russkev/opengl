@@ -15,6 +15,7 @@
 #include "mesh/Arrow.h"
 #include "mesh/Plane.h"
 #include "mesh/obj.h"
+#include "camera/Camera.h"
 #include "light/PointLight.h"
 #include "light/DirectionalLight.h"
 #include "light/SpotLight.h"
@@ -77,9 +78,11 @@ int main(int, char**)
 	GLuint height	= 600u;
 	Window window("GL Engine", st_config, width, height);
 
-	// Camera
-	CameraNode camNode1 = CameraNode("CamNode1");
-	camNode1.setClipFar(1000.0f);
+	//// Camera
+	Camera cam{};
+	cam.setClipFar(1000.0f);
+	CameraNode camNode1{ "Camera Node 1", &cam };
+	camNode1.camera()->setClipFar(1000.0f);
 	
 	// Shader 1
 	Material cShadMat = Material("cMat", "cShader.vert", "cShader.frag");
@@ -127,7 +130,6 @@ int main(int, char**)
 	spotLight_node1.setPosition({ -3.0f, 10.0f, -2.0f });
 	spotLight1.set_innerAngle(30.0f);
 	spotLight1.set_outerAngle(33.0f);
-	spotLight_node1.setParent(&camNode1);
 
 	// Null node 1
 	Node lightRotate1 = Node("light rotate 01");

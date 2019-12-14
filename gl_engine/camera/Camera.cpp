@@ -10,9 +10,6 @@ const float Camera::MOVE_SPEED			= 0.5f;
 const float Camera::MOUSE_MOVE_SPEED	= 0.05f;
 const float Camera::ROTATION_SPEED		= 0.007f;
 
-Camera::Camera()
-{}
-
 void Camera::update()
 {
 	static const auto cMoveSpeed	= glm::vec3(0.02f, 0.01f, 0.1f);

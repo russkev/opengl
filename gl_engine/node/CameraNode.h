@@ -4,48 +4,36 @@
 #include <glm/glm.hpp>
 
 #include "Node.h"
-#include "../camera/Camera.h"
 #include "../Buffer.h"
+
+// // ----- FORWARD DECLERATION ----- // //
+struct Camera;
 
 /*
 
 	Main mesh type node. Links a mesh to a material so it can be rendered on screen
 
 */
-
-
-/*
-
-	!!! Should change this so it doesn't inherit from camera so that it
-	is consistant with the other nodes
-
-*/
-struct CameraNode : public Node, public Camera
+struct CameraNode : public Node
 {
 	// // ----- MEMBER VARIABLES ----- // //
 private:
-	//std::string m_name;
-	//Camera* m_camera;
+	Camera* m_camera;
 
 	// // ----- CONSTRUCTOR ----- // //
 public:
 	CameraNode() {};
-	CameraNode(const std::string name);
-
-	// // ----- SETTERS ----- // //
-	//Camera* camera();
+	CameraNode(const std::string name, Camera* camera);
 
 	// // ----- GETTERS ----- // //
-	//const std::string& name() const;
-	//const Camera* camera() const;
-
-	// // ----- OVERRIDES ----- // //
+	Camera* camera();
 	const glm::vec3 position() const override;
 	const glm::vec3 worldPosition() override;
-	void setPosition(const glm::vec3&) override;
-	glm::mat4 worldToCam_matrix() override;
-	glm::mat4 worldToProjection_matrix() override;
+	glm::mat4 worldToCam_matrix();
+	glm::mat4 worldToProjection_matrix();
 
+	// // ----- SETTERS ----- // //
+	void setPosition(const glm::vec3&) override;
 };
 
 

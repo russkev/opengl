@@ -5,6 +5,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <GL/glew.h>
+#include "../node/CameraNode.h"
 
 
 // Forward declerations
@@ -26,7 +27,6 @@ struct Renderer
 private:
 	// // ----- MEMBER VARIABLES ----- // //
 	CameraNode* m_cameraNode;
-	//LightNode* m_lightNode;
 	std::vector<LightNode*> m_lightNodes;
 	std::vector<Material*> m_materials;
 	std::map<std::string, Node*> m_root_nodes;
@@ -55,7 +55,7 @@ private:
 public:
 	const CameraNode* camera() const;
 
-	// // ----- SETTERS ----- // //
+	//// // ----- SETTERS ----- // //
 	CameraNode* camera();
 
 

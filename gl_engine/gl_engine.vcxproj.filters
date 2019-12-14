@@ -123,6 +123,9 @@
     <ClCompile Include="light\SpotLight.cpp">
       <Filter>Light</Filter>
     </ClCompile>
+    <ClCompile Include="shading\ShadowMap.cpp">
+      <Filter>Shading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\SimpleFragmentShader.frag">
@@ -258,6 +261,9 @@
     </ClInclude>
     <ClInclude Include="light\SpotLight.h">
       <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\ShadowMap.h">
+      <Filter>Shading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

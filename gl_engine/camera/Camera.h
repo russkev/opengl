@@ -32,7 +32,7 @@ private:
 
 public:
 	// // ----- CONSTRUCTOR ----- // //
-	Camera();
+	Camera() {};
 	
 	// // ----- CAMERA MOVEMENT ----- // //
 	void update();

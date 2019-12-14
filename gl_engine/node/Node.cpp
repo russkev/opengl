@@ -1,8 +1,7 @@
 #include "Node.h"
 
-#include <stack>
-
 #include "../utils/VectorUtils.h"
+#include "CameraNode.h"
 
 
 const std::string Node::U_MODEL_TO_PROJECTION = "transform.modelToProjection";
@@ -57,13 +56,9 @@ const glm::mat4 Node::localTransform()
 // Calculate the transform matrix in world space
 const glm::mat4 Node::worldTransform()
 {
-	//return localTransform();
-
-	std::stack<glm::mat4> transforms;
 	Node* currentNode = this;
 	glm::mat4 outTransform(1.0f);
 
-	// Collect all transforms
 	while (currentNode != NULL)
 	{
 		outTransform = currentNode->localTransform() * outTransform;
