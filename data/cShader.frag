@@ -1,5 +1,5 @@
 #version 440 core
-#define NUM_LIGHTS 10
+#define NUM_LIGHTS 5
 
 // // INS // //
 in vec3 worldSpace_vertexPosition;
@@ -11,7 +11,8 @@ in vec3 camSpace_lightDirection[NUM_LIGHTS];
 in vec3 camSpace_normalDirection;
 
 in vec3 tangentSpace_camPosition;
-in vec3 tangentSpace_lightPosition[NUM_LIGHTS];
+in vec3 tangentSpace_pointLightPosition[NUM_LIGHTS];
+in vec3 tangentSpace_directionalLightDirection[NUM_LIGHTS];
 in vec3 tangentSpace_fragPosition;
 
 in vec2 uv;
@@ -62,7 +63,8 @@ vec3 camSpace_lightNormalized[NUM_LIGHTS];
 vec3 camSpace_normalNormalized;
 
 vec3 tangentSpace_camDirection;
-vec3 tangentSpace_lightDirection[NUM_LIGHTS];
+vec3 tangentSpace_pointLightDirection[NUM_LIGHTS];
+vec3 tangentSpace_directionalLight_nomalized[NUM_LIGHTS];
 vec3 tangentSpace_normal;
 
 
@@ -92,7 +94,8 @@ void init_tangentSpace()
 	tangentSpace_camDirection = normalize(tangentSpace_camPosition - tangentSpace_fragPosition);
 	for (int i = 0; i < NUM_LIGHTS; i++) 
 	{
-		tangentSpace_lightDirection[i] = normalize(tangentSpace_lightPosition[i] - tangentSpace_fragPosition);
+		tangentSpace_pointLightDirection[i] = normalize(tangentSpace_pointLightPosition[i] - tangentSpace_fragPosition);
+		tangentSpace_directionalLight_nomalized[i] = normalize(tangentSpace_directionalLightDirection[i]);
 	}
 	tangentSpace_normal = vec3(0.0, 0.0, 1.0);
 	
@@ -141,18 +144,26 @@ vec3 diffuse_point_tangentSpace(int index)
 {
 	return diffuse(
 		tangentSpace_normal, 
-		tangentSpace_lightDirection[index]);
+		tangentSpace_pointLightDirection[index]);
 }
 
 vec3 diffuse_directional_worldSpace(int index)
 {
 	return diffuse(
 		worldSpace_normalDirection,
-		directional_light[index].direction);
+		-directional_light[index].direction);
+}
+
+vec3 diffuse_directional_tangentSpace(int index)
+{
+	return diffuse(
+		tangentSpace_normal,
+		-tangentSpace_directionalLight_nomalized[index]);
+
 }
 
 // // SPECULAR LIGHTING // //
-vec3 specular_point(vec3 light, vec3 normal, vec3 cam)
+vec3 specular(vec3 light, vec3 normal, vec3 cam)
 {
 	vec3 reflection = reflect(-light, normal);
 	float cos_alpha = clamp( dot_vec3( cam, reflection ), 0, 1);
@@ -161,7 +172,7 @@ vec3 specular_point(vec3 light, vec3 normal, vec3 cam)
 
 vec3 specular_point_worldSpace(int index)
 {
-	return specular_point(
+	return specular(
 		worldSpace_lightDirection[index], 
 		worldSpace_normalDirection, 
 		worldSpace_camDirection);
@@ -169,7 +180,7 @@ vec3 specular_point_worldSpace(int index)
 
 vec3 specular_point_camSpace(int index)
 {
-	return specular_point(
+	return specular(
 		camSpace_lightNormalized[index],
 		camSpace_normalNormalized,
 		camSpace_camNormalized);
@@ -177,19 +188,29 @@ vec3 specular_point_camSpace(int index)
 
 vec3 specular_point_tangentSpace(int index)
 {
-	return specular_point(
-		tangentSpace_lightDirection[index], 
+	return specular(
+		tangentSpace_pointLightDirection[index], 
 		tangentSpace_normal, 
 		tangentSpace_camDirection);
 }
 
 vec3 specular_directional_worldSpace(int index)
 {
-	return(
-		directional_light[index].direction,
+	return specular(
+		-directional_light[index].direction,
 		worldSpace_normalDirection,
 		worldSpace_camDirection);
 }
+
+vec3 specular_directional_tangentSpace(int index)
+{
+	return specular(
+		-tangentSpace_directionalLight_nomalized[index],
+		tangentSpace_normal,
+		tangentSpace_camDirection);
+}
+
+
 
 // // MAIN // //
 void main ()
@@ -213,7 +234,7 @@ void main ()
 			temp_attenuation;
 
 		specular_out +=
-			specular_point_tangentSpace(i) * 
+			specular_point_worldSpace(i) * 
 			material.specular * 
 			point_light[i].color;
 	}
@@ -227,10 +248,9 @@ void main ()
 			directional_light[i].color;
 
 		specular_out +=
-			specular_directional_worldSpace(i) *
+			specular_directional_tangentSpace(i) *
 			material.specular * 
 			directional_light[i].color;
-			
 	}
 
 

@@ -1,5 +1,5 @@
 #version 440 core
-#define NUM_LIGHTS 10
+#define NUM_LIGHTS 5
 
 // // INS // //
 in layout(location = 0 ) vec3 model_vertexPosition;
@@ -19,6 +19,7 @@ struct Transform
 	mat3 modelToWorld_normal;
 	mat4 worldToCam;
 };
+uniform Transform transform;
 
 struct Point_Light
 {
@@ -26,13 +27,20 @@ struct Point_Light
 	float brightness;
 	vec3 color;
 };
+uniform Point_Light point_light[NUM_LIGHTS];
+
+struct Directional_Light
+{
+	vec3 direction;
+	float brightness;
+	vec3 color;
+};
+uniform Directional_Light directional_light[NUM_LIGHTS];
+
 struct Camera
 {
 	vec3 position;
 };
-
-uniform Transform transform;
-uniform Point_Light point_light[NUM_LIGHTS];
 uniform Camera camera;
 
 
@@ -46,7 +54,8 @@ out vec3 camSpace_lightDirection[NUM_LIGHTS];
 out vec3 camSpace_normalDirection;
 
 out vec3 tangentSpace_camPosition;
-out vec3 tangentSpace_lightPosition[NUM_LIGHTS];
+out vec3 tangentSpace_pointLightPosition[NUM_LIGHTS];
+out vec3 tangentSpace_directionalLightDirection[NUM_LIGHTS];
 out vec3 tangentSpace_fragPosition;
 
 out vec2 uv;
@@ -82,7 +91,6 @@ void send_camSpaceCoordinates()
 
 void send_tangentSpaceCoordinates()
 {
-//	vec3 tangent_basis	= normalize(vec3(transform.modelToWorld * vec4(model_vertexTangent, 0.0)));
 	vec3 tangent_basis		= normalize((transform.modelToWorld * vec4(model_vertexTangent, 0.0)).xyz);
 	vec3 normal_basis		= normalize((transform.modelToWorld * vec4(model_vertexNormal, 1.0)).xyz);
 
@@ -101,7 +109,8 @@ void send_tangentSpaceCoordinates()
 	tangentSpace_camPosition	= worldToTangent * camera.position;
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		tangentSpace_lightPosition[i]	= worldToTangent * point_light[i].position;
+		tangentSpace_pointLightPosition[i]	= worldToTangent * point_light[i].position;
+		tangentSpace_directionalLightDirection[i] = worldToTangent * directional_light[i].direction;
 	}
 	tangentSpace_fragPosition	= worldToTangent * worldSpace_vertexPosition;
 }

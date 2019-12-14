@@ -96,7 +96,7 @@ int main(int, char**)
 	MeshNode shaderBall_node{ "shader ball", &shaderBall, &cShadMat };
 
 	// Mesh 2
-	Mesh plane = Plane::createPlane(20.0f, 20.0f, 20, 20);
+	Mesh plane = Plane::createPlane(20.0f, 20.0f, 1, 1);
 	MeshNode plane_node{ "Plane1", &plane, &cShadMat };
 
 	// Light 1

@@ -6,7 +6,7 @@
 
 
 const std::string Node::U_MODEL_TO_PROJECTION = "transform.modelToProjection";
-const glm::vec3 Node::FORWARD_DIRECTION = { 0.0, 0.0, -1.0 };
+const glm::vec3 Node::FORWARD_DIRECTION = { 0.0, 0.0, 1.0 };
 
 
 Node::Node(const std::string name) : m_name(name)
