@@ -1,8 +1,11 @@
 #include "DirectionalLight.h"
 
+#include <GL/glew.h>
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "../mesh/Arrow.h"
+#include "../Buffer.h"
 
 
 const std::string DirectionalLight::TYPE = "directional_light";
