@@ -3,33 +3,35 @@
 
 #include "Camera.h"
 
-struct OrthoCamera : public Camera
+namespace gl_engine
 {
-	// // ----- MEMBER VARIABLES ----- // //
-private:
-	GLfloat m_left		= -10.0f;
-	GLfloat m_right		=  10.0f;
-	GLfloat m_bottom	= -10.0f;
-	GLfloat m_top		=  10.0f;
+	struct OrthoCamera : public Camera
+	{
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		GLfloat m_left = -10.0f;
+		GLfloat m_right = 10.0f;
+		GLfloat m_bottom = -10.0f;
+		GLfloat m_top = 10.0f;
 
-	// // ----- CONSTRUCTOR ----- // //
-public:
-	OrthoCamera();
-	OrthoCamera(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top);
+		// // ----- CONSTRUCTOR ----- // //
+	public:
+		OrthoCamera();
+		OrthoCamera(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top);
 
-	// // ----- CAMERA MOVEMENT ----- // //
-	void update();
+		// // ----- CAMERA MOVEMENT ----- // //
+		void update();
 
-	// // ----- GETTERS ----- // //
-	glm::mat4 worldToCam_matrix() override;
-	glm::mat4 viewToProjectionMatrix() override;
+		// // ----- GETTERS ----- // //
+		glm::mat4 worldToCam_matrix() override;
+		glm::mat4 viewToProjectionMatrix() override;
 
-	// // ----- SETTERS ----- // //
-	void setSides(const GLfloat left, const GLfloat right, const GLfloat bottom, const GLfloat top);
-	void setLeft(const GLfloat left);
-	void setRight(const GLfloat right);
-	void setBottom(const GLfloat bottom);
-	void setTop(const GLfloat top);
-};
-
+		// // ----- SETTERS ----- // //
+		void setSides(const GLfloat left, const GLfloat right, const GLfloat bottom, const GLfloat top);
+		void setLeft(const GLfloat left);
+		void setRight(const GLfloat right);
+		void setBottom(const GLfloat bottom);
+		void setTop(const GLfloat top);
+	};
+} // namespace gl_engine
 #endif

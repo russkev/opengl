@@ -60,9 +60,6 @@
     <ClCompile Include="shading\LoadShader.cpp">
       <Filter>Shading</Filter>
     </ClCompile>
-    <ClCompile Include="shading\Targa.cpp">
-      <Filter>Shading</Filter>
-    </ClCompile>
     <ClCompile Include="shading\Text2D.cpp">
       <Filter>Shading</Filter>
     </ClCompile>
@@ -126,10 +123,13 @@
     <ClCompile Include="shading\ShadowMap.cpp">
       <Filter>Shading</Filter>
     </ClCompile>
-    <ClCompile Include="camera\OrbitCamera.cpp">
+    <ClCompile Include="camera\OrthoCamera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="camera\OrthoCamera.cpp">
+    <ClCompile Include="camera\FreeCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="camera\TargetCamera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
   </ItemGroup>
@@ -196,13 +196,7 @@
     <ClInclude Include="mesh\OBJ.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="shading\Bitmap.h">
-      <Filter>Shading</Filter>
-    </ClInclude>
     <ClInclude Include="shading\LoadShader.h">
-      <Filter>Shading</Filter>
-    </ClInclude>
-    <ClInclude Include="shading\Targa.h">
       <Filter>Shading</Filter>
     </ClInclude>
     <ClInclude Include="shading\Text2D.h">
@@ -259,9 +253,6 @@
     <ClInclude Include="shading\Texture.h">
       <Filter>Shading</Filter>
     </ClInclude>
-    <ClInclude Include="render\LightsToMat.h">
-      <Filter>Render</Filter>
-    </ClInclude>
     <ClInclude Include="light\DirectionalLight.h">
       <Filter>Light</Filter>
     </ClInclude>
@@ -271,10 +262,13 @@
     <ClInclude Include="shading\ShadowMap.h">
       <Filter>Shading</Filter>
     </ClInclude>
-    <ClInclude Include="camera\OrbitCamera.h">
+    <ClInclude Include="camera\OrthoCamera.h">
       <Filter>Camera</Filter>
     </ClInclude>
-    <ClInclude Include="camera\OrthoCamera.h">
+    <ClInclude Include="camera\TargetCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\FreeCamera.h">
       <Filter>Camera</Filter>
     </ClInclude>
   </ItemGroup>

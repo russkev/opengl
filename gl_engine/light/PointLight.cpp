@@ -5,50 +5,52 @@
 
 #include "PointLight.h"
 
-
-// // ----- STATICS ----- // //
-const std::string PointLight::TYPE = "point_light";
-
-// // ----- CONSTRUCTORS ----- // //
-
-PointLight::PointLight(const GLfloat brightness, const glm::vec3 color) :
-	m_light_mesh(Sphere::createSphere(m_radius)),
-	m_shader(Shader("lightShader", "lightShader.vert", "lightShader.frag"))
+namespace gl_engine
 {
-	setBrightness(brightness);
-	setColor(color);
-}
+	// // ----- STATICS ----- // //
+	const std::string PointLight::TYPE = "point_light";
 
+	// // ----- CONSTRUCTORS ----- // //
 
-// // ----- GETTERS ----- // //
-const float& PointLight::radius() const
-{
-	return m_radius;
-}
-
-const std::string& PointLight::type() const
-{
-	return TYPE;
-}
-
-Mesh* PointLight::mesh()
-{
-	return &m_light_mesh;
-}
-Shader* PointLight::shader()
-{
-	return &m_shader;
-}
-
-// // ----- SETTERS ----- // //
-void PointLight::setRadius(const GLfloat radius)
-{
-	if (radius < 0)
+	PointLight::PointLight(const GLfloat brightness, const glm::vec3 color) :
+		m_light_mesh(Sphere::createSphere(m_radius)),
+		m_shader(Shader("lightShader", "lightShader.vert", "lightShader.frag"))
 	{
-		std::printf("WARNING: unable to set radius to %.3f, can't set to negative", radius);
+		setBrightness(brightness);
+		setColor(color);
 	}
-	else
+
+
+	// // ----- GETTERS ----- // //
+	const float& PointLight::radius() const
 	{
-		m_radius = radius;
+		return m_radius;
 	}
-}
+
+	const std::string& PointLight::type() const
+	{
+		return TYPE;
+	}
+
+	Mesh* PointLight::mesh()
+	{
+		return &m_light_mesh;
+	}
+	Shader* PointLight::shader()
+	{
+		return &m_shader;
+	}
+
+	// // ----- SETTERS ----- // //
+	void PointLight::setRadius(const GLfloat radius)
+	{
+		if (radius < 0)
+		{
+			std::printf("WARNING: unable to set radius to %.3f, can't set to negative", radius);
+		}
+		else
+		{
+			m_radius = radius;
+		}
+	}
+} //namespace gl_engine

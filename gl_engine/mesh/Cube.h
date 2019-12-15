@@ -1,11 +1,16 @@
-#pragma once
+#ifndef GL_ENGINE_MESH_CUBE_H
+#define GL_ENGINE_MESH_CUBE_H
 
 #include "Mesh.h"
 
-struct Cube
+namespace gl_engine
 {
-	static Mesh createCube();
-	static Mesh createCube(const float width);
-private:
-	static Mesh createCubeFace(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, glm::vec3 br);
-};
+	struct Cube
+	{
+		static Mesh createCube();
+		static Mesh createCube(const float width);
+	private:
+		static Mesh createCubeFace(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, glm::vec3 br);
+	};
+} // namespace gl_engine
+#endif

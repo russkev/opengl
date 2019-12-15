@@ -7,44 +7,46 @@
 
 #include "../shading/LoadShader.h"
 
-/*
-
-	Emits light in a cone shape like it's coming from a torch.
-
-*/
-struct SpotLight : public Light
+namespace gl_engine
 {
-public:
-	static const std::string INNER;
-	static const std::string OUTER;
+	/*
 
-private:
-	static const std::string TYPE;
+		Emits light in a cone shape like it's coming from a torch.
 
-	// // ----- MEMBER VARIABLES ----- // //
-private:
-	GLfloat m_innerAngle = 30.0f;
-	GLfloat m_outerAngle = 35.0f;
-	Mesh m_light_mesh;
-	Shader m_shader;
+	*/
+	struct SpotLight : public Light
+	{
+	public:
+		static const std::string INNER;
+		static const std::string OUTER;
 
-	// // ----- CONSTRUCTORS ----- // //
-public:
-	SpotLight(GLfloat brightness, glm::vec3 color);
+	private:
+		static const std::string TYPE;
 
-	// // ----- GETTERS ----- // //
-	const std::string& type() const override;
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		GLfloat m_innerAngle = 30.0f;
+		GLfloat m_outerAngle = 35.0f;
+		Mesh m_light_mesh;
+		Shader m_shader;
 
-	Mesh* mesh() override;
-	Shader* shader() override;
+		// // ----- CONSTRUCTORS ----- // //
+	public:
+		SpotLight(GLfloat brightness, glm::vec3 color);
 
-	const float cos_innerAngle() const;
-	const float cos_outerAngle() const;
+		// // ----- GETTERS ----- // //
+		const std::string& type() const override;
 
-	// // ----- SETTERS ----- // //
-	void set_innerAngle(const GLfloat theta);
-	void set_outerAngle(const GLfloat theta);
+		Mesh* mesh() override;
+		Shader* shader() override;
 
-};
+		const float cos_innerAngle() const;
+		const float cos_outerAngle() const;
 
+		// // ----- SETTERS ----- // //
+		void set_innerAngle(const GLfloat theta);
+		void set_outerAngle(const GLfloat theta);
+
+	};
+} // namespace gl_engine
 #endif

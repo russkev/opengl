@@ -150,7 +150,8 @@
   <ItemGroup>
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
-    <ClCompile Include="camera\OrbitCamera.cpp" />
+    <ClCompile Include="camera\FreeCamera.cpp" />
+    <ClCompile Include="camera\TargetCamera.cpp" />
     <ClCompile Include="camera\OrthoCamera.cpp" />
     <ClCompile Include="light\DirectionalLight.cpp" />
     <ClCompile Include="light\Light.cpp" />
@@ -174,7 +175,6 @@
     <ClCompile Include="shading\Material.cpp" />
     <ClCompile Include="shading\Shader.cpp" />
     <ClCompile Include="shading\ShadowMap.cpp" />
-    <ClCompile Include="shading\Targa.cpp" />
     <ClCompile Include="shading\Text2D.cpp" />
     <ClCompile Include="shading\Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -198,7 +198,8 @@
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="camera\Camera.h" />
-    <ClInclude Include="camera\OrbitCamera.h" />
+    <ClInclude Include="camera\FreeCamera.h" />
+    <ClInclude Include="camera\TargetCamera.h" />
     <ClInclude Include="camera\OrthoCamera.h" />
     <ClInclude Include="GL_Tuple_Introspect.h" />
     <ClInclude Include="GL_Type_Traits.h" />
@@ -218,14 +219,11 @@
     <ClInclude Include="node\LightNode.h" />
     <ClInclude Include="node\MeshNode.h" />
     <ClInclude Include="node\Node.h" />
-    <ClInclude Include="render\LightsToMat.h" />
     <ClInclude Include="render\Renderer.h" />
-    <ClInclude Include="shading\Bitmap.h" />
     <ClInclude Include="shading\LoadShader.h" />
     <ClInclude Include="shading\Material.h" />
     <ClInclude Include="shading\Shader.h" />
     <ClInclude Include="shading\ShadowMap.h" />
-    <ClInclude Include="shading\Targa.h" />
     <ClInclude Include="shading\Text2D.h" />
     <ClInclude Include="shading\Texture.h" />
     <ClInclude Include="Timer.h" />

@@ -7,30 +7,32 @@
 
 #include "../shading/LoadShader.h"
 
-/*
-
-	Emits light in a single direction. Rays are parallel like the sun.
-
-*/
-struct DirectionalLight : public Light
+namespace gl_engine
 {
-private:
-	static const std::string TYPE;
+	/*
 
-	// // ----- MEMBER VARIABLES ----- // //
-private:
-	Mesh m_light_mesh;
-	Shader m_shader;
+		Emits light in a single direction. Rays are parallel like the sun.
 
-	// // ----- CONSTRUCTORS ----- // //
-public:
-	DirectionalLight(GLfloat brightness, glm::vec3 color);
+	*/
+	struct DirectionalLight : public Light
+	{
+	private:
+		static const std::string TYPE;
 
-	// // ----- GETTERS ----- // //
-	const std::string& type() const override;
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		Mesh m_light_mesh;
+		Shader m_shader;
 
-	Mesh* mesh() override;
-	Shader* shader() override;
-};
+		// // ----- CONSTRUCTORS ----- // //
+	public:
+		DirectionalLight(GLfloat brightness, glm::vec3 color);
 
+		// // ----- GETTERS ----- // //
+		const std::string& type() const override;
+
+		Mesh* mesh() override;
+		Shader* shader() override;
+	};
+} // namespace gl_engine
 #endif
