@@ -33,14 +33,14 @@ namespace gl_engine
 
 		glm::vec2 m_oldMousePosition;
 
-		GLfloat m_angleOfView = 50.0f; // In degrees
+		GLfloat m_angleOfView = 3.0f; // In degrees
 
 		// // ----- CONSTRUCTOR ----- // //
 	public:
 		TargetCamera();
 
 		// // ----- CAMERA MOVEMENT ----- // //
-		void update();
+		void update() override;
 		//void positionUpdate(const SDL_Scancode& newPosition);
 		void scrollUpdate(const float scrollAmount);
 		void moveRel(const glm::vec3& moveDelta);

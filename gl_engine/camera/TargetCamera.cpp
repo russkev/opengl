@@ -112,7 +112,11 @@ namespace gl_engine
 
 	glm::mat4 TargetCamera::viewToProjectionMatrix()
 	{
-		return glm::perspective(glm::radians(m_angleOfView), (GLfloat)Camera::dimensions().x / (GLfloat)Camera::dimensions().y, Camera::clipNear(), Camera::clipFar());
+		return glm::perspective(
+			m_angleOfView, 
+			(GLfloat)Camera::dimensions().x / (GLfloat)Camera::dimensions().y, 
+			Camera::clipNear(), 
+			Camera::clipFar());
 	}
 
 	// // ----- SETTERS ----- // //
