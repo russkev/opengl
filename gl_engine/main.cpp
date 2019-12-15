@@ -17,6 +17,7 @@
 #include "mesh/obj.h"
 #include "camera/Camera.h"
 #include "camera/OrbitCamera.h"
+#include "camera/OrthoCamera.h"
 #include "light/PointLight.h"
 #include "light/DirectionalLight.h"
 #include "light/SpotLight.h"
@@ -79,10 +80,19 @@ int main(int, char**)
 	GLuint height	= 600u;
 	Window window("GL Engine", st_config, width, height);
 
-	//// Camera
+	// Camera
 	OrbitCamera orbitCam{};
 	orbitCam.setClipFar(1000.0f);
-	CameraNode camNode1 = CameraNode( "Camera Node 1", &orbitCam );
+
+	OrthoCamera orthoCam{};
+	CameraNode camNode1 = CameraNode("Camera Node 1", &orbitCam);
+	CameraNode orthoCamNode1 = CameraNode("Ortho Cam 1", &orthoCam);
+	//camNode1.setPosition(glm::vec3{ 0.0f, -4.0f, -6.0f });
+	//camNode1.setRotation(glm::vec3{ 50.0f, 0.0f, 0.0f });
+	orthoCam.setClipNear(0.001f);
+	orthoCam.setClipFar(100.0f);
+	orthoCam.setSides(-30.0f, 30.0f, -30.0f, 30.0f);
+	//CameraNode camNode1 = CameraNode( "Camera Node 1", &orbitCam );
 	
 	// Shader 1
 	Material cShadMat = Material("cMat", "cShader.vert", "cShader.frag");
@@ -120,8 +130,9 @@ int main(int, char**)
 	// Light 3
 	DirectionalLight directionalLight1{ 0.2f, { 0.2f, 1.0f, 0.1f } };
 	LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
-	directionalLight_node1.setPosition({ 0.0, 7.0, 0.0 });
+	directionalLight_node1.setPosition({ 8.0f, 9.0f, 0.0f });
 	directionalLight_node1.setRotation({ 30.0f, -100.0f, 0.0f });
+	directionalLight_node1.addChild(&orthoCamNode1);
 
 	// Light 4
 	SpotLight spotLight1{ 6.0f, { 1.0f, 0.0f, 0.0f } };
@@ -141,7 +152,7 @@ int main(int, char**)
 	lightRotate2.setPosition({ 2.0, 0.0, 0.0 });
 
 	// Renderer
-	Renderer render = Renderer(&camNode1, glm::uvec2(width, height));
+	Renderer render = Renderer(&orthoCamNode1, glm::uvec2(width, height));
 	render.addNode(&shaderBall_node);
 	render.addNode(&plane_node);
 	render.addLightNode(&pointLight_node);

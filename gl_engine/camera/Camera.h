@@ -16,7 +16,6 @@ private:
 	GLfloat m_clipNear		= 0.1f;
 	GLfloat m_clipFar		= 10.0f;
 
-
 public:
 	// // ----- CONSTRUCTOR ----- // //
 	Camera() {};
