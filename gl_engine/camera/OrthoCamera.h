@@ -5,6 +5,11 @@
 
 namespace gl_engine
 {
+	/*
+
+		Orthographic camera. No perspective.
+
+	*/
 	struct OrthoCamera : public Camera
 	{
 		// // ----- MEMBER VARIABLES ----- // //

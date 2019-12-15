@@ -5,6 +5,11 @@
 
 namespace gl_engine
 {
+	/*
+	
+		Used for making a shader program from a vertex and fragment shader.
+	
+	*/
 	namespace LoadShaders
 	{
 		GLuint load(const char * vertex_file_path, const char* fragment_file_path);

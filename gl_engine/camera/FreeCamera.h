@@ -5,6 +5,11 @@
 
 //namespace gl_engine
 //{
+	/*
+
+		Free camera. Not targeted. Orientation is based on parents transforms only
+
+	*/
 //	struct FreeCamera : public Camera
 //	{
 //

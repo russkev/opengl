@@ -3,15 +3,17 @@
 
 #include <SDL.h>
 #include <GL/glew.h>
-#include <glm/matrix.hpp>
-
-#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/glm.hpp>
 
 namespace gl_engine
 {
+	/*
+	
+		Abstract camera node. Provides camera basic funcrionality
+	
+	*/
 	struct Camera
 	{
-
 	private:
 		// // ----- MEMBER VARIABLES ----- // //
 		glm::uvec2 m_dimensions = { 800u, 600u };

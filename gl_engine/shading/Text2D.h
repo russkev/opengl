@@ -17,6 +17,11 @@
 
 namespace gl_engine
 {
+	/*
+	
+		Used for printing 2D text to the opengl screen
+	
+	*/
 	static constexpr auto MAX_LETTERS = 200u;
 
 	struct Text2D

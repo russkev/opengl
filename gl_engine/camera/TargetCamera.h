@@ -5,6 +5,12 @@
 
 namespace gl_engine
 {
+	/*
+
+		Target camera. Camera orbits around a particular point.
+		Pressing 'F' or 'Z' focuses the camera on the focus target.
+
+	*/
 	struct TargetCamera : public Camera
 	{
 	private:

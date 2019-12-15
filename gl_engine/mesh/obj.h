@@ -9,6 +9,12 @@
 
 namespace gl_engine
 {
+	/*
+	
+		OBJ Loader.
+		At the moment, the obj files have to be in triangulated form.
+	
+	*/
 	struct OBJ_Loader
 	{
 		// Set constants

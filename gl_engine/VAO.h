@@ -9,6 +9,11 @@
 
 namespace gl_engine
 {
+	/*
+	
+		Helper class for generating VAOs
+	
+	*/
 	struct VAO
 	{
 		// // CONSTRUCTOR

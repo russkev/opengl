@@ -5,6 +5,12 @@
 
 namespace gl_engine
 {
+	/*
+	
+		Basic cylinder with cap.
+		Radius, height, number of height segments, and number of width segments can be defined.
+	
+	*/
 	struct Cylinder
 	{
 		static Mesh createCylinder();

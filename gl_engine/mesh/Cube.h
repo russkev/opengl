@@ -5,6 +5,12 @@
 
 namespace gl_engine
 {
+	/*
+	
+		Basic cube.
+		Can instantiate with an overall size which is the size of each of the edges.
+	
+	*/
 	struct Cube
 	{
 		static Mesh createCube();

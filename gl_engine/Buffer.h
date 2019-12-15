@@ -9,6 +9,11 @@
 
 namespace gl_engine
 {
+	/*
+	
+		Main drawing buffer
+	
+	*/
 	struct Buffer
 	{
 		// // BIG 6

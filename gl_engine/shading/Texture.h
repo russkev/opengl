@@ -6,6 +6,11 @@
 
 namespace gl_engine
 {
+	/*
+	
+		A texture is an image that is procured externally
+	
+	*/
 	struct Texture
 	{
 		// // ----- MEMBER ATTRIBUTES ----- // //

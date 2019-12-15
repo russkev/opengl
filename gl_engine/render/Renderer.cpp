@@ -2,7 +2,7 @@
 
 #include "Renderer.h"
 
-#include "../Timer.h"
+#include "../utils/Timer.h"
 #include "../Window.h"
 #include "../node/Node.h"
 #include "../node/MeshNode.h"

@@ -1,8 +1,4 @@
 #include "Camera.h"
-#include <glm\gtx\transform.hpp>
-#include <iostream>
-
-#define GLM_ENABLE_EXPERIMENTAL
 
 namespace gl_engine
 {

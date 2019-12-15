@@ -5,6 +5,11 @@
 
 namespace gl_engine
 {
+	/*
+	
+		Basic plane
+
+	*/
 	struct Plane
 	{
 		static Mesh createPlane();
