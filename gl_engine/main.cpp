@@ -16,7 +16,7 @@
 #include "mesh/Plane.h"
 #include "mesh/obj.h"
 #include "camera/Camera.h"
-#include "camera/OrbitCamera.h"
+#include "camera/TargetCamera.h"
 #include "camera/OrthoCamera.h"
 #include "light/PointLight.h"
 #include "light/DirectionalLight.h"
@@ -29,7 +29,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 //#define DEBUG
 
-std::vector<opengl_attr_pair> st_config =
+std::vector<gl_engine::opengl_attr_pair> st_config =
 {
     {SDL_GL_RED_SIZE,					8},
     {SDL_GL_GREEN_SIZE,					8},
@@ -78,81 +78,87 @@ int main(int, char**)
 {
 	GLuint width	= 800u;
 	GLuint height	= 600u;
-	Window window("GL Engine", st_config, width, height);
+	gl_engine::Window window{ "GL Engine", st_config, width, height };
 
 	// Camera
-	OrbitCamera orbitCam{};
-	orbitCam.setClipFar(1000.0f);
+	gl_engine::TargetCamera targetCam{};
+	targetCam.setClipFar(1000.0f);
 
-	OrthoCamera orthoCam{};
-	CameraNode camNode1 = CameraNode("Camera Node 1", &orbitCam);
-	CameraNode orthoCamNode1 = CameraNode("Ortho Cam 1", &orthoCam);
+	gl_engine::OrthoCamera orthoCam{};
+	gl_engine::CameraNode camNode1{ "Target Camera 1", &targetCam };
+	gl_engine::CameraNode orthoCamNode1{ "Ortho Cam 1", &orthoCam };
 	//camNode1.setPosition(glm::vec3{ 0.0f, -4.0f, -6.0f });
 	//camNode1.setRotation(glm::vec3{ 50.0f, 0.0f, 0.0f });
 	orthoCam.setClipNear(0.001f);
 	orthoCam.setClipFar(100.0f);
 	orthoCam.setSides(-30.0f, 30.0f, -30.0f, 30.0f);
-	//CameraNode camNode1 = CameraNode( "Camera Node 1", &orbitCam );
+	orthoCamNode1.setPosition({ 0.0f, 0.0f, 0.0f });
+	orthoCamNode1.setRotation({ -30.0f, 100.0f, 0.0f });
+	//CameraNode camNode1 = CameraNode( "Camera Node 1", &targetCam );
 	
 	// Shader 1
-	Material cShadMat = Material("cMat", "cShader.vert", "cShader.frag");
+	gl_engine::Material cShadMat{ "cMat", "cShader.vert", "cShader.frag" };
 	cShadMat.setUniform("material.spec_power", 32.0f);
 	cShadMat.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
 
 	// Texture 1
-	Texture tex1("uvtemplate.tga");
+	gl_engine::Texture tex1("uvtemplate.tga");
 	cShadMat.setTexture("material.diffuse", tex1);
 
 	// Texture 2
-	Texture tex2("uvtemplate.tga");
+	gl_engine::Texture tex2("uvtemplate.tga");
 
 	// Mesh 1
-	Mesh shaderBall = OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
-	MeshNode shaderBall_node{ "shader ball", &shaderBall, &cShadMat };
+	gl_engine::Mesh shaderBall = gl_engine::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
+	gl_engine::MeshNode shaderBall_node{ "shader ball", &shaderBall, &cShadMat };
 
 	// Mesh 2
-	Mesh plane = Plane::createPlane(100.0f, 100.0f, 1, 1);
-	MeshNode plane_node{ "Plane1", &plane, &cShadMat };
+	gl_engine::Mesh plane = gl_engine::Plane::createPlane(100.0f, 100.0f, 1, 1);
+	gl_engine::MeshNode plane_node{ "Plane1", &plane, &cShadMat };
 
 	// Light 1
-	PointLight pointLight{ 1.0f, { 1.0f, 0.0f, 0.0f } };
+	gl_engine::PointLight pointLight{ 1.0f, { 0.0f, 0.0f, 0.0f } };
 	pointLight.setBrightness(2.1f);
 	pointLight.setColor(glm::vec3(1.0, 0.7, 0.2));
 	pointLight.disable_mesh();
-	LightNode pointLight_node{ "Point Light 1", &pointLight };
+	gl_engine::LightNode pointLight_node{ "Point Light 1", &pointLight };
 	pointLight_node.setPosition({ -6.0f, 1.2f, 0.0f });
 
 	// Light 2
-	PointLight pointLight2{ 3.0f, { 0.2f, 0.1f, 1.0f } };
-	LightNode pointLight_node2{ "Point Light 2", &pointLight2 };
+	gl_engine::PointLight pointLight2{ 3.0f, { 0.2f, 0.1f, 1.0f } };
+	gl_engine::LightNode pointLight_node2{ "Point Light 2", &pointLight2 };
 	pointLight_node2.setPosition({ 0.0f, 4.0f, -5.0f });
 
 	// Light 3
-	DirectionalLight directionalLight1{ 0.2f, { 0.2f, 1.0f, 0.1f } };
-	LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
-	directionalLight_node1.setPosition({ 8.0f, 9.0f, 0.0f });
-	directionalLight_node1.setRotation({ 30.0f, -100.0f, 0.0f });
-	directionalLight_node1.addChild(&orthoCamNode1);
+	gl_engine::DirectionalLight directionalLight1{ 0.2f, { 0.2f, 1.0f, 0.1f } };
+	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
+	//directionalLight_node1.setPosition({ 8.0f, 9.0f, 0.0f });
+	//directionalLight_node1.setRotation({ 30.0f, -100.0f, 0.0f });
+	//directionalLight_node1.addChild(&orthoCamNode1);
+	targetCam.setPosition({ -1.0,0,0 });
+	targetCam.setFocusTarget({ 0.0f, 6.0f, 0.0f });
+	//targetCam.setViewDirection({ -1.0, 0.0, 0.0 });
+	directionalLight_node1.addChild(&camNode1);
 
 	// Light 4
-	SpotLight spotLight1{ 6.0f, { 1.0f, 0.0f, 0.0f } };
-	LightNode spotLight_node1{ "Spot Light 1", &spotLight1 };
+	gl_engine::SpotLight spotLight1{ 6.0f, { 1.0f, 0.0f, 0.0f } };
+	gl_engine::LightNode spotLight_node1{ "Spot Light 1", &spotLight1 };
 	spotLight_node1.setRotation({ 60.0f, 0.0f, 0.0f });
 	spotLight_node1.setPosition({ -3.0f, 10.0f, -2.0f });
 	spotLight1.set_innerAngle(30.0f);
 	spotLight1.set_outerAngle(33.0f);
 
 	// Null node 1
-	Node lightRotate1 = Node("light rotate 01");
+	gl_engine::Node lightRotate1{ "light rotate 01" };
 	//lightRotate1.addChild(&pointLight_node);
 
 	// Null node 2
-	Node lightRotate2 = Node("light rotate 02");
+	gl_engine::Node lightRotate2{ "light rotate 02" };
 	lightRotate2.addChild(&lightRotate1);
 	lightRotate2.setPosition({ 2.0, 0.0, 0.0 });
 
 	// Renderer
-	Renderer render = Renderer(&orthoCamNode1, glm::uvec2(width, height));
+	gl_engine::Renderer render{ &camNode1, glm::uvec2(width, height) };
 	render.addNode(&shaderBall_node);
 	render.addNode(&plane_node);
 	render.addLightNode(&pointLight_node);
@@ -161,7 +167,7 @@ int main(int, char**)
 	render.addLightNode(&spotLight_node1);
 
 
-	Timer timer;
+	gl_engine::Timer timer;
 
 	while (render.pollEvents())
 	{
@@ -179,3 +185,4 @@ int main(int, char**)
 
 	return 0;
 }
+

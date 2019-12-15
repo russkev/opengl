@@ -1,10 +1,15 @@
-#pragma once
+#ifndef GL_ENGINE_MESH_PLANE_H
+#define GL_ENGINE_MESH_PLANE_H
 
 #include "Mesh.h"
 
-struct Plane
+namespace gl_engine
 {
-	static Mesh createPlane();
-	static Mesh createPlane(const float width, const float height);
-	static Mesh createPlane(const float width, const float height, const uint16_t widthSegments, const uint16_t heightSegments);
-};
+	struct Plane
+	{
+		static Mesh createPlane();
+		static Mesh createPlane(const float width, const float height);
+		static Mesh createPlane(const float width, const float height, const uint16_t widthSegments, const uint16_t heightSegments);
+	};
+} // namespace gl_engine
+#endif

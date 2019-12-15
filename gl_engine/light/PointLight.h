@@ -8,38 +8,39 @@
 #include "../shading/LoadShader.h"
 #include "../mesh/Sphere.h"
 
-
-/*
-
-	Emits light in all directions.
-	Uses sphere mesh to display location and size in scene
-
-*/
-struct PointLight : public Light
+namespace gl_engine
 {
-	static const std::string TYPE;
+	/*
 
-	// // ----- MEMBER VARIABLES ----- // //
-private:
-	float m_radius = 0.5f;
-	Mesh m_light_mesh;
-	Shader m_shader;
+		Emits light in all directions.
+		Uses sphere mesh to display location and size in scene
 
-	// // ----- CONSTRUCTORS ----- // //
-public:
-	PointLight(const GLfloat brightness, const glm::vec3 color);
+	*/
+	struct PointLight : public Light
+	{
+		static const std::string TYPE;
 
-	// // ----- GETTERS ----- // //
-	const float& radius() const;
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		float m_radius = 0.5f;
+		Mesh m_light_mesh;
+		Shader m_shader;
 
-	const std::string& type() const override;
+		// // ----- CONSTRUCTORS ----- // //
+	public:
+		PointLight(const GLfloat brightness, const glm::vec3 color);
 
-	Mesh* mesh() override;
-	Shader* shader() override;
+		// // ----- GETTERS ----- // //
+		const float& radius() const;
 
-	// // ----- SETTERS ----- // //	
-	void setRadius(const GLfloat radius);
+		const std::string& type() const override;
 
-};
+		Mesh* mesh() override;
+		Shader* shader() override;
 
+		// // ----- SETTERS ----- // //	
+		void setRadius(const GLfloat radius);
+
+	};
+} // namespace gl_engine
 #endif

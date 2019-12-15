@@ -4,26 +4,28 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-struct Texture
+namespace gl_engine
 {
-	// // ----- MEMBER ATTRIBUTES ----- // //
-private:
-	SDL_Surface*	m_surface = NULL;
-	const uint16_t	m_id;
-	static uint16_t	m_next_id;
+	struct Texture
+	{
+		// // ----- MEMBER ATTRIBUTES ----- // //
+	private:
+		SDL_Surface*	m_surface = NULL;
+		const uint16_t	m_id;
+		static uint16_t	m_next_id;
 
 
-	// // ----- CONSTRUCTOR ----- // //
-public:
-	Texture(const char* filename);
+		// // ----- CONSTRUCTOR ----- // //
+	public:
+		Texture(const char* filename);
 
-	// // ----- GETTERS ----- // //
-	size_t width();
-	size_t height();
-	const size_t tex_id() const;
-	bool hasAlpha();
-	void* data();
-};
-
+		// // ----- GETTERS ----- // //
+		size_t width();
+		size_t height();
+		const size_t tex_id() const;
+		bool hasAlpha();
+		void* data();
+	};
+} // namespace gl_engine
 
 #endif

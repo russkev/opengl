@@ -3,56 +3,59 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-OrthoCamera::OrthoCamera() 
-{}
-
-OrthoCamera::OrthoCamera(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top) :
-	m_left(left), m_right(right), m_bottom(bottom), m_top(top)
-{}
-
-
-// // ----- CAMERA MOVEMENT ----- // //
-void OrthoCamera::update()
+namespace gl_engine
 {
+	OrthoCamera::OrthoCamera()
+	{}
 
-}
+	OrthoCamera::OrthoCamera(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top) :
+		m_left(left), m_right(right), m_bottom(bottom), m_top(top)
+	{}
 
-// // ----- GETTERS ----- // //
-glm::mat4 OrthoCamera::worldToCam_matrix()
-{
-	return glm::mat4(glm::vec4{ 1.0f, 0.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 1.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 0.0f, 1.0f, 0.0f }, glm::vec4{ position(), 1.0f });
-}
 
-glm::mat4 OrthoCamera::viewToProjectionMatrix()
-{
-	return glm::ortho(m_left, m_right, m_bottom, m_top, Camera::clipNear(), Camera::clipFar());
-}
+	// // ----- CAMERA MOVEMENT ----- // //
+	void OrthoCamera::update()
+	{
 
-// // ----- SETTERS ----- // //
-void OrthoCamera::setSides(const GLfloat left, const GLfloat right, const GLfloat bottom, const GLfloat top)
-{
-	m_left = left;
-	m_right = right;
-	m_bottom = bottom;
-	m_top = top;
-}
+	}
 
-void OrthoCamera::setLeft(const GLfloat left)
-{
-	m_left = left;
-}
+	// // ----- GETTERS ----- // //
+	glm::mat4 OrthoCamera::worldToCam_matrix()
+	{
+		return glm::mat4(glm::vec4{ 1.0f, 0.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 1.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 0.0f, 1.0f, 0.0f }, glm::vec4{ position(), 1.0f });
+	}
 
-void OrthoCamera::setRight(const GLfloat right)
-{
-	m_right = right;
-}
+	glm::mat4 OrthoCamera::viewToProjectionMatrix()
+	{
+		return glm::ortho(m_left, m_right, m_bottom, m_top, Camera::clipNear(), Camera::clipFar());
+	}
 
-void OrthoCamera::setBottom(const GLfloat bottom)
-{
-	m_bottom = bottom;
-}
+	// // ----- SETTERS ----- // //
+	void OrthoCamera::setSides(const GLfloat left, const GLfloat right, const GLfloat bottom, const GLfloat top)
+	{
+		m_left = left;
+		m_right = right;
+		m_bottom = bottom;
+		m_top = top;
+	}
 
-void OrthoCamera::setTop(const GLfloat top)
-{
-	m_top = top;
-}
+	void OrthoCamera::setLeft(const GLfloat left)
+	{
+		m_left = left;
+	}
+
+	void OrthoCamera::setRight(const GLfloat right)
+	{
+		m_right = right;
+	}
+
+	void OrthoCamera::setBottom(const GLfloat bottom)
+	{
+		m_bottom = bottom;
+	}
+
+	void OrthoCamera::setTop(const GLfloat top)
+	{
+		m_top = top;
+	}
+} // namespace gl_engine

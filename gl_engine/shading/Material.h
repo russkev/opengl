@@ -3,24 +3,20 @@
 
 #include "Shader.h"
 
-/*
-
-	A material node links a shader to various textures and other attributs
-
-*/
-struct Material : public Shader
+namespace gl_engine
 {
-	// // ----- MEMBER ATTRIBUTES ----- // //
-//private:
-//	Shader m_shader;
-//
-	// // ----- CONSTRUCTOR ----- // //
-public:
-	Material() {};
-	Material(const std::string name, const char* vertexShader, const char* fragmentShader);
-//
-//	// // ----- GETTER ----- // //
-//	Shader& shader();
-};
+	/*
 
+		A material node links a shader to various textures and other attributs
+
+	*/
+	struct Material : public Shader
+	{
+		// // ----- CONSTRUCTOR ----- // //
+	public:
+		Material() {};
+		Material(const std::string name, const char* vertexShader, const char* fragmentShader);
+
+	};
+} // namespace gl_engine
 #endif

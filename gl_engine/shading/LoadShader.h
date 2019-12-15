@@ -1,7 +1,13 @@
-#include <GL/glew.h>
-#pragma once
+#ifndef GL_ENGINE_SHADING_LOAD_SHADER_H
+#define GL_ENGINE_SHADING_LOAD_SHADER_H
 
-namespace LoadShaders
+#include <GL/glew.h>
+
+namespace gl_engine
 {
-	GLuint load(const char * vertex_file_path, const char* fragment_file_path);
-}
+	namespace LoadShaders
+	{
+		GLuint load(const char * vertex_file_path, const char* fragment_file_path);
+	}
+} // namespace gl_engine
+#endif

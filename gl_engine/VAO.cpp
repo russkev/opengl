@@ -6,45 +6,48 @@
 #include "Buffer.h"
 #include "VAO.h"
 
-// // CONSTRUCTOR //
-VAO::VAO() :
-	m_VAO_ID(0)
+namespace gl_engine
 {
-	std::cout << "VAO object created\n";
-};
-
-void VAO::GenerateVAO(const Buffer& inBuffer, std::size_t divisor, const member_info_type* begin, const member_info_type* end, std::uint32_t id_offset) {
-	GenerateID();
-	Bind();
-	inBuffer.bind();
-
-	std::for_each(begin, end, [&](const member_info_type& mi)
+	// // CONSTRUCTOR //
+	VAO::VAO() :
+		m_VAO_ID(0)
 	{
-		for (auto i = 0u; i < mi.slot_occupancy; ++i)
+		std::cout << "VAO object created\n";
+	};
+
+	void VAO::GenerateVAO(const Buffer& inBuffer, std::size_t divisor, const member_info_type* begin, const member_info_type* end, std::uint32_t id_offset) {
+		GenerateID();
+		Bind();
+		inBuffer.bind();
+
+		std::for_each(begin, end, [&](const member_info_type& mi)
 		{
-			glEnableVertexAttribArray(id_offset + mi.attribute_slot + i);
-			if (mi.gl_type_enum == GL_FLOAT || mi.gl_type_enum == GL_DOUBLE)
+			for (auto i = 0u; i < mi.slot_occupancy; ++i)
 			{
-				glVertexAttribPointer(id_offset + mi.attribute_slot + i, mi.component_count, mi.gl_type_enum, GL_TRUE, mi.tuple_stride, mi.offset_from_start + i * mi.slot_size_in_bytes);
+				glEnableVertexAttribArray(id_offset + mi.attribute_slot + i);
+				if (mi.gl_type_enum == GL_FLOAT || mi.gl_type_enum == GL_DOUBLE)
+				{
+					glVertexAttribPointer(id_offset + mi.attribute_slot + i, mi.component_count, mi.gl_type_enum, GL_TRUE, mi.tuple_stride, mi.offset_from_start + i * mi.slot_size_in_bytes);
+				}
+				else
+				{
+					glVertexAttribIPointer(id_offset + mi.attribute_slot + i, mi.component_count, mi.gl_type_enum, mi.tuple_stride, mi.offset_from_start + i * mi.slot_size_in_bytes);
+				}
+				glVertexAttribDivisor(id_offset + mi.attribute_slot + i, (GLuint)divisor);
+
 			}
-			else
-			{
-				glVertexAttribIPointer(id_offset + mi.attribute_slot + i, mi.component_count, mi.gl_type_enum, mi.tuple_stride, mi.offset_from_start + i * mi.slot_size_in_bytes);
-			}
-			glVertexAttribDivisor(id_offset + mi.attribute_slot + i, (GLuint)divisor);
-
-		}
-	});
-}
-
-void VAO::Bind() {
-	glBindVertexArray(m_VAO_ID);
-}
-
-// // GENERATE ID
-void VAO::GenerateID() {
-	if (m_VAO_ID == 0) {
-		glGenVertexArrays(1, &m_VAO_ID);
+		});
 	}
-	return;
-}
+
+	void VAO::Bind() {
+		glBindVertexArray(m_VAO_ID);
+	}
+
+	// // GENERATE ID
+	void VAO::GenerateID() {
+		if (m_VAO_ID == 0) {
+			glGenVertexArrays(1, &m_VAO_ID);
+		}
+		return;
+	}
+} // namespace gl_engine

@@ -6,35 +6,38 @@
 #include "Node.h"
 #include "../Buffer.h"
 
-// // ----- FORWARD DECLERATION ----- // //
-struct Camera;
-
-/*
-
-	Camera node. Inherits from node.
-
-*/
-struct CameraNode : public Node
+namespace gl_engine
 {
-	// // ----- MEMBER VARIABLES ----- // //
-private:
-	Camera* m_camera;
+	// // ----- FORWARD DECLERATION ----- // //
+	struct Camera;
 
-	// // ----- CONSTRUCTOR ----- // //
-public:
-	CameraNode() {};
-	CameraNode(const std::string name, Camera* camera);
+	/*
 
-	// // ----- GETTERS ----- // //
-	Camera* camera();
-	const glm::vec3 position() const override;
-	const glm::vec3 worldPosition() override;
-	glm::mat4 worldToCam_matrix();
-	glm::mat4 worldToProjection_matrix();
+		Camera node. Inherits from node.
 
-	// // ----- SETTERS ----- // //
-	void setPosition(const glm::vec3&) override;
-};
+	*/
+	struct CameraNode : public Node
+	{
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		Camera* m_camera;
+
+		// // ----- CONSTRUCTOR ----- // //
+	public:
+		CameraNode() {};
+		CameraNode(const std::string name, Camera* camera);
+
+		// // ----- GETTERS ----- // //
+		Camera* camera();
+		const glm::vec3 position() const override;
+		const glm::vec3 worldPosition() override;
+		glm::mat4 worldToCam_matrix();
+		glm::mat4 worldToProjection_matrix();
+
+		// // ----- SETTERS ----- // //
+		void setPosition(const glm::vec3&) override;
+	};
+} // namespace gl_engine
 
 
 
