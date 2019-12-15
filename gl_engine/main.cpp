@@ -18,6 +18,7 @@
 #include "camera/Camera.h"
 #include "camera/TargetCamera.h"
 #include "camera/OrthoCamera.h"
+#include "camera/FreeCamera.h"
 #include "light/PointLight.h"
 #include "light/DirectionalLight.h"
 #include "light/SpotLight.h"
@@ -78,22 +79,34 @@ int main(int, char**)
 	GLuint height	= 600u;
 	gl_engine::Window window{ "GL Engine", st_config, width, height };
 
-	// Camera
+	// Target Camera
 	gl_engine::TargetCamera targetCam{};
+	gl_engine::CameraNode targetCamNode{ "Target Camera 1", &targetCam };
+
 	targetCam.setClipFar(1000.0f);
 
+	// Orthogonal Camera
 	gl_engine::OrthoCamera orthoCam{};
-	gl_engine::CameraNode camNode1{ "Target Camera 1", &targetCam };
 	gl_engine::CameraNode orthoCamNode1{ "Ortho Cam 1", &orthoCam };
-	//camNode1.setPosition(glm::vec3{ 0.0f, -4.0f, -6.0f });
-	//camNode1.setRotation(glm::vec3{ 50.0f, 0.0f, 0.0f });
+	//targetCamNode.setPosition(glm::vec3{ 0.0f, -4.0f, -6.0f });
+	//targetCamNode.setRotation(glm::vec3{ 50.0f, 0.0f, 0.0f });
 	orthoCam.setClipNear(0.001f);
 	orthoCam.setClipFar(100.0f);
 	orthoCam.setSides(-30.0f, 30.0f, -30.0f, 30.0f);
 	orthoCamNode1.setPosition({ 0.0f, 0.0f, 0.0f });
 	orthoCamNode1.setRotation({ -30.0f, 100.0f, 0.0f });
-	//CameraNode camNode1 = CameraNode( "Camera Node 1", &targetCam );
-	
+	//CameraNode targetCamNode = CameraNode( "Camera Node 1", &targetCam );
+
+	// Free Camera
+	gl_engine::FreeCamera freeCam{};
+	gl_engine::CameraNode freeCamNode{ "Free Cam 1", &freeCam };
+	freeCam.setClipNear(0.001f);
+	freeCam.setClipFar(1000.0f);
+
+	freeCamNode.setRotation({ 0.0f, 0.0f, 0.1f });
+	//freeCamNode.setPosition({ 8.0f, 9.0f, 0.0f });
+
+
 	// Shader 1
 	gl_engine::Material cShadMat{ "cMat", "cShader.vert", "cShader.frag" };
 	cShadMat.setUniform("material.spec_power", 32.0f);
@@ -130,13 +143,13 @@ int main(int, char**)
 	// Light 3
 	gl_engine::DirectionalLight directionalLight1{ 0.2f, { 0.2f, 1.0f, 0.1f } };
 	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
-	//directionalLight_node1.setPosition({ 8.0f, 9.0f, 0.0f });
+	directionalLight_node1.setPosition({ 8.0f, 9.0f, 0.0f });
 	//directionalLight_node1.setRotation({ 30.0f, -100.0f, 0.0f });
-	//directionalLight_node1.addChild(&orthoCamNode1);
-	targetCam.setPosition({ -1.0,0,0 });
-	targetCam.setFocusTarget({ 0.0f, 6.0f, 0.0f });
-	//targetCam.setViewDirection({ -1.0, 0.0, 0.0 });
-	directionalLight_node1.addChild(&camNode1);
+	//directionalLight_node1.addChild(&freeCamNode);
+	//targetCam.setPosition({ -1.0,0,0 });
+	//targetCam.setFocusTarget({ 0.0f, 6.0f, 0.0f });
+	////targetCam.setViewDirection({ -1.0, 0.0, 0.0 });
+	//directionalLight_node1.addChild(&targetCamNode);
 
 	// Light 4
 	gl_engine::SpotLight spotLight1{ 6.0f, { 1.0f, 0.0f, 0.0f } };
@@ -156,7 +169,7 @@ int main(int, char**)
 	lightRotate2.setPosition({ 2.0, 0.0, 0.0 });
 
 	// Renderer
-	gl_engine::Renderer render{ &camNode1, glm::uvec2(width, height) };
+	gl_engine::Renderer render{ &targetCamNode, glm::uvec2(width, height) };
 	render.addNode(&shaderBall_node);
 	render.addNode(&plane_node);
 	render.addLightNode(&pointLight_node);
@@ -169,7 +182,7 @@ int main(int, char**)
 
 	while (render.pollEvents())
 	{
-		float new_y_rotation = shaderBall_node.rotation().y + (float)timer.delta_time_s() * 30;
+		float new_y_rotation = (float)shaderBall_node.rotation().y + (float)timer.delta_time_s() * 0.3f;
 		shaderBall_node.setRotation({ 0.0, new_y_rotation, 0.0 });
 
 		//float l1_rotate = lightRotate1.rotation().z + (float)timer.delta_time_s() * 100;

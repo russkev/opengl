@@ -13,13 +13,6 @@ namespace gl_engine
 		Node(name), m_camera(camera)
 	{}
 
-	// // ----- SETTERS ----- // //
-	//Camera* CameraNode::camera()
-	//{
-	//	return m_camera;
-	//}
-
-
 	// // ----- GETTERS ----- // //
 	Camera* CameraNode::camera()
 	{
@@ -45,11 +38,11 @@ namespace gl_engine
 
 	glm::mat4 CameraNode::worldToCam_matrix()
 	{
-		return Node::worldTransform() * m_camera->worldToCam_matrix();
+		return  m_camera->worldToCam_matrix() * Node::worldTransform();
 	}
 
 	glm::mat4 CameraNode::worldToProjection_matrix()
 	{
-		return Node::worldTransform() * m_camera->worldToProjection_matrix();
+		return  m_camera->worldToProjection_matrix() * Node::worldTransform();
 	}
 } // namespace gl_engine
