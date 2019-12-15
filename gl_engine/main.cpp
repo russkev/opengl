@@ -16,6 +16,7 @@
 #include "mesh/Plane.h"
 #include "mesh/obj.h"
 #include "camera/Camera.h"
+#include "camera/OrbitCamera.h"
 #include "light/PointLight.h"
 #include "light/DirectionalLight.h"
 #include "light/SpotLight.h"
@@ -80,9 +81,10 @@ int main(int, char**)
 
 	//// Camera
 	Camera cam{};
+	OrbitCamera orbitCam{};
+	orbitCam.setClipFar(1000.0f);
 	cam.setClipFar(1000.0f);
-	CameraNode camNode1{ "Camera Node 1", &cam };
-	camNode1.camera()->setClipFar(1000.0f);
+	CameraNode camNode1 = CameraNode( "Camera Node 1", &orbitCam );
 	
 	// Shader 1
 	Material cShadMat = Material("cMat", "cShader.vert", "cShader.frag");

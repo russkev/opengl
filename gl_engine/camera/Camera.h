@@ -1,4 +1,6 @@
-#pragma once
+#ifndef GL_ENGINE_CAMERA_CAMERA_H
+#define GL_ENGINE_CAMERA_CAMERA_H
+
 #include <SDL.h>
 #include <GL/glew.h>
 #include <glm/matrix.hpp>
@@ -71,3 +73,4 @@ private:
 
 };
 
+#endif

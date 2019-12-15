@@ -126,6 +126,9 @@
     <ClCompile Include="shading\ShadowMap.cpp">
       <Filter>Shading</Filter>
     </ClCompile>
+    <ClCompile Include="camera\OrbitCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\SimpleFragmentShader.frag">
@@ -264,6 +267,9 @@
     </ClInclude>
     <ClInclude Include="shading\ShadowMap.h">
       <Filter>Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\OrbitCamera.h">
+      <Filter>Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
