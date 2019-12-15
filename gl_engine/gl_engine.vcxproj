@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
+    <ClCompile Include="camera\OrbitCamera.cpp" />
     <ClCompile Include="light\DirectionalLight.cpp" />
     <ClCompile Include="light\Light.cpp" />
     <ClCompile Include="light\PointLight.cpp" />
@@ -196,6 +197,7 @@
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="camera\Camera.h" />
+    <ClInclude Include="camera\OrbitCamera.h" />
     <ClInclude Include="GL_Tuple_Introspect.h" />
     <ClInclude Include="GL_Type_Traits.h" />
     <ClInclude Include="light\DirectionalLight.h" />

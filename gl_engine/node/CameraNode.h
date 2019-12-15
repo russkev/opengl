@@ -11,7 +11,7 @@ struct Camera;
 
 /*
 
-	Main mesh type node. Links a mesh to a material so it can be rendered on screen
+	Camera node. Inherits from node.
 
 */
 struct CameraNode : public Node
