@@ -151,6 +151,7 @@
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="camera\OrbitCamera.cpp" />
+    <ClCompile Include="camera\OrthoCamera.cpp" />
     <ClCompile Include="light\DirectionalLight.cpp" />
     <ClCompile Include="light\Light.cpp" />
     <ClCompile Include="light\PointLight.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="camera\OrbitCamera.h" />
+    <ClInclude Include="camera\OrthoCamera.h" />
     <ClInclude Include="GL_Tuple_Introspect.h" />
     <ClInclude Include="GL_Type_Traits.h" />
     <ClInclude Include="light\DirectionalLight.h" />

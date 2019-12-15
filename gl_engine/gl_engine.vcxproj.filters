@@ -129,6 +129,9 @@
     <ClCompile Include="camera\OrbitCamera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
+    <ClCompile Include="camera\OrthoCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\SimpleFragmentShader.frag">
@@ -269,6 +272,9 @@
       <Filter>Shading</Filter>
     </ClInclude>
     <ClInclude Include="camera\OrbitCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\OrthoCamera.h">
       <Filter>Camera</Filter>
     </ClInclude>
   </ItemGroup>
