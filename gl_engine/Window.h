@@ -12,6 +12,11 @@
 
 namespace gl_engine
 {
+	/*
+	
+		Basic window type used for displaying the rendered output to the screen
+	
+	*/
 	struct opengl_attr_pair
 	{
 		SDL_GLattr key;
@@ -23,7 +28,7 @@ namespace gl_engine
 	{
 		Window(std::string name, std::vector<opengl_attr_pair> st_config, GLuint width, GLuint height);
 		void init(std::vector<opengl_attr_pair> st_config, GLuint width, GLuint height);
-		void appendTitle(std::string str/*const char* title*/);
+		void appendTitle(std::string str);
 		void finish_frame();
 
 

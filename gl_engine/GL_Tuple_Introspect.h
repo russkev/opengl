@@ -9,6 +9,11 @@
 
 namespace gl_engine
 {
+	/*
+	
+		Helper struct used for automatically generating the correct VAO type
+	
+	*/
 	struct member_info_type
 	{
 		std::uint32_t gl_type_enum;

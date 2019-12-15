@@ -7,6 +7,11 @@
 
 namespace gl_engine
 {
+	/*
+
+		Basic sphere
+
+	*/
 	struct Sphere
 	{
 		static Mesh createSphere(const float radius);

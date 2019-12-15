@@ -15,6 +15,12 @@
 
 namespace gl_engine
 {
+	/*
+	
+		Raw mesh type.
+		Contains verticies, vertex properties and indicies.
+	
+	*/
 	struct Mesh
 	{
 	public:

@@ -5,9 +5,6 @@
 #include "../shading/Shader.h"
 #include "CameraNode.h"
 
-
-#include "../Timer.h"
-
 namespace gl_engine
 {
 	const std::string MeshNode::U_MODEL_TO_WORLD = "transform.modelToWorld";

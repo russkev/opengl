@@ -1,8 +1,5 @@
 #include <algorithm>
 
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/transform.hpp>
-
 #include "PointLight.h"
 
 namespace gl_engine

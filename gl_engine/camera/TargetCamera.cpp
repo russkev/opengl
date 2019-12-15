@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
+
 namespace gl_engine
 {
 	const glm::vec3 TargetCamera::UP_AXIS = { 0.0f, 1.0f, 0.0f };

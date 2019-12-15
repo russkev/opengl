@@ -75,9 +75,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Uncategorised</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Uncategorised</Filter>
-    </ClCompile>
     <ClCompile Include="VAO.cpp">
       <Filter>Uncategorised</Filter>
     </ClCompile>
@@ -131,6 +128,9 @@
     </ClCompile>
     <ClCompile Include="camera\TargetCamera.cpp">
       <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Timer.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,9 +214,6 @@
     <ClInclude Include="GL_Type_Traits.h">
       <Filter>Uncategorised</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Uncategorised</Filter>
-    </ClInclude>
     <ClInclude Include="VAO.h">
       <Filter>Uncategorised</Filter>
     </ClInclude>
@@ -270,6 +267,9 @@
     </ClInclude>
     <ClInclude Include="camera\FreeCamera.h">
       <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Timer.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

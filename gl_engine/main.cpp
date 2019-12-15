@@ -23,10 +23,8 @@
 #include "light/SpotLight.h"
 #include "render/Renderer.h"
 #include "shading/Texture.h"
-#include "Timer.h"
+#include "utils/Timer.h"
 
-
-#define GLM_ENABLE_EXPERIMENTAL
 //#define DEBUG
 
 std::vector<gl_engine::opengl_attr_pair> st_config =

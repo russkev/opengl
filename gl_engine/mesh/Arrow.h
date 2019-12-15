@@ -5,6 +5,12 @@
 
 namespace gl_engine
 {
+	/*
+
+		Basic arrow shape. 
+		Length attribute controls the length of the tail.
+
+	*/
 	struct Arrow
 	{
 		static Mesh createArrow();

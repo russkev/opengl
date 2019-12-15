@@ -7,6 +7,12 @@
 
 namespace gl_engine
 {
+	/*
+	
+		Individual vertex.
+		Contains various attributes which are useful for sending to the shader
+	
+	*/
 	enum vertexAttr { position_loc = 0, color_loc = 1, normal_loc = 2, uv_loc = 3, id_loc = 4, tangent_loc = 5, bitangent_loc = 6 };
 
 	struct Vertex
