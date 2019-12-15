@@ -80,10 +80,8 @@ int main(int, char**)
 	Window window("GL Engine", st_config, width, height);
 
 	//// Camera
-	Camera cam{};
 	OrbitCamera orbitCam{};
 	orbitCam.setClipFar(1000.0f);
-	cam.setClipFar(1000.0f);
 	CameraNode camNode1 = CameraNode( "Camera Node 1", &orbitCam );
 	
 	// Shader 1
