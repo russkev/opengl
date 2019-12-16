@@ -157,7 +157,7 @@ namespace gl_engine
 
 			// Break out the various vectors
 			const glm::tvec3<T>* translate_vec = &s_trs[0];
-			glm::tvec3<T> rotate_vec{ s_trs[1][0], s_trs[1][1], s_trs[1][2] };
+			glm::tvec3<T> rotate_vec{ glm::radians(s_trs[1][0]), glm::radians(s_trs[1][1]), glm::radians(s_trs[1][2]) };
 			const glm::tvec3<T>* scale_vec = &s_trs[2];
 
 			// Parse rotate order
@@ -189,6 +189,27 @@ namespace gl_engine
 					),
 					*scale_vec
 				);
+			//return
+			//	glm::translate
+			//	(
+			//		glm::rotate
+			//		(
+			//			glm::rotate
+			//			(
+			//				glm::rotate
+			//				(
+			//					glm::scale
+			//					(
+			//						glm::tmat4x4<T>(T(1.0f)), *scale_vec
+			//					),
+			//					rotate_vec[rotate_order[2]], rotate_axes[rotate_order[2]]
+			//				),
+			//				rotate_vec[rotate_order[1]], rotate_axes[rotate_order[1]]
+			//			),
+			//			rotate_vec[rotate_order[0]], rotate_axes[rotate_order[0]]
+			//		),
+			//		*translate_vec
+			//	);
 		}
 		// // ----- MIN MAX LOOP ----- // //
 		template<typename T>

@@ -41,6 +41,11 @@ namespace gl_engine
 	}
 
 	// // ----- GETTERS ----- // //
+	const glm::vec3 FreeCamera::position() const
+	{
+		return m_position;
+	}
+
 	glm::mat4 FreeCamera::worldToCam_matrix()
 	{
 		return glm::translate(glm::mat4(1.0f), m_position);		
@@ -49,10 +54,15 @@ namespace gl_engine
 	glm::mat4 FreeCamera::viewToProjectionMatrix()
 	{
 		return glm::perspective(
-			m_angleOfView, 
+			glm::radians(m_angleOfView), 
 			(GLfloat)Camera::dimensions().x / (GLfloat)Camera::dimensions().y, 
 			Camera::clipNear(), 
 			Camera::clipFar());
+	}
+
+	glm::mat4 FreeCamera::worldToProjection_matrix()
+	{
+		return viewToProjectionMatrix() * worldToCam_matrix();
 	}
 
 	// // ----- SETTERS ----- // //

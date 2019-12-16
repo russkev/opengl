@@ -23,12 +23,6 @@ namespace gl_engine
 		return glm::vec3(0.0f);
 	}
 
-	glm::mat4 Camera::worldToProjection_matrix()
-	{
-		return viewToProjectionMatrix() * worldToCam_matrix();
-	}
-
-
 	// // ----- SETTERS ----- // //
 	void Camera::setDimensions(glm::uvec2 dimensions)
 	{
