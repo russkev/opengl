@@ -29,7 +29,7 @@ namespace gl_engine
 
 		// // ----- GETTERS ----- // //
 		glm::mat4 worldToCam_matrix() override;
-		glm::mat4 viewToProjectionMatrix() override;
+		glm::mat4 viewToProjection_matrix() override;
 		glm::mat4 worldToProjection_matrix() override;
 
 		// // ----- SETTERS ----- // //

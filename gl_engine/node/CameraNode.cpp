@@ -49,7 +49,7 @@ namespace gl_engine
 
 	glm::mat4 CameraNode::worldToProjection_matrix()
 	{
-		return m_camera->worldToProjection_matrix() * Node::worldTransform();
+		return m_camera->viewToProjection_matrix();
 		//return m_camera->viewToProjectionMatrix() * worldToCam_matrix();
 		//return  m_camera->worldToProjection_matrix();// *worldToCam_matrix();//Node::worldTransform();
 	}

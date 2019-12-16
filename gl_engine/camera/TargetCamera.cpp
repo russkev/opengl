@@ -110,7 +110,7 @@ namespace gl_engine
 		return glm::lookAt(m_position, m_lookTarget, m_camUp);
 	}
 
-	glm::mat4 TargetCamera::viewToProjectionMatrix()
+	glm::mat4 TargetCamera::viewToProjection_matrix()
 	{
 		return glm::perspective(
 			glm::radians(m_angleOfView), 
@@ -121,7 +121,7 @@ namespace gl_engine
 
 	glm::mat4 TargetCamera::worldToProjection_matrix()
 	{
-		return viewToProjectionMatrix() * worldToCam_matrix();
+		return viewToProjection_matrix() * worldToCam_matrix();
 	}
 
 	// // ----- SETTERS ----- // //

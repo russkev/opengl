@@ -51,7 +51,7 @@ namespace gl_engine
 		return glm::translate(glm::mat4(1.0f), m_position);		
 	}
 
-	glm::mat4 FreeCamera::viewToProjectionMatrix()
+	glm::mat4 FreeCamera::viewToProjection_matrix()
 	{
 		return glm::perspective(
 			glm::radians(m_angleOfView), 
@@ -62,7 +62,7 @@ namespace gl_engine
 
 	glm::mat4 FreeCamera::worldToProjection_matrix()
 	{
-		return viewToProjectionMatrix() * worldToCam_matrix();
+		return viewToProjection_matrix() * worldToCam_matrix();
 	}
 
 	// // ----- SETTERS ----- // //

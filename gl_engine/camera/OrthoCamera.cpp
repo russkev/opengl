@@ -25,14 +25,14 @@ namespace gl_engine
 		return glm::mat4(glm::vec4{ 1.0f, 0.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 1.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 0.0f, 1.0f, 0.0f }, glm::vec4{ position(), 1.0f });
 	}
 
-	glm::mat4 OrthoCamera::viewToProjectionMatrix()
+	glm::mat4 OrthoCamera::viewToProjection_matrix()
 	{
 		return glm::ortho(m_left, m_right, m_bottom, m_top, Camera::clipNear(), Camera::clipFar());
 	}
 
 	glm::mat4 OrthoCamera::worldToProjection_matrix()
 	{
-		return viewToProjectionMatrix() * worldToCam_matrix();
+		return viewToProjection_matrix() * worldToCam_matrix();
 	}
 
 	// // ----- SETTERS ----- // //
