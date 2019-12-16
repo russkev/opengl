@@ -33,7 +33,7 @@ namespace gl_engine
 		const GLfloat& clipFar() const;
 		virtual const glm::vec3 position() const;
 		virtual glm::mat4 worldToCam_matrix() = 0;
-		virtual glm::mat4 viewToProjectionMatrix() = 0;
+		virtual glm::mat4 viewToProjection_matrix() = 0;
 		virtual glm::mat4 worldToProjection_matrix() = 0;
 
 		// // ----- SETTERS ----- // //

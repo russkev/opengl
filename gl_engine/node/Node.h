@@ -44,6 +44,7 @@ namespace gl_engine
 		void addChild(Node* child);
 		void setParent(Node* parent);
 		Node* disconnectChild(const std::string nodeName);
+
 		virtual const glm::mat4 localTransform();
 		const glm::mat4 worldTransform();
 		const glm::mat3 worldNormalTransform();

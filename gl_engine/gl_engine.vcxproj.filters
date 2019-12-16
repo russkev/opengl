@@ -262,14 +262,14 @@
     <ClInclude Include="camera\OrthoCamera.h">
       <Filter>Camera</Filter>
     </ClInclude>
-    <ClInclude Include="camera\TargetCamera.h">
-      <Filter>Camera</Filter>
-    </ClInclude>
     <ClInclude Include="camera\FreeCamera.h">
       <Filter>Camera</Filter>
     </ClInclude>
     <ClInclude Include="utils\Timer.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\TargetCamera.h">
+      <Filter>Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
