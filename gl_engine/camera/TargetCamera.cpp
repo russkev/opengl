@@ -78,7 +78,7 @@ namespace gl_engine
 		m_camRight = r_yaw * m_camRight;
 		m_camUp = cross(m_camRight, m_viewDirection);
 
-		//printData(rotateDelta);
+		printData(rotateDelta);
 	}
 
 	void TargetCamera::printData(const glm::vec2& rotateDelta)
@@ -113,10 +113,15 @@ namespace gl_engine
 	glm::mat4 TargetCamera::viewToProjectionMatrix()
 	{
 		return glm::perspective(
-			m_angleOfView, 
+			glm::radians(m_angleOfView), 
 			(GLfloat)Camera::dimensions().x / (GLfloat)Camera::dimensions().y, 
 			Camera::clipNear(), 
 			Camera::clipFar());
+	}
+
+	glm::mat4 TargetCamera::worldToProjection_matrix()
+	{
+		return viewToProjectionMatrix() * worldToCam_matrix();
 	}
 
 	// // ----- SETTERS ----- // //

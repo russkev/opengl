@@ -33,7 +33,7 @@ namespace gl_engine
 
 		glm::vec2 m_oldMousePosition;
 
-		GLfloat m_angleOfView = 3.0f; // In degrees
+		GLfloat m_angleOfView = 60.0f; // In degrees
 
 		// // ----- CONSTRUCTOR ----- // //
 	public:
@@ -52,6 +52,7 @@ namespace gl_engine
 		const glm::vec3 position() const override;
 		glm::mat4 worldToCam_matrix() override;
 		glm::mat4 viewToProjectionMatrix() override;
+		glm::mat4 worldToProjection_matrix() override;
 
 		// // ----- SETTERS ----- // //
 		void setPosition(glm::vec3);

@@ -1,6 +1,7 @@
 #include "CameraNode.h"
 
 #include "../camera/Camera.h"
+#include "../utils/VectorUtils.h"
 
 namespace gl_engine
 {
@@ -21,14 +22,19 @@ namespace gl_engine
 
 
 	// // ----- OVERRIDES ----- // //
+	const glm::mat4 CameraNode::localTransform()
+	{
+		return Node::localTransform() * glm::translate(glm::mat4(1.0f), m_camera->position());
+	}
+
+
 	const glm::vec3 CameraNode::position() const
 	{
 		return glm::vec3(m_camera->position() + Node::position());
 	}
 	const glm::vec3 CameraNode::worldPosition()
 	{
-		glm::mat4 wTransform = worldTransform();
-		return m_camera->position() + glm::vec3(wTransform[3][0], wTransform[3][1], wTransform[3][2]);
+		return glm::vec3(worldTransform() * glm::vec4(m_camera->position(), 1.0f));
 	}
 
 	void CameraNode::setPosition(const glm::vec3& position)
@@ -43,6 +49,8 @@ namespace gl_engine
 
 	glm::mat4 CameraNode::worldToProjection_matrix()
 	{
-		return  m_camera->worldToProjection_matrix() * Node::worldTransform();
+		return m_camera->worldToProjection_matrix() * Node::worldTransform();
+		//return m_camera->viewToProjectionMatrix() * worldToCam_matrix();
+		//return  m_camera->worldToProjection_matrix();// *worldToCam_matrix();//Node::worldTransform();
 	}
 } // namespace gl_engine

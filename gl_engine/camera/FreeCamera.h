@@ -15,7 +15,7 @@ namespace gl_engine
 	private:
 		static const float MOVE_SPEED;
 
-		GLfloat m_angleOfView = 1.0f;
+		GLfloat m_angleOfView = 60.0f;
 		glm::vec3 m_position = { 0.0f, 0.0f, 0.0f };
 
 		// // ----- CONSTRUCTOR ----- // //
@@ -26,8 +26,10 @@ namespace gl_engine
 		void update();
 
 		// // ----- GETTERS ----- // //
+		const glm::vec3 position() const override;
 		glm::mat4 worldToCam_matrix() override;
 		glm::mat4 viewToProjectionMatrix() override;
+		glm::mat4 worldToProjection_matrix() override;
 
 		// // ----- SETTERS ----- // //
 		void setAngleOfView(GLfloat angle);

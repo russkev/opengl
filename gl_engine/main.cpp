@@ -14,6 +14,7 @@
 #include "mesh/Sphere.h"
 #include "mesh/Arrow.h"
 #include "mesh/Plane.h"
+#include "mesh/Cube.h"
 #include "mesh/obj.h"
 #include "camera/Camera.h"
 #include "camera/TargetCamera.h"
@@ -81,30 +82,30 @@ int main(int, char**)
 
 	// Target Camera
 	gl_engine::TargetCamera targetCam{};
-	gl_engine::CameraNode targetCamNode{ "Target Camera 1", &targetCam };
+	gl_engine::CameraNode targetCam_node{ "Target Camera 1", &targetCam };
+	//targetCam.setPosition({ 0.0f, 10.0f, -20.0f });
 
 	targetCam.setClipFar(1000.0f);
 
 	// Orthogonal Camera
 	gl_engine::OrthoCamera orthoCam{};
-	gl_engine::CameraNode orthoCamNode1{ "Ortho Cam 1", &orthoCam };
-	//targetCamNode.setPosition(glm::vec3{ 0.0f, -4.0f, -6.0f });
-	//targetCamNode.setRotation(glm::vec3{ 50.0f, 0.0f, 0.0f });
+	gl_engine::CameraNode orthoCam_node{ "Ortho Cam 1", &orthoCam };
+	//targetCam_node.setPosition(glm::vec3{ 0.0f, -4.0f, -6.0f });
+	//targetCam_node.setRotation(glm::vec3{ 50.0f, 0.0f, 0.0f });
 	orthoCam.setClipNear(0.001f);
 	orthoCam.setClipFar(100.0f);
 	orthoCam.setSides(-30.0f, 30.0f, -30.0f, 30.0f);
-	orthoCamNode1.setPosition({ 0.0f, 0.0f, 0.0f });
-	orthoCamNode1.setRotation({ -30.0f, 100.0f, 0.0f });
-	//CameraNode targetCamNode = CameraNode( "Camera Node 1", &targetCam );
+	//orthoCam_node.setPosition({ 0.0f, 0.0f, 0.0f });
+	//orthoCam_node.setRotation({ -30.0f, 100.0f, 0.0f });
 
 	// Free Camera
 	gl_engine::FreeCamera freeCam{};
-	gl_engine::CameraNode freeCamNode{ "Free Cam 1", &freeCam };
+	gl_engine::CameraNode freeCam_node{ "Free Cam 1", &freeCam };
 	freeCam.setClipNear(0.001f);
 	freeCam.setClipFar(1000.0f);
 
-	freeCamNode.setRotation({ 0.0f, 0.0f, 0.1f });
-	//freeCamNode.setPosition({ 8.0f, 9.0f, 0.0f });
+	//freeCam_node.setRotation({ 0.0f, 0.0f, 0.1f });
+	freeCam_node.setPosition({ 0.0f, 0.0f, -8.0f });
 
 
 	// Shader 1
@@ -127,6 +128,11 @@ int main(int, char**)
 	gl_engine::Mesh plane = gl_engine::Plane::createPlane(100.0f, 100.0f, 1, 1);
 	gl_engine::MeshNode plane_node{ "Plane1", &plane, &cShadMat };
 
+	// Mesh 3
+	gl_engine::Mesh cube = gl_engine::Cube::createCube(5.0f);
+	gl_engine::MeshNode cube_node{ "Cube 1", &cube, &cShadMat };
+	cube_node.setParent(&freeCam_node);
+
 	// Light 1
 	gl_engine::PointLight pointLight{ 1.0f, { 0.0f, 0.0f, 0.0f } };
 	pointLight.setBrightness(2.1f);
@@ -143,13 +149,18 @@ int main(int, char**)
 	// Light 3
 	gl_engine::DirectionalLight directionalLight1{ 0.2f, { 0.2f, 1.0f, 0.1f } };
 	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
-	directionalLight_node1.setPosition({ 8.0f, 9.0f, 0.0f });
+	//directionalLight_node1.setRotation({ 33.0f, 0.0f, 0.0f });
+	//directionalLight_node1.setPosition({ 0.0f, 10.0f, -20.0f });
+	//directionalLight_node1.setPosition({ 0.0f, 5.0f, -9.0f });
 	//directionalLight_node1.setRotation({ 30.0f, -100.0f, 0.0f });
-	//directionalLight_node1.addChild(&freeCamNode);
+	//directionalLight_node1.addChild(&freeCam_node);
+	directionalLight_node1.addChild(&orthoCam_node);
+	//directionalLight_node1.addChild(&cube_node);
+
 	//targetCam.setPosition({ -1.0,0,0 });
 	//targetCam.setFocusTarget({ 0.0f, 6.0f, 0.0f });
 	////targetCam.setViewDirection({ -1.0, 0.0, 0.0 });
-	//directionalLight_node1.addChild(&targetCamNode);
+	//directionalLight_node1.addChild(&targetCam_node);
 
 	// Light 4
 	gl_engine::SpotLight spotLight1{ 6.0f, { 1.0f, 0.0f, 0.0f } };
@@ -169,7 +180,7 @@ int main(int, char**)
 	lightRotate2.setPosition({ 2.0, 0.0, 0.0 });
 
 	// Renderer
-	gl_engine::Renderer render{ &targetCamNode, glm::uvec2(width, height) };
+	gl_engine::Renderer render{ &targetCam_node, glm::uvec2(width, height) };
 	render.addNode(&shaderBall_node);
 	render.addNode(&plane_node);
 	render.addLightNode(&pointLight_node);

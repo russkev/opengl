@@ -84,6 +84,21 @@ namespace gl_engine
 		m_parent = parent;
 	}
 
+	void Node::update_view(CameraNode* camera_node)
+	{
+		for (auto child : m_children)
+		{
+			child.second->update_view(camera_node);
+		}
+	}
+	void Node::draw()
+	{
+		for (auto child : m_children)
+		{
+			child.second->draw();
+		}
+	}
+
 	// // ----- GETTERS ----- // //
 	const std::string& Node::name() const
 	{
@@ -98,8 +113,7 @@ namespace gl_engine
 
 	const glm::vec3 Node::worldPosition()
 	{
-		glm::mat4 wTransform = worldTransform();
-		return glm::vec3(wTransform[3][0], wTransform[3][1], wTransform[3][2]);
+		return glm::vec3(worldTransform() * glm::vec4{ 0.0f, 0.0f, 0.0f, 1.0f });
 	}
 
 	const glm::vec3 Node::rotation() const

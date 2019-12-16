@@ -17,7 +17,7 @@ namespace gl_engine
 	{
 		setBrightness(brightness);
 		setColor(color);
-		m_light_mesh.transform(glm::scale(glm::mat4(1.0f), glm::vec3(0.2, 0.05, 0.2)));
+		//m_light_mesh.transform(glm::scale(glm::mat4(1.0f), glm::vec3(0.2, 0.05, 0.2)));
 	}
 
 	// // ----- GETTERS ----- // //

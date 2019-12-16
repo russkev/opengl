@@ -44,13 +44,13 @@ namespace gl_engine
 		void addChild(Node* child);
 		void setParent(Node* parent);
 		Node* disconnectChild(const std::string nodeName);
-		const glm::mat4 localTransform();
+		virtual const glm::mat4 localTransform();
 		const glm::mat4 worldTransform();
 		const glm::mat3 worldNormalTransform();
 		const glm::vec3 directionVector();
 
-		virtual void update_view(CameraNode*) {};
-		virtual void draw() {};
+		virtual void update_view(CameraNode*);
+		virtual void draw();
 
 		// // ----- GETTERS ----- // //
 		const std::string& name() const;

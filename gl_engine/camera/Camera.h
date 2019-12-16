@@ -34,7 +34,7 @@ namespace gl_engine
 		virtual const glm::vec3 position() const;
 		virtual glm::mat4 worldToCam_matrix() = 0;
 		virtual glm::mat4 viewToProjectionMatrix() = 0;
-		glm::mat4 worldToProjection_matrix();
+		virtual glm::mat4 worldToProjection_matrix() = 0;
 
 		// // ----- SETTERS ----- // //
 		void setDimensions(glm::uvec2);

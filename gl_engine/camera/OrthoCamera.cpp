@@ -30,6 +30,11 @@ namespace gl_engine
 		return glm::ortho(m_left, m_right, m_bottom, m_top, Camera::clipNear(), Camera::clipFar());
 	}
 
+	glm::mat4 OrthoCamera::worldToProjection_matrix()
+	{
+		return viewToProjectionMatrix() * worldToCam_matrix();
+	}
+
 	// // ----- SETTERS ----- // //
 	void OrthoCamera::setSides(const GLfloat left, const GLfloat right, const GLfloat bottom, const GLfloat top)
 	{

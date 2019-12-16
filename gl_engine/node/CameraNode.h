@@ -22,13 +22,14 @@ namespace gl_engine
 	private:
 		Camera* m_camera;
 
-		// // ----- CONSTRUCTOR ----- // //
+		// // ----- CONSTRUCTORS ----- // //
 	public:
 		CameraNode() {};
 		CameraNode(const std::string name, Camera* camera);
 
 		// // ----- GETTERS ----- // //
 		Camera* camera();
+		const glm::mat4 localTransform() override;
 		const glm::vec3 position() const override;
 		const glm::vec3 worldPosition() override;
 		glm::mat4 worldToCam_matrix();
@@ -38,7 +39,4 @@ namespace gl_engine
 		void setPosition(const glm::vec3&) override;
 	};
 } // namespace gl_engine
-
-
-
 #endif
