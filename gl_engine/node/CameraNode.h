@@ -27,12 +27,15 @@ namespace gl_engine
 		CameraNode() {};
 		CameraNode(const std::string name, Camera* camera);
 
+		void update();
+
 		// // ----- GETTERS ----- // //
 		Camera* camera();
-		const glm::mat4 localTransform() override;
+		//glm::mat4& localTransform() override;
 		const glm::vec3 position() const override;
 		const glm::vec3 worldPosition() override;
-		glm::mat4 worldToCam_matrix();
+
+		glm::mat4 objectToCam_matrix();
 		glm::mat4 worldToProjection_matrix();
 
 		// // ----- SETTERS ----- // //

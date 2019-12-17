@@ -14,6 +14,11 @@ namespace gl_engine
 		Node(name), m_camera(camera)
 	{}
 
+	void CameraNode::update()
+	{
+		m_camera->update(&Node::localTransform());
+	}
+
 	// // ----- GETTERS ----- // //
 	Camera* CameraNode::camera()
 	{
@@ -22,18 +27,20 @@ namespace gl_engine
 
 
 	// // ----- OVERRIDES ----- // //
-	const glm::mat4 CameraNode::localTransform()
-	{
-		return Node::localTransform() * glm::translate(glm::mat4(1.0f), m_camera->position());
-	}
+	//const glm::mat4 CameraNode::localTransform()
+	//{
+	//	return Node::localTransform();// *glm::translate(glm::mat4(1.0f), m_camera->position());
+	//}
 
 
 	const glm::vec3 CameraNode::position() const
 	{
-		return glm::vec3(m_camera->position() + Node::position());
+		return Node::position();
+		//return glm::vec3(m_camera->position() + Node::position());
 	}
 	const glm::vec3 CameraNode::worldPosition()
 	{
+		//return glm::vec3(worldTransform() * glm::vec4(0.0, 0.0, 0.0, 1.0));
 		return glm::vec3(worldTransform() * glm::vec4(m_camera->position(), 1.0f));
 	}
 
@@ -42,15 +49,19 @@ namespace gl_engine
 		Node::setPosition(position);
 	}
 
-	glm::mat4 CameraNode::worldToCam_matrix()
+	// // ----- GETTERS ----- // //
+	glm::mat4 CameraNode::objectToCam_matrix()
 	{
-		return  m_camera->worldToCam_matrix() * Node::worldTransform();
+		//return m_camera->objectToCam_matrix();
+		return  m_camera->objectToCam_matrix() * Node::worldTransform();
 	}
 
 	glm::mat4 CameraNode::worldToProjection_matrix()
 	{
-		return m_camera->viewToProjection_matrix();
-		//return m_camera->viewToProjectionMatrix() * worldToCam_matrix();
-		//return  m_camera->worldToProjection_matrix();// *worldToCam_matrix();//Node::worldTransform();
+		auto sdkjf = Node::worldTransform();
+		return m_camera->worldToProjection_matrix();// *Node::worldTransform();
+		//return m_camera->viewToProjection_matrix();
+		//return m_camera->viewToProjectionMatrix() * objectToCam_matrix();
+		//return  m_camera->worldToProjection_matrix();// *objectToCam_matrix();//Node::worldTransform();
 	}
 } // namespace gl_engine

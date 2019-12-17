@@ -23,11 +23,11 @@ namespace gl_engine
 		FreeCamera();
 
 		// // ----- CAMERA MOVEMENT ----- // //
-		void update();
+		void update(glm::mat4* transform);
 
 		// // ----- GETTERS ----- // //
 		const glm::vec3 position() const override;
-		glm::mat4 worldToCam_matrix() override;
+		glm::mat4 objectToCam_matrix() override;
 		glm::mat4 viewToProjection_matrix() override;
 		glm::mat4 worldToProjection_matrix() override;
 

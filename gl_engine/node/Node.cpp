@@ -3,6 +3,12 @@
 #include "../utils/VectorUtils.h"
 #include "CameraNode.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
+#include <glm/gtx/euler_angles.hpp>
+
+
 namespace gl_engine
 {
 	const std::string Node::U_MODEL_TO_PROJECTION = "transform.modelToProjection";
@@ -49,9 +55,10 @@ namespace gl_engine
 	}
 
 	// Calculate the transform matrix in local space
-	const glm::mat4 Node::localTransform()
+	glm::mat4& Node::localTransform()
 	{
-		return VectorUtils::trs(glm::mat3{ m_position, m_rotation, m_scale });
+		return m_local_transform;
+		//return VectorUtils::trs(glm::mat3{ m_position, m_rotation, m_scale });
 	}
 
 	// Calculate the transform matrix in world space
@@ -108,7 +115,8 @@ namespace gl_engine
 
 	const glm::vec3 Node::position() const
 	{
-		return m_position;
+		return glm::vec3(m_local_transform * glm::vec4{ 0.0f, 0.0f, 0.0f, 1.0f });
+		//return m_position;
 	}
 
 	const glm::vec3 Node::worldPosition()
@@ -118,12 +126,23 @@ namespace gl_engine
 
 	const glm::vec3 Node::rotation() const
 	{
-		return m_rotation;
+		glm::vec3 out_rotation;
+		glm::quat temp_quat{};
+
+
+		glm::decompose(m_local_transform, glm::vec3{}, temp_quat, glm::vec3{}, glm::vec3{}, glm::vec4{});
+		out_rotation = glm::eulerAngles(temp_quat);
+
+		return glm::degrees(out_rotation);
 	}
 
 	const glm::vec3 Node::scale() const
 	{
-		return m_scale;
+		glm::vec3 out_scale;
+
+		glm::decompose(m_local_transform, out_scale, glm::quat{}, glm::vec3{}, glm::vec3{}, glm::vec4{});
+
+		return out_scale;
 	}
 
 	const Node* Node::parent() const
@@ -139,21 +158,31 @@ namespace gl_engine
 	// // ----- SETTERS ----- // //
 	void Node::setPosition(const glm::vec3& position)
 	{
-		m_position = position;
+		m_local_transform[3] = glm::vec4(position, 1.0f);
+		//m_position = position;
 	}
 
 	void Node::setRotation(const glm::vec3& rotation)
 	{
-		m_rotation = rotation;
+		m_local_transform =
+			glm::translate(glm::mat4{ 1.0f }, position()) *
+			glm::yawPitchRoll(glm::radians(rotation.y), glm::radians(rotation.x), glm::radians(rotation.z)) *
+			glm::scale(glm::mat4{ 1.0f }, scale());
 	}
 
 	void Node::setScale(const glm::vec3& scale)
 	{
-		m_scale = scale;
+		glm::vec3 existing_rotation = rotation();
+		m_local_transform =
+			glm::translate(glm::mat4{ 1.0f }, position()) *
+			glm::yawPitchRoll(existing_rotation.y, existing_rotation.x, existing_rotation.z) *
+			glm::scale(glm::mat4{ 1.0 }, scale);
+		//m_scale = scale;
 	}
 
 	void Node::setScale(const GLfloat scale)
 	{
-		m_scale = { scale, scale, scale };
+		setScale(glm::vec3{ scale, scale, scale });
+		//m_scale = { scale, scale, scale };
 	}
 } // namespace gl_engine

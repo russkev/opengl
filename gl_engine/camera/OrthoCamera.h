@@ -25,10 +25,10 @@ namespace gl_engine
 		OrthoCamera(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top);
 
 		// // ----- CAMERA MOVEMENT ----- // //
-		void update();
+		void update(glm::mat4* transform);
 
 		// // ----- GETTERS ----- // //
-		glm::mat4 worldToCam_matrix() override;
+		glm::mat4 objectToCam_matrix() override;
 		glm::mat4 viewToProjection_matrix() override;
 		glm::mat4 worldToProjection_matrix() override;
 
