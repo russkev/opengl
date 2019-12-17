@@ -14,13 +14,13 @@ namespace gl_engine
 
 
 	// // ----- CAMERA MOVEMENT ----- // //
-	void OrthoCamera::update()
+	void OrthoCamera::update(glm::mat4* transform)
 	{
 
 	}
 
 	// // ----- GETTERS ----- // //
-	glm::mat4 OrthoCamera::worldToCam_matrix()
+	glm::mat4 OrthoCamera::objectToCam_matrix()
 	{
 		return glm::mat4(glm::vec4{ 1.0f, 0.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 1.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 0.0f, 1.0f, 0.0f }, glm::vec4{ position(), 1.0f });
 	}
@@ -32,7 +32,7 @@ namespace gl_engine
 
 	glm::mat4 OrthoCamera::worldToProjection_matrix()
 	{
-		return viewToProjection_matrix() * worldToCam_matrix();
+		return viewToProjection_matrix() * objectToCam_matrix();
 	}
 
 	// // ----- SETTERS ----- // //

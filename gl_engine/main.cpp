@@ -27,6 +27,10 @@
 #include "shading/Texture.h"
 #include "utils/Timer.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/euler_angles.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
+
 //#define DEBUG
 
 std::vector<gl_engine::opengl_attr_pair> st_config =
@@ -79,6 +83,42 @@ int main(int, char**)
 	GLuint width	= 800u;
 	GLuint height	= 600u;
 	gl_engine::Window window{ "GL Engine", st_config, width, height };
+	/*
+	
+		Testing area	
+	
+	*/
+
+	gl_engine::Node testNode{};
+
+	glm::mat4 _homeMade = gl_engine::VectorUtils::trs(glm::mat3(glm::vec3(0, 0, 0), glm::vec3(0, 10, 0), glm::vec3(0.5f, 1.3f, 1.1f)));
+
+	//glm::mat4 _glm = glm::yawPitchRoll(0, 10, 0);
+	glm::mat4 _glm_orientate = glm::orientate4(glm::vec3{ 0.0f, 0.0f, glm::radians(10.0f) });
+	glm::mat4 _glm_yawPitchRoll = glm::yawPitchRoll(glm::radians(10.0f), 0.0f, 0.0f);
+
+	glm::vec3 _extracted;
+	//glm::vec3 _extracted_home;
+
+	//glm::extractEulerAngleXYZ(_homeMade, _extracted.x, _extracted.y, _extracted.z);
+
+
+	glm::quat _quat{};
+	glm::decompose(_homeMade, glm::vec3(1.0f), _quat, glm::vec3(1.0f), glm::vec3(1.0f), glm::vec4(1.0f));
+	glm::vec3 _euler_result = glm::eulerAngles(_quat);
+	_extracted = glm::vec3(glm::degrees(_euler_result.x), glm::degrees(_euler_result.y), glm::degrees(_euler_result.z));
+	auto lksdjf = 900;
+		
+	/*
+	
+	
+		End testing area
+	
+	*/
+
+
+
+
 
 	// Target Camera
 	gl_engine::TargetCamera targetCam{};
@@ -193,7 +233,7 @@ int main(int, char**)
 
 	while (render.pollEvents())
 	{
-		float new_y_rotation = (float)shaderBall_node.rotation().y + (float)timer.delta_time_s() * 0.3f;
+		float new_y_rotation = (float)shaderBall_node.rotation().y + (float)timer.delta_time_s() * 10.0f;
 		shaderBall_node.setRotation({ 0.0, new_y_rotation, 0.0 });
 
 		//float l1_rotate = lightRotate1.rotation().z + (float)timer.delta_time_s() * 100;

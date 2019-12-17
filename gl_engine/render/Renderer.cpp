@@ -130,7 +130,7 @@ namespace gl_engine
 	{
 
 		timer->update();
-		m_cameraNode->camera()->update();
+		m_cameraNode->update();
 		render();
 		window->finish_frame();
 		window->appendTitle(("FPS: " + (std::string)timer->fps()));

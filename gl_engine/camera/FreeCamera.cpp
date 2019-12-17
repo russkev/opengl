@@ -10,7 +10,7 @@ namespace gl_engine
 	{}
 
 	// // ----- CAMERA MOVEMENT ----- // //
-	void FreeCamera::update()
+	void FreeCamera::update(glm::mat4* transform)
 	{
 		auto const keyboardState = SDL_GetKeyboardState(nullptr);
 
@@ -46,7 +46,7 @@ namespace gl_engine
 		return m_position;
 	}
 
-	glm::mat4 FreeCamera::worldToCam_matrix()
+	glm::mat4 FreeCamera::objectToCam_matrix()
 	{
 		return glm::translate(glm::mat4(1.0f), m_position);		
 	}
@@ -62,7 +62,7 @@ namespace gl_engine
 
 	glm::mat4 FreeCamera::worldToProjection_matrix()
 	{
-		return viewToProjection_matrix() * worldToCam_matrix();
+		return viewToProjection_matrix() * objectToCam_matrix();
 	}
 
 	// // ----- SETTERS ----- // //

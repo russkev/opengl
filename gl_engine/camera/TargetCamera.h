@@ -40,7 +40,8 @@ namespace gl_engine
 		TargetCamera();
 
 		// // ----- CAMERA MOVEMENT ----- // //
-		void update() override;
+		void update(glm::mat4* transform) override;
+
 		//void positionUpdate(const SDL_Scancode& newPosition);
 		void scrollUpdate(const float scrollAmount);
 		void moveRel(const glm::vec3& moveDelta);
@@ -48,9 +49,12 @@ namespace gl_engine
 		void printData(const glm::vec2& rotateDelta);
 		void focus(const glm::vec3& focusTarget);
 
+	private:
+		void updatePosition(glm::vec3 newPosition);
+
 		// // ----- GETTERS ----- // //
 		const glm::vec3 position() const override;
-		glm::mat4 worldToCam_matrix() override;
+		glm::mat4 objectToCam_matrix() override;
 		glm::mat4 viewToProjection_matrix() override;
 		glm::mat4 worldToProjection_matrix() override;
 

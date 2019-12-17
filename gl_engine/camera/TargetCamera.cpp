@@ -16,8 +16,12 @@ namespace gl_engine
 	{}
 
 	// // ----- CAMERA MOVEMENT ----- // //
-	void TargetCamera::update()
+	void TargetCamera::update(glm::mat4* transform)
 	{
+		//glm::vec3{ (*transform)[3][0], (*transform)[3][1], (*transform)[3][2] };
+		updatePosition(glm::vec3{ (*transform)[3][0], (*transform)[3][1], (*transform)[3][2] });
+
+
 		static const auto cMoveSpeed = glm::vec3(0.02f, 0.01f, 0.1f);
 		static const auto cRotateSpeed = glm::vec2(0.01f, 0.01f);
 
@@ -47,6 +51,15 @@ namespace gl_engine
 		}
 		moveRel(axisDelta * cMoveSpeed);
 		rotateRel(rotateDelta * cRotateSpeed);
+
+		*transform = glm::inverse(objectToCam_matrix());
+	}
+
+	void TargetCamera::updatePosition(glm::vec3 newPosition)
+	{
+		glm::vec3 difference = newPosition - m_position;
+		m_position = newPosition;
+		m_lookTarget += difference;
 	}
 
 	void TargetCamera::scrollUpdate(const float scrollAmount)
@@ -105,7 +118,7 @@ namespace gl_engine
 		return m_position;
 	}
 
-	glm::mat4 TargetCamera::worldToCam_matrix()
+	glm::mat4 TargetCamera::objectToCam_matrix()
 	{
 		return glm::lookAt(m_position, m_lookTarget, m_camUp);
 	}
@@ -121,7 +134,7 @@ namespace gl_engine
 
 	glm::mat4 TargetCamera::worldToProjection_matrix()
 	{
-		return viewToProjection_matrix() * worldToCam_matrix();
+		return  viewToProjection_matrix() * objectToCam_matrix();
 	}
 
 	// // ----- SETTERS ----- // //

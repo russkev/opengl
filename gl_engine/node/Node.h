@@ -28,9 +28,10 @@ namespace gl_engine
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
 		std::string m_name;
-		glm::vec3 m_position{ 0.0f, 0.0f, 0.0f };
-		glm::vec3 m_rotation{ 0.0f, 0.0f, 0.0f };
-		glm::vec3 m_scale{ 1.0f, 1.0f, 1.0f };
+		//glm::vec3 m_position{ 0.0f, 0.0f, 0.0f };
+		//glm::vec3 m_rotation{ 0.0f, 0.0f, 0.0f };
+		//glm::vec3 m_scale{ 1.0f, 1.0f, 1.0f };
+		glm::mat4 m_local_transform{ 1.0f };
 
 		Node* m_parent = NULL;
 		std::unordered_map<std::string, Node*> m_children;
@@ -45,7 +46,7 @@ namespace gl_engine
 		void setParent(Node* parent);
 		Node* disconnectChild(const std::string nodeName);
 
-		virtual const glm::mat4 localTransform();
+		glm::mat4& localTransform();
 		const glm::mat4 worldTransform();
 		const glm::mat3 worldNormalTransform();
 		const glm::vec3 directionVector();
