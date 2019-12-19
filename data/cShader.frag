@@ -317,8 +317,10 @@ void main ()
 
 		specular_out +=
 			specular_point_worldSpace(i) * 
+			point_light[i].brightness *  point_light[i].brightness *
 			material.specular * 
-			point_light[i].color;
+			point_light[i].color * 
+			temp_attenuation;
 	}
 
 	// Directional lights
@@ -331,6 +333,7 @@ void main ()
 
 		specular_out +=
 			specular_directional_tangentSpace(i) *
+			directional_light[i].brightness *
 			material.specular * 
 			directional_light[i].color;
 	}
@@ -347,8 +350,10 @@ void main ()
 			temp_attenuation;
 		specular_out +=
 			specular_spot_tangentSpace(i) *
+			point_light[i].brightness * spot_light[i].brightness *
 			material.specular * 
-			spot_light[i].color;
+			spot_light[i].color * 
+			temp_attenuation;
 	}
 
 	vec3 outColor = 

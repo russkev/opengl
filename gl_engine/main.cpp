@@ -172,7 +172,7 @@ int main(int, char**)
 	gl_engine::Mesh cube = gl_engine::Cube::createCube(5.0f);
 	gl_engine::MeshNode cube_node{ "Cube 1", &cube, &cShadMat };
 	cube_node.setParent(&freeCam_node);
-	cube_node.setPosition({ 0.0f, 0.0f, 6.0f });
+	//cube_node.setPosition({ 0.0f, 0.0f, 6.0f });
 
 	// Light 1
 	gl_engine::PointLight pointLight{ 1.0f, { 0.0f, 0.0f, 0.0f } };
@@ -188,10 +188,10 @@ int main(int, char**)
 	pointLight_node2.setPosition({ 0.0f, 4.0f, -5.0f });
 
 	// Light 3
-	gl_engine::DirectionalLight directionalLight1{ 0.2f, { 0.2f, 1.0f, 0.1f } };
+	gl_engine::DirectionalLight directionalLight1{ 0.05f, { 0.2f, 1.0f, 0.1f } };
 	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
-	directionalLight_node1.setRotation({ 33.0f, 0.0f, 0.0f });
-	directionalLight_node1.setPosition({ 0.0f, 8.0f, -8.0f });
+	directionalLight_node1.setRotation({ 33.0f, 225.0f, 0.0f });
+	directionalLight_node1.setPosition({ 16.0f, 16.0f, 16.0f });
 	//directionalLight_node1.setPosition({ 0.0f, 5.0f, -9.0f });
 	//directionalLight_node1.setRotation({ 30.0f, -100.0f, 0.0f });
 	directionalLight_node1.addChild(&freeCam_node);
@@ -221,7 +221,7 @@ int main(int, char**)
 	lightRotate2.setPosition({ 2.0, 0.0, 0.0 });
 
 	// Renderer
-	gl_engine::Renderer render{ &freeCam_node, glm::uvec2(width, height) };
+	gl_engine::Renderer render{ &targetCam_node, glm::uvec2(width, height) };
 	render.addNode(&shaderBall_node);
 	render.addNode(&plane_node);
 	render.addLightNode(&pointLight_node);
