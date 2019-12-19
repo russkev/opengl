@@ -58,7 +58,6 @@ namespace gl_engine
 	glm::mat4& Node::localTransform()
 	{
 		return m_local_transform;
-		//return VectorUtils::trs(glm::mat3{ m_position, m_rotation, m_scale });
 	}
 
 	// Calculate the transform matrix in world space
@@ -113,27 +112,19 @@ namespace gl_engine
 	}
 
 
-	const glm::vec3 Node::position() const
+	const glm::vec3 Node::localPosition() const
 	{
-		return glm::vec3(m_local_transform * glm::vec4{ 0.0f, 0.0f, 0.0f, 1.0f });
-		//return m_position;
+		return VectorUtils::extract_position(m_local_transform);
 	}
 
 	const glm::vec3 Node::worldPosition()
 	{
-		return glm::vec3(worldTransform() * glm::vec4{ 0.0f, 0.0f, 0.0f, 1.0f });
+		return VectorUtils::extract_position(worldTransform());
 	}
 
 	const glm::vec3 Node::rotation() const
 	{
-		glm::vec3 out_rotation;
-		glm::quat temp_quat{};
-
-
-		glm::decompose(m_local_transform, glm::vec3{}, temp_quat, glm::vec3{}, glm::vec3{}, glm::vec4{});
-		out_rotation = glm::eulerAngles(temp_quat);
-
-		return glm::degrees(out_rotation);
+		return m_rotation;
 	}
 
 	const glm::vec3 Node::scale() const
@@ -159,14 +150,14 @@ namespace gl_engine
 	void Node::setPosition(const glm::vec3& position)
 	{
 		m_local_transform[3] = glm::vec4(position, 1.0f);
-		//m_position = position;
 	}
 
 	void Node::setRotation(const glm::vec3& rotation)
 	{
+		m_rotation = rotation;
 		m_local_transform =
-			glm::translate(glm::mat4{ 1.0f }, position()) *
-			glm::yawPitchRoll(glm::radians(rotation.y), glm::radians(rotation.x), glm::radians(rotation.z)) *
+			glm::translate(glm::mat4{ 1.0f }, localPosition()) *
+			glm::yawPitchRoll(glm::radians(m_rotation.y), glm::radians(m_rotation.x), glm::radians(m_rotation.z)) *
 			glm::scale(glm::mat4{ 1.0f }, scale());
 	}
 
@@ -174,15 +165,13 @@ namespace gl_engine
 	{
 		glm::vec3 existing_rotation = rotation();
 		m_local_transform =
-			glm::translate(glm::mat4{ 1.0f }, position()) *
+			glm::translate(glm::mat4{ 1.0f }, localPosition()) *
 			glm::yawPitchRoll(existing_rotation.y, existing_rotation.x, existing_rotation.z) *
 			glm::scale(glm::mat4{ 1.0 }, scale);
-		//m_scale = scale;
 	}
 
 	void Node::setScale(const GLfloat scale)
 	{
 		setScale(glm::vec3{ scale, scale, scale });
-		//m_scale = { scale, scale, scale };
 	}
 } // namespace gl_engine

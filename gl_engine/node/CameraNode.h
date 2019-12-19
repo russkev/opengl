@@ -31,8 +31,6 @@ namespace gl_engine
 
 		// // ----- GETTERS ----- // //
 		Camera* camera();
-		//glm::mat4& localTransform() override;
-		const glm::vec3 position() const override;
 		const glm::vec3 worldPosition() override;
 
 		glm::mat4 worldToCam_matrix();

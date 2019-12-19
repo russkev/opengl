@@ -31,20 +31,8 @@ namespace gl_engine
 
 
 	// // ----- OVERRIDES ----- // //
-	//const glm::mat4 CameraNode::localTransform()
-	//{
-	//	return Node::localTransform();// *glm::translate(glm::mat4(1.0f), m_camera->position());
-	//}
-
-
-	const glm::vec3 CameraNode::position() const
-	{
-		return Node::position();
-		//return glm::vec3(m_camera->position() + Node::position());
-	}
 	const glm::vec3 CameraNode::worldPosition()
 	{
-		//return glm::vec3(worldTransform() * glm::vec4(0.0, 0.0, 0.0, 1.0));
 		return glm::vec3(worldTransform() * glm::vec4(m_camera->position(), 1.0f));
 	}
 
@@ -56,19 +44,11 @@ namespace gl_engine
 	// // ----- GETTERS ----- // //
 	glm::mat4 CameraNode::worldToCam_matrix()
 	{
-		//return m_camera->worldToCam_matrix();
 		return  m_camera->objectToCam_matrix() * Node::worldTransform();
 	}
 
 	glm::mat4 CameraNode::worldToProjection_matrix()
 	{
-		//auto sdkjf = Node::worldTransform();
-		//return m_camera->objectToProjection_matrix();
-
 		return m_camera->transformToProjection_matrix(worldTransform());
-
-		//return m_camera->camToProjection_matrix();
-		//return m_camera->viewToProjectionMatrix() * worldToCam_matrix();
-		//return  m_camera->worldToProjection_matrix();// *worldToCam_matrix();//Node::worldTransform();
 	}
 } // namespace gl_engine

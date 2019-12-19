@@ -83,69 +83,25 @@ int main(int, char**)
 	GLuint width	= 800u;
 	GLuint height	= 600u;
 	gl_engine::Window window{ "GL Engine", st_config, width, height };
-	/*
-	
-		Testing area	
-	
-	*/
-
-	gl_engine::Node testNode{};
-
-	glm::mat4 _homeMade = gl_engine::VectorUtils::trs(glm::mat3(glm::vec3(0, 0, 0), glm::vec3(0, 10, 0), glm::vec3(0.5f, 1.3f, 1.1f)));
-
-	//glm::mat4 _glm = glm::yawPitchRoll(0, 10, 0);
-	glm::mat4 _glm_orientate = glm::orientate4(glm::vec3{ 0.0f, 0.0f, glm::radians(10.0f) });
-	glm::mat4 _glm_yawPitchRoll = glm::yawPitchRoll(glm::radians(10.0f), 0.0f, 0.0f);
-
-	glm::vec3 _extracted;
-	//glm::vec3 _extracted_home;
-
-	//glm::extractEulerAngleXYZ(_homeMade, _extracted.x, _extracted.y, _extracted.z);
-
-
-	glm::quat _quat{};
-	glm::decompose(_homeMade, glm::vec3(1.0f), _quat, glm::vec3(1.0f), glm::vec3(1.0f), glm::vec4(1.0f));
-	glm::vec3 _euler_result = glm::eulerAngles(_quat);
-	_extracted = glm::vec3(glm::degrees(_euler_result.x), glm::degrees(_euler_result.y), glm::degrees(_euler_result.z));
-	auto lksdjf = 900;
-		
-	/*
-	
-	
-		End testing area
-	
-	*/
-
-
-
-
 
 	// Target Camera
 	gl_engine::TargetCamera targetCam{};
 	gl_engine::CameraNode targetCam_node{ "Target Camera 1", &targetCam };
 	targetCam.setPosition({ 0.0f, 8.0f, 8.0f });
-
 	targetCam.setClipFar(1000.0f);
 
 	// Orthogonal Camera
 	gl_engine::OrthoCamera orthoCam{};
 	gl_engine::CameraNode orthoCam_node{ "Ortho Cam 1", &orthoCam };
-	//targetCam_node.setPosition(glm::vec3{ 0.0f, -4.0f, -6.0f });
-	//targetCam_node.setRotation(glm::vec3{ 50.0f, 0.0f, 0.0f });
 	orthoCam.setClipNear(0.001f);
 	orthoCam.setClipFar(100.0f);
 	orthoCam.setSides(-30.0f, 30.0f, -30.0f, 30.0f);
-	//orthoCam_node.setPosition({ 0.0f, 0.0f, 0.0f });
-	//orthoCam_node.setRotation({ -30.0f, 100.0f, 0.0f });
 
 	// Free Camera
 	gl_engine::FreeCamera freeCam{};
 	gl_engine::CameraNode freeCam_node{ "Free Cam 1", &freeCam };
 	freeCam.setClipNear(0.001f);
 	freeCam.setClipFar(1000.0f);
-
-	//freeCam_node.setRotation({ 0.0f, 0.0f, 0.1f });
-	//freeCam_node.setPosition({ 0.0f, 0.0f, -8.0f });
 
 
 	// Shader 1
@@ -172,7 +128,7 @@ int main(int, char**)
 	gl_engine::Mesh cube = gl_engine::Cube::createCube(5.0f);
 	gl_engine::MeshNode cube_node{ "Cube 1", &cube, &cShadMat };
 	cube_node.setParent(&freeCam_node);
-	//cube_node.setPosition({ 0.0f, 0.0f, 6.0f });
+	cube_node.setPosition({ 0.0f, 3.0f, 6.0f });
 
 	// Light 1
 	gl_engine::PointLight pointLight{ 1.0f, { 0.0f, 0.0f, 0.0f } };
@@ -192,16 +148,10 @@ int main(int, char**)
 	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
 	directionalLight_node1.setRotation({ 33.0f, 225.0f, 0.0f });
 	directionalLight_node1.setPosition({ 16.0f, 16.0f, 16.0f });
-	//directionalLight_node1.setPosition({ 0.0f, 5.0f, -9.0f });
-	//directionalLight_node1.setRotation({ 30.0f, -100.0f, 0.0f });
+
 	directionalLight_node1.addChild(&freeCam_node);
 	directionalLight_node1.addChild(&orthoCam_node);
-	//directionalLight_node1.addChild(&cube_node);
 
-	//targetCam.setPosition({ -1.0,0,0 });
-	//targetCam.setFocusTarget({ 0.0f, 6.0f, 0.0f });
-	////targetCam.setViewDirection({ -1.0, 0.0, 0.0 });
-	//directionalLight_node1.addChild(&targetCam_node);
 
 	// Light 4
 	gl_engine::SpotLight spotLight1{ 6.0f, { 1.0f, 0.0f, 0.0f } };
