@@ -72,10 +72,10 @@ namespace gl_engine
 		//return glm::inverse(transform);
 		//return glm::translate(glm::mat4(1.0f), m_position);		
 
-		glm::vec3 position = VectorUtils::extract_position(transform);
-		glm::vec3 right = glm::vec3{ transform[0][0], transform[0][1], transform[0][2] };
-		glm::vec3 up	= glm::vec3{ transform[1][0], transform[1][1], transform[1][2] };
-		glm::vec3 forward = glm::vec3{ transform[2][0], transform[2][1], transform[2][2] };
+		glm::vec3 position	= VectorUtils::extract_position(transform);
+		glm::vec3 right		= glm::vec3{ transform[0][0], transform[0][1], transform[0][2] };
+		glm::vec3 up		= glm::vec3{ transform[1][0], transform[1][1], transform[1][2] };
+		glm::vec3 forward	= glm::vec3{ transform[2][0], transform[2][1], transform[2][2] };
 
 		return glm::lookAt(position, position + forward, up);
 

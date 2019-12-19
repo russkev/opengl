@@ -24,8 +24,13 @@ namespace gl_engine
 	// // ----- GETTERS ----- // //
 	glm::mat4 OrthoCamera::transformToCam_matrix(const glm::mat4& transform)
 	{
-		glm::vec3 position = VectorUtils::extract_position(transform);
-		return glm::mat4(glm::vec4{ 1.0f, 0.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 1.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 0.0f, 1.0f, 0.0f }, glm::vec4{ position, 1.0f });
+		glm::vec3 position	= VectorUtils::extract_position(transform);
+		glm::vec3 right		= glm::vec3{ transform[0][0], transform[0][1], transform[0][2] };
+		glm::vec3 up		= glm::vec3{ transform[1][0], transform[1][1], transform[1][2] };
+		glm::vec3 forward	= glm::vec3{ transform[2][0], transform[2][1], transform[2][2] };
+
+		return glm::lookAt(position, position + forward, up);
+		//return glm::mat4(glm::vec4{ 1.0f, 0.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 1.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 0.0f, 1.0f, 0.0f }, glm::vec4{ position, 1.0f });
 	}
 
 	glm::mat4 OrthoCamera::camToProjection_matrix()
