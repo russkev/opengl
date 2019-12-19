@@ -166,12 +166,13 @@ int main(int, char**)
 
 	// Mesh 2
 	gl_engine::Mesh plane = gl_engine::Plane::createPlane(100.0f, 100.0f, 1, 1);
-	gl_engine::MeshNode plane_node{ "Plane1", &plane, &cShadMat };
+	gl_engine::MeshNode plane_node{ "Plane 1", &plane, &cShadMat };
 
 	// Mesh 3
 	gl_engine::Mesh cube = gl_engine::Cube::createCube(5.0f);
 	gl_engine::MeshNode cube_node{ "Cube 1", &cube, &cShadMat };
 	cube_node.setParent(&freeCam_node);
+	cube_node.setPosition({ 0.0f, 0.0f, 6.0f });
 
 	// Light 1
 	gl_engine::PointLight pointLight{ 1.0f, { 0.0f, 0.0f, 0.0f } };

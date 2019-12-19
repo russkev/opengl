@@ -33,7 +33,7 @@ namespace gl_engine
 		m_material->setUniform(U_MODEL_TO_WORLD, Node::worldTransform());
 		m_material->setUniform(U_MODEL_TO_WORLD_NORMAL, Node::worldNormalTransform());
 		m_material->setUniform(U_WORLD_TO_CAM, cameraNode->worldToCam_matrix());
-		m_material->setUniform(U_CAM, cameraNode->position());
+		m_material->setUniform(U_CAM, cameraNode->worldPosition());
 
 		for (auto child : Node::children())
 		{
