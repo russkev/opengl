@@ -25,7 +25,6 @@ namespace gl_engine
 		void update();
 
 		// // ----- GETTERS ----- // //
-		//const glm::vec3 position() const override;
 		glm::mat4 transformToCam_matrix(const glm::mat4& transform) override;
 		glm::mat4 camToProjection_matrix() override;
 

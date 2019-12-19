@@ -19,16 +19,11 @@ namespace gl_engine
 	const float TargetCamera::ROTATION_SPEED = 0.007f;
 
 	TargetCamera::TargetCamera()
-		//Camera()
 	{}
 
 	// // ----- CAMERA MOVEMENT ----- // //
 	void TargetCamera::update()
 	{
-		//m_transform = transform;
-		//glm::vec3{ (*transform)[3][0], (*transform)[3][1], (*transform)[3][2] };
-		//updatePosition(glm::vec3{ (*transform)[3][0], (*transform)[3][1], (*transform)[3][2] });
-
 
 		static const auto cMoveSpeed = glm::vec3(0.02f, 0.01f, 0.1f);
 		static const auto cRotateSpeed = glm::vec2(0.01f, 0.01f);
@@ -59,22 +54,7 @@ namespace gl_engine
 		}
 		moveRel(axisDelta * cMoveSpeed);
 		rotateRel(rotateDelta * cRotateSpeed);
-
-
-		//*m_transform = glm::inverse(objectToCam_matrix());
 	}
-
-	//void TargetCamera::updatePosition(glm::vec3 newPosition)
-	//{
-	//	glm::vec3 difference = newPosition - m_position;
-	//	m_position = newPosition;
-	//	m_lookTarget += difference;
-	//}
-
-	//void TargetCamera::scrollUpdate(const float scrollAmount)
-	//{
-	//	m_position += scrollAmount * m_viewDirection;
-	//}
 
 	void TargetCamera::moveRel(const glm::vec3& mouseDelta)
 	{
@@ -84,8 +64,6 @@ namespace gl_engine
 			+ m_viewDirection * mouseDelta.z;
 
 		Camera::addPosition(positionDelta);
-		//VectorUtils::add_position(*Camera::transform(), positionDelta);
-		//m_position += positionDelta;
 		m_lookTarget += positionDelta;
 	}
 
@@ -98,15 +76,7 @@ namespace gl_engine
 		Camera::setPosition(r_pitch * r_yaw * Camera::position());
 		Camera::addPosition(m_lookTarget);
 
-		//VectorUtils::add_position(*Camera::transform(), -m_lookTarget);
-		//VectorUtils::set_position(*Camera::transform(), r_pitch * r_yaw * VectorUtils::extract_position(*Camera::transform()));
-		//VectorUtils::add_position(*Camera::transform(), m_lookTarget);
-		//m_position -= m_lookTarget;
-		//m_position = r_pitch * r_yaw * m_position;
-		//m_position += m_lookTarget;
-
 		m_viewDirection = VectorUtils::extract_position(*Camera::transform());
-		//m_viewDirection = m_position - m_lookTarget;
 		m_camRight = r_yaw * m_camRight;
 		m_camUp = cross(m_camRight, m_viewDirection);
 
@@ -132,19 +102,13 @@ namespace gl_engine
 	{
 		m_lookTarget = focusTarget;
 	}
+
 	// // ----- GETTERS ----- // //
-	//const glm::vec3 TargetCamera::position() const
-	//{
-	//	return m_position;
-	//}
 
 	glm::mat4 TargetCamera::transformToCam_matrix(const glm::mat4& transform)
 	{
 		glm::vec3 position = VectorUtils::extract_position(transform);
 		return glm::lookAt(position, m_lookTarget, m_camUp);
-
-
-		//return glm::lookAt(VectorUtils::extract_position(*Camera::transform()), m_lookTarget, m_camUp);
 	}
 
 	glm::mat4 TargetCamera::camToProjection_matrix()
@@ -157,11 +121,6 @@ namespace gl_engine
 	}
 
 	// // ----- SETTERS ----- // //
-	//void TargetCamera::setPosition(glm::vec3 position)
-	//{
-	//	m_position = position;
-	//}
-
 	void TargetCamera::setViewDirection(glm::vec3 viewDirection)
 	{
 		m_viewDirection = viewDirection;
