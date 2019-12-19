@@ -16,20 +16,18 @@ namespace gl_engine
 		static const float MOVE_SPEED;
 
 		GLfloat m_angleOfView = 60.0f;
-		glm::vec3 m_position = { 0.0f, 0.0f, 0.0f };
 
 		// // ----- CONSTRUCTOR ----- // //
 	public:
 		FreeCamera();
 
 		// // ----- CAMERA MOVEMENT ----- // //
-		void update(glm::mat4* transform);
+		void update();
 
 		// // ----- GETTERS ----- // //
-		const glm::vec3 position() const override;
-		glm::mat4 objectToCam_matrix() override;
-		glm::mat4 viewToProjection_matrix() override;
-		glm::mat4 worldToProjection_matrix() override;
+		//const glm::vec3 position() const override;
+		glm::mat4 transformToCam_matrix(const glm::mat4& transform) override;
+		glm::mat4 camToProjection_matrix() override;
 
 		// // ----- SETTERS ----- // //
 		void setAngleOfView(GLfloat angle);

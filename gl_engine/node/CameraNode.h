@@ -35,7 +35,7 @@ namespace gl_engine
 		const glm::vec3 position() const override;
 		const glm::vec3 worldPosition() override;
 
-		glm::mat4 objectToCam_matrix();
+		glm::mat4 worldToCam_matrix();
 		glm::mat4 worldToProjection_matrix();
 
 		// // ----- SETTERS ----- // //

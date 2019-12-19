@@ -139,6 +139,29 @@ namespace gl_engine
 			return;
 		}
 
+
+		template<typename T>
+		glm::tvec3<T> extract_position(const glm::tmat4x4<T>& transform)
+		{
+			return glm::tvec3<T>{ transform[3][0], transform[3][1], transform[3][2] };
+		}
+
+		template<typename T>
+		void set_position(glm::tmat4x4<T>& transform, const glm::tvec3<T>& position)
+		{
+			transform[3][0] = position[0];
+			transform[3][1] = position[1];
+			transform[3][2] = position[2];
+		}
+
+		template<typename T>
+		void add_position(glm::tmat4x4<T>& transform, const glm::tvec3<T>& position)
+		{
+			glm::tvec3<T> newPosition = extract_position(transform) + position;
+			set_position(transform, newPosition);
+		}
+
+
 		// // ----- TRANSLATE ROTATE SCALE ----- // //
 		/*
 

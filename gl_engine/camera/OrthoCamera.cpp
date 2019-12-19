@@ -1,5 +1,7 @@
 #include "OrthoCamera.h"
 
+#include "../utils/VectorUtils.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -14,25 +16,21 @@ namespace gl_engine
 
 
 	// // ----- CAMERA MOVEMENT ----- // //
-	void OrthoCamera::update(glm::mat4* transform)
+	void OrthoCamera::update()
 	{
 
 	}
 
 	// // ----- GETTERS ----- // //
-	glm::mat4 OrthoCamera::objectToCam_matrix()
+	glm::mat4 OrthoCamera::transformToCam_matrix(const glm::mat4& transform)
 	{
-		return glm::mat4(glm::vec4{ 1.0f, 0.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 1.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 0.0f, 1.0f, 0.0f }, glm::vec4{ position(), 1.0f });
+		glm::vec3 position = VectorUtils::extract_position(transform);
+		return glm::mat4(glm::vec4{ 1.0f, 0.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 1.0f, 0.0f, 0.0f }, glm::vec4{ 0.0f, 0.0f, 1.0f, 0.0f }, glm::vec4{ position, 1.0f });
 	}
 
-	glm::mat4 OrthoCamera::viewToProjection_matrix()
+	glm::mat4 OrthoCamera::camToProjection_matrix()
 	{
 		return glm::ortho(m_left, m_right, m_bottom, m_top, Camera::clipNear(), Camera::clipFar());
-	}
-
-	glm::mat4 OrthoCamera::worldToProjection_matrix()
-	{
-		return viewToProjection_matrix() * objectToCam_matrix();
 	}
 
 	// // ----- SETTERS ----- // //

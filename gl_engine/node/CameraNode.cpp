@@ -3,6 +3,8 @@
 #include "../camera/Camera.h"
 #include "../utils/VectorUtils.h"
 
+
+
 namespace gl_engine
 {
 	/*
@@ -12,11 +14,13 @@ namespace gl_engine
 	*/
 	CameraNode::CameraNode(const std::string name, Camera* camera) :
 		Node(name), m_camera(camera)
-	{}
+	{
+		m_camera->registerTransform(&Node::localTransform());
+	}
 
 	void CameraNode::update()
 	{
-		m_camera->update(&Node::localTransform());
+		m_camera->update();
 	}
 
 	// // ----- GETTERS ----- // //
@@ -50,18 +54,21 @@ namespace gl_engine
 	}
 
 	// // ----- GETTERS ----- // //
-	glm::mat4 CameraNode::objectToCam_matrix()
+	glm::mat4 CameraNode::worldToCam_matrix()
 	{
-		//return m_camera->objectToCam_matrix();
+		//return m_camera->worldToCam_matrix();
 		return  m_camera->objectToCam_matrix() * Node::worldTransform();
 	}
 
 	glm::mat4 CameraNode::worldToProjection_matrix()
 	{
-		auto sdkjf = Node::worldTransform();
-		return m_camera->worldToProjection_matrix();// *Node::worldTransform();
-		//return m_camera->viewToProjection_matrix();
-		//return m_camera->viewToProjectionMatrix() * objectToCam_matrix();
-		//return  m_camera->worldToProjection_matrix();// *objectToCam_matrix();//Node::worldTransform();
+		//auto sdkjf = Node::worldTransform();
+		//return m_camera->objectToProjection_matrix();
+
+		return m_camera->transformToProjection_matrix(worldTransform());
+
+		//return m_camera->camToProjection_matrix();
+		//return m_camera->viewToProjectionMatrix() * worldToCam_matrix();
+		//return  m_camera->worldToProjection_matrix();// *worldToCam_matrix();//Node::worldTransform();
 	}
 } // namespace gl_engine

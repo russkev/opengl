@@ -1,7 +1,14 @@
 #include "TargetCamera.h"
 
+#include "../utils/VectorUtils.h"
+
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 namespace gl_engine
 {
@@ -16,10 +23,11 @@ namespace gl_engine
 	{}
 
 	// // ----- CAMERA MOVEMENT ----- // //
-	void TargetCamera::update(glm::mat4* transform)
+	void TargetCamera::update()
 	{
+		//m_transform = transform;
 		//glm::vec3{ (*transform)[3][0], (*transform)[3][1], (*transform)[3][2] };
-		updatePosition(glm::vec3{ (*transform)[3][0], (*transform)[3][1], (*transform)[3][2] });
+		//updatePosition(glm::vec3{ (*transform)[3][0], (*transform)[3][1], (*transform)[3][2] });
 
 
 		static const auto cMoveSpeed = glm::vec3(0.02f, 0.01f, 0.1f);
@@ -52,20 +60,21 @@ namespace gl_engine
 		moveRel(axisDelta * cMoveSpeed);
 		rotateRel(rotateDelta * cRotateSpeed);
 
-		*transform = glm::inverse(objectToCam_matrix());
+
+		//*m_transform = glm::inverse(objectToCam_matrix());
 	}
 
-	void TargetCamera::updatePosition(glm::vec3 newPosition)
-	{
-		glm::vec3 difference = newPosition - m_position;
-		m_position = newPosition;
-		m_lookTarget += difference;
-	}
+	//void TargetCamera::updatePosition(glm::vec3 newPosition)
+	//{
+	//	glm::vec3 difference = newPosition - m_position;
+	//	m_position = newPosition;
+	//	m_lookTarget += difference;
+	//}
 
-	void TargetCamera::scrollUpdate(const float scrollAmount)
-	{
-		m_position += scrollAmount * m_viewDirection;
-	}
+	//void TargetCamera::scrollUpdate(const float scrollAmount)
+	//{
+	//	m_position += scrollAmount * m_viewDirection;
+	//}
 
 	void TargetCamera::moveRel(const glm::vec3& mouseDelta)
 	{
@@ -74,7 +83,9 @@ namespace gl_engine
 			+ m_camUp * mouseDelta.y
 			+ m_viewDirection * mouseDelta.z;
 
-		m_position += positionDelta;
+		Camera::addPosition(positionDelta);
+		//VectorUtils::add_position(*Camera::transform(), positionDelta);
+		//m_position += positionDelta;
 		m_lookTarget += positionDelta;
 	}
 
@@ -83,11 +94,19 @@ namespace gl_engine
 		glm::mat3 r_pitch = (glm::mat3)glm::rotate(glm::mat4(1.0f), rotateDelta.y, m_camRight);
 		glm::mat3 r_yaw = (glm::mat3)glm::rotate(glm::mat4(1.0f), -rotateDelta.x, UP_AXIS);
 
-		m_position -= m_lookTarget;
-		m_position = r_pitch * r_yaw * m_position;
-		m_position += m_lookTarget;
+		Camera::addPosition(-m_lookTarget);
+		Camera::setPosition(r_pitch * r_yaw * Camera::position());
+		Camera::addPosition(m_lookTarget);
 
-		m_viewDirection = m_position - m_lookTarget;
+		//VectorUtils::add_position(*Camera::transform(), -m_lookTarget);
+		//VectorUtils::set_position(*Camera::transform(), r_pitch * r_yaw * VectorUtils::extract_position(*Camera::transform()));
+		//VectorUtils::add_position(*Camera::transform(), m_lookTarget);
+		//m_position -= m_lookTarget;
+		//m_position = r_pitch * r_yaw * m_position;
+		//m_position += m_lookTarget;
+
+		m_viewDirection = VectorUtils::extract_position(*Camera::transform());
+		//m_viewDirection = m_position - m_lookTarget;
 		m_camRight = r_yaw * m_camRight;
 		m_camUp = cross(m_camRight, m_viewDirection);
 
@@ -96,13 +115,14 @@ namespace gl_engine
 
 	void TargetCamera::printData(const glm::vec2& rotateDelta)
 	{
+		glm::vec3 position = VectorUtils::extract_position(*Camera::transform());
 		if (rotateDelta.y != 0) {
 			std::cout << "rotateDelta,     y: " << rotateDelta.y << "\n";
 			std::cout << "rotateDelta, sin y: " << sin(rotateDelta.y) << "\n";
 			std::cout << "viewDirection     : (" << m_viewDirection.x << ", " << m_viewDirection.y << ", " << m_viewDirection.z << ")\n";
 			std::cout << "strafeDirection   : (" << m_camRight.x << ", " << m_camRight.y << ", " << m_camRight.z << ")\n";
 			std::cout << "camUpDirection    : (" << m_camUp.x << ", " << m_camUp.y << ", " << m_camUp.z << ")\n";
-			std::cout << "position          : (" << m_position.x << ", " << m_position.y << ", " << m_position.z << ")\n";
+			std::cout << "position          : (" << position.x << ", " << position.y << ", " << position.z << ")\n";
 			std::cout << "lookTarget        : (" << m_lookTarget.x << ", " << m_lookTarget.y << ", " << m_lookTarget.z << ")\n";
 			std::cout << "----------------------------\n";
 		}
@@ -113,17 +133,21 @@ namespace gl_engine
 		m_lookTarget = focusTarget;
 	}
 	// // ----- GETTERS ----- // //
-	const glm::vec3 TargetCamera::position() const
+	//const glm::vec3 TargetCamera::position() const
+	//{
+	//	return m_position;
+	//}
+
+	glm::mat4 TargetCamera::transformToCam_matrix(const glm::mat4& transform)
 	{
-		return m_position;
+		glm::vec3 position = VectorUtils::extract_position(transform);
+		return glm::lookAt(position, m_lookTarget, m_camUp);
+
+
+		//return glm::lookAt(VectorUtils::extract_position(*Camera::transform()), m_lookTarget, m_camUp);
 	}
 
-	glm::mat4 TargetCamera::objectToCam_matrix()
-	{
-		return glm::lookAt(m_position, m_lookTarget, m_camUp);
-	}
-
-	glm::mat4 TargetCamera::viewToProjection_matrix()
+	glm::mat4 TargetCamera::camToProjection_matrix()
 	{
 		return glm::perspective(
 			glm::radians(m_angleOfView), 
@@ -132,16 +156,11 @@ namespace gl_engine
 			Camera::clipFar());
 	}
 
-	glm::mat4 TargetCamera::worldToProjection_matrix()
-	{
-		return  viewToProjection_matrix() * objectToCam_matrix();
-	}
-
 	// // ----- SETTERS ----- // //
-	void TargetCamera::setPosition(glm::vec3 position)
-	{
-		m_position = position;
-	}
+	//void TargetCamera::setPosition(glm::vec3 position)
+	//{
+	//	m_position = position;
+	//}
 
 	void TargetCamera::setViewDirection(glm::vec3 viewDirection)
 	{
