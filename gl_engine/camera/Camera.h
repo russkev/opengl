@@ -47,8 +47,6 @@ namespace gl_engine
 		virtual glm::mat4 transformToCam_matrix(const glm::mat4& transform) = 0;
 		glm::mat4 transformToProjection_matrix(const glm::mat4& transform);
 
-
-
 		// // ----- SETTERS ----- // //
 		void setDimensions(glm::uvec2);
 		void setClipNear(GLfloat);

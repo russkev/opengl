@@ -1,10 +1,17 @@
 #include "ShadowMap.h"
 
+#include "../light/Light.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace gl_engine
 {
+	// // ----- CONSTRUCTOR ----- // //
+	ShadowMap::ShadowMap()
+	{}
+
+
 	// // ----- SHADOW MAP ----- // //
 	void ShadowMap::init_shadowMap()
 	{
@@ -41,17 +48,22 @@ namespace gl_engine
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		// Configure shader and matrices
-		GLfloat near_plane = 1.0f, far_plane = 7.5f;
-		glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-		glm::mat4 lightView = glm::lookAt(
-			glm::vec3(-2.0f, 4.0f, -1.0f),
-			glm::vec3(0.0f, 0.0f, 0.0f),
-			glm::vec3(0.0f, 1.0f, 0.0f));
-		glm::mat4 lightSpace_matrix = lightProjection * lightView;
+		//GLfloat near_plane = 1.0f, far_plane = 7.5f;
+		//glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+		//glm::mat4 lightView = glm::lookAt(
+		//	glm::vec3(-2.0f, 4.0f, -1.0f),
+		//	glm::vec3(0.0f, 0.0f, 0.0f),
+		//	glm::vec3(0.0f, 1.0f, 0.0f));
+		//glm::mat4 lightSpace_matrix = lightProjection * lightView;
+
+
 
 		// Render shadow map
-		m_depthShader.setUniform("lightSpace_matrix", lightSpace_matrix);
-		m_depthShader.setUniform("model", model_matrix);
+		//m_depthShader.setUniform("lightSpace_matrix", lightSpace_matrix);
+		//m_depthShader.setUniform("model", model_matrix);
+
+		m_depthShader.setUniform("lightSpace_matrix", m_orthoCam_node.worldToProjection_matrix());
+		//m_depthShader.setUniform("model")
 
 		m_depthShader.use();
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
@@ -62,4 +74,13 @@ namespace gl_engine
 
 		// 2. Render
 	}
+
+	// // ----- SETTERS ----- // //
+	void ShadowMap::setLightNode(Node* light_node)
+	{
+		m_orthoCam_node.setParent(light_node);
+	}
+
+
+
 } // namespace gl_engine
