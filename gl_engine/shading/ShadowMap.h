@@ -4,6 +4,12 @@
 #include <GL/glew.h>
 
 #include "Shader.h"
+#include "../camera/OrthoCamera.h"
+#include "../node/CameraNode.h"
+
+// // ----- FORWARD DECLERATION ----- // //
+struct Light;
+
 
 namespace gl_engine
 {
@@ -23,9 +29,23 @@ namespace gl_engine
 		GLuint m_depthMap_ID;
 		Shader m_depthShader;
 
+		OrthoCamera m_orthoCam{};
+		CameraNode m_orthoCam_node{ "ortho cam for light", &m_orthoCam };
+
+
+		// // ----- CONSTRUCTOR ----- // //
+		ShadowMap();
+
 		// // ----- GENERAL ----- // //
 		void init_shadowMap();
 		void render_shadowMap(const glm::mat4 & model_matrix);
+
+		// // ----- GETTERS ----- // //
+		
+		// // ----- SETTERS ----- // //
+		void setLightNode(Node* light_node);
+
+
 	};
 } // namespace gl_engine
 

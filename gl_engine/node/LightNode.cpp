@@ -1,5 +1,6 @@
 #include "LightNode.h"
 #include "../light/Light.h"
+#include "../shading/ShadowMap.h"
 #include "CameraNode.h"
 
 namespace gl_engine
@@ -19,6 +20,15 @@ namespace gl_engine
 	}
 
 	// // ----- GENERAL ----- // //
+	void LightNode::set_shadowMap(ShadowMap* shadowMap)
+	{
+		m_shadowMap = shadowMap;
+
+		m_shadowMap->setLightNode(this);
+		//&shadowMap->orthoCam_node().setParent(this)
+		////shadowMap->orthoCam_node().setParent(this);
+	}
+
 	void LightNode::update_view(CameraNode* cameraNode)
 	{
 		m_modelToPerspectiveMatrix = cameraNode->worldToProjection_matrix() * Node::worldTransform();

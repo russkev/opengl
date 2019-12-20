@@ -9,6 +9,7 @@ namespace gl_engine
 {
 	// Forward declare light
 	struct Light;
+	struct ShadowMap;
 
 
 	/*
@@ -22,9 +23,12 @@ namespace gl_engine
 		static const std::string LIGHT_DIRECTION;
 	private:
 		Light* m_light = NULL;
+		ShadowMap* m_shadowMap = NULL;
+
 		VAO m_vao;
 		Buffer m_vertexBuffer = { GL_ARRAY_BUFFER, 0 };
 		Buffer m_indexBuffer = { GL_ARRAY_BUFFER, 0 };
+
 		glm::mat4 m_modelToPerspectiveMatrix;
 		bool m_shader_warned = false;
 
@@ -33,6 +37,8 @@ namespace gl_engine
 		LightNode(const std::string name, Light* light);
 
 		// // ----- GENERAL ----- // //
+		void set_shadowMap(ShadowMap* shadowMap);
+
 		void update_view(CameraNode* cameraNode) override;
 		void draw() override;
 
