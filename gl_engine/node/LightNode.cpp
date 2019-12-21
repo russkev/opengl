@@ -70,4 +70,9 @@ namespace gl_engine
 	{
 		return m_light;
 	}
+
+	ShadowMap* LightNode::shadowMap()
+	{
+		return m_shadowMap;
+	}
 } // namespace gl_engine

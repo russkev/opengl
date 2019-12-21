@@ -11,6 +11,7 @@
 #include "../camera/Camera.h"
 #include "../light/PointLight.h"
 #include "../shading/Material.h"
+#include "../shading/ShadowMap.h"
 
 
 
@@ -62,6 +63,19 @@ namespace gl_engine
 	//Draw all nodes to screen
 	void Renderer::render()
 	{
+		// Shadow map
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		for (auto const& node : m_root_nodes)
+		{
+			if (LightNode* lightNode = dynamic_cast<LightNode*>(node.second))
+			{
+				if (ShadowMap* shadowMap = lightNode->shadowMap())
+				{
+					shadowMap->render_shadowMap(m_root_nodes);
+				}				
+			}
+		}
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

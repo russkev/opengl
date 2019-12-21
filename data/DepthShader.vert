@@ -6,6 +6,6 @@ uniform mat4 lightSpace_matrix;
 
 void main()
 {
-	gl_position = lightSpace_matrix * vec4(aPos, 1.0);
-	//gl_position = lightSpace_matrix * model * vec4(aPos, 1.0);
+	gl_Position = lightSpace_matrix * vec4(aPos, 1.0);
+	//gl_Position = lightSpace_matrix * model * vec4(aPos, 1.0);
 }

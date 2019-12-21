@@ -44,6 +44,7 @@ namespace gl_engine
 
 		// // ----- GETTERS ----- // //
 		Light* light();
+		ShadowMap* shadowMap();
 
 
 	};
