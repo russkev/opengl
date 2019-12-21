@@ -10,7 +10,9 @@ namespace gl_engine
 {
 	// // ----- CONSTRUCTOR ----- // //
 	ShadowMap::ShadowMap()
-	{}
+	{
+		init_shadowMap();
+	}
 
 
 	// // ----- SHADOW MAP ----- // //
@@ -38,7 +40,8 @@ namespace gl_engine
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		// Create depth shader
-		m_depthMaterial = Shader("Depth shader", "DepthShader.vert", "DepthShader.frag");
+		m_depthMaterial = Material("Depth shader", "DepthShader.vert", "DepthShader.frag");
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	void ShadowMap::render_shadowMap(std::map<std::string, Node*>& root_nodes)
@@ -57,7 +60,7 @@ namespace gl_engine
 
 			if (MeshNode* meshNode = dynamic_cast<MeshNode*>(node.second))
 			{
-				m_depthMaterial.setUniform("object", meshNode->worldTransform());
+				m_depthMaterial.setUniform("lightSpace_matrix", meshNode->worldTransform());
 				meshNode->draw();
 				// meshNode->material()->use();
 				// bind vao

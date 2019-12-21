@@ -154,7 +154,8 @@ int main(int, char**)
 	directionalLight_node1.addChild(&orthoCam_node);
 
 	// Shadow map
-	gl_engine::ShadowMap shadowMap{}
+	gl_engine::ShadowMap shadowMap{};
+	directionalLight_node1.set_shadowMap(&shadowMap);
 
 
 	// Light 4

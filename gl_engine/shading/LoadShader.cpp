@@ -48,7 +48,7 @@ namespace gl_engine
 			GLint Result = GL_FALSE;
 			int InfoLogLength;
 
-			// // Compile Vertex SHader // //
+			// // Compile Vertex Shader // //
 			printf("Compiling shader : %s\n", vertex_file_path);
 			char const * VertexSourcePointer = VertexShaderCode.c_str();
 			glShaderSource(VertexShaderID, 1, &VertexSourcePointer, NULL);
