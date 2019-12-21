@@ -24,6 +24,7 @@
 #include "light/DirectionalLight.h"
 #include "light/SpotLight.h"
 #include "render/Renderer.h"
+#include "shading/ShadowMap.h"
 #include "shading/Texture.h"
 #include "utils/Timer.h"
 
@@ -151,6 +152,9 @@ int main(int, char**)
 
 	directionalLight_node1.addChild(&freeCam_node);
 	directionalLight_node1.addChild(&orthoCam_node);
+
+	// Shadow map
+	gl_engine::ShadowMap shadowMap{}
 
 
 	// Light 4
