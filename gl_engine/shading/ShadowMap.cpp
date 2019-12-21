@@ -1,6 +1,7 @@
 #include "ShadowMap.h"
 
 #include "../light/Light.h"
+#include "../node/MeshNode.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -37,15 +38,34 @@ namespace gl_engine
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		// Create depth shader
-		m_depthShader = Shader("Depth shader", "DepthShader.vert", "DepthShader.frag");
+		m_depthMaterial = Shader("Depth shader", "DepthShader.vert", "DepthShader.frag");
 	}
 
-	void ShadowMap::render_shadowMap(const glm::mat4& model_matrix)
+	void ShadowMap::render_shadowMap(std::map<std::string, Node*>& root_nodes)
 	{
 		// 1. Render depth map
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
+		//glActiveTexture(GL_TEXTURE0);
+
+		m_depthMaterial.setUniform("lightSpace_matrix", m_orthoCam_node.worldToProjection_matrix());
+		for (auto const& node : root_nodes)
+		{
+			//node.second->update_view(&m_orthoCam_node);
+			//node.second->draw();
+
+			if (MeshNode* meshNode = dynamic_cast<MeshNode*>(node.second))
+			{
+				m_depthMaterial.setUniform("object", meshNode->worldTransform());
+				meshNode->draw();
+				// meshNode->material()->use();
+				// bind vao
+			}
+		}
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
 
 		// Configure shader and matrices
 		//GLfloat near_plane = 1.0f, far_plane = 7.5f;
@@ -62,10 +82,10 @@ namespace gl_engine
 		//m_depthShader.setUniform("lightSpace_matrix", lightSpace_matrix);
 		//m_depthShader.setUniform("model", model_matrix);
 
-		m_depthShader.setUniform("lightSpace_matrix", m_orthoCam_node.worldToProjection_matrix());
+		//m_depthMaterial.setUniform("lightSpace_matrix", m_orthoCam_node.worldToProjection_matrix());
 		//m_depthShader.setUniform("model")
 
-		m_depthShader.use();
+		m_depthMaterial.use();
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
 		glClear(GL_DEPTH_BUFFER_BIT);

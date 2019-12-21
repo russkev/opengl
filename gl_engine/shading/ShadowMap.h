@@ -3,7 +3,7 @@
 
 #include <GL/glew.h>
 
-#include "Shader.h"
+#include "Material.h"
 #include "../camera/OrthoCamera.h"
 #include "../node/CameraNode.h"
 
@@ -27,7 +27,7 @@ namespace gl_engine
 		// // ----- MEMBER VARIABLES ----- // //
 		GLuint m_depthMap_FBO;
 		GLuint m_depthMap_ID;
-		Shader m_depthShader;
+		Material m_depthMaterial;
 
 		OrthoCamera m_orthoCam{};
 		CameraNode m_orthoCam_node{ "ortho cam for light", &m_orthoCam };
@@ -38,7 +38,7 @@ namespace gl_engine
 
 		// // ----- GENERAL ----- // //
 		void init_shadowMap();
-		void render_shadowMap(const glm::mat4 & model_matrix);
+		void render_shadowMap(std::map<std::string, Node*>& root_nodes);
 
 		// // ----- GETTERS ----- // //
 		
