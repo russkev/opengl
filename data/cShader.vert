@@ -18,6 +18,7 @@ struct Transform
 	mat4 modelToWorld;
 	mat3 modelToWorld_normal;
 	mat4 worldToCam;
+	mat4 worldToLightProjection;
 };
 uniform Transform transform;
 
@@ -78,6 +79,11 @@ out TangentSpace
 	vec3 spotLight_position[NUM_LIGHTS];
 	vec3 frag_position;
 } tangentSpace;
+
+out LightSpace
+{
+	vec4 position;
+} lightSpace;
 
 out vec2 uv;
 
@@ -144,5 +150,6 @@ void main()
 	send_worldSpaceCoordinates();
 	send_camSpaceCoordinates();
 	send_tangentSpaceCoordinates();
+	lightSpace.position = transform.worldToLightProjection * vec4(worldSpace.vertex_position, 1.0f);
 	gl_Position = transform.modelToProjection * vec4(model_vertexPosition, 1.0);
 }

@@ -25,8 +25,6 @@ namespace gl_engine
 		m_shadowMap = shadowMap;
 
 		m_shadowMap->setLightNode(this);
-		//&shadowMap->orthoCam_node().setParent(this)
-		////shadowMap->orthoCam_node().setParent(this);
 	}
 
 	void LightNode::update_view(CameraNode* cameraNode)
