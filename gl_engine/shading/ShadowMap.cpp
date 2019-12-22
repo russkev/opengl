@@ -18,15 +18,30 @@ namespace gl_engine
 	// // ----- SHADOW MAP ----- // //
 	void ShadowMap::init_shadowMap()
 	{
+		// Initialize ortho cam
+		m_orthoCam.setClipNear(0.1f);
+		m_orthoCam.setClipFar(1000.0f);
+
 		// Create frame buffer object
 		glGenFramebuffers(1, &m_depthMap_FBO);
 
 		// Create 2D texture
-		//const GLuint SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+
 
 		glGenTextures(1, &m_depthMap_ID);
 		glBindTexture(GL_TEXTURE_2D, m_depthMap_ID);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexImage2D(
+			GL_TEXTURE_2D, 
+			0, 
+			GL_DEPTH_COMPONENT, 
+			SHADOW_WIDTH, 
+			SHADOW_HEIGHT, 
+			0, 
+			GL_DEPTH_COMPONENT, 
+			GL_FLOAT, 
+			NULL
+		);
+
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -44,56 +59,39 @@ namespace gl_engine
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
+	void ShadowMap::update_materials(std::vector<Material*> materials)
+	{
+		for (Material* material : materials)
+		{
+			//!!! make string a static
+			material->setUniform("transform.worldToLightProjection", m_orthoCam_node.worldToProjection_matrix());
+			material->use();
+			material->setUniform("material.shadowMap", 1);
+			glActiveTexture(GLenum(GL_TEXTURE0 + m_depthMap_ID));
+			glBindTexture(GL_TEXTURE_2D, m_depthMap_FBO);
+		}
+	}
+
 	void ShadowMap::render_shadowMap(std::map<std::string, Node*>& root_nodes)
 	{
+		m_orthoCam_node.update();
+
 		// 1. Render depth map
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
-		//glActiveTexture(GL_TEXTURE0);
 
 		m_depthMaterial.setUniform("lightSpace_matrix", m_orthoCam_node.worldToProjection_matrix());
 		for (auto const& node : root_nodes)
 		{
-			//node.second->update_view(&m_orthoCam_node);
-			//node.second->draw();
-
+			node.second->update_view(&m_orthoCam_node);
 			if (MeshNode* meshNode = dynamic_cast<MeshNode*>(node.second))
 			{
 				m_depthMaterial.setUniform("lightSpace_matrix", meshNode->worldTransform());
 				meshNode->draw();
-				// meshNode->material()->use();
-				// bind vao
 			}
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-
-		// Configure shader and matrices
-		//GLfloat near_plane = 1.0f, far_plane = 7.5f;
-		//glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-		//glm::mat4 lightView = glm::lookAt(
-		//	glm::vec3(-2.0f, 4.0f, -1.0f),
-		//	glm::vec3(0.0f, 0.0f, 0.0f),
-		//	glm::vec3(0.0f, 1.0f, 0.0f));
-		//glm::mat4 lightSpace_matrix = lightProjection * lightView;
-
-
-
-		// Render shadow map
-		//m_depthShader.setUniform("lightSpace_matrix", lightSpace_matrix);
-		//m_depthShader.setUniform("model", model_matrix);
-
-		//m_depthMaterial.setUniform("lightSpace_matrix", m_orthoCam_node.worldToProjection_matrix());
-		//m_depthShader.setUniform("model")
-
-		m_depthMaterial.use();
-		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-		glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
-		glClear(GL_DEPTH_BUFFER_BIT);
-
-
 
 		// 2. Render
 	}

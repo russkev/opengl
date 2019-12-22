@@ -145,7 +145,7 @@ int main(int, char**)
 	pointLight_node2.setPosition({ 0.0f, 4.0f, -5.0f });
 
 	// Light 3
-	gl_engine::DirectionalLight directionalLight1{ 0.05f, { 0.2f, 1.0f, 0.1f } };
+	gl_engine::DirectionalLight directionalLight1{ 0.5f, { 0.2f, 1.0f, 0.1f } };
 	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
 	directionalLight_node1.setRotation({ 33.0f, 225.0f, 0.0f });
 	directionalLight_node1.setPosition({ 16.0f, 16.0f, 16.0f });

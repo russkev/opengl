@@ -19,10 +19,17 @@ namespace gl_engine
 		const uint16_t	m_id;
 		static uint16_t	m_next_id;
 
+		size_t			m_width;
+		size_t			m_height;
+
 
 		// // ----- CONSTRUCTOR ----- // //
 	public:
+		// Create a texture from an image file
 		Texture(const char* filename);
+
+		// Create an internal texture
+		Texture(size_t width, size_t height);
 
 		// // ----- GETTERS ----- // //
 		size_t width();

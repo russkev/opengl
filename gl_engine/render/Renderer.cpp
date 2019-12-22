@@ -64,7 +64,9 @@ namespace gl_engine
 	void Renderer::render()
 	{
 		// Shadow map
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		
 
 		for (auto const& node : m_root_nodes)
 		{
@@ -72,10 +74,16 @@ namespace gl_engine
 			{
 				if (ShadowMap* shadowMap = lightNode->shadowMap())
 				{
+					shadowMap->update_materials(m_materials);
 					shadowMap->render_shadowMap(m_root_nodes);
 				}				
 			}
 		}
+
+
+		
+		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
+		m_cameraNode->update();
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -144,7 +152,6 @@ namespace gl_engine
 	{
 
 		timer->update();
-		m_cameraNode->update();
 		render();
 		window->finish_frame();
 		window->appendTitle(("FPS: " + (std::string)timer->fps()));

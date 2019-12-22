@@ -85,21 +85,21 @@ namespace gl_engine
 				}
 				return;
 			}
-			if (thisUniform->type != dataEnumType)
-			{
-				if (m_hasBeenWarned.find(name_s) == m_hasBeenWarned.end())
-				{
-					printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Incorrect data type\n", name.c_str(), m_name.c_str());
-					m_hasBeenWarned.insert(name_s);
-				}
-				return;
-			}
+			//if (thisUniform->type != dataEnumType)
+			//{
+			//	if (m_hasBeenWarned.find(name_s) == m_hasBeenWarned.end())
+			//	{
+			//		printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Incorrect data type\n", name.c_str(), m_name.c_str());
+			//		m_hasBeenWarned.insert(name_s);
+			//	}
+			//	return;
+			//}
 
 			use();
 			uploadUniform(thisUniform, data);
 		}
 
-		void setTexture(const std::string& location_name, Texture& texture);
+		GLuint setTexture(const std::string& location_name, Texture& texture, GLenum mode = GL_RGBA, GLenum type = GL_UNSIGNED_BYTE);
 
 		void use();
 		bool containsUniform(const std::string uniform_name);

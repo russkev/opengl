@@ -16,25 +16,30 @@ namespace gl_engine
 
 	Texture::Texture(const char* filepath) :
 		m_surface(IMG_Load(filepath)),
-		m_id(m_next_id++)
+		m_id(m_next_id++),
+		m_width(m_surface->w),
+		m_height(m_surface->h)
 	{
-		//m_id = 5;
-		//m_id = Texture::m_next_tex_id++;
-
 		if (m_surface == NULL)
 		{
 			printf("WARNING: Loading \"%s\" failed. (%s)", filepath, IMG_GetError());
 		}
 	}
 
+	Texture::Texture(size_t width, size_t height) :
+		m_id(m_next_id++),
+		m_width(width),
+		m_height(height)
+	{}
+
 	size_t Texture::width()
 	{
-		return m_surface->w;
+		return m_width;
 	}
 
 	size_t Texture::height()
 	{
-		return m_surface->h;
+		return m_height;
 	}
 
 	const size_t Texture::tex_id() const
@@ -44,11 +49,19 @@ namespace gl_engine
 
 	bool Texture::hasAlpha()
 	{
-		return m_surface->format->BytesPerPixel == 4;
+		if (m_surface)
+		{
+			return m_surface->format->BytesPerPixel == 4;
+		}
+		return false;
 	}
 
 	void* Texture::data()
 	{
-		return m_surface->pixels;
+		if (m_surface)
+		{
+			return m_surface->pixels;
+		}
+		return false;
 	}
 } // namespace gl_engine
