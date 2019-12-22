@@ -74,8 +74,8 @@ namespace gl_engine
 			{
 				if (ShadowMap* shadowMap = lightNode->shadowMap())
 				{
-					shadowMap->update_materials(m_materials);
 					shadowMap->render_shadowMap(m_root_nodes);
+					shadowMap->update_materials(m_materials);
 				}				
 			}
 		}

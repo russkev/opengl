@@ -20,7 +20,8 @@ namespace gl_engine
 	{
 		// Initialize ortho cam
 		m_orthoCam.setClipNear(0.1f);
-		m_orthoCam.setClipFar(1000.0f);
+		m_orthoCam.setClipFar(100.0f);
+		m_orthoCam.setSides(-5.0f, 5.0f, -5.0f, 5.0f);
 
 		// Create frame buffer object
 		glGenFramebuffers(1, &m_depthMap_FBO);
@@ -29,6 +30,9 @@ namespace gl_engine
 
 
 		glGenTextures(1, &m_depthMap_ID);
+
+		m_depthMap_ID = 1;
+
 		glBindTexture(GL_TEXTURE_2D, m_depthMap_ID);
 		glTexImage2D(
 			GL_TEXTURE_2D, 
@@ -43,9 +47,11 @@ namespace gl_engine
 		);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+		GLfloat border_color[] = { 1.0f, 0.0f, 0.0f, 0.0f };
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border_color);
 
 		// Attach texture to framebuffer's depth buffer
 		glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
@@ -65,8 +71,15 @@ namespace gl_engine
 		{
 			//!!! make string a static
 			material->setUniform("transform.worldToLightProjection", m_orthoCam_node.worldToProjection_matrix());
-			material->use();
-			material->setUniform("material.shadowMap", 1);
+			//material->use();
+
+			GLuint tex_location = glGetUniformLocation(material->programID(), "shadowMap");
+			glUniform1i(tex_location, m_depthMap_ID);
+			//glUniform1i(, 1);
+			//material->setUniform("material.shadowMap", 1);
+
+
+			//glActiveTexture(GLenum(GL_TEXTURE0 + m_depthMap_ID));
 			glActiveTexture(GLenum(GL_TEXTURE0 + m_depthMap_ID));
 			glBindTexture(GL_TEXTURE_2D, m_depthMap_FBO);
 		}
