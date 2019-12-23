@@ -73,8 +73,8 @@ namespace gl_engine
 			material->setUniform("transform.worldToLightProjection", m_orthoCam_node.worldToProjection_matrix());
 
 			GLuint tex_location = glGetUniformLocation(material->programID(), "shadowMap");
-			glUniform1i(tex_location, tex_location);
-			glActiveTexture(GLenum(GL_TEXTURE0 + tex_location));
+			glUniform1i(tex_location, m_depthMap_ID);
+			glActiveTexture(GLenum(GL_TEXTURE0 + m_depthMap_ID));
 			glBindTexture(GL_TEXTURE_2D, m_depthMap_FBO);
 		}
 	}

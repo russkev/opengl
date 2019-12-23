@@ -129,6 +129,7 @@ namespace gl_engine
 		void uploadUniform(Uniform* uniform, const glm::dvec3& data) { glUniform3dv(uniform->location, 1, &data[0]); };
 		void uploadUniform(Uniform* uniform, const glm::dvec4& data) { glUniform4dv(uniform->location, 1, &data[0]); };
 		void uploadUniform(Uniform* uniform, const GLint& data) { glUniform1i(uniform->location, data); };
+		void uploadUniform(Uniform* uniform, const GLuint& data) { glUniform1i(uniform->location, data); };
 		void uploadUniform(Uniform* uniform, const glm::ivec2& data) { glUniform2iv(uniform->location, 1, &data[0]); };
 		void uploadUniform(Uniform* uniform, const glm::ivec3& data) { glUniform3iv(uniform->location, 1, &data[0]); };
 		void uploadUniform(Uniform* uniform, const glm::ivec4& data) { glUniform4iv(uniform->location, 1, &data[0]); };

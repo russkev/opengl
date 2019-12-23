@@ -80,7 +80,7 @@ namespace gl_engine
 		m_camRight = r_yaw * m_camRight;
 		m_camUp = cross(m_camRight, m_viewDirection);
 
-		printData(rotateDelta);
+		//printData(rotateDelta);
 	}
 
 	void TargetCamera::printData(const glm::vec2& rotateDelta)

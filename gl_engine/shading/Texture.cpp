@@ -1,6 +1,7 @@
+#include "Texture.h"
+
 #include <stdio.h>
 
-#include "Texture.h"
 
 namespace gl_engine
 {
@@ -12,37 +13,85 @@ namespace gl_engine
 		http://lazyfoo.net/tutorials/SDL/06_extension_libraries_and_loading_other_image_formats/index2.php
 
 	*/
-	uint16_t Texture::m_next_id = 0;
-
 	Texture::Texture(const char* filepath) :
 		m_surface(IMG_Load(filepath)),
-		m_id(m_next_id++),
 		m_width(m_surface->w),
 		m_height(m_surface->h)
+		
 	{
+		
+		glGenTextures(1, &m_id);
 		if (m_surface == NULL)
 		{
 			printf("WARNING: Loading \"%s\" failed. (%s)", filepath, IMG_GetError());
 		}
+		else
+		{
+			m_data = m_surface->pixels;
+			upload_texture();
+		}
 	}
 
-	Texture::Texture(size_t width, size_t height) :
-		m_id(m_next_id++),
+	Texture::Texture(GLuint width, GLuint height, GLenum format, GLenum type, void* data) :
 		m_width(width),
-		m_height(height)
-	{}
+		m_height(height),
+		m_internal_format(format),
+		m_format(format),
+		m_type(type),
+		m_data(data)
+	{
+		glGenTextures(1, &m_id);
+		upload_texture();
+	}
 
-	size_t Texture::width()
+	void Texture::upload_texture()
+	{
+		bind();
+		glTexImage2D
+		(
+			GL_TEXTURE_2D,
+			0,
+			GL_RGB,
+			m_width,
+			m_height,
+			0,
+			GL_RGB,
+			GL_UNSIGNED_BYTE,
+			data()
+		);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		unbind();
+
+	}
+
+	void Texture::bind(GLuint texture_unit)
+	{
+		glActiveTexture(GLenum(GL_TEXTURE0 + texture_unit));
+		glBindTexture(GL_TEXTURE_2D, m_id);
+	}
+
+	void Texture::unbind()
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	GLsizei Texture::width()
 	{
 		return m_width;
 	}
 
-	size_t Texture::height()
+	GLsizei Texture::height()
 	{
 		return m_height;
 	}
 
-	const size_t Texture::tex_id() const
+	const GLuint Texture::tex_id() const
 	{
 		return m_id;
 	}
