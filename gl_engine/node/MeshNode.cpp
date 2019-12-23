@@ -42,7 +42,7 @@ namespace gl_engine
 
 	}
 
-	void MeshNode::draw()
+	void MeshNode::draw(const Pass& pass)
 	{
 		m_material->use();
 		m_vao.Bind();

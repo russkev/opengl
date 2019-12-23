@@ -97,7 +97,7 @@ namespace gl_engine
 			child.second->update_view(camera_node);
 		}
 	}
-	void Node::draw()
+	void Node::draw(const Pass& pass)
 	{
 		for (auto child : m_children)
 		{

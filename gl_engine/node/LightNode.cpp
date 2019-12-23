@@ -36,9 +36,9 @@ namespace gl_engine
 		}
 	}
 
-	void LightNode::draw()
+	void LightNode::draw(const Pass& pass)
 	{
-		if (m_light->isEnabled())
+		if (m_light->isEnabled() && pass != shadow)
 		{
 			if (m_light->shader() == NULL)
 			{

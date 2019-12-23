@@ -20,6 +20,12 @@ namespace gl_engine
 	*/
 	struct Node
 	{
+		enum Pass
+		{
+			rgb,
+			shadow
+		};
+
 		static const std::string U_MODEL_TO_PROJECTION;
 		static constexpr auto POSITION_ATTR = 0u;
 		inline static const auto MESH_VAO_INFO = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
@@ -50,7 +56,7 @@ namespace gl_engine
 		const glm::vec3 directionVector();
 
 		virtual void update_view(CameraNode*);
-		virtual void draw();
+		virtual void draw(const Pass& pass = rgb);
 
 		// // ----- GETTERS ----- // //
 		const std::string& name() const;

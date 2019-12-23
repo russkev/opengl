@@ -31,7 +31,7 @@ namespace gl_engine
 
 		glGenTextures(1, &m_depthMap_ID);
 
-		m_depthMap_ID = 1;
+		//m_depthMap_ID = 1;
 
 		glBindTexture(GL_TEXTURE_2D, m_depthMap_ID);
 		glTexImage2D(
@@ -71,16 +71,10 @@ namespace gl_engine
 		{
 			//!!! make string a static
 			material->setUniform("transform.worldToLightProjection", m_orthoCam_node.worldToProjection_matrix());
-			//material->use();
 
 			GLuint tex_location = glGetUniformLocation(material->programID(), "shadowMap");
-			glUniform1i(tex_location, m_depthMap_ID);
-			//glUniform1i(, 1);
-			//material->setUniform("material.shadowMap", 1);
-
-
-			//glActiveTexture(GLenum(GL_TEXTURE0 + m_depthMap_ID));
-			glActiveTexture(GLenum(GL_TEXTURE0 + m_depthMap_ID));
+			glUniform1i(tex_location, tex_location);
+			glActiveTexture(GLenum(GL_TEXTURE0 + tex_location));
 			glBindTexture(GL_TEXTURE_2D, m_depthMap_FBO);
 		}
 	}
@@ -98,16 +92,12 @@ namespace gl_engine
 		for (auto const& node : root_nodes)
 		{
 			node.second->update_view(&m_orthoCam_node);
-			if (MeshNode* meshNode = dynamic_cast<MeshNode*>(node.second))
-			{
-				m_depthMaterial.setUniform("lightSpace_matrix", meshNode->worldTransform());
-				meshNode->draw();
-			}
+			node.second->draw(Node::shadow);
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		// 2. Render
 	}
+
+
 
 	// // ----- SETTERS ----- // //
 	void ShadowMap::setLightNode(Node* light_node)
