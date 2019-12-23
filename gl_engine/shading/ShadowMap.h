@@ -29,7 +29,7 @@ namespace gl_engine
 		GLuint		m_depthMap_FBO;
 		GLuint		m_depthMap_ID;
 		Material	m_depthMaterial;
-		Texture		m_texture{ SHADOW_WIDTH, SHADOW_HEIGHT };
+		Texture		m_texture{ SHADOW_WIDTH, SHADOW_HEIGHT, GL_DEPTH, GL_FLOAT, NULL };
 
 		OrthoCamera m_orthoCam{};
 		CameraNode m_orthoCam_node{ "ortho cam for light", &m_orthoCam };

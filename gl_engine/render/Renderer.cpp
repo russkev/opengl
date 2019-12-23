@@ -67,14 +67,14 @@ namespace gl_engine
 		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		
-		for (LightNode* lightNode : m_lightNodes)
-		{
-			if (ShadowMap* shadowMap = lightNode->shadowMap())
-			{
-				shadowMap->render_shadowMap(m_root_nodes);
-				shadowMap->update_materials(m_materials);
-			}
-		}
+		//for (LightNode* lightNode : m_lightNodes)
+		//{
+		//	if (ShadowMap* shadowMap = lightNode->shadowMap())
+		//	{
+		//		shadowMap->render_shadowMap(m_root_nodes);
+		//		shadowMap->update_materials(m_materials);
+		//	}
+		//}
 
 
 		
@@ -91,7 +91,10 @@ namespace gl_engine
 		for (auto const& node : m_root_nodes)
 		{
 			node.second->update_view(m_cameraNode);
+
+
 			node.second->draw();
+
 		}
 	}
 

@@ -115,7 +115,7 @@ int main(int, char**)
 	cShadMat.setTexture("material.diffuse", tex1);
 
 	// Texture 2
-	gl_engine::Texture tex2("uvtemplate.tga");
+	//gl_engine::Texture tex2("uvtemplate.tga");
 
 	// Mesh 1
 	gl_engine::Mesh shaderBall = gl_engine::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
@@ -154,8 +154,8 @@ int main(int, char**)
 	directionalLight_node1.addChild(&orthoCam_node);
 
 	// Shadow map
-	gl_engine::ShadowMap shadowMap{};
-	directionalLight_node1.set_shadowMap(&shadowMap);
+	//gl_engine::ShadowMap shadowMap{};
+	//directionalLight_node1.set_shadowMap(&shadowMap);
 
 
 	// Light 4
@@ -184,6 +184,7 @@ int main(int, char**)
 	render.addNode(&directionalLight_node1);
 	render.addNode(&spotLight_node1);
 
+	//tex1.unbind();
 
 	gl_engine::Timer timer;
 
