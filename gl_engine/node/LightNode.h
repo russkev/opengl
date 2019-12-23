@@ -40,7 +40,7 @@ namespace gl_engine
 		void set_shadowMap(ShadowMap* shadowMap);
 
 		void update_view(CameraNode* cameraNode) override;
-		void draw() override;
+		void draw(const Pass& pass = rgb) override;
 
 		// // ----- GETTERS ----- // //
 		Light* light();

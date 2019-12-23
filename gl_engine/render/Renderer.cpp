@@ -67,16 +67,12 @@ namespace gl_engine
 		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		
-
-		for (auto const& node : m_root_nodes)
+		for (LightNode* lightNode : m_lightNodes)
 		{
-			if (LightNode* lightNode = dynamic_cast<LightNode*>(node.second))
+			if (ShadowMap* shadowMap = lightNode->shadowMap())
 			{
-				if (ShadowMap* shadowMap = lightNode->shadowMap())
-				{
-					shadowMap->render_shadowMap(m_root_nodes);
-					shadowMap->update_materials(m_materials);
-				}				
+				shadowMap->render_shadowMap(m_root_nodes);
+				shadowMap->update_materials(m_materials);
 			}
 		}
 
@@ -99,15 +95,8 @@ namespace gl_engine
 		}
 	}
 
-	void Renderer::addLightNode(LightNode* lightNode)
-	{
-		m_lightNodes.push_back(lightNode);
-		addNode(lightNode);
-	}
-
 	void Renderer::addNode(Node* node)
 	{
-		auto search = m_root_nodes.find(node->name());
 
 		// Check if node exists in m_root_nodes
 		if (m_root_nodes.find(node->name()) != m_root_nodes.end())
@@ -122,9 +111,18 @@ namespace gl_engine
 			addMaterial(derived_meshNode->material());
 		}
 
+		if (LightNode* derived_lightNode = dynamic_cast<LightNode*>(node))
+		{
+			addLightNode(derived_lightNode);
+		}
+
 		m_root_nodes[node->name()] = node;
 	}
 
+	void Renderer::addLightNode(LightNode* lightNode)
+	{
+		m_lightNodes.push_back(lightNode);
+	}
 
 	void Renderer::addMaterial(Material* material)
 	{
@@ -150,7 +148,6 @@ namespace gl_engine
 
 	void Renderer::update(Window * window, Timer * timer)
 	{
-
 		timer->update();
 		render();
 		window->finish_frame();

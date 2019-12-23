@@ -28,15 +28,11 @@ namespace gl_engine
 
 		Uniform* thisUniform;
 
-		use();
+		//use();
 		thisUniform = &m_uniforms.at(location_name);
 
-		GLuint tex_id;
 		GLint tex_loc;
 		GLenum tex_mode = mode == GL_RGBA && !texture.hasAlpha() ? GL_RGB : mode;
-		////void* tex_data = texture.data() == NULL ? (GLenum)NULL
-
-		glGenTextures(1, &tex_id);
 
 		tex_loc = thisUniform->location;
 		glUniform1i(tex_loc, (GLint)texture.tex_id());

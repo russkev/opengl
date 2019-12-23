@@ -179,10 +179,10 @@ int main(int, char**)
 	gl_engine::Renderer render{ &targetCam_node, glm::uvec2(width, height) };
 	render.addNode(&shaderBall_node);
 	render.addNode(&plane_node);
-	render.addLightNode(&pointLight_node);
-	render.addLightNode(&pointLight_node2);
-	render.addLightNode(&directionalLight_node1);
-	render.addLightNode(&spotLight_node1);
+	render.addNode(&pointLight_node);
+	render.addNode(&pointLight_node2);
+	render.addNode(&directionalLight_node1);
+	render.addNode(&spotLight_node1);
 
 
 	gl_engine::Timer timer;

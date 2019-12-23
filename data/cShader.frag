@@ -303,37 +303,32 @@ vec3 specular_spot_tangentSpace(int index)
 // // SHADOW // //
 float create_shadow()
 {
+	float num_passes	= 1;
+	float step_size		= 3 / num_passes;
+	float texel_ratio	= 1.0;
+	vec2 texelSize		= texel_ratio / textureSize(shadowMap, 0);
 
-
-
-
-	float out_shadow = 0.0;
-	float max_bias = 0.005;
-	float bias_ratio = 0.2;
+	float out_shadow	= 0.0;
+	float max_bias		= 0.002;
+	float bias_ratio	= 0.2;
 	float bias =  max(max_bias * (1.0 - dot(tangentSpace_normal, tangentSpace_directionalLight_normalized[0])), max_bias * bias_ratio);
-
 
 	vec3 projection_coordinates = lightSpace.position.xyz / lightSpace.position.w;
 	projection_coordinates = projection_coordinates * 0.5 + 0.5;
 
-
 	float closest_depth = texture(shadowMap, projection_coordinates.xy).r;
 	float current_depth = projection_coordinates.z;
 
-	//-------------------------------------------//
-	vec2 texelSize = 2.0 / textureSize(shadowMap, 0);
-	for(int x = -1; x < 1; x++)
+	for(float x = -1; x < 1; x+= step_size)
 	{
-		for (int y = -1; y < 1; y++)
+		for (float y = -1; y < 1; y += step_size)
 		{
 			float pcfDepth = texture(shadowMap, projection_coordinates.xy + vec2(x, y) * texelSize).r;
 			out_shadow += current_depth - bias > pcfDepth ? 0.0 : 1.0;
 		}
 	}
-	out_shadow /= 9.0;
-	//-------------------------------------------//
+	out_shadow /= (num_passes * num_passes);
 
-//	out_shadow = current_depth - bias > closest_depth ? 0.0 : 1.0;
 	
 
 
