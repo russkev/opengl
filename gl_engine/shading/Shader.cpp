@@ -18,16 +18,6 @@ namespace gl_engine
 	}
 
 	// // ----- GENERAL METHODS ----- // //
-	//GLuint Shader::setTexture(const std::string& uniform_name, Texture& texture, GLenum mode, GLenum type)
-	//{
-	//	if (m_uniforms.find(uniform_name) == m_uniforms.end())
-	//	{
-	//		printf("WARNING: Unable to set texture: \"%s\", uniform not found\n", uniform_name.c_str());
-	//		return 0;
-	//	}
-	//	texture.upload_texture();
-	//}
-
 
 	// Tell opengl to use this shader for upcoming commands
 	void Shader::use()
@@ -105,6 +95,12 @@ namespace gl_engine
 
 			glGetActiveUniform(m_programID, i, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformNameLength, &newUniform.dataSize, &newUniform.type, uniformNameChars);
 			newUniform.location = glGetUniformLocation(m_programID, uniformNameChars);
+
+			if (newUniform.type == GL_SAMPLER_2D)
+			{
+				newUniform.texture_unit = m_num_textures;
+				m_num_textures++;
+			}
 
 			std::string uniformNameString(uniformNameChars);
 

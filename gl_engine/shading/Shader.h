@@ -29,6 +29,7 @@ namespace gl_engine
 		GLint location;
 		GLenum type;
 		GLsizei dataSize;
+		GLuint texture_unit;
 	};
 
 
@@ -45,6 +46,7 @@ namespace gl_engine
 		GLuint m_programID;
 		std::map<std::string, Uniform> m_uniforms;
 		std::set<std::string> m_hasBeenWarned;
+		GLuint m_num_textures = 0;
 
 		// // ----- CONSTRUCTOR ----- // //
 	public:
@@ -99,8 +101,6 @@ namespace gl_engine
 			uploadUniform(thisUniform, data);
 		}
 
-		//GLuint setTexture(Texture& texture);
-
 		void use();
 		bool containsUniform(const std::string uniform_name);
 		void updateLights(const std::vector<LightNode*>& light_nodes);
@@ -129,6 +129,7 @@ namespace gl_engine
 		void uploadUniform(Uniform* uniform, const glm::dvec3& data) { glUniform3dv(uniform->location, 1, &data[0]); };
 		void uploadUniform(Uniform* uniform, const glm::dvec4& data) { glUniform4dv(uniform->location, 1, &data[0]); };
 		void uploadUniform(Uniform* uniform, const GLint& data) { glUniform1i(uniform->location, data); };
+		void uploadUniform(Uniform* uniform, const GLuint& data) { glUniform1i(uniform->location, data); };
 		void uploadUniform(Uniform* uniform, const glm::ivec2& data) { glUniform2iv(uniform->location, 1, &data[0]); };
 		void uploadUniform(Uniform* uniform, const glm::ivec3& data) { glUniform3iv(uniform->location, 1, &data[0]); };
 		void uploadUniform(Uniform* uniform, const glm::ivec4& data) { glUniform4iv(uniform->location, 1, &data[0]); };

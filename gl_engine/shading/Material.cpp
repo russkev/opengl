@@ -27,12 +27,12 @@ namespace gl_engine
 
 	void Material::bindTextures()
 	{
-		int texture_unit = 0;
+		//int texture_unit = 0;
 		for (const auto & texture_pair : m_textures)
 		{
 			std::string curr_locationName = texture_pair.first;
 			Texture* curr_texture = texture_pair.second;
-			//auto texture_unit = Shader::uniforms().at(curr_locationName).texture_unit;
+			auto texture_unit = Shader::uniforms().at(curr_locationName).texture_unit;
 
 			Shader::setUniform(curr_locationName, texture_unit);
 			curr_texture->bind(texture_unit);
