@@ -91,8 +91,6 @@ namespace gl_engine
 		for (auto const& node : m_root_nodes)
 		{
 			node.second->update_view(m_cameraNode);
-
-
 			node.second->draw();
 
 		}

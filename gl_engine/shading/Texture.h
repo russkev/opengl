@@ -22,7 +22,7 @@ namespace gl_engine
 		GLsizei			m_width;
 		GLsizei			m_height;
 
-		GLenum			m_target = GL_TEXTURE_2D;	//Type of texture
+		GLenum			m_target = GL_TEXTURE_2D;	// Type of texture
 		GLint			m_level = 0;				// Mipmap base level
 		GLint			m_internal_format = GL_RGB;	// Number and size of color components
 		GLint			m_border = 0;				// Size of the border
@@ -59,6 +59,18 @@ namespace gl_engine
 		const GLuint tex_id() const;
 		bool hasAlpha();
 		void* data();
+
+
+		// // ----- SETTERS ----- // //
+		void set_internalFormat(const GLint internal_format);
+		void set_format(const GLenum format);
+		void set_type(const GLenum type);
+		void set_date(void* data);
+		void set_minFilter(const GLenum min_filter);
+		void set_magFilter(const GLenum max_filter);
+		void set_st_wrap(const GLenum wrap);
+		void set_mipmap(const bool value);
+
 	};
 } // namespace gl_engine
 

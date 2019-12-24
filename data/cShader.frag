@@ -417,7 +417,7 @@ void main ()
 	projection_coordinates = projection_coordinates * 0.5 + 0.5;
 
 	vec3 outColor = 
-		diffuse_out * texture(material.diffuse, uv).rgb
+		diffuse_out * texture(material.diffuse, uv).rgb * texture(shadowMap, uv).rgb
 		+ 
 		specular_out
 		* vec3(1.0);
