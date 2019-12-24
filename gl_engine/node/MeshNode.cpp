@@ -50,14 +50,7 @@ namespace gl_engine
 		m_indexBuffer.bind(GL_ELEMENT_ARRAY_BUFFER);
 		m_material->bindTextures();
 
-
-		//glBindTexture(GL_TEXTURE_2D, 1); // Test bind
-
-
 		glDrawElements(GL_TRIANGLES, (GLsizei)m_indexBuffer.size(), GL_UNSIGNED_SHORT, 0);
-
-
-		glBindTexture(GL_TEXTURE_2D, 0);
 
 		for (auto child : Node::children())
 		{

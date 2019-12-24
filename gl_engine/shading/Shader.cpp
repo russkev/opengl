@@ -18,60 +18,15 @@ namespace gl_engine
 	}
 
 	// // ----- GENERAL METHODS ----- // //
-	GLuint Shader::setTexture(const std::string& uniform_name, Texture& texture, GLenum mode, GLenum type)
-	{
-		if (m_uniforms.find(uniform_name) == m_uniforms.end())
-		{
-			printf("WARNING: Unable to set texture: \"%s\", uniform not found\n", uniform_name.c_str());
-			return 0;
-		}
-
-		GLenum tex_mode = mode == GL_RGBA && !texture.hasAlpha() ? GL_RGB : mode;
-
-
-		use();
-
-		texture.upload_texture();
-
-		//glActiveTexture(GLenum(GL_TEXTURE0 + texture.tex_id()));
-
-		//glBindTexture(GL_TEXTURE_2D, texture.tex_id());
-
-		//glTexImage2D
-		//(
-		//	GL_TEXTURE_2D,
-		//	0,
-		//	GL_RGB,
-		//	(GLsizei)texture.width(),
-		//	(GLsizei)texture.height(),
-		//	0,
-		//	GL_RGB,
-		//	GL_UNSIGNED_BYTE,
-		//	texture.data()
-		//);
-
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		//glGenerateMipmap(GL_TEXTURE_2D);
-
-		//glBindTexture(GL_TEXTURE_2D, 0);
-
-		GLuint tex_unit = 0;
-		texture.bind(tex_unit);
-		//setUniform(uniform_name, tex_unit);
-		//texture.unbind();
-
-		Uniform* thisUniform = &m_uniforms.at(uniform_name);
-
-		GLint tex_loc = thisUniform->location;
-		glUniform1i(tex_loc, tex_unit);
-
-		texture.unbind();
-		//return tex_id;
-		return 0;
-	}
+	//GLuint Shader::setTexture(const std::string& uniform_name, Texture& texture, GLenum mode, GLenum type)
+	//{
+	//	if (m_uniforms.find(uniform_name) == m_uniforms.end())
+	//	{
+	//		printf("WARNING: Unable to set texture: \"%s\", uniform not found\n", uniform_name.c_str());
+	//		return 0;
+	//	}
+	//	texture.upload_texture();
+	//}
 
 
 	// Tell opengl to use this shader for upcoming commands
