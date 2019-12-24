@@ -106,24 +106,30 @@ int main(int, char**)
 
 
 	// Shader 1
-	gl_engine::Material cShadMat{ "cMat", "cShader.vert", "cShader.frag" };
-	cShadMat.setUniform("material.spec_power", 32.0f);
-	cShadMat.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
+	gl_engine::Material shaderBall_material{ "cMat", "cShader.vert", "cShader.frag" };
+	shaderBall_material.setUniform("material.spec_power", 32.0f);
+	shaderBall_material.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
+
+	// Shader 2
+	gl_engine::Material floor_material{ "floor material", "cShader.vert", "cShader.frag" };
+	shaderBall_material.setUniform("material.spec_power", 32.0f);
+	shaderBall_material.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
 
 	// Texture 1
 	gl_engine::Texture tex1("uvtemplate.tga");
-	cShadMat.setTexture("material.diffuse", tex1);
+	shaderBall_material.addTexture("material.diffuse", &tex1);
 
 	// Texture 2
-	//gl_engine::Texture tex2("uvtemplate.tga");
+	gl_engine::Texture tex2("uvtemplateC.tga");
+	floor_material.addTexture("material.diffuse", &tex2);
 
 	// Mesh 1
 	gl_engine::Mesh shaderBall = gl_engine::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
-	gl_engine::MeshNode shaderBall_node{ "shader ball", &shaderBall, &cShadMat };
+	gl_engine::MeshNode shaderBall_node{ "shader ball", &shaderBall, &shaderBall_material };
 
 	// Mesh 2
 	gl_engine::Mesh plane = gl_engine::Plane::createPlane(100.0f, 100.0f, 1, 1);
-	gl_engine::MeshNode plane_node{ "Plane 1", &plane, &cShadMat };
+	gl_engine::MeshNode plane_node{ "Plane 1", &plane, &floor_material };
 
 	// Mesh 3
 	//gl_engine::Mesh cube = gl_engine::Cube::createCube(5.0f);

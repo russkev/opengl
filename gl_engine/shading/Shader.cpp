@@ -20,7 +20,7 @@ namespace gl_engine
 	// // ----- GENERAL METHODS ----- // //
 	GLuint Shader::setTexture(const std::string& uniform_name, Texture& texture, GLenum mode, GLenum type)
 	{
-		if (m_uniforms.find(uniform_name) == m_uniforms.end())
+		if (!containsUniform(uniform_name))
 		{
 			printf("WARNING: Unable to set texture: \"%s\", uniform not found\n", uniform_name.c_str());
 			return 0;
@@ -58,6 +58,7 @@ namespace gl_engine
 
 		GLuint tex_unit = 0;
 		texture.bind(tex_unit);
+		texture.upload_texture();
 		//setUniform(uniform_name, tex_unit);
 		//texture.unbind();
 
@@ -66,7 +67,7 @@ namespace gl_engine
 		GLint tex_loc = thisUniform->location;
 		glUniform1i(tex_loc, tex_unit);
 
-		texture.unbind();
+		//texture.unbind();
 		//return tex_id;
 		return 0;
 	}
