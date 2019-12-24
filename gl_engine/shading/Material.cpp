@@ -36,7 +36,6 @@ namespace gl_engine
 
 			Shader::setUniform(curr_locationName, texture_unit);
 			curr_texture->bind(texture_unit);
-			texture_unit++;
 		}
 	}
 
