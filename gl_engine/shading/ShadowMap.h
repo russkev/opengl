@@ -27,7 +27,6 @@ namespace gl_engine
 
 		// // ----- MEMBER VARIABLES ----- // //
 		GLuint		m_depthMap_FBO;
-		//GLuint		m_depthMap_ID;
 		Material	m_depthMaterial;
 		Texture		m_texture{ SHADOW_WIDTH, SHADOW_HEIGHT, GL_DEPTH, GL_FLOAT, NULL };
 

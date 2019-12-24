@@ -31,6 +31,7 @@ namespace gl_engine
 		// // ----- GENERAL ----- // //
 		void addTexture(const std::string& uniform_name, Texture* texture);
 		void bindTextures();
+		void unbindTextures();
 
 	};
 } // namespace gl_engine

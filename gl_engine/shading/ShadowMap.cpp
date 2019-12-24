@@ -62,7 +62,7 @@ namespace gl_engine
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture_ID, 0);
 		glDrawBuffer(GL_NONE);
 		glReadBuffer(GL_NONE);
-		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		// Create depth shader
 		m_depthMaterial = Material("Depth shader", "DepthShader.vert", "DepthShader.frag");

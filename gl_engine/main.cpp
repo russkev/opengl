@@ -123,7 +123,7 @@ int main(int, char**)
 	gl_engine::Texture tex2("greyGrid_01.tga");
 	floor_material.addTexture("material.diffuse", &tex2);
 
-	shaderBall_material.addTexture("shadowMap", &tex2);
+	//shaderBall_material.addTexture("shadowMap", &tex2);
 
 	// Mesh 1
 	gl_engine::Mesh shaderBall = gl_engine::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
@@ -215,9 +215,9 @@ int main(int, char**)
 	render.addNode(&pointLight_node2);
 	render.addNode(&directionalLight_node1);
 	render.addNode(&spotLight_node1);
-	render.addNode(&axis_arrow_x_node);
-	render.addNode(&axis_arrow_y_node);
-	render.addNode(&axis_arrow_z_node);
+	//render.addNode(&axis_arrow_x_node);
+	//render.addNode(&axis_arrow_y_node);
+	//render.addNode(&axis_arrow_z_node);
 
 	//tex1.unbind();
 
