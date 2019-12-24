@@ -131,6 +131,7 @@ int main(int, char**)
 
 	// Mesh 2
 	gl_engine::Mesh plane = gl_engine::Plane::createPlane(100.0f, 100.0f, 1, 1);
+	plane.scale_uvs(10.0f);
 	gl_engine::MeshNode plane_node{ "Plane 1", &plane, &floor_material };
 
 	// Mesh 3
@@ -183,6 +184,29 @@ int main(int, char**)
 	lightRotate2.addChild(&lightRotate1);
 	lightRotate2.setPosition({ 2.0, 0.0, 0.0 });
 
+	// Axis arrows
+	gl_engine::Mesh axis_arrow{ gl_engine::Arrow::createArrow(20) };
+	gl_engine::Material axis_mat_x{ "axis arrow x", "LightShader.vert", "LightShader.frag" };
+	gl_engine::Material axis_mat_y{ "axis arrow x", "LightShader.vert", "LightShader.frag" };
+	gl_engine::Material axis_mat_z{ "axis arrow x", "LightShader.vert", "LightShader.frag" };
+	axis_mat_x.setUniform("light.color", glm::vec3{ 1.0f, 0.0f, 0.0f });
+	axis_mat_y.setUniform("light.color", glm::vec3{ 0.0f, 1.0f, 0.0f });
+	axis_mat_z.setUniform("light.color", glm::vec3{ 0.0f, 0.0f, 1.0f });
+	gl_engine::MeshNode axis_arrow_x_node{ "axis arrow x node", &axis_arrow, &axis_mat_x };
+	gl_engine::MeshNode axis_arrow_y_node{ "axis arrow y node", &axis_arrow, &axis_mat_y };
+	gl_engine::MeshNode axis_arrow_z_node{ "axis arrow z node", &axis_arrow, &axis_mat_z };
+	axis_arrow_x_node.setScale(0.05f);
+	axis_arrow_y_node.setScale(0.05f);
+	axis_arrow_z_node.setScale(0.05f);
+	axis_arrow_x_node.setPosition({ 1.0f, 0.0f, 0.0f });
+	axis_arrow_y_node.setPosition({ 0.0f, 1.0f, 0.05f });
+	axis_arrow_z_node.setPosition({ 0.0f, 0.0f, 1.0f });
+	axis_arrow_x_node.setRotation({ 0.0f, 90.0f, 0.0f });
+	axis_arrow_y_node.setRotation({ -90.0f, 0.0f, 0.0f });
+	
+
+
+
 	// Renderer
 	gl_engine::Renderer render{ &targetCam_node, glm::uvec2(width, height) };
 	render.addNode(&shaderBall_node);
@@ -191,6 +215,9 @@ int main(int, char**)
 	render.addNode(&pointLight_node2);
 	render.addNode(&directionalLight_node1);
 	render.addNode(&spotLight_node1);
+	render.addNode(&axis_arrow_x_node);
+	render.addNode(&axis_arrow_y_node);
+	render.addNode(&axis_arrow_z_node);
 
 	//tex1.unbind();
 

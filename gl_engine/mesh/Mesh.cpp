@@ -77,6 +77,19 @@ namespace gl_engine
 		m_vertices.at(loc) = std::move(vertex);
 	}
 
+	// // ------UVs ----- // //
+	void Mesh::scale_uvs(const GLfloat amount)
+	{
+		glm::mat2 scale_matrix{ amount, 0, 0, amount };
+		for (Vertex & vertex : m_vertices)
+		{
+			glm::vec2 curent_uv = vertex.uv();
+			glm::vec2 new_uv = scale_matrix * vertex.uv();
+			vertex.uv() = new_uv;
+		}
+	}
+
+
 	// // ------INDICES ----- // //
 
 	// Guess shared indices based on proximity
