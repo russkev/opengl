@@ -50,10 +50,10 @@ namespace gl_engine
 				glm::vec3 v4 = { startX + widthOffset * (float)(x + 1),	0.0f,	startZ + heightOffset * (float)(z + 1) };
 
 				// Vertex UVs
-				glm::vec2 uv1 = { widthUVOffset * (float)(x),		heightUVOffset * (float)(heightSegments - z) };
-				glm::vec2 uv2 = { widthUVOffset * (float)(x + 1),	heightUVOffset * (float)(heightSegments - z) };
-				glm::vec2 uv3 = { widthUVOffset * (float)(x),		heightUVOffset * (float)(heightSegments - z - 1) };
-				glm::vec2 uv4 = { widthUVOffset * (float)(x + 1),	heightUVOffset * (float)(heightSegments - z - 1) };
+				glm::vec2 uv1 = { widthUVOffset * (float)(x + 1),	heightUVOffset * (float)(heightSegments - z) };
+				glm::vec2 uv2 = { widthUVOffset * (float)(x),		heightUVOffset * (float)(heightSegments - z) };
+				glm::vec2 uv3 = { widthUVOffset * (float)(x + 1),	heightUVOffset * (float)(heightSegments - z - 1) };
+				glm::vec2 uv4 = { widthUVOffset * (float)(x),		heightUVOffset * (float)(heightSegments - z - 1) };
 
 				// Vertices
 				Vertex vert1 = { v1, normal, uv1 };
