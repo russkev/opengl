@@ -70,6 +70,7 @@ namespace gl_engine
 		void set_magFilter(const GLenum max_filter);
 		void set_st_wrap(const GLenum wrap);
 		void set_mipmap(const bool value);
+		void resize(const GLsizei width, const GLsizei height);
 
 	};
 } // namespace gl_engine

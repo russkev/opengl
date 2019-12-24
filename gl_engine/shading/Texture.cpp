@@ -167,4 +167,11 @@ namespace gl_engine
 	{
 		m_generate_mipmap = value;
 	}
+
+	void Texture::resize(const GLsizei width, const GLsizei height)
+	{
+		m_width = width;
+		m_height = height;
+	}
+
 } // namespace gl_engine

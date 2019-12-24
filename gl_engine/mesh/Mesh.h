@@ -73,6 +73,9 @@ namespace gl_engine
 		void transform(glm::mat4 transformMatrix);
 		void transform(verticesType& inVertices, const glm::mat4 transformMatrix);
 
+		// // ----- UVs ----- // //
+		void scale_uvs(const GLfloat amount);
+
 		// // ----- IDs ----- // //
 		void updateIds();
 
