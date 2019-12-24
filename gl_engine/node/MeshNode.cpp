@@ -52,6 +52,8 @@ namespace gl_engine
 
 		glDrawElements(GL_TRIANGLES, (GLsizei)m_indexBuffer.size(), GL_UNSIGNED_SHORT, 0);
 
+		m_material->unbindTextures();
+
 		for (auto child : Node::children())
 		{
 			child.second->draw();

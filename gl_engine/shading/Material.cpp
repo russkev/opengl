@@ -40,5 +40,13 @@ namespace gl_engine
 		}
 	}
 
+	void Material::unbindTextures()
+	{
+		for (const auto & texture_pair : m_textures)
+		{
+			texture_pair.second->unbind();
+		}
+	}
+
 }  // namespace gl_engine
 
