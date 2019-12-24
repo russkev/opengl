@@ -44,6 +44,7 @@ namespace gl_engine
 		// // ----- GENERAL METHODS ----- // //
 		void update_view(CameraNode* cameraNode) override;
 		void draw(const Pass& pass = rgb) override;
+		void draw_material(Material* material);
 
 		// // ----- GETTER ----- // //
 		Mesh* mesh();
