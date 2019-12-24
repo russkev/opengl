@@ -14,8 +14,15 @@ namespace gl_engine
 		{
 			printf("WARNING: \"%s\" is overwriting an existing texture\n", uniform_name.c_str());
 		}
+
+		if (Shader::uniforms().find(uniform_name) == Shader::uniforms().end())
+		{
+			printf("WARNING: Unable to set texture: \"%s\", uniform not found\n", uniform_name.c_str());
+			return;
+		}
+
 		m_textures[uniform_name] = texture;
-		Shader::setTexture(uniform_name, *texture);
+		texture->upload_texture();
 	}
 
 	void Material::bindTextures()

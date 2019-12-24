@@ -99,7 +99,7 @@ namespace gl_engine
 			uploadUniform(thisUniform, data);
 		}
 
-		GLuint setTexture(const std::string& location_name, Texture& texture, GLenum mode = GL_RGBA, GLenum type = GL_UNSIGNED_BYTE);
+		//GLuint setTexture(Texture& texture);
 
 		void use();
 		bool containsUniform(const std::string uniform_name);
