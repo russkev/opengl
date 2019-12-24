@@ -19,7 +19,10 @@ namespace gl_engine
 		m_height(m_surface->h)
 		
 	{
-		
+		GLenum format = hasAlpha() ? GL_RGBA : GL_RGB;
+		m_format = format;
+		m_internal_format = format;
+
 		glGenTextures(1, &m_id);
 		if (m_surface == NULL)
 		{
@@ -28,7 +31,7 @@ namespace gl_engine
 		else
 		{
 			m_data = m_surface->pixels;
-			upload_texture();
+			//upload_texture();
 		}
 	}
 
@@ -41,12 +44,12 @@ namespace gl_engine
 		m_data(data)
 	{
 		glGenTextures(1, &m_id);
-		upload_texture();
+		//upload_texture();
 	}
 
 	void Texture::upload_texture()
 	{
-		bind();
+		//bind();
 		glTexImage2D
 		(
 			GL_TEXTURE_2D,
@@ -66,7 +69,7 @@ namespace gl_engine
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		unbind();
+		//unbind();
 
 	}
 

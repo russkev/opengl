@@ -48,7 +48,7 @@ namespace gl_engine
 		m_material->use();
 		m_vao.Bind();
 		m_indexBuffer.bind(GL_ELEMENT_ARRAY_BUFFER);
-
+		m_material->bindTextures();
 
 
 		//glBindTexture(GL_TEXTURE_2D, 1); // Test bind
