@@ -19,9 +19,16 @@ namespace gl_engine
 		m_height(m_surface->h)
 		
 	{
-		GLenum format = hasAlpha() ? GL_RGBA : GL_RGB;
-		m_format = format;
-		m_internal_format = format;
+		if (hasAlpha())
+		{
+			m_internal_format = GL_RGBA;
+			m_format = GL_BGRA;
+		}
+		else
+		{
+			m_internal_format = GL_RGB;
+			m_format = GL_BGR;
+		}
 
 		glGenTextures(1, &m_id);
 		if (m_surface == NULL)
@@ -31,7 +38,6 @@ namespace gl_engine
 		else
 		{
 			m_data = m_surface->pixels;
-			//upload_texture();
 		}
 	}
 
@@ -44,32 +50,35 @@ namespace gl_engine
 		m_data(data)
 	{
 		glGenTextures(1, &m_id);
-		//upload_texture();
 	}
 
 	void Texture::upload_texture()
 	{
-		//bind();
+		bind();
+
 		glTexImage2D
 		(
-			GL_TEXTURE_2D,
-			0,
-			GL_RGB,
+			m_target,
+			m_level,
+			m_internal_format,
 			m_width,
 			m_height,
-			0,
-			GL_RGB,
-			GL_UNSIGNED_BYTE,
-			data()
+			m_border,
+			m_format,
+			m_type,
+			m_data
 		);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glGenerateMipmap(GL_TEXTURE_2D);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_min_filter);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_mag_filter);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_wrap_s);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_wrap_t);
+		if (m_generate_mipmap)
+		{
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
 
-		//unbind();
+		unbind();
 
 	}
 
@@ -115,5 +124,47 @@ namespace gl_engine
 			return m_surface->pixels;
 		}
 		return false;
+	}
+
+	// // ----- SETTERS ----- // //
+	void Texture::set_internalFormat(const GLint internal_format)
+	{
+		m_internal_format = internal_format;
+	}
+
+	void Texture::set_format(const GLenum format)
+	{
+		m_format = format;
+	}
+
+	void Texture::set_type(const GLenum type)
+	{
+		m_type = type;
+	}
+
+	void Texture::set_date(void* data)
+	{
+		m_data = data;
+	}
+
+	void Texture::set_minFilter(const GLenum min_filter)
+	{
+		m_min_filter = min_filter;
+	}
+
+	void Texture::set_magFilter(const GLenum max_filter)
+	{
+		m_mag_filter = max_filter;
+	}
+
+	void Texture::set_st_wrap(const GLenum wrap)
+	{
+		m_wrap_s = wrap;
+		m_wrap_t = wrap;
+	}
+
+	void Texture::set_mipmap(const bool value)
+	{
+		m_generate_mipmap = value;
 	}
 } // namespace gl_engine

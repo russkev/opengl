@@ -112,16 +112,18 @@ int main(int, char**)
 
 	// Shader 2
 	gl_engine::Material floor_material{ "floor material", "cShader.vert", "cShader.frag" };
-	shaderBall_material.setUniform("material.spec_power", 32.0f);
-	shaderBall_material.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
+	floor_material.setUniform("material.spec_power", 32.0f);
+	floor_material.setUniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
 
 	// Texture 1
-	gl_engine::Texture tex1("uvtemplate.tga");
+	gl_engine::Texture tex1("uvtemplateB.tga");
 	shaderBall_material.addTexture("material.diffuse", &tex1);
 
 	// Texture 2
-	gl_engine::Texture tex2("uvtemplateC.tga");
+	gl_engine::Texture tex2("greyGrid_01.tga");
 	floor_material.addTexture("material.diffuse", &tex2);
+
+	shaderBall_material.addTexture("shadowMap", &tex2);
 
 	// Mesh 1
 	gl_engine::Mesh shaderBall = gl_engine::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
@@ -151,7 +153,7 @@ int main(int, char**)
 	pointLight_node2.setPosition({ 0.0f, 4.0f, -5.0f });
 
 	// Light 3
-	gl_engine::DirectionalLight directionalLight1{ 0.5f, { 0.2f, 1.0f, 0.1f } };
+	gl_engine::DirectionalLight directionalLight1{ 0.5f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
 	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
 	directionalLight_node1.setRotation({ 33.0f, 225.0f, 0.0f });
 	directionalLight_node1.setPosition({ 16.0f, 16.0f, 16.0f });
