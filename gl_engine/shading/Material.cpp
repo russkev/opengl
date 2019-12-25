@@ -22,7 +22,7 @@ namespace gl_engine
 		}
 
 		m_textures[uniform_name] = texture;
-		texture->upload_texture();
+		texture->process();
 	}
 
 	void Material::bindTextures()
