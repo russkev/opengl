@@ -41,7 +41,8 @@ namespace gl_engine
 
 		// // ----- GENERAL ----- // //
 		void init_shadowMap();
-		void update_materials(std::vector<Material*> materials);
+		void init_materials(std::vector<Material*>& materials);
+		void update_materials(std::vector<Material*>& materials);
 		void render_shadowMap(std::map<std::string, Node*>& root_nodes);
 
 		// // ----- GETTERS ----- // //
