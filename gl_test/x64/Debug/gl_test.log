@@ -1,8 +1,9 @@
-﻿  gl_test.cpp
-  NodeTest.cpp
-e:\docs\programming\cpp\opengl\repos\opengl\gl_engine\node\node.h(25): error C7525: inline variables require at least '/std:c++17'
-e:\docs\programming\cpp\opengl\repos\opengl\gl_engine\node\node.h(25): error C2864: 'gl_engine::Node::MESH_VAO_INFO': a static data member with an in-class initializer must have non-volatile const integral type or be specified as 'inline'
-  e:\docs\programming\cpp\opengl\repos\opengl\gl_engine\node\node.h(25): note: type is 'const std::array<gl_engine::member_info_type,7>'
+﻿  NodeTest.cpp
+e:\docs\programming\cpp\opengl\repos\opengl\gl_engine\node\node.h(31): error C7525: inline variables require at least '/std:c++17'
+e:\docs\programming\cpp\opengl\repos\opengl\gl_engine\node\node.h(31): error C2864: 'gl_engine::Node::MESH_VAO_INFO': a static data member with an in-class initializer must have non-volatile const integral type or be specified as 'inline'
+  e:\docs\programming\cpp\opengl\repos\opengl\gl_engine\node\node.h(31): note: type is 'const std::array<gl_engine::member_info_type,7>'
+e:\docs\programming\cpp\opengl\repos\opengl\gl_engine\node\node.cpp(134): error C2664: 'bool glm::decompose<float,0>(const glm::mat<4,4,float,0> &,glm::vec<3,float,0> &,glm::tquat<float,0> &,glm::vec<3,float,0> &,glm::vec<3,float,0> &,glm::vec<4,float,0> &)': cannot convert argument 3 from 'glm::quat' to 'glm::tquat<float,0> &'
+  e:\docs\programming\cpp\opengl\repos\opengl\gl_engine\node\node.cpp(134): note: A non-const reference may only be bound to an lvalue
 e:\docs\programming\cpp\opengl\repos\opengl\gl_test\nodetest.cpp(39): error C3646: 'N1': unknown override specifier
 e:\docs\programming\cpp\opengl\repos\opengl\gl_test\nodetest.cpp(39): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
 e:\docs\programming\cpp\opengl\repos\opengl\gl_test\nodetest.cpp(40): error C3646: 'N2': unknown override specifier

@@ -52,7 +52,7 @@ namespace gl_engine
 		glGenTextures(1, &m_id);
 	}
 
-	void Texture::upload_texture()
+	void Texture::process()
 	{
 		bind();
 
@@ -85,6 +85,11 @@ namespace gl_engine
 	void Texture::bind(GLuint texture_unit)
 	{
 		glActiveTexture(GLenum(GL_TEXTURE0 + texture_unit));
+		bind();
+	}
+
+	void Texture::bind()
+	{
 		glBindTexture(GL_TEXTURE_2D, m_id);
 	}
 
@@ -103,7 +108,7 @@ namespace gl_engine
 		return m_height;
 	}
 
-	const GLuint Texture::tex_id() const
+	const GLuint Texture::id() const
 	{
 		return m_id;
 	}

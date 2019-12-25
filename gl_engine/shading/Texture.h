@@ -10,7 +10,7 @@ namespace gl_engine
 {
 	/*
 	
-		A texture is an image that is procured externally
+		A texture is used to prepare sampler objects for shaders
 	
 	*/
 	struct Texture
@@ -18,9 +18,9 @@ namespace gl_engine
 		// // ----- MEMBER ATTRIBUTES ----- // //
 	private:
 		SDL_Surface*	m_surface = NULL;
-		GLuint			m_id;
-		GLsizei			m_width;
-		GLsizei			m_height;
+		GLuint			m_id = 0;
+		GLsizei			m_width = 0;
+		GLsizei			m_height = 0;
 
 		GLenum			m_target = GL_TEXTURE_2D;	// Type of texture
 		GLint			m_level = 0;				// Mipmap base level
@@ -41,6 +41,8 @@ namespace gl_engine
 
 		// // ----- CONSTRUCTOR ----- // //
 	public:
+		Texture() {};
+
 		// Create a texture from an image file
 		Texture(const char* filename);
 
@@ -48,15 +50,16 @@ namespace gl_engine
 		Texture(GLuint width, GLuint height, GLenum format, GLenum type, void* data);
 		
 		// // ----- GENERAL ----- // //
-		void upload_texture();
-		void bind(GLuint texture_unit = 0);
+		void process();
+		void bind();
+		void bind(GLuint texture_unit);
 		void unbind();
 
 		// // ----- GETTERS ----- // //
 	public:
 		GLsizei width();
 		GLsizei height();
-		const GLuint tex_id() const;
+		const GLuint id() const;
 		bool hasAlpha();
 		void* data();
 

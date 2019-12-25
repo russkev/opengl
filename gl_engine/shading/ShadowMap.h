@@ -28,10 +28,12 @@ namespace gl_engine
 		// // ----- MEMBER VARIABLES ----- // //
 		GLuint		m_depthMap_FBO;
 		Material	m_depthMaterial;
-		Texture		m_texture{ SHADOW_WIDTH, SHADOW_HEIGHT, GL_DEPTH, GL_FLOAT, NULL };
+		Texture		m_texture{ SHADOW_WIDTH, SHADOW_HEIGHT, GL_DEPTH_COMPONENT, GL_FLOAT, NULL };
 
 		OrthoCamera m_orthoCam{};
 		CameraNode m_orthoCam_node{ "ortho cam for light", &m_orthoCam };
+
+		GLuint m_depthMap_ID;
 
 
 		// // ----- CONSTRUCTOR ----- // //
