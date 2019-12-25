@@ -22,18 +22,18 @@ namespace gl_engine
 		m_cameraNode(cameraNode), m_dimensions(cameraNode->camera()->dimensions())
 	{
 		m_cameraNode->camera()->setDimensions(m_dimensions);
-		initSettings();
+		init_settings();
 	}
 
 	Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
 		m_cameraNode(camera), m_dimensions(dimensions)
 	{
 		m_cameraNode->camera()->setDimensions(dimensions);
-		initSettings();
+		init_settings();
 	}
 
 	// // ----- GENERAL METHODS ----- // //
-	void Renderer::initSettings()
+	void Renderer::init_settings()
 	{
 		/*
 
@@ -59,13 +59,28 @@ namespace gl_engine
 		glEnable(GL_FRAMEBUFFER_SRGB);
 	}
 
+	void Renderer::init_firstFrame()
+	{
+		// Shadow map		
+		for (LightNode* lightNode : m_lightNodes)
+		{
+			if (ShadowMap* shadowMap = lightNode->shadowMap())
+			{
+				shadowMap->init_materials(m_materials);
+			}
+		}
+	}
 
 	//Draw all nodes to screen
 	void Renderer::render()
 	{
-		// Shadow map
-
+		if (m_firstFrame)
+		{
+			init_firstFrame();
+			m_firstFrame = false;
+		}
 		
+		// Shadow map		
 		for (LightNode* lightNode : m_lightNodes)
 		{
 			if (ShadowMap* shadowMap = lightNode->shadowMap())

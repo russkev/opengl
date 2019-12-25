@@ -32,6 +32,7 @@ namespace gl_engine
 		std::vector<Material*> m_materials;
 		std::map<std::string, Node*> m_root_nodes;
 		glm::uvec2 m_dimensions = { 800, 600 };
+		bool m_firstFrame = true;
 
 	public:
 		// // ----- CONSTRUCTOR ----- // //
@@ -42,7 +43,8 @@ namespace gl_engine
 		void render();
 
 		// // ----- GENERAL METHODS ----- // //
-		void initSettings();
+		void init_settings();
+		void init_firstFrame();
 		void addLightNode(LightNode* lightNode);
 		void addNode(Node* node);
 		bool pollEvents();

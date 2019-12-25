@@ -77,6 +77,7 @@ namespace gl_engine
 		{
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, m_border_color);
 
 		unbind();
 
@@ -172,6 +173,15 @@ namespace gl_engine
 	{
 		m_generate_mipmap = value;
 	}
+
+	void Texture::set_border_color(const GLfloat r, const GLfloat g, const GLfloat b, const GLfloat a)
+	{
+		m_border_color[0] = r;
+		m_border_color[1] = g;
+		m_border_color[2] = b;
+		m_border_color[3] = a;
+	}
+
 
 	void Texture::resize(const GLsizei width, const GLsizei height)
 	{

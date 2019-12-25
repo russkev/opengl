@@ -34,6 +34,7 @@ namespace gl_engine
 		GLenum			m_mag_filter = GL_LINEAR;
 		GLenum			m_wrap_s = GL_REPEAT;
 		GLenum			m_wrap_t = GL_REPEAT;
+		GLfloat			m_border_color[4] = { 1.0f, 0.0f, 0.0f, 0.0f };
 
 		bool			m_generate_mipmap = true;
 
@@ -73,6 +74,7 @@ namespace gl_engine
 		void set_magFilter(const GLenum max_filter);
 		void set_st_wrap(const GLenum wrap);
 		void set_mipmap(const bool value);
+		void set_border_color(const GLfloat r, const GLfloat g, const GLfloat b, const GLfloat a);
 		void resize(const GLsizei width, const GLsizei height);
 
 	};
