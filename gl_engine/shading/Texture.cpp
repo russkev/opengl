@@ -41,13 +41,8 @@ namespace gl_engine
 		}
 	}
 
-	Texture::Texture(GLuint width, GLuint height, GLenum format, GLenum type, void* data) :
-		m_width(width),
-		m_height(height),
-		m_internal_format(format),
-		m_format(format),
-		m_type(type),
-		m_data(data)
+	Texture::Texture(const GLenum target) :
+		m_target(target)
 	{
 		glGenTextures(1, &m_id);
 	}
@@ -69,15 +64,15 @@ namespace gl_engine
 			m_data
 		);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_min_filter);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_mag_filter);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_wrap_s);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_wrap_t);
+		glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, m_min_filter);
+		glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, m_mag_filter);
+		glTexParameteri(m_target, GL_TEXTURE_WRAP_S, m_wrap_s);
+		glTexParameteri(m_target, GL_TEXTURE_WRAP_T, m_wrap_t);
 		if (m_generate_mipmap)
 		{
-			glGenerateMipmap(GL_TEXTURE_2D);
+			glGenerateMipmap(m_target);
 		}
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, m_border_color);
+		glTexParameterfv(m_target, GL_TEXTURE_BORDER_COLOR, m_border_color);
 
 		unbind();
 
@@ -133,6 +128,16 @@ namespace gl_engine
 	}
 
 	// // ----- SETTERS ----- // //
+	void Texture::set_width(const GLsizei width)
+	{
+		m_width = width;
+	}
+
+	void Texture::set_height(const GLsizei height)
+	{
+		m_height = height;
+	}
+
 	void Texture::set_internalFormat(const GLint internal_format)
 	{
 		m_internal_format = internal_format;
@@ -148,7 +153,7 @@ namespace gl_engine
 		m_type = type;
 	}
 
-	void Texture::set_date(void* data)
+	void Texture::set_data(void* data)
 	{
 		m_data = data;
 	}

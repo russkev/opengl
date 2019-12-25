@@ -48,7 +48,7 @@ namespace gl_engine
 		Texture(const char* filename);
 
 		// Create an internal texture
-		Texture(GLuint width, GLuint height, GLenum format, GLenum type, void* data);
+		Texture(const GLenum target);
 		
 		// // ----- GENERAL ----- // //
 		void process();
@@ -66,10 +66,13 @@ namespace gl_engine
 
 
 		// // ----- SETTERS ----- // //
+
+		void set_width(const GLsizei width);
+		void set_height(const GLsizei height);
 		void set_internalFormat(const GLint internal_format);
 		void set_format(const GLenum format);
 		void set_type(const GLenum type);
-		void set_date(void* data);
+		void set_data(void* data);
 		void set_minFilter(const GLenum min_filter);
 		void set_magFilter(const GLenum max_filter);
 		void set_st_wrap(const GLenum wrap);
