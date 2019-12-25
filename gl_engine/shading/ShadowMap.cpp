@@ -24,6 +24,11 @@ namespace gl_engine
 		m_orthoCam.setSides(-5.0f, 5.0f, -5.0f, 5.0f);
 
 		// Initialize texture settings
+		m_texture.set_width(SHADOW_WIDTH);
+		m_texture.set_height(SHADOW_HEIGHT);
+		m_texture.set_internalFormat(GL_DEPTH_COMPONENT);
+		m_texture.set_format(GL_DEPTH_COMPONENT);
+		m_texture.set_type(GL_FLOAT);
 		m_texture.set_minFilter(GL_NEAREST);
 		m_texture.set_magFilter(GL_LINEAR);
 		m_texture.set_mipmap(false);
