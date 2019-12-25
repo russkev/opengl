@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <vector>
+#include <GL/glew.h>
 
 #include "Window.h"
 
@@ -125,6 +126,12 @@ int main(int, char**)
 
 	//shaderBall_material.addTexture("shadowMap", &tex2);
 
+
+	// Texture 3
+	//gl_engine::Texture arrayTest_tex("uvtemplate.tga");
+	//arrayTest_tex.set_target(GL_TEXTURE_2D_ARRAY);
+	//shaderBall_material.addTexture("shadowMap", &arrayTest_tex);
+
 	// Mesh 1
 	gl_engine::Mesh shaderBall = gl_engine::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
 	gl_engine::MeshNode shaderBall_node{ "shader ball", &shaderBall, &shaderBall_material };
@@ -162,10 +169,6 @@ int main(int, char**)
 	directionalLight_node1.addChild(&freeCam_node);
 	directionalLight_node1.addChild(&orthoCam_node);
 
-	// Shadow map
-	gl_engine::ShadowMap shadowMap{};
-	directionalLight_node1.set_shadowMap(&shadowMap);
-
 
 	// Light 4
 	gl_engine::SpotLight spotLight1{ 6.0f, { 1.0f, 0.0f, 0.0f } };
@@ -174,6 +177,9 @@ int main(int, char**)
 	spotLight_node1.setPosition({ -3.0f, 10.0f, -2.0f });
 	spotLight1.set_innerAngle(30.0f);
 	spotLight1.set_outerAngle(33.0f);
+
+	// Shadow map
+	gl_engine::ShadowMap shadowMap{ &spotLight_node1 };
 
 	// Null node 1
 	gl_engine::Node lightRotate1{ "light rotate 01" };
@@ -211,9 +217,9 @@ int main(int, char**)
 	gl_engine::Renderer render{ &targetCam_node, glm::uvec2(width, height) };
 	render.addNode(&shaderBall_node);
 	render.addNode(&plane_node);
-	render.addNode(&pointLight_node);
-	render.addNode(&pointLight_node2);
-	render.addNode(&directionalLight_node1);
+	//render.addNode(&pointLight_node);
+	//render.addNode(&pointLight_node2);
+	//render.addNode(&directionalLight_node1);
 	render.addNode(&spotLight_node1);
 	//render.addNode(&axis_arrow_x_node);
 	//render.addNode(&axis_arrow_y_node);

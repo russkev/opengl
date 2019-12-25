@@ -51,18 +51,14 @@ namespace gl_engine
 	{
 		bind();
 
-		glTexImage2D
-		(
-			m_target,
-			m_level,
-			m_internal_format,
-			m_width,
-			m_height,
-			m_border,
-			m_format,
-			m_type,
-			m_data
-		);
+		if (m_target == GL_TEXTURE_2D)
+		{
+			process_uniform2D();
+		}
+		else if (m_target == GL_TEXTURE_2D_ARRAY)
+		{
+			process_uniform2D_array();
+		}
 
 		glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, m_min_filter);
 		glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, m_mag_filter);
@@ -77,6 +73,61 @@ namespace gl_engine
 		unbind();
 
 	}
+	
+	void Texture::process_uniform2D()
+	{
+		glTexImage2D
+		(
+			m_target,
+			m_level,
+			m_internal_format,
+			m_width,
+			m_height,
+			m_border,
+			m_format,
+			m_type,
+			m_data
+		);
+	}
+
+	void Texture::process_uniform2D_array()
+	{
+		//glTexStorage3D
+		//(
+		//	m_target,
+		//	1,
+		//	m_internal_format,
+		//	m_width,
+		//	m_height,
+		//	1
+		//);
+		//glTexSubImage3D
+		//(
+		//	m_target,
+		//	0,
+		//	0,
+		//	0,
+		//	0,
+		//	m_width,
+		//	m_height,
+		//	1,
+		//	m_format,
+		//	m_type,
+		//	m_data
+		//);
+		glTexImage3D(
+			m_target,
+			0,
+			m_internal_format,
+			m_width,
+			m_height,
+			1,
+			m_border,
+			m_format,
+			m_type,
+			m_data
+		);
+	}
 
 	void Texture::bind(GLuint texture_unit)
 	{
@@ -86,12 +137,12 @@ namespace gl_engine
 
 	void Texture::bind()
 	{
-		glBindTexture(GL_TEXTURE_2D, m_id);
+		glBindTexture(m_target, m_id);
 	}
 
 	void Texture::unbind()
 	{
-		glBindTexture(GL_TEXTURE_2D, 0);
+		glBindTexture(m_target, 0);
 	}
 
 	GLsizei Texture::width()
@@ -128,6 +179,11 @@ namespace gl_engine
 	}
 
 	// // ----- SETTERS ----- // //
+	void Texture::set_target(const GLenum target)
+	{
+		m_target = target;
+	}
+
 	void Texture::set_width(const GLsizei width)
 	{
 		m_width = width;

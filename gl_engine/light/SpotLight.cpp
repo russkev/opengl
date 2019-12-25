@@ -24,6 +24,8 @@ namespace gl_engine
 		m_light_mesh.transform(glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 0.1f, 1.0f)));
 		m_light_mesh.transform(glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
 
+		// Adjust camera angle of view
+		set_cameraAngle();
 	}
 
 	// // ----- GETTERS ----- // //
@@ -39,6 +41,11 @@ namespace gl_engine
 	Shader* SpotLight::shader()
 	{
 		return &m_shader;
+	}
+	
+	Camera* SpotLight::camera()
+	{
+		return &m_camera;
 	}
 
 	const float SpotLight::cos_innerAngle() const
@@ -59,6 +66,8 @@ namespace gl_engine
 		{
 			m_outerAngle = m_innerAngle;
 		}
+		set_cameraAngle();
+
 	}
 
 	void SpotLight::set_outerAngle(const GLfloat theta)
@@ -68,5 +77,11 @@ namespace gl_engine
 		{
 			m_innerAngle = m_outerAngle;
 		}
+		set_cameraAngle();
+	}
+
+	void SpotLight::set_cameraAngle()
+	{
+		m_camera.setAngleOfView(m_outerAngle * 2);
 	}
 } // namespace gl_engine

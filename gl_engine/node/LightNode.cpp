@@ -23,13 +23,11 @@ namespace gl_engine
 	void LightNode::set_shadowMap(ShadowMap* shadowMap)
 	{
 		m_shadowMap = shadowMap;
-
-		m_shadowMap->setLightNode(this);
 	}
 
 	void LightNode::update_view(CameraNode* cameraNode)
 	{
-		m_modelToPerspectiveMatrix = cameraNode->worldToProjection_matrix() * Node::worldTransform();
+		m_modelToPerspective_matrix = cameraNode->worldToProjection_matrix() * Node::worldTransform();
 		for (auto child : Node::children())
 		{
 			child.second->update_view(cameraNode);
@@ -49,7 +47,7 @@ namespace gl_engine
 				}
 				return;
 			}
-			m_light->shader()->setUniform(U_MODEL_TO_PROJECTION, m_modelToPerspectiveMatrix);
+			m_light->shader()->setUniform(U_MODEL_TO_PROJECTION, m_modelToPerspective_matrix);
 			m_light->shader()->use();
 
 			m_vao.Bind();

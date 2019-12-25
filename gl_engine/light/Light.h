@@ -1,14 +1,15 @@
 #ifndef GL_ENGINE_LIGHT_LIGHT_H
 #define GL_ENGINE_LIGHT_LIGHT_H
 
-#pragma once
 #include <vector>
+#include <memory>
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <../mesh/Mesh.h>
 #include <../shading/Shader.h>
 #include <../shading/Material.h>
+#include <../camera/Camera.h>
 
 namespace gl_engine
 {
@@ -28,6 +29,7 @@ namespace gl_engine
 		bool m_mesh_enabled = true;
 		GLfloat m_brightness = 0.0;
 		glm::vec3 m_color = { 0.0f, 0.0f, 0.0f };
+		
 
 		// // ----- CONSTRUCTORS ----- // //
 	public:
@@ -39,6 +41,8 @@ namespace gl_engine
 		const bool& isEnabled() const;
 		virtual Mesh* mesh();
 		virtual Shader* shader();
+		virtual Camera* camera();
+		
 
 		// // ----- SHADER COMMANDS ----- // //
 		virtual const std::string& type() const = 0;

@@ -1,5 +1,7 @@
 #include "Light.h"
 
+#include "../camera/FreeCamera.h"
+
 namespace gl_engine
 {
 	const std::string Light::LIGHT_SHADER_TYPE = "light";
@@ -30,6 +32,11 @@ namespace gl_engine
 	const bool& Light::isEnabled() const
 	{
 		return m_mesh_enabled;
+	}
+
+	Camera* Light::camera()
+	{
+		return NULL;
 	}
 
 	// // ----- SETTERS ----- // //

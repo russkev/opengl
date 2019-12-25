@@ -6,6 +6,7 @@
 #include "Light.h"
 
 #include "../shading/LoadShader.h"
+#include "../camera/FreeCamera.h"
 
 namespace gl_engine
 {
@@ -29,6 +30,7 @@ namespace gl_engine
 		GLfloat m_outerAngle = 35.0f;
 		Mesh m_light_mesh;
 		Shader m_shader;
+		FreeCamera m_camera;
 
 		// // ----- CONSTRUCTORS ----- // //
 	public:
@@ -39,6 +41,7 @@ namespace gl_engine
 
 		Mesh* mesh() override;
 		Shader* shader() override;
+		Camera* camera() override;
 
 		const float cos_innerAngle() const;
 		const float cos_outerAngle() const;
@@ -47,6 +50,8 @@ namespace gl_engine
 		void set_innerAngle(const GLfloat theta);
 		void set_outerAngle(const GLfloat theta);
 
+	private:
+		void set_cameraAngle();
 	};
 } // namespace gl_engine
 #endif

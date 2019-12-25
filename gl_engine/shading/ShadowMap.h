@@ -1,15 +1,19 @@
 #ifndef GL_ENGINE_SHADING_SHADOW_MAP
 #define GL_ENGINE_SHADING_SHADOW_MAP
 
+#include <string>
+
 #include <GL/glew.h>
 
 #include "Material.h"
 #include "Texture.h"
+#include "../camera/Camera.h"
 #include "../camera/OrthoCamera.h"
 #include "../node/CameraNode.h"
 
 // // ----- FORWARD DECLERATION ----- // //
 struct Light;
+struct LightNode;
 
 
 namespace gl_engine
@@ -24,26 +28,32 @@ namespace gl_engine
 	{
 		static constexpr GLuint SHADOW_WIDTH = 1024;
 		static constexpr GLuint SHADOW_HEIGHT = 1024;
+		static const std::string MODEL_TRANSFORM;
+		static const std::string LIGHT_SPACE_TRANSFORM;
+		static const std::string DEPTH_MAP;
 
 		// // ----- MEMBER VARIABLES ----- // //
 		GLuint		m_depthMap_FBO;
-		Material	m_depthMaterial;
-		Texture		m_texture{ GL_TEXTURE_2D };
+		Material	m_depthMaterial{ "Depth shader", "DepthShader.vert", "DepthShader.frag" };
+		Texture		m_texture{ GL_TEXTURE_2D_ARRAY };
 
-		OrthoCamera m_orthoCam{};
-		CameraNode m_orthoCam_node{ "ortho cam for light", &m_orthoCam };
+		CameraNode	m_camera_node;
+
+		//OrthoCamera m_orthoCam{};
+		//CameraNode m_orthoCam_node{ "Ortho cam for light", &m_orthoCam };
 
 		GLuint m_depthMap_ID;
 
 
 		// // ----- CONSTRUCTOR ----- // //
-		ShadowMap();
+		ShadowMap(LightNode* lightNode);
 
 		// // ----- GENERAL ----- // //
 		void init_shadowMap();
 		void init_materials(std::vector<Material*>& materials);
 		void update_materials(std::vector<Material*>& materials);
 		void render_shadowMap(std::map<std::string, Node*>& root_nodes);
+		bool check_bound_framebuffer();
 
 		// // ----- GETTERS ----- // //
 		
