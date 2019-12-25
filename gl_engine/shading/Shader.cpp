@@ -96,7 +96,7 @@ namespace gl_engine
 			glGetActiveUniform(m_programID, i, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformNameLength, &newUniform.dataSize, &newUniform.type, uniformNameChars);
 			newUniform.location = glGetUniformLocation(m_programID, uniformNameChars);
 
-			if (newUniform.type == GL_SAMPLER_2D)
+			if (newUniform.type == GL_SAMPLER_2D || newUniform.type == GL_SAMPLER_2D_ARRAY)
 			{
 				newUniform.texture_unit = m_num_textures;
 				m_num_textures++;

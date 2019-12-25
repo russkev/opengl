@@ -6,6 +6,7 @@
 #include "Light.h"
 
 #include "../shading/LoadShader.h"
+#include "../camera/OrthoCamera.h"
 
 namespace gl_engine
 {
@@ -23,6 +24,7 @@ namespace gl_engine
 	private:
 		Mesh m_light_mesh;
 		Shader m_shader;
+		OrthoCamera m_camera{ -10.0f, 10.0f, -10.0f, 10.0f };
 
 		// // ----- CONSTRUCTORS ----- // //
 	public:
@@ -30,9 +32,9 @@ namespace gl_engine
 
 		// // ----- GETTERS ----- // //
 		const std::string& type() const override;
-
 		Mesh* mesh() override;
 		Shader* shader() override;
+		Camera* camera() override;
 	};
 } // namespace gl_engine
 #endif

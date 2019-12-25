@@ -1,6 +1,8 @@
 #ifndef GL_ENGINE_NODE_LIGHT_H
 #define GL_ENGINE_NODE_LIGHT_H
 
+#include <memory>
+
 #include "Node.h"
 #include "../VAO.h"
 #include "../shading/Shader.h"
@@ -10,6 +12,7 @@ namespace gl_engine
 	// Forward declare light
 	struct Light;
 	struct ShadowMap;
+	struct CameraNode;
 
 
 	/*
@@ -29,7 +32,7 @@ namespace gl_engine
 		Buffer m_vertexBuffer = { GL_ARRAY_BUFFER, 0 };
 		Buffer m_indexBuffer = { GL_ARRAY_BUFFER, 0 };
 
-		glm::mat4 m_modelToPerspectiveMatrix;
+		glm::mat4 m_modelToPerspective_matrix;
 		bool m_shader_warned = false;
 
 	public:
@@ -37,6 +40,7 @@ namespace gl_engine
 		LightNode(const std::string name, Light* light);
 
 		// // ----- GENERAL ----- // //
+		//void create_shadowMap()
 		void set_shadowMap(ShadowMap* shadowMap);
 
 		void update_view(CameraNode* cameraNode) override;
@@ -45,7 +49,6 @@ namespace gl_engine
 		// // ----- GETTERS ----- // //
 		Light* light();
 		ShadowMap* shadowMap();
-
 
 	};
 } // namespace gl_engine

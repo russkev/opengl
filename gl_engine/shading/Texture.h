@@ -55,6 +55,9 @@ namespace gl_engine
 		void bind();
 		void bind(GLuint texture_unit);
 		void unbind();
+	private:
+		void process_uniform2D();
+		void process_uniform2D_array();
 
 		// // ----- GETTERS ----- // //
 	public:
@@ -67,6 +70,7 @@ namespace gl_engine
 
 		// // ----- SETTERS ----- // //
 
+		void set_target(const GLenum target);
 		void set_width(const GLsizei width);
 		void set_height(const GLsizei height);
 		void set_internalFormat(const GLint internal_format);

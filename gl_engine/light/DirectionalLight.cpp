@@ -6,6 +6,7 @@
 
 #include "../mesh/Arrow.h"
 #include "../Buffer.h"
+#include "../camera/OrthoCamera.h"
 
 namespace gl_engine
 {
@@ -24,6 +25,11 @@ namespace gl_engine
 	const std::string& DirectionalLight::type() const
 	{
 		return TYPE;
+	}
+
+	Camera* DirectionalLight::camera()
+	{
+		return &m_camera;
 	}
 
 	Mesh* DirectionalLight::mesh()
