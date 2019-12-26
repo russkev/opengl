@@ -46,7 +46,8 @@ namespace gl_engine
 		ShadowMap(LightNode* lightNode);
 
 		// // ----- GENERAL ----- // //
-		void init_shadowMap();
+		void init_directional_shadowMap();
+		void init_point_shadowMap();
 		void init_materials(std::vector<Material*>& materials);
 		void update_materials(std::vector<Material*>& materials);
 		void render_shadowMap(std::map<std::string, Node*>& root_nodes);
