@@ -20,8 +20,6 @@ namespace gl_engine
 	public:
 		static const std::string INNER;
 		static const std::string OUTER;
-
-	private:
 		static const std::string TYPE;
 
 		// // ----- MEMBER VARIABLES ----- // //

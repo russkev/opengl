@@ -1,6 +1,9 @@
 #include "ShadowMap.h"
 
 #include "../light/Light.h"
+#include "../light/DirectionalLight.h"
+#include "../light/PointLight.h"
+#include "../light/SpotLight.h"
 #include "../node/LightNode.h"
 #include "../node/MeshNode.h"
 
@@ -20,12 +23,19 @@ namespace gl_engine
 	{
 		m_camera_node.setParent(lightNode);
 		lightNode->set_shadowMap(this);
-		init_shadowMap();
+		if (lightNode->light()->type() == DirectionalLight::TYPE || lightNode->light()->type() == SpotLight::TYPE)
+		{
+			init_directional_shadowMap();
+		}
+		else if (lightNode->light()->type() == PointLight::TYPE)
+		{
+			init_point_shadowMap();
+		}
 	}
 
 
 	// // ----- SHADOW MAP ----- // //
-	void ShadowMap::init_shadowMap()
+	void ShadowMap::init_directional_shadowMap()
 	{
 		// Initialize ortho cam
 
@@ -63,6 +73,11 @@ namespace gl_engine
 		// Create depth shader
 		m_depthMaterial = Material("Depth shader", "DepthShader.vert", "DepthShader.frag");
 		m_texture.unbind();
+	}
+
+	void ShadowMap::init_point_shadowMap()
+	{
+		//
 	}
 
 	void ShadowMap::render_shadowMap(std::map<std::string, Node*>& root_nodes)
