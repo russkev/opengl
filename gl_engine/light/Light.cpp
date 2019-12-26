@@ -5,8 +5,8 @@
 namespace gl_engine
 {
 	const std::string Light::LIGHT_SHADER_TYPE = "light";
-	const std::string Light::LIGHT_BRIGHTNESS = std::string(".brightness");
-	const std::string Light::LIGHT_COLOR = std::string(".color");
+	const std::string Light::LIGHT_BRIGHTNESS = "brightness";
+	const std::string Light::LIGHT_COLOR = "color";
 
 	// // ----- GETTERS ----- // //
 	const GLfloat& Light::brightness() const
@@ -46,7 +46,7 @@ namespace gl_engine
 		m_brightness = brightness;
 		if (shader() != NULL)
 		{
-			shader()->setUniform(std::string(LIGHT_SHADER_TYPE + LIGHT_BRIGHTNESS), m_brightness);
+			shader()->setUniform(std::string(LIGHT_SHADER_TYPE + "." + LIGHT_BRIGHTNESS), m_brightness);
 		}
 	}
 
@@ -55,7 +55,7 @@ namespace gl_engine
 		m_color = color;
 		if (shader() != NULL)
 		{
-			shader()->setUniform(std::string(LIGHT_SHADER_TYPE + LIGHT_COLOR), m_color);
+			shader()->setUniform(std::string(LIGHT_SHADER_TYPE + "." + LIGHT_COLOR), m_color);
 		}
 	}
 

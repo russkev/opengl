@@ -179,7 +179,8 @@ int main(int, char**)
 	spotLight1.set_outerAngle(33.0f);
 
 	// Shadow map
-	gl_engine::ShadowMap shadowMap{ &spotLight_node1 };
+	gl_engine::ShadowMap shadowMap_spot1{ &spotLight_node1 };
+	gl_engine::ShadowMap shadowMap_directional1{ &directionalLight_node1 };
 
 	// Null node 1
 	gl_engine::Node lightRotate1{ "light rotate 01" };
@@ -217,9 +218,9 @@ int main(int, char**)
 	gl_engine::Renderer render{ &targetCam_node, glm::uvec2(width, height) };
 	render.addNode(&shaderBall_node);
 	render.addNode(&plane_node);
-	//render.addNode(&pointLight_node);
-	//render.addNode(&pointLight_node2);
-	//render.addNode(&directionalLight_node1);
+	render.addNode(&pointLight_node);
+	render.addNode(&pointLight_node2);
+	render.addNode(&directionalLight_node1);
 	render.addNode(&spotLight_node1);
 	//render.addNode(&axis_arrow_x_node);
 	//render.addNode(&axis_arrow_y_node);

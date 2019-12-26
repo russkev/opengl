@@ -36,6 +36,8 @@ struct Directional_Light
 	vec3 direction;
 	float brightness;
 	vec3 color;
+	sampler2DArray depth;
+	mat4 projection;
 };
 uniform Directional_Light directional_light[NUM_LIGHTS];
 
@@ -83,10 +85,15 @@ out TangentSpace
 	vec3 frag_position;
 } tangentSpace;
 
-out LightSpace
+out SpotLight_Space
 {
-	vec4 spotLight_position[NUM_LIGHTS];
-} lightSpace;
+	vec4 position[NUM_LIGHTS];
+} spotLight_space;
+
+out DirectionalLight_Space
+{
+	vec4 position[NUM_LIGHTS];
+} directionalLight_space;
 
 out vec2 uv;
 
@@ -150,7 +157,8 @@ void send_lightSpaceCoordinates()
 {
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		lightSpace.spotLight_position[i] = spot_light[i].projection * vec4(worldSpace.vertex_position, 1.0f);
+		spotLight_space.position[i] = spot_light[i].projection * vec4(worldSpace.vertex_position, 1.0f);
+		directionalLight_space.position[i] = directional_light[i].projection * vec4(worldSpace.vertex_position, 1.0f);
 	}
 }
 

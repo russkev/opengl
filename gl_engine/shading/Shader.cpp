@@ -67,19 +67,19 @@ namespace gl_engine
 			// Set uniforms
 			if (point_light || spot_light)
 			{
-				setUniform(std::string(type + "[" + std::to_string(index) + "]" + LightNode::LIGHT_POSITION), light_node->worldPosition());
+				setUniform(std::string(type + "[" + std::to_string(index) + "]." + LightNode::LIGHT_POSITION), light_node->worldPosition());
 			}
 			if (directional_light || spot_light)
 			{
-				setUniform(std::string(type + "[" + std::to_string(index) + "]" + LightNode::LIGHT_DIRECTION), light_node->directionVector());
+				setUniform(std::string(type + "[" + std::to_string(index) + "]." + LightNode::LIGHT_DIRECTION), light_node->directionVector());
 			}
 			if (spot_light)
 			{
-				setUniform(std::string(type + "[" + std::to_string(index) + "]" + SpotLight::INNER), spot_light->cos_innerAngle());
-				setUniform(std::string(type + "[" + std::to_string(index) + "]" + SpotLight::OUTER), spot_light->cos_outerAngle());
+				setUniform(std::string(type + "[" + std::to_string(index) + "]." + SpotLight::INNER), spot_light->cos_innerAngle());
+				setUniform(std::string(type + "[" + std::to_string(index) + "]." + SpotLight::OUTER), spot_light->cos_outerAngle());
 			}
-			setUniform(std::string(type + "[" + std::to_string(index) + "]" + Light::LIGHT_BRIGHTNESS), light_node->light()->brightness());
-			setUniform(std::string(type + "[" + std::to_string(index) + "]" + Light::LIGHT_COLOR), light_node->light()->color());
+			setUniform(std::string(type + "[" + std::to_string(index) + "]." + Light::LIGHT_BRIGHTNESS), light_node->light()->brightness());
+			setUniform(std::string(type + "[" + std::to_string(index) + "]." + Light::LIGHT_COLOR), light_node->light()->color());
 		}
 	}
 

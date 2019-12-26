@@ -103,28 +103,28 @@ namespace gl_engine
 		{
 			if (ShadowMap* shadowMap = lightNode->shadowMap())
 			{
-				//shadowMap->render_shadowMap(m_root_nodes);
-				//shadowMap->update_materials(m_materials);
+				shadowMap->render_shadowMap(m_root_nodes);
+				shadowMap->update_materials(m_materials);
 			}
 		}
 
 
 		
-		//glViewport(0, 0, m_dimensions.x, m_dimensions.y);
-		//m_cameraNode->update();
+		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
+		m_cameraNode->update();
 
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//for (Material* material : m_materials)
-		//{
-		//	material->updateLights(m_lightNodes);
-		//}
+		for (Material* material : m_materials)
+		{
+			material->updateLights(m_lightNodes);
+		}
 
-		//for (auto const& node : m_root_nodes)
-		//{
-		//	node.second->update_view(m_cameraNode);
-		//	node.second->draw();
-		//}
+		for (auto const& node : m_root_nodes)
+		{
+			node.second->update_view(m_cameraNode);
+			node.second->draw();
+		}
 	}
 
 	void Renderer::addNode(Node* node)

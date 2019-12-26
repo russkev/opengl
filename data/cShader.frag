@@ -26,10 +26,15 @@ in TangentSpace
 	vec3 frag_position;
 } tangentSpace;
 	
-in LightSpace
+in SpotLight_Space
 {
-	vec4 spotLight_position[NUM_LIGHTS];
-} lightSpace;
+	vec4 position[NUM_LIGHTS];
+} spotLight_space;
+
+in DirectionalLight_Space
+{
+	vec4 position[NUM_LIGHTS];
+} directionalLight_space;
 
 in vec2 uv;
 
@@ -43,8 +48,8 @@ struct Material
 };
 uniform Material material;
 
-uniform sampler2DArray depthMap;
-uniform sampler2D test_sampler;
+//uniform sampler2DArray depthMap;
+//uniform sampler2D test_sampler;
 
 struct Point_Light
 {
@@ -59,6 +64,8 @@ struct Directional_Light
 	vec3 direction;
 	float brightness;
 	vec3 color;
+	sampler2DArray depth;
+	mat4 projection;
 };
 uniform Directional_Light directional_light[NUM_LIGHTS];
 
@@ -305,7 +312,7 @@ vec3 specular_spot_tangentSpace(int index)
 }
 
 // // SHADOW // //
-float create_shadow(int index)
+float create_shadow(vec4 lightSpace_position, vec3 tangentSpace_lightDirection, sampler2DArray depth)
 {
 	float num_passes	= 1;
 	float step_size		= 3 / num_passes;
@@ -315,19 +322,19 @@ float create_shadow(int index)
 	float out_shadow	= 0.0;
 	float max_bias		= 0.002;
 	float bias_ratio	= 0.2;
-	float bias =  max(max_bias * (1.0 - dot(tangentSpace_normal, tangentSpace_spotLight_direction[index])), max_bias * bias_ratio);
+	float bias =  max(max_bias * (1.0 - dot(tangentSpace_normal, tangentSpace_lightDirection)), max_bias * bias_ratio);
 
-	vec3 projection_coordinates = lightSpace.spotLight_position[index].xyz / lightSpace.spotLight_position[index].w;
+	vec3 projection_coordinates = lightSpace_position.xyz / lightSpace_position.w;
 	projection_coordinates = projection_coordinates * 0.5 + 0.5;
 
-	float closest_depth = texture(depthMap, vec3(projection_coordinates.xy, 0)).r;
+	float closest_depth = texture(depth, vec3(projection_coordinates.xy, 0)).r;
 	float current_depth = projection_coordinates.z;
 
 	for(float x = -1; x < 1; x+= step_size)
 	{
 		for (float y = -1; y < 1; y += step_size)
 		{
-			float pcfDepth = texture(depthMap, vec3(projection_coordinates.xy + vec2(x, y) * texelSize, 0)).r;
+			float pcfDepth = texture(depth, vec3(projection_coordinates.xy + vec2(x, y) * texelSize, 0)).r;
 			out_shadow += current_depth - bias > pcfDepth ? 0.0 : 1.0;
 		}
 	}
@@ -361,7 +368,7 @@ void main ()
 	init_tangentSpace();
 
 	//float shadowMap_tex = clamp(create_shadow(), 0.0, 1.0);
-	float shadowMap_tex = 1.0;
+//	float shadowMap_tex = 1.0;
 
 
 	// Point lights
@@ -386,36 +393,47 @@ void main ()
 	// Directional lights
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
+		float temp_shadow = create_shadow(
+			directionalLight_space.position[i], 
+			tangentSpace_directionalLight_normalized[i],
+			directional_light[i].depth);
+
 		diffuse_out += 
 			diffuse_directional_worldSpace(i) *
 			directional_light[i].brightness *
-			directional_light[i].color;
+			directional_light[i].color * 
+			temp_shadow;
 
 		specular_out +=
 			specular_directional_tangentSpace(i) *
 			directional_light[i].brightness *
 			material.specular * 
-			directional_light[i].color;
+			directional_light[i].color * 
+			temp_shadow;
 	}
 
 	// Spot lights
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
 		float temp_attenuation = attenuation(spot_light[i].position);
+		float temp_shadow = create_shadow(
+			spotLight_space.position[i], 
+			tangentSpace_spotLight_direction[i],
+			spot_light[i].depth);
 
 		diffuse_out +=
 			diffuse_spot_tangentSpace(i) * 
 			spot_light[i].brightness * spot_light[i].brightness *
 			spot_light[i].color * 
 			temp_attenuation * 
-			shadowMap_tex;
+			temp_shadow;
 		specular_out +=
 			specular_spot_tangentSpace(i) *
 			point_light[i].brightness * spot_light[i].brightness *
 			material.specular * 
 			spot_light[i].color * 
 			temp_attenuation * 
-			shadowMap_tex;
+			temp_shadow;
 	}
 
 	//vec3 projection_coordinates = lightSpace.position.xyz / lightSpace.position.w;
@@ -425,8 +443,8 @@ void main ()
 		diffuse_out * texture(material.diffuse, uv).rgb
 		+ 
 		specular_out
-//		texture(depthMap, vec3(uv, 0)).rgb * 3
-//		create_shadow()
+////		texture(spot_light[0].depth, vec3(uv, 0)).rgb * 3
+//		create_shadow(0)
 		* vec3(1.0);
 
 	fragColor = vec4(outColor.xyz, 1.0);
