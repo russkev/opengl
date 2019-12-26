@@ -2,6 +2,7 @@
 #include "../light/PointLight.h"
 #include "../light/DirectionalLight.h"
 #include "../light/SpotLight.h"
+#include "../light/Light.h"
 
 #include "Shader.h"
 #include "LoadShader.h"
@@ -32,7 +33,7 @@ namespace gl_engine
 
 	void Shader::updateLights(const std::vector<LightNode*>& light_nodes)
 	{
-		int index = 0, point_index = 0, directional_index = 0, spot_index = 0;
+		int index = 0;// , point_index = 0, directional_index = 0, spot_index = 0;
 		std::string type = "";
 
 		for (LightNode* light_node : light_nodes)
@@ -41,25 +42,27 @@ namespace gl_engine
 			DirectionalLight* directional_light = dynamic_cast<DirectionalLight*>(light_node->light());
 			SpotLight* spot_light = dynamic_cast<SpotLight*>(light_node->light());
 
-			// Adjust indices
-			if (point_light)
-			{
-				type = point_light->type();
-				index = point_index;
-				point_index++;
-			}
-			if (directional_light)
-			{
-				type = directional_light->type();
-				index = directional_index;
-				directional_index++;
-			}
-			if (spot_light)
-			{
-				type = spot_light->type();
-				index = spot_index;
-				spot_index++;
-			}
+			index = light_node->shaderIndex();
+			type = light_node->light()->type();
+
+			//// Adjust indices
+			//if (point_light)
+			//{
+			//	type = point_light->type();
+			//	point_index++;
+			//}
+			//if (directional_light)
+			//{
+			//	type = directional_light->type();
+			//	index = directional_index;
+			//	directional_index++;
+			//}
+			//if (spot_light)
+			//{
+			//	type = spot_light->type();
+			//	index = spot_index;
+			//	spot_index++;
+			//}
 
 			// Set uniforms
 			if (point_light || spot_light)

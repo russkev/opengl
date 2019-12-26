@@ -1,5 +1,6 @@
 #version 440 core
-#define NUM_LIGHTS 5
+#define NUM_LIGHTS 3
+
 
 // // INS // //
 in layout(location = 0 ) vec3 model_vertexPosition;
@@ -18,7 +19,7 @@ struct Transform
 	mat4 modelToWorld;
 	mat3 modelToWorld_normal;
 	mat4 worldToCam;
-	mat4 worldToLightProjection;
+	//mat4 worldToLightProjection;
 };
 uniform Transform transform;
 
@@ -46,6 +47,8 @@ struct Spot_Light
 	vec3 color;
 	float inner;
 	float outer;
+	sampler2DArray depth;
+	mat4 projection;
 };
 uniform Spot_Light spot_light[NUM_LIGHTS];
 
@@ -82,7 +85,7 @@ out TangentSpace
 
 out LightSpace
 {
-	vec4 position;
+	vec4 spotLight_position[NUM_LIGHTS];
 } lightSpace;
 
 out vec2 uv;
@@ -143,6 +146,13 @@ void send_tangentSpaceCoordinates()
 	tangentSpace.frag_position	= worldToTangent * worldSpace.vertex_position;
 }
 
+void send_lightSpaceCoordinates()
+{
+	for (int i = 0; i < NUM_LIGHTS; i++)
+	{
+		lightSpace.spotLight_position[i] = spot_light[i].projection * vec4(worldSpace.vertex_position, 1.0f);
+	}
+}
 
 void main()
 {
@@ -150,6 +160,7 @@ void main()
 	send_worldSpaceCoordinates();
 	send_camSpaceCoordinates();
 	send_tangentSpaceCoordinates();
-	lightSpace.position = transform.worldToLightProjection * vec4(worldSpace.vertex_position, 1.0f);
+	//lightSpace.position = transform.worldToLightProjection * vec4(worldSpace.vertex_position, 1.0f);
+	send_lightSpaceCoordinates();
 	gl_Position = transform.modelToProjection * vec4(model_vertexPosition, 1.0);
 }

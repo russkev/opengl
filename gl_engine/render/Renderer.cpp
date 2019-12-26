@@ -10,6 +10,8 @@
 #include "../node/LightNode.h"
 #include "../camera/Camera.h"
 #include "../light/PointLight.h"
+#include "../light/SpotLight.h"
+#include "../light/DirectionalLight.h"
 #include "../shading/Material.h"
 #include "../shading/ShadowMap.h"
 
@@ -61,9 +63,25 @@ namespace gl_engine
 
 	void Renderer::init_firstFrame()
 	{
+		GLuint num_pointLights = 0, num_directionalLights = 0, num_spotLights = 0;
 		// Shadow map		
 		for (LightNode* lightNode : m_lightNodes)
 		{
+			if (DirectionalLight* spotLight = dynamic_cast<DirectionalLight*> (lightNode->light()))
+			{
+				lightNode->set_shaderIndex(num_directionalLights);
+				num_directionalLights++;
+			}
+			if (PointLight* spotLight = dynamic_cast<PointLight*> (lightNode->light()))
+			{
+				lightNode->set_shaderIndex(num_pointLights);
+				num_pointLights++;
+			}
+			if (SpotLight* spotLight = dynamic_cast<SpotLight*> (lightNode->light()))
+			{
+				lightNode->set_shaderIndex(num_spotLights);
+				num_spotLights++;
+			}
 			if (ShadowMap* shadowMap = lightNode->shadowMap())
 			{
 				shadowMap->init_materials(m_materials);

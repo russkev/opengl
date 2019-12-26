@@ -20,11 +20,6 @@ namespace gl_engine
 	}
 
 	// // ----- GENERAL ----- // //
-	void LightNode::set_shadowMap(ShadowMap* shadowMap)
-	{
-		m_shadowMap = shadowMap;
-	}
-
 	void LightNode::update_view(CameraNode* cameraNode)
 	{
 		m_modelToPerspective_matrix = cameraNode->worldToProjection_matrix() * Node::worldTransform();
@@ -71,4 +66,22 @@ namespace gl_engine
 	{
 		return m_shadowMap;
 	}
+
+	const GLuint LightNode::shaderIndex() const
+	{
+		return m_shaderIndex;
+	}
+
+
+	// // ----- SETTERS ----- // //
+	void LightNode::set_shadowMap(ShadowMap* shadowMap)
+	{
+		m_shadowMap = shadowMap;
+	}
+
+	void LightNode::set_shaderIndex(const GLuint index)
+	{
+		m_shaderIndex = index;
+	}
+
 } // namespace gl_engine

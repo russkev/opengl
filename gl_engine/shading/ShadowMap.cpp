@@ -10,12 +10,13 @@
 namespace gl_engine
 {
 	const std::string ShadowMap::MODEL_TRANSFORM = "transform.modelToWorld";
-	const std::string ShadowMap::LIGHT_SPACE_TRANSFORM = "transform.worldToLightProjection";
-	const std::string ShadowMap::DEPTH_MAP = "depthMap";
+	const std::string ShadowMap::LIGHT_SPACE_TRANSFORM = ".projection";
+	const std::string ShadowMap::DEPTH_MAP = ".depth";
 
 	// // ----- CONSTRUCTOR ----- // //
 	ShadowMap::ShadowMap(LightNode* lightNode) :
-		m_camera_node{std::string(lightNode->name() + " shadow"), lightNode->light()->camera()}
+		m_camera_node{ std::string(lightNode->name() + " shadow"), lightNode->light()->camera() },
+		m_lightNode{ lightNode }
 	{
 		m_camera_node.setParent(lightNode);
 		lightNode->set_shadowMap(this);
@@ -73,7 +74,10 @@ namespace gl_engine
 		glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
-		m_depthMaterial.setUniform(LIGHT_SPACE_TRANSFORM, m_camera_node.worldToProjection_matrix());
+		std::string type = m_lightNode->light()->type();
+		std::string index = std::to_string(m_lightNode->shaderIndex());
+
+		m_depthMaterial.setUniform(type + "[" + index + "]" + LIGHT_SPACE_TRANSFORM, m_camera_node.worldToProjection_matrix());
 		for (auto const& node_pair : root_nodes)
 		{
 			Node* node = node_pair.second;
@@ -93,7 +97,10 @@ namespace gl_engine
 	{
 		for (Material* material : materials)
 		{
-			material->addTexture(DEPTH_MAP, &m_texture);
+			std::string index = std::to_string(m_lightNode->shaderIndex());
+			std::string type = m_lightNode->light()->type();
+
+			material->addTexture(type + "[" + index + "]" + DEPTH_MAP, &m_texture);
 		}
 	}
 
@@ -101,7 +108,6 @@ namespace gl_engine
 	{
 		for (Material* material : materials)
 		{
-			//!!! make string a static
 			material->setUniform(LIGHT_SPACE_TRANSFORM, m_camera_node.worldToProjection_matrix());
 		}
 	}
