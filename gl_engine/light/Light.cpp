@@ -39,6 +39,7 @@ namespace gl_engine
 		return NULL;
 	}
 
+
 	// // ----- SETTERS ----- // //
 	void Light::setBrightness(const GLfloat brightness)
 	{

@@ -1,5 +1,5 @@
 #version 440 core
-#define NUM_LIGHTS 5
+#define NUM_LIGHTS 3
 #extension GL_EXT_texture_array : enable
 
 // // INS // //
@@ -28,7 +28,7 @@ in TangentSpace
 	
 in LightSpace
 {
-	vec4 position;
+	vec4 spotLight_position[NUM_LIGHTS];
 } lightSpace;
 
 in vec2 uv;
@@ -44,6 +44,7 @@ struct Material
 uniform Material material;
 
 uniform sampler2DArray depthMap;
+uniform sampler2D test_sampler;
 
 struct Point_Light
 {
@@ -69,6 +70,8 @@ struct Spot_Light
 	vec3 color;
 	float inner;
 	float outer;
+	sampler2DArray depth;
+	mat4 projection;
 };
 uniform Spot_Light spot_light[NUM_LIGHTS];
 
@@ -302,7 +305,7 @@ vec3 specular_spot_tangentSpace(int index)
 }
 
 // // SHADOW // //
-float create_shadow()
+float create_shadow(int index)
 {
 	float num_passes	= 1;
 	float step_size		= 3 / num_passes;
@@ -312,9 +315,9 @@ float create_shadow()
 	float out_shadow	= 0.0;
 	float max_bias		= 0.002;
 	float bias_ratio	= 0.2;
-	float bias =  max(max_bias * (1.0 - dot(tangentSpace_normal, tangentSpace_directionalLight_normalized[0])), max_bias * bias_ratio);
+	float bias =  max(max_bias * (1.0 - dot(tangentSpace_normal, tangentSpace_spotLight_direction[index])), max_bias * bias_ratio);
 
-	vec3 projection_coordinates = lightSpace.position.xyz / lightSpace.position.w;
+	vec3 projection_coordinates = lightSpace.spotLight_position[index].xyz / lightSpace.spotLight_position[index].w;
 	projection_coordinates = projection_coordinates * 0.5 + 0.5;
 
 	float closest_depth = texture(depthMap, vec3(projection_coordinates.xy, 0)).r;
@@ -357,7 +360,8 @@ void main ()
 	init_camSpace();
 	init_tangentSpace();
 
-	float shadowMap_tex = clamp(create_shadow(), 0.0, 1.0);
+	//float shadowMap_tex = clamp(create_shadow(), 0.0, 1.0);
+	float shadowMap_tex = 1.0;
 
 
 	// Point lights
@@ -414,8 +418,8 @@ void main ()
 			shadowMap_tex;
 	}
 
-	vec3 projection_coordinates = lightSpace.position.xyz / lightSpace.position.w;
-	projection_coordinates = projection_coordinates * 0.5 + 0.5;
+	//vec3 projection_coordinates = lightSpace.position.xyz / lightSpace.position.w;
+	//projection_coordinates = projection_coordinates * 0.5 + 0.5;
 
 	vec3 outColor = 
 		diffuse_out * texture(material.diffuse, uv).rgb

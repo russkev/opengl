@@ -27,6 +27,7 @@ namespace gl_engine
 	private:
 		Light* m_light = NULL;
 		ShadowMap* m_shadowMap = NULL;
+		GLuint m_shaderIndex;
 
 		VAO m_vao;
 		Buffer m_vertexBuffer = { GL_ARRAY_BUFFER, 0 };
@@ -40,8 +41,6 @@ namespace gl_engine
 		LightNode(const std::string name, Light* light);
 
 		// // ----- GENERAL ----- // //
-		//void create_shadowMap()
-		void set_shadowMap(ShadowMap* shadowMap);
 
 		void update_view(CameraNode* cameraNode) override;
 		void draw(const Pass& pass = rgb) override;
@@ -49,7 +48,11 @@ namespace gl_engine
 		// // ----- GETTERS ----- // //
 		Light* light();
 		ShadowMap* shadowMap();
+		const GLuint shaderIndex() const;
 
+		// // ----- SETTERS ----- // //
+		void set_shadowMap(ShadowMap* shadowMap);
+		void set_shaderIndex(const GLuint index);
 	};
 } // namespace gl_engine
 

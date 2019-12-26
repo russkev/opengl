@@ -17,7 +17,7 @@ namespace gl_engine
 
 		if (Shader::uniforms().find(uniform_name) == Shader::uniforms().end())
 		{
-			printf("WARNING: Unable to set texture: \"%s\", uniform not found\n", uniform_name.c_str());
+			printf("WARNING: Unable to set texture: \"%s\" for shader: \"%s\", uniform not found\n", uniform_name.c_str(), Shader::name().c_str());
 			return;
 		}
 

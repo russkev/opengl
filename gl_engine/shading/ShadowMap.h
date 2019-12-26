@@ -36,12 +36,9 @@ namespace gl_engine
 		GLuint		m_depthMap_FBO;
 		Material	m_depthMaterial{ "Depth shader", "DepthShader.vert", "DepthShader.frag" };
 		Texture		m_texture{ GL_TEXTURE_2D_ARRAY };
+		LightNode*	m_lightNode = NULL;
 
 		CameraNode	m_camera_node;
-
-		//OrthoCamera m_orthoCam{};
-		//CameraNode m_orthoCam_node{ "Ortho cam for light", &m_orthoCam };
-
 		GLuint m_depthMap_ID;
 
 
