@@ -10,8 +10,8 @@
 namespace gl_engine
 {
 	const std::string ShadowMap::MODEL_TRANSFORM = "transform.modelToWorld";
-	const std::string ShadowMap::LIGHT_SPACE_TRANSFORM = ".projection";
-	const std::string ShadowMap::DEPTH_MAP = ".depth";
+	const std::string ShadowMap::LIGHT_SPACE_TRANSFORM = "projection";
+	const std::string ShadowMap::DEPTH_MAP = "depth";
 
 	// // ----- CONSTRUCTOR ----- // //
 	ShadowMap::ShadowMap(LightNode* lightNode) :
@@ -68,7 +68,6 @@ namespace gl_engine
 	void ShadowMap::render_shadowMap(std::map<std::string, Node*>& root_nodes)
 	{
 		m_texture.bind();
-		//m_orthoCam_node.update();
 
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
@@ -77,7 +76,7 @@ namespace gl_engine
 		std::string type = m_lightNode->light()->type();
 		std::string index = std::to_string(m_lightNode->shaderIndex());
 
-		m_depthMaterial.setUniform(type + "[" + index + "]" + LIGHT_SPACE_TRANSFORM, m_camera_node.worldToProjection_matrix());
+		m_depthMaterial.setUniform(LIGHT_SPACE_TRANSFORM, m_camera_node.worldToProjection_matrix());
 		for (auto const& node_pair : root_nodes)
 		{
 			Node* node = node_pair.second;
@@ -100,7 +99,7 @@ namespace gl_engine
 			std::string index = std::to_string(m_lightNode->shaderIndex());
 			std::string type = m_lightNode->light()->type();
 
-			material->addTexture(type + "[" + index + "]" + DEPTH_MAP, &m_texture);
+			material->addTexture(type + "[" + index + "]." + DEPTH_MAP, &m_texture);
 		}
 	}
 
@@ -108,7 +107,10 @@ namespace gl_engine
 	{
 		for (Material* material : materials)
 		{
-			material->setUniform(LIGHT_SPACE_TRANSFORM, m_camera_node.worldToProjection_matrix());
+			std::string index = std::to_string(m_lightNode->shaderIndex());
+			std::string type = m_lightNode->light()->type();
+
+			material->setUniform(type + "[" + index + "]." + LIGHT_SPACE_TRANSFORM, m_camera_node.worldToProjection_matrix());
 		}
 	}
 

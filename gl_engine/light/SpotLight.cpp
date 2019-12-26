@@ -9,8 +9,8 @@ namespace gl_engine
 {
 
 	const std::string SpotLight::TYPE = "spot_light";
-	const std::string SpotLight::INNER = ".inner";
-	const std::string SpotLight::OUTER = ".outer";
+	const std::string SpotLight::INNER = "inner";
+	const std::string SpotLight::OUTER = "outer";
 
 
 	SpotLight::SpotLight(GLfloat brightness, glm::vec3 color) :
