@@ -5,7 +5,7 @@ layout (location = 0) in vec3 aPos;
 struct Transform
 {
 	mat4 modelToWorld;
-	mat4 worldToLightProjection;
+	//mat4 worldToLightProjection;
 };
 
 struct Spot_Light
