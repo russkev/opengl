@@ -27,6 +27,7 @@ namespace gl_engine
 	public:
 		Material() {};
 		Material(const std::string name, const char* vertexShader, const char* fragmentShader);
+		Material(const std::string name, const char* vertexShader, const char* geometryShader, const char* fragmentShader);
 
 		// // ----- GENERAL ----- // //
 		void addTexture(const std::string& uniform_name, Texture* texture);

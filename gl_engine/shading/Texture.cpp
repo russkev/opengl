@@ -64,6 +64,7 @@ namespace gl_engine
 		glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, m_mag_filter);
 		glTexParameteri(m_target, GL_TEXTURE_WRAP_S, m_wrap_s);
 		glTexParameteri(m_target, GL_TEXTURE_WRAP_T, m_wrap_t);
+		glTexParameteri(m_target, GL_TEXTURE_WRAP_R, m_wrap_r);
 		if (m_generate_mipmap)
 		{
 			glGenerateMipmap(m_target);
@@ -92,32 +93,9 @@ namespace gl_engine
 
 	void Texture::process_uniform2D_array()
 	{
-		//glTexStorage3D
-		//(
-		//	m_target,
-		//	1,
-		//	m_internal_format,
-		//	m_width,
-		//	m_height,
-		//	1
-		//);
-		//glTexSubImage3D
-		//(
-		//	m_target,
-		//	0,
-		//	0,
-		//	0,
-		//	0,
-		//	m_width,
-		//	m_height,
-		//	1,
-		//	m_format,
-		//	m_type,
-		//	m_data
-		//);
 		glTexImage3D(
 			m_target,
-			0,
+			m_level,
 			m_internal_format,
 			m_width,
 			m_height,
@@ -127,6 +105,23 @@ namespace gl_engine
 			m_type,
 			m_data
 		);
+	}
+
+	void Texture::process_cubeMap()
+	{
+		for (GLuint i = 0; i < 6; ++i)
+		{
+			glTexImage2D(
+				GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+				m_level,
+				m_internal_format,
+				m_width,
+				m_height,
+				m_border,
+				m_format,
+				m_type,
+				m_data);
+		}
 	}
 
 	void Texture::bind(GLuint texture_unit)
@@ -228,6 +223,7 @@ namespace gl_engine
 	{
 		m_wrap_s = wrap;
 		m_wrap_t = wrap;
+		m_wrap_r = wrap;
 	}
 
 	void Texture::set_mipmap(const bool value)

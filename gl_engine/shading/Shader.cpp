@@ -12,9 +12,16 @@ namespace gl_engine
 {
 	// // ----- CONSTRUCTOR ----- // //
 	Shader::Shader(const std::string& name, const char* vertexShader, const char* fragmentShader) :
-		m_name(name)
+		m_name{ name },
+		m_programID{ LoadShaders::load(vertexShader, fragmentShader) }
 	{
-		m_programID = LoadShaders::load(vertexShader, fragmentShader);
+		fetchUniforms();
+	}
+
+	Shader::Shader(const std::string& name, const char* vertexShader, const char* geometryShader, const char* fragmentShader) :
+		m_name{ name },
+		m_programID{ LoadShaders::load(vertexShader, geometryShader, fragmentShader) }
+	{
 		fetchUniforms();
 	}
 
@@ -44,25 +51,6 @@ namespace gl_engine
 
 			index = light_node->shaderIndex();
 			type = light_node->light()->type();
-
-			//// Adjust indices
-			//if (point_light)
-			//{
-			//	type = point_light->type();
-			//	point_index++;
-			//}
-			//if (directional_light)
-			//{
-			//	type = directional_light->type();
-			//	index = directional_index;
-			//	directional_index++;
-			//}
-			//if (spot_light)
-			//{
-			//	type = spot_light->type();
-			//	index = spot_index;
-			//	spot_index++;
-			//}
 
 			// Set uniforms
 			if (point_light || spot_light)

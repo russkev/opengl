@@ -16,6 +16,13 @@ namespace gl_engine
 	const std::string ShadowMap::LIGHT_SPACE_TRANSFORM = "projection";
 	const std::string ShadowMap::DEPTH_MAP = "depth";
 
+	const std::string ShadowMap::DEPTH_MAP_NAME = "depth map";
+	const char* ShadowMap::DEPTH_MAP_VERT = "DepthShader.vert";
+	const char* ShadowMap::DEPTH_MAP_FRAG = "DepthShader.frag";
+	const char* ShadowMap::CUBE_MAP_VERT = "DepthShaderCube.vert";
+	const char* ShadowMap::CUBE_MAP_GEOM = "DepthShaderCube.geom";
+	const char* ShadowMap::CUBE_MAP_FRAG = "DepthShaderCube.frag";
+
 	// // ----- CONSTRUCTOR ----- // //
 	ShadowMap::ShadowMap(LightNode* lightNode) :
 		m_camera_node{ std::string(lightNode->name() + " shadow"), lightNode->light()->camera() },
@@ -23,11 +30,11 @@ namespace gl_engine
 	{
 		m_camera_node.setParent(lightNode);
 		lightNode->set_shadowMap(this);
-		if (lightNode->light()->type() == DirectionalLight::TYPE || lightNode->light()->type() == SpotLight::TYPE)
+		if (is_directional())
 		{
 			init_directional_shadowMap();
 		}
-		else if (lightNode->light()->type() == PointLight::TYPE)
+		else if (is_point())
 		{
 			init_point_shadowMap();
 		}
@@ -37,6 +44,7 @@ namespace gl_engine
 	// // ----- SHADOW MAP ----- // //
 	void ShadowMap::init_directional_shadowMap()
 	{
+		m_texture = Texture{ GL_TEXTURE_2D_ARRAY };
 		// Initialize ortho cam
 
 		m_camera_node.camera()->setClipNear(0.1f);
@@ -71,13 +79,41 @@ namespace gl_engine
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		// Create depth shader
-		m_depthMaterial = Material("Depth shader", "DepthShader.vert", "DepthShader.frag");
+		m_depthMaterial = Material(DEPTH_MAP_NAME, DEPTH_MAP_VERT, DEPTH_MAP_FRAG);
 		m_texture.unbind();
 	}
 
 	void ShadowMap::init_point_shadowMap()
 	{
-		//
+		m_texture = Texture(GL_TEXTURE_CUBE_MAP);
+
+		m_texture.set_width(SHADOW_WIDTH);
+		m_texture.set_height(SHADOW_HEIGHT);
+		m_texture.set_format(GL_DEPTH_COMPONENT);
+		m_texture.set_type(GL_FLOAT);
+		m_texture.set_minFilter(GL_NEAREST);
+		m_texture.set_magFilter(GL_NEAREST);
+		m_texture.set_mipmap(false);
+		m_texture.set_st_wrap(GL_CLAMP_TO_EDGE);
+
+		// Process texture
+		m_texture.process();
+
+		// Create frame buffer object
+		glGenFramebuffers(1, &m_depthMap_FBO);
+
+		m_texture.bind();
+
+		glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_texture.id(), 0);
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);
+		check_bound_framebuffer();
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		m_depthMaterial = Material(DEPTH_MAP_NAME, CUBE_MAP_VERT, CUBE_MAP_GEOM, CUBE_MAP_FRAG);
+		m_texture.unbind();
 	}
 
 	void ShadowMap::render_shadowMap(std::map<std::string, Node*>& root_nodes)
@@ -88,6 +124,21 @@ namespace gl_engine
 		glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
+		if (is_directional())
+		{
+			render_directional_shadowMap(root_nodes);
+		}
+		else if (is_point())
+		{
+			render_point_shadowMap(root_nodes);
+		}
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		m_texture.unbind();
+	}
+
+	void ShadowMap::render_directional_shadowMap(std::map<std::string, Node*>& root_nodes)
+	{
 		std::string type = m_lightNode->light()->type();
 		std::string index = std::to_string(m_lightNode->shaderIndex());
 
@@ -102,9 +153,25 @@ namespace gl_engine
 				meshNode->draw_material(&m_depthMaterial);
 			}
 		}
+	}
 
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		m_texture.unbind();
+	void ShadowMap::render_point_shadowMap(std::map<std::string, Node*>& root_nodes)
+	{
+		// !!! Use a camera node for this
+		GLfloat aspect = (GLfloat)SHADOW_WIDTH / (GLfloat)SHADOW_HEIGHT;
+		GLfloat near = 1.0f;
+		GLfloat far = 25.0f; glm::mat4 shadow_projection = glm::perspective(glm::radians(90.0f), aspect, near, far);
+
+		std::vector<glm::mat4> shadow_transforms;
+		glm::vec3 position = m_lightNode->worldPosition();
+
+		shadow_transforms.push_back(shadow_projection * glm::lookAt(position, position + glm::vec3(+1.0f, +0.0f, +0.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
+		shadow_transforms.push_back(shadow_projection * glm::lookAt(position, position + glm::vec3(-1.0f, +0.0f, +0.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
+		shadow_transforms.push_back(shadow_projection * glm::lookAt(position, position + glm::vec3(+0.0f, +1.0f, +0.0f), glm::vec3(+0.0f, +0.0f, +1.0f)));
+		shadow_transforms.push_back(shadow_projection * glm::lookAt(position, position + glm::vec3(+0.0f, -1.0f, +0.0f), glm::vec3(+0.0f, +0.0f, -1.0f)));
+		shadow_transforms.push_back(shadow_projection * glm::lookAt(position, position + glm::vec3(+0.0f, +0.0f, +1.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
+		shadow_transforms.push_back(shadow_projection * glm::lookAt(position, position + glm::vec3(+0.0f, +0.0f, -1.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
+
 	}
 
 	void ShadowMap::init_materials(std::vector<Material*>& materials)
@@ -165,6 +232,16 @@ namespace gl_engine
 			printf("\n");
 		}
 		return true;
+	}
+
+	bool ShadowMap::is_directional()
+	{
+		return m_lightNode->light()->type() == DirectionalLight::TYPE || m_lightNode->light()->type() == SpotLight::TYPE;
+	}
+
+	bool ShadowMap::is_point()
+	{
+		return m_lightNode->light()->type() == PointLight::TYPE;
 	}
 
 	// // ----- SETTERS ----- // //
