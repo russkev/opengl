@@ -167,6 +167,15 @@
     <None Include="..\data\DepthShader.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="..\data\DepthShaderCube.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\data\DepthShaderCube.geom">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\data\DepthShaderCube.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera\Camera.h">

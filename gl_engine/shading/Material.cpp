@@ -5,7 +5,11 @@
 namespace gl_engine
 {
 	Material::Material(const std::string name, const char* vertexShader, const char* fragmentShader) :
-		Shader(name, vertexShader, fragmentShader)
+		Shader{ name, vertexShader, fragmentShader }
+	{}
+
+	Material::Material(const std::string name, const char* vertexShader, const char* geometryShader, const char* fragmentShader) :
+		Shader{ name, vertexShader, geometryShader, fragmentShader }
 	{}
 
 	void Material::addTexture(const std::string& uniform_name, Texture* texture)

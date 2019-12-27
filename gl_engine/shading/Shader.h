@@ -52,6 +52,7 @@ namespace gl_engine
 	public:
 		Shader() {};
 		Shader(const std::string& name, const char* vertexShader, const char* fragmentShader);
+		Shader(const std::string& name, const char* vertexShader, const char* geometryShader, const char* fragmentShader);
 
 		// // ----- GENERAL METHODS ----- // //
 

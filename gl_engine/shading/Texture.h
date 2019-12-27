@@ -34,6 +34,7 @@ namespace gl_engine
 		GLenum			m_mag_filter = GL_LINEAR;
 		GLenum			m_wrap_s = GL_REPEAT;
 		GLenum			m_wrap_t = GL_REPEAT;
+		GLenum			m_wrap_r = GL_REPEAT;
 		GLfloat			m_border_color[4] = { 1.0f, 0.0f, 0.0f, 0.0f };
 
 		bool			m_generate_mipmap = true;
@@ -58,6 +59,7 @@ namespace gl_engine
 	private:
 		void process_uniform2D();
 		void process_uniform2D_array();
+		void process_cubeMap();
 
 		// // ----- GETTERS ----- // //
 	public:

@@ -187,6 +187,9 @@
     <None Include="..\data\cShader.vert" />
     <None Include="..\data\DepthShader.frag" />
     <None Include="..\data\DepthShader.vert" />
+    <None Include="..\data\DepthShaderCube.frag" />
+    <None Include="..\data\DepthShaderCube.geom" />
+    <None Include="..\data\DepthShaderCube.vert" />
     <None Include="..\data\LightShader.frag" />
     <None Include="..\data\LightShader.vert" />
     <None Include="..\data\SimpleFragmentShader.frag" />
