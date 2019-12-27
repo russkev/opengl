@@ -25,6 +25,11 @@ in TangentSpace
 	vec3 spotLight_position[NUM_LIGHTS];
 	vec3 frag_position;
 } tangentSpace;
+
+in PointLight_Space
+{
+	vec4 position[NUM_LIGHTS];
+} pointLight_space;
 	
 in SpotLight_Space
 {
@@ -48,14 +53,13 @@ struct Material
 };
 uniform Material material;
 
-//uniform sampler2DArray depthMap;
-//uniform sampler2D test_sampler;
-
 struct Point_Light
 {
 	vec3 position;
 	float brightness;
 	vec3 color;
+	sampler2DArray depth;
+	mat4 projection;
 };
 uniform Point_Light point_light[NUM_LIGHTS];
 
@@ -367,20 +371,22 @@ void main ()
 	init_camSpace();
 	init_tangentSpace();
 
-	//float shadowMap_tex = clamp(create_shadow(), 0.0, 1.0);
-//	float shadowMap_tex = 1.0;
-
 
 	// Point lights
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
+		float temp_shadow = create_shadow(
+			pointLight_space.position[i], 
+			tangentSpace_pointLight_direction[i],
+			point_light[i].depth);
 		float temp_attenuation = attenuation(point_light[i].position);
 
 		diffuse_out += 
 			diffuse_point_worldSpace(i) *
 			point_light[i].brightness * point_light[i].brightness *
 			point_light[i].color * 
-			temp_attenuation;
+			temp_attenuation * 
+			temp_shadow;
 
 		specular_out +=
 			specular_point_worldSpace(i) * 

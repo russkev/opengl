@@ -10,5 +10,5 @@ uniform Transform transform;
 
 void main()
 {
-	gl_position = model * vec4(aPos, 1.0);
+	gl_Position = transform.modelToWorld * vec4(aPos, 1.0);
 }

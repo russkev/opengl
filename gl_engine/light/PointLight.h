@@ -7,6 +7,7 @@
 
 #include "../shading/LoadShader.h"
 #include "../mesh/Sphere.h"
+#include "../camera/FreeCamera.h"
 
 namespace gl_engine
 {
@@ -19,12 +20,14 @@ namespace gl_engine
 	struct PointLight : public Light
 	{
 		static const std::string TYPE;
+		static constexpr GLfloat CAMERA_ANGLE = 90.0f;
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
 		float m_radius = 0.5f;
 		Mesh m_light_mesh;
 		Shader m_shader;
+		FreeCamera m_camera;
 
 		// // ----- CONSTRUCTORS ----- // //
 	public:
@@ -37,6 +40,7 @@ namespace gl_engine
 
 		Mesh* mesh() override;
 		Shader* shader() override;
+		Camera* camera() override;
 
 		// // ----- SETTERS ----- // //	
 		void setRadius(const GLfloat radius);

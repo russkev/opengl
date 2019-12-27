@@ -8,7 +8,7 @@
 #include "Material.h"
 #include "Texture.h"
 #include "../camera/Camera.h"
-#include "../camera/OrthoCamera.h"
+//#include "../camera/OrthoCamera.h"
 #include "../node/CameraNode.h"
 
 // // ----- FORWARD DECLERATION ----- // //
@@ -38,6 +38,10 @@ namespace gl_engine
 		static const char* CUBE_MAP_VERT;
 		static const char* CUBE_MAP_GEOM;
 		static const char* CUBE_MAP_FRAG;
+
+		static const std::string SHADOW;
+		static const std::string TRANSFORMS;
+		static const std::string FAR_PLANE;
 
 
 		// // ----- MEMBER VARIABLES ----- // //

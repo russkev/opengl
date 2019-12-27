@@ -151,6 +151,7 @@ int main(int, char**)
 	gl_engine::PointLight pointLight{ 1.0f, { 0.0f, 0.0f, 0.0f } };
 	pointLight.setBrightness(2.1f);
 	pointLight.setColor(glm::vec3(1.0, 0.7, 0.2));
+	//pointLight.setRadius(0.1f);
 	pointLight.disable_mesh();
 	gl_engine::LightNode pointLight_node{ "Point Light 1", &pointLight };
 	pointLight_node.setPosition({ -6.0f, 1.2f, 0.0f });
@@ -179,8 +180,9 @@ int main(int, char**)
 	spotLight1.set_outerAngle(33.0f);
 
 	// Shadow map
-	gl_engine::ShadowMap shadowMap_spot1{ &spotLight_node1 };
-	gl_engine::ShadowMap shadowMap_directional1{ &directionalLight_node1 };
+	//gl_engine::ShadowMap shadowMap_spot1{ &spotLight_node1 };
+	//gl_engine::ShadowMap shadowMap_directional1{ &directionalLight_node1 };
+	gl_engine::ShadowMap shadowMap_point1{ &pointLight_node };
 
 	// Null node 1
 	gl_engine::Node lightRotate1{ "light rotate 01" };
