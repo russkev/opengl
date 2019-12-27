@@ -15,6 +15,7 @@ namespace gl_engine
 	{
 		setBrightness(brightness);
 		setColor(color);
+		m_camera.setAngleOfView(CAMERA_ANGLE);
 	}
 
 
@@ -33,9 +34,15 @@ namespace gl_engine
 	{
 		return &m_light_mesh;
 	}
+
 	Shader* PointLight::shader()
 	{
 		return &m_shader;
+	}
+
+	Camera* PointLight::camera()
+	{
+		return &m_camera;
 	}
 
 	// // ----- SETTERS ----- // //

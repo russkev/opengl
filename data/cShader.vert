@@ -85,6 +85,11 @@ out TangentSpace
 	vec3 frag_position;
 } tangentSpace;
 
+out PointLight_Space
+{
+	vec4 position[NUM_LIGHTS];
+} pointLight_space;
+
 out SpotLight_Space
 {
 	vec4 position[NUM_LIGHTS];

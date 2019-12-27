@@ -59,6 +59,10 @@ namespace gl_engine
 		{
 			process_uniform2D_array();
 		}
+		else if (m_target == GL_TEXTURE_CUBE_MAP)
+		{
+			process_cubeMap();
+		}
 
 		glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, m_min_filter);
 		glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, m_mag_filter);
