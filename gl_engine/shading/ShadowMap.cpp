@@ -25,7 +25,7 @@ namespace gl_engine
 
 	const std::string ShadowMap::SHADOW = "shadow";
 	const std::string ShadowMap::TRANSFORMS = "transforms";
-	const std::string ShadowMap::FAR_PLANE = "far_plane";
+	const std::string ShadowMap::FAR_PLANE = "camera.far_plane";
 
 	// // ----- CONSTRUCTOR ----- // //
 	ShadowMap::ShadowMap(LightNode* lightNode) :
@@ -138,29 +138,27 @@ namespace gl_engine
 		//-------------------------------------------
 		m_depthMaterial = Material(DEPTH_MAP_NAME, CUBE_MAP_VERT, CUBE_MAP_GEOM, CUBE_MAP_FRAG);
 		m_texture.unbind();
-
-		m_texture.bind();
 	}
 
 	void ShadowMap::render_shadowMap(std::map<std::string, Node*>& root_nodes)
 	{
-		//m_texture.bind();
+		m_texture.bind();
 
-		//glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-		//glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
-		//glClear(GL_DEPTH_BUFFER_BIT);
+		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+		glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
+		glClear(GL_DEPTH_BUFFER_BIT);
 
-		//if (is_directional())
-		//{
-		//	render_directional_shadowMap(root_nodes);
-		//}
-		//else if (is_point())
-		//{
-		//	render_point_shadowMap(root_nodes);
-		//}
+		if (is_directional())
+		{
+			render_directional_shadowMap(root_nodes);
+		}
+		else if (is_point())
+		{
+			render_point_shadowMap(root_nodes);
+		}
 
-		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		//m_texture.unbind();
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		m_texture.unbind();
 	}
 
 	void ShadowMap::render_directional_shadowMap(std::map<std::string, Node*>& root_nodes)
@@ -188,6 +186,8 @@ namespace gl_engine
 		//GLfloat near = 1.0f;
 		//GLfloat far = 25.0f; 
 		//glm::mat4 shadow_projection = glm::perspective(glm::radians(90.0f), aspect, near, far);
+
+		m_depthMaterial.use();
 
 		std::vector<glm::mat4> shadow_transforms;
 		glm::vec3 position = m_lightNode->worldPosition();
@@ -226,9 +226,9 @@ namespace gl_engine
 				}
 				m_depthMaterial.setUniform(type + "." + LightNode::LIGHT_POSITION, m_lightNode->worldPosition());
 				m_depthMaterial.setUniform(FAR_PLANE, m_camera_node.camera()->clipFar());
+				meshNode->draw_material(&m_depthMaterial);
 			}
 		}
-
 	}
 
 	void ShadowMap::init_materials(std::vector<Material*>& materials)

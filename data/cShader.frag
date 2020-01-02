@@ -58,7 +58,7 @@ struct Point_Light
 	vec3 position;
 	float brightness;
 	vec3 color;
-	sampler2DArray depth;
+	samplerCube depth;
 	mat4 projection;
 };
 uniform Point_Light point_light[NUM_LIGHTS];
@@ -90,8 +90,6 @@ struct Camera
 {
 	vec3 position;
 };
-
-
 uniform Camera camera;
 
 // // OUTS // //
@@ -375,25 +373,25 @@ void main ()
 	// Point lights
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		float temp_shadow = create_shadow(
-			pointLight_space.position[i], 
-			tangentSpace_pointLight_direction[i],
-			point_light[i].depth);
+//		float temp_shadow = create_shadow(
+//			pointLight_space.position[i], 
+//			tangentSpace_pointLight_direction[i],
+//			point_light[i].depth);
 		float temp_attenuation = attenuation(point_light[i].position);
 
 		diffuse_out += 
 			diffuse_point_worldSpace(i) *
 			point_light[i].brightness * point_light[i].brightness *
 			point_light[i].color * 
-			temp_attenuation * 
-			temp_shadow;
+			temp_attenuation; //* 
+//			temp_shadow;
 
 		specular_out +=
 			specular_point_worldSpace(i) * 
 			point_light[i].brightness *  point_light[i].brightness *
 			material.specular * 
-			point_light[i].color * 
-			temp_attenuation;
+			point_light[i].color;// * 
+//			temp_attenuation;
 	}
 
 	// Directional lights

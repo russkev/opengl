@@ -28,6 +28,8 @@ struct Point_Light
 	vec3 position;
 	float brightness;
 	vec3 color;
+	samplerCube depth;
+	mat4 projection;
 };
 uniform Point_Light point_light[NUM_LIGHTS];
 
@@ -164,6 +166,7 @@ void send_lightSpaceCoordinates()
 	{
 		spotLight_space.position[i] = spot_light[i].projection * vec4(worldSpace.vertex_position, 1.0f);
 		directionalLight_space.position[i] = directional_light[i].projection * vec4(worldSpace.vertex_position, 1.0f);
+		pointLight_space.position[i] = point_light[i].projection * vec4(worldSpace.vertex_position, 1.0f);
 	}
 }
 
