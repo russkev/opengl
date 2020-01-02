@@ -19,7 +19,7 @@ void main()
 //	{
 //		gl_Position = shadow_transforms[i] * 0;
 //	}
-	for (int face = 0; face < NUM_FACES; face++)
+	for (int face = 0; face < NUM_FACES; ++face)
 	{
 		gl_Layer = face;
 		for(int i = 0; i < 3; i++)
