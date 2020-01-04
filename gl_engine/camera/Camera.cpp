@@ -11,13 +11,13 @@ namespace gl_engine
 		return m_dimensions;
 	}
 
-	const GLfloat& Camera::clipNear() const
+	const GLfloat& Camera::clip_near() const
 	{
-		return m_clipNear;
+		return m_clip_near;
 	}
-	const GLfloat& Camera::clipFar() const
+	const GLfloat& Camera::clip_far() const
 	{
-		return m_clipFar;
+		return m_clip_far;
 	}
 
 	const glm::vec3 Camera::position() const
@@ -30,49 +30,49 @@ namespace gl_engine
 		return m_transform;
 	}
 
-	glm::mat4 Camera::objectToCam_matrix()
+	glm::mat4 Camera::object_to_cam()
 	{
-		return transformToCam_matrix(*m_transform);
+		return transform_to_cam(*m_transform);
 	}
 
-	glm::mat4 Camera::objectToProjection_matrix()
+	glm::mat4 Camera::object_to_projection()
 	{
-		return transformToProjection_matrix(*m_transform);
+		return transform_to_projection(*m_transform);
 	}
 
-	glm::mat4 Camera::transformToProjection_matrix(const glm::mat4& transform)
+	glm::mat4 Camera::transform_to_projection(const glm::mat4& transform)
 	{
-		return camToProjection_matrix() * transformToCam_matrix(transform);
+		return cam_to_projection() * transform_to_cam(transform);
 	}
 
 
 	// // ----- SETTERS ----- // //
-	void Camera::setDimensions(glm::uvec2 dimensions)
+	void Camera::set_dimensions(glm::uvec2 dimensions)
 	{
 		m_dimensions = dimensions;
 	}
 
-	void Camera::setClipNear(GLfloat clipNear)
+	void Camera::set_clip_near(GLfloat clipNear)
 	{
-		m_clipNear = clipNear;
+		m_clip_near = clipNear;
 	}
 
-	void Camera::setClipFar(GLfloat clipFar)
+	void Camera::set_clip_far(GLfloat clipFar)
 	{
-		m_clipFar = clipFar;
+		m_clip_far = clipFar;
 	}
 
-	void Camera::setPosition(const glm::vec3& position)
+	void Camera::set_position(const glm::vec3& position)
 	{
 		VectorUtils::set_position(*m_transform, position);
 	}
 
-	void Camera::addPosition(const glm::vec3& position)
+	void Camera::add_position(const glm::vec3& position)
 	{
 		VectorUtils::add_position(*m_transform, position);
 	}
 
-	void Camera::registerTransform(glm::mat4* transform)
+	void Camera::register_transform(glm::mat4* transform)
 	{
 		m_transform = transform;
 	}

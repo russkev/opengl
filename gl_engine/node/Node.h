@@ -71,7 +71,7 @@ namespace gl_engine
 
 
 		// // ----- SETTERS ----- // //
-		virtual void setPosition(const glm::vec3&);
+		virtual void set_position(const glm::vec3&);
 		virtual void setRotation(const glm::vec3&);
 		virtual void setScale(const glm::vec3&);
 		virtual void setScale(const GLfloat scale);

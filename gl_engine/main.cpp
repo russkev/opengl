@@ -89,21 +89,21 @@ int main(int, char**)
 	// Target Camera
 	gl_engine::TargetCamera targetCam{};
 	gl_engine::CameraNode targetCam_node{ "Target Camera 1", &targetCam };
-	targetCam.setPosition({ 0.0f, 8.0f, 8.0f });
-	targetCam.setClipFar(1000.0f);
+	targetCam.set_position({ 0.0f, 8.0f, 8.0f });
+	targetCam.set_clip_far(1000.0f);
 
 	// Orthogonal Camera
 	gl_engine::OrthoCamera orthoCam{};
 	gl_engine::CameraNode orthoCam_node{ "Ortho Cam 1", &orthoCam };
-	orthoCam.setClipNear(0.001f);
-	orthoCam.setClipFar(100.0f);
-	orthoCam.setSides(-30.0f, 30.0f, -30.0f, 30.0f);
+	orthoCam.set_clip_near(0.001f);
+	orthoCam.set_clip_far(100.0f);
+	orthoCam.set_sides(-30.0f, 30.0f, -30.0f, 30.0f);
 
 	// Free Camera
 	gl_engine::FreeCamera freeCam{};
 	gl_engine::CameraNode freeCam_node{ "Free Cam 1", &freeCam };
-	freeCam.setClipNear(0.001f);
-	freeCam.setClipFar(1000.0f);
+	freeCam.set_clip_near(0.001f);
+	freeCam.set_clip_far(1000.0f);
 
 
 	// Shader 1
@@ -145,7 +145,7 @@ int main(int, char**)
 	//gl_engine::Mesh cube = gl_engine::Cube::createCube(5.0f);
 	//gl_engine::MeshNode cube_node{ "Cube 1", &cube, &cShadMat };
 	//cube_node.setParent(&freeCam_node);
-	//cube_node.setPosition({ 0.0f, 3.0f, 6.0f });
+	//cube_node.set_position({ 0.0f, 3.0f, 6.0f });
 
 	// Point Light 1
 	gl_engine::PointLight pointLight{ 1.0f, { 0.0f, 0.0f, 0.0f } };
@@ -154,18 +154,18 @@ int main(int, char**)
 	pointLight.setRadius(0.1f);
 	//pointLight.disable_mesh();
 	gl_engine::LightNode pointLight_node{ "Point Light 1", &pointLight };
-	pointLight_node.setPosition({ -6.0f, 1.2f, 0.0f });
+	pointLight_node.set_position({ -6.0f, 1.2f, 0.0f });
 
 	// Point Light 2
 	gl_engine::PointLight pointLight2{ 3.0f, { 0.2f, 0.1f, 1.0f } };
 	gl_engine::LightNode pointLight_node2{ "Point Light 2", &pointLight2 };
-	pointLight_node2.setPosition({ 0.0f, 4.0f, -5.0f });
+	pointLight_node2.set_position({ 0.0f, 4.0f, -5.0f });
 
 	// Directional Light 1
 	gl_engine::DirectionalLight directionalLight1{ 0.5f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
 	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
 	directionalLight_node1.setRotation({ 33.0f, 225.0f, 0.0f });
-	directionalLight_node1.setPosition({ 16.0f, 16.0f, 16.0f });
+	directionalLight_node1.set_position({ 16.0f, 16.0f, 16.0f });
 
 	directionalLight_node1.addChild(&freeCam_node);
 	directionalLight_node1.addChild(&orthoCam_node);
@@ -175,14 +175,14 @@ int main(int, char**)
 	gl_engine::SpotLight spotLight1{ 10.0f, { 1.0f, 0.0f, 0.0f } };
 	gl_engine::LightNode spotLight_node1{ "Spot Light 1", &spotLight1 };
 	spotLight_node1.setRotation({ 60.0f, 0.0f, 0.0f });
-	spotLight_node1.setPosition({ -3.0f, 10.0f, -2.0f });
+	spotLight_node1.set_position({ -3.0f, 10.0f, -2.0f });
 	spotLight1.set_innerAngle(30.0f);
 	spotLight1.set_outerAngle(33.0f);
 
 	// Spot Light 2
 	gl_engine::SpotLight spotLight2{ 14.0f, {0.0f, 0.0f, 1.0f } };
 	gl_engine::LightNode spotLight_node2{ "Spot Light 2", &spotLight2 };
-	spotLight_node2.setPosition({ 6.0f, 12.0f, 2.0f});
+	spotLight_node2.set_position({ 6.0f, 12.0f, 2.0f});
 	spotLight_node2.setRotation({ 50.0f, -100.0f, 0.0f });
 	spotLight2.set_innerAngle(25.0f);
 	spotLight2.set_outerAngle(70.0f);
@@ -201,7 +201,7 @@ int main(int, char**)
 	// Null node 2
 	gl_engine::Node lightRotate2{ "light rotate 02" };
 	lightRotate2.addChild(&lightRotate1);
-	lightRotate2.setPosition({ 2.0, 0.0, 0.0 });
+	lightRotate2.set_position({ 2.0, 0.0, 0.0 });
 
 	// Axis arrows
 	gl_engine::Mesh axis_arrow{ gl_engine::Arrow::createArrow(20) };
@@ -217,9 +217,9 @@ int main(int, char**)
 	axis_arrow_x_node.setScale(0.05f);
 	axis_arrow_y_node.setScale(0.05f);
 	axis_arrow_z_node.setScale(0.05f);
-	axis_arrow_x_node.setPosition({ 1.0f, 0.0f, 0.0f });
-	axis_arrow_y_node.setPosition({ 0.0f, 1.0f, 0.05f });
-	axis_arrow_z_node.setPosition({ 0.0f, 0.0f, 1.0f });
+	axis_arrow_x_node.set_position({ 1.0f, 0.0f, 0.0f });
+	axis_arrow_y_node.set_position({ 0.0f, 1.0f, 0.05f });
+	axis_arrow_z_node.set_position({ 0.0f, 0.0f, 1.0f });
 	axis_arrow_x_node.setRotation({ 0.0f, 90.0f, 0.0f });
 	axis_arrow_y_node.setRotation({ -90.0f, 0.0f, 0.0f });
 
@@ -230,9 +230,9 @@ int main(int, char**)
 	render.addNode(&plane_node);
 	render.addNode(&pointLight_node);
 	render.addNode(&pointLight_node2);
-	//render.addNode(&directionalLight_node1);
-	//render.addNode(&spotLight_node1);
-	//render.addNode(&spotLight_node2);
+	render.addNode(&directionalLight_node1);
+	render.addNode(&spotLight_node1);
+	render.addNode(&spotLight_node2);
 	//render.addNode(&axis_arrow_x_node);
 	//render.addNode(&axis_arrow_y_node);
 	//render.addNode(&axis_arrow_z_node);

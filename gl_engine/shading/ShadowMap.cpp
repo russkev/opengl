@@ -51,8 +51,8 @@ namespace gl_engine
 		m_texture = Texture{ GL_TEXTURE_2D_ARRAY };
 
 		// Initialize cam
-		m_camera_node.camera()->setClipNear(0.1f);
-		m_camera_node.camera()->setClipFar(100.0f);
+		m_camera_node.camera()->set_clip_near(0.1f);
+		m_camera_node.camera()->set_clip_far(100.0f);
 
 		// Initialize texture settings
 		m_texture.set_width(SHADOW_WIDTH);
@@ -92,19 +92,8 @@ namespace gl_engine
 		m_texture = Texture{ GL_TEXTURE_CUBE_MAP };
 
 		// Initialize cam
-		m_camera_node.camera()->setClipNear(1.0f);
-		m_camera_node.camera()->setClipFar(25.0f);
-
-		//// Initialize texture settings
-		//m_texture.set_width(SHADOW_WIDTH);
-		//m_texture.set_height(SHADOW_HEIGHT);
-		//m_texture.set_internalFormat(GL_DEPTH_COMPONENT);
-		//m_texture.set_format(GL_DEPTH_COMPONENT);
-		//m_texture.set_type(GL_FLOAT);
-		//m_texture.set_minFilter(GL_NEAREST);
-		//m_texture.set_magFilter(GL_NEAREST);
-		//m_texture.set_mipmap(false);
-		//m_texture.set_st_wrap(GL_CLAMP_TO_EDGE);
+		m_camera_node.camera()->set_clip_near(1.0f);
+		m_camera_node.camera()->set_clip_far(25.0f);
 
 		// Initialize texture settings
 		m_texture.set_width(SHADOW_WIDTH);
@@ -126,7 +115,6 @@ namespace gl_engine
 		m_texture.bind();
 
 		glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
-		//glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_texture.id(), 0, 0);
 
 		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_texture.id(), 0);
 		glDrawBuffer(GL_NONE);
@@ -181,33 +169,27 @@ namespace gl_engine
 
 	void ShadowMap::render_point_shadowMap(std::map<std::string, Node*>& root_nodes)
 	{
-		// !!! Use a camera node for this
-		//GLfloat aspect = (GLfloat)SHADOW_WIDTH / (GLfloat)SHADOW_HEIGHT;
-		//GLfloat near = 1.0f;
-		//GLfloat far = 25.0f; 
-		//glm::mat4 shadow_projection = glm::perspective(glm::radians(90.0f), aspect, near, far);
-
 		m_depthMaterial.use();
 
 		std::vector<glm::mat4> shadow_transforms;
 		glm::vec3 position = m_lightNode->worldPosition();
 
-		shadow_transforms.push_back(m_camera_node.camera()->camToProjection_matrix() * 
+		shadow_transforms.push_back(m_camera_node.camera()->cam_to_projection() * 
 			glm::lookAt(position, position + glm::vec3(+1.0f, +0.0f, +0.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
 
-		shadow_transforms.push_back(m_camera_node.camera()->camToProjection_matrix() * 
+		shadow_transforms.push_back(m_camera_node.camera()->cam_to_projection() * 
 			glm::lookAt(position, position + glm::vec3(-1.0f, +0.0f, +0.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
 
-		shadow_transforms.push_back(m_camera_node.camera()->camToProjection_matrix() * 
+		shadow_transforms.push_back(m_camera_node.camera()->cam_to_projection() * 
 			glm::lookAt(position, position + glm::vec3(+0.0f, +1.0f, +0.0f), glm::vec3(+0.0f, +0.0f, +1.0f)));
 
-		shadow_transforms.push_back(m_camera_node.camera()->camToProjection_matrix() * 
+		shadow_transforms.push_back(m_camera_node.camera()->cam_to_projection() * 
 			glm::lookAt(position, position + glm::vec3(+0.0f, -1.0f, +0.0f), glm::vec3(+0.0f, +0.0f, -1.0f)));
 
-		shadow_transforms.push_back(m_camera_node.camera()->camToProjection_matrix() * 
+		shadow_transforms.push_back(m_camera_node.camera()->cam_to_projection() * 
 			glm::lookAt(position, position + glm::vec3(+0.0f, +0.0f, +1.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
 
-		shadow_transforms.push_back(m_camera_node.camera()->camToProjection_matrix() * 
+		shadow_transforms.push_back(m_camera_node.camera()->cam_to_projection() * 
 			glm::lookAt(position, position + glm::vec3(+0.0f, +0.0f, -1.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
 
 		for (auto const& node_pair : root_nodes)
@@ -225,7 +207,7 @@ namespace gl_engine
 					m_depthMaterial.setUniform(SHADOW + "[" + std::to_string(i) + "]." + TRANSFORMS, shadow_transforms.at(i));
 				}
 				m_depthMaterial.setUniform(type + "." + LightNode::LIGHT_POSITION, m_lightNode->worldPosition());
-				m_depthMaterial.setUniform(type + "." + FAR_PLANE, m_camera_node.camera()->clipFar());
+				m_depthMaterial.setUniform(type + "." + FAR_PLANE, m_camera_node.camera()->clip_far());
 				meshNode->draw_material(&m_depthMaterial);
 			}
 		}
@@ -241,7 +223,7 @@ namespace gl_engine
 			material->addTexture(type + "[" + index + "]." + DEPTH_MAP, &m_texture);
 			if (is_point())
 			{
-				material->setUniform(type + "[" + index + "]." + FAR_PLANE, m_camera_node.camera()->clipFar());
+				material->setUniform(type + "[" + index + "]." + FAR_PLANE, m_camera_node.camera()->clip_far());
 			}
 		}
 	}

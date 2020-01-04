@@ -23,14 +23,14 @@ namespace gl_engine
 	Renderer::Renderer(CameraNode* cameraNode) :
 		m_cameraNode(cameraNode), m_dimensions(cameraNode->camera()->dimensions())
 	{
-		m_cameraNode->camera()->setDimensions(m_dimensions);
+		m_cameraNode->camera()->set_dimensions(m_dimensions);
 		init_settings();
 	}
 
 	Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
 		m_cameraNode(camera), m_dimensions(dimensions)
 	{
-		m_cameraNode->camera()->setDimensions(dimensions);
+		m_cameraNode->camera()->set_dimensions(dimensions);
 		init_settings();
 	}
 

@@ -15,7 +15,7 @@ namespace gl_engine
 	CameraNode::CameraNode(const std::string name, Camera* camera) :
 		Node(name), m_camera(camera)
 	{
-		m_camera->registerTransform(&Node::localTransform());
+		m_camera->register_transform(&Node::localTransform());
 	}
 
 	void CameraNode::update()
@@ -36,19 +36,19 @@ namespace gl_engine
 		return glm::vec3(worldTransform() * glm::vec4(m_camera->position(), 1.0f));
 	}
 
-	void CameraNode::setPosition(const glm::vec3& position)
+	void CameraNode::set_position(const glm::vec3& position)
 	{
-		Node::setPosition(position);
+		Node::set_position(position);
 	}
 
 	// // ----- GETTERS ----- // //
 	glm::mat4 CameraNode::worldToCam_matrix()
 	{
-		return  m_camera->objectToCam_matrix() * Node::worldTransform();
+		return  m_camera->object_to_cam() * Node::worldTransform();
 	}
 
 	glm::mat4 CameraNode::worldToProjection_matrix()
 	{
-		return m_camera->transformToProjection_matrix(worldTransform());
+		return m_camera->transform_to_projection(worldTransform());
 	}
 } // namespace gl_engine
