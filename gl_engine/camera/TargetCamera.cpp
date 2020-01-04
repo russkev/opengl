@@ -14,8 +14,8 @@ namespace gl_engine
 {
 	const glm::vec3 TargetCamera::UP_AXIS = { 0.0f, 1.0f, 0.0f };
 
-	const float TargetCamera::MOVE_SPEED = 0.5f;
-	const float TargetCamera::MOUSE_MOVE_SPEED = 0.05f;
+	const float TargetCamera::MOVE_SPEED = 0.005f;
+	//const float TargetCamera::MOUSE_MOVE_SPEED = 0.05f;
 	const float TargetCamera::ROTATION_SPEED = 0.007f;
 
 	TargetCamera::TargetCamera()
@@ -25,8 +25,8 @@ namespace gl_engine
 	void TargetCamera::update()
 	{
 
-		static const auto cMoveSpeed = glm::vec3(0.02f, 0.01f, 0.1f);
-		static const auto cRotateSpeed = glm::vec2(0.01f, 0.01f);
+		//static const auto cMoveSpeed = glm::vec3(0.02f, 0.01f, 0.1f);
+		//static const auto cRotateSpeed = glm::vec2(0.01f, 0.01f);
 
 		auto const keyboardState = SDL_GetKeyboardState(nullptr);
 		auto mouseDelta = glm::ivec2();
@@ -50,108 +50,108 @@ namespace gl_engine
 		}
 		if (keyboardState[SDL_SCANCODE_F] || keyboardState[SDL_SCANCODE_Z])
 		{
-			focus(m_focusTarget);
+			focus(m_focus_target);
 		}
-		moveRel(axisDelta * cMoveSpeed);
-		rotateRel(rotateDelta * cRotateSpeed);
+		move_relative(axisDelta * MOVE_SPEED);
+		rotate_relative(rotateDelta * ROTATION_SPEED);
 	}
 
-	void TargetCamera::moveRel(const glm::vec3& mouseDelta)
+	void TargetCamera::move_relative(const glm::vec3& mouse_delta)
 	{
 		glm::vec3 positionDelta =
-			-m_camRight * mouseDelta.x
-			+ m_camUp * mouseDelta.y
-			+ m_viewDirection * mouseDelta.z;
+			-m_cam_right * mouse_delta.x
+			+ m_cam_up * mouse_delta.y
+			+ m_view_direction * mouse_delta.z;
 
-		Camera::addPosition(positionDelta);
-		m_lookTarget += positionDelta;
+		Camera::add_position(positionDelta);
+		m_look_target += positionDelta;
 	}
 
-	void TargetCamera::rotateRel(const glm::vec2& rotateDelta)
+	void TargetCamera::rotate_relative(const glm::vec2& rotateDelta)
 	{
-		glm::mat3 r_pitch = (glm::mat3)glm::rotate(glm::mat4(1.0f), rotateDelta.y, m_camRight);
-		glm::mat3 r_yaw = (glm::mat3)glm::rotate(glm::mat4(1.0f), -rotateDelta.x, UP_AXIS);
+		glm::mat3 pitch = (glm::mat3)glm::rotate(glm::mat4(1.0f), rotateDelta.y, m_cam_right);
+		glm::mat3 yaw = (glm::mat3)glm::rotate(glm::mat4(1.0f), -rotateDelta.x, UP_AXIS);
 
-		Camera::addPosition(-m_lookTarget);
-		Camera::setPosition(r_pitch * r_yaw * Camera::position());
-		Camera::addPosition(m_lookTarget);
+		Camera::add_position(-m_look_target);
+		Camera::set_position(pitch * yaw * Camera::position());
+		Camera::add_position(m_look_target);
 
-		m_viewDirection = VectorUtils::extract_position(*Camera::transform());
-		m_camRight = r_yaw * m_camRight;
-		m_camUp = cross(m_camRight, m_viewDirection);
+		m_view_direction = VectorUtils::extract_position(*Camera::transform());
+		m_cam_right = yaw * m_cam_right;
+		m_cam_up = cross(m_cam_right, m_view_direction);
 
-		//printData(rotateDelta);
+		//print_data(rotate_delta);
 	}
 
-	void TargetCamera::printData(const glm::vec2& rotateDelta)
+	void TargetCamera::print_data(const glm::vec2& rotate_delta)
 	{
 		glm::vec3 position = VectorUtils::extract_position(*Camera::transform());
-		if (rotateDelta.y != 0) {
-			std::cout << "rotateDelta,     y: " << rotateDelta.y << "\n";
-			std::cout << "rotateDelta, sin y: " << sin(rotateDelta.y) << "\n";
-			std::cout << "viewDirection     : (" << m_viewDirection.x << ", " << m_viewDirection.y << ", " << m_viewDirection.z << ")\n";
-			std::cout << "strafeDirection   : (" << m_camRight.x << ", " << m_camRight.y << ", " << m_camRight.z << ")\n";
-			std::cout << "camUpDirection    : (" << m_camUp.x << ", " << m_camUp.y << ", " << m_camUp.z << ")\n";
+		if (rotate_delta.y != 0) {
+			std::cout << "rotate_delta,     y: " << rotate_delta.y << "\n";
+			std::cout << "rotate_delta, sin y: " << sin(rotate_delta.y) << "\n";
+			std::cout << "view_direction     : (" << m_view_direction.x << ", " << m_view_direction.y << ", " << m_view_direction.z << ")\n";
+			std::cout << "strafeDirection   : (" << m_cam_right.x << ", " << m_cam_right.y << ", " << m_cam_right.z << ")\n";
+			std::cout << "camUpDirection    : (" << m_cam_up.x << ", " << m_cam_up.y << ", " << m_cam_up.z << ")\n";
 			std::cout << "position          : (" << position.x << ", " << position.y << ", " << position.z << ")\n";
-			std::cout << "lookTarget        : (" << m_lookTarget.x << ", " << m_lookTarget.y << ", " << m_lookTarget.z << ")\n";
+			std::cout << "lookTarget        : (" << m_look_target.x << ", " << m_look_target.y << ", " << m_look_target.z << ")\n";
 			std::cout << "----------------------------\n";
 		}
 	}
 
-	void TargetCamera::focus(const glm::vec3& focusTarget)
+	void TargetCamera::focus(const glm::vec3& focus_target)
 	{
-		m_lookTarget = focusTarget;
+		m_look_target = focus_target;
 	}
 
 	// // ----- GETTERS ----- // //
 
-	glm::mat4 TargetCamera::transformToCam_matrix(const glm::mat4& transform)
+	glm::mat4 TargetCamera::transform_to_cam(const glm::mat4& transform)
 	{
 		glm::vec3 position = VectorUtils::extract_position(transform);
-		return glm::lookAt(position, m_lookTarget, m_camUp);
+		return glm::lookAt(position, m_look_target, m_cam_up);
 	}
 
-	glm::mat4 TargetCamera::camToProjection_matrix()
+	glm::mat4 TargetCamera::cam_to_projection()
 	{
 		return glm::perspective(
-			glm::radians(m_angleOfView), 
+			glm::radians(m_angle_of_view), 
 			(GLfloat)Camera::dimensions().x / (GLfloat)Camera::dimensions().y, 
-			Camera::clipNear(), 
-			Camera::clipFar());
+			Camera::clip_near(), 
+			Camera::clip_far());
 	}
 
 	// // ----- SETTERS ----- // //
-	void TargetCamera::setViewDirection(glm::vec3 viewDirection)
+	void TargetCamera::set_view_direction(glm::vec3 view_direction)
 	{
-		m_viewDirection = viewDirection;
-		setLookTarget();
-		setCamUp();
+		m_view_direction = view_direction;
+		set_look_target();
+		set_cam_up();
 	}
 
-	void TargetCamera::setCamRight(glm::vec3 camRight)
+	void TargetCamera::set_cam_right(glm::vec3 cam_right)
 	{
-		m_camRight = camRight;
-		setLookTarget();
-		setCamUp();
+		m_cam_right = cam_right;
+		set_look_target();
+		set_cam_up();
 	}
 
-	void TargetCamera::setAngleOfView(GLfloat angleOfView)
+	void TargetCamera::set_angle_of_view(GLfloat angle_of_view)
 	{
-		m_angleOfView = angleOfView;
+		m_angle_of_view = angle_of_view;
 	}
 
-	void TargetCamera::setFocusTarget(const glm::vec3& target)
+	void TargetCamera::set_focus_target(const glm::vec3& target)
 	{
-		m_focusTarget = target;
+		m_focus_target = target;
 	}
 
-	void TargetCamera::setLookTarget()
+	void TargetCamera::set_look_target()
 	{
-		m_lookTarget = m_viewDirection + m_camRight;
+		m_look_target = m_view_direction + m_cam_right;
 	}
 
-	void TargetCamera::setCamUp()
+	void TargetCamera::set_cam_up()
 	{
-		m_camUp = glm::cross(m_viewDirection, m_camRight);
+		m_cam_up = glm::cross(m_view_direction, m_cam_right);
 	}
 } // namespace gl_engine

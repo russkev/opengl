@@ -37,7 +37,7 @@ namespace gl_engine
 		glm::mat4 worldToProjection_matrix();
 
 		// // ----- SETTERS ----- // //
-		void setPosition(const glm::vec3&) override;
+		void set_position(const glm::vec3&) override;
 	};
 } // namespace gl_engine
 #endif

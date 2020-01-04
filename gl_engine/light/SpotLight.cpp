@@ -82,6 +82,6 @@ namespace gl_engine
 
 	void SpotLight::set_cameraAngle()
 	{
-		m_camera.setAngleOfView(m_outerAngle * 2);
+		m_camera.set_angle_of_view(m_outerAngle * 2);
 	}
 } // namespace gl_engine

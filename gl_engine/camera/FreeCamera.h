@@ -15,7 +15,7 @@ namespace gl_engine
 	private:
 		static const float MOVE_SPEED;
 
-		GLfloat m_angleOfView = 60.0f;
+		GLfloat m_angle_of_view = 60.0f;
 
 		// // ----- CONSTRUCTOR ----- // //
 	public:
@@ -25,11 +25,11 @@ namespace gl_engine
 		void update();
 
 		// // ----- GETTERS ----- // //
-		glm::mat4 transformToCam_matrix(const glm::mat4& transform) override;
-		glm::mat4 camToProjection_matrix() override;
+		glm::mat4 transform_to_cam(const glm::mat4& transform) override;
+		glm::mat4 cam_to_projection() override;
 
 		// // ----- SETTERS ----- // //
-		void setAngleOfView(GLfloat angle);
+		void set_angle_of_view(GLfloat angle);
 	};
 
 

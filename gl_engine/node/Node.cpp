@@ -147,7 +147,7 @@ namespace gl_engine
 	}
 
 	// // ----- SETTERS ----- // //
-	void Node::setPosition(const glm::vec3& position)
+	void Node::set_position(const glm::vec3& position)
 	{
 		m_local_transform[3] = glm::vec4(position, 1.0f);
 	}

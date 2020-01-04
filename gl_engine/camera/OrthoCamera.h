@@ -28,16 +28,16 @@ namespace gl_engine
 		void update();
 
 		// // ----- GETTERS ----- // //
-		glm::mat4 transformToCam_matrix(const glm::mat4& transform) override;
-		glm::mat4 camToProjection_matrix() override;
+		glm::mat4 transform_to_cam(const glm::mat4& transform) override;
+		glm::mat4 cam_to_projection() override;
 
 
 		// // ----- SETTERS ----- // //
-		void setSides(const GLfloat left, const GLfloat right, const GLfloat bottom, const GLfloat top);
-		void setLeft(const GLfloat left);
-		void setRight(const GLfloat right);
-		void setBottom(const GLfloat bottom);
-		void setTop(const GLfloat top);
+		void set_sides(const GLfloat left, const GLfloat right, const GLfloat bottom, const GLfloat top);
+		void set_left(const GLfloat left);
+		void set_right(const GLfloat right);
+		void set_bottom(const GLfloat bottom);
+		void set_top(const GLfloat top);
 	};
 } // namespace gl_engine
 #endif

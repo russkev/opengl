@@ -18,32 +18,32 @@ namespace gl_engine
 
 		if (keyboardState[SDL_SCANCODE_A])
 		{
-			Camera::addPosition(glm::vec3{ +MOVE_SPEED, 0, 0 });
+			Camera::add_position(glm::vec3{ +MOVE_SPEED, 0, 0 });
 		}
 		if (keyboardState[SDL_SCANCODE_D])
 		{
-			Camera::addPosition(glm::vec3{ -MOVE_SPEED, 0, 0 });
+			Camera::add_position(glm::vec3{ -MOVE_SPEED, 0, 0 });
 		}
 		if (keyboardState[SDL_SCANCODE_W])
 		{
-			Camera::addPosition(glm::vec3{ 0, 0, +MOVE_SPEED });
+			Camera::add_position(glm::vec3{ 0, 0, +MOVE_SPEED });
 		}
 		if (keyboardState[SDL_SCANCODE_S])
 		{
-			Camera::addPosition(glm::vec3{ 0, 0, -MOVE_SPEED });
+			Camera::add_position(glm::vec3{ 0, 0, -MOVE_SPEED });
 		}
 		if (keyboardState[SDL_SCANCODE_Q])
 		{
-			Camera::addPosition(glm::vec3{ 0, +MOVE_SPEED, 0});
+			Camera::add_position(glm::vec3{ 0, +MOVE_SPEED, 0});
 		}
 		if (keyboardState[SDL_SCANCODE_E])
 		{
-			Camera::addPosition(glm::vec3{ 0, -MOVE_SPEED, 0 });
+			Camera::add_position(glm::vec3{ 0, -MOVE_SPEED, 0 });
 		}
 	}
 
 	// // ----- GETTERS ----- // //
-	glm::mat4 FreeCamera::transformToCam_matrix(const glm::mat4& transform)
+	glm::mat4 FreeCamera::transform_to_cam(const glm::mat4& transform)
 	{
 		glm::vec3 position	= VectorUtils::extract_position(transform);
 		glm::vec3 right		= glm::vec3{ transform[0][0], transform[0][1], transform[0][2] };
@@ -53,18 +53,18 @@ namespace gl_engine
 		return glm::lookAt(position, position + forward, up);
 	}
 
-	glm::mat4 FreeCamera::camToProjection_matrix()
+	glm::mat4 FreeCamera::cam_to_projection()
 	{
 		return glm::perspective(
-			glm::radians(m_angleOfView), 
+			glm::radians(m_angle_of_view), 
 			(GLfloat)Camera::dimensions().x / (GLfloat)Camera::dimensions().y, 
-			Camera::clipNear(), 
-			Camera::clipFar());
+			Camera::clip_near(), 
+			Camera::clip_far());
 	}
 
 	// // ----- SETTERS ----- // //
-	void FreeCamera::setAngleOfView(GLfloat angle)
+	void FreeCamera::set_angle_of_view(GLfloat angle)
 	{
-		m_angleOfView = angle;
+		m_angle_of_view = angle;
 	}
 }

@@ -20,13 +20,13 @@ namespace gl_engine
 		static const float ROTATION_SPEED;
 
 		// // ----- MEMBER VARIABLES ----- // //
-		glm::vec3 m_viewDirection = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 m_camRight = { -1.0f, 0.0f, 0.0f };
-		glm::vec3 m_lookTarget = m_viewDirection + m_camRight;
-		glm::vec3 m_focusTarget = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 m_camUp = glm::cross(m_viewDirection, m_camRight);
-		glm::vec2 m_oldMousePosition;
-		GLfloat m_angleOfView = 60.0f; // In degrees
+		glm::vec3 m_view_direction = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 m_cam_right = { -1.0f, 0.0f, 0.0f };
+		glm::vec3 m_look_target = m_view_direction + m_cam_right;
+		glm::vec3 m_focus_target = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 m_cam_up = glm::cross(m_view_direction, m_cam_right);
+		glm::vec2 m_old_mouse_position;
+		GLfloat m_angle_of_view = 60.0f; // In degrees
 
 		// // ----- CONSTRUCTOR ----- // //
 	public:
@@ -34,25 +34,25 @@ namespace gl_engine
 
 		// // ----- CAMERA MOVEMENT ----- // //
 		void update() override;
-		void moveRel(const glm::vec3& moveDelta);
-		void rotateRel(const glm::vec2& rotateDelta);
-		void printData(const glm::vec2& rotateDelta);
+		void move_relative(const glm::vec3& moveDelta);
+		void rotate_relative(const glm::vec2& rotateDelta);
+		void print_data(const glm::vec2& rotateDelta);
 		void focus(const glm::vec3& focusTarget);
 
 		// // ----- GETTERS ----- // //
-		glm::mat4 transformToCam_matrix(const glm::mat4& transform) override;
-		glm::mat4 camToProjection_matrix() override;
+		glm::mat4 transform_to_cam(const glm::mat4& transform) override;
+		glm::mat4 cam_to_projection() override;
 
 
 		// // ----- SETTERS ----- // //
-		void setViewDirection(glm::vec3);
-		void setCamRight(glm::vec3);
-		void setAngleOfView(GLfloat);
-		void setFocusTarget(const glm::vec3& target);
+		void set_view_direction(glm::vec3);
+		void set_cam_right(glm::vec3);
+		void set_angle_of_view(GLfloat);
+		void set_focus_target(const glm::vec3& target);
 
 	private:
-		void setLookTarget();
-		void setCamUp();
+		void set_look_target();
+		void set_cam_up();
 	};
 } // namespace gl_engine
 #endif

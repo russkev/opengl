@@ -15,7 +15,7 @@ namespace gl_engine
 	{
 		setBrightness(brightness);
 		setColor(color);
-		m_camera.setAngleOfView(CAMERA_ANGLE);
+		m_camera.set_angle_of_view(CAMERA_ANGLE);
 	}
 
 
