@@ -33,6 +33,16 @@ namespace gl_engine
 		glUseProgram(m_programID);
 	}
 
+	bool Shader::isUniform(const GLenum type)
+	{
+		return (
+			ShaderType::gl_float_samplerTypes.find(type) != ShaderType::gl_float_samplerTypes.end() ||
+			ShaderType::gl_int_samplerTypes.find(type) != ShaderType::gl_int_samplerTypes.end() ||
+			ShaderType::gl_uint_samplerTypes.find(type) != ShaderType::gl_uint_samplerTypes.end()
+			);
+	}
+
+
 	bool Shader::containsUniform(std::string uniform_name)
 	{
 		return m_uniforms.find(uniform_name) != m_uniforms.end();
@@ -87,7 +97,7 @@ namespace gl_engine
 			glGetActiveUniform(m_programID, i, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformNameLength, &newUniform.dataSize, &newUniform.type, uniformNameChars);
 			newUniform.location = glGetUniformLocation(m_programID, uniformNameChars);
 
-			if (newUniform.type == GL_SAMPLER_2D || newUniform.type == GL_SAMPLER_2D_ARRAY)
+			if (isUniform(newUniform.type))
 			{
 				newUniform.texture_unit = m_num_textures;
 				m_num_textures++;

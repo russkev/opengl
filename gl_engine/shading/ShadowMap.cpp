@@ -25,7 +25,7 @@ namespace gl_engine
 
 	const std::string ShadowMap::SHADOW = "shadow";
 	const std::string ShadowMap::TRANSFORMS = "transforms";
-	const std::string ShadowMap::FAR_PLANE = "camera.far_plane";
+	const std::string ShadowMap::FAR_PLANE = "far_plane";
 
 	// // ----- CONSTRUCTOR ----- // //
 	ShadowMap::ShadowMap(LightNode* lightNode) :
@@ -225,7 +225,7 @@ namespace gl_engine
 					m_depthMaterial.setUniform(SHADOW + "[" + std::to_string(i) + "]." + TRANSFORMS, shadow_transforms.at(i));
 				}
 				m_depthMaterial.setUniform(type + "." + LightNode::LIGHT_POSITION, m_lightNode->worldPosition());
-				m_depthMaterial.setUniform(FAR_PLANE, m_camera_node.camera()->clipFar());
+				m_depthMaterial.setUniform(type + "." + FAR_PLANE, m_camera_node.camera()->clipFar());
 				meshNode->draw_material(&m_depthMaterial);
 			}
 		}
@@ -239,6 +239,10 @@ namespace gl_engine
 			std::string type = m_lightNode->light()->type();
 
 			material->addTexture(type + "[" + index + "]." + DEPTH_MAP, &m_texture);
+			if (is_point())
+			{
+				material->setUniform(type + "[" + index + "]." + FAR_PLANE, m_camera_node.camera()->clipFar());
+			}
 		}
 	}
 

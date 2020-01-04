@@ -104,6 +104,7 @@ namespace gl_engine
 
 		void use();
 		bool containsUniform(const std::string uniform_name);
+		bool isUniform(const GLenum type);
 		void updateLights(const std::vector<LightNode*>& light_nodes);
 
 
@@ -163,7 +164,7 @@ namespace gl_engine
 			Not included are all the sampler and image types
 
 		*/
-		const static std::map<const type_info*, GLenum> glTypes =
+		const static std::map<const type_info*, GLenum> glTypes
 		{
 			{&typeid(GLfloat), GL_FLOAT},
 			{&typeid(glm::vec2), GL_FLOAT_VEC2},
@@ -208,6 +209,55 @@ namespace gl_engine
 			{&typeid(int), GL_INT},
 			{&typeid(uint16_t), GL_UNSIGNED_INT},
 			{&typeid(bool), GL_BOOL}
+		};
+
+		const static std::set<GLenum> gl_float_samplerTypes
+		{
+			GL_SAMPLER,
+			GL_SAMPLER_1D,
+			GL_SAMPLER_2D,
+			GL_SAMPLER_3D,
+			GL_SAMPLER_CUBE,
+			GL_SAMPLER_1D_SHADOW,
+			GL_SAMPLER_2D_SHADOW,
+			GL_SAMPLER_1D_ARRAY,
+			GL_SAMPLER_2D_ARRAY,
+			GL_SAMPLER_1D_ARRAY_SHADOW,
+			GL_SAMPLER_2D_ARRAY_SHADOW,
+			GL_SAMPLER_2D_MULTISAMPLE,
+			GL_SAMPLER_2D_MULTISAMPLE_ARRAY,
+			GL_SAMPLER_CUBE_SHADOW,
+			GL_SAMPLER_BUFFER,
+			GL_SAMPLER_2D_RECT,
+			GL_SAMPLER_2D_RECT_SHADOW
+		};
+
+		const static std::set<GLenum> gl_int_samplerTypes
+		{
+			GL_INT_SAMPLER_1D,
+			GL_INT_SAMPLER_2D,
+			GL_INT_SAMPLER_3D,
+			GL_INT_SAMPLER_CUBE,
+			GL_INT_SAMPLER_1D_ARRAY,
+			GL_INT_SAMPLER_2D_ARRAY,
+			GL_INT_SAMPLER_2D_MULTISAMPLE,
+			GL_INT_SAMPLER_2D_MULTISAMPLE_ARRAY,
+			GL_INT_SAMPLER_BUFFER,
+			GL_INT_SAMPLER_2D_RECT,
+		};
+
+		const static std::set<GLenum> gl_uint_samplerTypes
+		{
+			GL_UNSIGNED_INT_SAMPLER_1D,
+			GL_UNSIGNED_INT_SAMPLER_2D,
+			GL_UNSIGNED_INT_SAMPLER_3D,
+			GL_UNSIGNED_INT_SAMPLER_CUBE,
+			GL_UNSIGNED_INT_SAMPLER_1D_ARRAY,
+			GL_UNSIGNED_INT_SAMPLER_2D_ARRAY,
+			GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE,
+			GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY,
+			GL_UNSIGNED_INT_SAMPLER_BUFFER,
+			GL_UNSIGNED_INT_SAMPLER_2D_RECT,
 		};
 	}
 } // namespace gl_engine

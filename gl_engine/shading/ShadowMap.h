@@ -51,7 +51,7 @@ namespace gl_engine
 		LightNode*	m_lightNode = NULL;
 
 		CameraNode	m_camera_node;
-		GLuint		m_depthMap_ID;
+		//GLuint		m_depthMap_ID;
 
 
 		// // ----- CONSTRUCTOR ----- // //
