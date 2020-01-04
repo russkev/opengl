@@ -9,15 +9,9 @@ in vec4 frag_position;
 struct Point_Light
 {
 	vec3 position;
-};
-uniform Point_Light point_light;
-
-
-struct Camera
-{
 	float far_plane;
 };
-uniform Camera camera;
+uniform Point_Light point_light;
 
 void main()
 {
@@ -34,7 +28,7 @@ void main()
 //	float light_distance = length((frag_position * temp).xyz - point_light.position);
 
 	// Map to [0;1] range by dividing by range
-	light_distance = light_distance / camera.far_plane;
+	light_distance = light_distance / point_light.far_plane;
 
 	// Write this as modified depth
 	gl_FragDepth = light_distance;

@@ -147,21 +147,21 @@ int main(int, char**)
 	//cube_node.setParent(&freeCam_node);
 	//cube_node.setPosition({ 0.0f, 3.0f, 6.0f });
 
-	// Light 1
+	// Point Light 1
 	gl_engine::PointLight pointLight{ 1.0f, { 0.0f, 0.0f, 0.0f } };
-	pointLight.setBrightness(2.1f);
+	pointLight.setBrightness(4.1f);
 	pointLight.setColor(glm::vec3(1.0, 0.7, 0.2));
-	//pointLight.setRadius(0.1f);
-	pointLight.disable_mesh();
+	pointLight.setRadius(0.1f);
+	//pointLight.disable_mesh();
 	gl_engine::LightNode pointLight_node{ "Point Light 1", &pointLight };
 	pointLight_node.setPosition({ -6.0f, 1.2f, 0.0f });
 
-	// Light 2
+	// Point Light 2
 	gl_engine::PointLight pointLight2{ 3.0f, { 0.2f, 0.1f, 1.0f } };
 	gl_engine::LightNode pointLight_node2{ "Point Light 2", &pointLight2 };
 	pointLight_node2.setPosition({ 0.0f, 4.0f, -5.0f });
 
-	// Light 3
+	// Directional Light 1
 	gl_engine::DirectionalLight directionalLight1{ 0.5f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
 	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
 	directionalLight_node1.setRotation({ 33.0f, 225.0f, 0.0f });
@@ -171,18 +171,28 @@ int main(int, char**)
 	directionalLight_node1.addChild(&orthoCam_node);
 
 
-	// Light 4
-	gl_engine::SpotLight spotLight1{ 6.0f, { 1.0f, 0.0f, 0.0f } };
+	// Spot Light 1
+	gl_engine::SpotLight spotLight1{ 10.0f, { 1.0f, 0.0f, 0.0f } };
 	gl_engine::LightNode spotLight_node1{ "Spot Light 1", &spotLight1 };
 	spotLight_node1.setRotation({ 60.0f, 0.0f, 0.0f });
 	spotLight_node1.setPosition({ -3.0f, 10.0f, -2.0f });
 	spotLight1.set_innerAngle(30.0f);
 	spotLight1.set_outerAngle(33.0f);
 
+	// Spot Light 2
+	gl_engine::SpotLight spotLight2{ 14.0f, {0.0f, 0.0f, 1.0f } };
+	gl_engine::LightNode spotLight_node2{ "Spot Light 2", &spotLight2 };
+	spotLight_node2.setPosition({ 6.0f, 12.0f, 2.0f});
+	spotLight_node2.setRotation({ 50.0f, -100.0f, 0.0f });
+	spotLight2.set_innerAngle(25.0f);
+	spotLight2.set_outerAngle(70.0f);
+
 	// Shadow map
-	//gl_engine::ShadowMap shadowMap_spot1{ &spotLight_node1 };
-	//gl_engine::ShadowMap shadowMap_directional1{ &directionalLight_node1 };
+	gl_engine::ShadowMap shadowMap_spot1{ &spotLight_node1 };
+	gl_engine::ShadowMap shadowMap_spot2{ &spotLight_node2 };
+	gl_engine::ShadowMap shadowMap_directional1{ &directionalLight_node1 };
 	gl_engine::ShadowMap shadowMap_point1{ &pointLight_node };
+	gl_engine::ShadowMap shadowMap_point2{ &pointLight_node2 };
 
 	// Null node 1
 	gl_engine::Node lightRotate1{ "light rotate 01" };
@@ -212,8 +222,6 @@ int main(int, char**)
 	axis_arrow_z_node.setPosition({ 0.0f, 0.0f, 1.0f });
 	axis_arrow_x_node.setRotation({ 0.0f, 90.0f, 0.0f });
 	axis_arrow_y_node.setRotation({ -90.0f, 0.0f, 0.0f });
-	
-
 
 
 	// Renderer
@@ -222,8 +230,9 @@ int main(int, char**)
 	render.addNode(&plane_node);
 	render.addNode(&pointLight_node);
 	render.addNode(&pointLight_node2);
-	render.addNode(&directionalLight_node1);
-	render.addNode(&spotLight_node1);
+	//render.addNode(&directionalLight_node1);
+	//render.addNode(&spotLight_node1);
+	//render.addNode(&spotLight_node2);
 	//render.addNode(&axis_arrow_x_node);
 	//render.addNode(&axis_arrow_y_node);
 	//render.addNode(&axis_arrow_z_node);
