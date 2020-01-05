@@ -1,22 +1,27 @@
 #version 440 core
 
+// // ----- INS ----- // //
 in layout(location = 0) vec2 vertex_position;
 in layout(location = 1) vec2 vertex_uv;
 in layout(location = 2) int vertex_id;
 
+// // ----- UNIFORMS ----- // //
 uniform int			width;
 uniform int			height;
 uniform int[200]	text_string;
 
+// // ----- LOCALS ----- // //
 int half_width			= width / 2;
 int half_height			= height / 2;
 const int max_digits	= 200;
 const int max_letters	= 200;
 int num_digits			= 1;
 
+// // ----- OUTS ----- // //
 out vec2 uv;
 out vec3 vertex_color;
 
+// // ----- GENERAL METHODS ----- // //
 int[200] test()
 {
 	int[200] outArray;
@@ -117,6 +122,7 @@ int[max_digits] float_to_ints(float num)
 	return digits;
 }
 
+// // ----- MAIN ----- // //
 void main()
 {
 	vec2 outPosition	= vertex_position - vec2(half_width, half_height);

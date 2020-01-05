@@ -9,7 +9,6 @@ namespace gl_engine
 {
 	const std::string MeshNode::U_MODEL_TO_WORLD = "transform.model_to_world";
 	const std::string MeshNode::U_MODEL_TO_WORLD_NORMAL = "transform.model_to_world_normal";
-	const std::string MeshNode::U_WORLD_TO_CAM = "transform.world_to_cam";
 	const std::string MeshNode::U_CAM = "camera.position";
 
 
@@ -32,7 +31,6 @@ namespace gl_engine
 		m_material->set_uniform(U_MODEL_TO_PROJECTION, modelToPerspective_matrix);
 		m_material->set_uniform(U_MODEL_TO_WORLD, Node::world_to_node());
 		m_material->set_uniform(U_MODEL_TO_WORLD_NORMAL, Node::world_normal_to_node());
-		m_material->set_uniform(U_WORLD_TO_CAM, cameraNode->world_to_cam());
 		m_material->set_uniform(U_CAM, cameraNode->world_position());
 
 		for (auto child : Node::children())
