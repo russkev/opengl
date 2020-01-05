@@ -96,7 +96,7 @@ namespace gl_engine
 		SDL_GL_SwapWindow(m_st_window);
 	}
 
-	void Window::appendTitle(std::string str/*const char* title*/)
+	void Window::append_title(std::string str/*const char* title*/)
 	{
 		std::string concat_title_str = (m_name + " | " + str);
 		char concat_title_char[256];

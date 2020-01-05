@@ -5,17 +5,17 @@
 
 namespace gl_engine
 {
-	Mesh Arrow::createArrow()
+	Mesh Arrow::create_arrow()
 	{
-		return createArrow(1.0f);
+		return create_arrow(1.0f);
 	}
 
-	Mesh Arrow::createArrow(const float length)
+	Mesh Arrow::create_arrow(const float length)
 	{
 		Mesh newArrow;
 
 		// Up face
-		newArrow += createArrowFace(
+		newArrow += create_arrow_face(
 			glm::vec3(+0.0f, +2.0f, +3.0f),
 			glm::vec3(-2.0f, +2.0f, +1.0f),
 			glm::vec3(+2.0f, +2.0f, +1.0f),
@@ -25,7 +25,7 @@ namespace gl_engine
 			glm::vec3(+1.0f, +2.0f, -length));
 
 		// Down face
-		newArrow += createArrowFace(
+		newArrow += create_arrow_face(
 			glm::vec3(+0.0f, +0.0f, +3.0f),
 			glm::vec3(+2.0f, +0.0f, +1.0f),
 			glm::vec3(-2.0f, +0.0f, +1.0f),
@@ -35,61 +35,61 @@ namespace gl_engine
 			glm::vec3(-1.0f, +0.0f, -length));
 
 		// Back face 1
-		newArrow += createRectangleFace(
+		newArrow += create_rectangle_face(
 			glm::vec3(-1.0, +2.0, -length),
 			glm::vec3(+1.0, +2.0, -length),
 			glm::vec3(-1.0, +0.0, -length),
 			glm::vec3(+1.0, +0.0, -length));
 
 		// Back face 2
-		newArrow += createRectangleFace(
+		newArrow += create_rectangle_face(
 			glm::vec3(-2.0, +2.0, +1.0),
 			glm::vec3(-1.0, +2.0, +1.0),
 			glm::vec3(-2.0, +0.0, +1.0),
 			glm::vec3(-1.0, +0.0, +1.0));
 
 		// Back face 3
-		newArrow += createRectangleFace(
+		newArrow += create_rectangle_face(
 			glm::vec3(+1.0, +2.0, +1.0),
 			glm::vec3(+2.0, +2.0, +1.0),
 			glm::vec3(+1.0, +0.0, +1.0),
 			glm::vec3(+2.0, +0.0, +1.0));
 
 		// Left face
-		newArrow += createRectangleFace(
+		newArrow += create_rectangle_face(
 			glm::vec3(-1.0, +2.0, +1.0),
 			glm::vec3(-1.0, +2.0, -length),
 			glm::vec3(-1.0, +0.0, +1.0),
 			glm::vec3(-1.0, +0.0, -length));
 
 		// Right face
-		newArrow += createRectangleFace(
+		newArrow += create_rectangle_face(
 			glm::vec3(+1.0, +2.0, -length),
 			glm::vec3(+1.0, +2.0, +1.0),
 			glm::vec3(+1.0, +0.0, -length),
 			glm::vec3(+1.0, +0.0, +1.0));
 
 		// Left diagonal face
-		newArrow += createRectangleFace(
+		newArrow += create_rectangle_face(
 			glm::vec3(-0.0, +2.0, +3.0),
 			glm::vec3(-2.0, +2.0, +1.0),
 			glm::vec3(-0.0, +0.0, +3.0),
 			glm::vec3(-2.0, +0.0, +1.0));
 
 		// Right diagonal face
-		newArrow += createRectangleFace(
+		newArrow += create_rectangle_face(
 			glm::vec3(+2.0, +2.0, +1.0),
 			glm::vec3(-0.0, +2.0, +3.0),
 			glm::vec3(+2.0, +0.0, +1.0),
 			glm::vec3(-0.0, +0.0, +3.0));
 
 
-		newArrow.makeIndicesSmooth();
-		newArrow.makeTangents();
+		newArrow.make_indices_smooth();
+		newArrow.make_tangents();
 
 		return newArrow;
 	}
-	Mesh Arrow::createRectangleFace(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, glm::vec3 br)
+	Mesh Arrow::create_rectangle_face(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, glm::vec3 br)
 	{
 		// Vertix order is like this:
 		//
@@ -115,12 +115,12 @@ namespace gl_engine
 		Vertex vert_bl = { bl, faceNormal, uv4 };
 		Vertex vert_br = { br, faceNormal, uv3 };
 
-		newFace.appendTriangle(vert_tl, vert_tr, vert_bl);
-		newFace.appendTriangle(vert_tr, vert_br, vert_bl);
+		newFace.append_triangle(vert_tl, vert_tr, vert_bl);
+		newFace.append_triangle(vert_tr, vert_br, vert_bl);
 
 		return newFace;
 	}
-	Mesh Arrow::createArrowFace(glm::vec3 t, glm::vec3 cl, glm::vec3 cr, glm::vec3 il, glm::vec3 ir, glm::vec3 bl, glm::vec3 br)
+	Mesh Arrow::create_arrow_face(glm::vec3 t, glm::vec3 cl, glm::vec3 cr, glm::vec3 il, glm::vec3 ir, glm::vec3 bl, glm::vec3 br)
 	{
 		// Vertix order is like this:
 		//            t
@@ -157,9 +157,9 @@ namespace gl_engine
 		Vertex vert_bl = { bl, faceNormal, uv_bl };
 		Vertex vert_br = { br, faceNormal, uv_br };
 
-		newFace.appendTriangle(vert_t, vert_cr, vert_cl);
-		newFace.appendTriangle(vert_il, vert_ir, vert_bl);
-		newFace.appendTriangle(vert_ir, vert_br, vert_bl);
+		newFace.append_triangle(vert_t, vert_cr, vert_cl);
+		newFace.append_triangle(vert_il, vert_ir, vert_bl);
+		newFace.append_triangle(vert_ir, vert_br, vert_bl);
 
 		return newFace;
 	}

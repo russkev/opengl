@@ -8,17 +8,17 @@
 
 namespace gl_engine
 {
-	Mesh Sphere::createSphere(const float radius)
+	Mesh Sphere::create_sphere(const float radius)
 	{
-		return createSphere(radius, 32);
+		return create_sphere(radius, 32);
 	}
 
-	Mesh Sphere::createSphere(const float radius, const uint16_t segments)
+	Mesh Sphere::create_sphere(const float radius, const uint16_t segments)
 	{
-		return createSphere(radius, segments, segments / 2);
+		return create_sphere(radius, segments, segments / 2);
 	}
 
-	Mesh Sphere::createSphere(const float radius, const uint16_t widthSegments, const uint16_t heightSegments)
+	Mesh Sphere::create_sphere(const float radius, const uint16_t widthSegments, const uint16_t heightSegments)
 	{
 		assert(radius > 0);
 		assert(widthSegments > 1);
@@ -39,10 +39,10 @@ namespace gl_engine
 				float phi2 = ((float)(j + 1) / (float)widthSegments) * 2 * (float)M_PI;
 
 				// Vertex positions
-				glm::vec3 v1 = sphericalToCartesian(radius, theta1, phi1);
-				glm::vec3 v2 = sphericalToCartesian(radius, theta1, phi2);
-				glm::vec3 v3 = sphericalToCartesian(radius, theta2, phi2);
-				glm::vec3 v4 = sphericalToCartesian(radius, theta2, phi1);
+				glm::vec3 v1 = spherical_to_cartesian(radius, theta1, phi1);
+				glm::vec3 v2 = spherical_to_cartesian(radius, theta1, phi2);
+				glm::vec3 v3 = spherical_to_cartesian(radius, theta2, phi2);
+				glm::vec3 v4 = spherical_to_cartesian(radius, theta2, phi1);
 
 				// Vertex UVs
 				glm::vec2 uv1 =
@@ -87,27 +87,27 @@ namespace gl_engine
 				// Top cap
 				if (i == 0)
 				{
-					newSphere.appendTriangle(vert1, vert3, vert4);
+					newSphere.append_triangle(vert1, vert3, vert4);
 				}
 				// Bottom cap
 				else if (i + 1 == heightSegments)
 				{
-					newSphere.appendTriangle(vert3, vert1, vert2);
+					newSphere.append_triangle(vert3, vert1, vert2);
 				}
 				// Everything else
 				else
 				{
-					newSphere.appendTriangle(vert1, vert2, vert4);
-					newSphere.appendTriangle(vert2, vert3, vert4);
+					newSphere.append_triangle(vert1, vert2, vert4);
+					newSphere.append_triangle(vert2, vert3, vert4);
 				}
 			}
 		}
-		newSphere.makeIndicesSmooth();
-		newSphere.makeTangents();
+		newSphere.make_indices_smooth();
+		newSphere.make_tangents();
 		return newSphere;
 	}
 
-	glm::vec3 Sphere::sphericalToCartesian(const float radius, const float theta, const float phi)
+	glm::vec3 Sphere::spherical_to_cartesian(const float radius, const float theta, const float phi)
 	{
 		// Standard equation assumes z is up so need to swap z and y
 		return glm::vec3(

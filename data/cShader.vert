@@ -3,27 +3,26 @@
 
 
 // // INS // //
-in layout(location = 0 ) vec3 model_vertexPosition;
-in layout(location = 1 ) vec3 model_vertexColor;
-in layout(location = 2 ) vec3 model_vertexNormal;
-in layout(location = 3 ) vec2 model_uv;
-in layout(location = 4 ) int  model_id;
-in layout(location = 5 ) vec3 model_vertexTangent;
-in layout(location = 6 ) vec3 model_vertexBitangent;
+in layout(location = 0 ) vec3 vertex_position;
+in layout(location = 1 ) vec3 vertex_color;
+in layout(location = 2 ) vec3 vertex_normal;
+in layout(location = 3 ) vec2 vertex_uv;
+in layout(location = 4 ) int  vertex_id;
+in layout(location = 5 ) vec3 vertex_tangent;
+in layout(location = 6 ) vec3 vertex_bitangent;
 
 
 // // UNIFORMS // //
 struct Transform
 {
-	mat4 modelToProjection;
-	mat4 modelToWorld;
-	mat3 modelToWorld_normal;
-	mat4 worldToCam;
-	//mat4 worldToLightProjection;
+	mat4 model_to_projection;
+	mat4 model_to_world;
+	mat3 model_to_world_normal;
+	mat4 world_to_cam;
 };
 uniform Transform transform;
 
-struct Point_Light
+struct PointLight
 {
 	vec3 position;
 	float brightness;
@@ -32,9 +31,9 @@ struct Point_Light
 	mat4 projection;
 	float far_plane;
 };
-uniform Point_Light point_light[NUM_LIGHTS];
+uniform PointLight pointLight[NUM_LIGHTS];
 
-struct Directional_Light
+struct DirectionalLight
 {
 	vec3 direction;
 	float brightness;
@@ -42,9 +41,9 @@ struct Directional_Light
 	sampler2DArray depth;
 	mat4 projection;
 };
-uniform Directional_Light directional_light[NUM_LIGHTS];
+uniform DirectionalLight directionalLight[NUM_LIGHTS];
 
-struct Spot_Light
+struct SpotLight
 {
 	vec3 position;
 	vec3 direction;
@@ -55,7 +54,7 @@ struct Spot_Light
 	sampler2DArray depth;
 	mat4 projection;
 };
-uniform Spot_Light spot_light[NUM_LIGHTS];
+uniform SpotLight spotLight[NUM_LIGHTS];
 
 struct Camera
 {
@@ -105,27 +104,27 @@ out DirectionalLight_Space
 
 out vec2 uv;
 
-void send_uvCoordinates()
+void send_uv_coordinates()
 {
-	uv = model_uv;
+	uv = vertex_uv;
 }
 
-void send_worldSpaceCoordinates()
+void send_world_space_coordinates()
 {
-	worldSpace.vertex_position	= (transform.modelToWorld * vec4(model_vertexPosition, 1.0)).xyz;
-	worldSpace.vertex_normal		= transform.modelToWorld_normal * model_vertexNormal;
+	worldSpace.vertex_position	= (transform.model_to_world * vec4(vertex_position, 1.0)).xyz;
+	worldSpace.vertex_normal		= transform.model_to_world_normal * vertex_normal;
 
 }
 
-void send_camSpaceCoordinates()
+void send_cam_space_coordinates()
 {
-	camSpace.vertex_position		= ((transform.worldToCam * vec4(worldSpace.vertex_position, 1.0)).xyz);
+	camSpace.vertex_position		= ((transform.world_to_cam * vec4(worldSpace.vertex_position, 1.0)).xyz);
 	camSpace.cam_direction		= (- camSpace.vertex_position);
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		camSpace.light_direction[i] = ((transform.worldToCam * vec4(point_light[i].position, 1.0)).xyz - camSpace.vertex_position);
+		camSpace.light_direction[i] = ((transform.world_to_cam * vec4(pointLight[i].position, 1.0)).xyz - camSpace.vertex_position);
 	}
-	camSpace.normal_direction	= ((transform.worldToCam * vec4(worldSpace.vertex_normal, 0.0)).xyz);
+	camSpace.normal_direction	= ((transform.world_to_cam * vec4(worldSpace.vertex_normal, 0.0)).xyz);
 	
 	//
 	// Side not about vectors:
@@ -134,10 +133,10 @@ void send_camSpaceCoordinates()
 	//
 }
 
-void send_tangentSpaceCoordinates()
+void send_tangent_space_coordinates()
 {
-	vec3 tangent_basis		= normalize((transform.modelToWorld * vec4(model_vertexTangent, 0.0)).xyz);
-	vec3 normal_basis		= normalize((transform.modelToWorld * vec4(model_vertexNormal, 1.0)).xyz);
+	vec3 tangent_basis		= normalize((transform.model_to_world * vec4(vertex_tangent, 0.0)).xyz);
+	vec3 normal_basis		= normalize((transform.model_to_world * vec4(vertex_normal, 1.0)).xyz);
 
 	//
 	// Here Gram Schmidt procedure and cross product are used 
@@ -148,36 +147,35 @@ void send_tangentSpaceCoordinates()
 	vec3 bitangent_basis	= cross(normal_basis, tangent_basis);
 
 
-	mat3 tangentToWorld		= mat3(tangent_basis, bitangent_basis, normal_basis);
-	mat3 worldToTangent		= transpose(tangentToWorld);
+	mat3 tangent_to_world		= mat3(tangent_basis, bitangent_basis, normal_basis);
+	mat3 world_to_tangent		= transpose(tangent_to_world);
 
-	tangentSpace.cam_position	= worldToTangent * camera.position;
+	tangentSpace.cam_position	= world_to_tangent * camera.position;
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		tangentSpace.pointLight_position[i]			= worldToTangent * point_light[i].position;
-		tangentSpace.directionalLight_direction[i]	= worldToTangent * directional_light[i].direction;
-		tangentSpace.spotLight_position[i]			= worldToTangent * spot_light[i].position;
+		tangentSpace.pointLight_position[i]			= world_to_tangent * pointLight[i].position;
+		tangentSpace.directionalLight_direction[i]	= world_to_tangent * directionalLight[i].direction;
+		tangentSpace.spotLight_position[i]			= world_to_tangent * spotLight[i].position;
 	}
-	tangentSpace.frag_position	= worldToTangent * worldSpace.vertex_position;
+	tangentSpace.frag_position	= world_to_tangent * worldSpace.vertex_position;
 }
 
-void send_lightSpaceCoordinates()
+void send_light_space_coordinates()
 {
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		spotLight_space.position[i] = spot_light[i].projection * vec4(worldSpace.vertex_position, 1.0f);
-		directionalLight_space.position[i] = directional_light[i].projection * vec4(worldSpace.vertex_position, 1.0f);
-		pointLight_space.position[i] = point_light[i].projection * vec4(worldSpace.vertex_position, 1.0f);
+		spotLight_space.position[i] = spotLight[i].projection * vec4(worldSpace.vertex_position, 1.0f);
+		directionalLight_space.position[i] = directionalLight[i].projection * vec4(worldSpace.vertex_position, 1.0f);
+		pointLight_space.position[i] = pointLight[i].projection * vec4(worldSpace.vertex_position, 1.0f);
 	}
 }
 
 void main()
 {
-	send_uvCoordinates();
-	send_worldSpaceCoordinates();
-	send_camSpaceCoordinates();
-	send_tangentSpaceCoordinates();
-	//lightSpace.position = transform.worldToLightProjection * vec4(worldSpace.vertex_position, 1.0f);
-	send_lightSpaceCoordinates();
-	gl_Position = transform.modelToProjection * vec4(model_vertexPosition, 1.0);
+	send_uv_coordinates();
+	send_world_space_coordinates();
+	send_cam_space_coordinates();
+	send_tangent_space_coordinates();
+	send_light_space_coordinates();
+	gl_Position = transform.model_to_projection * vec4(vertex_position, 1.0);
 }

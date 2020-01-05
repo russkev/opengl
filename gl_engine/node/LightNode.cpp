@@ -12,17 +12,17 @@ namespace gl_engine
 		Node(name),
 		m_light(light)
 	{
-		m_vertexBuffer.append(m_light->mesh()->vertices());
-		m_indexBuffer.append(m_light->mesh()->indices());
+		m_vertex_buffer.append(m_light->mesh()->vertices());
+		m_index_buffer.append(m_light->mesh()->indices());
 
 		// // Upload the VAO information
-		m_vao.GenerateVAO(m_vertexBuffer, 0, MESH_VAO_INFO.data(), MESH_VAO_INFO.data() + MESH_VAO_INFO.size(), POSITION_ATTR);
+		m_vao.generate_VAO(m_vertex_buffer, 0, MESH_VAO_INFO.data(), MESH_VAO_INFO.data() + MESH_VAO_INFO.size(), POSITION_ATTR);
 	}
 
 	// // ----- GENERAL ----- // //
 	void LightNode::update_view(CameraNode* cameraNode)
 	{
-		m_modelToPerspective_matrix = cameraNode->worldToProjection_matrix() * Node::worldTransform();
+		m_model_to_perspective = cameraNode->world_to_projection() * Node::world_to_node();
 		for (auto child : Node::children())
 		{
 			child.second->update_view(cameraNode);
@@ -31,7 +31,7 @@ namespace gl_engine
 
 	void LightNode::draw(const Pass& pass)
 	{
-		if (m_light->isEnabled() && pass != shadow)
+		if (m_light->is_enabled() && pass != shadow)
 		{
 			if (m_light->shader() == NULL)
 			{
@@ -42,12 +42,12 @@ namespace gl_engine
 				}
 				return;
 			}
-			m_light->shader()->setUniform(U_MODEL_TO_PROJECTION, m_modelToPerspective_matrix);
+			m_light->shader()->set_uniform(U_MODEL_TO_PROJECTION, m_model_to_perspective);
 			m_light->shader()->use();
 
-			m_vao.Bind();
-			m_indexBuffer.bind(GL_ELEMENT_ARRAY_BUFFER);
-			glDrawElements(GL_TRIANGLES, (GLsizei)m_indexBuffer.size(), GL_UNSIGNED_SHORT, 0);
+			m_vao.bind();
+			m_index_buffer.bind(GL_ELEMENT_ARRAY_BUFFER);
+			glDrawElements(GL_TRIANGLES, (GLsizei)m_index_buffer.size(), GL_UNSIGNED_SHORT, 0);
 		}
 
 		for (auto child : Node::children())
@@ -64,24 +64,24 @@ namespace gl_engine
 
 	ShadowMap* LightNode::shadowMap()
 	{
-		return m_shadowMap;
+		return m_shadow_map;
 	}
 
-	const GLuint LightNode::shaderIndex() const
+	const GLuint LightNode::shader_pos() const
 	{
-		return m_shaderIndex;
+		return m_shader_pos;
 	}
 
 
 	// // ----- SETTERS ----- // //
 	void LightNode::set_shadowMap(ShadowMap* shadowMap)
 	{
-		m_shadowMap = shadowMap;
+		m_shadow_map = shadowMap;
 	}
 
-	void LightNode::set_shaderIndex(const GLuint index)
+	void LightNode::set_shader_pos(const GLuint index)
 	{
-		m_shaderIndex = index;
+		m_shader_pos = index;
 	}
 
 } // namespace gl_engine

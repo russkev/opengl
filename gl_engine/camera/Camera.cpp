@@ -67,9 +67,9 @@ namespace gl_engine
 		VectorUtils::set_position(*m_transform, position);
 	}
 
-	void Camera::add_position(const glm::vec3& position)
+	void Camera::add_to_position(const glm::vec3& position)
 	{
-		VectorUtils::add_position(*m_transform, position);
+		VectorUtils::add_position_to_transform(*m_transform, position);
 	}
 
 	void Camera::register_transform(glm::mat4* transform)

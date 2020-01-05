@@ -19,7 +19,7 @@ namespace gl_engine
 		m_height(m_surface->h)
 		
 	{
-		if (hasAlpha())
+		if (has_alpha())
 		{
 			m_internal_format = GL_RGBA;
 			m_format = GL_BGRA;
@@ -53,15 +53,15 @@ namespace gl_engine
 
 		if (m_target == GL_TEXTURE_2D)
 		{
-			process_uniform2D();
+			process_uniform_2d();
 		}
 		else if (m_target == GL_TEXTURE_2D_ARRAY)
 		{
-			process_uniform2D_array();
+			process_uniform_2d_array();
 		}
 		else if (m_target == GL_TEXTURE_CUBE_MAP)
 		{
-			process_cubeMap();
+			process_cube_map();
 		}
 
 		glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, m_min_filter);
@@ -79,7 +79,7 @@ namespace gl_engine
 
 	}
 	
-	void Texture::process_uniform2D()
+	void Texture::process_uniform_2d()
 	{
 		glTexImage2D
 		(
@@ -95,7 +95,7 @@ namespace gl_engine
 		);
 	}
 
-	void Texture::process_uniform2D_array()
+	void Texture::process_uniform_2d_array()
 	{
 		glTexImage3D(
 			m_target,
@@ -111,7 +111,7 @@ namespace gl_engine
 		);
 	}
 
-	void Texture::process_cubeMap()
+	void Texture::process_cube_map()
 	{
 		for (GLuint i = 0; i < 6; ++i)
 		{
@@ -159,7 +159,7 @@ namespace gl_engine
 		return m_id;
 	}
 
-	bool Texture::hasAlpha()
+	bool Texture::has_alpha()
 	{
 		if (m_surface)
 		{
@@ -193,7 +193,7 @@ namespace gl_engine
 		m_height = height;
 	}
 
-	void Texture::set_internalFormat(const GLint internal_format)
+	void Texture::set_internal_format(const GLint internal_format)
 	{
 		m_internal_format = internal_format;
 	}
@@ -213,12 +213,12 @@ namespace gl_engine
 		m_data = data;
 	}
 
-	void Texture::set_minFilter(const GLenum min_filter)
+	void Texture::set_min_filter(const GLenum min_filter)
 	{
 		m_min_filter = min_filter;
 	}
 
-	void Texture::set_magFilter(const GLenum max_filter)
+	void Texture::set_mag_filter(const GLenum max_filter)
 	{
 		m_mag_filter = max_filter;
 	}

@@ -26,14 +26,14 @@ namespace gl_engine
 		static const std::string LIGHT_DIRECTION;
 	private:
 		Light* m_light = NULL;
-		ShadowMap* m_shadowMap = NULL;
-		GLuint m_shaderIndex;
+		ShadowMap* m_shadow_map = NULL;
+		GLuint m_shader_pos;
 
 		VAO m_vao;
-		Buffer m_vertexBuffer = { GL_ARRAY_BUFFER, 0 };
-		Buffer m_indexBuffer = { GL_ARRAY_BUFFER, 0 };
+		Buffer m_vertex_buffer = { GL_ARRAY_BUFFER, 0 };
+		Buffer m_index_buffer = { GL_ARRAY_BUFFER, 0 };
 
-		glm::mat4 m_modelToPerspective_matrix;
+		glm::mat4 m_model_to_perspective;
 		bool m_shader_warned = false;
 
 	public:
@@ -42,17 +42,17 @@ namespace gl_engine
 
 		// // ----- GENERAL ----- // //
 
-		void update_view(CameraNode* cameraNode) override;
+		void update_view(CameraNode* camera_node) override;
 		void draw(const Pass& pass = rgb) override;
 
 		// // ----- GETTERS ----- // //
 		Light* light();
 		ShadowMap* shadowMap();
-		const GLuint shaderIndex() const;
+		const GLuint shader_pos() const;
 
 		// // ----- SETTERS ----- // //
 		void set_shadowMap(ShadowMap* shadowMap);
-		void set_shaderIndex(const GLuint index);
+		void set_shader_pos(const GLuint index);
 	};
 } // namespace gl_engine
 

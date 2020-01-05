@@ -6,12 +6,12 @@ in vec4 frag_position;
 
 //uniform mat4 shadow_transforms[NUM_FACES];
 
-struct Point_Light
+struct PointLight
 {
 	vec3 position;
 	float far_plane;
 };
-uniform Point_Light point_light;
+uniform PointLight pointLight;
 
 void main()
 {
@@ -24,11 +24,11 @@ void main()
 //
 
 	// Get distance between fragment and light source
-	float light_distance = length(frag_position.xyz - point_light.position);
-//	float light_distance = length((frag_position * temp).xyz - point_light.position);
+	float light_distance = length(frag_position.xyz - pointLight.position);
+//	float light_distance = length((frag_position * temp).xyz - pointLight.position);
 
 	// Map to [0;1] range by dividing by range
-	light_distance = light_distance / point_light.far_plane;
+	light_distance = light_distance / pointLight.far_plane;
 
 	// Write this as modified depth
 	gl_FragDepth = light_distance;

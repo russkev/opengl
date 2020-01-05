@@ -28,7 +28,8 @@ namespace gl_engine
 
 		static const std::string U_MODEL_TO_PROJECTION;
 		static constexpr auto POSITION_ATTR = 0u;
-		inline static const auto MESH_VAO_INFO = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
+		inline static const auto MESH_VAO_INFO = gl_introspect_tuple<
+			std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
 		static const glm::vec3 FORWARD_DIRECTION;
 
 		// // ----- MEMBER VARIABLES ----- // //
@@ -46,14 +47,14 @@ namespace gl_engine
 		Node(const std::string name);
 
 		// // ----- GENERAL METHODS ----- // //
-		void addChild(Node* child);
-		void setParent(Node* parent);
-		Node* disconnectChild(const std::string nodeName);
+		void add_child(Node* child);
+		void set_parent(Node* parent);
+		Node* disconnect_child(const std::string nodeName);
 
-		glm::mat4& localTransform();
-		const glm::mat4 worldTransform();
-		const glm::mat3 worldNormalTransform();
-		const glm::vec3 directionVector();
+		glm::mat4& local_to_node();
+		const glm::mat4 world_to_node();
+		const glm::mat3 world_normal_to_node();
+		const glm::vec3 direction();
 
 		virtual void update_view(CameraNode*);
 		virtual void draw(const Pass& pass = rgb);
@@ -61,10 +62,10 @@ namespace gl_engine
 		// // ----- GETTERS ----- // //
 		const std::string& name() const;
 
-		virtual const glm::vec3 localPosition() const;
-		virtual const glm::vec3 worldPosition();
-		const glm::vec3 rotation() const;
-		const glm::vec3 scale() const;
+		virtual const glm::vec3 local_position() const;
+		virtual const glm::vec3 world_position();
+		const glm::vec3 local_rotation() const;
+		const glm::vec3 local_scale() const;
 
 		const Node* parent() const;
 		std::unordered_map<std::string, Node*>& children();
@@ -72,9 +73,9 @@ namespace gl_engine
 
 		// // ----- SETTERS ----- // //
 		virtual void set_position(const glm::vec3&);
-		virtual void setRotation(const glm::vec3&);
-		virtual void setScale(const glm::vec3&);
-		virtual void setScale(const GLfloat scale);
+		virtual void set_rotation(const glm::vec3&);
+		virtual void set_scale(const glm::vec3&);
+		virtual void set_scale(const GLfloat scale);
 
 
 	private:

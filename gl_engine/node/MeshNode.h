@@ -32,8 +32,8 @@ namespace gl_engine
 	private:
 		Mesh* m_mesh;
 		Material* m_material;
-		Buffer m_vertexBuffer = { GL_ARRAY_BUFFER, 0 };
-		Buffer m_indexBuffer = { GL_ARRAY_BUFFER, 0 };
+		Buffer m_vertex_buffer = { GL_ARRAY_BUFFER, 0 };
+		Buffer m_index_buffer = { GL_ARRAY_BUFFER, 0 };
 		VAO m_vao;
 
 		// // ----- CONSTRUCTOR ----- // //

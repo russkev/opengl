@@ -50,7 +50,7 @@ namespace gl_engine
 		void set_clip_near(GLfloat);
 		void set_clip_far(GLfloat);
 		void set_position(const glm::vec3& position);
-		void add_position(const glm::vec3& position);
+		void add_to_position(const glm::vec3& position);
 		void register_transform(glm::mat4* transform);
 
 	};

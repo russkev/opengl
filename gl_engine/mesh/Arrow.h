@@ -13,11 +13,11 @@ namespace gl_engine
 	*/
 	struct Arrow
 	{
-		static Mesh createArrow();
-		static Mesh createArrow(const float length);
+		static Mesh create_arrow();
+		static Mesh create_arrow(const float length);
 	private:
-		static Mesh createRectangleFace(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, glm::vec3 br);
-		static Mesh createArrowFace(glm::vec3 t, glm::vec3 cl, glm::vec3 cr, glm::vec3 il, glm::vec3 ir, glm::vec3 bl, glm::vec3 br);
+		static Mesh create_rectangle_face(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, glm::vec3 br);
+		static Mesh create_arrow_face(glm::vec3 t, glm::vec3 cl, glm::vec3 cr, glm::vec3 il, glm::vec3 ir, glm::vec3 bl, glm::vec3 br);
 
 	};
 } // namespace gl_engine

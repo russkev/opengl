@@ -11,18 +11,18 @@
 namespace gl_engine
 {
 	// // ----- CONSTRUCTOR ----- // //
-	Shader::Shader(const std::string& name, const char* vertexShader, const char* fragmentShader) :
+	Shader::Shader(const std::string& name, const char* vertex_shader, const char* fragment_shader) :
 		m_name{ name },
-		m_programID{ LoadShaders::load(vertexShader, fragmentShader) }
+		m_program_id{ LoadShaders::load(vertex_shader, fragment_shader) }
 	{
-		fetchUniforms();
+		fetch_uniforms();
 	}
 
-	Shader::Shader(const std::string& name, const char* vertexShader, const char* geometryShader, const char* fragmentShader) :
+	Shader::Shader(const std::string& name, const char* vertex_shader, const char* geometry_shader, const char* fragment_shader) :
 		m_name{ name },
-		m_programID{ LoadShaders::load(vertexShader, geometryShader, fragmentShader) }
+		m_program_id{ LoadShaders::load(vertex_shader, geometry_shader, fragment_shader) }
 	{
-		fetchUniforms();
+		fetch_uniforms();
 	}
 
 	// // ----- GENERAL METHODS ----- // //
@@ -30,10 +30,10 @@ namespace gl_engine
 	// Tell opengl to use this shader for upcoming commands
 	void Shader::use()
 	{
-		glUseProgram(m_programID);
+		glUseProgram(m_program_id);
 	}
 
-	bool Shader::isUniform(const GLenum type)
+	bool Shader::is_uniform(const GLenum type)
 	{
 		return (
 			ShaderType::gl_float_samplerTypes.find(type) != ShaderType::gl_float_samplerTypes.end() ||
@@ -43,61 +43,61 @@ namespace gl_engine
 	}
 
 
-	bool Shader::containsUniform(std::string uniform_name)
+	bool Shader::contains_uniform(std::string uniform_name)
 	{
 		return m_uniforms.find(uniform_name) != m_uniforms.end();
 	}
 
-	void Shader::updateLights(const std::vector<LightNode*>& light_nodes)
+	void Shader::update_lights(const std::vector<LightNode*>& light_nodes)
 	{
 		int index = 0;// , point_index = 0, directional_index = 0, spot_index = 0;
 		std::string type = "";
 
 		for (LightNode* light_node : light_nodes)
 		{
-			PointLight* point_light = dynamic_cast<PointLight*>(light_node->light());
-			DirectionalLight* directional_light = dynamic_cast<DirectionalLight*>(light_node->light());
-			SpotLight* spot_light = dynamic_cast<SpotLight*>(light_node->light());
+			PointLight* pointLight = dynamic_cast<PointLight*>(light_node->light());
+			DirectionalLight* directionalLight = dynamic_cast<DirectionalLight*>(light_node->light());
+			SpotLight* spotLight = dynamic_cast<SpotLight*>(light_node->light());
 
-			index = light_node->shaderIndex();
+			index = light_node->shader_pos();
 			type = light_node->light()->type();
 
 			// Set uniforms
-			if (point_light || spot_light)
+			if (pointLight || spotLight)
 			{
-				setUniform(std::string(type + "[" + std::to_string(index) + "]." + LightNode::LIGHT_POSITION), light_node->worldPosition());
+				set_uniform(std::string(type + "[" + std::to_string(index) + "]." + LightNode::LIGHT_POSITION), light_node->world_position());
 			}
-			if (directional_light || spot_light)
+			if (directionalLight || spotLight)
 			{
-				setUniform(std::string(type + "[" + std::to_string(index) + "]." + LightNode::LIGHT_DIRECTION), light_node->directionVector());
+				set_uniform(std::string(type + "[" + std::to_string(index) + "]." + LightNode::LIGHT_DIRECTION), light_node->direction());
 			}
-			if (spot_light)
+			if (spotLight)
 			{
-				setUniform(std::string(type + "[" + std::to_string(index) + "]." + SpotLight::INNER), spot_light->cos_innerAngle());
-				setUniform(std::string(type + "[" + std::to_string(index) + "]." + SpotLight::OUTER), spot_light->cos_outerAngle());
+				set_uniform(std::string(type + "[" + std::to_string(index) + "]." + SpotLight::INNER), spotLight->cos_inner_angle());
+				set_uniform(std::string(type + "[" + std::to_string(index) + "]." + SpotLight::OUTER), spotLight->cos_outer_angle());
 			}
-			setUniform(std::string(type + "[" + std::to_string(index) + "]." + Light::LIGHT_BRIGHTNESS), light_node->light()->brightness());
-			setUniform(std::string(type + "[" + std::to_string(index) + "]." + Light::LIGHT_COLOR), light_node->light()->color());
+			set_uniform(std::string(type + "[" + std::to_string(index) + "]." + Light::LIGHT_BRIGHTNESS), light_node->light()->brightness());
+			set_uniform(std::string(type + "[" + std::to_string(index) + "]." + Light::LIGHT_COLOR), light_node->light()->color());
 		}
 	}
 
 
 	//Get all the uniforms from the shader and store their information with the shader
-	void Shader::fetchUniforms()
+	void Shader::fetch_uniforms()
 	{
 		use();
 		int numUniforms;
-		glGetProgramiv(m_programID, GL_ACTIVE_UNIFORMS, &numUniforms);
+		glGetProgramiv(m_program_id, GL_ACTIVE_UNIFORMS, &numUniforms);
 		for (int i = 0; i < numUniforms; ++i)
 		{
 			Uniform newUniform;
 			char uniformNameChars[GL_ACTIVE_UNIFORM_MAX_LENGTH];
 			GLsizei uniformNameLength;
 
-			glGetActiveUniform(m_programID, i, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformNameLength, &newUniform.dataSize, &newUniform.type, uniformNameChars);
-			newUniform.location = glGetUniformLocation(m_programID, uniformNameChars);
+			glGetActiveUniform(m_program_id, i, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformNameLength, &newUniform.data_size, &newUniform.type, uniformNameChars);
+			newUniform.location = glGetUniformLocation(m_program_id, uniformNameChars);
 
-			if (isUniform(newUniform.type))
+			if (is_uniform(newUniform.type))
 			{
 				newUniform.texture_unit = m_num_textures;
 				m_num_textures++;
@@ -110,9 +110,9 @@ namespace gl_engine
 	}
 
 	// // ----- GETTERS ----- // //
-	const GLuint Shader::programID() const
+	const GLuint Shader::program_id() const
 	{
-		return m_programID;
+		return m_program_id;
 	}
 
 	const std::string Shader::name() const
@@ -126,8 +126,8 @@ namespace gl_engine
 	}
 
 	// // ----- SETTERS ----- // //
-	std::string& Shader::name()
+	void Shader::set_name(const std::string& name)
 	{
-		return m_name;
+		m_name = name;
 	}
 } // namespace gl_engine

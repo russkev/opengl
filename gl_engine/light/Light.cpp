@@ -29,7 +29,7 @@ namespace gl_engine
 		return NULL;
 	}
 
-	const bool& Light::isEnabled() const
+	const bool& Light::is_enabled() const
 	{
 		return m_mesh_enabled;
 	}
@@ -41,21 +41,21 @@ namespace gl_engine
 
 
 	// // ----- SETTERS ----- // //
-	void Light::setBrightness(const GLfloat brightness)
+	void Light::set_brightness(const GLfloat brightness)
 	{
 		m_brightness = brightness;
 		if (shader() != NULL)
 		{
-			shader()->setUniform(std::string(LIGHT_SHADER_TYPE + "." + LIGHT_BRIGHTNESS), m_brightness);
+			shader()->set_uniform(std::string(LIGHT_SHADER_TYPE + "." + LIGHT_BRIGHTNESS), m_brightness);
 		}
 	}
 
-	void Light::setColor(const glm::vec3 color)
+	void Light::set_color(const glm::vec3 color)
 	{
 		m_color = color;
 		if (shader() != NULL)
 		{
-			shader()->setUniform(std::string(LIGHT_SHADER_TYPE + "." + LIGHT_COLOR), m_color);
+			shader()->set_uniform(std::string(LIGHT_SHADER_TYPE + "." + LIGHT_COLOR), m_color);
 		}
 	}
 

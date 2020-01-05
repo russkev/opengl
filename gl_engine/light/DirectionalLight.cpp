@@ -10,15 +10,14 @@
 
 namespace gl_engine
 {
-	const std::string DirectionalLight::TYPE = "directional_light";
+	const std::string DirectionalLight::TYPE = "directionalLight";
 
 	DirectionalLight::DirectionalLight(GLfloat brightness, glm::vec3 color) :
-		m_light_mesh(Arrow::createArrow(10.0)),
+		m_light_mesh(Arrow::create_arrow(10.0)),
 		m_shader(Shader("lightShader", "lightShader.vert", "lightShader.frag"))
 	{
-		setBrightness(brightness);
-		setColor(color);
-		//m_light_mesh.transform(glm::scale(glm::mat4(1.0f), glm::vec3(0.2, 0.05, 0.2)));
+		set_brightness(brightness);
+		set_color(color);
 	}
 
 	// // ----- GETTERS ----- // //

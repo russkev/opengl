@@ -8,30 +8,30 @@
 
 namespace gl_engine
 {
-	Mesh Cylinder::createCylinder()
+	Mesh Cylinder::create_cylinder()
 	{
-		return createCylinder(0.5f, 2.0f);
+		return create_cylinder(0.5f, 2.0f);
 	}
-	Mesh Cylinder::createCylinder(const float radius, const float height)
+	Mesh Cylinder::create_cylinder(const float radius, const float height)
 	{
-		return createCylinder(radius, height, 24, 1);
+		return create_cylinder(radius, height, 24, 1);
 	}
 
-	Mesh Cylinder::createCylinder(const float radius, const float height, const uint16_t widthSegments, const uint16_t heightSegments)
+	Mesh Cylinder::create_cylinder(const float radius, const float height, const uint16_t width_segments, const uint16_t height_segments)
 	{
 		assert(radius > 0);
 		assert(height > 0);
-		assert(widthSegments > 2);
-		assert(heightSegments > 0);
+		assert(width_segments > 2);
+		assert(height_segments > 0);
 
 		Mesh newCylinder;
-		float heightOffset = height / (float)heightSegments;
-		float widthUVOffset = 1 / (float)widthSegments;
-		float heightUVOffset = 1 / (float)heightSegments;
+		float heightOffset = height / (float)height_segments;
+		float widthUVOffset = 1 / (float)width_segments;
+		float heightUVOffset = 1 / (float)height_segments;
 
-		for (uint16_t i = 0; i < heightSegments; ++i)
+		for (uint16_t i = 0; i < height_segments; ++i)
 		{
-			for (uint16_t j = 0; j < widthSegments; ++j)
+			for (uint16_t j = 0; j < width_segments; ++j)
 			{
 				// Vertix order is like this:
 				//
@@ -41,24 +41,24 @@ namespace gl_engine
 				//		  v1-----v2
 				//
 
-				float theta1 = ((float)(j) / (float)widthSegments) * 2 * (float)M_PI;
-				float theta2 = ((float)(j + 1) / (float)widthSegments) * 2 * (float)M_PI;
+				float theta1 = ((float)(j) / (float)width_segments) * 2 * (float)M_PI;
+				float theta2 = ((float)(j + 1) / (float)width_segments) * 2 * (float)M_PI;
 
 				// Vertex positions
-				glm::vec3 v1 = radialToCartesian(radius, theta1, heightOffset * (i));
-				glm::vec3 v2 = radialToCartesian(radius, theta2, heightOffset * (i));
-				glm::vec3 v3 = radialToCartesian(radius, theta1, heightOffset * (i + 1));
-				glm::vec3 v4 = radialToCartesian(radius, theta2, heightOffset * (i + 1));
+				glm::vec3 v1 = radial_to_cartesian(radius, theta1, heightOffset * (i));
+				glm::vec3 v2 = radial_to_cartesian(radius, theta2, heightOffset * (i));
+				glm::vec3 v3 = radial_to_cartesian(radius, theta1, heightOffset * (i + 1));
+				glm::vec3 v4 = radial_to_cartesian(radius, theta2, heightOffset * (i + 1));
 
 				// Vertex normals
-				glm::vec3 n_theta1 = radialToCartesian(1, theta1, 0);
-				glm::vec3 n_theta2 = radialToCartesian(1, theta2, 0);
+				glm::vec3 n_theta1 = radial_to_cartesian(1, theta1, 0);
+				glm::vec3 n_theta2 = radial_to_cartesian(1, theta2, 0);
 
 				// Vertex UVs
-				glm::vec2 uv1 = { (widthSegments - j)     * widthUVOffset, (i)* heightUVOffset };
-				glm::vec2 uv2 = { (widthSegments - j - 1) * widthUVOffset, (i)* heightUVOffset };
-				glm::vec2 uv3 = { (widthSegments - j)     * widthUVOffset, (i + 1) * heightUVOffset };
-				glm::vec2 uv4 = { (widthSegments - j - 1) * widthUVOffset, (i + 1) * heightUVOffset };
+				glm::vec2 uv1 = { (width_segments - j)     * widthUVOffset, (i)* heightUVOffset };
+				glm::vec2 uv2 = { (width_segments - j - 1) * widthUVOffset, (i)* heightUVOffset };
+				glm::vec2 uv3 = { (width_segments - j)     * widthUVOffset, (i + 1) * heightUVOffset };
+				glm::vec2 uv4 = { (width_segments - j - 1) * widthUVOffset, (i + 1) * heightUVOffset };
 
 				// Vertices
 				Vertex vert1 = { v1, n_theta1, uv1 };
@@ -66,8 +66,8 @@ namespace gl_engine
 				Vertex vert3 = { v3, n_theta1, uv3 };
 				Vertex vert4 = { v4, n_theta2, uv4 };
 
-				newCylinder.appendTriangle(vert1, vert4, vert2);
-				newCylinder.appendTriangle(vert1, vert3, vert4);
+				newCylinder.append_triangle(vert1, vert4, vert2);
+				newCylinder.append_triangle(vert1, vert3, vert4);
 
 				// Bottom cap
 				if (i == 0)
@@ -88,11 +88,11 @@ namespace gl_engine
 					Vertex vert_cap2 = { v2, n_cap, uv_cap2 };
 					Vertex vert_cap3 = { v_centre, n_cap, uv_cap3 };
 
-					newCylinder.appendTriangle(vert_cap1, vert_cap2, vert_cap3);
+					newCylinder.append_triangle(vert_cap1, vert_cap2, vert_cap3);
 				}
 
 				// Top cap
-				if (i == heightSegments - 1)
+				if (i == height_segments - 1)
 				{
 					// Vertex positions
 					glm::vec3 v_centre = { 0.0f, height, 0.0f };
@@ -110,16 +110,16 @@ namespace gl_engine
 					Vertex vert_cap2 = { v3, n_cap, uv_cap1 };
 					Vertex vert_cap3 = { v_centre, n_cap, uv_cap3 };
 
-					newCylinder.appendTriangle(vert_cap1, vert_cap2, vert_cap3);
+					newCylinder.append_triangle(vert_cap1, vert_cap2, vert_cap3);
 				}
 			}
 		}
-		newCylinder.makeIndicesSmooth();
-		newCylinder.makeTangents();
+		newCylinder.make_indices_smooth();
+		newCylinder.make_tangents();
 		return newCylinder;
 	}
 
-	glm::vec3 Cylinder::radialToCartesian(float radius, float theta, float height)
+	glm::vec3 Cylinder::radial_to_cartesian(float radius, float theta, float height)
 	{
 		return glm::vec3(radius * std::cos(theta), height, radius * std::sin(theta));
 	}

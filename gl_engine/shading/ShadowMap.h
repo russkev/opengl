@@ -46,12 +46,11 @@ namespace gl_engine
 
 		// // ----- MEMBER VARIABLES ----- // //
 		GLuint		m_depthMap_FBO;
-		Material	m_depthMaterial{ "Depth shader", "DepthShader.vert", "DepthShader.frag" };
+		Material	m_depth_material{ "Depth shader", "DepthShader.vert", "DepthShader.frag" };
 		Texture		m_texture;
 		LightNode*	m_lightNode = NULL;
 
-		CameraNode	m_camera_node;
-		//GLuint		m_depthMap_ID;
+		CameraNode	m_cameraNode;
 
 
 		// // ----- CONSTRUCTOR ----- // //
@@ -72,13 +71,6 @@ namespace gl_engine
 		bool check_bound_framebuffer();
 		bool is_directional();
 		bool is_point();
-
-		// // ----- GETTERS ----- // //
-		
-		// // ----- SETTERS ----- // //
-		void setLightNode(Node* light_node);
-
-
 	};
 } // namespace gl_engine
 

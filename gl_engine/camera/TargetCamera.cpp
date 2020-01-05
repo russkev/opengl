@@ -63,7 +63,7 @@ namespace gl_engine
 			+ m_cam_up * mouse_delta.y
 			+ m_view_direction * mouse_delta.z;
 
-		Camera::add_position(positionDelta);
+		Camera::add_to_position(positionDelta);
 		m_look_target += positionDelta;
 	}
 
@@ -72,9 +72,9 @@ namespace gl_engine
 		glm::mat3 pitch = (glm::mat3)glm::rotate(glm::mat4(1.0f), rotateDelta.y, m_cam_right);
 		glm::mat3 yaw = (glm::mat3)glm::rotate(glm::mat4(1.0f), -rotateDelta.x, UP_AXIS);
 
-		Camera::add_position(-m_look_target);
+		Camera::add_to_position(-m_look_target);
 		Camera::set_position(pitch * yaw * Camera::position());
-		Camera::add_position(m_look_target);
+		Camera::add_to_position(m_look_target);
 
 		m_view_direction = VectorUtils::extract_position(*Camera::transform());
 		m_cam_right = yaw * m_cam_right;

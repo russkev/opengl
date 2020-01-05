@@ -5,18 +5,18 @@
 
 namespace gl_engine
 {
-	Mesh Cube::createCube()
+	Mesh Cube::create_cube()
 	{
-		return createCube(1.0f);
+		return create_cube(1.0f);
 	}
 
-	Mesh Cube::createCube(const float width)
+	Mesh Cube::create_cube(const float width)
 	{
 		float halfWidth = width / 2.0f;
 		Mesh newCube;
 
 		// Up Face
-		newCube += createCubeFace(
+		newCube += create_cube_face(
 			glm::vec3(-halfWidth, width, +halfWidth),
 			glm::vec3(+halfWidth, width, +halfWidth),
 			glm::vec3(-halfWidth, width, -halfWidth),
@@ -24,7 +24,7 @@ namespace gl_engine
 		);
 
 		// Bottom Face
-		newCube += createCubeFace(
+		newCube += create_cube_face(
 			glm::vec3(+halfWidth, 0, +halfWidth),
 			glm::vec3(-halfWidth, 0, +halfWidth),
 			glm::vec3(+halfWidth, 0, -halfWidth),
@@ -32,7 +32,7 @@ namespace gl_engine
 		);
 
 		// Right Face
-		newCube += createCubeFace(
+		newCube += create_cube_face(
 			glm::vec3(+halfWidth, width, -halfWidth),
 			glm::vec3(+halfWidth, width, +halfWidth),
 			glm::vec3(+halfWidth, 0, -halfWidth),
@@ -40,7 +40,7 @@ namespace gl_engine
 		);
 
 		// Left Face
-		newCube += createCubeFace(
+		newCube += create_cube_face(
 			glm::vec3(-halfWidth, width, +halfWidth),
 			glm::vec3(-halfWidth, width, -halfWidth),
 			glm::vec3(-halfWidth, 0, +halfWidth),
@@ -48,7 +48,7 @@ namespace gl_engine
 		);
 
 		// Front Face
-		newCube += createCubeFace(
+		newCube += create_cube_face(
 			glm::vec3(-halfWidth, width, -halfWidth),
 			glm::vec3(+halfWidth, width, -halfWidth),
 			glm::vec3(-halfWidth, 0, -halfWidth),
@@ -56,20 +56,20 @@ namespace gl_engine
 		);
 
 		// Back Face
-		newCube += createCubeFace(
+		newCube += create_cube_face(
 			glm::vec3(+halfWidth, width, +halfWidth),
 			glm::vec3(-halfWidth, width, +halfWidth),
 			glm::vec3(+halfWidth, 0, +halfWidth),
 			glm::vec3(-halfWidth, 0, +halfWidth)
 		);
 
-		newCube.makeIndicesSmooth();
-		newCube.makeTangents();
+		newCube.make_indices_smooth();
+		newCube.make_tangents();
 
 		return newCube;
 	}
 
-	Mesh Cube::createCubeFace(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, glm::vec3 br)
+	Mesh Cube::create_cube_face(glm::vec3 top_left, glm::vec3 top_right, glm::vec3 bottom_left, glm::vec3 bottom_right)
 	{
 		// Vertix order is like this:
 		//
@@ -81,7 +81,7 @@ namespace gl_engine
 		Mesh newFace;
 
 		// Vertex Normals
-		glm::vec3 faceNormal = glm::cross(tr - tl, bl - tl);
+		glm::vec3 faceNormal = glm::cross(top_right - top_left, bottom_left - top_left);
 
 		// Vertex UVs
 		glm::vec2 uv1 = { 0.0f, 1.0f };
@@ -90,13 +90,13 @@ namespace gl_engine
 		glm::vec2 uv4 = { 1.0f, 0.0f };
 
 		// Vertices
-		Vertex vert1 = { tl, faceNormal, uv2 };
-		Vertex vert2 = { tr, faceNormal, uv1 };
-		Vertex vert3 = { bl, faceNormal, uv4 };
-		Vertex vert4 = { br, faceNormal, uv3 };
+		Vertex vert1 = { top_left, faceNormal, uv2 };
+		Vertex vert2 = { top_right, faceNormal, uv1 };
+		Vertex vert3 = { bottom_left, faceNormal, uv4 };
+		Vertex vert4 = { bottom_right, faceNormal, uv3 };
 
-		newFace.appendTriangle(vert1, vert2, vert3);
-		newFace.appendTriangle(vert2, vert4, vert3);
+		newFace.append_triangle(vert1, vert2, vert3);
+		newFace.append_triangle(vert2, vert4, vert3);
 
 		return newFace;
 	}

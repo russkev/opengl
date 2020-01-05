@@ -8,16 +8,17 @@
 
 namespace gl_engine
 {
-	// // CONSTRUCTOR //
+	// // ----- CONSTRUCTOR ----- // //
 	VAO::VAO() :
 		m_VAO_ID(0)
 	{
 		std::cout << "VAO object created\n";
 	};
 
-	void VAO::GenerateVAO(const Buffer& inBuffer, std::size_t divisor, const member_info_type* begin, const member_info_type* end, std::uint32_t id_offset) {
-		GenerateID();
-		Bind();
+	// // ----- GENERAL METHODS ----- // //
+	void VAO::generate_VAO(const Buffer& inBuffer, std::size_t divisor, const member_info_type* begin, const member_info_type* end, std::uint32_t id_offset) {
+		generate_id();
+		bind();
 		inBuffer.bind();
 
 		std::for_each(begin, end, [&](const member_info_type& mi)
@@ -39,12 +40,11 @@ namespace gl_engine
 		});
 	}
 
-	void VAO::Bind() {
+	void VAO::bind() {
 		glBindVertexArray(m_VAO_ID);
 	}
 
-	// // GENERATE ID
-	void VAO::GenerateID() {
+	void VAO::generate_id() {
 		if (m_VAO_ID == 0) {
 			glGenVertexArrays(1, &m_VAO_ID);
 		}

@@ -46,7 +46,7 @@ namespace gl_engine
 		Texture() {};
 
 		// Create a texture from an image file
-		Texture(const char* filename);
+		Texture(const char* file_name);
 
 		// Create an internal texture
 		Texture(const GLenum target);
@@ -57,16 +57,16 @@ namespace gl_engine
 		void bind(GLuint texture_unit);
 		void unbind();
 	private:
-		void process_uniform2D();
-		void process_uniform2D_array();
-		void process_cubeMap();
+		void process_uniform_2d();
+		void process_uniform_2d_array();
+		void process_cube_map();
 
 		// // ----- GETTERS ----- // //
 	public:
 		GLsizei width();
 		GLsizei height();
 		const GLuint id() const;
-		bool hasAlpha();
+		bool has_alpha();
 		void* data();
 
 
@@ -75,12 +75,12 @@ namespace gl_engine
 		void set_target(const GLenum target);
 		void set_width(const GLsizei width);
 		void set_height(const GLsizei height);
-		void set_internalFormat(const GLint internal_format);
+		void set_internal_format(const GLint internal_format);
 		void set_format(const GLenum format);
 		void set_type(const GLenum type);
 		void set_data(void* data);
-		void set_minFilter(const GLenum min_filter);
-		void set_magFilter(const GLenum max_filter);
+		void set_min_filter(const GLenum min_filter);
+		void set_mag_filter(const GLenum max_filter);
 		void set_st_wrap(const GLenum wrap);
 		void set_mipmap(const bool value);
 		void set_border_color(const GLfloat r, const GLfloat g, const GLfloat b, const GLfloat a);

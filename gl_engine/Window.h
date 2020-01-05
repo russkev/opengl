@@ -28,7 +28,7 @@ namespace gl_engine
 	{
 		Window(std::string name, std::vector<opengl_attr_pair> st_config, GLuint width, GLuint height);
 		void init(std::vector<opengl_attr_pair> st_config, GLuint width, GLuint height);
-		void appendTitle(std::string str);
+		void append_title(std::string str);
 		void finish_frame();
 
 

@@ -27,8 +27,8 @@ namespace gl_engine
 	struct Text2D
 	{
 		// // TYPES // //
-		typedef std::tuple< glm::vec2, glm::vec2, GLuint>	vertex2DType;
-		typedef std::vector<vertex2DType>					vertices2DType;
+		typedef std::tuple< glm::vec2, glm::vec2, GLuint>	vertex_2d_type;
+		typedef std::vector<vertex_2d_type>					vertices_2d_type;
 
 		// // ENUMERATION // //
 		enum attr { position2D = 0, uv2D = 1 };
@@ -38,8 +38,8 @@ namespace gl_engine
 
 
 		void init(int s_x, int s_y, int size, int s_screen_width, int s_screen_height);
-		void initVertices();
-		void initShaders();
+		void init_vertices();
+		void init_shaders();
 
 		void print(const char* s_text);
 		void draw();
@@ -47,13 +47,13 @@ namespace gl_engine
 
 		void cleanup();
 	public:
-		Texture			m_texture;
-		vertices2DType	m_vertices;
-		int				m_x, m_y, m_size;
-		int				m_text_array[MAX_LETTERS];
-		GLuint			m_program_id, m_width_uniform_id, m_height_uniform_id, m_string_uniform_id, m_screen_width, m_screen_height;
-		Buffer			m_buffer = { GL_ARRAY_BUFFER, 0 };
-		VAO				m_vao;
+		Texture				m_texture;
+		vertices_2d_type	m_vertices;
+		int					m_x, m_y, m_size;
+		int					m_text_array[MAX_LETTERS];
+		GLuint				m_program_id, m_width_uniform_id, m_height_uniform_id, m_string_uniform_id, m_screen_width, m_screen_height;
+		Buffer				m_buffer = { GL_ARRAY_BUFFER, 0 };
+		VAO					m_vao;
 	};
 } // namespace gl_engine
 #endif

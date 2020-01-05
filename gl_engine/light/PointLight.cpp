@@ -5,16 +5,16 @@
 namespace gl_engine
 {
 	// // ----- STATICS ----- // //
-	const std::string PointLight::TYPE = "point_light";
+	const std::string PointLight::TYPE = "pointLight";
 
 	// // ----- CONSTRUCTORS ----- // //
 
 	PointLight::PointLight(const GLfloat brightness, const glm::vec3 color) :
-		m_light_mesh(Sphere::createSphere(m_radius)),
+		m_light_mesh(Sphere::create_sphere(m_radius)),
 		m_shader(Shader("lightShader", "lightShader.vert", "lightShader.frag"))
 	{
-		setBrightness(brightness);
-		setColor(color);
+		set_brightness(brightness);
+		set_color(color);
 		m_camera.set_angle_of_view(CAMERA_ANGLE);
 	}
 
@@ -46,7 +46,7 @@ namespace gl_engine
 	}
 
 	// // ----- SETTERS ----- // //
-	void PointLight::setRadius(const GLfloat radius)
+	void PointLight::set_radius(const GLfloat radius)
 	{
 		if (radius < 0)
 		{

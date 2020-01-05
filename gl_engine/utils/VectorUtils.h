@@ -21,9 +21,9 @@ namespace gl_engine
 	{
 		// // ----- COMBINE VECTORS ----- // //
 		template<typename T, typename ...Args>
-		std::vector<T> combineVectors(std::vector<T>& s_first, Args...args)
+		std::vector<T> combine_vectors(std::vector<T>& s_first, Args...args)
 		{
-			std::vector<T> second = combineVectors(args...);
+			std::vector<T> second = combine_vectors(args...);
 			std::vector<T> outDistances;
 
 			outDistances.reserve(s_first.size() + second.size());
@@ -34,7 +34,7 @@ namespace gl_engine
 		}
 
 		template<typename T>
-		std::vector<T> combineVectors(std::vector<T>& s_first, std::vector<T>& s_second)
+		std::vector<T> combine_vectors(std::vector<T>& s_first, std::vector<T>& s_second)
 		{
 			std::vector<T> outDistances;
 
@@ -47,38 +47,38 @@ namespace gl_engine
 
 		// // ----- MIN/MAX VALUES ----- // //
 		template <typename T1, typename T2>
-		T1 minValue(T1 first, T2 second)
+		T1 min_value(T1 first, T2 second)
 		{
 			return (first < second) ? first : second;
 		}
 		template <typename T1, typename T2, typename ...Args>
-		T1 minValue(T1 first, T2 second, Args ...args)
+		T1 min_value(T1 first, T2 second, Args ...args)
 		{
-			return (first < second) ? minValue(first, args...) : minValue(second, args...);
+			return (first < second) ? min_value(first, args...) : min_value(second, args...);
 		}
 		template<typename T1, typename T2>
-		T1 maxValue(T1 first, T2 second)
+		T1 max_value(T1 first, T2 second)
 		{
 			return (first > second) ? first : second;
 		}
 		template<typename T1, typename T2, typename ...Args>
-		T1 maxValue(T1 first, T2 second, Args... args)
+		T1 max_value(T1 first, T2 second, Args... args)
 		{
-			return (first > second) ? maxValue(first, args...) : maxValue(second, args...);
+			return (first > second) ? max_value(first, args...) : max_value(second, args...);
 		}
 
 		// // ----- AVERAGE VECTOR ----- // //
 		template <typename ... Args>
-		glm::vec3 vectorAverage(Args... args)
+		glm::vec3 vector_average(Args... args)
 		{
 			glm::vec3 outVec;
 
-			auto min_x = minValue(args.x...);
-			auto max_x = maxValue(args.x...);
-			auto min_y = minValue(args.y...);
-			auto max_y = maxValue(args.y...);
-			auto min_z = minValue(args.z...);
-			auto max_z = maxValue(args.z...);
+			auto min_x = min_value(args.x...);
+			auto max_x = max_value(args.x...);
+			auto min_y = min_value(args.y...);
+			auto max_y = max_value(args.y...);
+			auto min_z = min_value(args.z...);
+			auto max_z = max_value(args.z...);
 
 			outVec.x = min_x + (max_x - min_x) / 2;
 			outVec.y = min_y + (max_y - min_y) / 2;
@@ -89,24 +89,24 @@ namespace gl_engine
 
 
 		//// // ----- DISTANCE SQUARED ----- // //
-		GLfloat distanceSquared(glm::vec2, glm::vec2);
-		GLfloat distanceSquared(glm::vec3, glm::vec3);
+		GLfloat distance_squared(glm::vec2, glm::vec2);
+		GLfloat distance_squared(glm::vec3, glm::vec3);
 
 		// // ----- IS NEAR ----- // //
 		template <typename T>
-		bool isNear(T s_point_1, T s_point_2, float threshold)
+		bool is_near(T s_point_1, T s_point_2, float threshold)
 		{
-			return distanceSquared(s_point_1, s_point_2) < (threshold * threshold);
+			return distance_squared(s_point_1, s_point_2) < (threshold * threshold);
 		}
 
 		// // ----- IS LESS THAN ----- // //
-		bool isLessThan(const glm::vec2&, const glm::vec2&, const float threshold);
-		bool isLessThan(const glm::vec3&, const glm::vec3&, float threshold);
+		bool is_less_than(const glm::vec2&, const glm::vec2&, const float threshold);
+		bool is_less_than(const glm::vec3&, const glm::vec3&, float threshold);
 
 
 		// // ----- QUICK SORT VECTOR OF PAIRS ----- // //
 		template<typename T1, typename T2>
-		void quickSortPairVector(std::vector<std::pair<T1, T2>>& s_pairs)
+		void quick_sort_pair_vector(std::vector<std::pair<T1, T2>>& s_pairs)
 		{
 			typedef std::vector<std::pair<T1, T2>> pairType;
 
@@ -132,10 +132,10 @@ namespace gl_engine
 					pivots.push_back(i);
 				}
 			}
-			quickSortPairVector(less);
-			quickSortPairVector(greater);
+			quick_sort_pair_vector(less);
+			quick_sort_pair_vector(greater);
 
-			s_pairs = combineVectors(greater, pivots, less);
+			s_pairs = combine_vectors(greater, pivots, less);
 			return;
 		}
 
@@ -155,7 +155,7 @@ namespace gl_engine
 		}
 
 		template<typename T>
-		void add_position(glm::tmat4x4<T>& transform, const glm::tvec3<T>& position)
+		void add_position_to_transform(glm::tmat4x4<T>& transform, const glm::tvec3<T>& position)
 		{
 			glm::tvec3<T> newPosition = extract_position(transform) + position;
 			set_position(transform, newPosition);
@@ -171,7 +171,7 @@ namespace gl_engine
 
 		*/
 		template<typename T>
-		glm::tmat4x4<T> trs(const glm::tmat3x3<T>& s_trs, std::string s_rotate_order = "xyz")//, const char[]& s_rotate_order = 'xyz')
+		glm::tmat4x4<T> translate_rotate_scale(const glm::tmat3x3<T>& trans_rot_scale, std::string s_rotate_order = "xyz")//, const char[]& s_rotate_order = 'xyz')
 		{
 			assert(s_rotate_order.size() == 3 && "Rotate order must be exactly three letters");
 
@@ -179,9 +179,9 @@ namespace gl_engine
 			glm::tvec3<T> rotate_axes[] = { {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0} };
 
 			// Break out the various vectors
-			const glm::tvec3<T>* translate_vec = &s_trs[0];
-			glm::tvec3<T> rotate_vec{ glm::radians(s_trs[1][0]), glm::radians(s_trs[1][1]), glm::radians(s_trs[1][2]) };
-			const glm::tvec3<T>* scale_vec = &s_trs[2];
+			const glm::tvec3<T>* translate_vec = &trans_rot_scale[0];
+			glm::tvec3<T> rotate_vec{ glm::radians(trans_rot_scale[1][0]), glm::radians(trans_rot_scale[1][1]), glm::radians(trans_rot_scale[1][2]) };
+			const glm::tvec3<T>* scale_vec = &trans_rot_scale[2];
 
 			// Parse rotate order
 			for (auto & i : s_rotate_order)
@@ -212,42 +212,14 @@ namespace gl_engine
 					),
 					*scale_vec
 				);
-			//return
-			//	glm::translate
-			//	(
-			//		glm::rotate
-			//		(
-			//			glm::rotate
-			//			(
-			//				glm::rotate
-			//				(
-			//					glm::scale
-			//					(
-			//						glm::tmat4x4<T>(T(1.0f)), *scale_vec
-			//					),
-			//					rotate_vec[rotate_order[2]], rotate_axes[rotate_order[2]]
-			//				),
-			//				rotate_vec[rotate_order[1]], rotate_axes[rotate_order[1]]
-			//			),
-			//			rotate_vec[rotate_order[0]], rotate_axes[rotate_order[0]]
-			//		),
-			//		*translate_vec
-			//	);
 		}
+
 		// // ----- MIN MAX LOOP ----- // //
 		template<typename T>
-		T minMaxLoop(T num, T min = 0, T max = 1)
+		T min_max_loop(T num, T min = 0, T max = 1)
 		{
-			//T p_min = (T)0;
 			T p_max = max - min;
 			T p_num = num - min;
-			//T p_num = num < 0 ? 0 - num : num;
-
-
-			//T p_num = num < min ? (T)fmod(num, max) + p_max : num;
-			//return fmod(abs(p_num), p_max*2) == p_max?max:(T)fmod(p_num, p_max);
-
-			//auto test = p_max + fmod(p_num, p_max);
 			T out;
 			if (!fmod(p_num, p_max))
 			{

@@ -26,13 +26,13 @@ namespace gl_engine
 		// // ----- CONSTRUCTOR ----- // //
 	public:
 		Material() {};
-		Material(const std::string name, const char* vertexShader, const char* fragmentShader);
-		Material(const std::string name, const char* vertexShader, const char* geometryShader, const char* fragmentShader);
+		Material(const std::string name, const char* vertex_shader, const char* fragment_shader);
+		Material(const std::string name, const char* vertex_shader, const char* geometry_shader, const char* fragment_shader);
 
 		// // ----- GENERAL ----- // //
-		void addTexture(const std::string& uniform_name, Texture* texture);
-		void bindTextures();
-		void unbindTextures();
+		void add_texture(const std::string& uniform_name, Texture* texture);
+		void bind_textures();
+		void unbind_textures();
 
 	};
 } // namespace gl_engine

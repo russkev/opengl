@@ -6,15 +6,15 @@ const int transformDestLoc		= 1;
 const int shapeDestLoc			= 2;
 
 // // Input vertex data, different for all executions of this shader.
-in layout(location = 0 ) vec3 model_vertexPosition;
-in layout(location = 1 ) vec3 model_vertexColor;
-in layout(location = 2 ) vec3 model_vertexNormal;
-in layout(location = 3 ) vec2 model_uv;
-in layout(location = 4 ) int  model_id;
-in layout(location = 5 ) vec3 model_vertexTangent;
-in layout(location = 6 ) vec3 model_vertexBitangent;
+in layout(location = 0 ) vec3 vertex_position;
+in layout(location = 1 ) vec3 vertex_color;
+in layout(location = 2 ) vec3 vertex_normal;
+in layout(location = 3 ) vec2 vertex_uv;
+in layout(location = 4 ) int  vertex_id;
+in layout(location = 5 ) vec3 vertex_tangent;
+in layout(location = 6 ) vec3 vertex_bitangent;
 in layout(location = 7 ) mat4 mat_modelToProjection;
-in layout(location = 11) mat4 mat_modelToWorld;
+in layout(location = 11) mat4 mat_model_to_world;
 in layout(location = 15) vec2 text_vertexPosition;
 in layout(location = 16) vec2 text_uv;
 in layout(location = 17) int  text_id;
@@ -102,15 +102,15 @@ mat4 transformTransform(int endTransformId)
 // Calculate final vertex position
 void transformGlPosition()
 {
-	int incoming = incomingConnection(model_id, shapeDestLoc);
+	int incoming = incomingConnection(vertex_id, shapeDestLoc);
 
 	if (incoming > -1)
 	{
 		transform = transformTransform(incoming);
 	}
-	gl_Position					= mat_modelToProjection * transform * vec4(model_vertexPosition, 1.0);
-	worldSpace_vertexPosition	= vec3(mat_modelToWorld * transform * vec4(model_vertexPosition, 1.0));
-	worldSpace_vertexNormal		= normalize(vec3(mat_modelToWorld * transform * vec4(model_vertexNormal, 0)));
+	gl_Position					= mat_modelToProjection * transform * vec4(vertex_position, 1.0);
+	worldSpace_vertexPosition	= vec3(mat_model_to_world * transform * vec4(vertex_position, 1.0));
+	worldSpace_vertexNormal		= normalize(vec3(mat_model_to_world * transform * vec4(vertex_normal, 0)));
 }
 
 
@@ -134,10 +134,10 @@ vec3 colorFromIndex(int a)
 void sendTangendSpaceInformation()
 {
 	// Tangent vector
-	vec3 tangentBasis	= normalize(vec3(transform * vec4(model_vertexTangent, 0.0)));
+	vec3 tangentBasis	= normalize(vec3(transform * vec4(vertex_tangent, 0.0)));
 
 	// Normal vector
-	vec3 normalBasis	= normalize(vec3(transform * vec4(model_vertexNormal, 0.0)));
+	vec3 normalBasis	= normalize(vec3(transform * vec4(vertex_normal, 0.0)));
 
 	// Orthogonalize the tangent vector use Gram Schmidt procedure 
 	tangentBasis = normalize(tangentBasis - dot(tangentBasis, normalBasis) * normalBasis);
@@ -178,8 +178,8 @@ void sendCameraSpaceInformation()
 void main()
 {
 	transformGlPosition();
-	fragmentColor				= model_vertexColor;
-	uv							= model_uv;
+	fragmentColor				= vertex_color;
+	uv							= vertex_uv;
 	sendTangendSpaceInformation();		
 	sendCameraSpaceInformation();
 
