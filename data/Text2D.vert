@@ -1,7 +1,7 @@
 #version 440 core
 
-in layout(location = 0) vec2 model_vertexPosition;
-in layout(location = 1) vec2 model_uv;
+in layout(location = 0) vec2 vertex_position;
+in layout(location = 1) vec2 vertex_uv;
 in layout(location = 2) int vertex_id;
 
 uniform int			width;
@@ -119,7 +119,7 @@ int[max_digits] float_to_ints(float num)
 
 void main()
 {
-	vec2 outPosition	= model_vertexPosition - vec2(half_width, half_height);
+	vec2 outPosition	= vertex_position - vec2(half_width, half_height);
 	outPosition			/= vec2(half_width, half_height);
 
 	vertex_color		= vec3(1.0f, 0.0f, 0.0f);

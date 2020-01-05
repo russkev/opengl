@@ -31,10 +31,10 @@ namespace gl_engine
 
 		// // ----- GETTERS ----- // //
 		Camera* camera();
-		const glm::vec3 worldPosition() override;
+		const glm::vec3 world_position() override;
 
-		glm::mat4 worldToCam_matrix();
-		glm::mat4 worldToProjection_matrix();
+		glm::mat4 world_to_cam();
+		glm::mat4 world_to_projection();
 
 		// // ----- SETTERS ----- // //
 		void set_position(const glm::vec3&) override;

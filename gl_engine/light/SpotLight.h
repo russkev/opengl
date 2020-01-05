@@ -24,8 +24,8 @@ namespace gl_engine
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		GLfloat m_innerAngle = 30.0f;
-		GLfloat m_outerAngle = 35.0f;
+		GLfloat m_inner_angle = 30.0f;
+		GLfloat m_outer_angle = 35.0f;
 		Mesh m_light_mesh;
 		Shader m_shader;
 		FreeCamera m_camera;
@@ -41,15 +41,15 @@ namespace gl_engine
 		Shader* shader() override;
 		Camera* camera() override;
 
-		const float cos_innerAngle() const;
-		const float cos_outerAngle() const;
+		const float cos_inner_angle() const;
+		const float cos_outer_angle() const;
 
 		// // ----- SETTERS ----- // //
-		void set_innerAngle(const GLfloat theta);
-		void set_outerAngle(const GLfloat theta);
+		void set_inner_angle(const GLfloat theta);
+		void set_outer_angle(const GLfloat theta);
 
 	private:
-		void set_cameraAngle();
+		void set_camera_angle();
 	};
 } // namespace gl_engine
 #endif

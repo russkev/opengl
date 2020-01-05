@@ -26,24 +26,26 @@ namespace gl_engine
 	public:
 
 		// // ----- Type Definitions ----- // //
-		//                  Position    Colour     Normal      UV
-		// typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2>								vertexDataType;
-
-		// --- Don't forget to update the gl_introspect_tuple call when changing this --- //
-		//                  Position,   Colour,    Normal,      UV,     ID,    Tangent,  Bitangent
-		/*typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>	vertexType;*/
-		typedef std::vector<Vertex>						verticesType;
-		typedef GLushort								indexType;
-		typedef std::vector<indexType>					indicesType;
+		typedef std::vector<Vertex>						vertices_type;
+		typedef GLushort								index_type;
+		typedef std::vector<index_type>					indices_type;
 		typedef std::vector<Vertex>::const_iterator		vrt_iterator;
 		typedef std::vector<GLushort>::const_iterator	ind_iterator;
+
+	private:
+		// // ----- MEMBER VARIABLES----- // //
+		vertices_type	m_vertices;
+		indices_type	m_indices;
+		GLuint			m_id;
+
 
 		// // ----- Attribute Enumeration ----- // //
 		//enum attr { position = 0, color = 1, normal = 2, uv = 3, id = 4, tangent = 5, bitangent = 6 };
 
 		// // ----- Big 6 ----- // //
+	public:
 		Mesh();
-		Mesh(const verticesType s_vertices, const indicesType s_indices);
+		Mesh(const vertices_type vertices, const indices_type indices);
 		//~Mesh() {};
 		//Mesh(const Mesh&) = delete;
 		Mesh(const Mesh&& other);
@@ -54,73 +56,64 @@ namespace gl_engine
 		Mesh& operator += (Mesh& other);
 
 		// // ----- Append ----- // //
-		void appendVertex(const Vertex s_shape);
-		void appendTriangle(const Vertex v1, const Vertex v2, const Vertex v3);
-		void appendIndex(const GLushort s_index);
+		void append_vertex(const Vertex shape);
+		void append_triangle(const Vertex vertex_1, const Vertex vertex_2, const Vertex vertex_3);
+		void append_index(const GLushort index);
 
 		// // ----- Setters ----- // //
-		void setVertex(std::size_t loc, Vertex& data);
+		void set_vertex(std::size_t pos, Vertex& data);
 		template <std::size_t attr>
-		void setVertex(std::size_t loc, const glm::vec3& data)
+		void set_vertex(std::size_t pos, const glm::vec3& data)
 		{
-			assert(numVertices() >= loc);
-			m_vertices.at(loc).position() = data;
+			assert(num_vertices() >= pos);
+			m_vertices.at(pos).position() = data;
 		}
-		void setIndex(std::size_t loc, const indexType& data);
-		void setId(GLuint s_id);
+		void set_index(std::size_t pos, const index_type& data);
+		void set_id(GLuint s_id);
 
 		// // ----- Transform ----- // //
 		void transform(glm::mat4 transformMatrix);
-		void transform(verticesType& inVertices, const glm::mat4 transformMatrix);
+		void transform(vertices_type& inVertices, const glm::mat4 transformMatrix);
 
 		// // ----- UVs ----- // //
 		void scale_uvs(const GLfloat amount);
 
 		// // ----- IDs ----- // //
-		void updateIds();
+		void update_ids();
 
 		// // ------INDICES ----- // //
-		void makeIndicesSmooth();
-		void makeIndicesFaceted();
-		int findSimilarVertex(const indexType, const std::map<Vertex, indexType>&);
-
-		// // ----- NORMALS ----- // //
-		void makeNormals();
+		void make_indices_smooth();
+		void make_indices_faceted();
+		int find_similar_vertex(const index_type, const std::map<Vertex, index_type>&);
 
 		// // ----- TANGENTS AND BITANGENTS ----- // //
-		void makeTangents();
+		void make_tangents();
 
 		// // ----- GETTERS ----- // //
-		Vertex* getVertex(std::size_t i);
+		Vertex* get_vertex(std::size_t pos);
 		template <std::size_t attr>
-		glm::vec3 getVertex(const std::size_t i)
+		glm::vec3 get_vertex(const std::size_t pos)
 		{
 			assert(m_num_vertices > 0);
-			return std::get<attr>(m_vertices.at(i));
+			return std::get<attr>(m_vertices.at(pos));
 		}
-		indexType getIndex(std::size_t i);
+		index_type get_index(std::size_t i);
 
-		std::size_t numIndices() { return m_indices.size(); }
-		std::size_t numVertices() { return m_vertices.size(); }
-		verticesType vertices() { return m_vertices; }
-		const indicesType& indices() const { return m_indices; }
+		std::size_t num_indices() { return m_indices.size(); }
+		std::size_t num_vertices() { return m_vertices.size(); }
+		vertices_type vertices() { return m_vertices; }
+		const indices_type& indices() const { return m_indices; }
 
 		// // ----- SIZE GETTERS----- // //
-		GLsizeiptr sizeVertices() { return m_vertices.size() * sizeof(Vertex); }
-		GLsizeiptr sizeIndices() { return m_indices.size() * sizeof(indexType); }
-		GLsizeiptr sizeShape() { return sizeVertices() + sizeIndices(); }
+		GLsizeiptr size_vertices() { return m_vertices.size() * sizeof(Vertex); }
+		GLsizeiptr size_indices() { return m_indices.size() * sizeof(index_type); }
+		GLsizeiptr size_shape() { return size_vertices() + size_indices(); }
 
 		// // ----- ITERATORS ----- // //
 		vrt_iterator vert_begin() { return m_vertices.begin(); }
 		vrt_iterator vert_end() { return m_vertices.end(); }
 		ind_iterator indx_begin() { return m_indices.begin(); }
 		ind_iterator indx_end() { return m_indices.end(); }
-
-	private:
-		// // ----- MEMBER VARIABLES----- // //
-		verticesType	m_vertices;
-		indicesType		m_indices;
-		GLuint			m_id;
 	};
 }  // namespace gl_engine
 #endif

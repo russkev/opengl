@@ -53,7 +53,7 @@ struct Material
 };
 uniform Material material;
 
-struct Point_Light
+struct PointLight
 {
 	vec3 position;
 	float brightness;
@@ -62,9 +62,9 @@ struct Point_Light
 	mat4 projection;
 	float far_plane;
 };
-uniform Point_Light point_light[NUM_LIGHTS];
+uniform PointLight pointLight[NUM_LIGHTS];
 
-struct Directional_Light
+struct DirectionalLight
 {
 	vec3 direction;
 	float brightness;
@@ -72,9 +72,9 @@ struct Directional_Light
 	sampler2DArray depth;
 	mat4 projection;
 };
-uniform Directional_Light directional_light[NUM_LIGHTS];
+uniform DirectionalLight directionalLight[NUM_LIGHTS];
 
-struct Spot_Light
+struct SpotLight
 {
 	vec3 position;
 	vec3 direction;
@@ -85,7 +85,7 @@ struct Spot_Light
 	sampler2DArray depth;
 	mat4 projection;
 };
-uniform Spot_Light spot_light[NUM_LIGHTS];
+uniform SpotLight spotLight[NUM_LIGHTS];
 
 struct Camera
 {
@@ -97,15 +97,21 @@ uniform Camera camera;
 out vec4 fragColor;
 
 // // LOCALS // //
-vec3 worldSpace_cam_direction;
-vec3 worldSpace_pointLight_direction[NUM_LIGHTS];
-vec3 worldSpace_spotLight_direction[NUM_LIGHTS];
-float worldSpace_spotLight_intensity[NUM_LIGHTS];
-vec3 worldSpace_normal_direction;
+struct Local_WorldSpace
+{
+	vec3 cam_direction;
+	vec3 pointLight_direction[NUM_LIGHTS];
+	vec3 spotLight_direction[NUM_LIGHTS];
+	float spotLight_intensity[NUM_LIGHTS];
+	vec3 normal_direction;
+} local_worldSpace;
 
-vec3 camSpace_cam_normalized;
-vec3 camSpace_light_normalized[NUM_LIGHTS];
-vec3 camSpace_normal_normalized;
+struct Local_CamSpace
+{
+	vec3 cam;
+	vec3 light[NUM_LIGHTS];
+	vec3 normal;
+} local_camSpace;
 
 vec3 tangentSpace_cam_direction;
 vec3 tangentSpace_pointLight_direction[NUM_LIGHTS];
@@ -145,29 +151,43 @@ float spot_intensity(vec3 vertex_position, vec3 light_position, vec3 light_aim, 
 // INITIALIZATION OF LOCALS //
 void init_worldSpace()
 {
-	worldSpace_cam_direction = normalize(camera.position - worldSpace.vertex_position);
+//	local_worldSpace.cam_direction = normalize(camera.position - worldSpace.vertex_position);
+//	for (int i = 0; i < NUM_LIGHTS; i++)
+//	{
+//		local_worldSpace.pointLight_direction[i] = normalize(pointLight[i].position - worldSpace.vertex_position);
+//		local_worldSpace.spotLight_direction[i] = normalize(spotLight[i].position - worldSpace.vertex_position);
+//		local_worldSpace.spotLight_intensity[i] = spot_intensity(
+//			worldSpace.vertex_position,
+//			spotLight[i].position, 
+//			spotLight[i].direction, 
+//			spotLight[i].inner, 
+//			spotLight[i].outer);
+//	}
+//	local_worldSpace.normal_direction = normalize(worldSpace.vertex_normal);
+
+	local_worldSpace.cam_direction = normalize(camera.position - worldSpace.vertex_position);
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		worldSpace_pointLight_direction[i] = normalize(point_light[i].position - worldSpace.vertex_position);
-		worldSpace_spotLight_direction[i] = normalize(spot_light[i].position - worldSpace.vertex_position);
-		worldSpace_spotLight_intensity[i] = spot_intensity(
+		local_worldSpace.pointLight_direction[i] = normalize(pointLight[i].position - worldSpace.vertex_position);
+		local_worldSpace.spotLight_direction[i] = normalize(spotLight[i].position - worldSpace.vertex_position);
+		local_worldSpace.spotLight_intensity[i] = spot_intensity(
 			worldSpace.vertex_position,
-			spot_light[i].position, 
-			spot_light[i].direction, 
-			spot_light[i].inner, 
-			spot_light[i].outer);
+			spotLight[i].position, 
+			spotLight[i].direction, 
+			spotLight[i].inner, 
+			spotLight[i].outer);
 	}
-	worldSpace_normal_direction = normalize(worldSpace.vertex_normal);
+	local_worldSpace.normal_direction = normalize(worldSpace.vertex_normal);
 }
 
 void init_camSpace()
 {
-	camSpace_cam_normalized = normalize(camSpace.cam_direction);
+	local_camSpace.cam = normalize(camSpace.cam_direction);
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		camSpace_light_normalized[i] = normalize(camSpace.light_direction[i]);
+		local_camSpace.light[i] = normalize(camSpace.light_direction[i]);
 	}
-	camSpace_normal_normalized = normalize(camSpace.normal_direction);
+	local_camSpace.normal = normalize(camSpace.normal_direction);
 }
 
 void init_tangentSpace()
@@ -180,10 +200,10 @@ void init_tangentSpace()
 		tangentSpace_spotLight_direction[i] = normalize(tangentSpace.spotLight_position[i] - tangentSpace.frag_position);
 		tangentSpace_spotLight_intensity[i] = spot_intensity(
 			worldSpace.vertex_position,
-			spot_light[i].position, 
-			spot_light[i].direction, 
-			spot_light[i].inner, 
-			spot_light[i].outer);
+			spotLight[i].position, 
+			spotLight[i].direction, 
+			spotLight[i].inner, 
+			spotLight[i].outer);
 	}
 	tangentSpace_normal = vec3(0.0, 0.0, 1.0);
 	
@@ -199,15 +219,15 @@ vec3 diffuse(vec3 normal, vec3 light)
 vec3 diffuse_point_worldSpace(int index)
 {
 	return diffuse(
-		worldSpace_normal_direction,
-		worldSpace_pointLight_direction[index]);
+		local_worldSpace.normal_direction,
+		local_worldSpace.pointLight_direction[index]);
 }
 
 vec3 diffuse_point_camSpace(int index)
 {
 	return diffuse(
-		camSpace_normal_normalized, 
-		camSpace_light_normalized[index]);
+		local_camSpace.normal, 
+		local_camSpace.light[index]);
 }
 
 vec3 diffuse_point_tangentSpace(int index)
@@ -220,8 +240,8 @@ vec3 diffuse_point_tangentSpace(int index)
 vec3 diffuse_directional_worldSpace(int index)
 {
 	return diffuse(
-		worldSpace_normal_direction,
-		-directional_light[index].direction);
+		local_worldSpace.normal_direction,
+		-directionalLight[index].direction);
 }
 
 vec3 diffuse_directional_tangentSpace(int index)
@@ -234,10 +254,10 @@ vec3 diffuse_directional_tangentSpace(int index)
 
 vec3 diffuse_spot_worldSpace(int index)
 {
-	return worldSpace_spotLight_intensity[index] * 
+	return local_worldSpace.spotLight_intensity[index] * 
 	diffuse(
-		worldSpace_normal_direction,
-		worldSpace_spotLight_direction[index]);
+		local_worldSpace.normal_direction,
+		local_worldSpace.spotLight_direction[index]);
 }
 
 vec3 diffuse_spot_tangentSpace(int index)
@@ -259,17 +279,17 @@ vec3 specular(vec3 light, vec3 normal, vec3 cam)
 vec3 specular_point_worldSpace(int index)
 {
 	return specular(
-		worldSpace_pointLight_direction[index], 
-		worldSpace_normal_direction, 
-		worldSpace_cam_direction);
+		local_worldSpace.pointLight_direction[index], 
+		local_worldSpace.normal_direction, 
+		local_worldSpace.cam_direction);
 }
 
 vec3 specular_point_camSpace(int index)
 {
 	return specular(
-		camSpace_light_normalized[index],
-		camSpace_normal_normalized,
-		camSpace_cam_normalized);
+		local_camSpace.light[index],
+		local_camSpace.normal,
+		local_camSpace.cam);
 }
 
 vec3 specular_point_tangentSpace(int index)
@@ -283,9 +303,9 @@ vec3 specular_point_tangentSpace(int index)
 vec3 specular_directional_worldSpace(int index)
 {
 	return specular(
-		-directional_light[index].direction,
-		worldSpace_normal_direction,
-		worldSpace_cam_direction);
+		-directionalLight[index].direction,
+		local_worldSpace.normal_direction,
+		local_worldSpace.cam_direction);
 }
 
 vec3 specular_directional_tangentSpace(int index)
@@ -298,11 +318,11 @@ vec3 specular_directional_tangentSpace(int index)
 
 vec3 specular_spot_worldSpace(int index)
 {
-	return worldSpace_spotLight_intensity[index] * 
+	return local_worldSpace.spotLight_intensity[index] * 
 	specular(
-		worldSpace_spotLight_direction[index],
-		worldSpace_normal_direction,
-		worldSpace_cam_direction);
+		local_worldSpace.spotLight_direction[index],
+		local_worldSpace.normal_direction,
+		local_worldSpace.cam_direction);
 }
 
 vec3 specular_spot_tangentSpace(int index)
@@ -384,23 +404,23 @@ void main ()
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
 		float temp_shadow = create_point_shadow(
-			point_light[i].position,
-			point_light[i].far_plane,
-			point_light[i].depth);
-		float temp_attenuation = attenuation(point_light[i].position);
+			pointLight[i].position,
+			pointLight[i].far_plane,
+			pointLight[i].depth);
+		float temp_attenuation = attenuation(pointLight[i].position);
 
 		diffuse_out += 
 			diffuse_point_worldSpace(i) *
-			point_light[i].brightness * point_light[i].brightness *
-			point_light[i].color * 
+			pointLight[i].brightness * pointLight[i].brightness *
+			pointLight[i].color * 
 			temp_attenuation * 
 			temp_shadow;
 
 		specular_out +=
 			specular_point_worldSpace(i) * 
-			point_light[i].brightness *  point_light[i].brightness *
+			pointLight[i].brightness *  pointLight[i].brightness *
 			material.specular * 
-			point_light[i].color * 
+			pointLight[i].color * 
 			temp_attenuation * 
 			temp_shadow;
 	}
@@ -411,50 +431,45 @@ void main ()
 		float temp_shadow = create_directional_shadow(
 			directionalLight_space.position[i], 
 			tangentSpace_directionalLight_normalized[i],
-			directional_light[i].depth);
+			directionalLight[i].depth);
 
 		diffuse_out += 
 			diffuse_directional_worldSpace(i) *
-			directional_light[i].brightness *
-			directional_light[i].color * 
+			directionalLight[i].brightness *
+			directionalLight[i].color * 
 			temp_shadow;
 
 		specular_out +=
 			specular_directional_tangentSpace(i) *
-			directional_light[i].brightness *
+			directionalLight[i].brightness *
 			material.specular * 
-			directional_light[i].color * 
+			directionalLight[i].color * 
 			temp_shadow;
 	}
 
 	// Spot lights
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		float temp_attenuation = attenuation(spot_light[i].position);
+		float temp_attenuation = attenuation(spotLight[i].position);
 		float temp_shadow = create_directional_shadow(
 			spotLight_space.position[i], 
 			tangentSpace_spotLight_direction[i],
-			spot_light[i].depth);
+			spotLight[i].depth);
 
 		diffuse_out +=
 			diffuse_spot_tangentSpace(i) * 
-			spot_light[i].brightness * spot_light[i].brightness *
-			spot_light[i].color * 
+			spotLight[i].brightness * spotLight[i].brightness *
+			spotLight[i].color * 
 			temp_attenuation * 
 			temp_shadow;
 		specular_out +=
 			specular_spot_tangentSpace(i) *
-			point_light[i].brightness * spot_light[i].brightness *
+			pointLight[i].brightness * spotLight[i].brightness *
 			material.specular * 
-			spot_light[i].color * 
+			spotLight[i].color * 
 			temp_attenuation * 
 			temp_shadow;
 	}
-
-//	float temp_shadow = create_point_shadow(
-//		point_light[0].position,
-//		point_light[0].far_plane,
-//		point_light[0].depth);
 
 	vec3 outColor = 
 		diffuse_out * texture(material.diffuse, uv).rgb

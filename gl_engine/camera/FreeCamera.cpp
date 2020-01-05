@@ -18,27 +18,27 @@ namespace gl_engine
 
 		if (keyboardState[SDL_SCANCODE_A])
 		{
-			Camera::add_position(glm::vec3{ +MOVE_SPEED, 0, 0 });
+			Camera::add_to_position(glm::vec3{ +MOVE_SPEED, 0, 0 });
 		}
 		if (keyboardState[SDL_SCANCODE_D])
 		{
-			Camera::add_position(glm::vec3{ -MOVE_SPEED, 0, 0 });
+			Camera::add_to_position(glm::vec3{ -MOVE_SPEED, 0, 0 });
 		}
 		if (keyboardState[SDL_SCANCODE_W])
 		{
-			Camera::add_position(glm::vec3{ 0, 0, +MOVE_SPEED });
+			Camera::add_to_position(glm::vec3{ 0, 0, +MOVE_SPEED });
 		}
 		if (keyboardState[SDL_SCANCODE_S])
 		{
-			Camera::add_position(glm::vec3{ 0, 0, -MOVE_SPEED });
+			Camera::add_to_position(glm::vec3{ 0, 0, -MOVE_SPEED });
 		}
 		if (keyboardState[SDL_SCANCODE_Q])
 		{
-			Camera::add_position(glm::vec3{ 0, +MOVE_SPEED, 0});
+			Camera::add_to_position(glm::vec3{ 0, +MOVE_SPEED, 0});
 		}
 		if (keyboardState[SDL_SCANCODE_E])
 		{
-			Camera::add_position(glm::vec3{ 0, -MOVE_SPEED, 0 });
+			Camera::add_to_position(glm::vec3{ 0, -MOVE_SPEED, 0 });
 		}
 	}
 

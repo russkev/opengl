@@ -1,15 +1,15 @@
 #version 440 core
 
-in layout(location = 0 ) vec3 model_vertexPosition;
+in layout(location = 0 ) vec3 vertex_position;
 
 struct Transform
 {
-	mat4 modelToProjection;
+	mat4 model_to_projection;
 };
 
 uniform Transform transform;
 
 void main()
 {
-	gl_Position = transform.modelToProjection * vec4(model_vertexPosition, 1.0);
+	gl_Position = transform.model_to_projection * vec4(vertex_position, 1.0);
 }

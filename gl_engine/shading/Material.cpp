@@ -4,15 +4,15 @@
 
 namespace gl_engine
 {
-	Material::Material(const std::string name, const char* vertexShader, const char* fragmentShader) :
-		Shader{ name, vertexShader, fragmentShader }
+	Material::Material(const std::string name, const char* vertex_shader, const char* fragment_shader) :
+		Shader{ name, vertex_shader, fragment_shader }
 	{}
 
 	Material::Material(const std::string name, const char* vertexShader, const char* geometryShader, const char* fragmentShader) :
 		Shader{ name, vertexShader, geometryShader, fragmentShader }
 	{}
 
-	void Material::addTexture(const std::string& uniform_name, Texture* texture)
+	void Material::add_texture(const std::string& uniform_name, Texture* texture)
 	{
 		if (m_textures.find(uniform_name) != m_textures.end())
 		{
@@ -29,7 +29,7 @@ namespace gl_engine
 		texture->process();
 	}
 
-	void Material::bindTextures()
+	void Material::bind_textures()
 	{
 		//int texture_unit = 0;
 		for (const auto & texture_pair : m_textures)
@@ -38,12 +38,12 @@ namespace gl_engine
 			Texture* curr_texture = texture_pair.second;
 			auto texture_unit = Shader::uniforms().at(curr_locationName).texture_unit;
 
-			Shader::setUniform(curr_locationName, texture_unit);
+			Shader::set_uniform(curr_locationName, texture_unit);
 			curr_texture->bind(texture_unit);
 		}
 	}
 
-	void Material::unbindTextures()
+	void Material::unbind_textures()
 	{
 		for (const auto & texture_pair : m_textures)
 		{

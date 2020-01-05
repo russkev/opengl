@@ -192,8 +192,6 @@
     <None Include="..\data\DepthShaderCube.vert" />
     <None Include="..\data\LightShader.frag" />
     <None Include="..\data\LightShader.vert" />
-    <None Include="..\data\SimpleFragmentShader.frag" />
-    <None Include="..\data\SimpleVertexShader.vert" />
     <None Include="..\data\Text2D.frag" />
     <None Include="..\data\Text2D.vert" />
     <None Include="packages.config" />

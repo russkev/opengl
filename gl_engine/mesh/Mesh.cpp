@@ -15,12 +15,12 @@ namespace gl_engine
 {
 	// // ----- Constructors ----- // //
 	Mesh::Mesh() :
-		m_vertices(verticesType{}),
-		m_indices(indexType{}),
+		m_vertices(vertices_type{}),
+		m_indices(index_type{}),
 		m_id(0u)
 	{};
 
-	Mesh::Mesh(const verticesType s_vertices, const indicesType s_indices) :
+	Mesh::Mesh(const vertices_type s_vertices, const indices_type s_indices) :
 		m_vertices(s_vertices),
 		m_indices(s_indices)
 	{};
@@ -42,39 +42,40 @@ namespace gl_engine
 	// // ----- Addition Assign ----- // //
 	Mesh& Mesh::operator += (Mesh& other)
 	{
-		auto currentNumVertices = (indexType)numVertices();
-		for (std::size_t i = 0u; i < other.numIndices(); ++i)
+		auto currentNumVertices = (index_type)num_vertices();
+		for (std::size_t i = 0u; i < other.num_indices(); ++i)
 		{
 			m_indices.push_back(other.m_indices.at(i) + currentNumVertices);
 		}
 		m_vertices.insert(m_vertices.end(), other.m_vertices.begin(), other.m_vertices.end());
-		updateIds();
+		update_ids();
 		return *this;
 	}
 
 	// // ----- Append ----- // //
-	void Mesh::appendVertex(const Vertex s_vertex)
+	void Mesh::append_vertex(const Vertex vertex)
 	{
-		m_vertices.push_back(s_vertex);
+		m_vertices.push_back(vertex);
 	}
 
-	void Mesh::appendTriangle(const Vertex s_v1, const Vertex s_v2, const Vertex s_v3)
+	void Mesh::append_triangle(const Vertex vertex_1, const Vertex vertex_2, const Vertex vertex_3)
 	{
-		m_vertices.push_back(s_v1);
-		m_vertices.push_back(s_v2);
-		m_vertices.push_back(s_v3);
+		m_vertices.push_back(vertex_1);
+		m_vertices.push_back(vertex_2);
+		m_vertices.push_back(vertex_3);
 	}
 
-	void Mesh::appendIndex(const GLushort s_index)
+	void Mesh::append_index(const GLushort pos)
 	{
-		m_indices.push_back(s_index);
+		m_indices.push_back(pos);
 	}
 
 	// // ----- Setters ----- // //
-	void Mesh::setVertex(std::size_t loc, Vertex& vertex)
+	void Mesh::set_vertex(std::size_t pos, Vertex& vertex)
 	{
-		assert(numVertices() >= loc);
-		m_vertices.at(loc) = std::move(vertex);
+		assert(num_vertices() >= pos);
+		
+		m_vertices.at(pos) = std::move(vertex);
 	}
 
 	// // ------UVs ----- // //
@@ -85,7 +86,7 @@ namespace gl_engine
 		{
 			glm::vec2 curent_uv = vertex.uv();
 			glm::vec2 new_uv = scale_matrix * vertex.uv();
-			vertex.uv() = new_uv;
+			vertex.set_uv(new_uv);
 		}
 	}
 
@@ -93,25 +94,25 @@ namespace gl_engine
 	// // ------INDICES ----- // //
 
 	// Guess shared indices based on proximity
-	void Mesh::makeIndicesSmooth()
+	void Mesh::make_indices_smooth()
 	{
-		makeIndicesFaceted();
-		verticesType newVertices;
-		indicesType newIndices;
-		std::map<Vertex, indexType> vertexMap;
+		make_indices_faceted();
+		vertices_type newVertices;
+		indices_type newIndices;
+		std::map<Vertex, index_type> vertexMap;
 
 		for (int i = 0; i < m_vertices.size(); i++)
 		{
-			int existingIndex = findSimilarVertex(i, vertexMap);
+			int existingIndex = find_similar_vertex(i, vertexMap);
 			if (existingIndex >= 0)
 			{
-				newIndices.push_back((indexType)existingIndex);
+				newIndices.push_back((index_type)existingIndex);
 			}
 			else
 			{
 
 				newVertices.push_back(m_vertices.at(i));
-				indexType newIndex = (indexType)newVertices.size() - 1;
+				index_type newIndex = (index_type)newVertices.size() - 1;
 				newIndices.push_back(newIndex);
 				vertexMap[m_vertices.at(i)] = newIndex;
 			}
@@ -120,15 +121,15 @@ namespace gl_engine
 		std::swap(newIndices, m_indices);
 	}
 
-	void Mesh::makeIndicesFaceted()
+	void Mesh::make_indices_faceted()
 	{
 		for (auto i = 0; i < m_vertices.size(); i++)
 		{
-			m_indices.push_back((indexType)i);
+			m_indices.push_back((index_type)i);
 		}
 	}
 
-	int Mesh::findSimilarVertex(const indexType s_currentVertIndex, const std::map<Vertex, indexType>& s_vertexMap)
+	int Mesh::find_similar_vertex(const index_type s_currentVertIndex, const std::map<Vertex, index_type>& s_vertexMap)
 	{
 		auto iterator = s_vertexMap.find(m_vertices.at(s_currentVertIndex));
 		if (iterator == s_vertexMap.end())
@@ -141,18 +142,18 @@ namespace gl_engine
 		}
 	}
 
-	void Mesh::setIndex(std::size_t loc, const indexType& data)
+	void Mesh::set_index(std::size_t loc, const index_type& data)
 	{
-		assert(numIndices() >= loc);
+		assert(num_indices() >= loc);
 		m_indices.at(loc) = data;
 	}
 
 	// // ----- TANGENTS AND BITANGENTS ----- // //
-	void Mesh::makeTangents()
+	void Mesh::make_tangents()
 	{
 		assert(m_vertices.size() > 0);
 		assert(m_indices.size() > 0);
-		std::vector<indexType> existingIndices;
+		std::vector<index_type> existingIndices;
 
 		// Cycle through sets of three indices
 		for (auto i = 0; i < m_indices.size(); i += 3)
@@ -189,14 +190,14 @@ namespace gl_engine
 					glm::vec3 existingBitangent = m_vertices.at(m_indices.at(i + j)).bitangent();
 
 					// Calculate and set the average of the tangents. Good for them to be non-normalised here.
-					m_vertices.at(m_indices.at(i + j)).tangent() = (existingTangent + newTangent) / 2.0f;
-					m_vertices.at(m_indices.at(i + j)).bitangent() = (existingBitangent + newBitangent) / 2.0f;
+					m_vertices.at(m_indices.at(i + j)).set_tangent((existingTangent + newTangent) / 2.0f);
+					m_vertices.at(m_indices.at(i + j)).set_bitangent((existingBitangent + newBitangent) / 2.0f);
 
 				}
 				else {
 					// Set the new tangents
-					m_vertices.at(m_indices.at(i + j)).tangent() = newTangent;
-					m_vertices.at(m_indices.at(i + j)).bitangent() = newBitangent;
+					m_vertices.at(m_indices.at(i + j)).set_tangent(newTangent);
+					m_vertices.at(m_indices.at(i + j)).set_bitangent(newBitangent);
 				}
 
 			}
@@ -208,29 +209,29 @@ namespace gl_engine
 		}
 	}
 
-	void Mesh::setId(GLuint s_id)
+	void Mesh::set_id(GLuint id)
 	{
-		if (numVertices() > 0)
+		if (num_vertices() > 0)
 		{
 			for (auto & vertex : m_vertices)
 			{
-				vertex.id() = s_id;
+				vertex.set_id(id);
 			}
 		}
 
 	}
 
 	// // ----- Getters ----- // //
-	Vertex* Mesh::getVertex(std::size_t loc)
+	Vertex* Mesh::get_vertex(std::size_t pos)
 	{
-		assert(numVertices() >= loc);
-		return &m_vertices.at(loc);
+		assert(num_vertices() >= pos);
+		return &m_vertices.at(pos);
 	}
 
-	Mesh::indexType Mesh::getIndex(std::size_t i)
+	Mesh::index_type Mesh::get_index(std::size_t pos)
 	{
-		assert(numIndices() >= i);
-		return m_indices.at(i);
+		assert(num_indices() >= pos);
+		return m_indices.at(pos);
 	}
 
 	// ----- Transform ----- // //
@@ -239,7 +240,7 @@ namespace gl_engine
 		transform(m_vertices, transformMatrix);
 	}
 
-	void Mesh::transform(Mesh::verticesType& inVertices, const glm::mat4 transformMatrix)
+	void Mesh::transform(Mesh::vertices_type& inVertices, const glm::mat4 transformMatrix)
 	{
 
 		assert(inVertices.size() > 0);
@@ -252,20 +253,20 @@ namespace gl_engine
 			auto bitangent = transformMatrix * glm::vec4(vertex.bitangent(), 1);
 
 			// Set the new vertex attributes
-			vertex.position() = (glm::vec3)position;
-			vertex.normal() = (glm::vec3)normal;
-			vertex.tangent() = (glm::vec3)tangent;
-			vertex.bitangent() = (glm::vec3)bitangent;
+			vertex.set_position(position);
+			vertex.set_normal(normal);
+			vertex.set_tangent(tangent);
+			vertex.set_bitangent(bitangent);
 		}
 	}
 
-	void Mesh::updateIds()
+	void Mesh::update_ids()
 	{
-		if (numVertices() > 0)
+		if (num_vertices() > 0)
 		{
 			for (auto & vertex : m_vertices)
 			{
-				vertex.id() = m_id;
+				vertex.set_id(m_id);
 			}
 		}
 

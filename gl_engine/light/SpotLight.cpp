@@ -8,24 +8,24 @@
 namespace gl_engine
 {
 
-	const std::string SpotLight::TYPE = "spot_light";
+	const std::string SpotLight::TYPE = "spotLight";
 	const std::string SpotLight::INNER = "inner";
 	const std::string SpotLight::OUTER = "outer";
 
 
 	SpotLight::SpotLight(GLfloat brightness, glm::vec3 color) :
-		m_light_mesh(Cylinder::createCylinder()),
+		m_light_mesh(Cylinder::create_cylinder()),
 		m_shader(Shader("lightShader", "lightShader.vert", "lightShader.frag"))
 	{
-		setBrightness(brightness);
-		setColor(color);
+		set_brightness(brightness);
+		set_color(color);
 
 		// Rotate mesh so that it points the right direction
 		m_light_mesh.transform(glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 0.1f, 1.0f)));
 		m_light_mesh.transform(glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
 
 		// Adjust camera angle of view
-		set_cameraAngle();
+		set_camera_angle();
 	}
 
 	// // ----- GETTERS ----- // //
@@ -48,40 +48,40 @@ namespace gl_engine
 		return &m_camera;
 	}
 
-	const float SpotLight::cos_innerAngle() const
+	const float SpotLight::cos_inner_angle() const
 	{
-		return std::cos(glm::radians(m_innerAngle));
+		return std::cos(glm::radians(m_inner_angle));
 	}
 
-	const float SpotLight::cos_outerAngle() const
+	const float SpotLight::cos_outer_angle() const
 	{
-		return std::cos(glm::radians(m_outerAngle));
+		return std::cos(glm::radians(m_outer_angle));
 	}
 
 	// // ----- SETTERS ----- // //
-	void SpotLight::set_innerAngle(const GLfloat theta)
+	void SpotLight::set_inner_angle(const GLfloat theta)
 	{
-		m_innerAngle = theta;
-		if (m_outerAngle < m_innerAngle)
+		m_inner_angle = theta;
+		if (m_outer_angle < m_inner_angle)
 		{
-			m_outerAngle = m_innerAngle;
+			m_outer_angle = m_inner_angle;
 		}
-		set_cameraAngle();
+		set_camera_angle();
 
 	}
 
-	void SpotLight::set_outerAngle(const GLfloat theta)
+	void SpotLight::set_outer_angle(const GLfloat theta)
 	{
-		m_outerAngle = theta;
-		if (m_outerAngle < m_innerAngle)
+		m_outer_angle = theta;
+		if (m_outer_angle < m_inner_angle)
 		{
-			m_innerAngle = m_outerAngle;
+			m_inner_angle = m_outer_angle;
 		}
-		set_cameraAngle();
+		set_camera_angle();
 	}
 
-	void SpotLight::set_cameraAngle()
+	void SpotLight::set_camera_angle()
 	{
-		m_camera.set_angle_of_view(m_outerAngle * 2);
+		m_camera.set_angle_of_view(m_outer_angle * 2);
 	}
 } // namespace gl_engine

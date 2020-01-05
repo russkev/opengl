@@ -95,12 +95,12 @@ namespace gl_engine
 			glm::vec3 normalVertex = tempNormals.at(normalIndex);
 
 			//new_shape.append_vertices({ locationVertex, DEFAULT_COLOUR, normalVertex, uvVertex });
-			new_shape.appendVertex(Vertex(locationVertex, normalVertex, uvVertex));
+			new_shape.append_vertex(Vertex(locationVertex, normalVertex, uvVertex));
 
 		}
 
-		new_shape.makeIndicesSmooth();
-		new_shape.makeTangents();
+		new_shape.make_indices_smooth();
+		new_shape.make_tangents();
 		return new_shape;
 	}
 } // namespace gl_engine

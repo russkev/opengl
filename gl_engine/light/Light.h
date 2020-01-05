@@ -38,7 +38,7 @@ namespace gl_engine
 		// // ----- GETTERS ----- // //
 		const GLfloat& brightness() const;
 		const glm::vec3& color() const;
-		const bool& isEnabled() const;
+		const bool& is_enabled() const;
 		virtual Mesh* mesh();
 		virtual Shader* shader();
 		virtual Camera* camera();
@@ -48,8 +48,8 @@ namespace gl_engine
 		virtual const std::string& type() const = 0;
 
 		// // ----- SETTERS ----- // //
-		void setBrightness(const GLfloat brightness);
-		void setColor(const glm::vec3 color);
+		void set_brightness(const GLfloat brightness);
+		void set_color(const glm::vec3 color);
 		void enable_mesh();
 		void disable_mesh();
 	};

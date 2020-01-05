@@ -14,16 +14,16 @@ namespace gl_engine
 		Vertex(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f))
 	{}
 
-	Vertex::Vertex(glm::vec3 s_position, glm::vec3 s_normal, glm::vec2 s_uv) :
-		Vertex(s_position, glm::vec3(0.0f, 0.0f, 0.0f), s_normal, s_uv)
+	Vertex::Vertex(glm::vec3 position, glm::vec3 normal, glm::vec2 uv) :
+		Vertex(position, glm::vec3(0.0f, 0.0f, 0.0f), normal, uv)
 	{}
 
-	Vertex::Vertex(glm::vec3 s_position, glm::vec3 s_color, glm::vec3 s_normal, glm::vec2 s_uv) :
-		Vertex(s_position, s_color, s_normal, s_uv, 0, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f))
+	Vertex::Vertex(glm::vec3 position, glm::vec3 color, glm::vec3 normal, glm::vec2 uv) :
+		Vertex(position, color, normal, uv, 0, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f))
 	{}
 
-	Vertex::Vertex(glm::vec3 s_position, glm::vec3 s_colour, glm::vec3 s_normal, glm::vec2 s_uv, GLint s_id, glm::vec3 s_tangent, glm::vec3 s_bitangent) :
-		m_vertex({ s_position, s_colour, s_normal, s_uv, s_id, s_tangent, s_bitangent })
+	Vertex::Vertex(glm::vec3 position, glm::vec3 color, glm::vec3 normal, glm::vec2 uv, GLint id, glm::vec3 tangent, glm::vec3 bitangent) :
+		m_vertex({ position, color, normal, uv, id, tangent, bitangent })
 	{}
 
 	// // ----- OPERATOR OVERLOADS ----- // //
@@ -34,7 +34,7 @@ namespace gl_engine
 
 
 	// // ----- GETTERS ----- // //
-	const Vertex::vertexType& Vertex::vertexTuple() const
+	const Vertex::vertexType& Vertex::vertex_tuple() const
 	{
 		return m_vertex;
 	}
@@ -75,38 +75,32 @@ namespace gl_engine
 	}
 
 	// // ----- SETTERS ----- // //
-	glm::vec3& Vertex::position()
+	void Vertex::set_position(const glm::vec3& position)
 	{
-		return std::get<vertexAttr::position_loc>(m_vertex);
+		std::get<vertexAttr::position_loc>(m_vertex) = position;
 	}
-
-	glm::vec3& Vertex::color()
+	void Vertex::set_color(const glm::vec3& color)
 	{
-		return std::get<vertexAttr::color_loc>(m_vertex);
+		std::get<vertexAttr::color_loc>(m_vertex) = color;
 	}
-
-	glm::vec3& Vertex::normal()
+	void Vertex::set_normal(const glm::vec3& normal)
 	{
-		return std::get<vertexAttr::normal_loc>(m_vertex);
+		std::get<vertexAttr::normal_loc>(m_vertex) = normal;
 	}
-
-	glm::vec2& Vertex::uv()
+	void Vertex::set_uv(const glm::vec2& uv)
 	{
-		return std::get<vertexAttr::uv_loc>(m_vertex);
+		std::get<vertexAttr::uv_loc>(m_vertex) = uv;
 	}
-
-	GLint& Vertex::id()
+	void Vertex::set_id(const GLint id)
 	{
-		return std::get<vertexAttr::id_loc>(m_vertex);
+		std::get<vertexAttr::id_loc>(m_vertex) = id;
 	}
-
-	glm::vec3& Vertex::tangent()
+	void Vertex::set_tangent(const glm::vec3& tangent)
 	{
-		return std::get<vertexAttr::tangent_loc>(m_vertex);
+		std::get<vertexAttr::tangent_loc>(m_vertex) = tangent;
 	}
-
-	glm::vec3& Vertex::bitangent()
+	void Vertex::set_bitangent(const glm::vec3& bitangent)
 	{
-		return std::get<vertexAttr::bitangent_loc>(m_vertex);
+		std::get<vertexAttr::bitangent_loc>(m_vertex) = bitangent;
 	}
 } // namespace gl_engine

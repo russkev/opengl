@@ -29,13 +29,13 @@ namespace gl_engine
 		Vertex();
 		Vertex(glm::vec3, glm::vec3, glm::vec2);
 		Vertex(glm::vec3, glm::vec3, glm::vec3, glm::vec2);
-		Vertex(glm::vec3 s_position, glm::vec3 s_color, glm::vec3 s_normal, glm::vec2 s_uv, GLint id, glm::vec3 tangent, glm::vec3 bitangent);
+		Vertex(glm::vec3 position, glm::vec3 color, glm::vec3 normal, glm::vec2 uv, GLint id, glm::vec3 tangent, glm::vec3 bitangent);
 
 		// // ----- OPERATOR OVERLOADS ----- // //
 		bool operator < (const Vertex&) const;
 
 		// // ----- GETTERS ----- // //
-		const vertexType& vertexTuple() const;
+		const vertexType& vertex_tuple() const;
 		const glm::vec3& position() const;
 		const glm::vec3& color() const;
 		const glm::vec3& normal() const;
@@ -45,13 +45,13 @@ namespace gl_engine
 		const glm::vec3& bitangent() const;
 
 		// // ----- SETTERS ----- // //
-		glm::vec3& position();
-		glm::vec3& color();
-		glm::vec3& normal();
-		glm::vec2& uv();
-		GLint& id();
-		glm::vec3& tangent();
-		glm::vec3& bitangent();
+		void set_position(const glm::vec3& position);
+		void set_color(const glm::vec3& color);
+		void set_normal(const glm::vec3& normal);
+		void set_uv(const glm::vec2& uv);
+		void set_id(const GLint id);
+		void set_tangent(const glm::vec3& tangent);
+		void set_bitangent(const glm::vec3& bitangent);
 
 	private:
 		// // ----- MEMBER VARIABLES ----- // //

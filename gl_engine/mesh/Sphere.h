@@ -14,11 +14,11 @@ namespace gl_engine
 	*/
 	struct Sphere
 	{
-		static Mesh createSphere(const float radius);
-		static Mesh createSphere(const float radius, const uint16_t segments);
-		static Mesh createSphere(const float radius, const uint16_t widthSegments, const uint16_t heightSegments);
+		static Mesh create_sphere(const float radius);
+		static Mesh create_sphere(const float radius, const uint16_t segments);
+		static Mesh create_sphere(const float radius, const uint16_t width_segments, const uint16_t height_segments);
 	private:
-		static glm::vec3 sphericalToCartesian(const float radius, const float theta, const float phi);
+		static glm::vec3 spherical_to_cartesian(const float radius, const float theta, const float phi);
 	};
 } // namespace gl_engine
 #endif

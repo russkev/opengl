@@ -13,10 +13,10 @@ namespace gl_engine
 	*/
 	struct Cube
 	{
-		static Mesh createCube();
-		static Mesh createCube(const float width);
+		static Mesh create_cube();
+		static Mesh create_cube(const float width);
 	private:
-		static Mesh createCubeFace(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, glm::vec3 br);
+		static Mesh create_cube_face(glm::vec3 top_left, glm::vec3 top_right, glm::vec3 bottom_left, glm::vec3 bottom_right);
 	};
 } // namespace gl_engine
 #endif

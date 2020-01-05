@@ -43,7 +43,7 @@ namespace gl_engine
 		Camera* camera() override;
 
 		// // ----- SETTERS ----- // //	
-		void setRadius(const GLfloat radius);
+		void set_radius(const GLfloat radius);
 
 	};
 } // namespace gl_engine

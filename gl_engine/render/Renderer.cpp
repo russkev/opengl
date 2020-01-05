@@ -61,7 +61,7 @@ namespace gl_engine
 		glEnable(GL_FRAMEBUFFER_SRGB);
 	}
 
-	void Renderer::init_firstFrame()
+	void Renderer::init_first_frame()
 	{
 		GLuint num_pointLights = 0, num_directionalLights = 0, num_spotLights = 0;
 		// Shadow map		
@@ -69,17 +69,17 @@ namespace gl_engine
 		{
 			if (DirectionalLight* spotLight = dynamic_cast<DirectionalLight*> (lightNode->light()))
 			{
-				lightNode->set_shaderIndex(num_directionalLights);
+				lightNode->set_shader_pos(num_directionalLights);
 				num_directionalLights++;
 			}
 			if (PointLight* spotLight = dynamic_cast<PointLight*> (lightNode->light()))
 			{
-				lightNode->set_shaderIndex(num_pointLights);
+				lightNode->set_shader_pos(num_pointLights);
 				num_pointLights++;
 			}
 			if (SpotLight* spotLight = dynamic_cast<SpotLight*> (lightNode->light()))
 			{
-				lightNode->set_shaderIndex(num_spotLights);
+				lightNode->set_shader_pos(num_spotLights);
 				num_spotLights++;
 			}
 			if (ShadowMap* shadowMap = lightNode->shadowMap())
@@ -92,10 +92,10 @@ namespace gl_engine
 	//Draw all nodes to screen
 	void Renderer::render()
 	{
-		if (m_firstFrame)
+		if (m_first_frame)
 		{
-			init_firstFrame();
-			m_firstFrame = false;
+			init_first_frame();
+			m_first_frame = false;
 		}
 		
 		// Shadow map		
@@ -117,7 +117,7 @@ namespace gl_engine
 
 		for (Material* material : m_materials)
 		{
-			material->updateLights(m_lightNodes);
+			material->update_lights(m_lightNodes);
 		}
 
 		for (auto const& node : m_root_nodes)
@@ -127,7 +127,7 @@ namespace gl_engine
 		}
 	}
 
-	void Renderer::addNode(Node* node)
+	void Renderer::add_node(Node* node)
 	{
 
 		// Check if node exists in m_root_nodes
@@ -140,23 +140,23 @@ namespace gl_engine
 		// Add material from mesh node
 		if (MeshNode* derived_meshNode = dynamic_cast<MeshNode*>(node))
 		{
-			addMaterial(derived_meshNode->material());
+			add_material(derived_meshNode->material());
 		}
 
 		if (LightNode* derived_lightNode = dynamic_cast<LightNode*>(node))
 		{
-			addLightNode(derived_lightNode);
+			add_light_node(derived_lightNode);
 		}
 
 		m_root_nodes[node->name()] = node;
 	}
 
-	void Renderer::addLightNode(LightNode* lightNode)
+	void Renderer::add_light_node(LightNode* lightNode)
 	{
 		m_lightNodes.push_back(lightNode);
 	}
 
-	void Renderer::addMaterial(Material* material)
+	void Renderer::add_material(Material* material)
 	{
 		if (std::find(m_materials.begin(), m_materials.end(), material) == m_materials.end())
 		{
@@ -164,7 +164,7 @@ namespace gl_engine
 		}
 	}
 
-	bool Renderer::pollEvents()
+	bool Renderer::poll_events()
 	{
 		SDL_Event loc_event;
 		while (SDL_PollEvent(&loc_event))
@@ -183,7 +183,7 @@ namespace gl_engine
 		timer->update();
 		render();
 		window->finish_frame();
-		window->appendTitle(("FPS: " + (std::string)timer->fps()));
+		window->append_title(("FPS: " + (std::string)timer->fps()));
 	}
 
 } // namespace gl_engine
