@@ -2,7 +2,7 @@
 #define NUM_LIGHTS 3
 #extension GL_EXT_texture_array : enable
 
-// // INS // //
+// // ----- INS ----- // //
 in WorldSpace
 {
 	vec3 vertex_position;
@@ -43,7 +43,7 @@ in DirectionalLight_Space
 
 in vec2 uv;
 
-// // UNIFORMS // //
+// // ----- UNIFORMS ----- // //
 struct Material
 {
 	sampler2D diffuse;
@@ -93,26 +93,24 @@ struct Camera
 };
 uniform Camera camera;
 
-// // OUTS // //
+// // ----- OUTS ----- // //
 out vec4 fragColor;
 
-// // LOCALS // //
-struct Local_WorldSpace
-{
-	vec3 cam_direction;
-	vec3 pointLight_direction[NUM_LIGHTS];
-	vec3 spotLight_direction[NUM_LIGHTS];
-	float spotLight_intensity[NUM_LIGHTS];
-	vec3 normal_direction;
-} local_worldSpace;
-
-struct Local_CamSpace
+// // ----- LOCAL FRAGMENT DIRECTIONS ----- // //
+struct Frag_WorldSpace
 {
 	vec3 cam;
-	vec3 light[NUM_LIGHTS];
+	vec3 pointLight[NUM_LIGHTS];
+	vec3 spotLight[NUM_LIGHTS];
+	float spotLight_intensity[NUM_LIGHTS];
 	vec3 normal;
-} local_camSpace;
+} frag_worldSpace;
 
+//struct Local_PointLight
+//{
+//	vec3 worldSpace;
+//	vec3 camSpace;
+//	vec3 
 vec3 tangentSpace_cam_direction;
 vec3 tangentSpace_pointLight_direction[NUM_LIGHTS];
 vec3 tangentSpace_directionalLight_normalized[NUM_LIGHTS];
@@ -120,7 +118,7 @@ vec3 tangentSpace_spotLight_direction[NUM_LIGHTS];
 float tangentSpace_spotLight_intensity[NUM_LIGHTS];
 vec3 tangentSpace_normal;
 
-// // UTILITY FUNCTIONS // //
+// // ----- UTILITY METHODS ----- // //
 bool vec_is_zero(vec3 v)
 {
 	return !(v.x > 0.0 && v.y > 0.0 && v.z > 0.0);
@@ -148,46 +146,22 @@ float spot_intensity(vec3 vertex_position, vec3 light_position, vec3 light_aim, 
 }
 
 
-// INITIALIZATION OF LOCALS //
+// // ----- INITIALIZATION OF LOCALS ----- // //
 void init_worldSpace()
 {
-//	local_worldSpace.cam_direction = normalize(camera.position - worldSpace.vertex_position);
-//	for (int i = 0; i < NUM_LIGHTS; i++)
-//	{
-//		local_worldSpace.pointLight_direction[i] = normalize(pointLight[i].position - worldSpace.vertex_position);
-//		local_worldSpace.spotLight_direction[i] = normalize(spotLight[i].position - worldSpace.vertex_position);
-//		local_worldSpace.spotLight_intensity[i] = spot_intensity(
-//			worldSpace.vertex_position,
-//			spotLight[i].position, 
-//			spotLight[i].direction, 
-//			spotLight[i].inner, 
-//			spotLight[i].outer);
-//	}
-//	local_worldSpace.normal_direction = normalize(worldSpace.vertex_normal);
-
-	local_worldSpace.cam_direction = normalize(camera.position - worldSpace.vertex_position);
+	frag_worldSpace.cam = normalize(camera.position - worldSpace.vertex_position);
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		local_worldSpace.pointLight_direction[i] = normalize(pointLight[i].position - worldSpace.vertex_position);
-		local_worldSpace.spotLight_direction[i] = normalize(spotLight[i].position - worldSpace.vertex_position);
-		local_worldSpace.spotLight_intensity[i] = spot_intensity(
+		frag_worldSpace.pointLight[i] = normalize(pointLight[i].position - worldSpace.vertex_position);
+		frag_worldSpace.spotLight[i] = normalize(spotLight[i].position - worldSpace.vertex_position);
+		frag_worldSpace.spotLight_intensity[i] = spot_intensity(
 			worldSpace.vertex_position,
 			spotLight[i].position, 
 			spotLight[i].direction, 
 			spotLight[i].inner, 
 			spotLight[i].outer);
 	}
-	local_worldSpace.normal_direction = normalize(worldSpace.vertex_normal);
-}
-
-void init_camSpace()
-{
-	local_camSpace.cam = normalize(camSpace.cam_direction);
-	for (int i = 0; i < NUM_LIGHTS; i++)
-	{
-		local_camSpace.light[i] = normalize(camSpace.light_direction[i]);
-	}
-	local_camSpace.normal = normalize(camSpace.normal_direction);
+	frag_worldSpace.normal = normalize(worldSpace.vertex_normal);
 }
 
 void init_tangentSpace()
@@ -209,7 +183,7 @@ void init_tangentSpace()
 	
 }
 
-// // DIFFUSE LIGHTING // //
+// // ----- DIFFUSE LIGHTING ----- // //
 vec3 diffuse(vec3 normal, vec3 light)
 {
 	float cos_theta = clamp(dot(normal, light), 0, 1);
@@ -219,15 +193,8 @@ vec3 diffuse(vec3 normal, vec3 light)
 vec3 diffuse_point_worldSpace(int index)
 {
 	return diffuse(
-		local_worldSpace.normal_direction,
-		local_worldSpace.pointLight_direction[index]);
-}
-
-vec3 diffuse_point_camSpace(int index)
-{
-	return diffuse(
-		local_camSpace.normal, 
-		local_camSpace.light[index]);
+		frag_worldSpace.normal,
+		frag_worldSpace.pointLight[index]);
 }
 
 vec3 diffuse_point_tangentSpace(int index)
@@ -240,7 +207,7 @@ vec3 diffuse_point_tangentSpace(int index)
 vec3 diffuse_directional_worldSpace(int index)
 {
 	return diffuse(
-		local_worldSpace.normal_direction,
+		frag_worldSpace.normal,
 		-directionalLight[index].direction);
 }
 
@@ -254,10 +221,10 @@ vec3 diffuse_directional_tangentSpace(int index)
 
 vec3 diffuse_spot_worldSpace(int index)
 {
-	return local_worldSpace.spotLight_intensity[index] * 
+	return frag_worldSpace.spotLight[index] * 
 	diffuse(
-		local_worldSpace.normal_direction,
-		local_worldSpace.spotLight_direction[index]);
+		frag_worldSpace.normal,
+		frag_worldSpace.spotLight[index]);
 }
 
 vec3 diffuse_spot_tangentSpace(int index)
@@ -268,7 +235,7 @@ vec3 diffuse_spot_tangentSpace(int index)
 			tangentSpace_spotLight_direction[index]);
 }
 
-// // SPECULAR LIGHTING // //
+// // ----- SPECULAR LIGHTING ----- // //
 vec3 specular(vec3 light, vec3 normal, vec3 cam)
 {
 	vec3 reflection = reflect(-light, normal);
@@ -279,17 +246,9 @@ vec3 specular(vec3 light, vec3 normal, vec3 cam)
 vec3 specular_point_worldSpace(int index)
 {
 	return specular(
-		local_worldSpace.pointLight_direction[index], 
-		local_worldSpace.normal_direction, 
-		local_worldSpace.cam_direction);
-}
-
-vec3 specular_point_camSpace(int index)
-{
-	return specular(
-		local_camSpace.light[index],
-		local_camSpace.normal,
-		local_camSpace.cam);
+		frag_worldSpace.pointLight[index], 
+		frag_worldSpace.normal, 
+		frag_worldSpace.cam);
 }
 
 vec3 specular_point_tangentSpace(int index)
@@ -304,8 +263,8 @@ vec3 specular_directional_worldSpace(int index)
 {
 	return specular(
 		-directionalLight[index].direction,
-		local_worldSpace.normal_direction,
-		local_worldSpace.cam_direction);
+		frag_worldSpace.normal,
+		frag_worldSpace.cam);
 }
 
 vec3 specular_directional_tangentSpace(int index)
@@ -318,11 +277,11 @@ vec3 specular_directional_tangentSpace(int index)
 
 vec3 specular_spot_worldSpace(int index)
 {
-	return local_worldSpace.spotLight_intensity[index] * 
+	return frag_worldSpace.spotLight[index] * 
 	specular(
-		local_worldSpace.spotLight_direction[index],
-		local_worldSpace.normal_direction,
-		local_worldSpace.cam_direction);
+		frag_worldSpace.spotLight[index],
+		frag_worldSpace.normal,
+		frag_worldSpace.cam);
 }
 
 vec3 specular_spot_tangentSpace(int index)
@@ -334,7 +293,7 @@ vec3 specular_spot_tangentSpace(int index)
 		tangentSpace_cam_direction);
 }
 
-// // SHADOW // //
+// // ----- SHADOWS ----- // //
 float create_directional_shadow(vec4 lightSpace_position, vec3 tangentSpace_lightDirection, sampler2DArray depth)
 {
 	float num_passes	= 1;
@@ -389,14 +348,13 @@ float linearize_depth(float depth)
 }	
 
 
-// // MAIN // //
+// // ----- MAIN ----- // //
 void main ()
 {
 	vec3 diffuse_out = vec3(0.0);
 	vec3 specular_out = vec3(0.0);
 
 	init_worldSpace();
-	init_camSpace();
 	init_tangentSpace();
 
 
