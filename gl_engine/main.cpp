@@ -233,6 +233,8 @@ int main(int, char**)
 	render.add_node(&directionalLight_node1);
 	render.add_node(&spotLight_node1);
 	render.add_node(&spotLight_node2);
+
+
 	//render.add_node(&axis_arrow_x_node);
 	//render.add_node(&axis_arrow_y_node);
 	//render.add_node(&axis_arrow_z_node);

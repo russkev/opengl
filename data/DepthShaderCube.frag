@@ -2,8 +2,10 @@
 #define NUM_LIGHTS 3
 #define NUM_FACES 6
 
+// // ----- INS ----- // //
 in vec4 frag_position;
 
+// // ----- UNIFORMS ----- // //
 struct PointLight
 {
 	vec3 position;
@@ -11,6 +13,7 @@ struct PointLight
 };
 uniform PointLight pointLight;
 
+// // ----- MAIN ----- // //
 void main()
 {
 

@@ -235,7 +235,10 @@ namespace gl_engine
 			std::string index = std::to_string(m_lightNode->shader_pos());
 			std::string type = m_lightNode->light()->type();
 
-			material->set_uniform(type + "[" + index + "]." + LIGHT_SPACE_TRANSFORM, m_cameraNode.world_to_projection());
+			if (is_directional())
+			{
+				material->set_uniform(type + "[" + index + "]." + LIGHT_SPACE_TRANSFORM, m_cameraNode.world_to_projection());
+			}
 		}
 	}
 
