@@ -23,14 +23,6 @@ namespace gl_engine
 		static const std::string OUTER;
 		static const std::string TYPE;
 
-		// // ----- MEMBER VARIABLES ----- // //
-	private:
-		GLfloat m_inner_angle = 30.0f;
-		GLfloat m_outer_angle = 35.0f;
-		Mesh m_light_mesh;
-		Shader m_shader;
-		FreeCamera m_camera;
-
 		// // ----- CONSTRUCTORS ----- // //
 	public:
 		SpotLight(GLfloat brightness, glm::vec3 color);
@@ -51,6 +43,14 @@ namespace gl_engine
 
 	private:
 		void set_camera_angle();
+
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		GLfloat m_inner_angle = 30.0f;
+		GLfloat m_outer_angle = 35.0f;
+		Mesh m_light_mesh;
+		Shader m_shader;
+		FreeCamera m_camera;
 	};
 } // namespace gl_engine
 #endif

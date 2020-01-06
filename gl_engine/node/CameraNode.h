@@ -18,10 +18,6 @@ namespace gl_engine
 	*/
 	struct CameraNode : public Node
 	{
-		// // ----- MEMBER VARIABLES ----- // //
-	private:
-		Camera* m_camera;
-
 		// // ----- CONSTRUCTORS ----- // //
 	public:
 		CameraNode() {};
@@ -39,6 +35,10 @@ namespace gl_engine
 
 		// // ----- SETTERS ----- // //
 		void set_position(const glm::vec3&) override;
+
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		Camera* m_camera;
 	};
 } // namespace gl_engine
 #endif

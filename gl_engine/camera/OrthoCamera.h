@@ -12,13 +12,6 @@ namespace gl_engine
 	*/
 	struct OrthoCamera : public Camera
 	{
-		// // ----- MEMBER VARIABLES ----- // //
-	private:
-		GLfloat m_left = -10.0f;
-		GLfloat m_right = 10.0f;
-		GLfloat m_bottom = -10.0f;
-		GLfloat m_top = 10.0f;
-
 		// // ----- CONSTRUCTORS ----- // //
 	public:
 		OrthoCamera();
@@ -38,6 +31,13 @@ namespace gl_engine
 		void set_right(const GLfloat right);
 		void set_bottom(const GLfloat bottom);
 		void set_top(const GLfloat top);
+
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		GLfloat m_left = -10.0f;
+		GLfloat m_right = 10.0f;
+		GLfloat m_bottom = -10.0f;
+		GLfloat m_top = 10.0f;
 	};
 } // namespace gl_engine
 #endif

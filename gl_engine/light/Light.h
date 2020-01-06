@@ -23,14 +23,7 @@ namespace gl_engine
 		// // ----- STATICS ----- // //
 		static const std::string LIGHT_SHADER_TYPE;
 		static const std::string LIGHT_COLOR;
-		static const std::string LIGHT_BRIGHTNESS;
-
-		// // ----- MEMBER VARIABLES ----- // //
-	private:
-		bool m_mesh_enabled = true;
-		GLfloat m_brightness = 0.0;
-		glm::vec3 m_color = { 0.0f, 0.0f, 0.0f };
-		
+		static const std::string LIGHT_BRIGHTNESS;		
 
 		// // ----- CONSTRUCTORS ----- // //
 	public:
@@ -53,6 +46,12 @@ namespace gl_engine
 		void set_color(const glm::vec3 color);
 		void enable_mesh();
 		void disable_mesh();
+
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		bool m_mesh_enabled = true;
+		GLfloat m_brightness = 0.0;
+		glm::vec3 m_color = { 0.0f, 0.0f, 0.0f };
 	};
 } // namespace gl_engine
 #endif

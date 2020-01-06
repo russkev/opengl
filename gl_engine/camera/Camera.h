@@ -14,17 +14,6 @@ namespace gl_engine
 	*/
 	struct Camera
 	{
-	private:
-
-	private:
-		// // ----- MEMBER VARIABLES ----- // //
-		glm::uvec2 m_dimensions = { 800u, 600u };
-		GLfloat m_clip_near = 0.1f;
-		GLfloat m_clip_far = 10.0f;
-
-		glm::mat4 m_default_transform = glm::mat4{ 1.0f };
-		glm::mat4* m_transform = &m_default_transform;
-
 	public:
 		// // ----- CONSTRUCTOR ----- // //
 		Camera() {};
@@ -53,6 +42,14 @@ namespace gl_engine
 		void add_to_position(const glm::vec3& position);
 		void register_transform(glm::mat4* transform);
 
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		glm::uvec2 m_dimensions = { 800u, 600u };
+		GLfloat m_clip_near = 0.1f;
+		GLfloat m_clip_far = 10.0f;
+
+		glm::mat4 m_default_transform = glm::mat4{ 1.0f };
+		glm::mat4* m_transform = &m_default_transform;
 	};
 } // namespace gl_engine
 

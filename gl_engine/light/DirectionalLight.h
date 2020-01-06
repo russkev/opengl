@@ -20,12 +20,6 @@ namespace gl_engine
 		// // ----- STATICS ----- // //
 		static const std::string TYPE;
 
-		// // ----- MEMBER VARIABLES ----- // //
-	private:
-		Mesh m_light_mesh;
-		Shader m_shader;
-		OrthoCamera m_camera{ -10.0f, 10.0f, -10.0f, 10.0f };
-
 		// // ----- CONSTRUCTORS ----- // //
 	public:
 		DirectionalLight(GLfloat brightness, glm::vec3 color);
@@ -35,6 +29,12 @@ namespace gl_engine
 		Mesh* mesh() override;
 		Shader* shader() override;
 		Camera* camera() override;
+
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		Mesh m_light_mesh;
+		Shader m_shader;
+		OrthoCamera m_camera{ -10.0f, 10.0f, -10.0f, 10.0f };
 	};
 } // namespace gl_engine
 #endif

@@ -16,11 +16,6 @@ namespace gl_engine
 	*/
 	struct VAO
 	{
-		// // ----- MEMBER VARIABLES ----- // //
-	private:
-		std::uint32_t					m_target;
-		std::uint32_t					m_VAO_ID;
-		
 		// // ----- CONSTRUCTOR ----- // //
 	public:
 		VAO();
@@ -32,6 +27,11 @@ namespace gl_engine
 
 		// // ----- GETTERS ----- // //
 		std::uint32_t VAO_id() { return m_VAO_ID; }
+
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		std::uint32_t					m_target;
+		std::uint32_t					m_VAO_ID;
 	};
 } // namespace gl_engine
 #endif

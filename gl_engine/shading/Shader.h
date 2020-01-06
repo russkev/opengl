@@ -39,14 +39,6 @@ namespace gl_engine
 	*/
 	struct Shader
 	{
-		// // ----- MEMBER ATTRIBUTES ----- // //
-	private:
-		std::string m_name;
-		GLuint m_program_id;
-		std::map<std::string, Uniform> m_uniforms;
-		std::set<std::string> m_has_been_warned;
-		GLuint m_num_textures = 0;
-
 		// // ----- CONSTRUCTOR ----- // //
 	public:
 		Shader() {};
@@ -106,6 +98,14 @@ namespace gl_engine
 			use();
 			upload_uniform(thisUniform, data);
 		}
+
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		std::string m_name;
+		GLuint m_program_id;
+		std::map<std::string, Uniform> m_uniforms;
+		std::set<std::string> m_has_been_warned;
+		GLuint m_num_textures = 0;
 
 		// // ----- UNIFORM UPLOAD METHODS ----- // //
 	private:

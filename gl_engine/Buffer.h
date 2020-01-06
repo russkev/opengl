@@ -16,14 +16,6 @@ namespace gl_engine
 	*/
 	struct Buffer
 	{
-		// // ----- MEMBER VARIABLES ----- // //
-	private:
-		std::size_t		m_size;
-		std::size_t		m_capacity;
-		std::uint32_t	m_buffer_id;
-		std::uint32_t	m_target;
-		std::uint32_t	m_binding_id;
-
 		// // ----- CONSTRUCTORS ----- // //
 	public:
 		Buffer(std::uint32_t target, std::size_t size, std::uint32_t binding = 0);
@@ -80,6 +72,14 @@ namespace gl_engine
 		std::uint32_t binding_id() const noexcept { return m_binding_id; }
 		std::size_t capacity() const noexcept { return m_capacity; }
 		std::size_t size() const noexcept { return m_size; }
+
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		std::size_t		m_size;
+		std::size_t		m_capacity;
+		std::uint32_t	m_buffer_id;
+		std::uint32_t	m_target;
+		std::uint32_t	m_binding_id;
 	};
 } // namespace gl_engine
 #endif

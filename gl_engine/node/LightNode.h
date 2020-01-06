@@ -26,19 +26,6 @@ namespace gl_engine
 		static const std::string LIGHT_POSITION;
 		static const std::string LIGHT_DIRECTION;
 
-		// // ----- MEMBER VARIABLES ----- // //
-	private:
-		Light* m_light = NULL;
-		ShadowMap* m_shadow_map = NULL;
-		GLuint m_shader_pos;
-
-		VAO m_vao;
-		Buffer m_vertex_buffer = { GL_ARRAY_BUFFER, 0 };
-		Buffer m_index_buffer = { GL_ARRAY_BUFFER, 0 };
-
-		glm::mat4 m_model_to_perspective;
-		bool m_shader_warned = false;
-
 		// // ----- CONSTRUCTORS ----- // //
 	public:
 		LightNode() {};
@@ -57,6 +44,19 @@ namespace gl_engine
 		// // ----- SETTERS ----- // //
 		void set_shadowMap(ShadowMap* shadowMap);
 		void set_shader_pos(const GLuint index);
+
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		Light* m_light = NULL;
+		ShadowMap* m_shadow_map = NULL;
+		GLuint m_shader_pos;
+
+		VAO m_vao;
+		Buffer m_vertex_buffer = { GL_ARRAY_BUFFER, 0 };
+		Buffer m_index_buffer = { GL_ARRAY_BUFFER, 0 };
+
+		glm::mat4 m_model_to_perspective;
+		bool m_shader_warned = false;
 	};
 } // namespace gl_engine
 

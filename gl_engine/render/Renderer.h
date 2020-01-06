@@ -25,15 +25,6 @@ namespace gl_engine
 	*/
 	struct Renderer
 	{
-	private:
-		// // ----- MEMBER VARIABLES ----- // //
-		CameraNode* m_cameraNode;
-		std::vector<LightNode*> m_lightNodes;
-		std::vector<Material*> m_materials;
-		std::map<std::string, Node*> m_root_nodes;
-		glm::uvec2 m_dimensions = { 800, 600 };
-		bool m_first_frame = true;
-
 	public:
 		// // ----- CONSTRUCTOR ----- // //
 		Renderer(CameraNode* camera);
@@ -55,6 +46,14 @@ namespace gl_engine
 		void add_light_node(LightNode* lightNode);
 		void add_material(Material* material);
 
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		CameraNode* m_cameraNode;
+		std::vector<LightNode*> m_lightNodes;
+		std::vector<Material*> m_materials;
+		std::map<std::string, Node*> m_root_nodes;
+		glm::uvec2 m_dimensions = { 800, 600 };
+		bool m_first_frame = true;
 	};
 } // namespace gl_engine
 #endif
