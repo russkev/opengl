@@ -26,8 +26,8 @@ namespace gl_engine
 	struct ShadowMap
 	{
 		// // ----- CONSTANTS ----- // //
-		static constexpr GLuint SHADOW_WIDTH = 1024;
-		static constexpr GLuint SHADOW_HEIGHT = 1024;
+		static const GLuint SHADOW_WIDTH;
+		static const GLuint SHADOW_HEIGHT;
 		static const std::string MODEL_TRANSFORM;
 		static const std::string LIGHT_SPACE_TRANSFORM;
 		static const std::string DEPTH_MAP;
