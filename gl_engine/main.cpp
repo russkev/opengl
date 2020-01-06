@@ -157,7 +157,7 @@ int main(int, char**)
 	pointLight_node.set_position({ -4.0f, 1.2f, 0.0f });
 
 	// Point Light 2
-	gl_engine::PointLight pointLight2{ 3.0f, { 0.2f, 0.1f, 1.0f } };
+	gl_engine::PointLight pointLight2{ 6.0f, { 0.2f, 0.1f, 1.0f } };
 	gl_engine::LightNode pointLight_node2{ "Point Light 2", &pointLight2 };
 	pointLight_node2.set_position({ 0.0f, 4.0f, -5.0f });
 
