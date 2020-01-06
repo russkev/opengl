@@ -355,13 +355,14 @@ float create_point_shadow(vec3 light_pos, float light_far_plane, samplerCube dep
 	{
 		float closest_depth = 
 			texture(depth, frag_to_light + sample_offset_directions[i] * disk_radius).r * light_far_plane;
-		out_shadow += current_depth - bias > closest_depth ? 0.0 1.0;
+		out_shadow += current_depth - bias > closest_depth ? 0.0 : 1.0;
 	}
 	out_shadow /= float(samples);
 
-	//!!!! Continue here
 
-	return current_depth - bias > closest_depth ? 0.0 : 1.0;
+	return out_shadow;
+
+//	return current_depth - bias > closest_depth ? 0.0 : 1.0;
 }
 
 
