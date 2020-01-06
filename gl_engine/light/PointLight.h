@@ -23,13 +23,6 @@ namespace gl_engine
 		static const std::string TYPE;
 		static constexpr GLfloat CAMERA_ANGLE = 90.0f;
 
-		// // ----- MEMBER VARIABLES ----- // //
-	private:
-		float m_radius = 0.5f;
-		Mesh m_light_mesh;
-		Shader m_shader;
-		FreeCamera m_camera;
-
 		// // ----- CONSTRUCTORS ----- // //
 	public:
 		PointLight(const GLfloat brightness, const glm::vec3 color);
@@ -46,6 +39,12 @@ namespace gl_engine
 		// // ----- SETTERS ----- // //	
 		void set_radius(const GLfloat radius);
 
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		float m_radius = 0.5f;
+		Mesh m_light_mesh;
+		Shader m_shader;
+		FreeCamera m_camera;
 	};
 } // namespace gl_engine
 #endif

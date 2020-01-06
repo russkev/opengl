@@ -28,15 +28,6 @@ namespace gl_engine
 		static const std::string U_WORLD_TO_CAM;
 		static const std::string U_CAM;
 
-
-		// // ----- MEMBER VARIABLES ----- // //
-	private:
-		Mesh* m_mesh;
-		Material* m_material;
-		Buffer m_vertex_buffer = { GL_ARRAY_BUFFER, 0 };
-		Buffer m_index_buffer = { GL_ARRAY_BUFFER, 0 };
-		VAO m_vao;
-
 		// // ----- CONSTRUCTOR ----- // //
 	public:
 		MeshNode() {};
@@ -53,6 +44,13 @@ namespace gl_engine
 
 		// // ----- SETTERS ----- // //
 
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		Mesh* m_mesh;
+		Material* m_material;
+		Buffer m_vertex_buffer = { GL_ARRAY_BUFFER, 0 };
+		Buffer m_index_buffer = { GL_ARRAY_BUFFER, 0 };
+		VAO m_vao;
 	};
 } // namespace gl_engine
 #endif

@@ -43,16 +43,6 @@ namespace gl_engine
 		static const std::string TRANSFORMS;
 		static const std::string FAR_PLANE;
 
-
-		// // ----- MEMBER VARIABLES ----- // //
-		GLuint		m_depthMap_FBO;
-		Material	m_depth_material{ "Depth shader", "DepthShader.vert", "DepthShader.frag" };
-		Texture		m_texture;
-		LightNode*	m_lightNode = NULL;
-
-		CameraNode	m_cameraNode;
-
-
 		// // ----- CONSTRUCTOR ----- // //
 		ShadowMap(LightNode* lightNode);
 
@@ -78,6 +68,15 @@ namespace gl_engine
 		bool check_bound_framebuffer();
 		bool is_directional();
 		bool is_point();
+
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		GLuint		m_depthMap_FBO;
+		Material	m_depth_material{ "Depth shader", "DepthShader.vert", "DepthShader.frag" };
+		Texture		m_texture;
+		LightNode*	m_lightNode = NULL;
+
+		CameraNode	m_cameraNode;
 	};
 } // namespace gl_engine
 

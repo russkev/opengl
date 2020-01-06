@@ -21,9 +21,6 @@ namespace gl_engine
 	*/
 	struct Material : public Shader
 	{
-		// // ----- MEMBER VARIABLES ----- // //
-		std::map<std::string, Texture*> m_textures;
-
 		// // ----- CONSTRUCTORS ----- // //
 	public:
 		Material() {};
@@ -37,7 +34,9 @@ namespace gl_engine
 		// // ----- SETTERS ----- // //
 		void add_texture(const std::string& uniform_name, Texture* texture);
 
-
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		std::map<std::string, Texture*> m_textures;
 	};
 } // namespace gl_engine
 #endif

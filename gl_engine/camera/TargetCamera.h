@@ -20,15 +20,6 @@ namespace gl_engine
 		static const float MOUSE_MOVE_SPEED;
 		static const float ROTATION_SPEED;
 
-		// // ----- MEMBER VARIABLES ----- // //
-		glm::vec3 m_view_direction = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 m_cam_right = { -1.0f, 0.0f, 0.0f };
-		glm::vec3 m_look_target = m_view_direction + m_cam_right;
-		glm::vec3 m_focus_target = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 m_cam_up = glm::cross(m_view_direction, m_cam_right);
-		glm::vec2 m_old_mouse_position;
-		GLfloat m_angle_of_view = 60.0f; // In degrees
-
 		// // ----- CONSTRUCTOR ----- // //
 	public:
 		TargetCamera();
@@ -54,6 +45,16 @@ namespace gl_engine
 	private:
 		void set_look_target();
 		void set_cam_up();
+
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		glm::vec3 m_view_direction = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 m_cam_right = { -1.0f, 0.0f, 0.0f };
+		glm::vec3 m_look_target = m_view_direction + m_cam_right;
+		glm::vec3 m_focus_target = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 m_cam_up = glm::cross(m_view_direction, m_cam_right);
+		glm::vec2 m_old_mouse_position;
+		GLfloat m_angle_of_view = 60.0f; // In degrees
 	};
 } // namespace gl_engine
 #endif

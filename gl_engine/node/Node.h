@@ -34,15 +34,6 @@ namespace gl_engine
 			std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
 		static const glm::vec3 FORWARD_DIRECTION;
 
-		// // ----- MEMBER VARIABLES ----- // //
-	private:
-		std::string m_name;
-		glm::vec3 m_rotation{ 0.0f, 0.0f, 0.0f };
-		glm::mat4 m_local_transform{ 1.0f };
-
-		Node* m_parent = NULL;
-		std::unordered_map<std::string, Node*> m_children;
-
 		// // ----- CONSTRUCTORS ----- // //
 	public:
 		Node() {};
@@ -81,6 +72,15 @@ namespace gl_engine
 
 	private:
 		void add_parent(Node* parent);
+
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		std::string m_name;
+		glm::vec3 m_rotation{ 0.0f, 0.0f, 0.0f };
+		glm::mat4 m_local_transform{ 1.0f };
+
+		Node* m_parent = NULL;
+		std::unordered_map<std::string, Node*> m_children;
 	};
 } // namespace gl_engine
 

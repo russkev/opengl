@@ -32,13 +32,6 @@ namespace gl_engine
 		typedef std::vector<Vertex>::const_iterator		vrt_iterator;
 		typedef std::vector<GLushort>::const_iterator	ind_iterator;
 
-	private:
-		// // ----- MEMBER VARIABLES----- // //
-		vertices_type	m_vertices;
-		indices_type	m_indices;
-		GLuint			m_id;
-
-
 		// // ----- ATTRIBUTE ENUMERATION ----- // //
 		//enum attr { position = 0, color = 1, normal = 2, uv = 3, id = 4, tangent = 5, bitangent = 6 };
 
@@ -114,6 +107,12 @@ namespace gl_engine
 		vrt_iterator vert_end() { return m_vertices.end(); }
 		ind_iterator indx_begin() { return m_indices.begin(); }
 		ind_iterator indx_end() { return m_indices.end(); }
+
+		// // ----- MEMBER VARIABLES----- // //
+	private:
+		vertices_type	m_vertices;
+		indices_type	m_indices;
+		GLuint			m_id;
 	};
 }  // namespace gl_engine
 #endif
