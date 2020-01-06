@@ -154,7 +154,7 @@ int main(int, char**)
 	pointLight.set_radius(0.1f);
 	//pointLight.disable_mesh();
 	gl_engine::LightNode pointLight_node{ "Point Light 1", &pointLight };
-	pointLight_node.set_position({ -6.0f, 1.2f, 0.0f });
+	pointLight_node.set_position({ -4.0f, 1.2f, 0.0f });
 
 	// Point Light 2
 	gl_engine::PointLight pointLight2{ 3.0f, { 0.2f, 0.1f, 1.0f } };
@@ -201,7 +201,7 @@ int main(int, char**)
 	// Null node 2
 	gl_engine::Node lightRotate2{ "light rotate 02" };
 	lightRotate2.add_child(&lightRotate1);
-	lightRotate2.set_position({ 2.0, 0.0, 0.0 });
+	lightRotate2.set_position({ 0.0, 0.0, 0.0 });
 
 	// Axis arrows
 	gl_engine::Mesh axis_arrow{ gl_engine::Arrow::create_arrow(20) };
@@ -229,10 +229,12 @@ int main(int, char**)
 	render.add_node(&shaderBall_node);
 	render.add_node(&plane_node);
 	render.add_node(&pointLight_node);
-	render.add_node(&pointLight_node2);
-	render.add_node(&directionalLight_node1);
-	render.add_node(&spotLight_node1);
-	render.add_node(&spotLight_node2);
+	//render.add_node(&pointLight_node2);
+	//render.add_node(&directionalLight_node1);
+	//render.add_node(&spotLight_node1);
+	//render.add_node(&spotLight_node2);
+
+	//render.add_node(&lightRotate1);
 
 
 	//render.add_node(&axis_arrow_x_node);
@@ -248,10 +250,10 @@ int main(int, char**)
 		float new_y_rotation = (float)shaderBall_node.local_rotation().y + (float)timer.delta_time_s() * 10.0f;
 		shaderBall_node.set_rotation({ 0.0, new_y_rotation, 0.0 });
 
-		//float l1_rotate = lightRotate1.rotation().z + (float)timer.delta_time_s() * 100;
+		//float l1_rotate = lightRotate1.local_rotation().z + (float)timer.delta_time_s() * 100;
 		//lightRotate1.set_rotation({ 0.0 , 0.0, l1_rotate });
 
-		//float l2_rotate = lightRotate2.rotation().y - (float)timer.delta_time_s() * 60;
+		//float l2_rotate = lightRotate2.local_rotation().y - (float)timer.delta_time_s() * 60;
 		//lightRotate2.set_rotation({ 0.0, l2_rotate, 0.0 });
 
 		render.update(&window, &timer);

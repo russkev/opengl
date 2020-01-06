@@ -22,7 +22,7 @@ namespace gl_engine
 	*/
 	struct MeshNode : public Node
 	{
-		// // ----- STATICS ----- // //
+		// // ----- CONSTANTS ----- // //
 		static const std::string U_MODEL_TO_WORLD;
 		static const std::string U_MODEL_TO_WORLD_NORMAL;
 		static const std::string U_WORLD_TO_CAM;
@@ -36,7 +36,7 @@ namespace gl_engine
 		// // ----- GENERAL METHODS ----- // //
 		void update_view(CameraNode* cameraNode) override;
 		void draw(const Pass& pass = rgb) override;
-		void draw_material(Material* material);
+		void draw_material(Material* material) override;
 
 		// // ----- GETTERS ----- // //
 		Mesh* mesh();

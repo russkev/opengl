@@ -5,7 +5,7 @@
 
 namespace gl_engine
 {
-	// // ----- STATICS ----- // //
+	// // ----- CONSTANTS ----- // //
 	const std::string LightNode::LIGHT_POSITION = "position";
 	const std::string LightNode::LIGHT_DIRECTION = "direction";
 

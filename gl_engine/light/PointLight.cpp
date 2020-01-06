@@ -4,7 +4,7 @@
 
 namespace gl_engine
 {
-	// // ----- STATICS ----- // //
+	// // ----- CONSTANTS ----- // //
 	const std::string PointLight::TYPE = "pointLight";
 
 	// // ----- CONSTRUCTORS ----- // //

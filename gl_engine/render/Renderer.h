@@ -43,7 +43,7 @@ namespace gl_engine
 		void add_node(Node* node);
 
 	private:
-		void add_light_node(LightNode* lightNode);
+		void add_light_nodes(Node* root_node);
 		void add_material(Material* material);
 
 		// // ----- MEMBER VARIABLES ----- // //

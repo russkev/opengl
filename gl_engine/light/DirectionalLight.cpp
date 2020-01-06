@@ -10,7 +10,7 @@
 
 namespace gl_engine
 {
-	// // ----- STATICS ----- // //
+	// // ----- CONSTANTS ----- // //
 	const std::string DirectionalLight::TYPE = "directionalLight";
 
 	// // ----- CONSTRUCTORS ----- // //

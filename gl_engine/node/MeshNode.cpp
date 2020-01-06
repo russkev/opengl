@@ -7,7 +7,7 @@
 
 namespace gl_engine
 {
-	// // ----- STATICS ----- // //
+	// // ----- CONSTANTS ----- // //
 	const std::string MeshNode::U_MODEL_TO_WORLD = "transform.model_to_world";
 	const std::string MeshNode::U_MODEL_TO_WORLD_NORMAL = "transform.model_to_world_normal";
 	const std::string MeshNode::U_CAM = "camera.position";
@@ -64,6 +64,11 @@ namespace gl_engine
 		glDrawElements(GL_TRIANGLES, (GLsizei)m_index_buffer.size(), GL_UNSIGNED_SHORT, 0);
 
 		material->unbind_textures();
+
+		for (auto child : Node::children())
+		{
+			child.second->draw_material(material);
+		}
 	}
 
 

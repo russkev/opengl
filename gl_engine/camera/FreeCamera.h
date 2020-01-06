@@ -12,7 +12,7 @@ namespace gl_engine
 	*/
 	struct FreeCamera : public Camera
 	{
-		// // ----- STATICS ----- // //
+		// // ----- CONSTANTS ----- // //
 	private:
 		static const float MOVE_SPEED;
 

@@ -7,8 +7,7 @@
 
 namespace gl_engine
 {
-
-	// // ----- STATICS ----- // //
+	// // ----- CONSTANTS ----- // //
 	const std::string SpotLight::TYPE = "spotLight";
 	const std::string SpotLight::INNER = "inner";
 	const std::string SpotLight::OUTER = "outer";

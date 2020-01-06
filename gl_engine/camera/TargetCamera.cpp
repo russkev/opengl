@@ -12,7 +12,7 @@
 
 namespace gl_engine
 {
-	// // ----- STATICS ----- // //
+	// // ----- CONSTANTS ----- // //
 	const glm::vec3 TargetCamera::UP_AXIS = { 0.0f, 1.0f, 0.0f };
 	const float TargetCamera::MOVE_SPEED = 0.005f;
 	const float TargetCamera::ROTATION_SPEED = 0.007f;
