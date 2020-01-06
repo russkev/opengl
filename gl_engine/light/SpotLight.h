@@ -17,7 +17,7 @@ namespace gl_engine
 	*/
 	struct SpotLight : public Light
 	{
-		// // ----- STATICS ----- // //
+		// // ----- CONSTANTS ----- // //
 	public:
 		static const std::string INNER;
 		static const std::string OUTER;

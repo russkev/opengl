@@ -11,7 +11,7 @@
 
 namespace gl_engine
 {
-	// // ----- STATICS ----- // //
+	// // ----- CONSTANTS ----- // //
 	const std::string Node::U_MODEL_TO_PROJECTION = "transform.model_to_projection";
 	const glm::vec3 Node::FORWARD_DIRECTION = { 0.0, 0.0, 1.0 };
 
@@ -32,7 +32,15 @@ namespace gl_engine
 	{
 		for (auto child : m_children)
 		{
-			child.second->draw();
+			child.second->draw(pass);
+		}
+	}
+
+	void Node::draw_material(Material* material)
+	{
+		for (auto child : m_children)
+		{
+			child.second->draw_material(material);
 		}
 	}
 

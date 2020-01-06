@@ -12,6 +12,7 @@ namespace gl_engine
 {
 	// // ----- FORWARD DECLERATION ----- // //
 	struct CameraNode;
+	struct Material;
 
 	/*
 
@@ -27,7 +28,7 @@ namespace gl_engine
 			shadow
 		};
 
-		// // ----- STATICS ----- // //
+		// // ----- CONSTANTS ----- // //
 		static const std::string U_MODEL_TO_PROJECTION;
 		static constexpr auto POSITION_ATTR = 0u;
 		inline static const auto MESH_VAO_INFO = gl_introspect_tuple<
@@ -42,6 +43,7 @@ namespace gl_engine
 		// // ----- GENERAL METHODS ----- // //
 		virtual void update_view(CameraNode*);
 		virtual void draw(const Pass& pass = rgb);
+		virtual void draw_material(Material* material);
 
 		// // ----- GETTERS ----- // //
 		const std::string& name() const;

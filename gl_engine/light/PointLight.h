@@ -19,7 +19,7 @@ namespace gl_engine
 	*/
 	struct PointLight : public Light
 	{
-		// // ----- STATICS ----- // //
+		// // ----- CONSTANTS ----- // //
 		static const std::string TYPE;
 		static constexpr GLfloat CAMERA_ANGLE = 90.0f;
 

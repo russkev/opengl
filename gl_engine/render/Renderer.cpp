@@ -44,6 +44,7 @@ namespace gl_engine
 			m_first_frame = false;
 		}
 
+		glDisable(GL_CULL_FACE);
 		// Shadow map		
 		for (LightNode* lightNode : m_lightNodes)
 		{
@@ -53,6 +54,7 @@ namespace gl_engine
 				shadowMap->update_materials(m_materials);
 			}
 		}
+		glEnable(GL_CULL_FACE);
 
 		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
 		m_cameraNode->update();
@@ -165,17 +167,21 @@ namespace gl_engine
 			add_material(derived_meshNode->material());
 		}
 
-		if (LightNode* derived_lightNode = dynamic_cast<LightNode*>(node))
-		{
-			add_light_node(derived_lightNode);
-		}
+		add_light_nodes(node);
 
 		m_root_nodes[node->name()] = node;
 	}
 
-	void Renderer::add_light_node(LightNode* lightNode)
+	void Renderer::add_light_nodes(Node* root_node)
 	{
-		m_lightNodes.push_back(lightNode);
+		if (LightNode* derived_lightNode = dynamic_cast<LightNode*>(root_node))
+		{
+			m_lightNodes.push_back(derived_lightNode);
+		}
+		for (auto child : root_node->children())
+		{
+			add_light_nodes(child.second);
+		}
 	}
 
 	void Renderer::add_material(Material* material)

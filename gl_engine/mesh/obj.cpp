@@ -3,7 +3,7 @@
 
 namespace gl_engine
 {
-	// // ------ STATICS ----- // //
+	// // ------ CONSTANTS ----- // //
 	const glm::vec3 OBJ_Loader::DEFAULT_COLOUR = { 0.5, 0.5, 0.5 };
 
 	// // ------ MAIN ----- // //

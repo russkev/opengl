@@ -17,7 +17,7 @@ namespace gl_engine
 	*/
 	struct DirectionalLight : public Light
 	{
-		// // ----- STATICS ----- // //
+		// // ----- CONSTANTS ----- // //
 		static const std::string TYPE;
 
 		// // ----- CONSTRUCTORS ----- // //

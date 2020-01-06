@@ -18,7 +18,7 @@ namespace gl_engine
 
 	struct Vertex
 	{
-		// // ----- STATICS ----- // //
+		// // ----- CONSTANTS ----- // //
 		static constexpr float DISTANCE_THRESHOLD = 0.01f;
 
 		// // ----- TYPE DEFINITIONS ----- // //

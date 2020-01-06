@@ -25,7 +25,7 @@ namespace gl_engine
 	*/
 	struct ShadowMap
 	{
-		// // ----- STATICS ----- // //
+		// // ----- CONSTANTS ----- // //
 		static constexpr GLuint SHADOW_WIDTH = 1024;
 		static constexpr GLuint SHADOW_HEIGHT = 1024;
 		static const std::string MODEL_TRANSFORM;

@@ -12,7 +12,7 @@
 
 namespace gl_engine
 {
-	// // ----- STATICS ----- // //
+	// // ----- CONSTANTS ----- // //
 	const std::string ShadowMap::MODEL_TRANSFORM = "transform.model_to_world";
 	const std::string ShadowMap::LIGHT_SPACE_TRANSFORM = "projection";
 	const std::string ShadowMap::DEPTH_MAP = "depth";

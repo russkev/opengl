@@ -17,7 +17,7 @@ namespace gl_engine
 	*/
 	struct OBJ_Loader
 	{
-		// // ------ STATICS ----- // //
+		// // ------ CONSTANTS ----- // //
 		const static glm::vec3 DEFAULT_COLOUR;
 
 		// // ------ MAIN ----- // //

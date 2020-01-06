@@ -22,7 +22,7 @@ namespace gl_engine
 	*/
 	struct LightNode : public Node
 	{
-		// // ----- STATICS ----- // //
+		// // ----- CONSTANTS ----- // //
 		static const std::string LIGHT_POSITION;
 		static const std::string LIGHT_DIRECTION;
 
