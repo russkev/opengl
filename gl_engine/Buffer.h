@@ -16,7 +16,7 @@ namespace gl_engine
 	*/
 	struct Buffer
 	{
-		// // MEMBER VARIABLES // //
+		// // ----- MEMBER VARIABLES ----- // //
 	private:
 		std::size_t		m_size;
 		std::size_t		m_capacity;
@@ -24,7 +24,7 @@ namespace gl_engine
 		std::uint32_t	m_target;
 		std::uint32_t	m_binding_id;
 
-		// // BIG 6
+		// // ----- CONSTRUCTORS ----- // //
 	public:
 		Buffer(std::uint32_t target, std::size_t size, std::uint32_t binding = 0);
 		~Buffer();
@@ -33,7 +33,7 @@ namespace gl_engine
 		Buffer& operator = (const Buffer&) = delete;
 		Buffer& operator = (Buffer&&);
 
-		// // GENERAL FUNCTIONS
+		// // ----- GENERAL METHODS ----- // //
 		std::uint32_t generate_buffer(std::size_t size);
 		void read_buffer(void* dest);
 		void upload(std::size_t offset, std::size_t size, void* data);

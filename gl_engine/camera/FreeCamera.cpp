@@ -6,8 +6,10 @@
 
 namespace gl_engine
 {
+	// // ----- STATICS ----- // //
 	const float FreeCamera::MOVE_SPEED = 0.5f;
 
+	// // ----- CONSTRUCTOR ----- // //
 	FreeCamera::FreeCamera()
 	{}
 

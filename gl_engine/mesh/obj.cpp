@@ -3,8 +3,10 @@
 
 namespace gl_engine
 {
+	// // ------ STATICS ----- // //
 	const glm::vec3 OBJ_Loader::DEFAULT_COLOUR = { 0.5, 0.5, 0.5 };
 
+	// // ------ MAIN ----- // //
 	Mesh OBJ_Loader::load_obj(const char *path)
 	{
 		// Create temp variables

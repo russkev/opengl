@@ -9,7 +9,7 @@
 
 namespace gl_engine
 {
-	// Forward declare structs
+	// // ----- FORWARD DECLARATION ----- // //
 	struct Mesh;
 	struct Material;
 	struct Shader;
@@ -22,6 +22,7 @@ namespace gl_engine
 	*/
 	struct MeshNode : public Node
 	{
+		// // ----- STATICS ----- // //
 		static const std::string U_MODEL_TO_WORLD;
 		static const std::string U_MODEL_TO_WORLD_NORMAL;
 		static const std::string U_WORLD_TO_CAM;
@@ -46,9 +47,12 @@ namespace gl_engine
 		void draw(const Pass& pass = rgb) override;
 		void draw_material(Material* material);
 
-		// // ----- GETTER ----- // //
+		// // ----- GETTERS ----- // //
 		Mesh* mesh();
 		Material* material();
+
+		// // ----- SETTERS ----- // //
+
 	};
 } // namespace gl_engine
 #endif

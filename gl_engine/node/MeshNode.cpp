@@ -7,12 +7,13 @@
 
 namespace gl_engine
 {
+	// // ----- STATICS ----- // //
 	const std::string MeshNode::U_MODEL_TO_WORLD = "transform.model_to_world";
 	const std::string MeshNode::U_MODEL_TO_WORLD_NORMAL = "transform.model_to_world_normal";
 	const std::string MeshNode::U_CAM = "camera.position";
 
 
-	//Set member variables and upload mesh vertices and indices buffers
+	// // ----- CONSTRUCTORS ----- // //
 	MeshNode::MeshNode(const std::string name, Mesh* mesh, Material* material) :
 		Node(name), m_mesh(mesh), m_material(material)
 	{
@@ -24,6 +25,7 @@ namespace gl_engine
 	}
 
 
+	// // ----- GENERAL METHODS ----- // //
 	void MeshNode::update_view(CameraNode* cameraNode)
 	{
 		glm::mat4 modelToPerspective_matrix = cameraNode->world_to_projection() * Node::world_to_node();
@@ -65,6 +67,7 @@ namespace gl_engine
 	}
 
 
+	// // ----- GETTERS ----- // //
 	Mesh* MeshNode::mesh()
 	{
 		return m_mesh;
@@ -74,6 +77,8 @@ namespace gl_engine
 	{
 		return m_material;
 	}
+	// // ----- SETTERS ----- // //
+
 } // namespace gl_engine
 
 

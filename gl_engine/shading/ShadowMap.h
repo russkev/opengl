@@ -8,10 +8,9 @@
 #include "Material.h"
 #include "Texture.h"
 #include "../camera/Camera.h"
-//#include "../camera/OrthoCamera.h"
 #include "../node/CameraNode.h"
 
-// // ----- FORWARD DECLERATION ----- // //
+// // ----- FORWARD DECLERATIONS ----- // //
 struct Light;
 struct LightNode;
 
@@ -26,6 +25,7 @@ namespace gl_engine
 	*/
 	struct ShadowMap
 	{
+		// // ----- STATICS ----- // //
 		static constexpr GLuint SHADOW_WIDTH = 1024;
 		static constexpr GLuint SHADOW_HEIGHT = 1024;
 		static const std::string MODEL_TRANSFORM;
@@ -56,17 +56,24 @@ namespace gl_engine
 		// // ----- CONSTRUCTOR ----- // //
 		ShadowMap(LightNode* lightNode);
 
-		// // ----- GENERAL ----- // //
+		// // ----- INITIALIZATION ----- // //
+	public:
+		void init_materials(std::vector<Material*>& materials);
 	private:
 		void init_directional_shadowMap();
 		void init_point_shadowMap();
+
+		// // ----- UPDATE ----- // //
 	public:
-		void init_materials(std::vector<Material*>& materials);
 		void update_materials(std::vector<Material*>& materials);
+
+		// // ----- RENDER ----- // //
 		void render_shadowMap(std::map<std::string, Node*>& root_nodes);
 	private:
 		void render_directional_shadowMap(std::map<std::string, Node*>& root_nodes);
 		void render_point_shadowMap(std::map<std::string, Node*>& root_nodes);
+
+		// // ----- GENERAL METHODS ----- // //
 	public:
 		bool check_bound_framebuffer();
 		bool is_directional();

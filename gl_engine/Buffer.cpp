@@ -11,7 +11,8 @@
 
 namespace gl_engine
 {
-	// DEFAULT CONSTRUCTOR //
+	// // ----- CONSTRUCTORS ----- // //
+	// Default constructor
 	Buffer::Buffer(std::uint32_t target, std::size_t size, std::uint32_t binding) :
 		m_size(0),
 		m_capacity(size),
@@ -25,7 +26,7 @@ namespace gl_engine
 		}
 	};
 
-	// DESTRUCTOR //
+	// Destructor
 	Buffer::~Buffer() {
 		std::cout << "Buffer object destructed\n";
 		if (m_buffer_id != 0) {
@@ -33,7 +34,7 @@ namespace gl_engine
 		}
 	}
 
-	// MOVE CONSTRUCTOR //
+	// Move constructor
 	Buffer::Buffer(Buffer&& other) :
 		m_size(std::exchange(other.m_size, 0u)),
 		m_capacity(std::exchange(other.m_capacity, 0u)),
@@ -44,7 +45,7 @@ namespace gl_engine
 		std::cout << "Buffer move constructor called\n";
 	}
 
-	// MOVE ASSIGN
+	// Move assign
 	Buffer& Buffer::operator=(Buffer&& other)
 	{
 		std::cout << "Buffer move assign called\n";
@@ -52,7 +53,7 @@ namespace gl_engine
 		return *new (this) Buffer(std::move(other));
 	}
 
-	// // UPLOAD
+	// // ----- GENERAL METHODS ----- // //
 	void Buffer::upload(std::size_t offset, std::size_t size, void* data) {
 		assert(offset + size <= m_capacity);
 		void * dest = map_buffer(size, offset);
@@ -60,7 +61,6 @@ namespace gl_engine
 		unmap();
 	}
 
-	// // GENERATE BUFFER
 	std::uint32_t Buffer::generate_buffer(std::size_t size) {
 		std::uint32_t tempID = 0;
 		glGenBuffers(1, &tempID);
@@ -72,14 +72,12 @@ namespace gl_engine
 		return tempID;
 	}
 
-	// // READ BUFFER
 	void Buffer::read_buffer(void* destination) {
 		void * src = map_buffer(m_size, 0);
 		std::memcpy(destination, src, m_size);
 		unmap();
 	}
 
-	// // MAP
 	void * Buffer::map_buffer(std::size_t size, std::size_t offset) {
 		assert(offset + size <= m_capacity);
 		glBindBuffer(m_target, m_buffer_id);
@@ -95,13 +93,11 @@ namespace gl_engine
 		return out;
 	}
 
-	// // UNMAP
 	void Buffer::unmap() {
 		glBindBuffer(m_target, m_buffer_id);
 		glUnmapBuffer(m_target);
 	}
 
-	// // APPEND
 	std::uint32_t Buffer::append(std::size_t size, void* data) {
 		std::size_t offset = m_size;
 		resize(offset + size);
@@ -109,7 +105,6 @@ namespace gl_engine
 		return (uint32_t)offset;
 	}
 
-	// // RESIZE
 	void Buffer::resize(std::size_t new_size) {
 		if (new_size > m_capacity) {
 			std::uint32_t tempID = generate_buffer(new_size);
@@ -129,7 +124,6 @@ namespace gl_engine
 		m_size = new_size;
 	}
 
-	// // RESERVE
 	void Buffer::reserve(std::size_t new_capacity) {
 		auto currentSize = m_size;
 		if (new_capacity > m_capacity) {
@@ -138,7 +132,6 @@ namespace gl_engine
 		}
 	}
 
-	// // BIND
 	void Buffer::bind() const {
 		glBindBuffer(m_target, m_buffer_id);
 	}

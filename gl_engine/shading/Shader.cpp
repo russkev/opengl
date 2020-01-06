@@ -10,7 +10,7 @@
 
 namespace gl_engine
 {
-	// // ----- CONSTRUCTOR ----- // //
+	// // ----- CONSTRUCTORS ----- // //
 	Shader::Shader(const std::string& name, const char* vertex_shader, const char* fragment_shader) :
 		m_name{ name },
 		m_program_id{ LoadShaders::load(vertex_shader, fragment_shader) }

@@ -8,6 +8,7 @@
 
 namespace gl_engine
 {
+	// // ------ MAIN ----- // //
 	Mesh Sphere::create_sphere(const float radius)
 	{
 		return create_sphere(radius, 32);
@@ -107,6 +108,7 @@ namespace gl_engine
 		return newSphere;
 	}
 
+	// // ------ HELPER ----- // //
 	glm::vec3 Sphere::spherical_to_cartesian(const float radius, const float theta, const float phi)
 	{
 		// Standard equation assumes z is up so need to swap z and y

@@ -5,6 +5,7 @@
 
 namespace gl_engine
 {
+	// // ----- MAIN ----- // //
 	Mesh Cube::create_cube()
 	{
 		return create_cube(1.0f);
@@ -69,6 +70,7 @@ namespace gl_engine
 		return newCube;
 	}
 
+	// // ----- HELPER ----- // //
 	Mesh Cube::create_cube_face(glm::vec3 top_left, glm::vec3 top_right, glm::vec3 bottom_left, glm::vec3 bottom_right)
 	{
 		// Vertix order is like this:

@@ -13,9 +13,12 @@ namespace gl_engine
 	*/
 	struct Cylinder
 	{
+		// // ----- MAIN ----- // //
 		static Mesh create_cylinder();
 		static Mesh create_cylinder(const float radius, const float height);
 		static Mesh create_cylinder(const float radius, const float height, const uint16_t width_segments, const uint16_t height_segments);
+		
+		// // ----- HELPER ----- // //
 	private:
 		static glm::vec3 radial_to_cartesian(float radius, float theta, float height);
 	};

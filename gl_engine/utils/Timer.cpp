@@ -4,6 +4,7 @@
 
 namespace gl_engine
 {
+	// // ----- CONSTRUCTORS ----- // //
 	Timer::Timer() :
 		m_start(SDL_GetPerformanceCounter())
 	{}
@@ -13,6 +14,7 @@ namespace gl_engine
 		m_multiplier(multiplier)
 	{}
 
+	// // ----- GENERAL METHODS ----- // //
 	void Timer::update()
 	{
 		// PerformanceCounter provides number of ticks since start
@@ -41,6 +43,7 @@ namespace gl_engine
 		}
 	}
 
+	// // ----- GETTERS ----- // //
 	const double Timer::total_time_s() const
 	{
 		return (double)m_current / SDL_GetPerformanceFrequency();
@@ -61,6 +64,13 @@ namespace gl_engine
 		return m_delta_time_ms * m_multiplier;
 	}
 
+	const char* Timer::fps()
+	{
+		sprintf_s(m_fps_chars, "%.3f", m_fps);
+		return m_fps_chars;
+	}
+
+	// // ----- SETTERS ----- // //
 	void Timer::set_multiplier(const double multiplier)
 	{
 		m_multiplier = multiplier;
@@ -69,11 +79,5 @@ namespace gl_engine
 	void Timer::set_fps_update_time(const float update_time_s)
 	{
 		m_fps_update_time_ms = update_time_s * 1000;
-	}
-
-	const char* Timer::fps()
-	{
-		sprintf_s(m_fps_chars, "%.3f", m_fps);
-		return m_fps_chars;
 	}
 } // namespace gl_engine

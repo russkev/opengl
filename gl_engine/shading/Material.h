@@ -11,7 +11,7 @@
 
 namespace gl_engine
 {
-	// // ----- FORWARD DECLERATION ----- // //
+	// // ----- FORWARD DECLERATIONS ----- // //
 	struct Texture;
 
 	/*
@@ -21,18 +21,22 @@ namespace gl_engine
 	*/
 	struct Material : public Shader
 	{
+		// // ----- MEMBER VARIABLES ----- // //
 		std::map<std::string, Texture*> m_textures;
 
-		// // ----- CONSTRUCTOR ----- // //
+		// // ----- CONSTRUCTORS ----- // //
 	public:
 		Material() {};
 		Material(const std::string name, const char* vertex_shader, const char* fragment_shader);
 		Material(const std::string name, const char* vertex_shader, const char* geometry_shader, const char* fragment_shader);
 
-		// // ----- GENERAL ----- // //
-		void add_texture(const std::string& uniform_name, Texture* texture);
+		// // ----- GENERAL METHODS ----- // //
 		void bind_textures();
 		void unbind_textures();
+
+		// // ----- SETTERS ----- // //
+		void add_texture(const std::string& uniform_name, Texture* texture);
+
 
 	};
 } // namespace gl_engine

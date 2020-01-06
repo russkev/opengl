@@ -7,6 +7,7 @@
 
 namespace gl_engine
 {
+	// // ----- CONSTRUCTORS ----- // //
 	OrthoCamera::OrthoCamera()
 	{}
 

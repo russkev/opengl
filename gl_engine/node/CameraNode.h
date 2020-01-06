@@ -27,6 +27,7 @@ namespace gl_engine
 		CameraNode() {};
 		CameraNode(const std::string name, Camera* camera);
 
+		// // ----- GENERAL METHODS ----- // //
 		void update();
 
 		// // ----- GETTERS ----- // //

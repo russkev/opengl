@@ -26,26 +26,29 @@ namespace gl_engine
 
 	struct Text2D
 	{
-		// // TYPES // //
+		// // ----- TYPE DEFINITIONS ----- // //
 		typedef std::tuple< glm::vec2, glm::vec2, GLuint>	vertex_2d_type;
 		typedef std::vector<vertex_2d_type>					vertices_2d_type;
 
-		// // ENUMERATION // //
+		// // ----- ENUMERATIONS ----- // //
 		enum attr { position2D = 0, uv2D = 1 };
 
+		// // ----- CONSTRUCTORS ----- // //
 		Text2D(const char* s_texture_path);				// Constructor
 		~Text2D();										// Destructor
 
-
+		// // ----- INIT ----- // //
 		void init(int s_x, int s_y, int size, int s_screen_width, int s_screen_height);
 		void init_vertices();
 		void init_shaders();
 
+		// // ----- GENERAL METHODS ----- // //
 		void print(const char* s_text);
 		void draw();
 		void convert_string(const char* s_text);
-
 		void cleanup();
+	
+		// // ----- MEMBER VARIABLES ----- // //
 	public:
 		Texture				m_texture;
 		vertices_2d_type	m_vertices;

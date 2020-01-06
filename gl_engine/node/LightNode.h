@@ -9,7 +9,7 @@
 
 namespace gl_engine
 {
-	// Forward declare light
+	// // ----- FORWARD DECLARATION ----- // //
 	struct Light;
 	struct ShadowMap;
 	struct CameraNode;
@@ -22,8 +22,11 @@ namespace gl_engine
 	*/
 	struct LightNode : public Node
 	{
+		// // ----- STATICS ----- // //
 		static const std::string LIGHT_POSITION;
 		static const std::string LIGHT_DIRECTION;
+
+		// // ----- MEMBER VARIABLES ----- // //
 	private:
 		Light* m_light = NULL;
 		ShadowMap* m_shadow_map = NULL;
@@ -36,6 +39,7 @@ namespace gl_engine
 		glm::mat4 m_model_to_perspective;
 		bool m_shader_warned = false;
 
+		// // ----- CONSTRUCTORS ----- // //
 	public:
 		LightNode() {};
 		LightNode(const std::string name, Light* light);

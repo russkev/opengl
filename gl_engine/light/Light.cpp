@@ -4,6 +4,7 @@
 
 namespace gl_engine
 {
+	// // ----- STATICS ----- // //
 	const std::string Light::LIGHT_SHADER_TYPE = "light";
 	const std::string Light::LIGHT_BRIGHTNESS = "brightness";
 	const std::string Light::LIGHT_COLOR = "color";

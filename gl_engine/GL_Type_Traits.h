@@ -12,7 +12,7 @@ namespace gl_engine
 		Helper struct used for automatically generating the correct VAO type	
 	
 	*/
-	// // Base case 
+	// Base case 
 	template <typename T>
 	struct gl_type_traits;
 

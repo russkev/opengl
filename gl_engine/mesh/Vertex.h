@@ -13,14 +13,15 @@ namespace gl_engine
 		Contains various attributes which are useful for sending to the shader
 	
 	*/
+	// // ----- ENUMERATIONS ----- // //
 	enum vertexAttr { position_loc = 0, color_loc = 1, normal_loc = 2, uv_loc = 3, id_loc = 4, tangent_loc = 5, bitangent_loc = 6 };
 
 	struct Vertex
 	{
-		// // ----- CONSTS ----- // //
+		// // ----- STATICS ----- // //
 		static constexpr float DISTANCE_THRESHOLD = 0.01f;
 
-		// // ----- TYPEDEF ----- // //
+		// // ----- TYPE DEFINITIONS ----- // //
 		// --- Don't forget to update the gl_introspect_tuple call when changing this --- //
 		//                   Position,   Colour,    Normal,      UV,     ID,    Tangent,  Bitangent    //
 		typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>	vertexType;

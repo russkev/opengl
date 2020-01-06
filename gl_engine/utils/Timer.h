@@ -13,6 +13,7 @@ namespace gl_engine
 	*/
 	struct Timer
 	{
+		// // ----- MEMBER VARIABLES ----- // //
 	private:
 		Uint64 m_start = 0, m_current = 0;
 		double m_delta_time_ms = 0.0;
@@ -25,21 +26,27 @@ namespace gl_engine
 		float m_fps_update_time_ms = 200.0f;
 
 	public:
+		// // ----- CONSTRUCTORS ----- // //
 		Timer();
 		Timer(const double multiplier);
+
+		// // ----- GENERAL METHODS ----- // //
 		void update();
 		void debug_update();
 
+		// // ----- GETTERS ----- // //
 		const double total_time_s() const;
 		const double total_time_ms() const;
 
 		const double delta_time_s() const;
 		const double delta_time_ms() const;
 
+		const char* fps();
+
+		// // ----- SETTERS ----- // //
 		void set_multiplier(const double multiplier);
 		void set_fps_update_time(const float update_time);
 
-		const char* fps();
 	};
 } // namespace gl_engine
 #endif

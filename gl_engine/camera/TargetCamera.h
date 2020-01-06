@@ -13,6 +13,7 @@ namespace gl_engine
 	*/
 	struct TargetCamera : public Camera
 	{
+		// // ----- STATICS ----- // //
 	private:
 		static const glm::vec3 UP_AXIS;
 		static const float MOVE_SPEED;

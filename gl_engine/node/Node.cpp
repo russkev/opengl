@@ -11,47 +11,35 @@
 
 namespace gl_engine
 {
+	// // ----- STATICS ----- // //
 	const std::string Node::U_MODEL_TO_PROJECTION = "transform.model_to_projection";
 	const glm::vec3 Node::FORWARD_DIRECTION = { 0.0, 0.0, 1.0 };
 
 
+	// // ----- CONSTRUCTORS ----- // //
 	Node::Node(const std::string name) : m_name(name)
 	{}
 
-
-	// Add new child to list of children in the node
-	void Node::add_child(Node* child)
+	// // ----- GENERAL METHODS ----- // //
+	void Node::update_view(CameraNode* camera_node)
 	{
-		if (m_children.find(child->m_name) == m_children.end())
+		for (auto child : m_children)
 		{
-			m_children[child->m_name] = child;
-			child->addParent(this);
+			child.second->update_view(camera_node);
 		}
-		else
+	}
+	void Node::draw(const Pass& pass)
+	{
+		for (auto child : m_children)
 		{
-			throw std::runtime_error("Unable to add " + child->m_name + ", node with that name already exists");
+			child.second->draw();
 		}
 	}
 
-
-	// Change the existing parent. All children will come along.
-	void Node::set_parent(Node* parent)
+	// // ----- GETTERS ----- // //
+	const std::string& Node::name() const
 	{
-		m_parent = parent;
-		parent->add_child(this);
-	}
-
-	// Disconnect child and return a pointer to that child. 
-	Node* Node::disconnect_child(const std::string child_name)
-	{
-		if (m_children.find(child_name) != m_children.end())
-		{
-			Node* child = m_children[child_name];
-			m_children.erase(child_name);
-			child->m_parent = NULL;
-			return child;
-		}
-		return NULL;
+		return m_name;
 	}
 
 	// Calculate the transform matrix in local space
@@ -84,33 +72,6 @@ namespace gl_engine
 	{
 		return glm::mat3(world_to_node()) * FORWARD_DIRECTION;
 	}
-
-	void Node::addParent(Node* parent)
-	{
-		m_parent = parent;
-	}
-
-	void Node::update_view(CameraNode* camera_node)
-	{
-		for (auto child : m_children)
-		{
-			child.second->update_view(camera_node);
-		}
-	}
-	void Node::draw(const Pass& pass)
-	{
-		for (auto child : m_children)
-		{
-			child.second->draw();
-		}
-	}
-
-	// // ----- GETTERS ----- // //
-	const std::string& Node::name() const
-	{
-		return m_name;
-	}
-
 
 	const glm::vec3 Node::local_position() const
 	{
@@ -146,7 +107,47 @@ namespace gl_engine
 		return m_children;
 	}
 
+
 	// // ----- SETTERS ----- // //
+	// Add new child to list of children in the node
+	void Node::add_child(Node* child)
+	{
+		if (m_children.find(child->m_name) == m_children.end())
+		{
+			m_children[child->m_name] = child;
+			child->add_parent(this);
+		}
+		else
+		{
+			throw std::runtime_error("Unable to add " + child->m_name + ", node with that name already exists");
+		}
+	}
+
+	// Change the existing parent. All children will come along.
+	void Node::set_parent(Node* parent)
+	{
+		m_parent = parent;
+		parent->add_child(this);
+	}
+
+	// Disconnect child and return a pointer to that child. 
+	Node* Node::disconnect_child(const std::string child_name)
+	{
+		if (m_children.find(child_name) != m_children.end())
+		{
+			Node* child = m_children[child_name];
+			m_children.erase(child_name);
+			child->m_parent = NULL;
+			return child;
+		}
+		return NULL;
+	}
+
+	void Node::add_parent(Node* parent)
+	{
+		m_parent = parent;
+	}
+
 	void Node::set_position(const glm::vec3& position)
 	{
 		m_local_transform[3] = glm::vec4(position, 1.0f);

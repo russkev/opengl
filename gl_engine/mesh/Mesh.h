@@ -25,7 +25,7 @@ namespace gl_engine
 	{
 	public:
 
-		// // ----- Type Definitions ----- // //
+		// // ----- TYPE DEFINITIONS ----- // //
 		typedef std::vector<Vertex>						vertices_type;
 		typedef GLushort								index_type;
 		typedef std::vector<index_type>					indices_type;
@@ -39,10 +39,10 @@ namespace gl_engine
 		GLuint			m_id;
 
 
-		// // ----- Attribute Enumeration ----- // //
+		// // ----- ATTRIBUTE ENUMERATION ----- // //
 		//enum attr { position = 0, color = 1, normal = 2, uv = 3, id = 4, tangent = 5, bitangent = 6 };
 
-		// // ----- Big 6 ----- // //
+		// // ----- BIG 6 ----- // //
 	public:
 		Mesh();
 		Mesh(const vertices_type vertices, const indices_type indices);
@@ -52,26 +52,15 @@ namespace gl_engine
 		//Mesh& operator = (const Mesh&) = delete;
 		Mesh& operator = (Mesh&& other);
 
-		// // ----- Addition Assign ----- // //
+		// // ----- OPERATOR OVERLOADS ----- // //
 		Mesh& operator += (Mesh& other);
 
-		// // ----- Append ----- // //
+		// // ----- APPEND ----- // //
 		void append_vertex(const Vertex shape);
 		void append_triangle(const Vertex vertex_1, const Vertex vertex_2, const Vertex vertex_3);
 		void append_index(const GLushort index);
 
-		// // ----- Setters ----- // //
-		void set_vertex(std::size_t pos, Vertex& data);
-		template <std::size_t attr>
-		void set_vertex(std::size_t pos, const glm::vec3& data)
-		{
-			assert(num_vertices() >= pos);
-			m_vertices.at(pos).position() = data;
-		}
-		void set_index(std::size_t pos, const index_type& data);
-		void set_id(GLuint s_id);
-
-		// // ----- Transform ----- // //
+		// // ----- TRANSFORM ----- // //
 		void transform(glm::mat4 transformMatrix);
 		void transform(vertices_type& inVertices, const glm::mat4 transformMatrix);
 
@@ -108,6 +97,17 @@ namespace gl_engine
 		GLsizeiptr size_vertices() { return m_vertices.size() * sizeof(Vertex); }
 		GLsizeiptr size_indices() { return m_indices.size() * sizeof(index_type); }
 		GLsizeiptr size_shape() { return size_vertices() + size_indices(); }
+
+		// // ----- SETTERS ----- // //
+		void set_vertex(std::size_t pos, Vertex& data);
+		template <std::size_t attr>
+		void set_vertex(std::size_t pos, const glm::vec3& data)
+		{
+			assert(num_vertices() >= pos);
+			m_vertices.at(pos).position() = data;
+		}
+		void set_index(std::size_t pos, const index_type& data);
+		void set_id(GLuint s_id);
 
 		// // ----- ITERATORS ----- // //
 		vrt_iterator vert_begin() { return m_vertices.begin(); }
