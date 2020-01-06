@@ -228,11 +228,11 @@ int main(int, char**)
 	gl_engine::Renderer render{ &targetCam_node, glm::uvec2(width, height) };
 	render.add_node(&shaderBall_node);
 	render.add_node(&plane_node);
-	render.add_node(&pointLight_node);
+	//render.add_node(&pointLight_node);
 	render.add_node(&pointLight_node2);
-	render.add_node(&directionalLight_node1);
-	render.add_node(&spotLight_node1);
-	render.add_node(&spotLight_node2);
+	//render.add_node(&directionalLight_node1);
+	//render.add_node(&spotLight_node1);
+	//render.add_node(&spotLight_node2);
 
 	//render.add_node(&lightRotate1);
 
