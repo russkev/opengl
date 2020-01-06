@@ -15,9 +15,8 @@
 
 namespace gl_engine
 {
-	// Forward decleration
+	// // ----- FORWARD DECLERATIONS ----- // //
 	struct LightNode;
-
 
 	/*
 
@@ -55,6 +54,22 @@ namespace gl_engine
 		Shader(const std::string& name, const char* vertex_shader, const char* geometry_shader, const char* fragment_shader);
 
 		// // ----- GENERAL METHODS ----- // //
+		void use();
+		bool contains_uniform(const std::string uniform_name);
+		bool is_uniform(const GLenum type);
+		void update_lights(const std::vector<LightNode*>& light_nodes);
+
+	private:
+		void fetch_uniforms();
+
+		// // ----- GETTERS ----- // //
+	public:
+		const GLuint program_id() const;
+		const std::string name() const;
+		const std::map<std::string, Uniform>& uniforms() const;
+
+		// // ----- SETTERS ----- // //
+		void set_name(const std::string& name);
 
 		// Set uniform of shader.
 		// Automatically choose correct upload path based on data type
@@ -88,37 +103,9 @@ namespace gl_engine
 				}
 				return;
 			}
-			//if (thisUniform->type != dataEnumType)
-			//{
-			//	if (m_has_been_warned.find(name_s) == m_has_been_warned.end())
-			//	{
-			//		printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Incorrect data type\n", name.c_str(), m_name.c_str());
-			//		m_has_been_warned.insert(name_s);
-			//	}
-			//	return;
-			//}
-
 			use();
 			upload_uniform(thisUniform, data);
 		}
-
-		void use();
-		bool contains_uniform(const std::string uniform_name);
-		bool is_uniform(const GLenum type);
-		void update_lights(const std::vector<LightNode*>& light_nodes);
-
-
-	private:
-		void fetch_uniforms();
-
-	public:
-		// // ----- GETTERS ----- // //
-		const GLuint program_id() const;
-		const std::string name() const;
-		const std::map<std::string, Uniform>& uniforms() const;
-
-		// // ----- SETTERS ----- // //
-		void set_name(const std::string& name);
 
 		// // ----- UNIFORM UPLOAD METHODS ----- // //
 	private:

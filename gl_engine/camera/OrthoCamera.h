@@ -19,7 +19,7 @@ namespace gl_engine
 		GLfloat m_bottom = -10.0f;
 		GLfloat m_top = 10.0f;
 
-		// // ----- CONSTRUCTOR ----- // //
+		// // ----- CONSTRUCTORS ----- // //
 	public:
 		OrthoCamera();
 		OrthoCamera(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top);

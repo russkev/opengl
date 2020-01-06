@@ -15,7 +15,7 @@ namespace gl_engine
 	*/
 	struct Texture
 	{
-		// // ----- MEMBER ATTRIBUTES ----- // //
+		// // ----- MEMBER VARIABLES ----- // //
 	private:
 		SDL_Surface*	m_surface = NULL;
 		GLuint			m_id = 0;
@@ -41,7 +41,7 @@ namespace gl_engine
 
 
 
-		// // ----- CONSTRUCTOR ----- // //
+		// // ----- CONSTRUCTORS ----- // //
 	public:
 		Texture() {};
 

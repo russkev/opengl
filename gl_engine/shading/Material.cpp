@@ -4,6 +4,7 @@
 
 namespace gl_engine
 {
+	// // ----- CONSTRUCTORS ----- // //
 	Material::Material(const std::string name, const char* vertex_shader, const char* fragment_shader) :
 		Shader{ name, vertex_shader, fragment_shader }
 	{}
@@ -12,23 +13,7 @@ namespace gl_engine
 		Shader{ name, vertexShader, geometryShader, fragmentShader }
 	{}
 
-	void Material::add_texture(const std::string& uniform_name, Texture* texture)
-	{
-		if (m_textures.find(uniform_name) != m_textures.end())
-		{
-			printf("WARNING: \"%s\" is overwriting an existing texture\n", uniform_name.c_str());
-		}
-
-		if (Shader::uniforms().find(uniform_name) == Shader::uniforms().end())
-		{
-			printf("WARNING: Unable to set texture: \"%s\" for shader: \"%s\", uniform not found\n", uniform_name.c_str(), Shader::name().c_str());
-			return;
-		}
-
-		m_textures[uniform_name] = texture;
-		texture->process();
-	}
-
+	// // ----- GENERAL METHODS ----- // //
 	void Material::bind_textures()
 	{
 		//int texture_unit = 0;
@@ -49,6 +34,24 @@ namespace gl_engine
 		{
 			texture_pair.second->unbind();
 		}
+	}
+
+	// // ----- SETTERS ----- // //
+	void Material::add_texture(const std::string& uniform_name, Texture* texture)
+	{
+		if (m_textures.find(uniform_name) != m_textures.end())
+		{
+			printf("WARNING: \"%s\" is overwriting an existing texture\n", uniform_name.c_str());
+		}
+
+		if (Shader::uniforms().find(uniform_name) == Shader::uniforms().end())
+		{
+			printf("WARNING: Unable to set texture: \"%s\" for shader: \"%s\", uniform not found\n", uniform_name.c_str(), Shader::name().c_str());
+			return;
+		}
+
+		m_textures[uniform_name] = texture;
+		texture->process();
 	}
 
 }  // namespace gl_engine

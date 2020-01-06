@@ -26,12 +26,17 @@ namespace gl_engine
 
 	struct Window
 	{
+		// // ----- CONSTRUCTORS ----- // //
 		Window(std::string name, std::vector<opengl_attr_pair> st_config, GLuint width, GLuint height);
+
+		// // ----- INIT ----- // //
 		void init(std::vector<opengl_attr_pair> st_config, GLuint width, GLuint height);
+
+		// // ----- GENERAL METHODS ----- // //
 		void append_title(std::string str);
 		void finish_frame();
 
-
+		// // ----- MEMBER VARIABLES ----- // //
 	public:
 		SDL_Window *	m_st_window = nullptr;
 		SDL_GLContext	m_st_opengl = nullptr;

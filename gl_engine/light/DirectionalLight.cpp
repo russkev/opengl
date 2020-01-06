@@ -10,8 +10,10 @@
 
 namespace gl_engine
 {
+	// // ----- STATICS ----- // //
 	const std::string DirectionalLight::TYPE = "directionalLight";
 
+	// // ----- CONSTRUCTORS ----- // //
 	DirectionalLight::DirectionalLight(GLfloat brightness, glm::vec3 color) :
 		m_light_mesh(Arrow::create_arrow(10.0)),
 		m_shader(Shader("lightShader", "lightShader.vert", "lightShader.frag"))

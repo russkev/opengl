@@ -8,11 +8,12 @@
 namespace gl_engine
 {
 
+	// // ----- STATICS ----- // //
 	const std::string SpotLight::TYPE = "spotLight";
 	const std::string SpotLight::INNER = "inner";
 	const std::string SpotLight::OUTER = "outer";
 
-
+	// // ----- CONSTRUCTORS ----- // //
 	SpotLight::SpotLight(GLfloat brightness, glm::vec3 color) :
 		m_light_mesh(Cylinder::create_cylinder()),
 		m_shader(Shader("lightShader", "lightShader.vert", "lightShader.frag"))

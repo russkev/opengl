@@ -13,8 +13,10 @@ namespace gl_engine
 	struct FreeCamera : public Camera
 	{
 	private:
+		// // ----- STATICS ----- // //
 		static const float MOVE_SPEED;
 
+		// // ----- MEMBER VARIABLES ----- // //
 		GLfloat m_angle_of_view = 60.0f;
 
 		// // ----- CONSTRUCTOR ----- // //

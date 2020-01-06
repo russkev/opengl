@@ -13,8 +13,11 @@ namespace gl_engine
 	*/
 	struct Cube
 	{
+		// // ----- MAIN ----- // //
 		static Mesh create_cube();
 		static Mesh create_cube(const float width);
+
+		// // ----- HELPER ----- // //
 	private:
 		static Mesh create_cube_face(glm::vec3 top_left, glm::vec3 top_right, glm::vec3 bottom_left, glm::vec3 bottom_right);
 	};

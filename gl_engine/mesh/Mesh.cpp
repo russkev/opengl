@@ -13,7 +13,7 @@
 
 namespace gl_engine
 {
-	// // ----- Constructors ----- // //
+	// // ----- CONSTRUCTORS ----- // //
 	Mesh::Mesh() :
 		m_vertices(vertices_type{}),
 		m_indices(index_type{}),
@@ -52,7 +52,7 @@ namespace gl_engine
 		return *this;
 	}
 
-	// // ----- Append ----- // //
+	// // ----- APPEND ----- // //
 	void Mesh::append_vertex(const Vertex vertex)
 	{
 		m_vertices.push_back(vertex);
@@ -70,15 +70,33 @@ namespace gl_engine
 		m_indices.push_back(pos);
 	}
 
-	// // ----- Setters ----- // //
-	void Mesh::set_vertex(std::size_t pos, Vertex& vertex)
+	// ----- TRANSFORM ----- // //
+	void Mesh::transform(glm::mat4 transformMatrix)
 	{
-		assert(num_vertices() >= pos);
-		
-		m_vertices.at(pos) = std::move(vertex);
+		transform(m_vertices, transformMatrix);
 	}
 
-	// // ------UVs ----- // //
+	void Mesh::transform(Mesh::vertices_type& inVertices, const glm::mat4 transformMatrix)
+	{
+
+		assert(inVertices.size() > 0);
+		for (auto & vertex : inVertices)
+		{
+			// Transform the vertex
+			auto position = transformMatrix * glm::vec4(vertex.position(), 1);
+			auto normal = transformMatrix * glm::vec4(vertex.normal(), 1);
+			auto tangent = transformMatrix * glm::vec4(vertex.tangent(), 1);
+			auto bitangent = transformMatrix * glm::vec4(vertex.bitangent(), 1);
+
+			// Set the new vertex attributes
+			vertex.set_position(position);
+			vertex.set_normal(normal);
+			vertex.set_tangent(tangent);
+			vertex.set_bitangent(bitangent);
+		}
+	}
+
+	// // ------ UVs ----- // //
 	void Mesh::scale_uvs(const GLfloat amount)
 	{
 		glm::mat2 scale_matrix{ amount, 0, 0, amount };
@@ -90,8 +108,18 @@ namespace gl_engine
 		}
 	}
 
-
-	// // ------INDICES ----- // //
+	// // ------ IDs ----- // //
+	void Mesh::update_ids()
+	{
+		if (num_vertices() > 0)
+		{
+			for (auto & vertex : m_vertices)
+			{
+				vertex.set_id(m_id);
+			}
+		}
+	}
+	// // ------ INDICES ----- // //
 
 	// Guess shared indices based on proximity
 	void Mesh::make_indices_smooth()
@@ -221,7 +249,7 @@ namespace gl_engine
 
 	}
 
-	// // ----- Getters ----- // //
+	// // ----- GETTERS ----- // //
 	Vertex* Mesh::get_vertex(std::size_t pos)
 	{
 		assert(num_vertices() >= pos);
@@ -234,41 +262,12 @@ namespace gl_engine
 		return m_indices.at(pos);
 	}
 
-	// ----- Transform ----- // //
-	void Mesh::transform(glm::mat4 transformMatrix)
+	// // ----- SETTERS ----- // //
+	void Mesh::set_vertex(std::size_t pos, Vertex& vertex)
 	{
-		transform(m_vertices, transformMatrix);
+		assert(num_vertices() >= pos);
+
+		m_vertices.at(pos) = std::move(vertex);
 	}
 
-	void Mesh::transform(Mesh::vertices_type& inVertices, const glm::mat4 transformMatrix)
-	{
-
-		assert(inVertices.size() > 0);
-		for (auto & vertex : inVertices)
-		{
-			// Transform the vertex
-			auto position = transformMatrix * glm::vec4(vertex.position(), 1);
-			auto normal = transformMatrix * glm::vec4(vertex.normal(), 1);
-			auto tangent = transformMatrix * glm::vec4(vertex.tangent(), 1);
-			auto bitangent = transformMatrix * glm::vec4(vertex.bitangent(), 1);
-
-			// Set the new vertex attributes
-			vertex.set_position(position);
-			vertex.set_normal(normal);
-			vertex.set_tangent(tangent);
-			vertex.set_bitangent(bitangent);
-		}
-	}
-
-	void Mesh::update_ids()
-	{
-		if (num_vertices() > 0)
-		{
-			for (auto & vertex : m_vertices)
-			{
-				vertex.set_id(m_id);
-			}
-		}
-
-	}
 } // namespace gl_engine

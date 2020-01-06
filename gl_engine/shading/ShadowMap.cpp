@@ -12,6 +12,7 @@
 
 namespace gl_engine
 {
+	// // ----- STATICS ----- // //
 	const std::string ShadowMap::MODEL_TRANSFORM = "transform.model_to_world";
 	const std::string ShadowMap::LIGHT_SPACE_TRANSFORM = "projection";
 	const std::string ShadowMap::DEPTH_MAP = "depth";
@@ -27,7 +28,7 @@ namespace gl_engine
 	const std::string ShadowMap::TRANSFORMS = "transforms";
 	const std::string ShadowMap::FAR_PLANE = "far_plane";
 
-	// // ----- CONSTRUCTOR ----- // //
+	// // ----- CONSTRUCTORS ----- // //
 	ShadowMap::ShadowMap(LightNode* lightNode) :
 		m_cameraNode{ std::string(lightNode->name() + " shadow"), lightNode->light()->camera() },
 		m_lightNode{ lightNode }
@@ -45,7 +46,22 @@ namespace gl_engine
 	}
 
 
-	// // ----- SHADOW MAP ----- // //
+	// // ----- INIT ----- // //
+	void ShadowMap::init_materials(std::vector<Material*>& materials)
+	{
+		for (Material* material : materials)
+		{
+			std::string index = std::to_string(m_lightNode->shader_pos());
+			std::string type = m_lightNode->light()->type();
+
+			material->add_texture(type + "[" + index + "]." + DEPTH_MAP, &m_texture);
+			if (is_point())
+			{
+				material->set_uniform(type + "[" + index + "]." + FAR_PLANE, m_cameraNode.camera()->clip_far());
+			}
+		}
+	}
+
 	void ShadowMap::init_directional_shadowMap()
 	{
 		m_texture = Texture{ GL_TEXTURE_2D_ARRAY };
@@ -128,6 +144,22 @@ namespace gl_engine
 		m_texture.unbind();
 	}
 
+	// // ----- UPDATE ----- // //
+	void ShadowMap::update_materials(std::vector<Material*>& materials)
+	{
+		for (Material* material : materials)
+		{
+			std::string index = std::to_string(m_lightNode->shader_pos());
+			std::string type = m_lightNode->light()->type();
+
+			if (is_directional())
+			{
+				material->set_uniform(type + "[" + index + "]." + LIGHT_SPACE_TRANSFORM, m_cameraNode.world_to_projection());
+			}
+		}
+	}
+
+	// // ----- RENDER ----- // //
 	void ShadowMap::render_shadowMap(std::map<std::string, Node*>& root_nodes)
 	{
 		m_texture.bind();
@@ -213,35 +245,7 @@ namespace gl_engine
 		}
 	}
 
-	void ShadowMap::init_materials(std::vector<Material*>& materials)
-	{
-		for (Material* material : materials)
-		{
-			std::string index = std::to_string(m_lightNode->shader_pos());
-			std::string type = m_lightNode->light()->type();
-
-			material->add_texture(type + "[" + index + "]." + DEPTH_MAP, &m_texture);
-			if (is_point())
-			{
-				material->set_uniform(type + "[" + index + "]." + FAR_PLANE, m_cameraNode.camera()->clip_far());
-			}
-		}
-	}
-
-	void ShadowMap::update_materials(std::vector<Material*>& materials)
-	{
-		for (Material* material : materials)
-		{
-			std::string index = std::to_string(m_lightNode->shader_pos());
-			std::string type = m_lightNode->light()->type();
-
-			if (is_directional())
-			{
-				material->set_uniform(type + "[" + index + "]." + LIGHT_SPACE_TRANSFORM, m_cameraNode.world_to_projection());
-			}
-		}
-	}
-
+	// // ----- GENERAL METHODS ----- // //
 	bool ShadowMap::check_bound_framebuffer()
 	{
 		auto status = glCheckFramebufferStatus(GL_FRAMEBUFFER);

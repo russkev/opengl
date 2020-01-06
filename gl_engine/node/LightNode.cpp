@@ -5,9 +5,11 @@
 
 namespace gl_engine
 {
+	// // ----- STATICS ----- // //
 	const std::string LightNode::LIGHT_POSITION = "position";
 	const std::string LightNode::LIGHT_DIRECTION = "direction";
 
+	// // ----- CONSTRUCTORS ----- // //
 	LightNode::LightNode(const std::string name, Light* light) :
 		Node(name),
 		m_light(light)

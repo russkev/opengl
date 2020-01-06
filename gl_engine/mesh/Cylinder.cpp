@@ -8,6 +8,7 @@
 
 namespace gl_engine
 {
+	// // ----- MAIN ----- // //
 	Mesh Cylinder::create_cylinder()
 	{
 		return create_cylinder(0.5f, 2.0f);
@@ -119,6 +120,7 @@ namespace gl_engine
 		return newCylinder;
 	}
 
+	// // ----- HELPER ----- // //
 	glm::vec3 Cylinder::radial_to_cartesian(float radius, float theta, float height)
 	{
 		return glm::vec3(radius * std::cos(theta), height, radius * std::sin(theta));

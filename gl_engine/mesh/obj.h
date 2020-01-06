@@ -17,10 +17,10 @@ namespace gl_engine
 	*/
 	struct OBJ_Loader
 	{
-		// Set constants
+		// // ------ STATICS ----- // //
 		const static glm::vec3 DEFAULT_COLOUR;
 
-		// Static methods
+		// // ------ MAIN ----- // //
 		static Mesh load_obj(const char *path);
 
 	};

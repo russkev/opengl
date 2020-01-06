@@ -5,6 +5,7 @@
 
 namespace gl_engine
 {
+	// // ----- CONSTRUCTORS ----- // //
 	/*
 
 		Struct for loading multiple file types as textures
@@ -47,6 +48,7 @@ namespace gl_engine
 		glGenTextures(1, &m_id);
 	}
 
+	// // ----- GENERAL METHODS ----- // //
 	void Texture::process()
 	{
 		bind();
@@ -144,6 +146,7 @@ namespace gl_engine
 		glBindTexture(m_target, 0);
 	}
 
+	// // ----- GETTERS ----- // //
 	GLsizei Texture::width()
 	{
 		return m_width;

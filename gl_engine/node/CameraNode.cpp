@@ -7,17 +7,14 @@
 
 namespace gl_engine
 {
-	/*
-
-		Constructor. Requires name for the node and a pointer to a camera
-
-	*/
+	// // ----- CONSTRUCTORS ----- // //
 	CameraNode::CameraNode(const std::string name, Camera* camera) :
 		Node(name), m_camera(camera)
 	{
 		m_camera->register_transform(&Node::local_to_node());
 	}
 
+	// // ----- GENERAL METHODS ----- // //
 	void CameraNode::update()
 	{
 		m_camera->update();
@@ -29,19 +26,11 @@ namespace gl_engine
 		return m_camera;
 	}
 
-
-	// // ----- OVERRIDES ----- // //
 	const glm::vec3 CameraNode::world_position()
 	{
 		return glm::vec3(world_to_node() * glm::vec4(m_camera->position(), 1.0f));
 	}
 
-	void CameraNode::set_position(const glm::vec3& position)
-	{
-		Node::set_position(position);
-	}
-
-	// // ----- GETTERS ----- // //
 	glm::mat4 CameraNode::world_to_cam()
 	{
 		return  m_camera->object_to_cam() * Node::world_to_node();
@@ -51,4 +40,11 @@ namespace gl_engine
 	{
 		return m_camera->transform_to_projection(world_to_node());
 	}
+
+	// // ----- SETTERS ----- // //
+	void CameraNode::set_position(const glm::vec3& position)
+	{
+		Node::set_position(position);
+	}
+
 } // namespace gl_engine

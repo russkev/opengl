@@ -19,7 +19,7 @@
 
 namespace gl_engine
 {
-	// // ----- CONSTRUCTOR ----- // //
+	// // ----- CONSTRUCTORS ----- // //
 	Renderer::Renderer(CameraNode* cameraNode) :
 		m_cameraNode(cameraNode), m_dimensions(cameraNode->camera()->dimensions())
 	{
@@ -32,6 +32,43 @@ namespace gl_engine
 	{
 		m_cameraNode->camera()->set_dimensions(dimensions);
 		init_settings();
+	}
+
+	// // ----- RENDER ----- // //
+	//Draw all nodes to screen
+	void Renderer::render()
+	{
+		if (m_first_frame)
+		{
+			init_first_frame();
+			m_first_frame = false;
+		}
+
+		// Shadow map		
+		for (LightNode* lightNode : m_lightNodes)
+		{
+			if (ShadowMap* shadowMap = lightNode->shadowMap())
+			{
+				shadowMap->render_shadowMap(m_root_nodes);
+				shadowMap->update_materials(m_materials);
+			}
+		}
+
+		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
+		m_cameraNode->update();
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		for (Material* material : m_materials)
+		{
+			material->update_lights(m_lightNodes);
+		}
+
+		for (auto const& node : m_root_nodes)
+		{
+			node.second->update_view(m_cameraNode);
+			node.second->draw();
+		}
 	}
 
 	// // ----- GENERAL METHODS ----- // //
@@ -89,44 +126,29 @@ namespace gl_engine
 		}
 	}
 
-	//Draw all nodes to screen
-	void Renderer::render()
+	bool Renderer::poll_events()
 	{
-		if (m_first_frame)
+		SDL_Event loc_event;
+		while (SDL_PollEvent(&loc_event))
 		{
-			init_first_frame();
-			m_first_frame = false;
-		}
-		
-		// Shadow map		
-		for (LightNode* lightNode : m_lightNodes)
-		{
-			if (ShadowMap* shadowMap = lightNode->shadowMap())
+			if (loc_event.type == SDL_QUIT)
 			{
-				shadowMap->render_shadowMap(m_root_nodes);
-				shadowMap->update_materials(m_materials);
+				return false;
 			}
 		}
-
-
-		
-		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
-		m_cameraNode->update();
-
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		for (Material* material : m_materials)
-		{
-			material->update_lights(m_lightNodes);
-		}
-
-		for (auto const& node : m_root_nodes)
-		{
-			node.second->update_view(m_cameraNode);
-			node.second->draw();
-		}
+		return true;
 	}
 
+
+	void Renderer::update(Window * window, Timer * timer)
+	{
+		timer->update();
+		render();
+		window->finish_frame();
+		window->append_title(("FPS: " + (std::string)timer->fps()));
+	}
+
+	// // ----- SETTERS ----- // //
 	void Renderer::add_node(Node* node)
 	{
 
@@ -163,27 +185,4 @@ namespace gl_engine
 			m_materials.push_back(material);
 		}
 	}
-
-	bool Renderer::poll_events()
-	{
-		SDL_Event loc_event;
-		while (SDL_PollEvent(&loc_event))
-		{
-			if (loc_event.type == SDL_QUIT)
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-
-
-	void Renderer::update(Window * window, Timer * timer)
-	{
-		timer->update();
-		render();
-		window->finish_frame();
-		window->append_title(("FPS: " + (std::string)timer->fps()));
-	}
-
 } // namespace gl_engine

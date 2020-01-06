@@ -5,6 +5,7 @@
 
 namespace gl_engine
 {
+	// // ----- MAIN ----- // //
 	Mesh Arrow::create_arrow()
 	{
 		return create_arrow(1.0f);
@@ -89,6 +90,8 @@ namespace gl_engine
 
 		return newArrow;
 	}
+
+	// // ----- HELPER ----- // //
 	Mesh Arrow::create_rectangle_face(glm::vec3 tl, glm::vec3 tr, glm::vec3 bl, glm::vec3 br)
 	{
 		// Vertix order is like this:

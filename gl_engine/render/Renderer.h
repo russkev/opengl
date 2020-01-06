@@ -9,7 +9,7 @@
 
 namespace gl_engine
 {
-	// Forward declerations
+	// // ----- FORWARD DECLERATIONS ----- // //
 	struct CameraNode;
 	struct LightNode;
 	struct Node;
@@ -45,12 +45,14 @@ namespace gl_engine
 		// // ----- GENERAL METHODS ----- // //
 		void init_settings();
 		void init_first_frame();
-		void add_light_node(LightNode* lightNode);
-		void add_node(Node* node);
 		bool poll_events();
 		void update(Window * window, Timer* timer);
 
+		// // ----- SETTERS ----- // //
+		void add_node(Node* node);
+
 	private:
+		void add_light_node(LightNode* lightNode);
 		void add_material(Material* material);
 
 	};

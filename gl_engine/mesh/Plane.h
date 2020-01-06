@@ -12,6 +12,7 @@ namespace gl_engine
 	*/
 	struct Plane
 	{
+		// // ------ MAIN ----- // //
 		static Mesh create_plane();
 		static Mesh create_plane(const float width, const float height);
 		static Mesh create_plane(const float width, const float height, const uint16_t width_segments, const uint16_t height_segments);
