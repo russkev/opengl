@@ -13,6 +13,9 @@
 namespace gl_engine
 {
 	// // ----- CONSTANTS ----- // //
+
+	const GLuint ShadowMap::SHADOW_WIDTH = 1024;
+	const GLuint ShadowMap::SHADOW_HEIGHT = 1024;
 	const std::string ShadowMap::MODEL_TRANSFORM = "transform.model_to_world";
 	const std::string ShadowMap::LIGHT_SPACE_TRANSFORM = "projection";
 	const std::string ShadowMap::DEPTH_MAP = "depth";
@@ -34,6 +37,8 @@ namespace gl_engine
 		m_lightNode{ lightNode }
 	{
 		m_cameraNode.set_parent(lightNode);
+		m_cameraNode.camera()->set_dimensions(glm::vec2(SHADOW_WIDTH, SHADOW_HEIGHT));
+
 		lightNode->set_shadowMap(this);
 		if (is_directional())
 		{

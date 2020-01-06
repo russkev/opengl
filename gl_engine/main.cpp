@@ -162,7 +162,7 @@ int main(int, char**)
 	pointLight_node2.set_position({ 0.0f, 4.0f, -5.0f });
 
 	// Directional Light 1
-	gl_engine::DirectionalLight directionalLight1{ 0.5f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
+	gl_engine::DirectionalLight directionalLight1{ 0.2f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
 	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
 	directionalLight_node1.set_rotation({ 33.0f, 225.0f, 0.0f });
 	directionalLight_node1.set_position({ 16.0f, 16.0f, 16.0f });
@@ -196,12 +196,12 @@ int main(int, char**)
 
 	// Null node 1
 	gl_engine::Node lightRotate1{ "light rotate 01" };
-	//lightRotate1.add_child(&pointLight_node);
+	lightRotate1.add_child(&pointLight_node);
 
 	// Null node 2
 	gl_engine::Node lightRotate2{ "light rotate 02" };
 	lightRotate2.add_child(&lightRotate1);
-	lightRotate2.set_position({ 0.0, 0.0, 0.0 });
+	lightRotate2.set_position({ 3.0, 0.0, 0.0 });
 
 	// Axis arrows
 	gl_engine::Mesh axis_arrow{ gl_engine::Arrow::create_arrow(20) };
@@ -229,10 +229,10 @@ int main(int, char**)
 	render.add_node(&shaderBall_node);
 	render.add_node(&plane_node);
 	render.add_node(&pointLight_node);
-	//render.add_node(&pointLight_node2);
-	//render.add_node(&directionalLight_node1);
-	//render.add_node(&spotLight_node1);
-	//render.add_node(&spotLight_node2);
+	render.add_node(&pointLight_node2);
+	render.add_node(&directionalLight_node1);
+	render.add_node(&spotLight_node1);
+	render.add_node(&spotLight_node2);
 
 	//render.add_node(&lightRotate1);
 
@@ -250,11 +250,11 @@ int main(int, char**)
 		float new_y_rotation = (float)shaderBall_node.local_rotation().y + (float)timer.delta_time_s() * 10.0f;
 		shaderBall_node.set_rotation({ 0.0, new_y_rotation, 0.0 });
 
-		//float l1_rotate = lightRotate1.local_rotation().z + (float)timer.delta_time_s() * 100;
-		//lightRotate1.set_rotation({ 0.0 , 0.0, l1_rotate });
+		float l1_rotate = lightRotate1.local_rotation().z - (float)timer.delta_time_s() * 10;
+		lightRotate1.set_rotation({ 0.0 , 0.0, l1_rotate });
 
-		//float l2_rotate = lightRotate2.local_rotation().y - (float)timer.delta_time_s() * 60;
-		//lightRotate2.set_rotation({ 0.0, l2_rotate, 0.0 });
+		float l2_rotate = lightRotate2.local_rotation().y - (float)timer.delta_time_s() * 60;
+		lightRotate2.set_rotation({ 0.0, l2_rotate, 0.0 });
 
 		render.update(&window, &timer);
 	}
