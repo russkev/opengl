@@ -335,11 +335,32 @@ float create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_lig
 
 float create_point_shadow(vec3 light_pos, float light_far_plane, samplerCube depth)
 {
+	float out_shadow = 1;
+	float bias = 0.05;
+	int samples = 20;
+	float disk_radius = 0.05;
 	vec3 frag_to_light = in_frag.world_space_position - light_pos;
-	float closest_depth = texture(depth, frag_to_light).r * light_far_plane;
 	float current_depth = length(frag_to_light);
 
-	float bias = 0.05;
+	vec3 sample_offset_directions[20] = vec3[]
+	(
+		vec3(+1, +1, +1), vec3(+1, -1, +1), vec3(-1, -1, +1), vec3(-1, +1, +1),
+		vec3(+1, +1, -1), vec3(+1, -1, -1), vec3(-1, -1, -1), vec3(-1, +1, -1),
+		vec3(+1, +1, +0), vec3(+1, -1, +0), vec3(-1, -1, +0), vec3(-1, +1, +0),
+		vec3(+1, +0, +1), vec3(-1, +0, +1), vec3(+1, +0, -1), vec3(-1, +0, -1),
+		vec3(+0, +1, +1), vec3(+0, -1, +1), vec3(+0, -1, -1), vec3(+0, +1, -1)
+	);
+
+	for (int i = 0; i < samples; ++i)
+	{
+		float closest_depth = 
+			texture(depth, frag_to_light + sample_offset_directions[i] * disk_radius).r * light_far_plane;
+		out_shadow += current_depth - bias > closest_depth ? 0.0 1.0;
+	}
+	out_shadow /= float(samples);
+
+	//!!!! Continue here
+
 	return current_depth - bias > closest_depth ? 0.0 : 1.0;
 }
 
