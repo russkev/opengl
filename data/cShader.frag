@@ -35,7 +35,11 @@ in Out_DirectionalLight
 
 in vec2 uv;
 
+in vec3 test;
+
 // // ----- UNIFORMS ----- // //
+uniform bool is_blinn;
+
 struct Material
 {
 	sampler2D diffuse;
@@ -172,7 +176,8 @@ void init_tangent_space()
 	for (int i = 0; i < NUM_LIGHTS; i++) 
 	{
 		m_pointLight[i].tangent_space_direction = normalize(in_pointLight[i].tangent_space_position - in_frag.tangent_space_position);
-		m_directionalLight[i].tangent_space_direction = -normalize(in_directionalLight[i].tangent_space_position);
+		m_directionalLight[i].tangent_space_direction = -in_directionalLight[i].tangent_space_position;
+//		m_directionalLight[i].tangent_space_direction = -normalize(in_directionalLight[i].tangent_space_position);
 		m_spotLight[i].tangent_space_direction = normalize(in_spotLight[i].tangent_space_position - in_frag.tangent_space_position);
 		m_spotLight[i].tangent_space_intensity = spot_intensity(
 			in_frag.world_space_position,
@@ -243,22 +248,33 @@ vec3 diffuse_spot_tangent_space(int index)
 
 vec3 phong(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
 {
+	// Energy conservation approximation is (spec_power + 2)/(2 * pi)
+	float energy_conservation_factor = 0.159 * material.spec_power + 0.318;
 	vec3 reflection_direction = reflect(-light_direction, normal_direction);
 	float cos_alpha = clamp( dot_vec3( cam_direction, reflection_direction ), 0, 1);
-	return vec3(pow(cos_alpha, material.spec_power));
+	return vec3(pow(cos_alpha, material.spec_power)) * energy_conservation_factor;
 
 }
 
 vec3 blinn_phong(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
 {
+	// Energy conservation approximation is (spec_power + 8)/(8 * pi)
+	float energy_conservation_factor = 0.0397436 * material.spec_power + 0.0856832;
 	vec3 half_way_direction = normalize(light_direction + cam_direction);
 	float cos_alpha = clamp( dot(normal_direction, half_way_direction), 0.0, 1.0);
-	return vec3(pow(cos_alpha, material.spec_power));
+	return vec3(pow(cos_alpha, material.spec_power)) * energy_conservation_factor;
 }
 
 vec3 specular(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
 {
-	return phong(light_direction, normal_direction, cam_direction);
+	if (is_blinn)
+	{
+		return blinn_phong(light_direction, normal_direction, cam_direction);
+	}
+	else
+	{
+		return phong(light_direction, normal_direction, cam_direction);
+	}
 }
 
 vec3 specular_point_world_space(int index)
@@ -438,7 +454,7 @@ void main ()
 			temp_shadow;
 
 		specular_out +=
-			specular_directional_world_space(i) *
+			specular_directional_tangent_space(i) *
 			directionalLight[i].brightness *
 			material.specular * 
 			directionalLight[i].color * 
@@ -474,7 +490,7 @@ void main ()
 		diffuse_out * texture(material.diffuse, uv).rgb
 		+ 
 		specular_out
-//		m_spotLight[0].tangent_space_direction
+//		test
 		* vec3(1.0);
 
 	fragColor = vec4(outColor.xyz, 1.0);
