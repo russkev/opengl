@@ -90,8 +90,8 @@ int main(int, char**)
 	GLuint height	= 600u;
 	gl_engine::Window window{ "GL Engine", st_config, width, height };
 
-	//spinning_shader_ball_scene(window);
-	three_shader_ball_scene(window);
+	spinning_shader_ball_scene(window);
+	//three_shader_ball_scene(window);
 
 	return 0;
 }
@@ -277,7 +277,7 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 void three_shader_ball_scene(gl_engine::Window window)
 {
 	GLfloat shader_ball_scale = 0.6f;
-	GLfloat shader_ball_offset = 4.0f;
+	GLfloat shader_ball_offset = 3.5f;
 	glm::vec3 shader_ball_rotation{ 0.0f, -35.0f, 0.0f };
 
 	// Target Camera
@@ -290,17 +290,36 @@ void three_shader_ball_scene(gl_engine::Window window)
 
 	// Shader Grey
 	gl_engine::Material grey_material_rough{ "grey material rough", "cShader.vert", "cShader.frag" };
-	grey_material_rough.set_uniform("material.spec_power", 1.5f);
+	grey_material_rough.set_uniform("material.spec_power", 2.5f);
 	grey_material_rough.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
+	grey_material_rough.set_uniform("is_blinn", true);
 
 	gl_engine::Material grey_material_mid{ "grey material mid", "cShader.vert", "cShader.frag" };
 	grey_material_mid.set_uniform("material.spec_power", 15.0f);
 	grey_material_mid.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
-
+	grey_material_mid.set_uniform("is_blinn", true);
 
 	gl_engine::Material grey_material_shiny{ "grey material shiny", "cShader.vert", "cShader.frag" };
-	grey_material_shiny.set_uniform("material.spec_power", 40.0f);
+	grey_material_shiny.set_uniform("material.spec_power", 80.0f);
 	grey_material_shiny.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
+	grey_material_shiny.set_uniform("is_blinn", true);
+
+
+	gl_engine::Material grey_blinn_material_rough{ "grey material rough", "cShader.vert", "cShader.frag" };
+	grey_blinn_material_rough.set_uniform("material.spec_power", 2.5f);
+	grey_blinn_material_rough.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
+	grey_blinn_material_rough.set_uniform("is_blinn", false);
+		 
+	gl_engine::Material grey_blinn_material_mid{ "grey material mid", "cShader.vert", "cShader.frag" };
+	grey_blinn_material_mid.set_uniform("material.spec_power", 15.0f);
+	grey_blinn_material_mid.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
+	grey_blinn_material_mid.set_uniform("is_blinn", false);
+		 
+	gl_engine::Material grey_blinn_material_shiny{ "grey material shiny", "cShader.vert", "cShader.frag" };
+	grey_blinn_material_shiny.set_uniform("material.spec_power", 80.0f);
+	grey_blinn_material_shiny.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
+	grey_blinn_material_shiny.set_uniform("is_blinn", false);
+
 
 
 	// Texture grey
@@ -308,6 +327,9 @@ void three_shader_ball_scene(gl_engine::Window window)
 	grey_material_rough.add_texture("material.diffuse", &grey_texture);
 	grey_material_mid.add_texture("material.diffuse", &grey_texture);
 	grey_material_shiny.add_texture("material.diffuse", &grey_texture);
+	grey_blinn_material_rough.add_texture("material.diffuse", &grey_texture);
+	grey_blinn_material_mid.add_texture("material.diffuse", &grey_texture);
+	grey_blinn_material_shiny.add_texture("material.diffuse", &grey_texture);
 
 	// Shader ball mesh
 	gl_engine::Mesh shaderBall = gl_engine::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
@@ -315,16 +337,19 @@ void three_shader_ball_scene(gl_engine::Window window)
 
 	// Spec test shader ball nodes
 	gl_engine::MeshNode shaderBall_rough_node{ "shaderBall rough", &shaderBall, &grey_material_rough };
-	//shaderBall_rough_node.set_scale(shader_ball_scale);
 	gl_engine::MeshNode shaderBall_mid_node{ "shaderBall mid", &shaderBall, &grey_material_mid };
-	//shaderBall_mid_node.set_scale(shader_ball_scale);
 	gl_engine::MeshNode shaderBall_shiny_node{ "shaderBall shiny", &shaderBall, &grey_material_shiny };
-	//shaderBall_shiny_node.set_scale(shader_ball_scale);
+	gl_engine::MeshNode shaderBall_blinn_rough_node{ "shaderBall blinn rough", &shaderBall, &grey_blinn_material_rough };
+	gl_engine::MeshNode shaderBall_blinn_mid_node{   "shaderBall blinn mid",   &shaderBall, &grey_blinn_material_mid };
+	gl_engine::MeshNode shaderBall_blinn_shiny_node{ "shaderBall blinn shiny", &shaderBall, &grey_blinn_material_shiny };
 
 	std::vector<gl_engine::MeshNode*> shaderBalls;
 	shaderBalls.push_back(&shaderBall_rough_node);
 	shaderBalls.push_back(&shaderBall_mid_node);
 	shaderBalls.push_back(&shaderBall_shiny_node);
+	shaderBalls.push_back(&shaderBall_blinn_rough_node);
+	shaderBalls.push_back(&shaderBall_blinn_mid_node);
+	shaderBalls.push_back(&shaderBall_blinn_shiny_node);
 
 	for (auto & shad_ball : shaderBalls)
 	{
@@ -333,9 +358,12 @@ void three_shader_ball_scene(gl_engine::Window window)
 	}
 
 	// Position shader balls
-	shaderBall_rough_node.set_position({ -shader_ball_offset, 0.0f, 0.0f });
-	shaderBall_mid_node.set_position({ 0.0f, 0.0f, 0.0f });
-	shaderBall_shiny_node.set_position({ shader_ball_offset, 0.0f, 0.0f });
+	shaderBall_rough_node.set_position({ -shader_ball_offset, shader_ball_offset / 2, 0.0f });
+	shaderBall_mid_node.set_position({ 0.0f, shader_ball_offset / 2, 0.0f });
+	shaderBall_shiny_node.set_position({ shader_ball_offset, shader_ball_offset / 2, 0.0f });
+	shaderBall_blinn_rough_node.set_position({ -shader_ball_offset, -shader_ball_offset / 2, 0.0f });
+	shaderBall_blinn_mid_node.set_position({ 0.0f, -shader_ball_offset / 2, 0.0f });
+	shaderBall_blinn_shiny_node.set_position({ shader_ball_offset, -shader_ball_offset / 2, 0.0f });
 
 	// Directional light 1
 	gl_engine::DirectionalLight directionalLight1{ 0.2f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
@@ -344,7 +372,7 @@ void three_shader_ball_scene(gl_engine::Window window)
 	directionalLight_node1.set_position({ 16.0f, 16.0f, 16.0f });
 
 	// Shadow map
-	gl_engine::ShadowMap shadowMap_directional1{ &directionalLight_node1 };
+	//gl_engine::ShadowMap shadowMap_directional1{ &directionalLight_node1 };
 
 
 	// Renderer
@@ -353,6 +381,9 @@ void three_shader_ball_scene(gl_engine::Window window)
 	render.add_node(&shaderBall_rough_node);
 	render.add_node(&shaderBall_mid_node);
 	render.add_node(&shaderBall_shiny_node);
+	render.add_node(&shaderBall_blinn_rough_node);
+	render.add_node(&shaderBall_blinn_mid_node);
+	render.add_node(&shaderBall_blinn_shiny_node);
 
 	render.add_node(&directionalLight_node1);
 

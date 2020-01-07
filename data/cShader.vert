@@ -64,6 +64,8 @@ uniform Camera camera;
 
 
 // // ----- OUTS ----- // //
+out vec3 test;
+
 out Out_Frag
 {
 	vec3 world_space_position;
@@ -111,7 +113,7 @@ void send_world_space_coordinates()
 void send_tangent_space_coordinates()
 {
 	vec3 tangent_basis		= normalize((transform.model_to_world * vec4(vertex_tangent, 0.0)).xyz);
-	vec3 normal_basis		= normalize((transform.model_to_world * vec4(vertex_normal, 1.0)).xyz);
+	vec3 normal_basis		= normalize((transform.model_to_world * vec4(vertex_normal, 0.0)).xyz);
 
 	//
 	// Here Gram Schmidt procedure and cross product are used 
@@ -120,7 +122,6 @@ void send_tangent_space_coordinates()
 
 	tangent_basis			= normalize(tangent_basis - dot(tangent_basis, normal_basis) * normal_basis);
 	vec3 bitangent_basis	= cross(normal_basis, tangent_basis);
-
 
 	mat3 tangent_to_world		= mat3(tangent_basis, bitangent_basis, normal_basis);
 	mat3 world_to_tangent		= transpose(tangent_to_world);
@@ -151,5 +152,6 @@ void main()
 	send_world_space_coordinates();
 	send_tangent_space_coordinates();
 	send_light_space_coordinates();
+
 	gl_Position = transform.model_to_projection * vec4(vertex_position, 1.0);
 }
