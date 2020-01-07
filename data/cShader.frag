@@ -21,7 +21,6 @@ in Out_PointLight
 	vec3 tangent_space_position;
 } in_pointLight[NUM_LIGHTS];
 
-
 in Out_SpotLight
 {
 	vec4 light_space_position;
@@ -240,11 +239,26 @@ vec3 diffuse_spot_tangent_space(int index)
 }
 
 // // ----- SPECULAR LIGHTING ----- // //
-vec3 specular(vec3 light, vec3 normal, vec3 cam)
+
+
+vec3 phong(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
 {
-	vec3 reflection = reflect(-light, normal);
-	float cos_alpha = clamp( dot_vec3( cam, reflection ), 0, 1);
+	vec3 reflection_direction = reflect(-light_direction, normal_direction);
+	float cos_alpha = clamp( dot_vec3( cam_direction, reflection_direction ), 0, 1);
 	return vec3(pow(cos_alpha, material.spec_power));
+
+}
+
+vec3 blinn_phong(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
+{
+	vec3 half_way_direction = normalize(light_direction + cam_direction);
+	float cos_alpha = clamp( dot(normal_direction, half_way_direction), 0.0, 1.0);
+	return vec3(pow(cos_alpha, material.spec_power));
+}
+
+vec3 specular(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
+{
+	return phong(light_direction, normal_direction, cam_direction);
 }
 
 vec3 specular_point_world_space(int index)
@@ -401,7 +415,7 @@ void main ()
 			temp_shadow;
 
 		specular_out +=
-			specular_point_world_space(i) * 
+			specular_point_tangent_space(i) * 
 			pointLight[i].brightness *  pointLight[i].brightness *
 			material.specular * 
 			pointLight[i].color * 
@@ -424,7 +438,7 @@ void main ()
 			temp_shadow;
 
 		specular_out +=
-			specular_directional_tangent_space(i) *
+			specular_directional_world_space(i) *
 			directionalLight[i].brightness *
 			material.specular * 
 			directionalLight[i].color * 

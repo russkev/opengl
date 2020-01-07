@@ -36,6 +36,10 @@ namespace gl_engine
 		void append_title(std::string str);
 		void finish_frame();
 
+		// // ----- GETTERS ----- // //
+		GLint width();
+		GLint height();
+
 		// // ----- MEMBER VARIABLES ----- // //
 	public:
 		SDL_Window *	m_st_window = nullptr;

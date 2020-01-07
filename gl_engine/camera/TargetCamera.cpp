@@ -67,10 +67,10 @@ namespace gl_engine
 		m_look_target += positionDelta;
 	}
 
-	void TargetCamera::rotate_relative(const glm::vec2& rotateDelta)
+	void TargetCamera::rotate_relative(const glm::vec2& rotate_delta)
 	{
-		glm::mat3 pitch = (glm::mat3)glm::rotate(glm::mat4(1.0f), rotateDelta.y, m_cam_right);
-		glm::mat3 yaw = (glm::mat3)glm::rotate(glm::mat4(1.0f), -rotateDelta.x, UP_AXIS);
+		glm::mat3 pitch = (glm::mat3)glm::rotate(glm::mat4(1.0f), rotate_delta.y, m_cam_right);
+		glm::mat3 yaw = (glm::mat3)glm::rotate(glm::mat4(1.0f), -rotate_delta.x, UP_AXIS);
 
 		Camera::add_to_position(-m_look_target);
 		Camera::set_position(pitch * yaw * Camera::position());

@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <GL/glew.h>
+#include <glm/glm.hpp>
 
 
 namespace gl_engine
@@ -24,6 +25,9 @@ namespace gl_engine
 
 		// Create an internal texture
 		Texture(const GLenum target);
+
+		// Create color solid color texture
+		Texture(const glm::vec3& color);
 		
 		// // ----- GENERAL ----- // //
 		void process();
@@ -62,7 +66,9 @@ namespace gl_engine
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		SDL_Surface*	m_surface = NULL;
+		SDL_Surface*		m_surface = NULL;
+		glm::tvec4<GLubyte>	m_color;
+
 		GLuint			m_id = 0;
 		GLsizei			m_width = 0;
 		GLsizei			m_height = 0;
