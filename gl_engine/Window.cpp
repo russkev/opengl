@@ -2,6 +2,7 @@
 
 namespace gl_engine
 {
+	// // ----- CONSTRUCTORS ----- // //
 	Window::Window(std::string name, std::vector<opengl_attr_pair> st_config, GLuint width, GLuint height) :
 		m_name(name)
 	{
@@ -40,6 +41,7 @@ namespace gl_engine
 		__debugbreak();
 	}
 
+	// // ----- INIT ----- // //
 	void Window::init(std::vector<opengl_attr_pair> st_config, GLuint width, GLuint height)
 	{
 #ifdef _DEBUG
@@ -85,12 +87,10 @@ namespace gl_engine
 			glDebugMessageCallbackARB(&DebugOutputCallback, NULL);
 #endif
 			glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
-
-
 		}
-
 	}
 
+	// // ----- GENERAL METHODS ----- // //
 	void Window::finish_frame()
 	{
 		SDL_GL_SwapWindow(m_st_window);
@@ -103,5 +103,20 @@ namespace gl_engine
 		strncpy(concat_title_char, concat_title_str.c_str(), sizeof(concat_title_char));
 
 		SDL_SetWindowTitle(m_st_window, concat_title_char);
+	}
+
+	// // ----- GETTERS ----- // //
+	GLint Window::width()
+	{
+		GLint width;
+		SDL_GetWindowSize(m_st_window, &width, NULL);
+		return width;
+	}
+
+	GLint Window::height()
+	{
+		GLint height;
+		SDL_GetWindowSize(m_st_window, NULL, &height);
+		return height;
 	}
 } // namespace gl_engine

@@ -29,6 +29,7 @@
 #include "shading/Texture.h"
 #include "utils/Timer.h"
 
+#include <glm/glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
@@ -80,12 +81,23 @@ static void __stdcall openglCallbackFunction(
 	}
 }
 
+void spinning_shader_ball_scene(gl_engine::Window window);
+void three_shader_ball_scene(gl_engine::Window window);
+
 int main(int, char**)
 {
 	GLuint width	= 800u;
 	GLuint height	= 600u;
 	gl_engine::Window window{ "GL Engine", st_config, width, height };
 
+	//spinning_shader_ball_scene(window);
+	three_shader_ball_scene(window);
+
+	return 0;
+}
+
+void spinning_shader_ball_scene(gl_engine::Window window)
+{
 	// Target Camera
 	gl_engine::TargetCamera targetCam{};
 	gl_engine::CameraNode targetCam_node{ "Target Camera 1", &targetCam };
@@ -113,7 +125,7 @@ int main(int, char**)
 
 	// Shader 2
 	gl_engine::Material floor_material{ "floor material", "cShader.vert", "cShader.frag" };
-	floor_material.set_uniform("material.spec_power", 32.0f);
+	floor_material.set_uniform("material.spec_power", 26.0f);
 	floor_material.set_uniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
 
 	// Texture 1
@@ -146,6 +158,7 @@ int main(int, char**)
 	//gl_engine::MeshNode cube_node{ "Cube 1", &cube, &cShadMat };
 	//cube_node.set_parent(&freeCam_node);
 	//cube_node.set_position({ 0.0f, 3.0f, 6.0f });
+
 
 	// Point Light 1
 	gl_engine::PointLight pointLight{ 1.0f, { 0.0f, 0.0f, 0.0f } };
@@ -182,7 +195,7 @@ int main(int, char**)
 	// Spot Light 2
 	gl_engine::SpotLight spotLight2{ 14.0f, {0.0f, 0.0f, 1.0f } };
 	gl_engine::LightNode spotLight_node2{ "Spot Light 2", &spotLight2 };
-	spotLight_node2.set_position({ 6.0f, 12.0f, 2.0f});
+	spotLight_node2.set_position({ 6.0f, 12.0f, 2.0f });
 	spotLight_node2.set_rotation({ 50.0f, -100.0f, 0.0f });
 	spotLight2.set_inner_angle(25.0f);
 	spotLight2.set_outer_angle(70.0f);
@@ -196,7 +209,7 @@ int main(int, char**)
 
 	// Null node 1
 	gl_engine::Node lightRotate1{ "light rotate 01" };
-	lightRotate1.add_child(&pointLight_node);
+	//lightRotate1.add_child(&pointLight_node);
 
 	// Null node 2
 	gl_engine::Node lightRotate2{ "light rotate 02" };
@@ -225,14 +238,15 @@ int main(int, char**)
 
 
 	// Renderer
-	gl_engine::Renderer render{ &targetCam_node, glm::uvec2(width, height) };
+	gl_engine::Renderer render{ &targetCam_node, glm::uvec2(window.width(), window.height()) };
 	render.add_node(&shaderBall_node);
 	render.add_node(&plane_node);
-	//render.add_node(&pointLight_node);
+
+	render.add_node(&pointLight_node);
 	render.add_node(&pointLight_node2);
-	//render.add_node(&directionalLight_node1);
-	//render.add_node(&spotLight_node1);
-	//render.add_node(&spotLight_node2);
+	render.add_node(&directionalLight_node1);
+	render.add_node(&spotLight_node1);
+	render.add_node(&spotLight_node2);
 
 	//render.add_node(&lightRotate1);
 
@@ -258,7 +272,96 @@ int main(int, char**)
 
 		render.update(&window, &timer);
 	}
-
-	return 0;
 }
 
+void three_shader_ball_scene(gl_engine::Window window)
+{
+	GLfloat shader_ball_scale = 0.6f;
+	GLfloat shader_ball_offset = 4.0f;
+	glm::vec3 shader_ball_rotation{ 0.0f, -35.0f, 0.0f };
+
+	// Target Camera
+	gl_engine::TargetCamera targetCam{};
+	gl_engine::CameraNode targetCam_node{ "Target Camera 1", &targetCam };
+	targetCam.set_position({ 0.0f, 8.0f, 8.0f });
+	targetCam.set_focus_target({ 0.0f, 0.0f, 0.0f });
+	targetCam.focus(glm::vec3{ 0.0f, 0.0f, 0.0f });
+	targetCam.set_clip_far(1000.0f);
+
+	// Shader Grey
+	gl_engine::Material grey_material_rough{ "grey material rough", "cShader.vert", "cShader.frag" };
+	grey_material_rough.set_uniform("material.spec_power", 1.5f);
+	grey_material_rough.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
+
+	gl_engine::Material grey_material_mid{ "grey material mid", "cShader.vert", "cShader.frag" };
+	grey_material_mid.set_uniform("material.spec_power", 15.0f);
+	grey_material_mid.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
+
+
+	gl_engine::Material grey_material_shiny{ "grey material shiny", "cShader.vert", "cShader.frag" };
+	grey_material_shiny.set_uniform("material.spec_power", 40.0f);
+	grey_material_shiny.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
+
+
+	// Texture grey
+	gl_engine::Texture grey_texture(glm::vec3{ 0.5f, 0.5f, 0.5f });
+	grey_material_rough.add_texture("material.diffuse", &grey_texture);
+	grey_material_mid.add_texture("material.diffuse", &grey_texture);
+	grey_material_shiny.add_texture("material.diffuse", &grey_texture);
+
+	// Shader ball mesh
+	gl_engine::Mesh shaderBall = gl_engine::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
+	//gl_engine::Mesh shaderBall = gl_engine::Sphere::create_sphere(2.5f);
+
+	// Spec test shader ball nodes
+	gl_engine::MeshNode shaderBall_rough_node{ "shaderBall rough", &shaderBall, &grey_material_rough };
+	//shaderBall_rough_node.set_scale(shader_ball_scale);
+	gl_engine::MeshNode shaderBall_mid_node{ "shaderBall mid", &shaderBall, &grey_material_mid };
+	//shaderBall_mid_node.set_scale(shader_ball_scale);
+	gl_engine::MeshNode shaderBall_shiny_node{ "shaderBall shiny", &shaderBall, &grey_material_shiny };
+	//shaderBall_shiny_node.set_scale(shader_ball_scale);
+
+	std::vector<gl_engine::MeshNode*> shaderBalls;
+	shaderBalls.push_back(&shaderBall_rough_node);
+	shaderBalls.push_back(&shaderBall_mid_node);
+	shaderBalls.push_back(&shaderBall_shiny_node);
+
+	for (auto & shad_ball : shaderBalls)
+	{
+		shad_ball->set_scale(shader_ball_scale);
+		shad_ball->set_rotation(shader_ball_rotation);
+	}
+
+	// Position shader balls
+	shaderBall_rough_node.set_position({ -shader_ball_offset, 0.0f, 0.0f });
+	shaderBall_mid_node.set_position({ 0.0f, 0.0f, 0.0f });
+	shaderBall_shiny_node.set_position({ shader_ball_offset, 0.0f, 0.0f });
+
+	// Directional light 1
+	gl_engine::DirectionalLight directionalLight1{ 0.2f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
+	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
+	directionalLight_node1.set_rotation({ 33.0f, 225.0f, 0.0f });
+	directionalLight_node1.set_position({ 16.0f, 16.0f, 16.0f });
+
+	// Shadow map
+	gl_engine::ShadowMap shadowMap_directional1{ &directionalLight_node1 };
+
+
+	// Renderer
+	gl_engine::Renderer render{ &targetCam_node, glm::uvec2(window.width(), window.height()) };
+
+	render.add_node(&shaderBall_rough_node);
+	render.add_node(&shaderBall_mid_node);
+	render.add_node(&shaderBall_shiny_node);
+
+	render.add_node(&directionalLight_node1);
+
+	gl_engine::Timer timer;
+
+	while (render.poll_events())
+	{
+		render.update(&window, &timer);
+
+		//shaderBall_rough_node.set_position(glm::vec3{ std::cos(timer.total_time_s()) * 5.0f, 0.0f, 0.0f });
+	}
+}
