@@ -37,6 +37,23 @@ namespace gl_engine
 	}
 
 	// // ----- SETTERS ----- // //
+	void Material::set_sampler_color(const std::string& uniform_name, glm::vec4& color)
+	{
+		Texture texture{ color };
+		m_colors.push_back(texture);
+		add_texture(uniform_name, &texture);
+	}
+
+	void Material::set_sampler_color(const std::string& uniform_name, glm::vec3& color)
+	{
+		set_sampler_color(uniform_name, glm::vec4(color.r, color.g, color.b, 1.0f));
+	}
+
+	void Material::set_sampler_value(const std::string& uniform_name, GLfloat value)
+	{
+		set_sampler_color(uniform_name, glm::vec3(value));
+	}
+
 	void Material::add_texture(const std::string& uniform_name, Texture* texture)
 	{
 		if (m_textures.find(uniform_name) != m_textures.end())
