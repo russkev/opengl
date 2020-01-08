@@ -90,8 +90,8 @@ int main(int, char**)
 	GLuint height	= 600u;
 	gl_engine::Window window{ "GL Engine", st_config, width, height };
 
-	spinning_shader_ball_scene(window);
-	//three_shader_ball_scene(window);
+	//spinning_shader_ball_scene(window);
+	three_shader_ball_scene(window);
 
 	return 0;
 }
@@ -117,27 +117,31 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	freeCam.set_clip_near(0.001f);
 	freeCam.set_clip_far(1000.0f);
 
+	// Colors
+	gl_engine::Texture white_tex(		glm::vec3(1.00f, 1.00f, 1.00f));
+	gl_engine::Texture light_grey_tex(	glm::vec3(0.85f, 0.85f, 0.85f));
+	gl_engine::Texture grey_tex(		glm::vec3(0.50f, 0.50f, 0.50f));
+	gl_engine::Texture dark_grey_tex(	glm::vec3(0.25f, 0.25f, 0.25f));
+	gl_engine::Texture blue_tex(		glm::vec3(0.25f, 0.25f, 1.00f));
+
+	// Textures
+	gl_engine::Texture uv_template_b_tex("uvtemplateB.tga");
+	gl_engine::Texture grey_grid_tex("greyGrid_01.tga");
 
 	// Shader 1
 	gl_engine::Material shaderBall_material{ "cMat", "cShader.vert", "cShader.frag" };
-	shaderBall_material.set_uniform("material.spec_power", 32.0f);
-	shaderBall_material.set_uniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
+	//shaderBall_material.set_uniform("material.specular_power", 32.0f);
+	//shaderBall_material.set_uniform("material.glossiness", 0.5f);
+	shaderBall_material.add_texture("material.glossiness", &grey_tex);
+	shaderBall_material.add_texture("material.specular", &light_grey_tex);
+	shaderBall_material.add_texture("material.diffuse", &uv_template_b_tex);
 
 	// Shader 2
 	gl_engine::Material floor_material{ "floor material", "cShader.vert", "cShader.frag" };
-	floor_material.set_uniform("material.spec_power", 26.0f);
-	floor_material.set_uniform("material.specular", glm::vec3(0.7, 0.6, 0.9));
-
-	// Texture 1
-	gl_engine::Texture tex1("uvtemplateB.tga");
-	shaderBall_material.add_texture("material.diffuse", &tex1);
-
-	// Texture 2
-	gl_engine::Texture tex2("greyGrid_01.tga");
-	floor_material.add_texture("material.diffuse", &tex2);
-
-	//shaderBall_material.add_texture("shadowMap", &tex2);
-
+	//floor_material.set_uniform("material.specular_power", 26.0f);
+	floor_material.add_texture("material.glossiness", &dark_grey_tex);
+	floor_material.add_texture("material.specular", &light_grey_tex);
+	floor_material.add_texture("material.diffuse", &grey_grid_tex);
 
 	// Texture 3
 	//gl_engine::Texture arrayTest_tex("uvtemplate.tga");
@@ -255,7 +259,7 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	//render.add_node(&axis_arrow_y_node);
 	//render.add_node(&axis_arrow_z_node);
 
-	//tex1.unbind();
+	//uv_template_b_tex.unbind();
 
 	gl_engine::Timer timer;
 
@@ -288,39 +292,44 @@ void three_shader_ball_scene(gl_engine::Window window)
 	targetCam.focus(glm::vec3{ 0.0f, 0.0f, 0.0f });
 	targetCam.set_clip_far(1000.0f);
 
+	// Colors
+	gl_engine::Texture white_tex(		glm::vec3(1.00f, 1.00f, 1.00f));
+	gl_engine::Texture lighter_grey_tex(glm::vec3(0.95f, 0.95f, 0.95f));
+	gl_engine::Texture light_grey_tex(	glm::vec3(0.85f, 0.85f, 0.85f));
+	gl_engine::Texture grey_tex(		glm::vec3(0.50f, 0.50f, 0.50f));
+	gl_engine::Texture dark_grey_tex(	glm::vec3(0.25f, 0.25f, 0.25f));
+	gl_engine::Texture darker_grey_tex(	glm::vec3(0.10f, 0.10f, 0.10f));
+
 	// Shader Grey
-	gl_engine::Material grey_material_rough{ "grey material rough", "cShader.vert", "cShader.frag" };
-	grey_material_rough.set_uniform("material.spec_power", 2.5f);
-	grey_material_rough.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
-	grey_material_rough.set_uniform("is_blinn", true);
-
-	gl_engine::Material grey_material_mid{ "grey material mid", "cShader.vert", "cShader.frag" };
-	grey_material_mid.set_uniform("material.spec_power", 15.0f);
-	grey_material_mid.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
-	grey_material_mid.set_uniform("is_blinn", true);
-
-	gl_engine::Material grey_material_shiny{ "grey material shiny", "cShader.vert", "cShader.frag" };
-	grey_material_shiny.set_uniform("material.spec_power", 80.0f);
-	grey_material_shiny.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
-	grey_material_shiny.set_uniform("is_blinn", true);
+	gl_engine::Material grey_material_rough{		"grey material rough",	"cShader.vert", "cShader.frag" };
+	gl_engine::Material grey_material_mid{			"grey material mid",	"cShader.vert", "cShader.frag" };
+	gl_engine::Material grey_material_shiny{		"grey material shiny",	"cShader.vert", "cShader.frag" };
+	gl_engine::Material grey_blinn_material_rough{	"grey material rough",	"cShader.vert", "cShader.frag" };
+	gl_engine::Material grey_blinn_material_mid{	"grey material mid",	"cShader.vert", "cShader.frag" };
+	gl_engine::Material grey_blinn_material_shiny{	"grey material shiny",	"cShader.vert", "cShader.frag" };
 
 
-	gl_engine::Material grey_blinn_material_rough{ "grey material rough", "cShader.vert", "cShader.frag" };
-	grey_blinn_material_rough.set_uniform("material.spec_power", 2.5f);
-	grey_blinn_material_rough.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
-	grey_blinn_material_rough.set_uniform("is_blinn", false);
-		 
-	gl_engine::Material grey_blinn_material_mid{ "grey material mid", "cShader.vert", "cShader.frag" };
-	grey_blinn_material_mid.set_uniform("material.spec_power", 15.0f);
-	grey_blinn_material_mid.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
-	grey_blinn_material_mid.set_uniform("is_blinn", false);
-		 
-	gl_engine::Material grey_blinn_material_shiny{ "grey material shiny", "cShader.vert", "cShader.frag" };
-	grey_blinn_material_shiny.set_uniform("material.spec_power", 80.0f);
-	grey_blinn_material_shiny.set_uniform("material.specular", glm::vec3{ 1.0, 1.0, 1.0 });
-	grey_blinn_material_shiny.set_uniform("is_blinn", false);
+	grey_material_rough.add_texture(		"material.glossiness", &darker_grey_tex);
+	grey_material_mid.add_texture(			"material.glossiness", &grey_tex);
+	grey_material_shiny.add_texture(		"material.glossiness", &lighter_grey_tex);
+	grey_blinn_material_rough.add_texture(	"material.glossiness", &darker_grey_tex);
+	grey_blinn_material_mid.add_texture(	"material.glossiness", &grey_tex);
+	grey_blinn_material_shiny.add_texture(	"material.glossiness", &lighter_grey_tex);
 
 
+	grey_material_rough.add_texture(		"material.specular", &white_tex);
+	grey_material_mid.add_texture(			"material.specular", &white_tex);
+	grey_material_shiny.add_texture(		"material.specular", &white_tex);
+	grey_blinn_material_rough.add_texture(	"material.specular", &white_tex);
+	grey_blinn_material_mid.add_texture(	"material.specular", &white_tex);
+	grey_blinn_material_shiny.add_texture(	"material.specular", &white_tex);
+
+	grey_material_rough.set_uniform(		"is_blinn", true);
+	grey_material_mid.set_uniform(			"is_blinn", true);
+	grey_material_shiny.set_uniform(		"is_blinn", true);
+	grey_blinn_material_rough.set_uniform(	"is_blinn", false);
+	grey_blinn_material_mid.set_uniform(	"is_blinn", false);
+	grey_blinn_material_shiny.set_uniform(	"is_blinn", false);
 
 	// Texture grey
 	gl_engine::Texture grey_texture(glm::vec3{ 0.5f, 0.5f, 0.5f });

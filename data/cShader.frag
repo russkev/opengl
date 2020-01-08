@@ -2,6 +2,7 @@
 #pragma optionNV unroll all
 #extension GL_EXT_texture_array : enable
 #define NUM_LIGHTS 3
+#define MAX_SPECULAR_POWER 100
 
 // // ----- INS ----- // //
 in Out_Frag
@@ -43,9 +44,14 @@ uniform bool is_blinn;
 struct Material
 {
 	sampler2D diffuse;
+	float diffuse_amount;
 	
-	vec3 specular;
-	float spec_power;
+	sampler2D specular;
+	float specular_amount;
+
+	sampler2D glossiness;
+
+//	float specular_power;
 };
 uniform Material material;
 
@@ -93,6 +99,11 @@ uniform Camera camera;
 out vec4 fragColor;
 
 // // ----- LOCAL FRAGMENT DIRECTIONS ----- // //
+struct m_Material
+{
+	float specular_power;
+} m_material;
+
 struct m_Frag
 {
 	vec3 world_space_normal;
@@ -153,6 +164,12 @@ float spot_intensity(vec3 vertex_position, vec3 light_position, vec3 light_aim, 
 
 
 // // ----- INITIALIZATION OF LOCALS ----- // //
+void init_material()
+{
+	m_material.specular_power = texture(material.glossiness, uv).r * MAX_SPECULAR_POWER;
+}
+
+
 void init_world_space()
 {
 	m_cam.world_space_direction = normalize(camera.position - in_frag.world_space_position);
@@ -177,7 +194,6 @@ void init_tangent_space()
 	{
 		m_pointLight[i].tangent_space_direction = normalize(in_pointLight[i].tangent_space_position - in_frag.tangent_space_position);
 		m_directionalLight[i].tangent_space_direction = -in_directionalLight[i].tangent_space_position;
-//		m_directionalLight[i].tangent_space_direction = -normalize(in_directionalLight[i].tangent_space_position);
 		m_spotLight[i].tangent_space_direction = normalize(in_spotLight[i].tangent_space_position - in_frag.tangent_space_position);
 		m_spotLight[i].tangent_space_intensity = spot_intensity(
 			in_frag.world_space_position,
@@ -248,21 +264,21 @@ vec3 diffuse_spot_tangent_space(int index)
 
 vec3 phong(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
 {
-	// Energy conservation approximation is (spec_power + 2)/(2 * pi)
-	float energy_conservation_factor = 0.159 * material.spec_power + 0.318;
+	// Energy conservation approximation is (specular_power + 2)/(2 * pi)
+	float energy_conservation_factor = 0.159 * m_material.specular_power + 0.318;
 	vec3 reflection_direction = reflect(-light_direction, normal_direction);
 	float cos_alpha = clamp( dot_vec3( cam_direction, reflection_direction ), 0, 1);
-	return vec3(pow(cos_alpha, material.spec_power)) * energy_conservation_factor;
+	return vec3(pow(cos_alpha, m_material.specular_power)) * energy_conservation_factor;
 
 }
 
 vec3 blinn_phong(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
 {
-	// Energy conservation approximation is (spec_power + 8)/(8 * pi)
-	float energy_conservation_factor = 0.0397436 * material.spec_power + 0.0856832;
+	// Energy conservation approximation is (specular_power + 8)/(8 * pi)
+	float energy_conservation_factor = 0.0397436 * m_material.specular_power + 0.0856832;
 	vec3 half_way_direction = normalize(light_direction + cam_direction);
 	float cos_alpha = clamp( dot(normal_direction, half_way_direction), 0.0, 1.0);
-	return vec3(pow(cos_alpha, material.spec_power)) * energy_conservation_factor;
+	return vec3(pow(cos_alpha, m_material.specular_power)) * energy_conservation_factor;
 }
 
 vec3 specular(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
@@ -410,6 +426,7 @@ void main ()
 	vec3 diffuse_out = vec3(0.0);
 	vec3 specular_out = vec3(0.0);
 
+	init_material();
 	init_world_space();
 	init_tangent_space();
 
@@ -433,7 +450,7 @@ void main ()
 		specular_out +=
 			specular_point_tangent_space(i) * 
 			pointLight[i].brightness *  pointLight[i].brightness *
-			material.specular * 
+			texture(material.specular, uv).rgb * 
 			pointLight[i].color * 
 			temp_attenuation * 
 			temp_shadow;
@@ -456,7 +473,7 @@ void main ()
 		specular_out +=
 			specular_directional_tangent_space(i) *
 			directionalLight[i].brightness *
-			material.specular * 
+			texture(material.specular, uv).rgb * 
 			directionalLight[i].color * 
 			temp_shadow;
 	}
@@ -480,7 +497,7 @@ void main ()
 		specular_out +=
 			specular_spot_tangent_space(i) *
 			pointLight[i].brightness * spotLight[i].brightness *
-			material.specular * 
+			texture(material.specular, uv).rgb * 
 			spotLight[i].color * 
 			temp_attenuation * 
 			temp_shadow;
