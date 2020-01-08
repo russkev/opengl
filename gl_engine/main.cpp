@@ -309,20 +309,29 @@ void three_shader_ball_scene(gl_engine::Window window)
 	gl_engine::Material grey_blinn_material_shiny{	"grey material shiny",	"cShader.vert", "cShader.frag" };
 
 
-	grey_material_rough.add_texture(		"material.glossiness", &darker_grey_tex);
+	//grey_material_rough.add_texture(		"material.glossiness", &darker_grey_tex);
 	grey_material_mid.add_texture(			"material.glossiness", &grey_tex);
 	grey_material_shiny.add_texture(		"material.glossiness", &lighter_grey_tex);
 	grey_blinn_material_rough.add_texture(	"material.glossiness", &darker_grey_tex);
 	grey_blinn_material_mid.add_texture(	"material.glossiness", &grey_tex);
 	grey_blinn_material_shiny.add_texture(	"material.glossiness", &lighter_grey_tex);
 
+	//grey_material_rough.set_sampler_value(		"material.glossiness", 0.95f);
+	//grey_material_mid.set_sampler_value(		"material.glossiness", 0.50f);
+	//grey_material_shiny.set_sampler_value(		"material.glossiness", 0.95f);
+	//grey_blinn_material_rough.set_sampler_value("material.glossiness", 0.05f);
+	//grey_blinn_material_mid.set_sampler_value(	"material.glossiness", 0.50f);
+	//grey_blinn_material_shiny.set_sampler_value("material.glossiness", 0.95f);
 
-	grey_material_rough.add_texture(		"material.specular", &white_tex);
-	grey_material_mid.add_texture(			"material.specular", &white_tex);
-	grey_material_shiny.add_texture(		"material.specular", &white_tex);
-	grey_blinn_material_rough.add_texture(	"material.specular", &white_tex);
-	grey_blinn_material_mid.add_texture(	"material.specular", &white_tex);
-	grey_blinn_material_shiny.add_texture(	"material.specular", &white_tex);
+
+	grey_material_rough.set_sampler_color(			"material.glossiness", glm::vec3{1.0f, 0.0f, 0.0f});
+	grey_material_rough.set_sampler_value(			"material.specular", 1.0f);
+
+	grey_material_mid.set_sampler_value(			"material.specular", 1.0f);
+	grey_material_shiny.set_sampler_value(			"material.specular", 1.0f);
+	grey_blinn_material_rough.set_sampler_value(	"material.specular", 1.0f);
+	grey_blinn_material_mid.set_sampler_value(		"material.specular", 1.0f);
+	grey_blinn_material_shiny.set_sampler_value(	"material.specular", 1.0f);
 
 	grey_material_rough.set_uniform(		"is_blinn", true);
 	grey_material_mid.set_uniform(			"is_blinn", true);
@@ -345,12 +354,12 @@ void three_shader_ball_scene(gl_engine::Window window)
 	//gl_engine::Mesh shaderBall = gl_engine::Sphere::create_sphere(2.5f);
 
 	// Spec test shader ball nodes
-	gl_engine::MeshNode shaderBall_rough_node{ "shaderBall rough", &shaderBall, &grey_material_rough };
-	gl_engine::MeshNode shaderBall_mid_node{ "shaderBall mid", &shaderBall, &grey_material_mid };
-	gl_engine::MeshNode shaderBall_shiny_node{ "shaderBall shiny", &shaderBall, &grey_material_shiny };
-	gl_engine::MeshNode shaderBall_blinn_rough_node{ "shaderBall blinn rough", &shaderBall, &grey_blinn_material_rough };
-	gl_engine::MeshNode shaderBall_blinn_mid_node{   "shaderBall blinn mid",   &shaderBall, &grey_blinn_material_mid };
-	gl_engine::MeshNode shaderBall_blinn_shiny_node{ "shaderBall blinn shiny", &shaderBall, &grey_blinn_material_shiny };
+	gl_engine::MeshNode shaderBall_rough_node{		"shaderBall rough",			&shaderBall, &grey_material_rough };
+	gl_engine::MeshNode shaderBall_mid_node{		"shaderBall mid",			&shaderBall, &grey_material_mid };
+	gl_engine::MeshNode shaderBall_shiny_node{		"shaderBall shiny",			&shaderBall, &grey_material_shiny };
+	gl_engine::MeshNode shaderBall_blinn_rough_node{"shaderBall blinn rough",	&shaderBall, &grey_blinn_material_rough };
+	gl_engine::MeshNode shaderBall_blinn_mid_node{  "shaderBall blinn mid",		&shaderBall, &grey_blinn_material_mid };
+	gl_engine::MeshNode shaderBall_blinn_shiny_node{"shaderBall blinn shiny",	&shaderBall, &grey_blinn_material_shiny };
 
 	std::vector<gl_engine::MeshNode*> shaderBalls;
 	shaderBalls.push_back(&shaderBall_rough_node);

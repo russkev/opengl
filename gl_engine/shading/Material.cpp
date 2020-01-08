@@ -41,7 +41,7 @@ namespace gl_engine
 	{
 		Texture texture{ color };
 		m_colors.push_back(texture);
-		add_texture(uniform_name, &texture);
+		add_texture(uniform_name, &m_colors.back());
 	}
 
 	void Material::set_sampler_color(const std::string& uniform_name, glm::vec3& color)
