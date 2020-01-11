@@ -90,8 +90,8 @@ int main(int, char**)
 	GLuint height	= 600u;
 	gl_engine::Window window{ "GL Engine", st_config, width, height };
 
-	//spinning_shader_ball_scene(window);
-	three_shader_ball_scene(window);
+	spinning_shader_ball_scene(window);
+	//three_shader_ball_scene(window);
 
 	return 0;
 }
@@ -128,29 +128,33 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	// Textures
 	gl_engine::Texture uv_template_b_tex{ "uvtemplateB.tga"  };
 	gl_engine::Texture grey_grid_tex{ "greyGrid_01.tga" };
-	gl_engine::Texture brick_normals{ "normal_mapping_normal_map.tga" };
+	gl_engine::Texture brick_normals{ "bricks2_normal.tga" };
+	gl_engine::Texture brick_displacement{ "bricks2_disp.tga" };
+
 
 
 	// Shader 1
 	gl_engine::Material shaderBall_material{ "cMat", "cShader.vert", "cShader.frag" };
 	shaderBall_material.set_sampler_value("material.glossiness", 0.5f);
 	shaderBall_material.set_sampler_value("material.specular", 0.8f);
-	shaderBall_material.add_texture("material.diffuse", &uv_template_b_tex);
-	shaderBall_material.add_texture("material.normal", &brick_normals);
-	shaderBall_material.set_uniform("material.normal_directx_mode", true);
+	shaderBall_material.set_texture("material.diffuse", &uv_template_b_tex);
+	shaderBall_material.set_texture("material.normal", &brick_normals);
+	shaderBall_material.set_uniform("material.normal_directx_mode", false);
+	shaderBall_material.set_texture("material.displacement", &brick_displacement);
+	shaderBall_material.set_uniform("material.displacement_amount", 0.06f);
 
 
 	// Shader 2
 	gl_engine::Material floor_material{ "floor material", "cShader.vert", "cShader.frag" };
 	floor_material.set_sampler_value("material.glossiness", 0.03f);
 	floor_material.set_sampler_value("material.specular", 0.30f);
-	floor_material.add_texture("material.diffuse", &grey_grid_tex);
-	floor_material.add_texture("material.normal", &normal_up);
+	floor_material.set_texture("material.diffuse", &grey_grid_tex);
+	floor_material.set_texture("material.normal", &normal_up);
 
 	// Texture 3
 	//gl_engine::Texture arrayTest_tex("uvtemplate.tga");
 	//arrayTest_tex.set_target(GL_TEXTURE_2D_ARRAY);
-	//shaderBall_material.add_texture("shadowMap", &arrayTest_tex);
+	//shaderBall_material.set_texture("shadowMap", &arrayTest_tex);
 
 	// Mesh 1
 	gl_engine::Mesh shaderBall = gl_engine::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
@@ -335,23 +339,23 @@ void three_shader_ball_scene(gl_engine::Window window)
 	grey_material_mid_mapped.set_sampler_value(		"material.specular", 1.0f);
 	grey_material_shiny_mapped.set_sampler_value(	"material.specular", 1.0f);
 
-	grey_material_rough.add_texture(		"material.diffuse", &grid_tex);
-	grey_material_mid.add_texture(			"material.diffuse", &grid_tex);
-	grey_material_shiny.add_texture(		"material.diffuse", &grid_tex);
-	grey_material_rough_mapped.add_texture(	"material.diffuse", &grid_tex);
-	grey_material_mid_mapped.add_texture(	"material.diffuse", &grid_tex);
-	grey_material_shiny_mapped.add_texture(	"material.diffuse", &grid_tex);
+	grey_material_rough.set_texture(		"material.diffuse", &grid_tex);
+	grey_material_mid.set_texture(			"material.diffuse", &grid_tex);
+	grey_material_shiny.set_texture(		"material.diffuse", &grid_tex);
+	grey_material_rough_mapped.set_texture(	"material.diffuse", &grid_tex);
+	grey_material_mid_mapped.set_texture(	"material.diffuse", &grid_tex);
+	grey_material_shiny_mapped.set_texture(	"material.diffuse", &grid_tex);
 
-	grey_material_rough.add_texture(		"material.normal", &brick_normals);
-	grey_material_mid.add_texture(			"material.normal", &brick_normals);
-	grey_material_shiny.add_texture(		"material.normal", &brick_normals);
-	grey_material_rough_mapped.add_texture(	"material.normal", &brick_normals);
-	grey_material_mid_mapped.add_texture(	"material.normal", &brick_normals);
-	grey_material_shiny_mapped.add_texture(	"material.normal", &brick_normals);
+	grey_material_rough.set_texture(		"material.normal", &brick_normals);
+	grey_material_mid.set_texture(			"material.normal", &brick_normals);
+	grey_material_shiny.set_texture(		"material.normal", &brick_normals);
+	grey_material_rough_mapped.set_texture(	"material.normal", &brick_normals);
+	grey_material_mid_mapped.set_texture(	"material.normal", &brick_normals);
+	grey_material_shiny_mapped.set_texture(	"material.normal", &brick_normals);
 
-	grey_material_rough_mapped.add_texture(	"material.displacement", &brick_displacement);
-	grey_material_mid_mapped.add_texture(	"material.displacement", &brick_displacement);
-	grey_material_shiny_mapped.add_texture(	"material.displacement", &brick_displacement);
+	grey_material_rough_mapped.set_texture(	"material.displacement", &brick_displacement);
+	grey_material_mid_mapped.set_texture(	"material.displacement", &brick_displacement);
+	grey_material_shiny_mapped.set_texture(	"material.displacement", &brick_displacement);
 
 	grey_material_rough_mapped.set_uniform(	"material.displacement_amount", 0.03f);
 	grey_material_mid_mapped.set_uniform(	"material.displacement_amount", 0.03f);

@@ -41,7 +41,7 @@ namespace gl_engine
 	{
 		Texture texture{ color };
 		m_colors.push_back(texture);
-		add_texture(uniform_name, &m_colors.back());
+		set_texture(uniform_name, &m_colors.back());
 	}
 
 	//void Material::set_sampler_color(const std::string& uniform_name, glm::vec3& color)
@@ -54,7 +54,7 @@ namespace gl_engine
 		set_sampler_color(uniform_name, glm::vec3(value));
 	}
 
-	void Material::add_texture(const std::string& uniform_name, Texture* texture)
+	void Material::set_texture(const std::string& uniform_name, Texture* texture)
 	{
 		if (m_textures.find(uniform_name) != m_textures.end())
 		{
