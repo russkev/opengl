@@ -35,7 +35,7 @@ in Out_DirectionalLight
 	vec3 tangent_space_position;
 } in_directionalLight[NUM_LIGHTS];
 
-in vec2 uv;
+in vec2 flat_uv;
 
 in vec3 test;
 
@@ -53,7 +53,8 @@ struct Material
 	sampler2D normal;
 	bool normal_directx_mode;
 
-//	float specular_power;
+	sampler2D displacement;
+	float displacement_amount;
 };
 uniform Material material;
 
@@ -101,6 +102,8 @@ uniform Camera camera;
 out vec4 fragColor;
 
 // // ----- LOCAL FRAGMENT DIRECTIONS ----- // //
+vec2 uv;
+
 struct m_Material
 {
 	float specular_power;
@@ -166,11 +169,21 @@ float spot_intensity(vec3 vertex_position, vec3 light_position, vec3 light_aim, 
 
 
 // // ----- INITIALIZATION OF LOCALS ----- // //
-//void init_material()
-//{
-//	m_material.specular_power = texture(material.glossiness, uv).r * MAX_SPECULAR_POWER;
-//}
+void init_displaced_uv()
+{
+//	uv = flat_uv;
+	m_cam.tangent_space_direction = normalize(in_cam.tangent_space_position - in_frag.tangent_space_position);
 
+	float height = texture(material.displacement, flat_uv).r;
+	vec2 difference = m_cam.tangent_space_direction.xy / 
+						m_cam.tangent_space_direction.z * 
+						(height * material.displacement_amount);
+	uv = flat_uv - difference;
+//	if(uv.x > 1.0 || uv.y > 1.0 || uv.x < 0.0 || uv.y < 0.0)
+//	{
+//		discard;
+//	}
+}
 
 void init_world_space()
 {
@@ -201,7 +214,7 @@ void init_tangent_space()
 			in_frag.world_space_position,
 			spotLight[i].position, 
 			spotLight[i].direction, 
-			spotLight[i].inner, 
+			spotLight[i].inner,
 			spotLight[i].outer);
 	}
 
@@ -417,11 +430,10 @@ void main ()
 	vec3 diffuse_out = vec3(0.0);
 	vec3 specular_out = vec3(0.0);
 
-//	init_material();
+	init_displaced_uv();
 	init_world_space();
 	init_tangent_space();
-
-
+	   
 	// Point lights
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
@@ -498,7 +510,8 @@ void main ()
 		diffuse_out * texture(material.diffuse, uv).rgb
 		+ 
 		specular_out
-//		texture(material.glossiness, uv).rgb
+//		vec3(flat_uv - (m_cam.tangent_space_direction.xy / m_cam.tangent_space_direction.z) * (texture(material.displacement, flat_uv).r * material.displacement_amount) , 0.0)
+//		vec3(uv, 0.0)
 		* vec3(1.0);
 
 	fragColor = vec4(outColor.xyz, 1.0);

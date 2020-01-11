@@ -95,12 +95,12 @@ out Out_DirectionalLight
 	vec3 tangent_space_position;
 } out_directionalLight[NUM_LIGHTS];
 
-out vec2 uv;
+out vec2 flat_uv;
 
 // // ----- SEND FUNCTIONS ----- // //
 void send_uv_coordinates()
 {
-	uv = vertex_uv;
+	flat_uv = vertex_uv;
 }
 
 void send_world_space_coordinates()
