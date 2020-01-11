@@ -51,6 +51,7 @@ struct Material
 	sampler2D glossiness;
 
 	sampler2D normal;
+	bool normal_directx_mode;
 
 //	float specular_power;
 };
@@ -205,7 +206,11 @@ void init_tangent_space()
 	}
 
 	m_frag.tangent_space_normal = texture(material.normal, uv).rgb;
-	m_frag.tangent_space_normal.g = 1 - m_frag.tangent_space_normal.g;
+	// Flip green channel for directx mode normal map
+	if (material.normal_directx_mode)
+	{
+		m_frag.tangent_space_normal.g = 1 - m_frag.tangent_space_normal.g;
+	}
 	m_frag.tangent_space_normal = normalize(m_frag.tangent_space_normal * 2.0 - 1.0);
 }
 
