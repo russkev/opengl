@@ -2,7 +2,8 @@
 #pragma optionNV unroll all
 #extension GL_EXT_texture_array : enable
 #define NUM_LIGHTS 3
-#define MAX_SPECULAR_POWER 100
+#define MAX_BLINN_SPECULAR_POWER 8
+#define MAX_PHONG_SPECULAR_POWER 150
 
 // // ----- INS ----- // //
 in Out_Frag
@@ -50,6 +51,8 @@ struct Material
 	float specular_amount;
 
 	sampler2D glossiness;
+
+	sampler2D normal;
 
 //	float specular_power;
 };
@@ -164,10 +167,10 @@ float spot_intensity(vec3 vertex_position, vec3 light_position, vec3 light_aim, 
 
 
 // // ----- INITIALIZATION OF LOCALS ----- // //
-void init_material()
-{
-	m_material.specular_power = texture(material.glossiness, uv).r * MAX_SPECULAR_POWER;
-}
+//void init_material()
+//{
+//	m_material.specular_power = texture(material.glossiness, uv).r * MAX_SPECULAR_POWER;
+//}
 
 
 void init_world_space()
@@ -202,8 +205,9 @@ void init_tangent_space()
 			spotLight[i].inner, 
 			spotLight[i].outer);
 	}
-	m_frag.tangent_space_normal = vec3(0.0, 0.0, 1.0);
-	
+
+	m_frag.tangent_space_normal = texture(material.normal, uv).rgb;
+	m_frag.tangent_space_normal = normalize(m_frag.tangent_space_normal * 2.0 - 1.0);
 }
 
 // // ----- DIFFUSE LIGHTING ----- // //
@@ -264,21 +268,25 @@ vec3 diffuse_spot_tangent_space(int index)
 
 vec3 phong(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
 {
+	float specular_power = texture(material.glossiness, uv).r * MAX_PHONG_SPECULAR_POWER;
+	specular_power = specular_power * specular_power;
 	// Energy conservation approximation is (specular_power + 2)/(2 * pi)
-	float energy_conservation_factor = 0.159 * m_material.specular_power + 0.318;
+	float energy_conservation_factor = 0.159 * specular_power + 0.318;
 	vec3 reflection_direction = reflect(-light_direction, normal_direction);
 	float cos_alpha = clamp( dot_vec3( cam_direction, reflection_direction ), 0, 1);
-	return vec3(pow(cos_alpha, m_material.specular_power)) * energy_conservation_factor;
+	return vec3(pow(cos_alpha, specular_power)) * energy_conservation_factor;
 
 }
 
 vec3 blinn_phong(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
 {
+	float specular_power = texture(material.glossiness, uv).r * MAX_BLINN_SPECULAR_POWER;
+	specular_power = specular_power * specular_power * specular_power + 2.0;
 	// Energy conservation approximation is (specular_power + 8)/(8 * pi)
-	float energy_conservation_factor = 0.0397436 * m_material.specular_power + 0.0856832;
+	float energy_conservation_factor = 0.0397436 * specular_power + 0.0856832;
 	vec3 half_way_direction = normalize(light_direction + cam_direction);
 	float cos_alpha = clamp( dot(normal_direction, half_way_direction), 0.0, 1.0);
-	return vec3(pow(cos_alpha, m_material.specular_power)) * energy_conservation_factor;
+	return vec3(pow(cos_alpha, specular_power)) * energy_conservation_factor;
 }
 
 vec3 specular(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
@@ -426,7 +434,7 @@ void main ()
 	vec3 diffuse_out = vec3(0.0);
 	vec3 specular_out = vec3(0.0);
 
-	init_material();
+//	init_material();
 	init_world_space();
 	init_tangent_space();
 
@@ -504,10 +512,10 @@ void main ()
 	}
 
 	vec3 outColor = 
-//		diffuse_out * texture(material.diffuse, uv).rgb
-//		+ 
-//		specular_out
-		texture(material.glossiness, uv).rgb
+		diffuse_out * texture(material.diffuse, uv).rgb
+		+ 
+		specular_out
+//		texture(material.glossiness, uv).rgb
 		* vec3(1.0);
 
 	fragColor = vec4(outColor.xyz, 1.0);
