@@ -90,8 +90,8 @@ int main(int, char**)
 	GLuint height	= 600u;
 	gl_engine::Window window{ "GL Engine", st_config, width, height };
 
-	spinning_shader_ball_scene(window);
-	//three_shader_ball_scene(window);
+	//spinning_shader_ball_scene(window);
+	three_shader_ball_scene(window);
 
 	return 0;
 }
@@ -308,7 +308,8 @@ void three_shader_ball_scene(gl_engine::Window window)
 	gl_engine::Texture blue_tex{		glm::vec3{0.00f, 0.00f, 1.00f} };
 	gl_engine::Texture normal_up{		glm::vec3{0.50f, 0.50f, 1.00f} };
 	gl_engine::Texture grid_tex{ "greyGrid_01.tga" };
-	gl_engine::Texture brick_normals{ "normal_mapping_normal_map.tga" };
+	gl_engine::Texture brick_normals{ "bricks2_normal.tga" };
+	gl_engine::Texture brick_displacement{ "bricks2_disp.tga" };
 
 
 
@@ -327,9 +328,6 @@ void three_shader_ball_scene(gl_engine::Window window)
 	grey_material_mid_mapped.set_sampler_value(	"material.glossiness", 0.50f);
 	grey_material_shiny_mapped.set_sampler_value("material.glossiness", 1.00f);
 
-	grey_material_mid.set_sampler_color("material.diffuse", glm::vec3{ 0.0f, 0.8f, 0.3f });
-
-
 	grey_material_rough.set_sampler_value(			"material.specular", 1.0f);
 	grey_material_mid.set_sampler_value(			"material.specular", 1.0f);
 	grey_material_shiny.set_sampler_value(			"material.specular", 1.0f);
@@ -337,24 +335,27 @@ void three_shader_ball_scene(gl_engine::Window window)
 	grey_material_mid_mapped.set_sampler_value(		"material.specular", 1.0f);
 	grey_material_shiny_mapped.set_sampler_value(	"material.specular", 1.0f);
 
-	grey_material_rough.add_texture(		"material.diffuse", &grey_tex);
-	grey_material_mid.add_texture(			"material.diffuse", &grey_tex);
-	grey_material_shiny.add_texture(		"material.diffuse", &grey_tex);
-	grey_material_rough_mapped.add_texture(	"material.diffuse", &grey_tex);
-	grey_material_mid_mapped.add_texture(	"material.diffuse", &grey_tex);
-	grey_material_shiny_mapped.add_texture(	"material.diffuse", &grey_tex);
+	grey_material_rough.add_texture(		"material.diffuse", &grid_tex);
+	grey_material_mid.add_texture(			"material.diffuse", &grid_tex);
+	grey_material_shiny.add_texture(		"material.diffuse", &grid_tex);
+	grey_material_rough_mapped.add_texture(	"material.diffuse", &grid_tex);
+	grey_material_mid_mapped.add_texture(	"material.diffuse", &grid_tex);
+	grey_material_shiny_mapped.add_texture(	"material.diffuse", &grid_tex);
 
-	grey_material_rough.add_texture(		"material.normal", &normal_up);
-	grey_material_mid.add_texture(			"material.normal", &normal_up);
-	grey_material_shiny.add_texture(		"material.normal", &normal_up);
+	grey_material_rough.add_texture(		"material.normal", &brick_normals);
+	grey_material_mid.add_texture(			"material.normal", &brick_normals);
+	grey_material_shiny.add_texture(		"material.normal", &brick_normals);
 	grey_material_rough_mapped.add_texture(	"material.normal", &brick_normals);
 	grey_material_mid_mapped.add_texture(	"material.normal", &brick_normals);
 	grey_material_shiny_mapped.add_texture(	"material.normal", &brick_normals);
 
-	grey_material_rough_mapped.set_uniform("material.normal_directx_mode", true);
-	grey_material_mid_mapped.set_uniform("material.normal_directx_mode", true);
-	grey_material_shiny_mapped.set_uniform("material.normal_directx_mode", true);
+	grey_material_rough_mapped.add_texture(	"material.displacement", &brick_displacement);
+	grey_material_mid_mapped.add_texture(	"material.displacement", &brick_displacement);
+	grey_material_shiny_mapped.add_texture(	"material.displacement", &brick_displacement);
 
+	grey_material_rough_mapped.set_uniform(	"material.displacement_amount", 0.03f);
+	grey_material_mid_mapped.set_uniform(	"material.displacement_amount", 0.03f);
+	grey_material_shiny_mapped.set_uniform(	"material.displacement_amount", 0.03f);
 
 	// Shader ball mesh
 	gl_engine::Mesh shaderBall = gl_engine::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
