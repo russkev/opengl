@@ -28,6 +28,7 @@ namespace gl_engine
 
 		// Create color solid color texture
 		Texture(const glm::vec3& color);
+		Texture(const glm::vec4& color);
 		
 		// // ----- GENERAL ----- // //
 		void process();

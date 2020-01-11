@@ -49,17 +49,31 @@ namespace gl_engine
 	}
 
 	Texture::Texture(const glm::vec3& color) :
-		m_color{ (GLubyte)(color.r * 255), (GLubyte)(color.g * 255), (GLubyte)(color.b * 255), 255 }
+		m_color{ (GLubyte)(color.r * 255), (GLubyte)(color.g * 255), (GLubyte)(color.b * 255), 255 },
+		m_internal_format{ GL_RGB },
+		m_format{ GL_RGB },
+		m_width{ 1 },
+		m_height{ 1 },
+		m_data{ &m_color },
+		m_type{ GL_UNSIGNED_BYTE },
+		m_generate_mipmap{ false }
 	{
-		m_internal_format = GL_RGB;
-		m_format = GL_RGB;
-		//m_color = {  };
-		m_width = 1;
-		m_height = 1;
-		m_data = &m_color;
-		m_type = GL_UNSIGNED_BYTE;
 		glGenTextures(1, &m_id);
 	}
+
+	Texture::Texture(const glm::vec4& color) :
+		m_color{ (GLubyte)(color.r * 255), (GLubyte)(color.g * 255), (GLubyte)(color.b * 255), (GLubyte)(color.a * 255) },
+		m_internal_format{ GL_RGBA },
+		m_format{ GL_RGBA },
+		m_width{ 1 },
+		m_height{ 1 },
+		m_data{ &m_color },
+		m_type{ GL_UNSIGNED_BYTE },
+		m_generate_mipmap{ false }
+	{
+		glGenTextures(1, &m_id);
+	}
+
 
 	// // ----- GENERAL METHODS ----- // //
 	void Texture::process()

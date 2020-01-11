@@ -2,8 +2,10 @@
 #define GL_ENGINE_SHADING_MATERIAL_H
 
 #include <map>
-#include <GL/glew.h>
 #include <string>
+#include <list>
+
+#include <GL/glew.h>
 
 #include "Shader.h"
 
@@ -34,7 +36,7 @@ namespace gl_engine
 
 		// // ----- SETTERS ----- // //
 	public:
-		void set_sampler_color(const std::string& uniform_name, glm::vec4& color);
+		//void set_sampler_color(const std::string& uniform_name, glm::vec4& color);
 		void set_sampler_color(const std::string& uniform_name, glm::vec3& color);
 		void set_sampler_value(const std::string& uniform_name, GLfloat value);
 		void add_texture(const std::string& uniform_name, Texture* texture);
@@ -42,7 +44,7 @@ namespace gl_engine
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
 		std::map<std::string, Texture*> m_textures;
-		std::vector<Texture> m_colors;
+		std::list<Texture> m_colors;
 	};
 } // namespace gl_engine
 #endif
