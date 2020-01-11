@@ -59,7 +59,7 @@ namespace gl_engine
 			std::string index = std::to_string(m_lightNode->shader_pos());
 			std::string type = m_lightNode->light()->type();
 
-			material->add_texture(type + "[" + index + "]." + DEPTH_MAP, &m_texture);
+			material->set_texture(type + "[" + index + "]." + DEPTH_MAP, &m_texture);
 			if (is_point())
 			{
 				material->set_uniform(type + "[" + index + "]." + FAR_PLANE, m_cameraNode.camera()->clip_far());

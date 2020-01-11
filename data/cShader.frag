@@ -171,18 +171,32 @@ float spot_intensity(vec3 vertex_position, vec3 light_position, vec3 light_aim, 
 // // ----- INITIALIZATION OF LOCALS ----- // //
 void init_displaced_uv()
 {
-//	uv = flat_uv;
+	// Initialize values
+	const float num_layers = 10.0;
+	const float layer_depth = 1.0 / num_layers;
+	float current_layer_depth = 0.0;
 	m_cam.tangent_space_direction = normalize(in_cam.tangent_space_position - in_frag.tangent_space_position);
+	vec2 difference = m_cam.tangent_space_direction.xy * material.displacement_amount;
+	vec2 delta_uv = difference / num_layers;
+	vec2 curr_uv = flat_uv;
+	float current_depth_map_value = texture(material.displacement, curr_uv).r;
 
-	float height = texture(material.displacement, flat_uv).r;
-	vec2 difference = m_cam.tangent_space_direction.xy / 
-						m_cam.tangent_space_direction.z * 
-						(height * material.displacement_amount);
-	uv = flat_uv - difference;
-//	if(uv.x > 1.0 || uv.y > 1.0 || uv.x < 0.0 || uv.y < 0.0)
-//	{
-//		discard;
-//	}
+	// Find first layer where depth is less deep than actual depth
+	while(current_layer_depth < current_depth_map_value)
+	{
+		curr_uv -= delta_uv;
+		current_depth_map_value = texture(material.displacement, curr_uv).r;
+		current_layer_depth += layer_depth;
+	}
+
+	vec2 prev_uv = curr_uv + delta_uv;
+
+	float after_depth = current_depth_map_value - current_layer_depth;
+	float before_depth = texture(material.displacement, prev_uv).r - current_layer_depth + layer_depth;
+	
+	// Interpolation between befor and after depth
+	float weight = after_depth / (after_depth - before_depth);
+	uv = prev_uv * weight + curr_uv * (1.0 - weight);
 }
 
 void init_world_space()

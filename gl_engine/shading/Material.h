@@ -39,7 +39,7 @@ namespace gl_engine
 		//void set_sampler_color(const std::string& uniform_name, glm::vec4& color);
 		void set_sampler_color(const std::string& uniform_name, glm::vec3& color);
 		void set_sampler_value(const std::string& uniform_name, GLfloat value);
-		void add_texture(const std::string& uniform_name, Texture* texture);
+		void set_texture(const std::string& uniform_name, Texture* texture);
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
