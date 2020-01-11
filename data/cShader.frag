@@ -40,8 +40,6 @@ in vec2 uv;
 in vec3 test;
 
 // // ----- UNIFORMS ----- // //
-uniform bool is_blinn;
-
 struct Material
 {
 	sampler2D diffuse;
@@ -207,6 +205,7 @@ void init_tangent_space()
 	}
 
 	m_frag.tangent_space_normal = texture(material.normal, uv).rgb;
+	m_frag.tangent_space_normal.g = 1 - m_frag.tangent_space_normal.g;
 	m_frag.tangent_space_normal = normalize(m_frag.tangent_space_normal * 2.0 - 1.0);
 }
 
@@ -264,20 +263,6 @@ vec3 diffuse_spot_tangent_space(int index)
 }
 
 // // ----- SPECULAR LIGHTING ----- // //
-
-
-vec3 phong(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
-{
-	float specular_power = texture(material.glossiness, uv).r * MAX_PHONG_SPECULAR_POWER;
-	specular_power = specular_power * specular_power;
-	// Energy conservation approximation is (specular_power + 2)/(2 * pi)
-	float energy_conservation_factor = 0.159 * specular_power + 0.318;
-	vec3 reflection_direction = reflect(-light_direction, normal_direction);
-	float cos_alpha = clamp( dot_vec3( cam_direction, reflection_direction ), 0, 1);
-	return vec3(pow(cos_alpha, specular_power)) * energy_conservation_factor;
-
-}
-
 vec3 blinn_phong(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
 {
 	float specular_power = texture(material.glossiness, uv).r * MAX_BLINN_SPECULAR_POWER;
@@ -291,14 +276,7 @@ vec3 blinn_phong(vec3 light_direction, vec3 normal_direction, vec3 cam_direction
 
 vec3 specular(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
 {
-	if (is_blinn)
-	{
-		return blinn_phong(light_direction, normal_direction, cam_direction);
-	}
-	else
-	{
-		return phong(light_direction, normal_direction, cam_direction);
-	}
+	return blinn_phong(light_direction, normal_direction, cam_direction);
 }
 
 vec3 specular_point_world_space(int index)
@@ -449,7 +427,7 @@ void main ()
 		float temp_attenuation = attenuation(pointLight[i].position);
 
 		diffuse_out += 
-			diffuse_point_world_space(i) *
+			diffuse_point_tangent_space(i) *
 			pointLight[i].brightness * pointLight[i].brightness *
 			pointLight[i].color * 
 			temp_attenuation * 
@@ -473,7 +451,7 @@ void main ()
 			directionalLight[i].depth);
 
 		diffuse_out += 
-			diffuse_directional_world_space(i) *
+			diffuse_directional_tangent_space(i) *
 			directionalLight[i].brightness *
 			directionalLight[i].color * 
 			temp_shadow;
