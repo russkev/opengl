@@ -19,5 +19,5 @@ void main()
 	const float gamma = 2.2;
 	vec3 hdr_color = texture(hdr_buffer, uv).rgb;
 
-	fragColor = vec4(hdr_color, 1.0);
+	fragColor = vec4(hdr_color, 1.0) * exposure;
 }

@@ -37,6 +37,9 @@ namespace gl_engine
 		{
 			init_first_frame();
 			m_first_frame = false;
+
+			m_test_screen_material.set_texture("screen_texture", &m_test_texture);
+
 		}
 
 		glDisable(GL_CULL_FACE);
@@ -72,8 +75,10 @@ namespace gl_engine
 		m_hdr_framebuffer.unbind();
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		m_hdr_material.set_texture("hdr_buffer", &m_hdr_texture);
-		m_hdr_material.set_uniform("exposure", 1.0);
+		//m_hdr_material.set_texture("hdr_buffer", &m_hdr_texture);
+		//m_hdr_material.set_uniform("exposure", 1.0);
+		//m_screen_node.draw();
+		m_test_screen_node.draw();
 	}
 
 	// // ----- GENERAL METHODS ----- // //

@@ -107,7 +107,6 @@ void send_world_space_coordinates()
 {
 	out_frag.world_space_position	= (transform.model_to_world * vec4(vertex_position, 1.0)).xyz;
 	out_frag.world_space_normal		= transform.model_to_world_normal * vertex_normal;
-
 }
 
 void send_tangent_space_coordinates()
