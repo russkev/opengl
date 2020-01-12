@@ -132,6 +132,9 @@
     <ClCompile Include="utils\Timer.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="shading\Framebuffer.cpp">
+      <Filter>Shading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\Text2D.frag">
@@ -273,6 +276,9 @@
     </ClInclude>
     <ClInclude Include="camera\TargetCamera.h">
       <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\Framebuffer.h">
+      <Filter>Shading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
