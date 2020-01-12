@@ -20,18 +20,13 @@
 namespace gl_engine
 {
 	// // ----- CONSTRUCTORS ----- // //
-	Renderer::Renderer(CameraNode* cameraNode) :
-		m_cameraNode(cameraNode), m_dimensions(cameraNode->camera()->dimensions())
-	{
-		m_cameraNode->camera()->set_dimensions(m_dimensions);
-		init_settings();
-	}
-
 	Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
-		m_cameraNode(camera), m_dimensions(dimensions)
+		m_cameraNode{ camera }, 
+		m_dimensions{ dimensions }
 	{
 		m_cameraNode->camera()->set_dimensions(dimensions);
 		init_settings();
+		init_hdr();
 	}
 
 	// // ----- RENDER ----- // //
@@ -59,6 +54,8 @@ namespace gl_engine
 		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
 		m_cameraNode->update();
 
+
+		m_hdr_framebuffer.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		for (Material* material : m_materials)
@@ -71,6 +68,12 @@ namespace gl_engine
 			node.second->update_view(m_cameraNode);
 			node.second->draw();
 		}
+
+		m_hdr_framebuffer.unbind();
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		m_hdr_material.set_texture("hdr_buffer", &m_hdr_texture);
+		m_hdr_material.set_uniform("exposure", 1.0);
 	}
 
 	// // ----- GENERAL METHODS ----- // //
@@ -126,6 +129,30 @@ namespace gl_engine
 				shadowMap->init_materials(m_materials);
 			}
 		}
+	}
+
+	void Renderer::init_hdr()
+	{
+		m_hdr_texture.set_internal_format(GL_RGBA16F);
+		m_hdr_texture.set_width(m_dimensions.x);
+		m_hdr_texture.set_height(m_dimensions.y);
+		m_hdr_texture.set_format(GL_RGBA);
+		m_hdr_texture.set_type(GL_FLOAT);
+		m_hdr_texture.set_data(NULL);
+		m_hdr_texture.set_mipmap(false);
+		m_hdr_texture.set_min_filter(GL_LINEAR);
+		m_hdr_texture.set_mag_filter(GL_LINEAR);
+		m_hdr_texture.process();
+
+		glGenRenderbuffers(1, &m_rbo_depth_id);
+		glBindRenderbuffer(GL_RENDERBUFFER, m_rbo_depth_id);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_dimensions.x, m_dimensions.y);
+
+		m_hdr_framebuffer.bind();
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_hdr_texture.id(), 0);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_rbo_depth_id);
+		m_hdr_framebuffer.check_bound_framebuffer();
+		m_hdr_framebuffer.unbind();
 	}
 
 	bool Renderer::poll_events()

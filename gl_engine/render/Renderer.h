@@ -6,6 +6,9 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 #include "../node/CameraNode.h"
+#include "../shading/Framebuffer.h"
+#include "../shading/Texture.h"
+#include "../shading/Material.h"
 
 namespace gl_engine
 {
@@ -27,7 +30,6 @@ namespace gl_engine
 	{
 	public:
 		// // ----- CONSTRUCTOR ----- // //
-		Renderer(CameraNode* camera);
 		Renderer(CameraNode* camera, const glm::uvec2& dimensions);
 
 		// // ----- RENDER ----- // //
@@ -36,6 +38,7 @@ namespace gl_engine
 		// // ----- GENERAL METHODS ----- // //
 		void init_settings();
 		void init_first_frame();
+		void init_hdr();
 		bool poll_events();
 		void update(Window * window, Timer* timer);
 
@@ -54,6 +57,11 @@ namespace gl_engine
 		std::map<std::string, Node*> m_root_nodes;
 		glm::uvec2 m_dimensions = { 800, 600 };
 		bool m_first_frame = true;
+
+		Framebuffer m_hdr_framebuffer{ GL_FRAMEBUFFER };
+		Texture m_hdr_texture{ GL_TEXTURE_2D };
+		GLuint m_rbo_depth_id;
+		Material m_hdr_material{ "HDR Shader", "HDR.vert", "HDR.frag" };
 	};
 } // namespace gl_engine
 #endif

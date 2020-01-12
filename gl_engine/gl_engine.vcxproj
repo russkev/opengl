@@ -191,6 +191,8 @@
     <None Include="..\data\DepthShaderCube.frag" />
     <None Include="..\data\DepthShaderCube.geom" />
     <None Include="..\data\DepthShaderCube.vert" />
+    <None Include="..\data\HDR.frag" />
+    <None Include="..\data\HDR.vert" />
     <None Include="..\data\LightShader.frag" />
     <None Include="..\data\LightShader.vert" />
     <None Include="..\data\Text2D.frag" />
