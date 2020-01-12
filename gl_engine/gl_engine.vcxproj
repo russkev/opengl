@@ -166,10 +166,12 @@
     <ClCompile Include="mesh\Plane.cpp" />
     <ClCompile Include="mesh\Sphere.cpp" />
     <ClCompile Include="mesh\Vertex.cpp" />
+    <ClCompile Include="mesh\WindowQuad.cpp" />
     <ClCompile Include="node\CameraNode.cpp" />
     <ClCompile Include="node\LightNode.cpp" />
     <ClCompile Include="node\MeshNode.cpp" />
     <ClCompile Include="node\Node.cpp" />
+    <ClCompile Include="node\ScreenNode.cpp" />
     <ClCompile Include="render\Renderer.cpp" />
     <ClCompile Include="shading\Framebuffer.cpp" />
     <ClCompile Include="shading\LoadShader.cpp" />
@@ -195,6 +197,8 @@
     <None Include="..\data\HDR.vert" />
     <None Include="..\data\LightShader.frag" />
     <None Include="..\data\LightShader.vert" />
+    <None Include="..\data\Screen.frag" />
+    <None Include="..\data\Screen.vert" />
     <None Include="..\data\Text2D.frag" />
     <None Include="..\data\Text2D.vert" />
     <None Include="packages.config" />
@@ -219,10 +223,12 @@
     <ClInclude Include="mesh\Plane.h" />
     <ClInclude Include="mesh\Sphere.h" />
     <ClInclude Include="mesh\Vertex.h" />
+    <ClInclude Include="mesh\WindowQuad.h" />
     <ClInclude Include="node\CameraNode.h" />
     <ClInclude Include="node\LightNode.h" />
     <ClInclude Include="node\MeshNode.h" />
     <ClInclude Include="node\Node.h" />
+    <ClInclude Include="node\ScreenNode.h" />
     <ClInclude Include="render\Renderer.h" />
     <ClInclude Include="shading\Framebuffer.h" />
     <ClInclude Include="shading\LoadShader.h" />

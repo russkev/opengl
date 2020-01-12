@@ -6,9 +6,12 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 #include "../node/CameraNode.h"
+#include "../node/ScreenNode.h"
+#include "../node/MeshNode.h"
 #include "../shading/Framebuffer.h"
 #include "../shading/Texture.h"
 #include "../shading/Material.h"
+#include "../mesh/WindowQuad.h"
 
 namespace gl_engine
 {
@@ -62,6 +65,27 @@ namespace gl_engine
 		Texture m_hdr_texture{ GL_TEXTURE_2D };
 		GLuint m_rbo_depth_id;
 		Material m_hdr_material{ "HDR Shader", "HDR.vert", "HDR.frag" };
+		//Material m_screen_material{ "Screen Shader", "Screen.vert", "Screen.frag" };
+		Mesh m_screen_mesh{ WindowQuad::create_windowQuad() };
+		ScreenNode m_screen_node{ "Screen Node", &m_screen_mesh, &m_hdr_material };
+
+		/*
+		
+		Test variables
+		
+		*/
+
+		Texture m_test_texture{ "two.tga" };
+		Material m_test_screen_material{ "Screen Shader", "Screen.vert", "Screen.frag" };
+		//ScreenNode m_test_screen_node{ "Test Screen Node", &m_screen_mesh, &m_test_screen_material };
+		MeshNode m_test_screen_node{ "Test Screen Node", &m_screen_mesh, &m_test_screen_material };
+
+
+		/*
+
+		End test variables
+
+		*/
 	};
 } // namespace gl_engine
 #endif

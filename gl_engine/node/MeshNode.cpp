@@ -32,7 +32,7 @@ namespace gl_engine
 
 		m_material->set_uniform(U_MODEL_TO_PROJECTION, modelToPerspective_matrix);
 		m_material->set_uniform(U_MODEL_TO_WORLD, Node::world_to_node());
-		m_material->set_uniform(U_MODEL_TO_WORLD_NORMAL, Node::world_normal_to_node());
+		//m_material->set_uniform(U_MODEL_TO_WORLD_NORMAL, Node::world_normal_to_node());
 		m_material->set_uniform(U_CAM, cameraNode->world_position());
 
 		for (auto child : Node::children())
@@ -45,7 +45,14 @@ namespace gl_engine
 	void MeshNode::draw(const Pass& pass)
 	{
 
-		draw_material(m_material);
+		m_material->use();
+		m_vao.bind();
+		m_index_buffer.bind(GL_ELEMENT_ARRAY_BUFFER);
+		m_material->bind_textures();
+
+		glDrawElements(GL_TRIANGLES, (GLsizei)m_index_buffer.size(), GL_UNSIGNED_SHORT, 0);
+
+		m_material->unbind_textures();
 
 		for (auto child : Node::children())
 		{

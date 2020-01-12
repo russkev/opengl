@@ -313,9 +313,9 @@ void three_shader_ball_scene(gl_engine::Window window)
 	gl_engine::Texture green_tex{		glm::vec3{0.00f, 1.00f, 0.00f} };
 	gl_engine::Texture blue_tex{		glm::vec3{0.00f, 0.00f, 1.00f} };
 	gl_engine::Texture normal_up{		glm::vec3{0.50f, 0.50f, 1.00f} };
-	gl_engine::Texture grid_tex{ "greyGrid_01.tga" };
-	gl_engine::Texture brick_normals{ "bricks2_normal.tga" };
-	gl_engine::Texture brick_displacement{ "bricks2_disp.tga" };
+	gl_engine::Texture grid_tex{			"greyGrid_01.tga"		};
+	gl_engine::Texture brick_normals{		"bricks2_normal.tga"	};
+	gl_engine::Texture brick_displacement{	"bricks2_disp.tga"		};
 
 
 
