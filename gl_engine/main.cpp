@@ -219,6 +219,8 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	gl_engine::ShadowMap shadowMap_point1{ &pointLight_node };
 	gl_engine::ShadowMap shadowMap_point2{ &pointLight_node2 };
 
+	shadowMap_point2.set_clip_far(25.0f);
+
 	// Null node 1
 	gl_engine::Node lightRotate1{ "light rotate 01" };
 	//lightRotate1.add_child(&pointLight_node);

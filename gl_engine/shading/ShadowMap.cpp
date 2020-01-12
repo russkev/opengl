@@ -16,6 +16,8 @@ namespace gl_engine
 
 	const GLuint ShadowMap::SHADOW_WIDTH = 1024;
 	const GLuint ShadowMap::SHADOW_HEIGHT = 1024;
+	const GLfloat ShadowMap::DEFAULT_CLIP_NEAR = 0.1f;
+	const GLfloat ShadowMap::DEFAULT_CLIP_FAR = 100.0f;
 	const std::string ShadowMap::MODEL_TRANSFORM = "transform.model_to_world";
 	const std::string ShadowMap::LIGHT_SPACE_TRANSFORM = "projection";
 	const std::string ShadowMap::DEPTH_MAP = "depth";
@@ -36,8 +38,7 @@ namespace gl_engine
 		m_cameraNode{ std::string(lightNode->name() + " shadow"), lightNode->light()->camera() },
 		m_lightNode{ lightNode }
 	{
-		m_cameraNode.set_parent(lightNode);
-		m_cameraNode.camera()->set_dimensions(glm::vec2(SHADOW_WIDTH, SHADOW_HEIGHT));
+		init_camera();
 
 		lightNode->set_shadowMap(this);
 		if (is_directional())
@@ -67,40 +68,29 @@ namespace gl_engine
 		}
 	}
 
+	void ShadowMap::init_camera()
+	{
+		m_cameraNode.set_parent(m_lightNode);
+		m_cameraNode.camera()->set_dimensions(glm::vec2(SHADOW_WIDTH, SHADOW_HEIGHT));
+		m_cameraNode.camera()->set_clip_near(DEFAULT_CLIP_NEAR);
+		m_cameraNode.camera()->set_clip_far(DEFAULT_CLIP_FAR);
+	}
+
 	void ShadowMap::init_directional_shadowMap()
 	{
 		m_texture = Texture{ GL_TEXTURE_2D_ARRAY };
 
-		// Initialize cam
-		m_cameraNode.camera()->set_clip_near(0.1f);
-		m_cameraNode.camera()->set_clip_far(100.0f);
-
-		// Initialize texture settings
-		m_texture.set_width(SHADOW_WIDTH);
-		m_texture.set_height(SHADOW_HEIGHT);
-		m_texture.set_internal_format(GL_DEPTH_COMPONENT);
-		m_texture.set_format(GL_DEPTH_COMPONENT);
-		m_texture.set_type(GL_FLOAT);
-		m_texture.set_min_filter(GL_NEAREST);
-		m_texture.set_mag_filter(GL_LINEAR);
-		m_texture.set_mipmap(false);
-		m_texture.set_st_wrap(GL_CLAMP_TO_BORDER);
-
-		// Process texture
-		m_texture.process();
-
-		// Create frame buffer object
-		glGenFramebuffers(1, &m_depthMap_FBO);
+		init_texture();
 
 		m_texture.bind();
-		// Attach texture to framebuffer's depth buffer
-		glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
-		glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_texture.id(), 0, 0);
+		m_framebuffer.bind();
+
+		m_framebuffer.process_texture(&m_texture, 0);
 		glDrawBuffer(GL_NONE);
 		glReadBuffer(GL_NONE);
-		check_bound_framebuffer();
+		m_framebuffer.check_bound_framebuffer();
 
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		m_framebuffer.unbind();
 
 		// Create depth shader
 		m_depth_material = Material(DEPTH_MAP_NAME, DEPTH_MAP_VERT, DEPTH_MAP_FRAG);
@@ -112,11 +102,24 @@ namespace gl_engine
 		//m_texture = Texture{ GL_TEXTURE_2D_ARRAY };
 		m_texture = Texture{ GL_TEXTURE_CUBE_MAP };
 
-		// Initialize cam
-		m_cameraNode.camera()->set_clip_near(1.0f);
-		m_cameraNode.camera()->set_clip_far(25.0f);
+		init_texture();
 
-		// Initialize texture settings
+		m_texture.bind();
+		m_framebuffer.bind();
+
+		m_framebuffer.process_texture(&m_texture);
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);
+		m_framebuffer.check_bound_framebuffer();
+		m_framebuffer.unbind();
+
+		// Create depth shader
+		m_depth_material = Material(DEPTH_MAP_NAME, CUBE_MAP_VERT, CUBE_MAP_GEOM, CUBE_MAP_FRAG);
+		m_texture.unbind();
+	}
+
+	void ShadowMap::init_texture()
+	{
 		m_texture.set_width(SHADOW_WIDTH);
 		m_texture.set_height(SHADOW_HEIGHT);
 		m_texture.set_internal_format(GL_DEPTH_COMPONENT);
@@ -127,26 +130,7 @@ namespace gl_engine
 		m_texture.set_mipmap(false);
 		m_texture.set_st_wrap(GL_CLAMP_TO_BORDER);
 
-		// Process texture
 		m_texture.process();
-
-		// Create frame buffer object
-		glGenFramebuffers(1, &m_depthMap_FBO);
-
-		m_texture.bind();
-
-		glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
-
-		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_texture.id(), 0);
-		glDrawBuffer(GL_NONE);
-		glReadBuffer(GL_NONE);
-		check_bound_framebuffer();
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		//-------------------------------------------
-		m_depth_material = Material(DEPTH_MAP_NAME, CUBE_MAP_VERT, CUBE_MAP_GEOM, CUBE_MAP_FRAG);
-		m_texture.unbind();
 	}
 
 	// // ----- UPDATE ----- // //
@@ -168,9 +152,9 @@ namespace gl_engine
 	void ShadowMap::render_shadowMap(std::map<std::string, Node*>& root_nodes)
 	{
 		m_texture.bind();
+		m_framebuffer.bind();
 
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-		glBindFramebuffer(GL_FRAMEBUFFER, m_depthMap_FBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		if (is_directional())
@@ -181,8 +165,7 @@ namespace gl_engine
 		{
 			render_point_shadowMap(root_nodes);
 		}
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		m_framebuffer.unbind();
 		m_texture.unbind();
 	}
 
@@ -296,5 +279,15 @@ namespace gl_engine
 	bool ShadowMap::is_point()
 	{
 		return m_lightNode->light()->type() == PointLight::TYPE;
+	}
+
+	// // ----- SETTERS ----- // //
+	void ShadowMap::set_clip_near(GLfloat clip_near)
+	{
+		m_cameraNode.camera()->set_clip_near(clip_near);
+	}
+	void ShadowMap::set_clip_far(GLfloat clip_far)
+	{
+		m_cameraNode.camera()->set_clip_far(clip_far);
 	}
 } // namespace gl_engine

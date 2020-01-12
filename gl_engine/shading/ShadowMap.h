@@ -7,6 +7,8 @@
 
 #include "Material.h"
 #include "Texture.h"
+#include "Framebuffer.h"
+
 #include "../camera/Camera.h"
 #include "../node/CameraNode.h"
 
@@ -28,6 +30,8 @@ namespace gl_engine
 		// // ----- CONSTANTS ----- // //
 		static const GLuint SHADOW_WIDTH;
 		static const GLuint SHADOW_HEIGHT;
+		static const GLfloat DEFAULT_CLIP_NEAR;
+		static const GLfloat DEFAULT_CLIP_FAR;
 		static const std::string MODEL_TRANSFORM;
 		static const std::string LIGHT_SPACE_TRANSFORM;
 		static const std::string DEPTH_MAP;
@@ -50,8 +54,10 @@ namespace gl_engine
 	public:
 		void init_materials(std::vector<Material*>& materials);
 	private:
+		void init_camera();
 		void init_directional_shadowMap();
 		void init_point_shadowMap();
+		void init_texture();
 
 		// // ----- UPDATE ----- // //
 	public:
@@ -69,11 +75,17 @@ namespace gl_engine
 		bool is_directional();
 		bool is_point();
 
+		// // ----- SETTERS ----- // //
+	public:
+		void set_clip_near(GLfloat);
+		void set_clip_far(GLfloat);
+
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		GLuint		m_depthMap_FBO;
+		//GLuint		m_depthMap_FBO;
 		Material	m_depth_material{ "Depth shader", "DepthShader.vert", "DepthShader.frag" };
 		Texture		m_texture;
+		Framebuffer m_framebuffer;
 		LightNode*	m_lightNode = NULL;
 
 		CameraNode	m_cameraNode;
