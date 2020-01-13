@@ -99,8 +99,10 @@ namespace gl_engine
 			assert(num_vertices() >= pos);
 			m_vertices.at(pos).position() = data;
 		}
+		void set_vertex_position(GLuint pos, glm::vec3 position);
 		void set_index(std::size_t pos, const index_type& data);
 		void set_id(GLuint s_id);
+
 
 		// // ----- ITERATORS ----- // //
 		vrt_iterator vert_begin() { return m_vertices.begin(); }

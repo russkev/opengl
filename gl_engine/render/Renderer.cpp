@@ -78,7 +78,35 @@ namespace gl_engine
 		//m_hdr_material.set_texture("hdr_buffer", &m_hdr_texture);
 		//m_hdr_material.set_uniform("exposure", 1.0);
 		//m_screen_node.draw();
+
+		m_test_light_material.set_uniform("transform.model_to_projection", m_cameraNode->world_to_projection() * m_test_cube_node.world_to_node());
+		m_test_light_material.set_uniform("light.position", m_test_cube_node.world_position());
+		m_test_light_material.set_uniform("light.brightness", 1.0f);
+		m_test_light_material.set_uniform("light.color", glm::vec3(0.5f, 0.4f, 0.3f));
+
+		//m_test_cube_node.draw();
+
+
+		//m_test_screen_node.set_rotation({ 90.0f, 0.0f, 0.0f });
+		//glDisable(GL_CULL_FACE);
+
+		//m_test_screen_mesh.set_vertex_position(0, glm::vec3(-1.0f, -1.0f, 0.0f));
+		//m_test_screen_mesh.set_vertex_position(1, glm::vec3(+1.0f, -1.0f, 0.0f));
+		//m_test_screen_mesh.set_vertex_position(2, glm::vec3(-1.0f, +1.0f, 0.0f));
+		//m_test_screen_mesh.set_vertex_position(3, glm::vec3(+1.0f, +1.0f, 0.0f));
+
+		glm::mat4 identity_matrix{ 1.0f };
+		//m_test_light_material.set_uniform("transform.model_to_projection", m_cameraNode->world_to_projection() * m_test_screen_node.world_to_node());
+		m_test_light_material.set_uniform("transform.model_to_projection", identity_matrix);
+
+		//m_test_light_material.set_uniform("light.position", m_test_screen_node.world_position());
+		m_test_light_material.set_uniform("light.position", glm::vec3{ 0.0f });
+
+		m_test_light_material.set_uniform("light.brightness", 1.0f);
+		m_test_light_material.set_uniform("light.color", glm::vec3(0.5f, 0.4f, 0.3f));
+
 		m_test_screen_node.draw();
+
 	}
 
 	// // ----- GENERAL METHODS ----- // //

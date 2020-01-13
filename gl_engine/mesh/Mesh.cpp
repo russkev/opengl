@@ -270,4 +270,12 @@ namespace gl_engine
 		m_vertices.at(pos) = std::move(vertex);
 	}
 
+	void Mesh::set_vertex_position(GLuint pos, glm::vec3 position)
+	{
+		assert(num_vertices() >= pos);
+
+		m_vertices.at(pos).set_position(position);
+	}
+
+
 } // namespace gl_engine

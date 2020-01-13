@@ -8,13 +8,21 @@ namespace gl_engine
 	{
 		Mesh windowQuad;
 
+		// Vertix order is like this:
+		//
+		//		  v1-----v2
+		//		   |     |
+		//		   |     |
+		//		  v3-----v4
+		//
+
 		// Vertex positions
 		glm::vec3 v1 { -1.0f, +1.0f, +0.0f };
 		glm::vec3 v2 { -1.0f, -1.0f, +0.0f };
 		glm::vec3 v3 { +1.0f, +1.0f, +0.0f };
 		glm::vec3 v4 { +1.0f, -1.0f, +0.0f };
 
-		glm::vec3 normal{ 0.0f };
+		glm::vec3 normal{ 0.0f, 1.0f, 0.0f };
 
 		// Vertex uvs
 		glm::vec2 uv1{ 0.0f, 1.0f };
@@ -27,10 +35,12 @@ namespace gl_engine
 		Vertex vert3{ v3, normal, uv3 };
 		Vertex vert4{ v4, normal, uv4 };
 
-		windowQuad.append_triangle(vert1, vert3, vert2);
-		windowQuad.append_triangle(vert3, vert4, vert2);
+		windowQuad.append_triangle(vert1, vert2, vert3);
+		windowQuad.append_triangle(vert2, vert4, vert3);
 
 		windowQuad.make_indices_smooth();
+		windowQuad.make_tangents();
+
 
 		return windowQuad;
 	}
