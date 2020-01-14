@@ -15,7 +15,7 @@ namespace gl_engine
 	Framebuffer::Framebuffer(const GLenum target) :
 		m_target{target}
 	{
-		Framebuffer();
+		glGenFramebuffers(1, &m_id);
 	}
 
 

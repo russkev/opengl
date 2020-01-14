@@ -8,10 +8,10 @@ in vec2 uv;
 uniform sampler2D screen_texture;
 
 // // ----- OUTS ----- // //
-out vec4 fragColor;
+out vec4 frag_color;
 
 void main()
 {
-//	fragColor = vec4(1.0, 0.0, 0.0, 1.0);
-	fragColor = texture(screen_texture, uv);
+//	frag_color = vec4(1.0, 0.0, 0.0, 1.0);
+	frag_color = texture(screen_texture, uv);
 }

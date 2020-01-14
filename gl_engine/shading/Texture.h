@@ -39,6 +39,7 @@ namespace gl_engine
 		void process_uniform_2d();
 		void process_uniform_2d_array();
 		void process_cube_map();
+		void flip_surface();
 
 		// // ----- GETTERS ----- // //
 	public:
@@ -67,7 +68,7 @@ namespace gl_engine
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		SDL_Surface*		m_surface = NULL;
+		SDL_Surface*	m_surface = NULL;
 		glm::tvec4<GLubyte>	m_color;
 
 		GLuint			m_id = 0;

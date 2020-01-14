@@ -56,10 +56,6 @@ namespace gl_engine
 
 	void Material::set_texture(const std::string& uniform_name, Texture* texture)
 	{
-		if (m_textures.find(uniform_name) != m_textures.end())
-		{
-			printf("WARNING: \"%s\" is overwriting an existing texture\n", uniform_name.c_str());
-		}
 
 		if (Shader::uniforms().find(uniform_name) == Shader::uniforms().end())
 		{

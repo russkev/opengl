@@ -99,7 +99,8 @@ struct Camera
 uniform Camera camera;
 
 // // ----- OUTS ----- // //
-out vec4 fragColor;
+//out vec4 frag_color;
+out layout(location = 0) vec4 frag_color;
 
 // // ----- LOCAL FRAGMENT DIRECTIONS ----- // //
 vec2 uv;
@@ -528,5 +529,5 @@ void main ()
 //		vec3(uv, 0.0)
 		* vec3(1.0);
 
-	fragColor = vec4(outColor.xyz, 1.0);
+	frag_color = vec4(outColor.xyz, 1.0);
 }
