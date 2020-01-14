@@ -38,7 +38,21 @@ namespace gl_engine
 			init_first_frame();
 			m_first_frame = false;
 
-			m_test_screen_material.set_texture("screen_texture", &m_test_texture);
+
+			/*
+
+			Test
+
+			*/
+
+			//m_test_screen_material.set_texture("screen_texture", &m_test_texture);
+			//m_test_hdr_material.set_texture("hdr_buffer", &m_test_texture);
+
+			/*
+
+			End test
+
+			*/
 
 		}
 
@@ -54,11 +68,12 @@ namespace gl_engine
 		}
 		glEnable(GL_CULL_FACE);
 
+		m_hdr_framebuffer.bind();
+
 		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
 		m_cameraNode->update();
 
 
-		m_hdr_framebuffer.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		for (Material* material : m_materials)
@@ -73,39 +88,51 @@ namespace gl_engine
 		}
 
 		m_hdr_framebuffer.unbind();
-
+		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//m_hdr_material.set_texture("hdr_buffer", &m_hdr_texture);
 		//m_hdr_material.set_uniform("exposure", 1.0);
 		//m_screen_node.draw();
 
-		m_test_light_material.set_uniform("transform.model_to_projection", m_cameraNode->world_to_projection() * m_test_cube_node.world_to_node());
-		m_test_light_material.set_uniform("light.position", m_test_cube_node.world_position());
-		m_test_light_material.set_uniform("light.brightness", 1.0f);
-		m_test_light_material.set_uniform("light.color", glm::vec3(0.5f, 0.4f, 0.3f));
+		/*
 
-		//m_test_cube_node.draw();
+		Test
+
+		*/
+
+		//glDisable(GL_BLEND);
+
+		//m_hdr_texture.bind();
+
+		//m_test_hdr_material.use();
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, m_hdr_texture.id);
+
+		//m_test_hdr_material.set_texture("hdr_buffer", &m_hdr_texture);
+
+		//m_test_screen_node.draw();
+
+		//m_hdr_material.use();
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, m_hdr_texture.id());
+
+		//m_hdr_material.set_texture("hdr_buffer", &m_test_texture);
+		m_hdr_material.set_texture("hdr_buffer", &m_hdr_texture);
+
+		m_screen_node.draw();
+
+		//m_hdr_texture.unbind();
+
+		glEnable(GL_BLEND);
 
 
-		//m_test_screen_node.set_rotation({ 90.0f, 0.0f, 0.0f });
-		//glDisable(GL_CULL_FACE);
 
-		//m_test_screen_mesh.set_vertex_position(0, glm::vec3(-1.0f, -1.0f, 0.0f));
-		//m_test_screen_mesh.set_vertex_position(1, glm::vec3(+1.0f, -1.0f, 0.0f));
-		//m_test_screen_mesh.set_vertex_position(2, glm::vec3(-1.0f, +1.0f, 0.0f));
-		//m_test_screen_mesh.set_vertex_position(3, glm::vec3(+1.0f, +1.0f, 0.0f));
 
-		glm::mat4 identity_matrix{ 1.0f };
-		//m_test_light_material.set_uniform("transform.model_to_projection", m_cameraNode->world_to_projection() * m_test_screen_node.world_to_node());
-		m_test_light_material.set_uniform("transform.model_to_projection", identity_matrix);
+		/*
 
-		//m_test_light_material.set_uniform("light.position", m_test_screen_node.world_position());
-		m_test_light_material.set_uniform("light.position", glm::vec3{ 0.0f });
+		End test
 
-		m_test_light_material.set_uniform("light.brightness", 1.0f);
-		m_test_light_material.set_uniform("light.color", glm::vec3(0.5f, 0.4f, 0.3f));
-
-		m_test_screen_node.draw();
+		*/
 
 	}
 
@@ -173,19 +200,34 @@ namespace gl_engine
 		m_hdr_texture.set_type(GL_FLOAT);
 		m_hdr_texture.set_data(NULL);
 		m_hdr_texture.set_mipmap(false);
-		m_hdr_texture.set_min_filter(GL_LINEAR);
-		m_hdr_texture.set_mag_filter(GL_LINEAR);
+		m_hdr_texture.set_min_filter(GL_NEAREST);
+		m_hdr_texture.set_mag_filter(GL_NEAREST);
+		m_hdr_texture.set_st_wrap(GL_CLAMP_TO_EDGE);
 		m_hdr_texture.process();
 
+
+		m_hdr_texture.bind();
+		// Create depth buffer
 		glGenRenderbuffers(1, &m_rbo_depth_id);
 		glBindRenderbuffer(GL_RENDERBUFFER, m_rbo_depth_id);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_dimensions.x, m_dimensions.y);
-
-		m_hdr_framebuffer.bind();
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_hdr_texture.id(), 0);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_rbo_depth_id);
+
+
+		// Attach buffers
+		m_hdr_framebuffer.bind();
+		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_hdr_texture.id(), 0);
+		//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_rbo_depth_id);
+		
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_hdr_texture.id(), 0);
+
+		GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+		glDrawBuffers(1, DrawBuffers);
+		
+		
 		m_hdr_framebuffer.check_bound_framebuffer();
 		m_hdr_framebuffer.unbind();
+		m_hdr_texture.unbind();
 	}
 
 	bool Renderer::poll_events()

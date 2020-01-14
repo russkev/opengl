@@ -44,7 +44,6 @@ namespace gl_engine
 
 	void MeshNode::draw(const Pass& pass)
 	{
-
 		m_material->use();
 		m_vao.bind();
 		m_index_buffer.bind(GL_ELEMENT_ARRAY_BUFFER);
@@ -58,6 +57,8 @@ namespace gl_engine
 		{
 			child.second->draw();
 		}
+
+
 	}
 
 	void MeshNode::draw_material(Material* material)

@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
+#include <algorithm>
+
 
 namespace gl_engine
 {
@@ -38,6 +40,7 @@ namespace gl_engine
 		}
 		else
 		{
+			flip_surface();
 			m_data = m_surface->pixels;
 		}
 	}
@@ -155,6 +158,36 @@ namespace gl_engine
 				m_type,
 				m_data);
 		}
+	}
+
+	void Texture::flip_surface()
+	{
+		// Algorithm thanks to GitHub user wduminy
+		// https://gist.github.com/wduminy/5859474
+
+		SDL_Surface* result = SDL_CreateRGBSurface(
+			m_surface->flags,
+			m_surface->w,
+			m_surface->h,
+			m_surface->format->BytesPerPixel * 8,
+			m_surface->format->Rmask,
+			m_surface->format->Gmask,
+			m_surface->format->Bmask,
+			m_surface->format->Amask);
+
+		const auto pitch = m_surface->pitch;
+		const auto pixel_length = pitch * (m_surface->h - 1);
+		
+		auto input_pixels = static_cast<unsigned char*>(m_surface->pixels) + pixel_length;
+		auto result_pixels = static_cast<unsigned char*>(result->pixels);
+
+		for (auto line = 0; line < m_surface->h; ++line)
+		{
+			memcpy(result_pixels, input_pixels, pitch);
+			input_pixels -= pitch;
+			result_pixels += pitch;
+		}
+		std::swap(m_surface, result);
 	}
 
 	void Texture::bind(GLuint texture_unit)
