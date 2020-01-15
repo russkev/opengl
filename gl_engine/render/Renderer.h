@@ -6,7 +6,6 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 #include "../node/CameraNode.h"
-#include "../node/ScreenNode.h"
 #include "../node/MeshNode.h"
 #include "../shading/Framebuffer.h"
 #include "../shading/Texture.h"
@@ -69,38 +68,9 @@ namespace gl_engine
 
 		GLuint m_hdr_depth_id;
 		Material m_hdr_material{ "HDR Shader", "HDR.vert", "HDR.frag" };
-		//Material m_screen_material{ "Screen Shader", "Screen.vert", "Screen.frag" };
 		Mesh m_screen_mesh{ WindowQuad::create_windowQuad() };
-		//ScreenNode m_screen_node{ "Screen Node", &m_screen_mesh, &m_hdr_material };
 		MeshNode m_screen_node{ "Screen Node", &m_screen_mesh, &m_hdr_material };
 
-		bool m_screen_mode_enabled = true;
-
-		/*
-		
-		Test variables
-		
-		*/
-
-		//Texture m_test_texture{ "uvtemplate.tga" };
-		//Material m_test_screen_material{ "Screen Shader", "Screen.vert", "Screen.frag" };
-		//Material m_test_light_material{ "Light shader", "LightShader.vert", "LightShader.frag" };
-		//Material m_test_hdr_material{ "Test HDR Material", "HDR.vert", "HDR.frag" };
-		////ScreenNode m_test_screen_node{ "Test Screen Node", &m_screen_mesh, &m_test_screen_material };
-
-		//Mesh m_test_cube{ Cube::create_cube(2.0f) };
-		////Mesh m_test_screen_mesh{ Plane::create_plane(10.0f, 10.0f, 1, 1) };
-		//Mesh m_test_screen_mesh{ WindowQuad::create_windowQuad() };
-
-		//MeshNode m_test_cube_node{ "Test cube", &m_test_cube, &m_test_light_material };
-		//MeshNode m_test_screen_node{ "Test Screen Node", &m_test_screen_mesh, &m_test_hdr_material };
-
-
-		/*
-
-		End test variables
-
-		*/
 	};
 } // namespace gl_engine
 #endif

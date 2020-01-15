@@ -37,23 +37,6 @@ namespace gl_engine
 		{
 			init_first_frame();
 			m_first_frame = false;
-
-
-			/*
-
-			Test
-
-			*/
-
-			//m_test_screen_material.set_texture("screen_texture", &m_test_texture);
-			//m_test_hdr_material.set_texture("hdr_buffer", &m_test_texture);
-
-			/*
-
-			End test
-
-			*/
-
 		}
 
 		glEnable(GL_DEPTH_TEST);
@@ -70,10 +53,8 @@ namespace gl_engine
 		}
 		glEnable(GL_CULL_FACE);
 
-		if (m_screen_mode_enabled)
-		{
-			m_backbuffer_FBO.bind();
-		}
+
+		m_backbuffer_FBO.bind();
 
 		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
 		m_cameraNode->update();
@@ -92,71 +73,20 @@ namespace gl_engine
 			node.second->draw();
 		}
 
-		if (m_screen_mode_enabled)
-		{
-			m_backbuffer_FBO.unbind();
+
+		m_backbuffer_FBO.unbind();
 
 
-			glViewport(0, 0, m_dimensions.x, m_dimensions.y);
-			//glClear(GL_COLOR_BUFFER_BIT );
-			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			glBindFramebuffer(GL_READ_FRAMEBUFFER, m_backbuffer_FBO.id());
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-			glBlitFramebuffer(
-				0, 0, m_dimensions.x, m_dimensions.y,
-				0, 0, m_dimensions.x, m_dimensions.y,
-				GL_COLOR_BUFFER_BIT, GL_NEAREST
-			);
-
-
-			//glDisable(GL_DEPTH_TEST);
-
-
-			////m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_color);
-			////m_hdr_material.set_uniform("exposure", 1.0);
-			////m_screen_node.draw();
-
-			///*
-
-			//Test
-
-			//*/
-
-			////glDisable(GL_BLEND);
-
-			////m_backbuffer_color.bind();
-
-			////m_test_hdr_material.use();
-			////glActiveTexture(GL_TEXTURE0);
-			////glBindTexture(GL_TEXTURE_2D, m_backbuffer_color.id);
-
-			////m_test_hdr_material.set_texture("hdr_buffer", &m_backbuffer_color);
-
-			////m_test_screen_node.draw();
-
-			////m_hdr_material.use();
-			////glActiveTexture(GL_TEXTURE0);
-			////glBindTexture(GL_TEXTURE_2D, m_backbuffer_color.id());
-
-			////m_hdr_material.set_texture("hdr_buffer", &m_test_texture);
-			//m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_color);
-
-			//m_screen_node.draw();
-
-			//m_backbuffer_color.unbind();
-
-			//glEnable(GL_BLEND);
-
-
-
-
-		/*
-
-		End test
-
-		*/
-		}
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_backbuffer_FBO.id());
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		glBlitFramebuffer(
+			0, 0, m_dimensions.x, m_dimensions.y,
+			0, 0, m_dimensions.x, m_dimensions.y,
+			GL_COLOR_BUFFER_BIT, GL_NEAREST
+		);
 
 	}
 
@@ -243,33 +173,15 @@ namespace gl_engine
 		m_backbuffer_depth.set_st_wrap(GL_CLAMP_TO_EDGE);
 		m_backbuffer_depth.process();
 
-		//m_backbuffer_color.bind();
-		// Create depth buffer
-		//glGenRenderbuffers(1, &m_hdr_depth_id);
-		//glBindRenderbuffer(GL_RENDERBUFFER, m_hdr_depth_id);
-		//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_dimensions.x, m_dimensions.y);
-		//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_hdr_depth_id);
-
 
 		// Attach buffers
 		m_backbuffer_FBO.bind();
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_backbuffer_color.id(), 0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_backbuffer_depth.id(), 0);
-
-
-		////glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_backbuffer_color.id(), 0);
-		////glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_hdr_depth_id);
-		//
-		//glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_backbuffer_color.id(), 0);
-
-		//GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
-		//glDrawBuffers(1, DrawBuffers);
-		
 		
 		m_backbuffer_FBO.check_bound_framebuffer();
 		m_backbuffer_FBO.unbind();
-		//m_backbuffer_color.unbind();
 	}
 
 	bool Renderer::poll_events()

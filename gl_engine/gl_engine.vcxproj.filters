@@ -138,9 +138,6 @@
     <ClCompile Include="mesh\WindowQuad.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="node\ScreenNode.cpp">
-      <Filter>Node</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\Text2D.frag">
@@ -300,9 +297,6 @@
     </ClInclude>
     <ClInclude Include="mesh\WindowQuad.h">
       <Filter>Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="node\ScreenNode.h">
-      <Filter>Node</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

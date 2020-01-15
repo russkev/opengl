@@ -171,7 +171,6 @@
     <ClCompile Include="node\LightNode.cpp" />
     <ClCompile Include="node\MeshNode.cpp" />
     <ClCompile Include="node\Node.cpp" />
-    <ClCompile Include="node\ScreenNode.cpp" />
     <ClCompile Include="render\Renderer.cpp" />
     <ClCompile Include="shading\Framebuffer.cpp" />
     <ClCompile Include="shading\LoadShader.cpp" />
@@ -228,7 +227,6 @@
     <ClInclude Include="node\LightNode.h" />
     <ClInclude Include="node\MeshNode.h" />
     <ClInclude Include="node\Node.h" />
-    <ClInclude Include="node\ScreenNode.h" />
     <ClInclude Include="render\Renderer.h" />
     <ClInclude Include="shading\Framebuffer.h" />
     <ClInclude Include="shading\LoadShader.h" />
