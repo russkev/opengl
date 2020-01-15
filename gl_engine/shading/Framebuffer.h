@@ -23,6 +23,9 @@ namespace gl_engine
 		bool check_bound_framebuffer();
 
 
+		// // ----- GETTERS ----- // //
+		GLuint id();
+
 		// // ----- SETTERS ----- // //
 		void set_attachment(GLenum attachent);
 

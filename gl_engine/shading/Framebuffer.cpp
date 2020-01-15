@@ -91,6 +91,12 @@ namespace gl_engine
 	}
 
 
+	// // ----- GETTERS ----- // //
+	GLuint Framebuffer::id()
+	{
+		return m_id;
+	}
+
 	// // ----- SETTERS ----- // //
 	void Framebuffer::set_attachment(GLenum attachment)
 	{
