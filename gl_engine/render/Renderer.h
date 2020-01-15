@@ -63,14 +63,18 @@ namespace gl_engine
 		glm::uvec2 m_dimensions = { 800, 600 };
 		bool m_first_frame = true;
 
-		Framebuffer m_hdr_framebuffer{ GL_FRAMEBUFFER };
-		Texture m_hdr_texture{ GL_TEXTURE_2D };
-		GLuint m_rbo_depth_id;
+		Framebuffer m_backbuffer_FBO{ GL_FRAMEBUFFER };
+		Texture m_backbuffer_color{ GL_TEXTURE_2D };
+		Texture m_backbuffer_depth{ GL_TEXTURE_2D };
+
+		GLuint m_hdr_depth_id;
 		Material m_hdr_material{ "HDR Shader", "HDR.vert", "HDR.frag" };
 		//Material m_screen_material{ "Screen Shader", "Screen.vert", "Screen.frag" };
 		Mesh m_screen_mesh{ WindowQuad::create_windowQuad() };
 		//ScreenNode m_screen_node{ "Screen Node", &m_screen_mesh, &m_hdr_material };
 		MeshNode m_screen_node{ "Screen Node", &m_screen_mesh, &m_hdr_material };
+
+		bool m_screen_mode_enabled = true;
 
 		/*
 		

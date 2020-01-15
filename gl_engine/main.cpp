@@ -141,7 +141,7 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	shaderBall_material.set_texture("material.normal", &brick_normals);
 	shaderBall_material.set_uniform("material.normal_directx_mode", false);
 	shaderBall_material.set_texture("material.displacement", &brick_displacement);
-	shaderBall_material.set_uniform("material.displacement_amount", 0.06f);
+	shaderBall_material.set_uniform("material.displacement_amount", 0.0f /* 0.06f */);
 
 
 	// Shader 2
