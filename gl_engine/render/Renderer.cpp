@@ -54,11 +54,11 @@ namespace gl_engine
 		glEnable(GL_CULL_FACE);
 
 
+		// Main render
 		m_backbuffer_FBO.bind();
 
 		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
 		m_cameraNode->update();
-
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -73,10 +73,9 @@ namespace gl_engine
 			node.second->draw();
 		}
 
-
 		m_backbuffer_FBO.unbind();
 
-
+		// Backbuffer render
 		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -87,6 +86,11 @@ namespace gl_engine
 			0, 0, m_dimensions.x, m_dimensions.y,
 			GL_COLOR_BUFFER_BIT, GL_NEAREST
 		);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		////m_backbuffer_color.bind();
+		//m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_color);
+		//m_screen_node.draw();
 
 	}
 

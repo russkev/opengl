@@ -62,11 +62,11 @@ namespace gl_engine
 		glm::uvec2 m_dimensions = { 800, 600 };
 		bool m_first_frame = true;
 
+		// // ----- BACKBUFFER VARIABLES ----- // //
 		Framebuffer m_backbuffer_FBO{ GL_FRAMEBUFFER };
 		Texture m_backbuffer_color{ GL_TEXTURE_2D };
 		Texture m_backbuffer_depth{ GL_TEXTURE_2D };
 
-		GLuint m_hdr_depth_id;
 		Material m_hdr_material{ "HDR Shader", "HDR.vert", "HDR.frag" };
 		Mesh m_screen_mesh{ WindowQuad::create_windowQuad() };
 		MeshNode m_screen_node{ "Screen Node", &m_screen_mesh, &m_hdr_material };

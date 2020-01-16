@@ -26,6 +26,9 @@ namespace gl_engine
 
 	struct Window
 	{
+		// // ----- CONSTANTS ----- // //
+		static constexpr float DEFAULT_WINDOWS_DPI = 96.0f;
+
 		// // ----- CONSTRUCTORS ----- // //
 		Window(std::string name, std::vector<opengl_attr_pair> st_config, GLuint width, GLuint height);
 
@@ -39,6 +42,9 @@ namespace gl_engine
 		// // ----- GETTERS ----- // //
 		GLint width();
 		GLint height();
+	private:
+		void init_dimensions(GLuint* width, GLuint* height);
+
 
 		// // ----- MEMBER VARIABLES ----- // //
 	public:
