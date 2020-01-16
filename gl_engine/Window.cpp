@@ -61,6 +61,9 @@ namespace gl_engine
 		);
 
 		// // Create window // //
+		init_dimensions(&width, &height);
+
+
 		m_st_window = SDL_CreateWindow("GL Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
 		assert(m_st_window != nullptr);
 
@@ -118,5 +121,17 @@ namespace gl_engine
 		GLint height;
 		SDL_GetWindowSize(m_st_window, NULL, &height);
 		return height;
+	}
+
+	void Window::init_dimensions(GLuint *width, GLuint *height)
+	{
+		float dpi;
+		if (SDL_GetDisplayDPI(0, NULL, &dpi, NULL) < 0)
+		{
+			printf("SDL_DisplayDPI failed: %s\n", SDL_GetError());
+		}
+		float scale_factor = dpi / DEFAULT_WINDOWS_DPI;
+		*width = (GLuint)(*width * scale_factor);
+		*height = (GLuint)(*height * scale_factor);
 	}
 } // namespace gl_engine

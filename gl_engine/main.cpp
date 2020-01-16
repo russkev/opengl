@@ -88,7 +88,22 @@ int main(int, char**)
 {
 	GLuint width	= 800u;
 	GLuint height	= 600u;
+
 	gl_engine::Window window{ "GL Engine", st_config, width, height };
+
+	/*
+	
+		Test
+	
+	*/
+	float dpi;
+	SDL_GetDisplayDPI(0, NULL, &dpi, NULL);
+
+	/*
+
+		End test
+
+	*/
 
 	spinning_shader_ball_scene(window);
 	//three_shader_ball_scene(window);
