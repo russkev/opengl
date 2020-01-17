@@ -20,7 +20,6 @@ namespace gl_engine
 		m_target(target),
 		m_binding_id(binding)
 	{
-		std::cout << "Buffer object constructed\n";
 		if (size != 0) {
 			m_buffer_id = generate_buffer(size);
 		}

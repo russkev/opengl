@@ -77,20 +77,24 @@ namespace gl_engine
 
 		// Backbuffer render
 		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_backbuffer_FBO.id());
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-		glBlitFramebuffer(
-			0, 0, m_dimensions.x, m_dimensions.y,
-			0, 0, m_dimensions.x, m_dimensions.y,
-			GL_COLOR_BUFFER_BIT, GL_NEAREST
-		);
 		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		////m_backbuffer_color.bind();
-		//m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_color);
+		//glBindFramebuffer(GL_READ_FRAMEBUFFER, m_backbuffer_FBO.id());
+		//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		//glBlitFramebuffer(
+		//	0, 0, m_dimensions.x, m_dimensions.y,
+		//	0, 0, m_dimensions.x, m_dimensions.y,
+		//	GL_COLOR_BUFFER_BIT, GL_NEAREST
+		//);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//m_backbuffer_color.bind();
+		m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_color);
+		m_screen_node.draw();
+		//m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_depth);
 		//m_screen_node.draw();
+
+
 
 	}
 
@@ -118,7 +122,7 @@ namespace gl_engine
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		// // Enable gamma correction
-		glEnable(GL_FRAMEBUFFER_SRGB);
+		//glEnable(GL_FRAMEBUFFER_SRGB);
 	}
 
 	void Renderer::init_first_frame()
@@ -158,7 +162,7 @@ namespace gl_engine
 		m_backbuffer_color.set_format(GL_RGBA);
 		m_backbuffer_color.set_type(GL_FLOAT);
 		m_backbuffer_color.set_data(NULL);
-		m_backbuffer_color.set_mipmap(false);
+		m_backbuffer_color.set_mipmap(true);
 		m_backbuffer_color.set_min_filter(GL_NEAREST);
 		m_backbuffer_color.set_mag_filter(GL_NEAREST);
 		m_backbuffer_color.set_st_wrap(GL_CLAMP_TO_EDGE);
@@ -171,7 +175,7 @@ namespace gl_engine
 		m_backbuffer_depth.set_format(GL_DEPTH_COMPONENT);
 		m_backbuffer_depth.set_type(GL_FLOAT);
 		m_backbuffer_depth.set_data(NULL);
-		m_backbuffer_depth.set_mipmap(false);
+		m_backbuffer_depth.set_mipmap(true);
 		m_backbuffer_depth.set_min_filter(GL_NEAREST);
 		m_backbuffer_depth.set_mag_filter(GL_NEAREST);
 		m_backbuffer_depth.set_st_wrap(GL_CLAMP_TO_EDGE);

@@ -20,11 +20,14 @@ namespace gl_engine
 		for (const auto & texture_pair : m_textures)
 		{
 			std::string curr_locationName = texture_pair.first;
-			Texture* curr_texture = texture_pair.second;
-			auto texture_unit = Shader::uniforms().at(curr_locationName).texture_unit;
+			if (Shader::uniforms().find(curr_locationName) != Shader::uniforms().end())
+			{
+				Texture* curr_texture = texture_pair.second;
+				auto texture_unit = Shader::uniforms().at(curr_locationName).texture_unit;
 
-			Shader::set_uniform(curr_locationName, texture_unit);
-			curr_texture->bind(texture_unit);
+				Shader::set_uniform(curr_locationName, texture_unit);
+				curr_texture->bind(texture_unit);
+			}
 		}
 	}
 
@@ -59,8 +62,12 @@ namespace gl_engine
 
 		if (Shader::uniforms().find(uniform_name) == Shader::uniforms().end())
 		{
-			printf("WARNING: Unable to set texture: \"%s\" for shader: \"%s\", uniform not found\n", uniform_name.c_str(), Shader::name().c_str());
-			return;
+			if (m_failed_uniforms.find(uniform_name) == m_failed_uniforms.end())
+			{
+				printf("WARNING: Unable to set texture: \"%s\" for shader: \"%s\", uniform not found\n", uniform_name.c_str(), Shader::name().c_str());
+				m_failed_uniforms.insert(uniform_name);
+				return;
+			}
 		}
 
 		m_textures[uniform_name] = texture;

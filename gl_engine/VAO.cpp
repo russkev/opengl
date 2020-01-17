@@ -11,9 +11,7 @@ namespace gl_engine
 	// // ----- CONSTRUCTOR ----- // //
 	VAO::VAO() :
 		m_VAO_ID(0)
-	{
-		std::cout << "VAO object created\n";
-	};
+	{};
 
 	// // ----- GENERAL METHODS ----- // //
 	void VAO::generate_VAO(const Buffer& inBuffer, std::size_t divisor, const member_info_type* begin, const member_info_type* end, std::uint32_t id_offset) {
