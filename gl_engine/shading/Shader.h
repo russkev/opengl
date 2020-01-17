@@ -50,6 +50,9 @@ namespace gl_engine
 		bool contains_uniform(const std::string uniform_name);
 		bool is_uniform(const GLenum type);
 		void update_lights(const std::vector<LightNode*>& light_nodes);
+	private:
+		void init();
+
 
 	private:
 		void fetch_uniforms();

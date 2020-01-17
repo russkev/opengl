@@ -1,5 +1,6 @@
 #ifndef GL_ENGINE_WINDOW_H
 #define GL_ENGINE_WINDOW_H
+#define DEBUG
 
 #include <cstdlib>
 #include <vector>
@@ -38,8 +39,11 @@ namespace gl_engine
 		// // ----- GENERAL METHODS ----- // //
 		void append_title(std::string str);
 		void finish_frame();
+	private:
+		void print_gl_properties();
 
 		// // ----- GETTERS ----- // //
+	public:
 		GLint width();
 		GLint height();
 	private:

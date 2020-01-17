@@ -91,6 +91,8 @@ namespace gl_engine
 #endif
 			glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
 		}
+
+		print_gl_properties();
 	}
 
 	// // ----- GENERAL METHODS ----- // //
@@ -107,6 +109,15 @@ namespace gl_engine
 
 		SDL_SetWindowTitle(m_st_window, concat_title_char);
 	}
+
+	void Window::print_gl_properties()
+	{
+		printf("OpenGL loaded\n");
+		printf("Vendor: %s\n", glGetString(GL_VENDOR));
+		printf("Renderer: %s\n", glGetString(GL_RENDERER));
+		printf("Version: %s\n", glGetString(GL_VERSION));
+	}
+
 
 	// // ----- GETTERS ----- // //
 	GLint Window::width()
