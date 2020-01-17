@@ -15,15 +15,14 @@ namespace gl_engine
 		m_name{ name },
 		m_program_id{ LoadShaders::load(vertex_shader, fragment_shader) }
 	{
-		fetch_uniforms();
+		init();
 	}
 
 	Shader::Shader(const std::string& name, const char* vertex_shader, const char* geometry_shader, const char* fragment_shader) :
 		m_name{ name },
 		m_program_id{ LoadShaders::load(vertex_shader, geometry_shader, fragment_shader) }
 	{
-		std::printf("Shader \"%s\" loaded.\n", m_name.c_str());
-		fetch_uniforms();
+		init();
 	}
 
 	// // ----- GENERAL METHODS ----- // //
@@ -82,7 +81,11 @@ namespace gl_engine
 		}
 	}
 
-
+	void Shader::init()
+	{
+		//std::printf("Shader \"%s\" loaded.\n", m_name.c_str());
+		fetch_uniforms();
+	}
 	//Get all the uniforms from the shader and store their information with the shader
 	void Shader::fetch_uniforms()
 	{
