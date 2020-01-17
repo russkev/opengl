@@ -13,17 +13,46 @@ uniform float exposure;
 // // ----- OUTS ----- // //
 out vec4 frag_color;
 
+// // ----- GENERAL ----- // //
+float rgb_to_luminance(vec3 color)
+{
+	return dot(color, vec3(0.2126, 0.7152, 0.0722));
+}
+
+vec3 gamma(vec3 color, float gamma_value)
+{
+	return vec3(pow(color.x, gamma_value), pow(color.y, gamma_value), pow(color.z, gamma_value));
+}
+
+vec3 reinhard_tonemap(vec3 color)
+{
+	return color / (color + 1);
+}
+
+vec3 exposure_tonemap(vec3 color, float exposure_value)
+{
+	return vec3(1.0) - exp(-color * exposure_value);
+}
+
+
 // // ----- MAIN ----- // //
 void main()
 {
-	const float gamma = 1 / 2.2;
+	const float inverted_gamma = 1 / 2.2;
+	const float luminance = 0.1;
+
 	vec3 hdr_color = texture(hdr_buffer, uv).rgb;
 
-	//frag_color = vec4(hdr_color, 1.0) * exposure;
-	//frag_color = vec4(1.0, 0.5, 1.0, 1.0);
-//    frag_color = texture(hdr_buffer, uv);
-//	frag_color = vec4(hdr_color * 0.5, 1.0);
-//	frag_color = vec4(hdr_color / (hdr_color + vec3(1.0)), 1.0);
+	hdr_color = gamma(hdr_color, inverted_gamma);
 
-	frag_color = vec4(pow(hdr_color.x, gamma), pow(hdr_color.y, gamma), pow(hdr_color.z, gamma), 1.0);
+
+	if (uv.x < 0.5)
+	{
+
+		hdr_color = exposure_tonemap(hdr_color, exposure);
+	}
+
+//	hdr_color = reinhard_tonemap(hdr_color);
+
+	frag_color = vec4(hdr_color, 1.0);
 }
