@@ -140,52 +140,46 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\data\Text2D.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\Text2D.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\LightShader.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\LightShader.vert">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="packages.config">
       <Filter>Uncategorised</Filter>
     </None>
-    <None Include="..\data\cShader.frag">
+    <None Include="..\data\shaders\Blinn.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\cShader.vert">
+    <None Include="..\data\shaders\Blinn.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\DepthShader.vert">
+    <None Include="..\data\shaders\Depth.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\DepthShader.frag">
+    <None Include="..\data\shaders\Depth.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\DepthShaderCube.vert">
+    <None Include="..\data\shaders\DepthCube.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\DepthShaderCube.geom">
+    <None Include="..\data\shaders\DepthCube.geom">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\DepthShaderCube.frag">
+    <None Include="..\data\shaders\DepthCube.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\HDR.frag">
+    <None Include="..\data\shaders\HDR.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\HDR.vert">
+    <None Include="..\data\shaders\Light.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\Screen.frag">
+    <None Include="..\data\shaders\Light.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\Screen.vert">
+    <None Include="..\data\shaders\ScreenPassthrough.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\data\shaders\Text2D.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\data\shaders\Text2D.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

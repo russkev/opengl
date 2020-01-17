@@ -83,7 +83,7 @@ namespace gl_engine
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
 		//GLuint		m_depthMap_FBO;
-		Material	m_depth_material{ "Depth shader", "DepthShader.vert", "DepthShader.frag" };
+		Material	m_depth_material{ "Depth shader", "Depth.vert", "Depth.frag" };
 		Texture		m_texture;
 		Framebuffer m_framebuffer;
 		LightNode*	m_lightNode = NULL;

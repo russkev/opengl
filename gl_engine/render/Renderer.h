@@ -69,11 +69,13 @@ namespace gl_engine
 
 		// // ----- BACKBUFFER VARIABLES ----- // //
 		Framebuffer m_backbuffer_FBO{ GL_FRAMEBUFFER };
+		Framebuffer m_backbuffer_pingpong_FBO{ GL_FRAMEBUFFER };
 		Texture m_backbuffer_color{ GL_TEXTURE_2D };
-		Texture m_backbuffer_bloom{ GL_TEXTURE_2D };
+		Texture m_backbuffer_threshold{ GL_TEXTURE_2D };
+		Texture m_backbuffer_pingpong{ GL_TEXTURE_2D };
 		Texture m_backbuffer_depth{ GL_TEXTURE_2D };
 
-		Material m_hdr_material{ "HDR Shader", "HDR.vert", "HDR.frag" };
+		Material m_hdr_material{ "HDR Shader", "screenPassthrough.vert", "HDR.frag" };
 		Mesh m_screen_mesh{ WindowQuad::create_windowQuad() };
 		MeshNode m_screen_node{ "Screen Node", &m_screen_mesh, &m_hdr_material };
 

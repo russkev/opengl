@@ -5,6 +5,5 @@
 *.VC.VC.opendb
 *.VC.db
 *.db
-/data/shaders
 *.VC.opendb
 *.suo

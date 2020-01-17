@@ -135,7 +135,7 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 
 
 	// Shader 1
-	gl_engine::Material shaderBall_material{ "cMat", "cShader.vert", "cShader.frag" };
+	gl_engine::Material shaderBall_material{ "cMat", "Blinn.vert", "Blinn.frag" };
 	shaderBall_material.set_sampler_value("material.glossiness", 0.5f);
 	shaderBall_material.set_sampler_value("material.specular", 0.8f);
 	shaderBall_material.set_texture("material.diffuse", &uv_template_b_tex);
@@ -146,7 +146,7 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 
 
 	// Shader 2
-	gl_engine::Material floor_material{ "floor material", "cShader.vert", "cShader.frag" };
+	gl_engine::Material floor_material{ "floor material", "Blinn.vert", "Blinn.frag" };
 	floor_material.set_sampler_value("material.glossiness", 0.03f);
 	floor_material.set_sampler_value("material.specular", 0.30f);
 	floor_material.set_texture("material.diffuse", &grey_grid_tex);
@@ -233,9 +233,9 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 
 	// Axis arrows
 	gl_engine::Mesh axis_arrow{ gl_engine::Arrow::create_arrow(20) };
-	gl_engine::Material axis_mat_x{ "axis arrow x", "LightShader.vert", "LightShader.frag" };
-	gl_engine::Material axis_mat_y{ "axis arrow x", "LightShader.vert", "LightShader.frag" };
-	gl_engine::Material axis_mat_z{ "axis arrow x", "LightShader.vert", "LightShader.frag" };
+	gl_engine::Material axis_mat_x{ "axis arrow x", "Light.vert", "Light.frag" };
+	gl_engine::Material axis_mat_y{ "axis arrow x", "Light.vert", "Light.frag" };
+	gl_engine::Material axis_mat_z{ "axis arrow x", "Light.vert", "Light.frag" };
 	axis_mat_x.set_uniform("light.color", glm::vec3{ 1.0f, 0.0f, 0.0f });
 	axis_mat_y.set_uniform("light.color", glm::vec3{ 0.0f, 1.0f, 0.0f });
 	axis_mat_z.set_uniform("light.color", glm::vec3{ 0.0f, 0.0f, 1.0f });
@@ -321,12 +321,12 @@ void three_shader_ball_scene(gl_engine::Window window)
 
 
 	// Shader Grey
-	gl_engine::Material grey_material_rough{		"grey material rough",	"cShader.vert", "cShader.frag" };
-	gl_engine::Material grey_material_mid{			"grey material mid",	"cShader.vert", "cShader.frag" };
-	gl_engine::Material grey_material_shiny{		"grey material shiny",	"cShader.vert", "cShader.frag" };
-	gl_engine::Material grey_material_rough_mapped{	"grey material rough",	"cShader.vert", "cShader.frag" };
-	gl_engine::Material grey_material_mid_mapped{	"grey material mid",	"cShader.vert", "cShader.frag" };
-	gl_engine::Material grey_material_shiny_mapped{	"grey material shiny",	"cShader.vert", "cShader.frag" };
+	gl_engine::Material grey_material_rough{		"grey material rough",	"Blinn.vert", "Blinn.frag" };
+	gl_engine::Material grey_material_mid{			"grey material mid",	"Blinn.vert", "Blinn.frag" };
+	gl_engine::Material grey_material_shiny{		"grey material shiny",	"Blinn.vert", "Blinn.frag" };
+	gl_engine::Material grey_material_rough_mapped{	"grey material rough",	"Blinn.vert", "Blinn.frag" };
+	gl_engine::Material grey_material_mid_mapped{	"grey material mid",	"Blinn.vert", "Blinn.frag" };
+	gl_engine::Material grey_material_shiny_mapped{	"grey material shiny",	"Blinn.vert", "Blinn.frag" };
 
 	grey_material_rough.set_sampler_value(		"material.glossiness", 0.01f);
 	grey_material_mid.set_sampler_value(		"material.glossiness", 0.50f);
