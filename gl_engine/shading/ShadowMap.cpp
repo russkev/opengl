@@ -23,11 +23,11 @@ namespace gl_engine
 	const std::string ShadowMap::DEPTH_MAP = "depth";
 
 	const std::string ShadowMap::DEPTH_MAP_NAME = "depth map";
-	const char* ShadowMap::DEPTH_MAP_VERT = "DepthShader.vert";
-	const char* ShadowMap::DEPTH_MAP_FRAG = "DepthShader.frag";
-	const char* ShadowMap::CUBE_MAP_VERT = "DepthShaderCube.vert";
-	const char* ShadowMap::CUBE_MAP_GEOM = "DepthShaderCube.geom";
-	const char* ShadowMap::CUBE_MAP_FRAG = "DepthShaderCube.frag";
+	const char* ShadowMap::DEPTH_MAP_VERT = "Depth.vert";
+	const char* ShadowMap::DEPTH_MAP_FRAG = "Depth.frag";
+	const char* ShadowMap::CUBE_MAP_VERT = "DepthCube.vert";
+	const char* ShadowMap::CUBE_MAP_GEOM = "DepthCube.geom";
+	const char* ShadowMap::CUBE_MAP_FRAG = "DepthCube.frag";
 
 	const std::string ShadowMap::SHADOW = "shadow";
 	const std::string ShadowMap::TRANSFORMS = "transforms";
