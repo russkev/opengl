@@ -25,20 +25,16 @@ namespace gl_engine
 			std::string geometry_shader_code = geometry_file_path ? read_shader_code(geometry_file_path) : "";
 			std::string fragment_shader_code = read_shader_code(fragment_file_path);
 
-			printf("Compiling shader : %s\n", vertex_file_path);
 			compile_shader(vertex_shader_id, vertex_shader_code);
 
 			if (geometry_file_path)
 			{
-				printf("Compiling shader : %s\n", geometry_file_path);
 				compile_shader(geometry_shader_id, geometry_shader_code);
 			}
 
-			printf("Compiling shader: %s\n", fragment_file_path);
 			compile_shader(fragment_shader_id, fragment_shader_code);
 
 			// Link to program
-			printf("Linking program\n");
 			GLuint program_id = glCreateProgram();
 			glAttachShader(program_id, vertex_shader_id);
 			if (geometry_file_path)

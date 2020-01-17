@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <list>
+#include <set>
 
 #include <GL/glew.h>
 
@@ -45,6 +46,7 @@ namespace gl_engine
 	private:
 		std::map<std::string, Texture*> m_textures;
 		std::list<Texture> m_colors;
+		std::set<std::string> m_failed_uniforms;
 	};
 } // namespace gl_engine
 #endif

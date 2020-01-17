@@ -22,6 +22,7 @@ namespace gl_engine
 		m_name{ name },
 		m_program_id{ LoadShaders::load(vertex_shader, geometry_shader, fragment_shader) }
 	{
+		std::printf("Shader \"%s\" loaded.\n", m_name.c_str());
 		fetch_uniforms();
 	}
 

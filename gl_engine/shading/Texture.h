@@ -51,7 +51,6 @@ namespace gl_engine
 
 
 		// // ----- SETTERS ----- // //
-
 		void set_target(const GLenum target);
 		void set_width(const GLsizei width);
 		void set_height(const GLsizei height);
