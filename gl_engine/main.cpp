@@ -91,20 +91,6 @@ int main(int, char**)
 
 	gl_engine::Window window{ "GL Engine", st_config, width, height };
 
-	/*
-	
-		Test
-	
-	*/
-	float dpi;
-	SDL_GetDisplayDPI(0, NULL, &dpi, NULL);
-
-	/*
-
-		End test
-
-	*/
-
 	spinning_shader_ball_scene(window);
 	//three_shader_ball_scene(window);
 
@@ -197,12 +183,12 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	pointLight_node.set_position({ -4.0f, 1.2f, 0.0f });
 
 	// Point Light 2
-	gl_engine::PointLight pointLight2{ 6.0f, { 0.2f, 0.1f, 1.0f } };
+	gl_engine::PointLight pointLight2{ 9.0f, { 0.2f, 0.1f, 1.0f } };
 	gl_engine::LightNode pointLight_node2{ "Point Light 2", &pointLight2 };
 	pointLight_node2.set_position({ 0.0f, 4.0f, -5.0f });
 
 	// Directional Light 1
-	gl_engine::DirectionalLight directionalLight1{ 0.2f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
+	gl_engine::DirectionalLight directionalLight1{ 0.01f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
 	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
 	directionalLight_node1.set_rotation({ 33.0f, 225.0f, 0.0f });
 	directionalLight_node1.set_position({ 16.0f, 16.0f, 16.0f });
@@ -273,7 +259,7 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 
 	render.add_node(&pointLight_node);
 	render.add_node(&pointLight_node2);
-	render.add_node(&directionalLight_node1);
+	//render.add_node(&directionalLight_node1);
 	render.add_node(&spotLight_node1);
 	render.add_node(&spotLight_node2);
 

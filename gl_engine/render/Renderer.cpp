@@ -90,6 +90,7 @@ namespace gl_engine
 
 		//m_backbuffer_color.bind();
 		m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_color);
+		m_hdr_material.set_uniform("exposure", 1.3f);
 		m_screen_node.draw();
 		//m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_depth);
 		//m_screen_node.draw();
