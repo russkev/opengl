@@ -40,13 +40,18 @@ namespace gl_engine
 		void render();
 
 		// // ----- GENERAL METHODS ----- // //
+		bool poll_events();
+		void update(Window * window, Timer* timer);
+	private:
 		void init_settings();
 		void init_first_frame();
 		void init_hdr();
-		bool poll_events();
-		void update(Window * window, Timer* timer);
+		void init_backbuffer_color(Texture& backbuffer);
+		void init_backbuffer_depth(Texture& backbuffer);
+		void init_color_attachments();
 
 		// // ----- SETTERS ----- // //
+	public:
 		void add_node(Node* node);
 
 	private:
@@ -65,6 +70,7 @@ namespace gl_engine
 		// // ----- BACKBUFFER VARIABLES ----- // //
 		Framebuffer m_backbuffer_FBO{ GL_FRAMEBUFFER };
 		Texture m_backbuffer_color{ GL_TEXTURE_2D };
+		Texture m_backbuffer_bloom{ GL_TEXTURE_2D };
 		Texture m_backbuffer_depth{ GL_TEXTURE_2D };
 
 		Material m_hdr_material{ "HDR Shader", "HDR.vert", "HDR.frag" };

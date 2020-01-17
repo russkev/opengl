@@ -77,26 +77,19 @@ namespace gl_engine
 
 		// Backbuffer render
 		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		//glBindFramebuffer(GL_READ_FRAMEBUFFER, m_backbuffer_FBO.id());
-		//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-		//glBlitFramebuffer(
-		//	0, 0, m_dimensions.x, m_dimensions.y,
-		//	0, 0, m_dimensions.x, m_dimensions.y,
-		//	GL_COLOR_BUFFER_BIT, GL_NEAREST
-		//);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//m_backbuffer_color.bind();
 		m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_color);
 		m_hdr_material.set_uniform("exposure", 1.3f);
 		m_screen_node.draw();
-		//m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_depth);
+
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		////m_backbuffer_color.bind();
+		//m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_bloom);
+		//m_hdr_material.set_uniform("exposure", 0.2f);
 		//m_screen_node.draw();
-
-
-
 	}
 
 	// // ----- GENERAL METHODS ----- // //
@@ -156,41 +149,59 @@ namespace gl_engine
 
 	void Renderer::init_hdr()
 	{
-		// Color backbuffer
-		m_backbuffer_color.set_internal_format(GL_RGBA16F);
-		m_backbuffer_color.set_width(m_dimensions.x);
-		m_backbuffer_color.set_height(m_dimensions.y);
-		m_backbuffer_color.set_format(GL_RGBA);
-		m_backbuffer_color.set_type(GL_FLOAT);
-		m_backbuffer_color.set_data(NULL);
-		m_backbuffer_color.set_mipmap(true);
-		m_backbuffer_color.set_min_filter(GL_NEAREST);
-		m_backbuffer_color.set_mag_filter(GL_NEAREST);
-		m_backbuffer_color.set_st_wrap(GL_CLAMP_TO_EDGE);
-		m_backbuffer_color.process();
+		init_backbuffer_color(m_backbuffer_color);
+		init_backbuffer_color(m_backbuffer_bloom);
+		init_backbuffer_depth(m_backbuffer_depth);
 
-		// Depth backbuffer
-		m_backbuffer_depth.set_internal_format(GL_DEPTH_COMPONENT);
-		m_backbuffer_depth.set_width(m_dimensions.x);
-		m_backbuffer_depth.set_height(m_dimensions.y);
-		m_backbuffer_depth.set_format(GL_DEPTH_COMPONENT);
-		m_backbuffer_depth.set_type(GL_FLOAT);
-		m_backbuffer_depth.set_data(NULL);
-		m_backbuffer_depth.set_mipmap(true);
-		m_backbuffer_depth.set_min_filter(GL_NEAREST);
-		m_backbuffer_depth.set_mag_filter(GL_NEAREST);
-		m_backbuffer_depth.set_st_wrap(GL_CLAMP_TO_EDGE);
-		m_backbuffer_depth.process();
 
 
 		// Attach buffers
 		m_backbuffer_FBO.bind();
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_backbuffer_color.id(), 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_backbuffer_bloom.id(), 0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_backbuffer_depth.id(), 0);
-		
+
 		m_backbuffer_FBO.check_bound_framebuffer();
 		m_backbuffer_FBO.unbind();
+
+		init_color_attachments();
+	}
+
+	void Renderer::init_backbuffer_color(Texture& backbuffer)
+	{
+		backbuffer.set_internal_format(GL_RGBA16F);
+		backbuffer.set_width(m_dimensions.x);
+		backbuffer.set_height(m_dimensions.y);
+		backbuffer.set_format(GL_RGBA);
+		backbuffer.set_type(GL_FLOAT);
+		backbuffer.set_data(NULL);
+		backbuffer.set_mipmap(true);
+		backbuffer.set_min_filter(GL_NEAREST);
+		backbuffer.set_mag_filter(GL_NEAREST);
+		backbuffer.set_st_wrap(GL_CLAMP_TO_EDGE);
+		backbuffer.process();
+	}
+
+	void Renderer::init_backbuffer_depth(Texture& backbuffer)
+	{
+		backbuffer.set_internal_format(GL_DEPTH_COMPONENT);
+		backbuffer.set_width(m_dimensions.x);
+		backbuffer.set_height(m_dimensions.y);
+		backbuffer.set_format(GL_DEPTH_COMPONENT);
+		backbuffer.set_type(GL_FLOAT);
+		backbuffer.set_data(NULL);
+		backbuffer.set_mipmap(true);
+		backbuffer.set_min_filter(GL_NEAREST);
+		backbuffer.set_mag_filter(GL_NEAREST);
+		backbuffer.set_st_wrap(GL_CLAMP_TO_EDGE);
+		backbuffer.process();
+	}
+
+	void Renderer::init_color_attachments()
+	{
+		GLuint attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+		glDrawBuffers(2, attachments);
 	}
 
 	bool Renderer::poll_events()

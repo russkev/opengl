@@ -11,7 +11,8 @@ uniform float exposure;
 
 
 // // ----- OUTS ----- // //
-out vec4 frag_color;
+out layout (location = 0) vec4 frag_color;
+out layout (location = 1) vec4 bright_color;
 
 // // ----- GENERAL ----- // //
 float rgb_to_luminance(vec3 color)
@@ -34,6 +35,18 @@ vec3 exposure_tonemap(vec3 color, float exposure_value)
 	return vec3(1.0) - exp(-color * exposure_value);
 }
 
+vec3 threshold_color(vec3 color, float threshold)
+{
+	if (rgb_to_luminance(color) > threshold)
+	{
+		return color;
+	}
+	else
+	{
+		return vec3(0.0);
+	}
+}
+
 
 // // ----- MAIN ----- // //
 void main()
@@ -41,18 +54,13 @@ void main()
 	const float inverted_gamma = 1 / 2.2;
 	const float luminance = 0.1;
 
-	vec3 hdr_color = texture(hdr_buffer, uv).rgb;
+	vec3 raw_color = texture(hdr_buffer, uv).rgb;
 
-	hdr_color = gamma(hdr_color, inverted_gamma);
+	vec3 gamma_corrected_color = gamma(raw_color, inverted_gamma);
 
+	vec3 tonemapped_color = exposure_tonemap(gamma_corrected_color, exposure);
 
-	if (uv.x < 0.5)
-	{
+	frag_color = vec4(tonemapped_color, 1.0);
+	bright_color = vec4(threshold_color(raw_color, 1.0), 1.0);
 
-		hdr_color = exposure_tonemap(hdr_color, exposure);
-	}
-
-//	hdr_color = reinhard_tonemap(hdr_color);
-
-	frag_color = vec4(hdr_color, 1.0);
 }
