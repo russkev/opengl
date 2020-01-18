@@ -142,6 +142,22 @@ struct m_SpotLight
 	float tangent_space_intensity;
 } m_spotLight[NUM_LIGHTS];
 
+
+// // ----- UTILITY STRUCTS ----- // //
+struct Layers
+{
+	float num;
+	float layer_depth;
+	float current_depth;
+};
+
+struct ParallaxUVs
+{
+	vec2 current;
+	vec2 prev;
+	vec2 delta;
+};
+
 // // ----- UTILITY METHODS ----- // //
 bool vec_is_zero(vec3 v)
 {
@@ -171,65 +187,38 @@ float spot_intensity(vec3 vertex_position, vec3 light_position, vec3 light_aim, 
 
 
 // // ----- INITIALIZATION OF LOCALS ----- // //
-void init_displaced_uv()
-{
-	uv = flat_uv;
-	if (material.displacement_enabled == true)
-	{
-//		uv = vec2(texture(material.diffuse, uv).r, 1.0);
-		uv = vec2(texture(material.displacement, uv).r, 1.0);
-//		uv = vec2(material.displacement_amount);
-//		uv = vec2(1.0);
+void init_tangent_space_cam();
+void init_tangent_space_lights();
+void init_tangent_space_normals();
 
-//		// Initialize values
-//		const float num_layers = 10.0;
-//		const float layer_depth = 1.0 / num_layers;
-//		float current_layer_depth = 0.0;
-//		m_cam.tangent_space_direction = normalize(in_cam.tangent_space_position - in_frag.tangent_space_position);
-//		vec2 difference = m_cam.tangent_space_direction.xy * material.displacement_amount;
-//		vec2 delta_uv = difference / num_layers;
-//		vec2 curr_uv = flat_uv;
-//		float current_depth_map_value = texture(material.displacement, curr_uv).r;
-//
-//		// Find first layer where depth is less deep than actual depth
-//		while(current_layer_depth < current_depth_map_value)
-//		{
-//			curr_uv -= delta_uv;
-//			current_depth_map_value = texture(material.displacement, curr_uv).r;
-//			current_layer_depth += layer_depth;
-//		}
-//
-//		vec2 prev_uv = curr_uv + delta_uv;
-//
-//		float after_depth = current_depth_map_value - current_layer_depth;
-//		float before_depth = texture(material.displacement, prev_uv).r - current_layer_depth + layer_depth;
-//	
-//		// Interpolation between befor and after depth
-//		float weight = after_depth / (after_depth - before_depth);
-//		uv = prev_uv * weight + curr_uv * (1.0 - weight);
-	}
+void init_uv();
+void calculate_displaced_uv();
+Layers init_displaced_uv_layers();
+ParallaxUVs init_parallax_uv_values(Layers);
+float find_current_depth_layer(inout Layers, inout ParallaxUVs);
+vec2 interpolate_depth(float, Layers, ParallaxUVs);
+
+void init_world_space();
+void init_world_space_cam();
+void init_world_space_lights();
+void init_world_space_normals();
+
+void init()
+{
+	init_tangent_space_cam();
+	init_tangent_space_lights();
+	init_uv();
+	init_tangent_space_normals();
+	init_world_space();
 }
 
-void init_world_space()
-{
-	m_cam.world_space_direction = normalize(camera.position - in_frag.world_space_position);
-	for (int i = 0; i < NUM_LIGHTS; i++)
-	{
-		m_pointLight[i].world_space_direction = normalize(pointLight[i].position - in_frag.world_space_position);
-		m_spotLight[i].world_space_direction = normalize(spotLight[i].position - in_frag.world_space_position);
-		m_spotLight[i].world_space_intensity = spot_intensity(
-			in_frag.world_space_position,
-			spotLight[i].position, 
-			spotLight[i].direction, 
-			spotLight[i].inner, 
-			spotLight[i].outer);
-	}
-	m_frag.world_space_normal = normalize(in_frag.world_space_normal);
-}
-
-void init_tangent_space()
+void init_tangent_space_cam()
 {
 	m_cam.tangent_space_direction = normalize(in_cam.tangent_space_position - in_frag.tangent_space_position);
+}
+
+void init_tangent_space_lights()
+{
 	for (int i = 0; i < NUM_LIGHTS; i++) 
 	{
 		m_pointLight[i].tangent_space_direction = normalize(in_pointLight[i].tangent_space_position - in_frag.tangent_space_position);
@@ -242,7 +231,10 @@ void init_tangent_space()
 			spotLight[i].inner,
 			spotLight[i].outer);
 	}
+}
 
+void init_tangent_space_normals()
+{
 	m_frag.tangent_space_normal = texture(material.normal, uv).rgb;
 	// Flip green channel for directx mode normal map
 	if (material.normal_directx_mode)
@@ -251,6 +243,108 @@ void init_tangent_space()
 	}
 	m_frag.tangent_space_normal = normalize(m_frag.tangent_space_normal * 2.0 - 1.0);
 }
+	
+
+void init_uv()
+{
+	uv = flat_uv;
+	if (material.displacement_enabled == true)
+	{
+//		uv = vec2(texture(material.diffuse, uv).r, 1.0);
+//		uv = vec2(texture(material.displacement, uv).r, 1.0);
+//		uv = vec2(material.displacement_amount);
+//		uv = vec2(1.0);
+		calculate_displaced_uv();
+	}
+}
+
+void calculate_displaced_uv()
+{
+	Layers layers = init_displaced_uv_layers();
+	ParallaxUVs uvs = init_parallax_uv_values(layers);
+
+	float current_depth_map_value = find_current_depth_layer(layers, uvs);
+	uv = interpolate_depth(current_depth_map_value, layers, uvs);
+}
+
+Layers init_displaced_uv_layers()
+{
+	Layers out_layers;
+	out_layers.num = 10;
+	out_layers.layer_depth = 1.0 / out_layers.num;
+	out_layers.current_depth = 0.0;
+	return out_layers;
+}
+
+ParallaxUVs init_parallax_uv_values(Layers layers)
+{
+	vec2 difference = m_cam.tangent_space_direction.xy * material.displacement_amount;
+
+	ParallaxUVs out_uvs;
+	out_uvs.delta = difference / layers.num;
+	out_uvs.current = flat_uv;
+	out_uvs.prev = vec2(0.0);
+	return out_uvs;
+}
+
+float find_current_depth_layer(inout Layers layers, inout ParallaxUVs uvs)
+{
+	float current_depth_map_value = texture(material.displacement, uvs.current).r;
+
+	while(layers.current_depth < current_depth_map_value)
+	{
+		uvs.current -= uvs.delta;
+		current_depth_map_value = texture(material.displacement, uvs.current).r;
+		layers.current_depth += layers.layer_depth;
+	}
+	return current_depth_map_value;
+}
+
+vec2 interpolate_depth(float current_depth_map_value, Layers layers, ParallaxUVs uvs)
+{
+	uvs.prev = uvs.current + uvs.delta;
+
+	float current_depth = current_depth_map_value - layers.current_depth;
+	float prev_depth = texture(material.displacement, uvs.prev).r - layers.current_depth + layers.layer_depth;
+
+	float weight = current_depth / (current_depth - prev_depth);
+	return uvs.prev * weight + uvs.current * (1.0 - weight);
+}
+	
+	
+
+void init_world_space()
+{
+	init_world_space_cam();
+	init_world_space_lights();
+	init_world_space_normals();
+}
+
+void init_world_space_cam()
+{
+	m_cam.world_space_direction = normalize(camera.position - in_frag.world_space_position);
+}
+
+void init_world_space_lights()
+{
+	for (int i = 0; i < NUM_LIGHTS; i++)
+	{
+		m_pointLight[i].world_space_direction = normalize(pointLight[i].position - in_frag.world_space_position);
+		m_spotLight[i].world_space_direction = normalize(spotLight[i].position - in_frag.world_space_position);
+		m_spotLight[i].world_space_intensity = spot_intensity(
+			in_frag.world_space_position,
+			spotLight[i].position, 
+			spotLight[i].direction, 
+			spotLight[i].inner, 
+			spotLight[i].outer);
+	}
+}
+
+void init_world_space_normals()
+{
+	m_frag.world_space_normal = normalize(in_frag.world_space_normal);
+}
+	
 
 // // ----- DIFFUSE LIGHTING ----- // //
 vec3 diffuse(vec3 normal, vec3 light)
@@ -456,9 +550,7 @@ void main ()
 	vec3 specular_out = vec3(0.0);
 
     uv = flat_uv;
-	init_displaced_uv();
-	init_world_space();
-	init_tangent_space();
+	init();
 	   
 	// Point lights
 	for (int i = 0; i < NUM_LIGHTS; i++)
