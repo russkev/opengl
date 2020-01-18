@@ -16,7 +16,6 @@ void main()
 {
 	vec3 main_color = texture(color, uv).rgb;
 	vec3 main_brightness = texture(threshold, uv).rgb;
-//	frag_color = vec4(main_color * 0.1 + main_brightness, 1.0);
-	frag_color = vec4(main_brightness + main_color, 1.0);
+	frag_color = vec4(main_color + main_brightness * 0.01, 1.0);
 }
 	

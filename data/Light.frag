@@ -3,7 +3,6 @@
 
 // // ----- OUTS ----- // //
 out layout(location = 0) vec4 frag_color;
-out layout(location = 1) vec4 bright_color;
 
 // // ----- UNIFORMS ----- // //
 struct Light
@@ -18,5 +17,4 @@ uniform Light light = { vec3(0.0), 10.0, vec3(1.0) };
 void main ()
 {
 	frag_color = vec4(light.brightness * light.color, 1.0);
-	bright_color = vec4(1.0, 0.2, 0.5, 1.0);
 }

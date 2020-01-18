@@ -55,6 +55,7 @@ struct Material
 
 	sampler2D displacement;
 	float displacement_amount;
+	bool displacement_enabled;
 };
 uniform Material material;
 
@@ -172,32 +173,41 @@ float spot_intensity(vec3 vertex_position, vec3 light_position, vec3 light_aim, 
 // // ----- INITIALIZATION OF LOCALS ----- // //
 void init_displaced_uv()
 {
-	// Initialize values
-	const float num_layers = 10.0;
-	const float layer_depth = 1.0 / num_layers;
-	float current_layer_depth = 0.0;
-	m_cam.tangent_space_direction = normalize(in_cam.tangent_space_position - in_frag.tangent_space_position);
-	vec2 difference = m_cam.tangent_space_direction.xy * material.displacement_amount;
-	vec2 delta_uv = difference / num_layers;
-	vec2 curr_uv = flat_uv;
-	float current_depth_map_value = texture(material.displacement, curr_uv).r;
-
-	// Find first layer where depth is less deep than actual depth
-	while(current_layer_depth < current_depth_map_value)
+	uv = flat_uv;
+	if (material.displacement_enabled == true)
 	{
-		curr_uv -= delta_uv;
-		current_depth_map_value = texture(material.displacement, curr_uv).r;
-		current_layer_depth += layer_depth;
+//		uv = vec2(texture(material.diffuse, uv).r, 1.0);
+		uv = vec2(texture(material.displacement, uv).r, 1.0);
+//		uv = vec2(material.displacement_amount);
+//		uv = vec2(1.0);
+
+//		// Initialize values
+//		const float num_layers = 10.0;
+//		const float layer_depth = 1.0 / num_layers;
+//		float current_layer_depth = 0.0;
+//		m_cam.tangent_space_direction = normalize(in_cam.tangent_space_position - in_frag.tangent_space_position);
+//		vec2 difference = m_cam.tangent_space_direction.xy * material.displacement_amount;
+//		vec2 delta_uv = difference / num_layers;
+//		vec2 curr_uv = flat_uv;
+//		float current_depth_map_value = texture(material.displacement, curr_uv).r;
+//
+//		// Find first layer where depth is less deep than actual depth
+//		while(current_layer_depth < current_depth_map_value)
+//		{
+//			curr_uv -= delta_uv;
+//			current_depth_map_value = texture(material.displacement, curr_uv).r;
+//			current_layer_depth += layer_depth;
+//		}
+//
+//		vec2 prev_uv = curr_uv + delta_uv;
+//
+//		float after_depth = current_depth_map_value - current_layer_depth;
+//		float before_depth = texture(material.displacement, prev_uv).r - current_layer_depth + layer_depth;
+//	
+//		// Interpolation between befor and after depth
+//		float weight = after_depth / (after_depth - before_depth);
+//		uv = prev_uv * weight + curr_uv * (1.0 - weight);
 	}
-
-	vec2 prev_uv = curr_uv + delta_uv;
-
-	float after_depth = current_depth_map_value - current_layer_depth;
-	float before_depth = texture(material.displacement, prev_uv).r - current_layer_depth + layer_depth;
-	
-	// Interpolation between befor and after depth
-	float weight = after_depth / (after_depth - before_depth);
-	uv = prev_uv * weight + curr_uv * (1.0 - weight);
 }
 
 void init_world_space()
@@ -445,6 +455,7 @@ void main ()
 	vec3 diffuse_out = vec3(0.0);
 	vec3 specular_out = vec3(0.0);
 
+    uv = flat_uv;
 	init_displaced_uv();
 	init_world_space();
 	init_tangent_space();
@@ -525,8 +536,7 @@ void main ()
 		diffuse_out * texture(material.diffuse, uv).rgb
 		+ 
 		specular_out
-//		vec3(flat_uv - (m_cam.tangent_space_direction.xy / m_cam.tangent_space_direction.z) * (texture(material.displacement, flat_uv).r * material.displacement_amount) , 0.0)
-//		vec3(uv, 0.0)
+//		vec3(uv, 1.0)
 		* vec3(1.0);
 
 	frag_color = vec4(outColor.xyz, 1.0);

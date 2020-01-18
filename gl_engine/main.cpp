@@ -135,22 +135,26 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 
 
 	// Shader 1
-	gl_engine::Material shaderBall_material{ "cMat", "Blinn.vert", "Blinn.frag" };
+	gl_engine::Material shaderBall_material{ "Shaderball Blinn", "Blinn.vert", "Blinn.frag" };
 	shaderBall_material.set_sampler_value("material.glossiness", 0.5f);
 	shaderBall_material.set_sampler_value("material.specular", 0.8f);
 	shaderBall_material.set_texture("material.diffuse", &uv_template_b_tex);
 	shaderBall_material.set_texture("material.normal", &brick_normals);
 	shaderBall_material.set_uniform("material.normal_directx_mode", false);
+	shaderBall_material.set_uniform("material.displacement_enabled", true);
 	shaderBall_material.set_texture("material.displacement", &brick_displacement);
 	shaderBall_material.set_uniform("material.displacement_amount", 0.06f);
 
 
 	// Shader 2
-	gl_engine::Material floor_material{ "floor material", "Blinn.vert", "Blinn.frag" };
+	gl_engine::Material floor_material{ "Floor Blinn", "Blinn.vert", "Blinn.frag" };
 	floor_material.set_sampler_value("material.glossiness", 0.03f);
 	floor_material.set_sampler_value("material.specular", 0.30f);
 	floor_material.set_texture("material.diffuse", &grey_grid_tex);
 	floor_material.set_texture("material.normal", &normal_up);
+	floor_material.set_uniform("material.displacement_enabled", false);
+	////floor_material.set_texture("material.displacement", &brick_displacement)
+	//floor_material.set_uniform("material.displacement_amount", 0.0f);
 
 	// Texture 3
 	//gl_engine::Texture arrayTest_tex("uvtemplate.tga");
@@ -188,7 +192,7 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	pointLight_node2.set_position({ 0.0f, 4.0f, -5.0f });
 
 	// Directional Light 1
-	gl_engine::DirectionalLight directionalLight1{ 0.01f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
+	gl_engine::DirectionalLight directionalLight1{ 0.5f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
 	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
 	directionalLight_node1.set_rotation({ 33.0f, 225.0f, 0.0f });
 	directionalLight_node1.set_position({ 16.0f, 16.0f, 16.0f });
@@ -259,7 +263,7 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 
 	render.add_node(&pointLight_node);
 	render.add_node(&pointLight_node2);
-	//render.add_node(&directionalLight_node1);
+	render.add_node(&directionalLight_node1);
 	render.add_node(&spotLight_node1);
 	render.add_node(&spotLight_node2);
 
@@ -405,7 +409,7 @@ void three_shader_ball_scene(gl_engine::Window window)
 	directionalLight_node1.set_position({ 16.0f, 16.0f, 16.0f });
 
 	// Shadow map
-	//gl_engine::ShadowMap shadowMap_directional1{ &directionalLight_node1 };
+	gl_engine::ShadowMap shadowMap_directional1{ &directionalLight_node1 };
 
 
 	// Renderer
