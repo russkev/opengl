@@ -191,19 +191,20 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\data\shaders\Blinn.frag" />
-    <None Include="..\data\shaders\Blinn.vert" />
-    <None Include="..\data\shaders\Depth.frag" />
-    <None Include="..\data\shaders\Depth.vert" />
-    <None Include="..\data\shaders\DepthCube.frag" />
-    <None Include="..\data\shaders\DepthCube.geom" />
-    <None Include="..\data\shaders\DepthCube.vert" />
-    <None Include="..\data\shaders\HDR.frag" />
-    <None Include="..\data\shaders\Light.frag" />
-    <None Include="..\data\shaders\Light.vert" />
-    <None Include="..\data\shaders\ScreenPassthrough.vert" />
-    <None Include="..\data\shaders\Text2D.frag" />
-    <None Include="..\data\shaders\Text2D.vert" />
+    <None Include="..\data\Blinn.frag" />
+    <None Include="..\data\Blinn.vert" />
+    <None Include="..\data\Bloom.frag" />
+    <None Include="..\data\Depth.frag" />
+    <None Include="..\data\Depth.vert" />
+    <None Include="..\data\DepthCube.frag" />
+    <None Include="..\data\DepthCube.geom" />
+    <None Include="..\data\DepthCube.vert" />
+    <None Include="..\data\HDR.frag" />
+    <None Include="..\data\Light.frag" />
+    <None Include="..\data\Light.vert" />
+    <None Include="..\data\ScreenPassthrough.vert" />
+    <None Include="..\data\Text2D.frag" />
+    <None Include="..\data\Text2D.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

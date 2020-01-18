@@ -143,43 +143,46 @@
     <None Include="packages.config">
       <Filter>Uncategorised</Filter>
     </None>
-    <None Include="..\data\shaders\Blinn.frag">
+    <None Include="..\data\Bloom.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\shaders\Blinn.vert">
+    <None Include="..\data\Blinn.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\shaders\Depth.frag">
+    <None Include="..\data\Depth.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\shaders\Depth.vert">
+    <None Include="..\data\DepthCube.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\shaders\DepthCube.frag">
+    <None Include="..\data\HDR.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\shaders\DepthCube.geom">
+    <None Include="..\data\Light.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\shaders\DepthCube.vert">
+    <None Include="..\data\Text2D.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\shaders\HDR.frag">
+    <None Include="..\data\DepthCube.geom">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\shaders\Light.frag">
+    <None Include="..\data\Blinn.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\shaders\Light.vert">
+    <None Include="..\data\Depth.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\shaders\ScreenPassthrough.vert">
+    <None Include="..\data\DepthCube.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\shaders\Text2D.frag">
+    <None Include="..\data\Light.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\data\shaders\Text2D.vert">
+    <None Include="..\data\ScreenPassthrough.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\data\Text2D.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
