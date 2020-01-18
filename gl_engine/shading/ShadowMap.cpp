@@ -128,7 +128,7 @@ namespace gl_engine
 		m_texture.set_min_filter(GL_NEAREST);
 		m_texture.set_mag_filter(GL_NEAREST);
 		m_texture.set_mipmap(true);
-		m_texture.set_st_wrap(GL_CLAMP_TO_EDGE);
+		m_texture.set_st_wrap(GL_CLAMP_TO_BORDER);
 
 		m_texture.process();
 	}
