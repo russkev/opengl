@@ -6,6 +6,7 @@ in vec2 uv;
 
 // // ----- UNIFORMS ----- // //
 uniform sampler2D hdr_buffer;
+uniform sampler2D bright_buffer;
 uniform bool is_hdr;
 uniform float exposure;
 
@@ -60,7 +61,13 @@ void main()
 
 	vec3 tonemapped_color = exposure_tonemap(gamma_corrected_color, exposure);
 
-	frag_color = vec4(tonemapped_color, 1.0);
-	bright_color = vec4(threshold_color(raw_color, 1.0), 1.0);
+	vec3 out_bright_color = texture(bright_buffer, uv).rgb;
+
+//	frag_color = vec4(tonemapped_color - out_bright_color, 1.0);
+	frag_color = vec4(out_bright_color, 1.0);
+	bright_color = vec4(threshold_color(raw_color, 0.1), 1.0);
+//	frag_color = vec4(0.1, 0.8, 0.2, 1.0)  + vec4(tonemapped_color, 1.0) * 0.01;
+//	bright_color = vec4(0.9, 0.1, 0.2, 1.0);
+
 
 }

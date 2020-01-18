@@ -76,28 +76,33 @@ namespace gl_engine
 		m_backbuffer_FBO.unbind();
 
 		// Backbuffer render
-		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		////m_backbuffer_color.bind();
-
-		m_backbuffer_pingpong_FBO.bind();
-		m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_color);
-		m_hdr_material.set_uniform("exposure", 1.3f);
-		m_screen_node.draw();
-		m_backbuffer_pingpong_FBO.unbind();
-
+		//glViewport(0, 0, m_dimensions.x, m_dimensions.y);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glActiveTexture(GL_TEXTURE1);
-		m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_pingpong);
-		m_screen_node.draw();
 
-		//////m_backbuffer_color.bind();
-		//m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_threshold);
-		//m_hdr_material.set_uniform("exposure", 0.2f);
-		//m_screen_node.draw();
+		//m_hdr_material.use();
+		//m_backbuffer_pingpong_FBO.bind();
+		m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_colorA);
+		m_hdr_material.set_texture("bright_buffer", &m_backbuffer_colorB);
+		m_hdr_material.set_uniform("exposure", 1.3f);
+		m_hdr_screen_node.draw();
+		//m_backbuffer_pingpong_FBO.unbind();
 
-		//m_backbuffer_FBO.unbind();
+		//// Bloom render
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//m_bloom_material.use();
+
+		//m_bloom_material.set_texture("color", &m_backbuffer_pingpong);
+		//glActiveTexture(GL_TEXTURE1);
+		//glBindTexture(GL_TEXTURE_2D, 1);
+		//m_bloom_material.set_texture("threshold", &m_backbuffer_pingpong);
+		//m_bloom_screen_node.draw();
+
+		//m_bloom_material.use();
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, m_backbuffer_colorA.id());
+		//glActiveTexture(GL_TEXTURE1);
+		//glBindTexture(GL_TEXTURE_2D, m_backbuffer_pingpong.id());
+		//m_bloom_screen_node.draw();
 	}
 
 	// // ----- GENERAL METHODS ----- // //
@@ -157,22 +162,22 @@ namespace gl_engine
 
 	void Renderer::init_hdr()
 	{
-		init_backbuffer_color(m_backbuffer_color);
-		init_backbuffer_color(m_backbuffer_threshold);
+		init_backbuffer_color(m_backbuffer_colorA);
+		init_backbuffer_color(m_backbuffer_colorB);
 		init_backbuffer_depth(m_backbuffer_depth);
 
 
 		// Attach buffers
 		m_backbuffer_FBO.bind();
+		init_color_attachments();
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_backbuffer_color.id(), 0);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_backbuffer_threshold.id(), 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_backbuffer_colorA.id(), 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_backbuffer_colorB.id(), 0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_backbuffer_depth.id(), 0);
 
 		m_backbuffer_FBO.check_bound_framebuffer();
 		m_backbuffer_FBO.unbind();
 
-		init_color_attachments();
 
 
 
