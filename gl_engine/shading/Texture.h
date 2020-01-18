@@ -67,7 +67,7 @@ namespace gl_engine
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		SDL_Surface*	m_surface = NULL;
+		SDL_Surface*		m_surface = NULL;
 		glm::tvec4<GLubyte>	m_color;
 
 		GLuint			m_id = 0;

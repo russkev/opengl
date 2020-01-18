@@ -38,16 +38,21 @@ namespace gl_engine
 
 		// // ----- RENDER ----- // //
 		void render();
+	private:
+		void clear_screen();
+		void render_shadow_maps();
+		void render_geometry();
 
 		// // ----- GENERAL METHODS ----- // //
+	public:
 		bool poll_events();
 		void update(Window * window, Timer* timer);
 	private:
 		void init_settings();
 		void init_first_frame();
-		void init_hdr();
-		void init_backbuffer_color(Texture& backbuffer);
-		void init_backbuffer_depth(Texture& backbuffer);
+		void init_backbuffers();
+		void init_color_backbuffer(Texture& backbuffer);
+		void init_depth_backbuffer(Texture& backbuffer);
 		void init_color_attachments();
 
 		// // ----- SETTERS ----- // //

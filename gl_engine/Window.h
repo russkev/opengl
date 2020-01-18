@@ -1,6 +1,6 @@
 #ifndef GL_ENGINE_WINDOW_H
 #define GL_ENGINE_WINDOW_H
-//#define DEBUG
+#define DEBUG
 
 #include <cstdlib>
 #include <vector>
