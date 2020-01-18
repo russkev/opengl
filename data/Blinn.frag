@@ -100,7 +100,6 @@ struct Camera
 uniform Camera camera;
 
 // // ----- OUTS ----- // //
-//out vec4 frag_color;
 out layout(location = 0) vec4 frag_color;
 
 // // ----- LOCAL FRAGMENT DIRECTIONS ----- // //
@@ -198,18 +197,12 @@ ParallaxUVs init_parallax_uv_values(Layers);
 float find_current_depth_layer(inout Layers, inout ParallaxUVs);
 vec2 interpolate_depth(float, Layers, ParallaxUVs);
 
-void init_world_space();
-void init_world_space_cam();
-void init_world_space_lights();
-void init_world_space_normals();
-
 void init()
 {
 	init_tangent_space_cam();
 	init_tangent_space_lights();
 	init_uv();
 	init_tangent_space_normals();
-	init_world_space();
 }
 
 void init_tangent_space_cam()
@@ -250,10 +243,6 @@ void init_uv()
 	uv = flat_uv;
 	if (material.displacement_enabled == true)
 	{
-//		uv = vec2(texture(material.diffuse, uv).r, 1.0);
-//		uv = vec2(texture(material.displacement, uv).r, 1.0);
-//		uv = vec2(material.displacement_amount);
-//		uv = vec2(1.0);
 		calculate_displaced_uv();
 	}
 }
@@ -309,41 +298,7 @@ vec2 interpolate_depth(float current_depth_map_value, Layers layers, ParallaxUVs
 
 	float weight = current_depth / (current_depth - prev_depth);
 	return uvs.prev * weight + uvs.current * (1.0 - weight);
-}
-	
-	
-
-void init_world_space()
-{
-	init_world_space_cam();
-	init_world_space_lights();
-	init_world_space_normals();
-}
-
-void init_world_space_cam()
-{
-	m_cam.world_space_direction = normalize(camera.position - in_frag.world_space_position);
-}
-
-void init_world_space_lights()
-{
-	for (int i = 0; i < NUM_LIGHTS; i++)
-	{
-		m_pointLight[i].world_space_direction = normalize(pointLight[i].position - in_frag.world_space_position);
-		m_spotLight[i].world_space_direction = normalize(spotLight[i].position - in_frag.world_space_position);
-		m_spotLight[i].world_space_intensity = spot_intensity(
-			in_frag.world_space_position,
-			spotLight[i].position, 
-			spotLight[i].direction, 
-			spotLight[i].inner, 
-			spotLight[i].outer);
-	}
-}
-
-void init_world_space_normals()
-{
-	m_frag.world_space_normal = normalize(in_frag.world_space_normal);
-}
+}	
 	
 
 // // ----- DIFFUSE LIGHTING ----- // //
@@ -353,25 +308,11 @@ vec3 diffuse(vec3 normal, vec3 light)
 	return vec3(cos_theta);
 }
 
-vec3 diffuse_point_world_space(int index)
-{
-	return diffuse(
-		m_frag.world_space_normal,
-		m_pointLight[index].world_space_direction);
-}
-
 vec3 diffuse_point_tangent_space(int index)
 {
 	return diffuse(
 		m_frag.tangent_space_normal, 
 		m_pointLight[index].tangent_space_direction);
-}
-
-vec3 diffuse_directional_world_space(int index)
-{
-	return diffuse(
-		m_frag.world_space_normal,
-		-directionalLight[index].direction);
 }
 
 vec3 diffuse_directional_tangent_space(int index)
@@ -380,14 +321,6 @@ vec3 diffuse_directional_tangent_space(int index)
 		m_frag.tangent_space_normal,
 		m_directionalLight[index].tangent_space_direction);
 
-}
-
-vec3 diffuse_spot_world_space(int index)
-{
-	return m_spotLight[index].world_space_direction * 
-	diffuse(
-		m_frag.world_space_normal,
-		m_spotLight[index].world_space_direction);
 }
 
 vec3 diffuse_spot_tangent_space(int index)
@@ -416,14 +349,6 @@ vec3 specular(vec3 light_direction, vec3 normal_direction, vec3 cam_direction)
 	return blinn_phong(light_direction, normal_direction, cam_direction);
 }
 
-vec3 specular_point_world_space(int index)
-{
-	return specular(
-		m_pointLight[index].world_space_direction, 
-		m_frag.world_space_normal, 
-		m_cam.world_space_direction);
-}
-
 vec3 specular_point_tangent_space(int index)
 {
 	return specular(
@@ -432,29 +357,12 @@ vec3 specular_point_tangent_space(int index)
 		m_cam.tangent_space_direction);
 }
 
-vec3 specular_directional_world_space(int index)
-{
-	return specular(
-		-directionalLight[index].direction,
-		m_frag.world_space_normal,
-		m_cam.world_space_direction);
-}
-
 vec3 specular_directional_tangent_space(int index)
 {
 	return specular(
 		m_directionalLight[index].tangent_space_direction,
 		m_frag.tangent_space_normal,
 		m_cam.tangent_space_direction);
-}
-
-vec3 specular_spot_world_space(int index)
-{
-	return m_spotLight[index].world_space_direction * 
-	specular(
-		m_spotLight[index].world_space_direction,
-		m_frag.world_space_normal,
-		m_cam.world_space_direction);
 }
 
 vec3 specular_spot_tangent_space(int index)
@@ -528,10 +436,7 @@ float create_point_shadow(vec3 light_pos, float light_far_plane, samplerCube dep
 	}
 	out_shadow /= float(samples);
 
-
 	return out_shadow;
-
-//	return current_depth - bias > closest_depth ? 0.0 : 1.0;
 }
 
 
