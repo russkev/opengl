@@ -206,6 +206,10 @@ namespace gl_engine
 		glBindTexture(m_target, 0);
 	}
 
+	bool Texture::is_framebuffer()
+	{
+		return m_data == NULL;
+	}
 
 	// // ----- FACTORY ----- // //
 	Texture Texture::create_color_backbuffer(const GLenum target, const glm::uvec2* dimensions)
@@ -300,6 +304,11 @@ namespace gl_engine
 	}
 
 	// // ----- SETTERS ----- // //
+	void Texture::set_id(GLuint id)
+	{
+		m_id = id;
+	}
+
 	void Texture::set_target(const GLenum target)
 	{
 		m_target = target;

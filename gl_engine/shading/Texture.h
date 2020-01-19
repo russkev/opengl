@@ -35,6 +35,7 @@ namespace gl_engine
 		void bind();
 		void bind(GLuint texture_unit);
 		void unbind();
+		bool is_framebuffer();
 	private:
 		void process_uniform_2d();
 		void process_uniform_2d_array();
@@ -57,6 +58,7 @@ namespace gl_engine
 		void* data();
 
 		// // ----- SETTERS ----- // //
+		void set_id(const GLuint id);
 		void set_target(const GLenum target);
 		void set_width(const GLsizei width);
 		void set_height(const GLsizei height);
