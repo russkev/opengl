@@ -41,6 +41,13 @@ namespace gl_engine
 		void process_cube_map();
 		void flip_surface();
 
+		// // ----- FACTORY ----- // //
+	public:
+		static Texture create_color_backbuffer(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_depth_backbuffer(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_depth_shadow(const GLenum target, const glm::uvec2* dimensions);
+
+
 		// // ----- GETTERS ----- // //
 	public:
 		GLsizei width();
@@ -48,7 +55,6 @@ namespace gl_engine
 		const GLuint id() const;
 		bool has_alpha();
 		void* data();
-
 
 		// // ----- SETTERS ----- // //
 		void set_target(const GLenum target);

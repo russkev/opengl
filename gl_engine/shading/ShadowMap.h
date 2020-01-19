@@ -57,7 +57,6 @@ namespace gl_engine
 		void init_camera();
 		void init_directional_shadowMap();
 		void init_point_shadowMap();
-		void init_texture();
 
 		// // ----- UPDATE ----- // //
 	public:

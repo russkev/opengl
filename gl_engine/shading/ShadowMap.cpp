@@ -78,9 +78,7 @@ namespace gl_engine
 
 	void ShadowMap::init_directional_shadowMap()
 	{
-		m_texture = Texture{ GL_TEXTURE_2D_ARRAY };
-
-		init_texture();
+		m_texture = Texture::create_depth_shadow(GL_TEXTURE_2D_ARRAY, &glm::uvec2(SHADOW_WIDTH, SHADOW_HEIGHT));
 
 		m_texture.bind();
 		m_framebuffer.bind();
@@ -99,10 +97,7 @@ namespace gl_engine
 
 	void ShadowMap::init_point_shadowMap()
 	{
-		//m_texture = Texture{ GL_TEXTURE_2D_ARRAY };
-		m_texture = Texture{ GL_TEXTURE_CUBE_MAP };
-
-		init_texture();
+		m_texture = Texture::create_depth_shadow(GL_TEXTURE_CUBE_MAP, &glm::uvec2(SHADOW_WIDTH, SHADOW_HEIGHT));
 
 		m_texture.bind();
 		m_framebuffer.bind();
@@ -116,21 +111,6 @@ namespace gl_engine
 		// Create depth shader
 		m_depth_material = Material(DEPTH_MAP_NAME, CUBE_MAP_VERT, CUBE_MAP_GEOM, CUBE_MAP_FRAG);
 		m_texture.unbind();
-	}
-
-	void ShadowMap::init_texture()
-	{
-		m_texture.set_width(SHADOW_WIDTH);
-		m_texture.set_height(SHADOW_HEIGHT);
-		m_texture.set_internal_format(GL_DEPTH_COMPONENT);
-		m_texture.set_format(GL_DEPTH_COMPONENT);
-		m_texture.set_type(GL_FLOAT);
-		m_texture.set_min_filter(GL_NEAREST);
-		m_texture.set_mag_filter(GL_NEAREST);
-		m_texture.set_mipmap(true);
-		m_texture.set_st_wrap(GL_CLAMP_TO_BORDER);
-
-		m_texture.process();
 	}
 
 	// // ----- UPDATE ----- // //

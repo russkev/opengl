@@ -3,7 +3,7 @@
 #include <vector>
 #include <GL/glew.h>
 
-#include "Window.h"
+#include "render/Window.h"
 
 #include "node/Node.h"
 #include "node/MeshNode.h"
@@ -153,8 +153,8 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	floor_material.set_texture("material.diffuse", &grey_grid_tex);
 	floor_material.set_texture("material.normal", &normal_up);
 	floor_material.set_uniform("material.displacement_enabled", false);
-	////floor_material.set_texture("material.displacement", &brick_displacement)
-	//floor_material.set_uniform("material.displacement_amount", 0.0f);
+	floor_material.set_sampler_value("material.displacement", 0.0f);
+	floor_material.set_uniform("material.displacement_amount", 0.0f);
 
 	// Texture 3
 	//gl_engine::Texture arrayTest_tex("uvtemplate.tga");

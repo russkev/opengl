@@ -21,6 +21,7 @@ namespace gl_engine
 		void bind();
 		void unbind();
 		bool check_bound_framebuffer();
+		void init_color_attachments(GLuint amount, GLuint offset);
 
 
 		// // ----- GETTERS ----- // //

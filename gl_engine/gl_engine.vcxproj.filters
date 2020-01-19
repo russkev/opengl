@@ -31,6 +31,12 @@
     <Filter Include="Render">
       <UniqueIdentifier>{8076be69-4ff2-47a8-aa7b-46d85333bbdb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Post">
+      <UniqueIdentifier>{a5d0c31f-ba77-4a78-a20b-838e2c2348e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{30102c56-1aca-4ec3-9313-d073f376b1f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mesh\Arrow.cpp">
@@ -69,16 +75,7 @@
     <ClCompile Include="camera\Camera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Buffer.cpp">
-      <Filter>Uncategorised</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Uncategorised</Filter>
-    </ClCompile>
-    <ClCompile Include="VAO.cpp">
-      <Filter>Uncategorised</Filter>
-    </ClCompile>
-    <ClCompile Include="Window.cpp">
       <Filter>Uncategorised</Filter>
     </ClCompile>
     <ClCompile Include="node\Node.cpp">
@@ -137,6 +134,24 @@
     </ClCompile>
     <ClCompile Include="mesh\WindowQuad.cpp">
       <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Window.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\Buffer.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\VAO.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="post\ToneMap.cpp">
+      <Filter>Post</Filter>
+    </ClCompile>
+    <ClCompile Include="post\DepthMap.cpp">
+      <Filter>Post</Filter>
+    </ClCompile>
+    <ClCompile Include="post\Bloom.cpp">
+      <Filter>Post</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -223,21 +238,6 @@
     <ClInclude Include="light\PointLight.h">
       <Filter>Light</Filter>
     </ClInclude>
-    <ClInclude Include="Buffer.h">
-      <Filter>Uncategorised</Filter>
-    </ClInclude>
-    <ClInclude Include="GL_Tuple_Introspect.h">
-      <Filter>Uncategorised</Filter>
-    </ClInclude>
-    <ClInclude Include="GL_Type_Traits.h">
-      <Filter>Uncategorised</Filter>
-    </ClInclude>
-    <ClInclude Include="VAO.h">
-      <Filter>Uncategorised</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Uncategorised</Filter>
-    </ClInclude>
     <ClInclude Include="node\Node.h">
       <Filter>Node</Filter>
     </ClInclude>
@@ -294,6 +294,33 @@
     </ClInclude>
     <ClInclude Include="mesh\WindowQuad.h">
       <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Window.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\Buffer.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\GL_Tuple_Introspect.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\GL_Type_Traits.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\VAO.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="post\PostEffect.h">
+      <Filter>Post</Filter>
+    </ClInclude>
+    <ClInclude Include="post\ToneMap.h">
+      <Filter>Post</Filter>
+    </ClInclude>
+    <ClInclude Include="post\DepthMap.h">
+      <Filter>Post</Filter>
+    </ClInclude>
+    <ClInclude Include="post\Bloom.h">
+      <Filter>Post</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

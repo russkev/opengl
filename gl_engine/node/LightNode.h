@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "Node.h"
-#include "../VAO.h"
+#include "../resources/VAO.h"
 #include "../shading/Shader.h"
 
 namespace gl_engine

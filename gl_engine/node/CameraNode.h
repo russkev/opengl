@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 
 #include "Node.h"
-#include "../Buffer.h"
+#include "../resources/Buffer.h"
 
 namespace gl_engine
 {

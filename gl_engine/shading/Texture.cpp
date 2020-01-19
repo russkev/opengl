@@ -206,6 +206,65 @@ namespace gl_engine
 		glBindTexture(m_target, 0);
 	}
 
+
+	// // ----- FACTORY ----- // //
+	Texture Texture::create_color_backbuffer(const GLenum target, const glm::uvec2* dimensions)
+	{
+		Texture texture{ target };
+		texture.set_width(dimensions->x);
+		texture.set_height(dimensions->y);
+		texture.set_internal_format(GL_RGBA16F);
+		texture.set_format(GL_RGBA);
+		texture.set_type(GL_FLOAT);
+		texture.set_data(NULL);
+		texture.set_mipmap(true);
+		texture.set_min_filter(GL_NEAREST);
+		texture.set_mag_filter(GL_NEAREST);
+		texture.set_st_wrap(GL_CLAMP_TO_EDGE);
+
+		texture.process();
+
+		return texture;
+	}
+
+	Texture Texture::create_depth_backbuffer(const GLenum target, const glm::uvec2* dimensions)
+	{
+		Texture texture{ target };
+		texture.set_internal_format(GL_DEPTH_COMPONENT);
+		texture.set_width(dimensions->x);
+		texture.set_height(dimensions->y);
+		texture.set_format(GL_DEPTH_COMPONENT);
+		texture.set_type(GL_FLOAT);
+		texture.set_data(NULL);
+		texture.set_mipmap(true);
+		texture.set_min_filter(GL_NEAREST);
+		texture.set_mag_filter(GL_NEAREST);
+		texture.set_st_wrap(GL_CLAMP_TO_EDGE);
+
+		texture.process();
+
+		return texture;
+	}
+
+	Texture Texture::create_depth_shadow(const GLenum target, const glm::uvec2* dimensions)
+	{
+		Texture texture{ target };
+		texture.set_width((GLsizei)dimensions->x);
+		texture.set_height((GLsizei)dimensions->y);
+		texture.set_internal_format(GL_DEPTH_COMPONENT);
+		texture.set_format(GL_DEPTH_COMPONENT);
+		texture.set_type(GL_FLOAT);
+		texture.set_min_filter(GL_NEAREST);
+		texture.set_mag_filter(GL_NEAREST);
+		texture.set_mipmap(true);
+		texture.set_st_wrap(GL_CLAMP_TO_BORDER);
+
+		texture.process();
+
+		return texture;
+	}
+
+
 	// // ----- GETTERS ----- // //
 	GLsizei Texture::width()
 	{

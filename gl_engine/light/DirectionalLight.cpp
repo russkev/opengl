@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "../mesh/Arrow.h"
-#include "../Buffer.h"
+#include "../resources/Buffer.h"
 #include "../camera/OrthoCamera.h"
 
 namespace gl_engine
