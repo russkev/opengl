@@ -20,20 +20,19 @@ namespace gl_engine
 			m_pingpong_fbos[i].check_bound_framebuffer();
 			m_pingpong_fbos[i].unbind();
 		}
+		m_material.set_texture("image", &m_pingpong_textures[0]);
+
 	}
 
 	// // ----- GENERAL METHODS ----- // //
 	void Bloom::draw()
 	{
 		m_material.set_uniform("is_horizontal", true);
-		glBindFramebuffer(GL_FRAMEBUFFER, m_pingpong_fbos[0].id());
 		glViewport(0, 0, 800, 600);
-		m_material.set_texture("image", m_tone_map->bright());
+
+		m_material.update_texture_id("image", m_tone_map->bright()->id());
 		m_mesh_node.draw();
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		m_mesh_node.draw();
-		//m_material.set_texture("image", m_tone_map->bright());
-		//gaussian_blur();
+
 	}
 
 	void Bloom::gaussian_blur()

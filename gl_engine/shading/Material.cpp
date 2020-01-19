@@ -16,18 +16,19 @@ namespace gl_engine
 	// // ----- GENERAL METHODS ----- // //
 	void Material::bind_textures()
 	{
-		//int texture_unit = 0;
 		for (const auto & texture_pair : m_textures)
 		{
-			std::string curr_locationName = texture_pair.first;
-			if (Shader::uniforms().find(curr_locationName) != Shader::uniforms().end())
-			{
-				Texture* curr_texture = texture_pair.second;
-				auto texture_unit = Shader::uniforms().at(curr_locationName).texture_unit;
+			bind_texture(texture_pair.first, texture_pair.second);
+		}
+	}
 
-				Shader::set_uniform(curr_locationName, texture_unit);
-				curr_texture->bind(texture_unit);
-			}
+	void Material::bind_texture(const std::string uniform_name, Texture* texture)
+	{
+		if (Shader::uniforms().find(uniform_name) != Shader::uniforms().end())
+		{
+			auto texture_unit = Shader::uniforms().at(uniform_name).texture_unit;
+			Shader::set_uniform(uniform_name, texture_unit);
+			texture->bind(texture_unit);
 		}
 	}
 
@@ -37,6 +38,14 @@ namespace gl_engine
 		{
 			texture_pair.second->unbind();
 		}
+	}
+
+	void Material::update_texture_id(std::string uniform_name, const GLuint id)
+	{
+		Texture* texture = m_textures[uniform_name];
+		Shader::use();
+		texture->set_id(id);
+		texture->bind();
 	}
 
 	// // ----- SETTERS ----- // //

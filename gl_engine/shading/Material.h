@@ -16,6 +16,7 @@ namespace gl_engine
 {
 	// // ----- FORWARD DECLERATIONS ----- // //
 	struct Texture;
+	struct Framebuffer;
 
 	/*
 
@@ -33,7 +34,11 @@ namespace gl_engine
 		// // ----- GENERAL METHODS ----- // //
 	public:
 		void bind_textures();
+	private:
+		void bind_texture(const std::string uniform_name, Texture* texture);
+	public:
 		void unbind_textures();
+		void update_texture_id(const std::string uniform_name, const GLuint id);
 
 		// // ----- SETTERS ----- // //
 	public:
