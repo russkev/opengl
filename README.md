@@ -1,4 +1,4 @@
-# opengl
+# gl_engine
 
 Working with OpenGL to create a functional realtime rendering engine.
 
