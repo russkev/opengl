@@ -7,7 +7,7 @@ in vec2 uv;
 // // ----- UNIFORMS ----- // //
 uniform sampler2D image;
 uniform bool is_horizontal;
-float weights[5] = float[]( 0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216 );
+float weights[5] = float[](0.2270270270, 0.1945945946, 0.1216216216, 0.0540540541, 0.0162162162);
 
 // // ----- OUTS ----- // //
 out layout (location = 0) vec4 out_color;
@@ -20,7 +20,7 @@ void main()
 	
 	if(is_horizontal)
 	{
-		for (int i = 0; i < 5; ++i)
+		for (int i = 1; i < 5; ++i)
 		{
 			vec2 right_uv = uv + vec2(texel_size.x * i, 0.0);
 			vec2 left_uv = uv - vec2(texel_size.x * i, 0.0);
@@ -33,7 +33,7 @@ void main()
 	}
 	else
 	{
-		for (int i = 0; i < 5; ++i)
+		for (int i = 1; i < 5; ++i)
 		{
 			vec2 up_uv = uv + vec2(0.0, texel_size.y * i);
 			vec2 down_uv = uv - vec2(0.0, texel_size.y * i);
@@ -45,4 +45,5 @@ void main()
 		}
 	}
 	out_color = vec4(frag_contribution, 1.0);
+//	out_color = vec4(texel_size, 0.0, 1.0);
 }

@@ -20,7 +20,9 @@ namespace gl_engine
 			m_pingpong_fbos[i].check_bound_framebuffer();
 			m_pingpong_fbos[i].unbind();
 		}
-		m_material.set_texture("image", &m_pingpong_textures[0]);
+
+		m_temp_texture = Texture::create_color_backbuffer(GL_TEXTURE_2D, dimensions);
+		m_material.set_texture("image", &m_temp_texture);
 
 	}
 
@@ -65,15 +67,28 @@ namespace gl_engine
 
 
 		bool horizontal = true, first_iteration = true;
-		int amount = 10;
+		GLuint amount = 10;
 		m_material.use();
 		for (GLuint i = 0; i < amount; ++i)
 		{
+			GLuint pingpong_index = (GLuint)horizontal;
+			GLuint texture_id = 0;
+			if (first_iteration)
+			{
+				texture_id = m_tone_map->beauty()->id();
+			}
+			else
+			{
+				texture_id = m_pingpong_textures[!horizontal].id();
+			}
+
 			glBindFramebuffer(GL_FRAMEBUFFER, m_pingpong_fbos[horizontal].id());
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 			m_material.set_uniform("is_horizontal", horizontal);
-			glBindTexture(
-				GL_TEXTURE_2D, first_iteration ? m_tone_map->bright()->id() : m_pingpong_textures[!horizontal].id()
-			);
+			//glBindTexture( GL_TEXTURE_2D, texture_id );
+			//m_pingpong_textures[0].set_id(texture_id);
+			m_material.update_texture_id("image", texture_id);
 			m_mesh_node.draw();
 			horizontal = !horizontal;
 			if (first_iteration)
