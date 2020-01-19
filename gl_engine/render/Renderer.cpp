@@ -26,7 +26,6 @@ namespace gl_engine
 	{
 		m_cameraNode->camera()->set_dimensions(dimensions);
 		init_settings();
-		init_backbuffers();
 	}
 
 	// // ----- RENDER ----- // //
@@ -57,6 +56,7 @@ namespace gl_engine
 		////glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		clear_screen();
 		m_bloom.draw();
+
 		//m_bloom_screen_node.draw();
 
 	}
@@ -156,31 +156,6 @@ namespace gl_engine
 				shadowMap->init_materials(m_materials);
 			}
 		}
-	}
-
-	void Renderer::init_backbuffers()
-	{
-		//m_backbuffer_FBO.init_color_attachments(2, 0);
-		//m_backbuffer_FBO.bind();
-
-		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_backbuffer_colorA.id(), 0);
-		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_backbuffer_colorB.id(), 0);
-		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_backbuffer_depth.id(), 0);
-
-		//m_backbuffer_FBO.check_bound_framebuffer();
-		//m_backbuffer_FBO.unbind();
-
-		//m_backbuffer_bloom_FBO.bind();
-		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_backbuffer_pingpong.id(), 0);
-
-		//m_backbuffer_bloom_FBO.check_bound_framebuffer();
-		//m_backbuffer_bloom_FBO.unbind();
-
-		////m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_colorA);
-		////m_hdr_material.set_uniform("exposure", 1.3f);
-
-		//m_bloom_material.set_texture("color", &m_backbuffer_colorA);
-		//m_bloom_material.set_texture("threshold", &m_backbuffer_colorB);
 	}
 
 	bool Renderer::poll_events()

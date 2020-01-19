@@ -202,6 +202,7 @@
     <None Include="..\data\DepthCube.frag" />
     <None Include="..\data\DepthCube.geom" />
     <None Include="..\data\DepthCube.vert" />
+    <None Include="..\data\GaussianBlur.frag" />
     <None Include="..\data\HDR.frag" />
     <None Include="..\data\Light.frag" />
     <None Include="..\data\Light.vert" />

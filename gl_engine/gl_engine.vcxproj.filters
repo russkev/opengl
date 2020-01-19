@@ -200,6 +200,9 @@
     <None Include="..\data\Text2D.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="..\data\GaussianBlur.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera\Camera.h">
