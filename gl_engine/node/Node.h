@@ -6,7 +6,7 @@
 
 #include <glm/glm.hpp>
 
-#include "../GL_Tuple_Introspect.h"
+#include "../resources/GL_Tuple_Introspect.h"
 
 namespace gl_engine
 {

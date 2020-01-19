@@ -10,10 +10,10 @@
 #include "Texture.h"
 #include "LoadShader.h"
 
-#include "../Buffer.h"
-#include "../VAO.h"
-#include "../GL_Type_Traits.h"
-#include "../GL_Tuple_Introspect.h"
+#include "../resources/Buffer.h"
+#include "../resources/VAO.h"
+#include "../resources/GL_Type_Traits.h"
+#include "../resources/GL_Tuple_Introspect.h"
 
 namespace gl_engine
 {

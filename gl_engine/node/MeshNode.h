@@ -4,8 +4,8 @@
 #include <glm/glm.hpp>
 
 #include "Node.h"
-#include "../Buffer.h"
-#include "../VAO.h"
+#include "../resources/Buffer.h"
+#include "../resources/VAO.h"
 
 namespace gl_engine
 {

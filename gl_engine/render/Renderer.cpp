@@ -3,7 +3,7 @@
 #include "Renderer.h"
 
 #include "../utils/Timer.h"
-#include "../Window.h"
+#include "../render/Window.h"
 #include "../node/Node.h"
 #include "../node/MeshNode.h"
 #include "../node/CameraNode.h"
@@ -49,13 +49,15 @@ namespace gl_engine
 		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		clear_screen();
 		m_backbuffer_FBO.bind();
-		m_hdr_screen_node.draw();
+		m_tone_map.draw();
+		//m_hdr_screen_node.draw();
 		m_backbuffer_FBO.unbind();
 
-		//// Bloom render
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		////// Bloom render
+		////glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		clear_screen();
-		m_bloom_screen_node.draw();
+		m_bloom.draw();
+		//m_bloom_screen_node.draw();
 
 	}
 
@@ -158,69 +160,27 @@ namespace gl_engine
 
 	void Renderer::init_backbuffers()
 	{
-		init_color_backbuffer(m_backbuffer_colorA);
-		init_color_backbuffer(m_backbuffer_colorB);
-		init_depth_backbuffer(m_backbuffer_depth);
+		//m_backbuffer_FBO.init_color_attachments(2, 0);
+		//m_backbuffer_FBO.bind();
 
+		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_backbuffer_colorA.id(), 0);
+		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_backbuffer_colorB.id(), 0);
+		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_backbuffer_depth.id(), 0);
 
-		m_backbuffer_FBO.bind();
-		init_color_attachments();
+		//m_backbuffer_FBO.check_bound_framebuffer();
+		//m_backbuffer_FBO.unbind();
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_backbuffer_colorA.id(), 0);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_backbuffer_colorB.id(), 0);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_backbuffer_depth.id(), 0);
+		//m_backbuffer_bloom_FBO.bind();
+		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_backbuffer_pingpong.id(), 0);
 
-		m_backbuffer_FBO.check_bound_framebuffer();
-		m_backbuffer_FBO.unbind();
+		//m_backbuffer_bloom_FBO.check_bound_framebuffer();
+		//m_backbuffer_bloom_FBO.unbind();
 
-		m_backbuffer_pingpong_FBO.bind();
-		init_color_backbuffer(m_backbuffer_pingpong);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_backbuffer_pingpong.id(), 0);
+		////m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_colorA);
+		////m_hdr_material.set_uniform("exposure", 1.3f);
 
-		m_backbuffer_pingpong_FBO.check_bound_framebuffer();
-		m_backbuffer_pingpong_FBO.unbind();
-
-		m_hdr_material.set_texture("hdr_buffer", &m_backbuffer_colorA);
-		m_hdr_material.set_uniform("exposure", 1.3f);
-
-		m_bloom_material.set_texture("color", &m_backbuffer_colorA);
-		m_bloom_material.set_texture("threshold", &m_backbuffer_colorB);
-	}
-
-	void Renderer::init_color_backbuffer(Texture& backbuffer)
-	{
-		backbuffer.set_internal_format(GL_RGBA16F);
-		backbuffer.set_width(m_dimensions.x);
-		backbuffer.set_height(m_dimensions.y);
-		backbuffer.set_format(GL_RGBA);
-		backbuffer.set_type(GL_FLOAT);
-		backbuffer.set_data(NULL);
-		backbuffer.set_mipmap(true);
-		backbuffer.set_min_filter(GL_NEAREST);
-		backbuffer.set_mag_filter(GL_NEAREST);
-		backbuffer.set_st_wrap(GL_CLAMP_TO_EDGE);
-		backbuffer.process();
-	}
-
-	void Renderer::init_depth_backbuffer(Texture& backbuffer)
-	{
-		backbuffer.set_internal_format(GL_DEPTH_COMPONENT);
-		backbuffer.set_width(m_dimensions.x);
-		backbuffer.set_height(m_dimensions.y);
-		backbuffer.set_format(GL_DEPTH_COMPONENT);
-		backbuffer.set_type(GL_FLOAT);
-		backbuffer.set_data(NULL);
-		backbuffer.set_mipmap(true);
-		backbuffer.set_min_filter(GL_NEAREST);
-		backbuffer.set_mag_filter(GL_NEAREST);
-		backbuffer.set_st_wrap(GL_CLAMP_TO_EDGE);
-		backbuffer.process();
-	}
-
-	void Renderer::init_color_attachments()
-	{
-		std::vector<GLuint> attachments{ GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT0 + 1 };
-		glDrawBuffers(2, attachments.data());
+		//m_bloom_material.set_texture("color", &m_backbuffer_colorA);
+		//m_bloom_material.set_texture("threshold", &m_backbuffer_colorB);
 	}
 
 	bool Renderer::poll_events()

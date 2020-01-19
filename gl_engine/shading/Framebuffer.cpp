@@ -1,6 +1,7 @@
 #include "FrameBuffer.h"
 
 #include <stdio.h>
+#include <vector>
 
 #include "Texture.h"
 
@@ -90,6 +91,17 @@ namespace gl_engine
 		return true;
 	}
 
+	void Framebuffer::init_color_attachments(GLuint amount, GLuint offset)
+	{
+		bind();
+		std::vector<GLenum> attachments;
+		for (GLuint i = 0; i < amount; ++i)
+		{
+			attachments.push_back(GL_COLOR_ATTACHMENT0 + offset + i);
+		}
+		glDrawBuffers(amount, attachments.data());
+		unbind();
+	}
 
 	// // ----- GETTERS ----- // //
 	GLuint Framebuffer::id()
