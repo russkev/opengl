@@ -11,16 +11,26 @@ C++ for main program and GLSL for shaders.
 SDL for window display.
 
 Current features:
- - Timer for animation
- - Maya-like controls for camera
- - Creation and display of various 3D primitives
- - Lighting:
-    - Diffuse
-    - Specular
-- Textures
-    - BMP load
-    - TGA load
-    - Diffuse
-- Text display in window
-- Models
-    - OBJ Loader
+ - Cameras
+    - Target camera for orbiting
+    - Free camera
+    - Orthogonal camera
+ - Lights
+    - Directional
+    - Point
+    - Spot
+ - Meshes
+    - Various primitive shapes
+    - Custom OBJ loader
+ - Shading
+    - Blinn master shader
+    - Self illuminated shader
+    - Shadow mapping for all light types
+    - Handles multiple lights and shadows
+    - Image loading for textures
+    - 2D Text overlay
+ - Post effects
+    - HDR Tone mapping
+    
+Big thank you to:
+  - [Aleksandras Ševčenko](https://github.com/Coldberg)
