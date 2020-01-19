@@ -3,12 +3,14 @@
 
 #include "PostEffect.h"
 
-#include "ToneMap.h"
+#include "../shading/Framebuffer.h"
 #include "../shading/Material.h"
 #include "../node/MeshNode.h"
 
 namespace gl_engine
 {
+	// // ----- FORWARD DECLERATION ----- // //
+	struct ToneMap;
 
 	/*
 
@@ -17,15 +19,26 @@ namespace gl_engine
 	*/
 	struct Bloom : public PostEffect
 	{
+		// // ----- CONSTANTS ----- // //
+		static constexpr GLuint DIRECTIONS = 2;
+		static constexpr GLuint PASSES = 10;
+
 		// // ----- CONSTRUCTOR ----- // //
 		Bloom(Framebuffer* backbuffer, const glm::uvec2* dimensions, ToneMap* tone_map);
 
 		// // ----- GENERAL METHODS ----- // //
 		void draw() override;
+	private:
+		void gaussian_blur();
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		Material m_material{ "Bloom Shader", "screenPassthrough.vert", "Bloom.frag" };
+		ToneMap* m_tone_map;
+
+		Framebuffer m_pingpong_fbos[DIRECTIONS];
+		Texture m_pingpong_textures[DIRECTIONS];
+
+		Material m_material{ "Bloom Shader", "ScreenPassthrough.vert", "GaussianBlur.frag" };
 		MeshNode m_mesh_node{ "Bloom Screen Node", PostEffect::mesh(), &m_material };
 	};
 }

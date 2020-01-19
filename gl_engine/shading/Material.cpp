@@ -47,11 +47,6 @@ namespace gl_engine
 		set_texture(uniform_name, &m_colors.back());
 	}
 
-	//void Material::set_sampler_color(const std::string& uniform_name, glm::vec3& color)
-	//{
-	//	set_sampler_color(uniform_name, glm::vec4(color.r, color.g, color.b, 1.0f));
-	//}
-
 	void Material::set_sampler_value(const std::string& uniform_name, GLfloat value)
 	{
 		set_sampler_color(uniform_name, glm::vec3(value));
@@ -59,7 +54,6 @@ namespace gl_engine
 
 	void Material::set_texture(const std::string& uniform_name, Texture* texture)
 	{
-
 		if (Shader::uniforms().find(uniform_name) == Shader::uniforms().end())
 		{
 			if (m_failed_uniforms.find(uniform_name) == m_failed_uniforms.end())

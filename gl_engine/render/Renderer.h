@@ -53,7 +53,6 @@ namespace gl_engine
 	private:
 		void init_settings();
 		void init_first_frame();
-		void init_backbuffers();
 
 		// // ----- SETTERS ----- // //
 	public:
