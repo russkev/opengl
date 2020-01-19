@@ -37,8 +37,9 @@ namespace gl_engine
 
 		Framebuffer m_pingpong_fbos[DIRECTIONS];
 		Texture m_pingpong_textures[DIRECTIONS];
+		Texture m_temp_texture;
 
-		Material m_material{ "Bloom Shader", "ScreenPassthrough.vert", "GaussianBlur.frag" };
+		Material m_material{ "Gaussian Blur Shader", "ScreenPassthrough.vert", "GaussianBlur.frag" };
 		MeshNode m_mesh_node{ "Bloom Screen Node", PostEffect::mesh(), &m_material };
 	};
 }
