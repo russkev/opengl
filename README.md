@@ -33,4 +33,6 @@ Current features:
     - HDR Tone mapping
     
 Big thank you to:
-  - [Aleksandras Ševčenko](https://github.com/Coldberg)
+  - [Aleksandras Ševčenko](https://github.com/Coldberg) for being an excellent guide while I've been fumbling around.
+  - [Joey Devries](https://joeydevries.com/#home) for his excellent tutorials and his example game engine here on github.
+  - [OpenGL Tutorial](http://www.opengl-tutorial.org/). Another excellent resource.
