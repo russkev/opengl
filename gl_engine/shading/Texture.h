@@ -58,7 +58,7 @@ namespace gl_engine
 		void* data();
 
 		// // ----- SETTERS ----- // //
-		void set_id(const GLuint id);
+		void set_new_id(const GLuint id);
 		void set_target(const GLenum target);
 		void set_width(const GLsizei width);
 		void set_height(const GLsizei height);

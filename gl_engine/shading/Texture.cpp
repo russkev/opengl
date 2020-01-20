@@ -304,9 +304,10 @@ namespace gl_engine
 	}
 
 	// // ----- SETTERS ----- // //
-	void Texture::set_id(GLuint id)
+	void Texture::set_new_id(GLuint id)
 	{
 		m_id = id;
+		bind();
 	}
 
 	void Texture::set_target(const GLenum target)

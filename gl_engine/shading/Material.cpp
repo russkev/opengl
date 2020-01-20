@@ -43,8 +43,8 @@ namespace gl_engine
 	void Material::update_texture_id(std::string uniform_name, const GLuint id)
 	{
 		Texture* texture = m_textures[uniform_name];
-		Shader::use();
-		texture->set_id(id);
+		//Shader::use();
+		texture->set_new_id(id);
 		texture->bind();
 	}
 

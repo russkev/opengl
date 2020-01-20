@@ -5,7 +5,7 @@
 in vec2 uv;
 
 // // ----- UNIFORMS ----- // //
-uniform sampler2D hdr_buffer;
+uniform sampler2D hdr_image;
 uniform bool is_hdr;
 uniform float exposure;
 
@@ -39,8 +39,7 @@ vec3 threshold_color(vec3 color, float threshold)
 {
 	if (rgb_to_luminance(color) > threshold)
 	{
-		return vec3(1.0);
-//		return color;
+		return color;
 	}
 	else
 	{
@@ -54,7 +53,7 @@ void main()
 {
 	const float inverted_gamma = 1 / 2.2;
 
-	vec3 raw_color = texture(hdr_buffer, uv).rgb;
+	vec3 raw_color = texture(hdr_image, uv).rgb;
 
 	vec3 gamma_corrected_color = gamma(raw_color, inverted_gamma);
 
@@ -62,7 +61,7 @@ void main()
 
 
 	frag_color = vec4(tonemapped_color, 1.0);
-	bright_color = vec4(threshold_color(raw_color, 1.0), 1.0);
+	bright_color = vec4(threshold_color(gamma_corrected_color, 1.0), 1.0);
 //	frag_color = vec4(0.1, 0.8, 0.2, 1.0)  + vec4(tonemapped_color, 1.0) * 0.01;
 //	bright_color = vec4(0.9, 0.1, 0.2, 1.0);
 

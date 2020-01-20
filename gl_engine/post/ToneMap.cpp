@@ -19,7 +19,7 @@ namespace gl_engine
 		PostEffect::backbuffer_fbo()->check_bound_framebuffer();
 		PostEffect::backbuffer_fbo()->unbind();
 
-		m_material.set_texture("hdr_buffer", &m_beauty);
+		m_material.set_texture("hdr_image", &m_beauty);
 		m_material.set_uniform("exposure", 1.0f);
 	}
 
