@@ -30,6 +30,7 @@ namespace gl_engine
 		void draw() override;
 	private:
 		void gaussian_blur();
+		void combine_blur();
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
@@ -37,10 +38,12 @@ namespace gl_engine
 
 		Framebuffer m_pingpong_fbos[DIRECTIONS];
 		Texture m_pingpong_textures[DIRECTIONS];
-		Texture m_temp_texture;
+		Texture m_blur_texture;
 
-		Material m_material{ "Gaussian Blur Shader", "ScreenPassthrough.vert", "GaussianBlur.frag" };
-		MeshNode m_mesh_node{ "Bloom Screen Node", PostEffect::mesh(), &m_material };
+		Material m_blur_material{ "Gaussian Blur Shader", "ScreenPassthrough.vert", "GaussianBlur.frag" };
+		Material m_bloom_material{ "Bloom Shader", "ScreenPassthrough.vert", "Bloom.frag" };
+		MeshNode m_blur_node{ "Blur Screen Node", PostEffect::mesh(), &m_blur_material };
+		MeshNode m_bloom_node{ "Bloom Screen Node", PostEffect::mesh(), &m_bloom_material };
 	};
 }
 

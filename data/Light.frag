@@ -16,5 +16,5 @@ uniform Light light = { vec3(0.0), 10.0, vec3(1.0) };
 // // ----- MAIN ----- // //
 void main ()
 {
-	frag_color = vec4(light.brightness * light.color, 1.0);
+	frag_color = vec4(light.brightness * light.brightness * light.color, 1.0);
 }

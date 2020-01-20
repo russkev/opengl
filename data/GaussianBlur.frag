@@ -45,5 +45,4 @@ void main()
 		}
 	}
 	out_color = vec4(frag_contribution, 1.0);
-//	out_color = vec4(texel_size, 0.0, 1.0);
 }

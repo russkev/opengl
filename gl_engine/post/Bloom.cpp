@@ -21,82 +21,42 @@ namespace gl_engine
 			m_pingpong_fbos[i].unbind();
 		}
 
-		m_temp_texture = Texture::create_color_backbuffer(GL_TEXTURE_2D, dimensions);
-		m_material.set_texture("image", &m_temp_texture);
-
+		m_blur_texture = Texture::create_color_backbuffer(GL_TEXTURE_2D, dimensions);
+		//m_blur_material.set_texture("image", m_tone_map->bright());
+		m_blur_material.set_texture("image", &m_blur_texture);
+		m_bloom_material.set_texture("color", m_tone_map->beauty());
+		m_bloom_material.set_texture("bright", &m_blur_texture);
 	}
 
 	// // ----- GENERAL METHODS ----- // //
 	void Bloom::draw()
 	{
-		//m_material.set_uniform("is_horizontal", true);
-		//glViewport(0, 0, 800, 600);
-
-		//m_material.update_texture_id("image", m_tone_map->bright()->id());
-		//m_mesh_node.draw();
 		gaussian_blur();
 	}
 
 	void Bloom::gaussian_blur()
 	{
-		//bool is_horizontal = true, first_iteration = true;
-		//GLuint current_texture_id = m_tone_map->bright()->id();
-		////GLuint texture_id = bright_id;
+		bool horizontal = true;
+		GLuint amount = 20;
+		GLuint texture_id = m_tone_map->bright()->id();
 
-		////m_material.use();
-		//for (int i = 0; i < PASSES; ++i)
-		//{
-		//	m_pingpong_fbos[is_horizontal].bind();
-		//	m_material.set_uniform("is_horizontal", is_horizontal);
-		//	m_material.update_texture_id("image", current_texture_id);
-		//	m_mesh_node.draw();
-		////	glBindTexture(GL_TEXTURE_2D, texture_id);
-		////	m_material.set_texture("image", )
-		////	m_mesh_node.draw();
-		//	current_texture_id = (GLuint)is_horizontal;
-		//	is_horizontal = !is_horizontal;
-
-		////	//if (first_iteration)
-		////	//{
-		////	//	first_iteration = false;
-		////	//}
-		//}
-		//m_pingpong_fbos[0].unbind();
-		//m_mesh_node.draw();
-
-
-
-		bool horizontal = true, first_iteration = true;
-		GLuint amount = 10;
-		m_material.use();
+		m_blur_material.use();
 		for (GLuint i = 0; i < amount; ++i)
 		{
-			GLuint pingpong_index = (GLuint)horizontal;
-			GLuint texture_id = 0;
-			if (first_iteration)
-			{
-				texture_id = m_tone_map->beauty()->id();
-			}
-			else
-			{
-				texture_id = m_pingpong_textures[!horizontal].id();
-			}
-
-			glBindFramebuffer(GL_FRAMEBUFFER, m_pingpong_fbos[horizontal].id());
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-			m_material.set_uniform("is_horizontal", horizontal);
-			//glBindTexture( GL_TEXTURE_2D, texture_id );
-			//m_pingpong_textures[0].set_id(texture_id);
-			m_material.update_texture_id("image", texture_id);
-			m_mesh_node.draw();
+			m_pingpong_fbos[horizontal].bind();
+			m_blur_material.set_uniform("is_horizontal", horizontal);
+			m_blur_texture.set_new_id(texture_id);
+			m_blur_node.draw();
+			texture_id = m_pingpong_textures[horizontal].id();
 			horizontal = !horizontal;
-			if (first_iteration)
-			{
-				first_iteration = false;
-			}
 		}
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		m_mesh_node.draw();
+		m_pingpong_fbos[horizontal].unbind();
+
+		combine_blur();
+	}
+
+	void Bloom::combine_blur()
+	{
+		m_bloom_node.draw();
 	}
 }
