@@ -285,6 +285,11 @@ namespace gl_engine
 		return m_id;
 	}
 
+	const GLenum Texture::target() const
+	{
+		return m_target;
+	}
+
 	bool Texture::has_alpha()
 	{
 		if (m_surface)

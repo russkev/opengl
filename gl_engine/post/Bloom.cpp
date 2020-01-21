@@ -22,7 +22,6 @@ namespace gl_engine
 		}
 
 		m_blur_texture = Texture::create_color_backbuffer(GL_TEXTURE_2D, dimensions);
-		//m_blur_material.set_texture("image", m_tone_map->bright());
 		m_blur_material.set_texture("image", &m_blur_texture);
 		m_bloom_material.set_texture("color", m_tone_map->beauty());
 		m_bloom_material.set_texture("bright", &m_blur_texture);
@@ -32,6 +31,7 @@ namespace gl_engine
 	void Bloom::draw()
 	{
 		gaussian_blur();
+		m_bloom_node.draw();
 	}
 
 	void Bloom::gaussian_blur()
@@ -51,12 +51,5 @@ namespace gl_engine
 			horizontal = !horizontal;
 		}
 		m_pingpong_fbos[horizontal].unbind();
-
-		combine_blur();
-	}
-
-	void Bloom::combine_blur()
-	{
-		m_bloom_node.draw();
 	}
 }
