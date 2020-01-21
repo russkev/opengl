@@ -94,14 +94,37 @@ namespace gl_engine
 	void Framebuffer::init_color_attachments(GLuint amount, GLuint offset)
 	{
 		bind();
+		init_color_attachments_for_bound_framebuffer(amount, offset);
+		unbind();
+	}
+
+	void Framebuffer::init_color_attachments_for_bound_framebuffer(GLuint amount, GLuint offset)
+	{
 		std::vector<GLenum> attachments;
 		for (GLuint i = 0; i < amount; ++i)
 		{
 			attachments.push_back(GL_COLOR_ATTACHMENT0 + offset + i);
 		}
 		glDrawBuffers(amount, attachments.data());
-		unbind();
 	}
+
+	void Framebuffer::add_color_buffer_textures(const std::vector<Texture*> textures)
+	{
+		bind();
+		GLuint offset = m_num_color_buffers;
+		init_color_attachments_for_bound_framebuffer((GLuint)textures.size(), offset);
+		m_num_color_buffers += (GLuint)textures.size();
+
+		for (int i = 0; i < textures.size(); ++i)
+		{
+			glFramebufferTexture2D(m_target, GL_COLOR_ATTACHMENT0 + offset + i, textures.at(i)->target(), textures.at(i)->id(), 0);
+		}
+
+		check_bound_framebuffer();
+		unbind();
+
+	}
+
 
 	// // ----- GETTERS ----- // //
 	GLuint Framebuffer::id()

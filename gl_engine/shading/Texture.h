@@ -54,6 +54,7 @@ namespace gl_engine
 		GLsizei width();
 		GLsizei height();
 		const GLuint id() const;
+		const GLenum target() const;
 		bool has_alpha();
 		void* data();
 

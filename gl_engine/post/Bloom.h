@@ -30,10 +30,10 @@ namespace gl_engine
 		void draw() override;
 	private:
 		void gaussian_blur();
-		void combine_blur();
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
+		// !!! Tonemapping should really be done after the glow effect
 		ToneMap* m_tone_map;
 
 		Framebuffer m_pingpong_fbos[DIRECTIONS];
