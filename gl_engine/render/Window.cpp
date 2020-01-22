@@ -105,7 +105,7 @@ namespace gl_engine
 	{
 		std::string concat_title_str = (m_name + " | " + str);
 		char concat_title_char[256];
-		strncpy(concat_title_char, concat_title_str.c_str(), sizeof(concat_title_char));
+		strncpy_s(concat_title_char, concat_title_str.c_str(), sizeof(concat_title_char));
 
 		SDL_SetWindowTitle(m_st_window, concat_title_char);
 	}

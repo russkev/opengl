@@ -3,17 +3,17 @@
 #include <boost/test/unit_test.hpp>
 #include <windows.h> 
 #include <string>
-#include "../gl_engine/Timer.h"
-#include "../gl_engine/Timer.cpp"
+#include "../gl_engine/utils/Timer.h"
+#include "../gl_engine/utils/Timer.cpp"
 
 namespace tt = boost::test_tools;
 namespace utf = boost::unit_test;
 
-BOOST_AUTO_TEST_SUITE(timerTests)
+BOOST_AUTO_TEST_SUITE(Timer_tests)
 
 BOOST_AUTO_TEST_CASE(normalSecond, * utf::tolerance(0.01))
 {
-	Timer timer;
+	gl_engine::Timer timer;
 	Sleep(1000);
 	timer.update();
 	BOOST_TEST(timer.delta_time_ms() == 1000.0);
@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE(normalSecond, * utf::tolerance(0.01))
 
 BOOST_AUTO_TEST_CASE(nonNormalSpeed, * utf::tolerance(0.01))
 {
-	Timer timer(0.1);
+	gl_engine::Timer timer(0.1);
 	Sleep(1000);
 	timer.update();
 	BOOST_TEST(timer.delta_time_ms() == 100.0);
@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE(nonNormalSpeed, * utf::tolerance(0.01))
 
 BOOST_AUTO_TEST_CASE(totalTime, * utf::tolerance(0.01))
 {
-	Timer timer;
+	gl_engine::Timer timer;
 	Sleep(500);
 	timer.update();
 	Sleep(500);
@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(totalTime, * utf::tolerance(0.01))
 
 BOOST_AUTO_TEST_CASE(fps, *utf::tolerance(0.01))
 {
-	Timer timer;
+	gl_engine::Timer timer;
 	Sleep(100);
 	timer.update();
 	Sleep(100);

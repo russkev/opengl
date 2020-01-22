@@ -100,7 +100,13 @@ namespace gl_engine
 	{
 		glm::vec3 out_scale;
 
-		glm::decompose(m_local_transform, out_scale, glm::quat{}, glm::vec3{}, glm::vec3{}, glm::vec4{});
+		glm::quat temp_rotation;
+		glm::vec3 temp_translation;
+		glm::vec3 temp_skew;
+		glm::vec4 temp_perspective;
+		//!! Look into a faster way of doing this
+
+		glm::decompose(m_local_transform, out_scale, temp_rotation, temp_translation, temp_skew, temp_perspective);
 
 		return out_scale;
 	}

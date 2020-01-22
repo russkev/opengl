@@ -134,7 +134,8 @@ namespace gl_engine
 	{
 		if (loc != 0 && loc > num_color_textures())
 		{
-			printf("WARNING: Unable to set framebuffer texture, location %d is not available to set");
+			printf("WARNING: Unable to set framebuffer texture, location %d is not available to set", loc);
+			return;
 		}
 		bind();
 		attach_texture_to_bound_framebuffer(texture, GL_COLOR_ATTACHMENT0 + loc);
@@ -183,7 +184,7 @@ namespace gl_engine
 
 	GLuint Framebuffer::num_color_textures()
 	{
-		return m_color_textures.size();
+		return (GLuint)m_color_textures.size();
 	}
 
 	// // ----- SETTERS ----- // //
