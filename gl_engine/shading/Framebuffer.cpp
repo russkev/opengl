@@ -108,21 +108,70 @@ namespace gl_engine
 		glDrawBuffers(amount, attachments.data());
 	}
 
-	void Framebuffer::add_color_buffer_textures(const std::vector<Texture*> textures)
+	void Framebuffer::push_back_color_buffer_texture(const Texture* texture)
+	{
+		push_back_color_buffer_textures(std::vector<const Texture*>{ texture });
+	}
+
+	void Framebuffer::push_back_color_buffer_textures(const std::vector<const Texture*> textures)
 	{
 		bind();
-		GLuint offset = m_num_color_buffers;
-		init_color_attachments_for_bound_framebuffer((GLuint)textures.size(), offset);
-		m_num_color_buffers += (GLuint)textures.size();
+		GLuint offset = num_color_textures();
+		init_color_attachments_for_bound_framebuffer((GLuint)textures.size(), num_color_textures());
+		//num_color_textures() += (GLuint)textures.size();
 
 		for (int i = 0; i < textures.size(); ++i)
 		{
-			glFramebufferTexture2D(m_target, GL_COLOR_ATTACHMENT0 + offset + i, textures.at(i)->target(), textures.at(i)->id(), 0);
+			attach_texture_to_bound_framebuffer(textures.at(i), GL_COLOR_ATTACHMENT0 + offset);
+			m_color_textures.push_back(textures.at(i));
+			offset++;
 		}
-
 		check_bound_framebuffer();
 		unbind();
+	}
 
+	void Framebuffer::set_color_buffer_texture(const Texture* texture, const GLuint loc)
+	{
+		if (loc != 0 && loc > num_color_textures())
+		{
+			printf("WARNING: Unable to set framebuffer texture, location %d is not available to set");
+		}
+		bind();
+		attach_texture_to_bound_framebuffer(texture, GL_COLOR_ATTACHMENT0 + loc);
+		if (m_color_textures.size() == 0)
+		{
+			m_color_textures.push_back(texture);
+		}
+		else
+		{
+			m_color_textures.at(loc) = texture;
+		}
+		unbind();
+	}
+
+	void Framebuffer::set_depth_buffer_texture(const Texture* texture)
+	{
+		attach_single_texture(texture, GL_DEPTH_ATTACHMENT);
+		m_depth_texture = texture;
+	}
+
+	void Framebuffer::set_stencil_buffer_texture(const Texture* texture)
+	{
+		attach_single_texture(texture, GL_STENCIL_ATTACHMENT);
+		m_stencil_texture = texture;
+	}
+
+	void Framebuffer::attach_single_texture(const Texture* texture, const GLenum attachment)
+	{
+		bind();
+		attach_texture_to_bound_framebuffer(texture, attachment);
+		check_bound_framebuffer();
+		unbind();
+	}
+
+	void Framebuffer::attach_texture_to_bound_framebuffer(const Texture* texture, const GLenum attachment)
+	{
+		glFramebufferTexture2D(m_target, attachment, texture->target(), texture->id(), 0);
 	}
 
 
@@ -130,6 +179,11 @@ namespace gl_engine
 	GLuint Framebuffer::id()
 	{
 		return m_id;
+	}
+
+	GLuint Framebuffer::num_color_textures()
+	{
+		return m_color_textures.size();
 	}
 
 	// // ----- SETTERS ----- // //
