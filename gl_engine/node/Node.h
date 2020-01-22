@@ -33,6 +33,7 @@ namespace gl_engine
 		static constexpr auto POSITION_ATTR = 0u;
 		inline static const auto MESH_VAO_INFO = gl_introspect_tuple<
 			std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
+
 		static const glm::vec3 FORWARD_DIRECTION;
 
 		// // ----- CONSTRUCTORS ----- // //

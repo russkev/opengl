@@ -1,84 +1,21 @@
 ﻿  pch.cpp
-  NodeTest.cpp
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_engine\node\node.h(34): error C7525: inline variables require at least '/std:c++17'
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_engine\node\node.h(34): error C2864: 'gl_engine::Node::MESH_VAO_INFO': a static data member with an in-class initializer must have non-volatile const integral type or be specified as 'inline'
-  c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_engine\node\node.h(35): note: type is 'const std::array<gl_engine::member_info_type,7>'
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_engine\node\node.cpp(103): error C2664: 'bool glm::decompose<float,0>(const glm::mat<4,4,float,0> &,glm::vec<3,float,0> &,glm::tquat<float,0> &,glm::vec<3,float,0> &,glm::vec<3,float,0> &,glm::vec<4,float,0> &)': cannot convert argument 3 from 'glm::quat' to 'glm::tquat<float,0> &'
-  c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_engine\node\node.cpp(103): note: A non-const reference may only be bound to an lvalue
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(39): error C3646: 'N1': unknown override specifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(39): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(40): error C3646: 'N2': unknown override specifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(40): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(41): error C3646: 'N3': unknown override specifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(41): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(42): error C3646: 'N4': unknown override specifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(42): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(16): error C3861: 'Node': identifier not found
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(17): error C3861: 'Node': identifier not found
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(18): error C3861: 'Node': identifier not found
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(19): error C3861: 'Node': identifier not found
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(16): error C2614: 'nodeTestContext': illegal member initialization: 'N1' is not a base or member
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(17): error C2614: 'nodeTestContext': illegal member initialization: 'N2' is not a base or member
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(18): error C2614: 'nodeTestContext': illegal member initialization: 'N3' is not a base or member
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(19): error C2614: 'nodeTestContext': illegal member initialization: 'N4' is not a base or member
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(21): error C2065: 'N1': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(21): error C2065: 'N2': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(22): error C2065: 'N2': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(22): error C2065: 'N3': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(23): error C2065: 'N2': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(23): error C2065: 'N4': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(25): error C2065: 'N1': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(26): error C2065: 'N4': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(58): error C2065: 'N1': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(62): error C2065: 'N1': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(66): error C2065: 'N2': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(70): error C2065: 'N3': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(74): error C2065: 'N4': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(79): error C2065: 'N4': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(90): error C2065: 'N1': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(91): error C2065: 'N1': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(92): error C3536: 'children': cannot be used before it is initialized
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(92): error C2065: 'N2': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(93): error C2065: 'N1': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(94): error C2065: 'Node': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(94): error C2146: syntax error: missing ';' before identifier 'newNode'
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(94): error C2065: 'newNode': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(94): error C3861: 'Node': identifier not found
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(95): error C2065: 'N1': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(95): error C2065: 'newNode': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(99): error C2065: 'N2': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(100): error C2065: 'N2': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(101): error C3536: 'children': cannot be used before it is initialized
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(101): error C2065: 'N3': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(102): error C2065: 'N4': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(103): error C2065: 'N2': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(103): error C2065: 'N1': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(107): error C2065: 'Node': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(107): error C2065: 'N2_b': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(107): error C2065: 'N1': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(108): error C2065: 'N2_b': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(108): error C2065: 'N2': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(109): error C2065: 'N2': undeclared identifier
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\nodetest.cpp(110): error C2065: 'N2': undeclared identifier
-  Test.cpp
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(19): error C2653: 'VectorUtils': is not a class or namespace name
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(19): error C3861: 'minValue': identifier not found
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(20): error C2653: 'VectorUtils': is not a class or namespace name
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(20): error C3861: 'minValue': identifier not found
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(21): error C2653: 'VectorUtils': is not a class or namespace name
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(21): error C3861: 'minValue': identifier not found
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(22): error C2653: 'VectorUtils': is not a class or namespace name
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(22): error C3861: 'minValue': identifier not found
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(31): error C2653: 'VectorUtils': is not a class or namespace name
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(31): error C3861: 'trs': identifier not found
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(40): error C2653: 'VectorUtils': is not a class or namespace name
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(40): error C3861: 'trs': identifier not found
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(52): error C2653: 'VectorUtils': is not a class or namespace name
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(52): error C3861: 'trs': identifier not found
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(64): error C2653: 'VectorUtils': is not a class or namespace name
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(64): error C3861: 'trs': identifier not found
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\test.cpp(72): warning C4305: 'initializing': truncation from 'double' to 'float'
-  TimerTest.cpp
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_test\timertest.cpp(6): fatal error C1083: Cannot open include file: '../gl_engine/Timer.h': No such file or directory
+  Framebuffer_test.cpp
+  Node_test.cpp
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(63): error C2653: 'Helper': is not a class or namespace name
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(63): error C3861: 'matrix_is_similar': identifier not found
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(67): error C2653: 'Helper': is not a class or namespace name
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(67): error C3861: 'matrix_is_similar': identifier not found
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(71): error C2653: 'Helper': is not a class or namespace name
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(71): error C3861: 'matrix_is_similar': identifier not found
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(75): error C2653: 'Helper': is not a class or namespace name
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(75): error C3861: 'matrix_is_similar': identifier not found
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(79): error C2653: 'Helper': is not a class or namespace name
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(79): error C3861: 'matrix_is_similar': identifier not found
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(84): error C2653: 'Helper': is not a class or namespace name
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(84): error C3861: 'matrix_is_similar': identifier not found
+  Timer_test.cpp
+  VectorUtils_test.cpp
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\vectorutils_test.cpp(74): error C2653: 'Helper': is not a class or namespace name
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\vectorutils_test.cpp(74): error C3861: 'matrix_is_similar': identifier not found
   gl_test.cpp
   Generating Code...

@@ -18,7 +18,7 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="helper.h">
+    <ClInclude Include="Helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -29,13 +29,16 @@
     <ClCompile Include="gl_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Test.cpp">
+    <ClCompile Include="Node_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NodeTest.cpp">
+    <ClCompile Include="Timer_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TimerTest.cpp">
+    <ClCompile Include="VectorUtils_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Framebuffer_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

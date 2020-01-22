@@ -1,29 +1,34 @@
 #pragma once
 #include "pch.h"
-#include "helper.h"
 #include <boost/test/unit_test.hpp>
+
+//#include "Helper.h"
+
 #include "../gl_engine/node/Node.h"
 #include "../gl_engine/node/Node.cpp"
 
-#include <glm/glm.hpp>
 #include "../gl_engine/utils/VectorUtils.h"
+#include "../gl_engine/utils/VectorUtils.cpp"
+
+#include <glm/glm.hpp>
+
 
 namespace tt = boost::test_tools;
 
-struct nodeTestContext
+struct NodeTestContext
 {
-	nodeTestContext() :
-		N1(Node("N1")),
-		N2(Node("N2")),
-		N3(Node("N3")),
-		N4(Node("N4"))
+	NodeTestContext() :
+		N1(gl_engine::Node("N1")),
+		N2(gl_engine::Node("N2")),
+		N3(gl_engine::Node("N3")),
+		N4(gl_engine::Node("N4"))
 	{
-		N1.addChild(&N2);
-		N2.addChild(&N3);
-		N2.addChild(&N4);
+		N1.add_child(&N2);
+		N2.add_child(&N3);
+		N2.add_child(&N4);
 
-		N1.setPosition({ 3.0f, 2.0f, 1.0f });
-		N4.setPosition({ 2.0f, 1.0f, 3.0f });
+		N1.set_position({ 3.0f, 2.0f, 1.0f });
+		N4.set_position({ 2.0f, 1.0f, 3.0f });
 
 		expectedMatrix1 = glm::mat4(1.0f);
 		expectedMatrix1[3][0] = 3.0f;
@@ -36,11 +41,11 @@ struct nodeTestContext
 		expectedMatrix2[3][2] = 3.0f;
 	}
 
-	Node N1;
-	Node N2;
-	Node N3;
-	Node N4;
-
+	gl_engine::Node N1;
+	gl_engine::Node N2;
+	gl_engine::Node N3;
+	gl_engine::Node N4;
+	
 	glm::mat4 expectedMatrix1;
 	glm::mat4 expectedMatrix2;
 
@@ -49,41 +54,41 @@ struct nodeTestContext
 //----------------------------------------------------------------------------------------------------//
 
 
-BOOST_FIXTURE_TEST_SUITE(nodeTests, nodeTestContext)
+BOOST_FIXTURE_TEST_SUITE(Node_tests, NodeTestContext)
 
-BOOST_AUTO_TEST_SUITE(transfromTests)
+BOOST_AUTO_TEST_SUITE(transform_tests)
 
 BOOST_AUTO_TEST_CASE(N1_local)
 {
-	BOOST_TEST(Helper::matrixIsSimilar(N1.localTransform(), expectedMatrix1, 0.1f));
+	BOOST_TEST(Helper::matrix_is_similar(N1.local_to_node(), expectedMatrix1, 0.1f));
 }
 BOOST_AUTO_TEST_CASE(N1_world)
 {
-	BOOST_TEST(Helper::matrixIsSimilar(N1.worldTransform(), expectedMatrix1, 0.1f));
+	BOOST_TEST(Helper::matrix_is_similar(N1.local_to_node(), expectedMatrix1, 0.1f));
 }
 BOOST_AUTO_TEST_CASE(N2_world)
 {
-	BOOST_TEST(Helper::matrixIsSimilar(N2.worldTransform(), expectedMatrix1, 0.1f));
+	BOOST_TEST(Helper::matrix_is_similar(N2.world_to_node(), expectedMatrix1, 0.1f));
 }
 BOOST_AUTO_TEST_CASE(N3_world)
 {
-	BOOST_TEST(Helper::matrixIsSimilar(N3.worldTransform(), expectedMatrix1, 0.1f));
+	BOOST_TEST(Helper::matrix_is_similar(N3.world_to_node(), expectedMatrix1, 0.1f));
 }
 BOOST_AUTO_TEST_CASE(N4_local)
 {
-	BOOST_TEST(Helper::matrixIsSimilar(N4.localTransform(), expectedMatrix2, 0.1f));
+	BOOST_TEST(Helper::matrix_is_similar(N4.local_to_node(), expectedMatrix2, 0.1f));
 }
 BOOST_AUTO_TEST_CASE(N4_world)
 {
 	auto finalExpectedMatrix = expectedMatrix1 * expectedMatrix2;
-	BOOST_TEST(Helper::matrixIsSimilar(N4.worldTransform(), finalExpectedMatrix, 0.1f));
+	BOOST_TEST(Helper::matrix_is_similar(N4.world_to_node(), finalExpectedMatrix, 0.1f));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
 
 //----------------------------------------------------------------------------------------------------//
 
-BOOST_AUTO_TEST_SUITE(relationshipTests)
+BOOST_AUTO_TEST_SUITE(relationship_tests)
 
 BOOST_AUTO_TEST_CASE(N1_relationships)
 {
@@ -91,8 +96,8 @@ BOOST_AUTO_TEST_CASE(N1_relationships)
 	auto children = N1.children();
 	BOOST_CHECK(children["N2"] == &N2);
 	BOOST_CHECK(N1.parent() == false);
-	Node newNode = Node("N2");
-	BOOST_CHECK_THROW(N1.addChild(&newNode), std::runtime_error);
+	gl_engine::Node newNode = gl_engine::Node("N2");
+	BOOST_CHECK_THROW(N1.add_child(&newNode), std::runtime_error);
 }
 BOOST_AUTO_TEST_CASE(N2_relationships)
 {
@@ -104,7 +109,7 @@ BOOST_AUTO_TEST_CASE(N2_relationships)
 }
 BOOST_AUTO_TEST_CASE(N2_disconnect)
 {
-	Node* N2_b = N1.disconnectChild("N2");
+	gl_engine::Node* N2_b = N1.disconnect_child("N2");
 	BOOST_TEST(N2_b == &N2);
 	BOOST_CHECK(N2.parent() == false);
 	BOOST_TEST(N2.children().size() == 2);
