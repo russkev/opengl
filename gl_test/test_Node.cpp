@@ -2,16 +2,16 @@
 #include "pch.h"
 #include <boost/test/unit_test.hpp>
 
-//#include "Helper.h"
-
 #include "../gl_engine/node/Node.h"
 #include "../gl_engine/node/Node.cpp"
 
-#include "../gl_engine/utils/VectorUtils.h"
-#include "../gl_engine/utils/VectorUtils.cpp"
-
 #include <glm/glm.hpp>
 
+
+//namespace Helper
+//{
+//	bool matrix_is_similar(glm::mat4, glm::mat4, float);
+//}
 
 namespace tt = boost::test_tools;
 

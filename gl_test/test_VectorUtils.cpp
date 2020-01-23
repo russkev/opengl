@@ -1,15 +1,23 @@
 #include "pch.h"
-#define BOOST_TEST_MODULE VectorUtils_test
+
+//#define BOOST_TEST_MODULE VectorUtils_test
 #include <boost/test/unit_test.hpp>
+
+//#include "Helper.h"
+
+#include <glm/gtc/type_ptr.hpp>
 
 #include "../gl_engine/utils/VectorUtils.h"
 
-#include <glm/gtc/type_ptr.hpp>
+//namespace Helper
+//{
+//	bool matrix_is_similar(glm::mat4, glm::mat4, float);
+//}
 
 namespace utf = boost::unit_test;
 namespace tt = boost::test_tools;
 
-//void matricesAreSimilar(glm::mat4 result, glm::mat4 expected);
+void matricesAreSimilar(glm::mat4 result, glm::mat4 expected);
 
 BOOST_AUTO_TEST_CASE(test_minValue)
 {
@@ -76,14 +84,14 @@ BOOST_AUTO_TEST_CASE(test_trs)
 }
 
 
-//void matricesAreSimilar(glm::mat4 result, glm::mat4 expected)
-//{
-//	for (auto i = 0; i < 4; ++i)
-//	{
-//		for (auto j = 0; j < 4; ++j)
-//		{
-//			BOOST_TEST(result[i][j] == expected[i][j], tt::tolerance(0.1f));
-//		}
-//	}
-//
-//}
+void matricesAreSimilar(glm::mat4 result, glm::mat4 expected)
+{
+	for (auto i = 0; i < 4; ++i)
+	{
+		for (auto j = 0; j < 4; ++j)
+		{
+			BOOST_TEST(result[i][j] == expected[i][j], tt::tolerance(0.1f));
+		}
+	}
+
+}

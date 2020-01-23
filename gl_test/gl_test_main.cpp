@@ -2,6 +2,16 @@
 //
 
 #include "pch.h"
+
+#define BOOST_TEST_MAIN
+#define BOOST_TEST_MODULE Main
+
+#include <boost/test/unit_test.hpp>
+#include "../gl_engine/render/Window.cpp"
+#include "../gl_engine/shading/Texture.cpp"
+#include "../gl_engine/shading/Framebuffer.cpp"
+
+
 //#include <iostream>
 //#define BOOT_TEST_MODULE
 //#include <boost/test/included/unit_test.hpp>
