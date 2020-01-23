@@ -1,21 +1,2 @@
-﻿  pch.cpp
-  Framebuffer_test.cpp
-  Node_test.cpp
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(63): error C2653: 'Helper': is not a class or namespace name
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(63): error C3861: 'matrix_is_similar': identifier not found
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(67): error C2653: 'Helper': is not a class or namespace name
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(67): error C3861: 'matrix_is_similar': identifier not found
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(71): error C2653: 'Helper': is not a class or namespace name
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(71): error C3861: 'matrix_is_similar': identifier not found
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(75): error C2653: 'Helper': is not a class or namespace name
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(75): error C3861: 'matrix_is_similar': identifier not found
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(79): error C2653: 'Helper': is not a class or namespace name
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(79): error C3861: 'matrix_is_similar': identifier not found
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(84): error C2653: 'Helper': is not a class or namespace name
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\node_test.cpp(84): error C3861: 'matrix_is_similar': identifier not found
-  Timer_test.cpp
-  VectorUtils_test.cpp
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\vectorutils_test.cpp(74): error C2653: 'Helper': is not a class or namespace name
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\vectorutils_test.cpp(74): error C3861: 'matrix_is_similar': identifier not found
-  gl_test.cpp
-  Generating Code...
+﻿  test_Framebuffer.cpp
+  gl_test.vcxproj -> C:\Users\kev_k\Documents\_DOCS\PROGRAMMING\OpenGL\repo\opengl\x64\Debug\gl_test.exe
