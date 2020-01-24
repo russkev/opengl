@@ -196,6 +196,7 @@
     <Import Project="..\packages\sdl2_image.v140.2.0.1\build\native\sdl2_image.v140.targets" Condition="Exists('..\packages\sdl2_image.v140.2.0.1\build\native\sdl2_image.v140.targets')" />
     <Import Project="..\packages\glew.redist.1.9.0.1\build\native\glew.redist.targets" Condition="Exists('..\packages\glew.redist.1.9.0.1\build\native\glew.redist.targets')" />
     <Import Project="..\packages\glew.v140.1.12.0\build\native\glew.v140.targets" Condition="Exists('..\packages\glew.v140.1.12.0\build\native\glew.v140.targets')" />
+    <Import Project="..\packages\glm.0.9.9.700\build\native\glm.targets" Condition="Exists('..\packages\glm.0.9.9.700\build\native\glm.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -214,5 +215,6 @@
     <Error Condition="!Exists('..\packages\sdl2_image.v140.2.0.1\build\native\sdl2_image.v140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sdl2_image.v140.2.0.1\build\native\sdl2_image.v140.targets'))" />
     <Error Condition="!Exists('..\packages\glew.redist.1.9.0.1\build\native\glew.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glew.redist.1.9.0.1\build\native\glew.redist.targets'))" />
     <Error Condition="!Exists('..\packages\glew.v140.1.12.0\build\native\glew.v140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glew.v140.1.12.0\build\native\glew.v140.targets'))" />
+    <Error Condition="!Exists('..\packages\glm.0.9.9.700\build\native\glm.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glm.0.9.9.700\build\native\glm.targets'))" />
   </Target>
 </Project>
