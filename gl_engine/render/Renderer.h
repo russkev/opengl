@@ -24,6 +24,7 @@ namespace gl_engine
 	struct LightNode;
 	struct Node;
 	struct LightNode;
+	struct ShadowMap;
 	struct Material;
 	struct Window;
 	struct Timer;
@@ -58,6 +59,8 @@ namespace gl_engine
 		// // ----- SETTERS ----- // //
 	public:
 		void add_node(Node* node);
+		void enable_post_effects();
+		void disable_post_effects();
 
 	private:
 		void add_light_nodes(Node* root_node);
@@ -67,10 +70,12 @@ namespace gl_engine
 	private:
 		CameraNode* m_cameraNode;
 		std::vector<LightNode*> m_lightNodes;
+		std::vector<ShadowMap*> m_shadow_maps;
 		std::vector<Material*> m_materials;
 		std::map<std::string, Node*> m_root_nodes;
 		glm::uvec2 m_dimensions;
 		bool m_first_frame = true;
+		bool m_post_effects_enabled = true;
 
 		// // ----- BACKBUFFER VARIABLES ----- // //
 		Framebuffer m_backbuffer_FBO{ GL_FRAMEBUFFER };
@@ -81,7 +86,7 @@ namespace gl_engine
 
 		// // ----- DEFERRRED RENDER VARIABLES ----- // //
 		Framebuffer m_g_buffer{ GL_FRAMEBUFFER };
-		
+
 		Texture m_g_position;
 		Texture m_g_normal;
 		Texture m_g_color_spec;
