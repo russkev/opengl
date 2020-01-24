@@ -53,6 +53,7 @@ namespace gl_engine
 	private:
 		void init_settings();
 		void init_first_frame();
+		void init_deferred_renderer();
 
 		// // ----- SETTERS ----- // //
 	public:
@@ -77,6 +78,14 @@ namespace gl_engine
 		ToneMap m_tone_map{ &m_backbuffer_FBO, &m_dimensions };
 		DepthMap m_depth_map{ &m_backbuffer_FBO, &m_dimensions };
 		Bloom m_bloom{ &m_backbuffer_FBO, &m_dimensions, &m_tone_map };
+
+		// // ----- DEFERRRED RENDER VARIABLES ----- // //
+		Framebuffer m_g_buffer{ GL_FRAMEBUFFER };
+		
+		Texture m_g_position;
+		Texture m_g_normal;
+		Texture m_g_color_spec;
+
 	};
 } // namespace gl_engine
 #endif

@@ -78,7 +78,7 @@ namespace gl_engine
 
 	void ShadowMap::init_directional_shadowMap()
 	{
-		m_texture = Texture::create_depth_shadow(GL_TEXTURE_2D_ARRAY, &glm::uvec2(SHADOW_WIDTH, SHADOW_HEIGHT));
+		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_2D_ARRAY, &glm::uvec2(SHADOW_WIDTH, SHADOW_HEIGHT));
 
 		m_texture.bind();
 		m_framebuffer.bind();
@@ -97,7 +97,7 @@ namespace gl_engine
 
 	void ShadowMap::init_point_shadowMap()
 	{
-		m_texture = Texture::create_depth_shadow(GL_TEXTURE_CUBE_MAP, &glm::uvec2(SHADOW_WIDTH, SHADOW_HEIGHT));
+		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_CUBE_MAP, &glm::uvec2(SHADOW_WIDTH, SHADOW_HEIGHT));
 
 		m_texture.bind();
 		m_framebuffer.bind();

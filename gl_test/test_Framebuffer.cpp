@@ -25,10 +25,10 @@ struct FramebufferTestContext
 	gl_engine::Texture color_buffer_1{ gl_engine::Texture::create_color_backbuffer(GL_TEXTURE_2D, &dimensions) };
 	gl_engine::Texture color_buffer_2{ gl_engine::Texture::create_color_backbuffer(GL_TEXTURE_2D, &dimensions) };
 	gl_engine::Texture color_buffer_3{ gl_engine::Texture::create_color_backbuffer(GL_TEXTURE_2D, &dimensions) };
-	gl_engine::Texture color_depth_1{ gl_engine::Texture::create_color_backbuffer(GL_DEPTH, &dimensions) };
-	gl_engine::Texture color_depth_2{ gl_engine::Texture::create_color_backbuffer(GL_DEPTH, &dimensions) };
-	gl_engine::Texture color_stencil_1{ gl_engine::Texture::create_color_backbuffer(GL_STENCIL, &dimensions) };
-	gl_engine::Texture color_stencil_2{ gl_engine::Texture::create_color_backbuffer(GL_STENCIL, &dimensions) };
+	gl_engine::Texture depth_buffer_1{ gl_engine::Texture::create_depth_backbuffer(GL_TEXTURE_2D, &dimensions) };
+	gl_engine::Texture depth_buffer_2{ gl_engine::Texture::create_depth_backbuffer(GL_TEXTURE_2D, &dimensions) };
+	gl_engine::Texture stencil_buffer_1{ gl_engine::Texture::create_stencil_backbuffer(GL_TEXTURE_2D, &dimensions) };
+	gl_engine::Texture stencil_buffer_2{ gl_engine::Texture::create_stencil_backbuffer(GL_TEXTURE_2D, &dimensions) };
 
 };
 
@@ -36,12 +36,69 @@ struct FramebufferTestContext
 
 BOOST_FIXTURE_TEST_SUITE(Framebuffer_tests, FramebufferTestContext)
 
-BOOST_AUTO_TEST_SUITE(Texture_tests)
+BOOST_AUTO_TEST_SUITE(binding_tests)
+
+BOOST_AUTO_TEST_CASE(F1_check_texture_id_set)
+{
+	BOOST_TEST(F1.id() != 0);
+}
+
+BOOST_AUTO_TEST_CASE(F1_check_binding)
+{
+	F1.bind();
+	GLint current_bound = 0;
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &current_bound);
+	BOOST_TEST(current_bound == F1.id());
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(buffer_texture_tests)
+
 
 BOOST_AUTO_TEST_CASE(F1_set_color_1)
 {
 	F1.set_color_buffer_texture(&color_buffer_1, 0);
 	BOOST_TEST(F1.num_color_textures() == 1);
+}
+
+BOOST_AUTO_TEST_CASE(F1_set_color_1_invalid)
+{
+	F1.set_color_buffer_texture(&color_buffer_1, (GLuint)932879865892);
+	BOOST_TEST(F1.num_color_textures() == 0);
+}
+
+BOOST_AUTO_TEST_CASE(F1_overwrite_color_1)
+{
+	F1.set_color_buffer_texture(&color_buffer_1, 0);
+	F1.set_color_buffer_texture(&color_buffer_2, 0);
+	BOOST_TEST(F1.num_color_textures() == 1);
+	BOOST_TEST(F1.color_texture_at(0) == &color_buffer_2);
+}
+
+BOOST_AUTO_TEST_CASE(F1_set_multiple_color_buffer_textures)
+{
+	std::vector<const gl_engine::Texture*> colors{ &color_buffer_2, &color_buffer_3 };
+	F1.set_color_buffer_texture(&color_buffer_1, 0);
+	F1.push_back_color_buffer_textures(colors);
+	BOOST_TEST(F1.num_color_textures() == 3);
+	BOOST_TEST(F1.color_texture_at(0) == &color_buffer_1);
+	BOOST_TEST(F1.color_texture_at(1) == &color_buffer_2);
+	BOOST_TEST(F1.color_texture_at(2) == &color_buffer_3);
+}
+
+BOOST_AUTO_TEST_CASE(F1_overwrite_depth_1)
+{
+	F1.set_depth_buffer_texture(&depth_buffer_1);
+	F1.set_depth_buffer_texture(&depth_buffer_2);
+	BOOST_TEST(F1.depth_texture() == &depth_buffer_2);
+}
+
+BOOST_AUTO_TEST_CASE(F1_overwrite_stencil_1)
+{
+	F1.set_stencil_buffer_texture(&stencil_buffer_1);
+	F1.set_stencil_buffer_texture(&stencil_buffer_2);
+	BOOST_TEST(F1.stencil_texture() == &stencil_buffer_2);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

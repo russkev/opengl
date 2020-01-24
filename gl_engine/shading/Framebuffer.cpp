@@ -23,7 +23,6 @@ namespace gl_engine
 	// // ----- GENERAL METHODS ----- // //
 	void Framebuffer::process_texture(Texture* texture)
 	{
-		GLuint id = texture->id();
 		glFramebufferTexture(
 			m_target,
 			m_attachment,
@@ -185,6 +184,21 @@ namespace gl_engine
 	GLuint Framebuffer::num_color_textures()
 	{
 		return (GLuint)m_color_textures.size();
+	}
+
+	const Texture* Framebuffer::color_texture_at(const size_t loc)
+	{
+		return m_color_textures.at(loc);
+	}
+
+	const Texture* Framebuffer::depth_texture()
+	{
+		return m_depth_texture;
+	}
+
+	const Texture* Framebuffer::stencil_texture()
+	{
+		return m_stencil_texture;
 	}
 
 	// // ----- SETTERS ----- // //

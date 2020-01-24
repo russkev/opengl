@@ -34,6 +34,9 @@ namespace gl_engine
 	public:
 		GLuint id();
 		GLuint num_color_textures();
+		const Texture* color_texture_at(const size_t loc);
+		const Texture* depth_texture();
+		const Texture* stencil_texture();
 
 		// // ----- SETTERS ----- // //
 	public:
@@ -46,7 +49,7 @@ namespace gl_engine
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		GLuint m_id;
+		GLuint m_id = 0;
 		GLenum m_target = GL_FRAMEBUFFER;
 		GLenum m_attachment = GL_DEPTH_ATTACHMENT;
 		GLint m_level = 0;

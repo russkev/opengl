@@ -14,14 +14,14 @@ namespace gl_engine
 	{
 		for (GLuint i = 0; i < DIRECTIONS; ++i)
 		{
-			m_pingpong_textures[i] = Texture::create_color_backbuffer(GL_TEXTURE_2D, dimensions);
+			m_pingpong_textures[i] = Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, dimensions);
 			m_pingpong_fbos[i].bind();
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_pingpong_textures[i].id(), 0);
 			m_pingpong_fbos[i].check_bound_framebuffer();
 			m_pingpong_fbos[i].unbind();
 		}
 
-		m_blur_texture = Texture::create_color_backbuffer(GL_TEXTURE_2D, dimensions);
+		m_blur_texture = Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, dimensions);
 		m_blur_material.set_texture("image", &m_blur_texture);
 		m_bloom_material.set_texture("color", m_tone_map->beauty());
 		m_bloom_material.set_texture("bright", &m_blur_texture);
