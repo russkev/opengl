@@ -153,6 +153,9 @@
     <ClCompile Include="material\Material.cpp">
       <Filter>Material</Filter>
     </ClCompile>
+    <ClCompile Include="material\LightMaterial.cpp">
+      <Filter>Material</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -326,6 +329,9 @@
       <Filter>Post</Filter>
     </ClInclude>
     <ClInclude Include="material\Material.h">
+      <Filter>Material</Filter>
+    </ClInclude>
+    <ClInclude Include="material\LightMaterial.h">
       <Filter>Material</Filter>
     </ClInclude>
   </ItemGroup>
