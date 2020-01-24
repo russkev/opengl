@@ -163,6 +163,7 @@
     <ClCompile Include="light\PointLight.cpp" />
     <ClCompile Include="light\SpotLight.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="material\Material.cpp" />
     <ClCompile Include="mesh\Arrow.cpp" />
     <ClCompile Include="mesh\Cube.cpp" />
     <ClCompile Include="mesh\Cylinder.cpp" />
@@ -185,7 +186,6 @@
     <ClCompile Include="resources\VAO.cpp" />
     <ClCompile Include="shading\Framebuffer.cpp" />
     <ClCompile Include="shading\LoadShader.cpp" />
-    <ClCompile Include="shading\Material.cpp" />
     <ClCompile Include="shading\ShadowMap.cpp" />
     <ClCompile Include="shading\Text2D.cpp" />
     <ClCompile Include="shading\Texture.cpp" />
@@ -221,6 +221,7 @@
     <ClInclude Include="light\Light.h" />
     <ClInclude Include="light\PointLight.h" />
     <ClInclude Include="light\SpotLight.h" />
+    <ClInclude Include="material\Material.h" />
     <ClInclude Include="mesh\Arrow.h" />
     <ClInclude Include="mesh\Cube.h" />
     <ClInclude Include="mesh\Cylinder.h" />
@@ -246,7 +247,6 @@
     <ClInclude Include="resources\VAO.h" />
     <ClInclude Include="shading\Framebuffer.h" />
     <ClInclude Include="shading\LoadShader.h" />
-    <ClInclude Include="shading\Material.h" />
     <ClInclude Include="shading\ShadowMap.h" />
     <ClInclude Include="shading\Text2D.h" />
     <ClInclude Include="shading\Texture.h" />

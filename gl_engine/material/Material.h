@@ -13,7 +13,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-#include "Texture.h"
+#include "../shading/Texture.h"
 
 namespace gl_engine
 {

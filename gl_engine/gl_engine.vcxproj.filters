@@ -37,6 +37,9 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{30102c56-1aca-4ec3-9313-d073f376b1f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Material">
+      <UniqueIdentifier>{a9a863f3-5005-403a-8564-48ff6c0db8a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mesh\Arrow.cpp">
@@ -147,8 +150,8 @@
     <ClCompile Include="post\Bloom.cpp">
       <Filter>Post</Filter>
     </ClCompile>
-    <ClCompile Include="shading\Material.cpp">
-      <Filter>Shading</Filter>
+    <ClCompile Include="material\Material.cpp">
+      <Filter>Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -322,8 +325,8 @@
     <ClInclude Include="post\Bloom.h">
       <Filter>Post</Filter>
     </ClInclude>
-    <ClInclude Include="shading\Material.h">
-      <Filter>Shading</Filter>
+    <ClInclude Include="material\Material.h">
+      <Filter>Material</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
