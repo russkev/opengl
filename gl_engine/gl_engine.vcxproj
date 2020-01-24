@@ -186,7 +186,6 @@
     <ClCompile Include="shading\Framebuffer.cpp" />
     <ClCompile Include="shading\LoadShader.cpp" />
     <ClCompile Include="shading\Material.cpp" />
-    <ClCompile Include="shading\Shader.cpp" />
     <ClCompile Include="shading\ShadowMap.cpp" />
     <ClCompile Include="shading\Text2D.cpp" />
     <ClCompile Include="shading\Texture.cpp" />
@@ -248,7 +247,6 @@
     <ClInclude Include="shading\Framebuffer.h" />
     <ClInclude Include="shading\LoadShader.h" />
     <ClInclude Include="shading\Material.h" />
-    <ClInclude Include="shading\Shader.h" />
     <ClInclude Include="shading\ShadowMap.h" />
     <ClInclude Include="shading\Text2D.h" />
     <ClInclude Include="shading\Texture.h" />

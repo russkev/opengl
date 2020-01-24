@@ -25,7 +25,7 @@ namespace gl_engine
 		return NULL;
 	}
 
-	Shader* Light::shader()
+	Material* Light::shader()
 	{
 		return NULL;
 	}

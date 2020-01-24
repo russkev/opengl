@@ -7,7 +7,6 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <../mesh/Mesh.h>
-#include <../shading/Shader.h>
 #include <../shading/Material.h>
 #include <../camera/Camera.h>
 
@@ -34,7 +33,7 @@ namespace gl_engine
 		const glm::vec3& color() const;
 		const bool& is_enabled() const;
 		virtual Mesh* mesh();
-		virtual Shader* shader();
+		virtual Material* shader();
 		virtual Camera* camera();
 		
 
