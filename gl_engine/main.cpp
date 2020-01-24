@@ -459,10 +459,17 @@ void g_buffer_scene(gl_engine::Window window)
 	// GBuffer material
 	gl_engine::Material g_buffer_material{ "G Buffer Material", "GBuffer.vert", "GBuffer.frag" };
 
-	gl_engine::Material test_material{ "Test material", "Blinn.vert", "Blinn.frag" };
+	//gl_engine::Material test_material{ "Test material", "Blinn.vert", "Blinn.frag" };
+
+	// Textures
+	gl_engine::Texture diffuse_texture{ "uvtemplate.tga" };
+	gl_engine::Texture spec_texture{ "greyGrid_01.tga" };
+
+	g_buffer_material.set_texture("material.diffuse", &diffuse_texture);
+	g_buffer_material.set_texture("material.specular", &spec_texture);
 
 	// Mesh node
-	gl_engine::MeshNode g_buffer_node{ "G Buffer Mesh Node", &shaderBall, &test_material };
+	gl_engine::MeshNode g_buffer_node{ "G Buffer Mesh Node", &shaderBall, &g_buffer_material };
 
 	// Directional light 1
 	gl_engine::DirectionalLight directionalLight1{ 0.8f, {1.0f, 0.4f, 1.0f}};
@@ -482,7 +489,5 @@ void g_buffer_scene(gl_engine::Window window)
 	while (render.poll_events())
 	{
 		render.update(&window, &timer);
-
-		//shaderBall_rough_node.set_position(glm::vec3{ std::cos(timer.total_time_s()) * 5.0f, 0.0f, 0.0f });
 	}
 }
