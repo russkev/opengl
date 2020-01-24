@@ -4,8 +4,7 @@
 #include "../light/SpotLight.h"
 #include "../light/Light.h"
 
-#include "LoadShader.h"
-//#include "Texture.h"
+#include "../shading/LoadShader.h"
 
 #include <glm/glm.hpp>
 

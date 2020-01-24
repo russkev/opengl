@@ -9,7 +9,7 @@
 #include "../node/MeshNode.h"
 #include "../shading/Framebuffer.h"
 #include "../shading/Texture.h"
-#include "../shading/Material.h"
+#include "../material/Material.h"
 #include "../mesh/WindowQuad.h"
 #include "../mesh/Cube.h"
 #include "../mesh/Plane.h"

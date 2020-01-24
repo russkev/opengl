@@ -7,7 +7,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <../mesh/Mesh.h>
-#include <../shading/Material.h>
+#include <../material/Material.h>
 #include <../camera/Camera.h>
 
 namespace gl_engine

@@ -5,7 +5,7 @@
 
 #include <GL/glew.h>
 
-#include "Material.h"
+#include "../material/Material.h"
 #include "Texture.h"
 #include "Framebuffer.h"
 

@@ -4,7 +4,7 @@
 #include "PostEffect.h"
 
 #include "../shading/Framebuffer.h"
-#include "../shading/Material.h"
+#include "../material/Material.h"
 #include "../node/MeshNode.h"
 
 namespace gl_engine

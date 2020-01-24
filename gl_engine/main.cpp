@@ -9,7 +9,7 @@
 #include "node/MeshNode.h"
 #include "node/LightNode.h"
 #include "node/CameraNode.h"
-#include "shading/Material.h"
+#include "material/Material.h"
 #include "mesh/Mesh.h"
 #include "mesh/Sphere.h"
 #include "mesh/Arrow.h"

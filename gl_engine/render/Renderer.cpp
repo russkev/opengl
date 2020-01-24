@@ -12,7 +12,7 @@
 #include "../light/PointLight.h"
 #include "../light/SpotLight.h"
 #include "../light/DirectionalLight.h"
-#include "../shading/Material.h"
+#include "../material/Material.h"
 #include "../shading/ShadowMap.h"
 
 
