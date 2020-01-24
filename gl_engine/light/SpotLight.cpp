@@ -15,7 +15,7 @@ namespace gl_engine
 	// // ----- CONSTRUCTORS ----- // //
 	SpotLight::SpotLight(GLfloat brightness, glm::vec3 color) :
 		m_light_mesh(Cylinder::create_cylinder()),
-		m_shader(Shader("lightShader", "light.vert", "light.frag"))
+		m_shader(Material("lightShader", "light.vert", "light.frag"))
 	{
 		set_brightness(brightness);
 		set_color(color);
@@ -38,7 +38,7 @@ namespace gl_engine
 	{
 		return &m_light_mesh;
 	}
-	Shader* SpotLight::shader()
+	Material* SpotLight::shader()
 	{
 		return &m_shader;
 	}

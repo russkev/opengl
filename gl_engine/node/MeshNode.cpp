@@ -2,7 +2,6 @@
 
 #include "../mesh/Mesh.h"
 #include "../shading/Material.h"
-#include "../shading/Shader.h"
 #include "CameraNode.h"
 
 namespace gl_engine

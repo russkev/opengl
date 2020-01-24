@@ -33,7 +33,7 @@ namespace gl_engine
 		const std::string& type() const override;
 
 		Mesh* mesh() override;
-		Shader* shader() override;
+		Material* shader() override;
 		Camera* camera() override;
 
 		// // ----- SETTERS ----- // //	
@@ -43,7 +43,7 @@ namespace gl_engine
 	private:
 		float m_radius = 0.5f;
 		Mesh m_light_mesh;
-		Shader m_shader;
+		Material m_shader;
 		FreeCamera m_camera;
 	};
 } // namespace gl_engine

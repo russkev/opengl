@@ -16,7 +16,7 @@ namespace gl_engine
 	// // ----- CONSTRUCTORS ----- // //
 	DirectionalLight::DirectionalLight(GLfloat brightness, glm::vec3 color) :
 		m_light_mesh(Arrow::create_arrow(10.0)),
-		m_shader(Shader("lightShader", "light.vert", "light.frag"))
+		m_shader(Material("lightShader", "light.vert", "light.frag"))
 	{
 		set_brightness(brightness);
 		set_color(color);
@@ -37,7 +37,7 @@ namespace gl_engine
 	{
 		return &m_light_mesh;
 	}
-	Shader* DirectionalLight::shader()
+	Material* DirectionalLight::shader()
 	{
 		return &m_shader;
 	}

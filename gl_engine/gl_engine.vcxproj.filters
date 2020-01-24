@@ -87,12 +87,6 @@
     <ClCompile Include="node\MeshNode.cpp">
       <Filter>Node</Filter>
     </ClCompile>
-    <ClCompile Include="shading\Shader.cpp">
-      <Filter>Shading</Filter>
-    </ClCompile>
-    <ClCompile Include="shading\Material.cpp">
-      <Filter>Shading</Filter>
-    </ClCompile>
     <ClCompile Include="render\Renderer.cpp">
       <Filter>Render</Filter>
     </ClCompile>
@@ -152,6 +146,9 @@
     </ClCompile>
     <ClCompile Include="post\Bloom.cpp">
       <Filter>Post</Filter>
+    </ClCompile>
+    <ClCompile Include="shading\Material.cpp">
+      <Filter>Shading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -256,12 +253,6 @@
     <ClInclude Include="node\MeshNode.h">
       <Filter>Node</Filter>
     </ClInclude>
-    <ClInclude Include="shading\Shader.h">
-      <Filter>Shading</Filter>
-    </ClInclude>
-    <ClInclude Include="shading\Material.h">
-      <Filter>Shading</Filter>
-    </ClInclude>
     <ClInclude Include="render\Renderer.h">
       <Filter>Render</Filter>
     </ClInclude>
@@ -330,6 +321,9 @@
     </ClInclude>
     <ClInclude Include="post\Bloom.h">
       <Filter>Post</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\Material.h">
+      <Filter>Shading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

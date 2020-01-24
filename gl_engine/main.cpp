@@ -9,7 +9,6 @@
 #include "node/MeshNode.h"
 #include "node/LightNode.h"
 #include "node/CameraNode.h"
-#include "shading/Shader.h"
 #include "shading/Material.h"
 #include "mesh/Mesh.h"
 #include "mesh/Sphere.h"

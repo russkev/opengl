@@ -12,7 +12,7 @@ namespace gl_engine
 	// // ----- FORWARD DECLARATION ----- // //
 	struct Mesh;
 	struct Material;
-	struct Shader;
+	struct Material;
 	struct CameraNode;
 
 	/*

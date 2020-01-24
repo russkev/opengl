@@ -5,7 +5,6 @@
 
 #include "Node.h"
 #include "../resources/VAO.h"
-#include "../shading/Shader.h"
 
 namespace gl_engine
 {

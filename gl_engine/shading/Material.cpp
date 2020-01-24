@@ -1,19 +1,87 @@
-#include "Material.h"
+#include "../node/LightNode.h"
+#include "../light/PointLight.h"
+#include "../light/DirectionalLight.h"
+#include "../light/SpotLight.h"
+#include "../light/Light.h"
 
-#include "Texture.h"
+#include "LoadShader.h"
+//#include "Texture.h"
+
+#include <glm/glm.hpp>
 
 namespace gl_engine
 {
 	// // ----- CONSTRUCTORS ----- // //
-	Material::Material(const std::string name, const char* vertex_shader, const char* fragment_shader) :
-		Shader{ name, vertex_shader, fragment_shader }
-	{}
+	Material::Material(const std::string& name, const char* vertex_shader, const char* fragment_shader) :
+		m_name{ name },
+		m_program_id{ LoadShaders::load(vertex_shader, fragment_shader) }
+	{
+		init();
+	}
 
-	Material::Material(const std::string name, const char* vertexShader, const char* geometryShader, const char* fragmentShader) :
-		Shader{ name, vertexShader, geometryShader, fragmentShader }
-	{}
+	Material::Material(const std::string& name, const char* vertex_shader, const char* geometry_shader, const char* fragment_shader) :
+		m_name{ name },
+		m_program_id{ LoadShaders::load(vertex_shader, geometry_shader, fragment_shader) }
+	{
+		init();
+	}
 
 	// // ----- GENERAL METHODS ----- // //
+
+	// Tell opengl to use this shader for upcoming commands
+	void Material::use()
+	{
+		glUseProgram(m_program_id);
+	}
+
+	bool Material::is_uniform(const GLenum type)
+	{
+		return (
+			ShaderType::gl_float_samplerTypes.find(type) != ShaderType::gl_float_samplerTypes.end() ||
+			ShaderType::gl_int_samplerTypes.find(type) != ShaderType::gl_int_samplerTypes.end() ||
+			ShaderType::gl_uint_samplerTypes.find(type) != ShaderType::gl_uint_samplerTypes.end()
+			);
+	}
+
+
+	bool Material::contains_uniform(std::string uniform_name)
+	{
+		return m_uniforms.find(uniform_name) != m_uniforms.end();
+	}
+
+	void Material::update_lights(const std::vector<LightNode*>& light_nodes)
+	{
+		int index = 0;// , point_index = 0, directional_index = 0, spot_index = 0;
+		std::string type = "";
+
+		for (LightNode* light_node : light_nodes)
+		{
+			PointLight* pointLight = dynamic_cast<PointLight*>(light_node->light());
+			DirectionalLight* directionalLight = dynamic_cast<DirectionalLight*>(light_node->light());
+			SpotLight* spotLight = dynamic_cast<SpotLight*>(light_node->light());
+
+			index = light_node->shader_pos();
+			type = light_node->light()->type();
+
+			// Set uniforms
+			if (pointLight || spotLight)
+			{
+				set_uniform(std::string(type + "[" + std::to_string(index) + "]." + LightNode::LIGHT_POSITION), light_node->world_position());
+			}
+			if (directionalLight || spotLight)
+			{
+				set_uniform(std::string(type + "[" + std::to_string(index) + "]." + LightNode::LIGHT_DIRECTION), light_node->direction());
+			}
+			if (spotLight)
+			{
+				set_uniform(std::string(type + "[" + std::to_string(index) + "]." + SpotLight::INNER), spotLight->cos_inner_angle());
+				set_uniform(std::string(type + "[" + std::to_string(index) + "]." + SpotLight::OUTER), spotLight->cos_outer_angle());
+			}
+			set_uniform(std::string(type + "[" + std::to_string(index) + "]." + Light::LIGHT_BRIGHTNESS), light_node->light()->brightness());
+			set_uniform(std::string(type + "[" + std::to_string(index) + "]." + Light::LIGHT_COLOR), light_node->light()->color());
+		}
+	}
+
 	void Material::bind_textures()
 	{
 		for (const auto & texture_pair : m_textures)
@@ -24,13 +92,14 @@ namespace gl_engine
 
 	void Material::bind_texture(const std::string uniform_name, Texture* texture)
 	{
-		if (Shader::uniforms().find(uniform_name) != Shader::uniforms().end())
+		if (Material::uniforms().find(uniform_name) != Material::uniforms().end())
 		{
-			auto texture_unit = Shader::uniforms().at(uniform_name).texture_unit;
-			Shader::set_uniform(uniform_name, texture_unit);
+			auto texture_unit = Material::uniforms().at(uniform_name).texture_unit;
+			Material::set_uniform(uniform_name, texture_unit);
 			texture->bind(texture_unit);
 		}
 	}
+
 
 	void Material::unbind_textures()
 	{
@@ -43,12 +112,64 @@ namespace gl_engine
 	void Material::update_texture_id(std::string uniform_name, const GLuint id)
 	{
 		Texture* texture = m_textures[uniform_name];
-		//Shader::use();
 		texture->set_new_id(id);
 		texture->bind();
 	}
 
+	void Material::init()
+	{
+		//std::printf("Shader \"%s\" loaded.\n", m_name.c_str());
+		fetch_uniforms();
+	}
+	//Get all the uniforms from the shader and store their information with the shader
+	void Material::fetch_uniforms()
+	{
+		use();
+		int numUniforms;
+		glGetProgramiv(m_program_id, GL_ACTIVE_UNIFORMS, &numUniforms);
+		for (int i = 0; i < numUniforms; ++i)
+		{
+			Uniform newUniform;
+			char uniformNameChars[GL_ACTIVE_UNIFORM_MAX_LENGTH];
+			GLsizei uniformNameLength;
+
+			glGetActiveUniform(m_program_id, i, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformNameLength, &newUniform.data_size, &newUniform.type, uniformNameChars);
+			newUniform.location = glGetUniformLocation(m_program_id, uniformNameChars);
+
+			if (is_uniform(newUniform.type))
+			{
+				newUniform.texture_unit = m_num_textures;
+				m_num_textures++;
+			}
+
+			std::string uniformNameString(uniformNameChars);
+
+			m_uniforms[uniformNameString] = newUniform;
+		}
+	}
+
+	// // ----- GETTERS ----- // //
+	const GLuint Material::program_id() const
+	{
+		return m_program_id;
+	}
+
+	const std::string Material::name() const
+	{
+		return m_name;
+	}
+
+	const std::map<std::string, Uniform>& Material::uniforms() const
+	{
+		return m_uniforms;
+	}
+
 	// // ----- SETTERS ----- // //
+	void Material::set_name(const std::string& name)
+	{
+		m_name = name;
+	}
+
 	void Material::set_sampler_color(const std::string& uniform_name, glm::vec3& color)
 	{
 		Texture texture{ color };
@@ -63,12 +184,12 @@ namespace gl_engine
 
 	void Material::set_texture(const std::string& uniform_name, Texture* texture)
 	{
-		if (Shader::uniforms().find(uniform_name) == Shader::uniforms().end())
+		if (Material::uniforms().find(uniform_name) == Material::uniforms().end())
 		{
-			if (m_failed_uniforms.find(uniform_name) == m_failed_uniforms.end())
+			if (m_failed_textures.find(uniform_name) == m_failed_textures.end())
 			{
-				printf("WARNING: Unable to set texture: \"%s\" for shader: \"%s\", uniform not found\n", uniform_name.c_str(), Shader::name().c_str());
-				m_failed_uniforms.insert(uniform_name);
+				printf("WARNING: Unable to set texture: \"%s\" for shader: \"%s\", uniform not found\n", uniform_name.c_str(), Material::name().c_str());
+				m_failed_textures.insert(uniform_name);
 				return;
 			}
 		}
@@ -76,6 +197,4 @@ namespace gl_engine
 		m_textures[uniform_name] = texture;
 		texture->process();
 	}
-
-}  // namespace gl_engine
-
+} // namespace gl_engine
