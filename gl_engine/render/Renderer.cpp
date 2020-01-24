@@ -158,6 +158,13 @@ namespace gl_engine
 		}
 	}
 
+	void Renderer::init_deferred_renderer()
+	{
+		m_g_position = Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
+		m_g_normal = Texture::create_16bit_rgb_null_texture{ GL_TEXTURE_2D, &m_dimensions };
+
+	}
+
 	bool Renderer::poll_events()
 	{
 		SDL_Event loc_event;

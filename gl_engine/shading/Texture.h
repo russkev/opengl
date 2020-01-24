@@ -44,9 +44,13 @@ namespace gl_engine
 
 		// // ----- FACTORY ----- // //
 	public:
-		static Texture create_color_backbuffer(const GLenum target, const glm::uvec2* dimensions);
-		static Texture create_depth_backbuffer(const GLenum target, const glm::uvec2* dimensions);
-		static Texture create_depth_shadow(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_16bit_rgba_null_texture(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_16bit_rgb_null_texture(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_8bit_rgba_null_texture(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_8bit_rgb_null_texture(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_depth_null_texture(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_stencil_texture(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_depth_null_texture_for_shadow(const GLenum target, const glm::uvec2* dimensions);
 
 
 		// // ----- GETTERS ----- // //

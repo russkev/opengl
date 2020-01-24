@@ -6,7 +6,7 @@ namespace gl_engine
 {
 	DepthMap::DepthMap(Framebuffer* backbuffer, const glm::uvec2* dimensions) :
 		PostEffect::PostEffect(backbuffer),
-		m_depth{ Texture::create_depth_backbuffer(GL_TEXTURE_2D, dimensions) }
+		m_depth{ Texture::create_depth_null_texture(GL_TEXTURE_2D, dimensions) }
 	{
 		PostEffect::backbuffer_fbo()->bind();
 
