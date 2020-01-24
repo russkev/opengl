@@ -83,6 +83,7 @@ static void __stdcall openglCallbackFunction(
 
 void spinning_shader_ball_scene(gl_engine::Window window);
 void three_shader_ball_scene(gl_engine::Window window);
+void g_buffer_scene(gl_engine::Window window);
 
 int main(int, char**)
 {
@@ -91,8 +92,9 @@ int main(int, char**)
 
 	gl_engine::Window window{ "GL Engine", st_config, width, height };
 
-	spinning_shader_ball_scene(window);
+	//spinning_shader_ball_scene(window);
 	//three_shader_ball_scene(window);
+	g_buffer_scene(window);
 
 	return 0;
 }
@@ -192,7 +194,7 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	pointLight_node2.set_position({ 0.0f, 4.0f, -5.0f });
 
 	// Directional Light 1
-	gl_engine::DirectionalLight directionalLight1{ 0.5f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
+	gl_engine::DirectionalLight directionalLight1{ 0.1f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
 	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
 	directionalLight_node1.set_rotation({ 33.0f, 225.0f, 0.0f });
 	directionalLight_node1.set_position({ 16.0f, 16.0f, 16.0f });
@@ -360,10 +362,17 @@ void three_shader_ball_scene(gl_engine::Window window)
 	grey_material_mid_mapped.set_texture(	"material.normal", &brick_normals);
 	grey_material_shiny_mapped.set_texture(	"material.normal", &brick_normals);
 
+
+	grey_material_rough.set_sampler_value(	"material.displacement", 0.0f);
+	grey_material_mid.set_sampler_value(	"material.displacement", 0.0f);
+	grey_material_shiny.set_sampler_value(	"material.displacement", 0.0f);
 	grey_material_rough_mapped.set_texture(	"material.displacement", &brick_displacement);
 	grey_material_mid_mapped.set_texture(	"material.displacement", &brick_displacement);
 	grey_material_shiny_mapped.set_texture(	"material.displacement", &brick_displacement);
 
+	grey_material_rough.set_uniform(		"material.displacement_amount", 0.0f);
+	grey_material_mid.set_uniform(		"material.displacement_amount", 0.0f);
+	grey_material_shiny.set_uniform(		"material.displacement_amount", 0.0f);
 	grey_material_rough_mapped.set_uniform(	"material.displacement_amount", 0.03f);
 	grey_material_mid_mapped.set_uniform(	"material.displacement_amount", 0.03f);
 	grey_material_shiny_mapped.set_uniform(	"material.displacement_amount", 0.03f);
@@ -423,6 +432,50 @@ void three_shader_ball_scene(gl_engine::Window window)
 	render.add_node(&shaderBall_shiny_mapped_node);
 
 	render.add_node(&directionalLight_node1);
+
+	gl_engine::Timer timer;
+
+	while (render.poll_events())
+	{
+		render.update(&window, &timer);
+
+		//shaderBall_rough_node.set_position(glm::vec3{ std::cos(timer.total_time_s()) * 5.0f, 0.0f, 0.0f });
+	}
+}
+
+void g_buffer_scene(gl_engine::Window window)
+{
+	// Target Camera
+	gl_engine::TargetCamera targetCam{};
+	gl_engine::CameraNode targetCam_node{ "Target Camera 1", &targetCam };
+	targetCam.set_position({ 0.0f, 8.0f, 8.0f });
+	targetCam.set_focus_target({ 0.0f, 0.0f, 0.0f });
+	targetCam.focus(glm::vec3{ 0.0f, 0.0f, 0.0f });
+	targetCam.set_clip_far(1000.0f);
+
+	// Shader ball mesh
+	gl_engine::Mesh shaderBall = gl_engine::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
+
+	// GBuffer material
+	gl_engine::Material g_buffer_material{ "G Buffer Material", "GBuffer.vert", "GBuffer.frag" };
+
+	gl_engine::Material test_material{ "Test material", "Blinn.vert", "Blinn.frag" };
+
+	// Mesh node
+	gl_engine::MeshNode g_buffer_node{ "G Buffer Mesh Node", &shaderBall, &test_material };
+
+	// Directional light 1
+	gl_engine::DirectionalLight directionalLight1{ 0.8f, {1.0f, 0.4f, 1.0f}};
+	gl_engine::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
+	directionalLight_node1.set_rotation({ 33.0f, 225.0f, 0.0f });
+	directionalLight_node1.set_position({ 16.0f, 16.0f, 16.0f });
+
+	// Renderer
+	gl_engine::Renderer render{ &targetCam_node, glm::uvec2(window.width(), window.height()) };
+
+	render.add_node(&g_buffer_node);
+	render.add_node(&directionalLight_node1);
+	render.disable_post_effects();
 
 	gl_engine::Timer timer;
 

@@ -40,24 +40,24 @@ namespace gl_engine
 
 		render_shadow_maps();
 
-		m_backbuffer_FBO.bind();
+		if (m_post_effects_enabled)
+		{
+			m_backbuffer_FBO.bind();
+		}
 		render_geometry();
-		m_backbuffer_FBO.unbind();
 
-		// HDR render
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		clear_screen();
-		m_backbuffer_FBO.bind();
-		m_tone_map.draw();
-		//m_hdr_screen_node.draw();
-		m_backbuffer_FBO.unbind();
+		if (m_post_effects_enabled)
+		{
+			m_backbuffer_FBO.unbind();
 
-		////// Bloom render
-		////glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		clear_screen();
-		m_bloom.draw();
+			clear_screen();
+			m_backbuffer_FBO.bind();
+			m_tone_map.draw();
+			m_backbuffer_FBO.unbind();
 
-		//m_bloom_screen_node.draw();
+			clear_screen();
+			m_bloom.draw();
+		}
 
 	}
 
@@ -70,19 +70,19 @@ namespace gl_engine
 
 	void Renderer::render_shadow_maps()
 	{
-		glEnable(GL_DEPTH_TEST);
-
-		glDisable(GL_CULL_FACE);
-
-		for (LightNode* lightNode : m_lightNodes)
+		if (m_shadow_maps.size() != 0)
 		{
-			if (ShadowMap* shadowMap = lightNode->shadowMap())
+			glEnable(GL_DEPTH_TEST);
+
+			glDisable(GL_CULL_FACE);
+
+			for (ShadowMap* shadowMap : m_shadow_maps)
 			{
 				shadowMap->render_shadowMap(m_root_nodes);
 				shadowMap->update_materials(m_materials);
 			}
+			glEnable(GL_CULL_FACE);
 		}
-		glEnable(GL_CULL_FACE);
 	}
 
 	void Renderer::render_geometry()
@@ -160,9 +160,9 @@ namespace gl_engine
 
 	void Renderer::init_deferred_renderer()
 	{
-		m_g_position = Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
-		m_g_normal = Texture::create_16bit_rgb_null_texture{ GL_TEXTURE_2D, &m_dimensions };
-
+		m_g_position	= Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
+		m_g_normal		= Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
+		m_g_color_spec	= Texture::create_8bit_rgba_null_texture(GL_TEXTURE_2D, &m_dimensions);
 	}
 
 	bool Renderer::poll_events()
@@ -214,6 +214,11 @@ namespace gl_engine
 		if (LightNode* derived_lightNode = dynamic_cast<LightNode*>(root_node))
 		{
 			m_lightNodes.push_back(derived_lightNode);
+			if (ShadowMap* shadowMap = derived_lightNode->shadowMap())
+			{
+				m_shadow_maps.push_back(shadowMap);
+			}
+
 		}
 		for (auto child : root_node->children())
 		{
@@ -227,5 +232,15 @@ namespace gl_engine
 		{
 			m_materials.push_back(material);
 		}
+	}
+
+	void Renderer::enable_post_effects()
+	{
+		m_post_effects_enabled = true;
+	}
+
+	void Renderer::disable_post_effects()
+	{
+		m_post_effects_enabled = false;
 	}
 } // namespace gl_engine
