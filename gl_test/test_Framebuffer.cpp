@@ -14,21 +14,18 @@
 
 struct FramebufferTestContext
 {
-	FramebufferTestContext()
-	{
-
-	}
+	FramebufferTestContext(){}
 	
 	gl_engine::Window window{ Helper::create_gl_window() };
 	const glm::uvec2 dimensions{ 2048, 2048 };
 	gl_engine::Framebuffer F1{ GL_FRAMEBUFFER };
-	gl_engine::Texture color_buffer_1{ gl_engine::Texture::create_color_backbuffer(GL_TEXTURE_2D, &dimensions) };
-	gl_engine::Texture color_buffer_2{ gl_engine::Texture::create_color_backbuffer(GL_TEXTURE_2D, &dimensions) };
-	gl_engine::Texture color_buffer_3{ gl_engine::Texture::create_color_backbuffer(GL_TEXTURE_2D, &dimensions) };
-	gl_engine::Texture depth_buffer_1{ gl_engine::Texture::create_depth_backbuffer(GL_TEXTURE_2D, &dimensions) };
-	gl_engine::Texture depth_buffer_2{ gl_engine::Texture::create_depth_backbuffer(GL_TEXTURE_2D, &dimensions) };
-	gl_engine::Texture stencil_buffer_1{ gl_engine::Texture::create_stencil_backbuffer(GL_TEXTURE_2D, &dimensions) };
-	gl_engine::Texture stencil_buffer_2{ gl_engine::Texture::create_stencil_backbuffer(GL_TEXTURE_2D, &dimensions) };
+	gl_engine::Texture color_buffer_1{ gl_engine::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, &dimensions) };
+	gl_engine::Texture color_buffer_2{ gl_engine::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, &dimensions) };
+	gl_engine::Texture color_buffer_3{ gl_engine::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, &dimensions) };
+	gl_engine::Texture depth_buffer_1{ gl_engine::Texture::create_depth_null_texture (GL_TEXTURE_2D, &dimensions) };
+	gl_engine::Texture depth_buffer_2{ gl_engine::Texture::create_depth_null_texture(GL_TEXTURE_2D, &dimensions) };
+	gl_engine::Texture stencil_buffer_1{ gl_engine::Texture::create_stencil_texture(GL_TEXTURE_2D, &dimensions) };
+	gl_engine::Texture stencil_buffer_2{ gl_engine::Texture::create_stencil_texture(GL_TEXTURE_2D, &dimensions) };
 
 };
 

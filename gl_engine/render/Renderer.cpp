@@ -43,11 +43,9 @@ namespace gl_engine
 		if (m_post_effects_enabled)
 		{
 			m_backbuffer_FBO.bind();
-		}
-		render_geometry();
 
-		if (m_post_effects_enabled)
-		{
+			render_geometry();
+
 			m_backbuffer_FBO.unbind();
 
 			clear_screen();
@@ -57,6 +55,10 @@ namespace gl_engine
 
 			clear_screen();
 			m_bloom.draw();
+		}
+		else
+		{
+			render_geometry();
 		}
 
 	}
@@ -124,8 +126,8 @@ namespace gl_engine
 		glDepthFunc(GL_LESS);
 		//glDepthFunc(GL_ALWAYS);
 		// // Enable alpha
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		// // Enable gamma correction
 		//glEnable(GL_FRAMEBUFFER_SRGB);
 	}
