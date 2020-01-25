@@ -125,7 +125,6 @@ namespace gl_engine
 	{
 		inline static const std::string k_transform_model_to_projection = "transform.model_to_projection";
 
-		inline static const std::string k_light_position	= "light.position";
 		inline static const std::string k_light_brightness	= "light.brightness";
 		inline static const std::string k_light_color		= "light.color";
 

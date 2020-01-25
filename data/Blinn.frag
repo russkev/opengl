@@ -65,7 +65,6 @@ struct PointLight
 	float brightness;
 	vec3 color;
 	samplerCube depth;
-	mat4 projection;
 	float far_plane;
 };
 uniform PointLight pointLight[NUM_LIGHTS];
@@ -530,9 +529,9 @@ void main ()
 	}
 
 	vec3 outColor = 
-		diffuse_out * texture(material.diffuse, uv).rgb
+		diffuse_out * texture(material.diffuse, uv).rgb * material.diffuse_amount
 		+ 
-		specular_out
+		specular_out * material.specular_amount
 //		vec3(uv, 1.0)
 		* vec3(1.0);
 
