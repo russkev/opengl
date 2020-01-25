@@ -11,7 +11,7 @@ namespace gl_engine
 
 	PointLight::PointLight(const GLfloat brightness, const glm::vec3 color) :
 		m_light_mesh(Sphere::create_sphere(m_radius)),
-		m_shader(Material("lightShader", "light.vert", "light.frag"))
+		m_material(Material("lightShader", "light.vert", "light.frag"))
 	{
 		set_brightness(brightness);
 		set_color(color);
@@ -35,9 +35,9 @@ namespace gl_engine
 		return &m_light_mesh;
 	}
 
-	Material* PointLight::shader()
+	Material* PointLight::material()
 	{
-		return &m_shader;
+		return &m_material;
 	}
 
 	Camera* PointLight::camera()

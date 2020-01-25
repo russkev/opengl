@@ -29,11 +29,11 @@ namespace gl_engine
 	{
 		glm::mat4 modelToPerspective_matrix = cameraNode->world_to_projection() * Node::world_to_node();
 
-		m_material->set_uniform(U_MODEL_TO_PROJECTION, modelToPerspective_matrix);
-		m_material->set_uniform(U_MODEL_TO_WORLD, Node::world_to_node());
-		m_material->set_uniform(U_MODEL_TO_WORLD_NORMAL, Node::world_normal_to_node());
-		m_material->set_uniform(U_CAM, cameraNode->world_position());
-
+		//m_material->set_uniform(U_MODEL_TO_PROJECTION, modelToPerspective_matrix);
+		//m_material->set_uniform(U_MODEL_TO_WORLD, Node::world_to_node());
+		//m_material->set_uniform(U_MODEL_TO_WORLD_NORMAL, Node::world_normal_to_node());
+		//m_material->set_uniform(U_CAM, cameraNode->world_position());
+		m_material->update_view(cameraNode, this);
 		Node::update_view(cameraNode);
 
 		//for (auto child : Node::children())

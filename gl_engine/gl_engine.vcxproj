@@ -163,7 +163,7 @@
     <ClCompile Include="light\PointLight.cpp" />
     <ClCompile Include="light\SpotLight.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="material\LightMaterial.cpp" />
+    <ClCompile Include="material\MaterialLibrary.cpp" />
     <ClCompile Include="material\Material.cpp" />
     <ClCompile Include="mesh\Arrow.cpp" />
     <ClCompile Include="mesh\Cube.cpp" />
@@ -222,7 +222,7 @@
     <ClInclude Include="light\Light.h" />
     <ClInclude Include="light\PointLight.h" />
     <ClInclude Include="light\SpotLight.h" />
-    <ClInclude Include="material\LightMaterial.h" />
+    <ClInclude Include="material\MaterialLibrary.h" />
     <ClInclude Include="material\Material.h" />
     <ClInclude Include="mesh\Arrow.h" />
     <ClInclude Include="mesh\Cube.h" />

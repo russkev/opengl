@@ -1,1 +1,10 @@
-﻿  gl_test.vcxproj -> C:\Users\kev_k\Documents\_DOCS\PROGRAMMING\OpenGL\repo\opengl\x64\Debug\gl_test.exe
+﻿  pch.cpp
+  gl_test_main.cpp
+  Helper.cpp
+  test_Framebuffer.cpp
+  test_Node.cpp
+  test_Timer.cpp
+  test_VectorUtils.cpp
+  Generating Code...
+glew32sd.lib(glew.obj) : warning LNK4099: PDB 'glew_static.pdb' was not found with 'glew32sd.lib(glew.obj)' or at 'E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\x64\Debug\glew_static.pdb'; linking object as if no debug info
+  gl_test.vcxproj -> E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\x64\Debug\gl_test.exe

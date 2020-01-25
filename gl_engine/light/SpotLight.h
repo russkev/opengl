@@ -31,7 +31,7 @@ namespace gl_engine
 		const std::string& type() const override;
 
 		Mesh* mesh() override;
-		Material* shader() override;
+		Material* material() override;
 		Camera* camera() override;
 
 		const float cos_inner_angle() const;
@@ -49,7 +49,7 @@ namespace gl_engine
 		GLfloat m_inner_angle = 30.0f;
 		GLfloat m_outer_angle = 35.0f;
 		Mesh m_light_mesh;
-		Material m_shader;
+		Material m_material;
 		FreeCamera m_camera;
 	};
 } // namespace gl_engine

@@ -25,7 +25,7 @@ namespace gl_engine
 		return NULL;
 	}
 
-	Material* Light::shader()
+	Material* Light::material()
 	{
 		return NULL;
 	}
@@ -45,18 +45,18 @@ namespace gl_engine
 	void Light::set_brightness(const GLfloat brightness)
 	{
 		m_brightness = brightness;
-		if (shader() != NULL)
+		if (material() != NULL)
 		{
-			shader()->set_uniform(std::string(LIGHT_SHADER_TYPE + "." + LIGHT_BRIGHTNESS), m_brightness);
+			material()->set_uniform(std::string(LIGHT_SHADER_TYPE + "." + LIGHT_BRIGHTNESS), m_brightness);
 		}
 	}
 
 	void Light::set_color(const glm::vec3 color)
 	{
 		m_color = color;
-		if (shader() != NULL)
+		if (material() != NULL)
 		{
-			shader()->set_uniform(std::string(LIGHT_SHADER_TYPE + "." + LIGHT_COLOR), m_color);
+			material()->set_uniform(std::string(LIGHT_SHADER_TYPE + "." + LIGHT_COLOR), m_color);
 		}
 	}
 
