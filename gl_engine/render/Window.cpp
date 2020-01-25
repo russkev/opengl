@@ -13,6 +13,11 @@ namespace gl_engine
 
 
 	void DebugOutputCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+		if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
+		{
+			return;
+		}
+
 		printf("Open Debug Output message: ");
 
 		if (source == GL_DEBUG_SOURCE_API_ARB)					printf("Source: API ; ");
@@ -30,12 +35,7 @@ namespace gl_engine
 		if (severity == GL_DEBUG_SEVERITY_HIGH_ARB)				printf("Severity: HIGH ; ");
 		else if (severity == GL_DEBUG_SEVERITY_MEDIUM_ARB)		printf("Severity: MEDIUM ; ");
 		else if (severity == GL_DEBUG_SEVERITY_LOW_ARB)			printf("Severity: LOW ; ");
-		else if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
-		{
-			printf("Severity: NOTIFICATION ; ");
-			printf("\nMessage : %s\n", message);
-			return;
-		}
+
 
 		printf("\nMessage : %s\n", message);
 		__debugbreak();

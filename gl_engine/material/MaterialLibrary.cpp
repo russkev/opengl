@@ -30,10 +30,8 @@ namespace gl_engine
 			set_uniform(k_point_light + "[" + index + "]." + k_brightness, 0.0f);
 			set_uniform(k_point_light + "[" + index + "]." + k_color, glm::vec3{ 1.0f });
 			set_sampler_value(k_point_light + "[" + index + "]." + k_depth, 0.0f);
-			set_uniform(k_point_light + "[" + index + "]." + k_projection, glm::mat4{ 1.0f });
 			set_uniform(k_point_light + "[" + index + "]." + k_far_plane, 100.0f);
 		}
-		//
 
 		for (GLuint i = 0; i < k_num_directional_lights; ++i)
 		{
@@ -216,7 +214,6 @@ namespace gl_engine
 	void LightMaterial::init()
 	{
 		set_uniform(k_transform_model_to_projection, glm::mat4{ 1.0f });
-		set_uniform(k_light_position, glm::vec3{ 0.0f });
 		set_uniform(k_light_brightness, 0.0f);
 		set_uniform(k_light_color, glm::vec3{ 0.0f });
 	}

@@ -7,11 +7,10 @@ out layout(location = 0) vec4 frag_color;
 // // ----- UNIFORMS ----- // //
 struct Light
 {
-	vec3 position;
 	float brightness;
 	vec3 color;
 };
-uniform Light light = { vec3(0.0), 10.0, vec3(1.0) };
+uniform Light light = { 10.0, vec3(1.0) };
 
 // // ----- MAIN ----- // //
 void main ()
