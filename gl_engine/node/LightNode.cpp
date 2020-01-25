@@ -25,10 +25,12 @@ namespace gl_engine
 	void LightNode::update_view(CameraNode* cameraNode)
 	{
 		m_model_to_perspective = cameraNode->world_to_projection() * Node::world_to_node();
-		for (auto child : Node::children())
-		{
-			child.second->update_view(cameraNode);
-		}
+
+		Node::update_view();
+		//for (auto child : Node::children())
+		//{
+		//	child.second->update_view(cameraNode);
+		//}
 	}
 
 	void LightNode::draw(const Pass& pass)

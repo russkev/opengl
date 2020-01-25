@@ -34,10 +34,12 @@ namespace gl_engine
 		m_material->set_uniform(U_MODEL_TO_WORLD_NORMAL, Node::world_normal_to_node());
 		m_material->set_uniform(U_CAM, cameraNode->world_position());
 
-		for (auto child : Node::children())
-		{
-			child.second->update_view(cameraNode);
-		}
+		Node::update_view(cameraNode);
+
+		//for (auto child : Node::children())
+		//{
+		//	child.second->update_view(cameraNode);
+		//}
 
 	}
 
