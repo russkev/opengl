@@ -18,7 +18,10 @@
 namespace gl_engine
 {
 	// // ----- FORWARD DECLERATIONS ----- // //
+	struct Node;
 	struct LightNode;
+	struct CameraNode;
+	struct Framebuffer;
 
 	/*
 
@@ -36,14 +39,12 @@ namespace gl_engine
 
 	/*
 
-		Main shader class that stores relevent information and functions about a particular shader
+		Main material class that stores relevent information and functions about a particular material
 
 	*/
 	struct Material
 	{
-		// // ----- FORWARD DECLERATIONS ----- // //
-		//struct Texture;
-		struct Framebuffer;
+
 
 		// // ----- CONSTRUCTOR ----- // //
 	public:
@@ -59,6 +60,7 @@ namespace gl_engine
 		void bind_textures();
 		void unbind_textures();
 		void update_texture_id(const std::string uniform_name, const GLuint id);
+		virtual void update_view(CameraNode* cameraNode, Node* node) {};
 
 	private:
 		void init();

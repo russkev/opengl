@@ -27,13 +27,13 @@ namespace gl_engine
 		// // ----- GETTERS ----- // //
 		const std::string& type() const override;
 		Mesh* mesh() override;
-		Material* shader() override;
+		Material* material() override;
 		Camera* camera() override;
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
 		Mesh m_light_mesh;
-		Material m_shader;
+		LightMaterial m_material;
 		OrthoCamera m_camera{ -10.0f, 10.0f, -10.0f, 10.0f };
 	};
 } // namespace gl_engine

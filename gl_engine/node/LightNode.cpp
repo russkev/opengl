@@ -24,20 +24,16 @@ namespace gl_engine
 	// // ----- GENERAL ----- // //
 	void LightNode::update_view(CameraNode* cameraNode)
 	{
-		m_model_to_perspective = cameraNode->world_to_projection() * Node::world_to_node();
-
-		Node::update_view();
-		//for (auto child : Node::children())
-		//{
-		//	child.second->update_view(cameraNode);
-		//}
+		//m_model_to_perspective = cameraNode->world_to_projection() * Node::world_to_node();
+		m_light->material()->update_view(cameraNode, this);
+		Node::update_view(cameraNode);
 	}
 
 	void LightNode::draw(const Pass& pass)
 	{
 		if (m_light->is_enabled() && pass != shadow)
 		{
-			if (m_light->shader() == NULL)
+			if (m_light->material() == NULL)
 			{
 				if (!m_shader_warned)
 				{
@@ -46,8 +42,8 @@ namespace gl_engine
 				}
 				return;
 			}
-			m_light->shader()->set_uniform(U_MODEL_TO_PROJECTION, m_model_to_perspective);
-			m_light->shader()->use();
+			//m_light->material()->set_uniform(U_MODEL_TO_PROJECTION, m_model_to_perspective);
+			m_light->material()->use();
 
 			m_vao.bind();
 			m_index_buffer.bind(GL_ELEMENT_ARRAY_BUFFER);

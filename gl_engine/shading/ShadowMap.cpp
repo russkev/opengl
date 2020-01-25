@@ -90,7 +90,7 @@ namespace gl_engine
 
 		m_framebuffer.unbind();
 
-		// Create depth shader
+		// Create depth material
 		m_depth_material = Material(DEPTH_MAP_NAME, DEPTH_MAP_VERT, DEPTH_MAP_FRAG);
 		m_texture.unbind();
 	}
@@ -108,7 +108,7 @@ namespace gl_engine
 		m_framebuffer.check_bound_framebuffer();
 		m_framebuffer.unbind();
 
-		// Create depth shader
+		// Create depth material
 		m_depth_material = Material(DEPTH_MAP_NAME, CUBE_MAP_VERT, CUBE_MAP_GEOM, CUBE_MAP_FRAG);
 		m_texture.unbind();
 	}
