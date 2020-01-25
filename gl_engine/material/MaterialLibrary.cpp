@@ -73,12 +73,12 @@ namespace gl_engine
 		set_uniform(k_material_displacement_enabled, false);
 	}
 
-	void BlinnMaterial::update_view(CameraNode* cameraNode, Node* node)
+	void BlinnMaterial::update_view(CameraNode* camera_node, Node* model_node)
 	{
-		set_uniform(k_transform_model_to_projection, cameraNode->world_to_projection() * node->world_to_node());
-		set_uniform(k_transform_model_to_world, node->world_to_node());
-		set_uniform(k_transform_model_world_to_normal, node->world_normal_to_node());
-		set_uniform(k_camera_position, cameraNode->world_position());
+		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * model_node->world_to_node());
+		set_uniform(k_transform_model_to_world, model_node->world_to_node());
+		set_uniform(k_transform_model_world_to_normal, model_node->world_normal_to_node());
+		set_uniform(k_camera_position, camera_node->world_position());
 	}
 
 	void BlinnMaterial::update_lights(const std::vector<LightNode*>& light_nodes)
@@ -106,6 +106,14 @@ namespace gl_engine
 			}
 		}
 	}
+	void BlinnMaterial::update_light_transform(LightNode* light_node, CameraNode* camera_node)
+	{
+		std::string index = std::to_string(light_node->shader_pos());
+		std::string type = light_node->light()->type();
+
+		set_uniform(type + "[" + index + "]." + k_projection, camera_node->world_to_projection());
+	}
+
 
 	void BlinnMaterial::update_light(LightNode* light_node, const PointLight* point_light)
 	{
@@ -137,6 +145,8 @@ namespace gl_engine
 		set_uniform(k_spot_light + "[" + index + "]." + k_color, light_node->light()->color());
 	}
 
+
+
 	// BLOOM
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 	BloomMaterial::BloomMaterial(const std::string& name) :
@@ -151,6 +161,49 @@ namespace gl_engine
 		set_sampler_value(k_bright, 0.0f);
 	}
 
+	// DEPTH
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	DepthMaterial::DepthMaterial(const std::string& name) :
+		Material(name, "Depth.vert", "Depth.frag")
+	{
+		init();
+	}
+
+	void DepthMaterial::init()
+	{
+		set_uniform(k_transform_model_to_projection, glm::mat4{ 1.0f });
+	}
+
+	void DepthMaterial::update_view(CameraNode* camera_node, Node* model_node)
+	{
+		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * model_node->world_to_node());
+	}
+
+	// DEPTH CUBE
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	DepthCubeMaterial::DepthCubeMaterial(const std::string& name) :
+		Material(name, "DepthCube.vert", "DepthCube.geom", "DepthCube.frag")
+	{
+		init();
+	}
+
+	void DepthCubeMaterial::init()
+	{
+		set_uniform(k_transform_model_to_world, glm::mat4{ 1.0f });
+		for (GLuint i = 0; i < k_num_faces; ++i)
+		{
+			set_uniform(k_shadow + "[" + std::to_string(i) + "]." + k_transform, glm::mat4{ 1.0f });
+		}
+		set_uniform(k_point_light_position, glm::vec3{ 0.0f });
+		set_uniform(k_point_light_far_plane, 100.0f);
+	}
+
+	void DepthCubeMaterial::update_view(CameraNode* camera_node, Node* model_node)
+	{
+		set_uniform(k_transform_model_to_world, model_node->world_to_node());
+		set_uniform(k_point_light_position, camera_node->world_position());
+		set_uniform(k_point_light_far_plane, camera_node->camera()->clip_far());
+	}
 	// LIGHT
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -169,8 +222,8 @@ namespace gl_engine
 	}
 
 
-	void LightMaterial::update_view(CameraNode* cameraNode, Node* node)
+	void LightMaterial::update_view(CameraNode* cameraNode, Node* model_node)
 	{
-		set_uniform(k_transform_model_to_projection, cameraNode->world_to_projection() * node->world_to_node());
+		set_uniform(k_transform_model_to_projection, cameraNode->world_to_projection() * model_node->world_to_node());
 	}
 } // namespace gl_engine

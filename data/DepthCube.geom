@@ -11,7 +11,7 @@ layout (triangle_strip, max_vertices = 18) out;
 // // ----- UNIFORMS ----- // //
 struct Shadow
 {
-	mat4 transforms;
+	mat4 transform;
 };
 uniform Shadow shadow[NUM_FACES];
 
@@ -27,7 +27,7 @@ void main()
 		for(int i = 0; i < 3; i++)
 		{
 			frag_position = gl_in[i].gl_Position;
-			gl_Position = shadow[face].transforms * frag_position;
+			gl_Position = shadow[face].transform * frag_position;
 			EmitVertex();
 		}
 		EndPrimitive();
