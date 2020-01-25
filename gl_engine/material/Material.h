@@ -56,7 +56,7 @@ namespace gl_engine
 		void use();
 		bool contains_uniform(const std::string uniform_name);
 		bool is_uniform(const GLenum type);
-		void update_lights(const std::vector<LightNode*>& light_nodes);
+		virtual void update_lights(const std::vector<LightNode*>& light_nodes) {}
 		void bind_textures();
 		void unbind_textures();
 		void update_texture_id(const std::string uniform_name, const GLuint id);

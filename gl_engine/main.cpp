@@ -149,7 +149,15 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 
 
 	// Shader 2
-	//gl_engine::Material floor_material{ "Floor Blinn", "Blinn.vert", "Blinn.frag" };
+	gl_engine::BlinnMaterial floor_material{ "Floor Blinn" };
+	floor_material.set_sampler_value(floor_material.k_material_glossiness, 0.03f);
+	floor_material.set_sampler_value(floor_material.k_material_specular, 0.30f);
+	floor_material.set_texture(floor_material.k_material_diffuse, &grey_grid_tex);
+	//floor_material.set_texture("material.normal", &normal_up);
+	//floor_material.set_uniform("material.displacement_enabled", false);
+	//floor_material.set_sampler_value("material.displacement", 0.0f);
+	//floor_material.set_uniform("material.displacement_amount", 0.0f);
+	
 	//floor_material.set_sampler_value("material.glossiness", 0.03f);
 	//floor_material.set_sampler_value("material.specular", 0.30f);
 	//floor_material.set_texture("material.diffuse", &grey_grid_tex);
@@ -157,6 +165,7 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	//floor_material.set_uniform("material.displacement_enabled", false);
 	//floor_material.set_sampler_value("material.displacement", 0.0f);
 	//floor_material.set_uniform("material.displacement_amount", 0.0f);
+
 
 	// Texture 3
 	//gl_engine::Texture arrayTest_tex("uvtemplate.tga");
@@ -168,9 +177,9 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	gl_engine::MeshNode shaderBall_node{ "shader ball", &shaderBall, &shaderBall_material };
 
 	// Mesh 2
-	//gl_engine::Mesh plane = gl_engine::Plane::create_plane(100.0f, 100.0f, 1, 1);
-	//plane.scale_uvs(10.0f);
-	//gl_engine::MeshNode plane_node{ "Plane 1", &plane, &floor_material };
+	gl_engine::Mesh plane = gl_engine::Plane::create_plane(100.0f, 100.0f, 1, 1);
+	plane.scale_uvs(10.0f);
+	gl_engine::MeshNode plane_node{ "Plane 1", &plane, &floor_material };
 
 	// Mesh 3
 	//gl_engine::Mesh cube = gl_engine::Cube::create_cube(5.0f);
@@ -261,7 +270,7 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	// Renderer
 	gl_engine::Renderer render{ &targetCam_node, glm::uvec2(window.width(), window.height()) };
 	render.add_node(&shaderBall_node);
-	//render.add_node(&plane_node);
+	render.add_node(&plane_node);
 
 	render.add_node(&pointLight_node);
 	render.add_node(&pointLight_node2);

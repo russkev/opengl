@@ -15,6 +15,10 @@
 
 namespace gl_engine
 {
+	struct PointLight;
+	struct DirectionalLight;
+	struct SpotLight;
+
 	struct BlinnMaterial : public Material
 	{
 		inline static GLuint k_num_point_lights			= 3;
@@ -53,13 +57,35 @@ namespace gl_engine
 		inline static const std::string k_material_displacement_enabled = "material.displacement_enabled";
 
 		BlinnMaterial(const std::string& name);
-
+	private:
+		void init();
+	public:
 		void update_view(CameraNode* cameraNode, Node* node) override;
+		void update_lights(const std::vector<LightNode*>& light_nodes) override;
+	private:
+		void update_light(LightNode* light_node, const PointLight* point_light);
+		void update_light(LightNode* light_node, const DirectionalLight* directional_light);
+		void update_light(LightNode* light_node, const SpotLight* spot_light);
+
+
+	};
+	// BLOOM
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	struct BloomMaterial : public Material
+	{
+		inline static const std::string k_color =	"color";
+		inline static const std::string k_bright =	"bright";
+
+		BloomMaterial(const std::string& name);
 
 	private:
 		void init();
+
 	};
 
+
+	// LIGHT
+	//------------------------------------------------------------------------------------------------------------------------------------------//
 	struct LightMaterial : public Material
 	{
 		inline static const std::string k_transform_model_to_projection = "transform.model_to_projection";

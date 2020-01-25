@@ -48,39 +48,6 @@ namespace gl_engine
 		return m_uniforms.find(uniform_name) != m_uniforms.end();
 	}
 
-	void Material::update_lights(const std::vector<LightNode*>& light_nodes)
-	{
-		int index = 0;// , point_index = 0, directional_index = 0, spot_index = 0;
-		std::string type = "";
-
-		for (LightNode* light_node : light_nodes)
-		{
-			PointLight* pointLight = dynamic_cast<PointLight*>(light_node->light());
-			DirectionalLight* directionalLight = dynamic_cast<DirectionalLight*>(light_node->light());
-			SpotLight* spotLight = dynamic_cast<SpotLight*>(light_node->light());
-
-			index = light_node->shader_pos();
-			type = light_node->light()->type();
-
-			// Set uniforms
-			if (pointLight || spotLight)
-			{
-				set_uniform(std::string(type + "[" + std::to_string(index) + "]." + LightNode::LIGHT_POSITION), light_node->world_position());
-			}
-			if (directionalLight || spotLight)
-			{
-				set_uniform(std::string(type + "[" + std::to_string(index) + "]." + LightNode::LIGHT_DIRECTION), light_node->direction());
-			}
-			if (spotLight)
-			{
-				set_uniform(std::string(type + "[" + std::to_string(index) + "]." + SpotLight::INNER), spotLight->cos_inner_angle());
-				set_uniform(std::string(type + "[" + std::to_string(index) + "]." + SpotLight::OUTER), spotLight->cos_outer_angle());
-			}
-			set_uniform(std::string(type + "[" + std::to_string(index) + "]." + Light::LIGHT_BRIGHTNESS), light_node->light()->brightness());
-			set_uniform(std::string(type + "[" + std::to_string(index) + "]." + Light::LIGHT_COLOR), light_node->light()->color());
-		}
-	}
-
 	void Material::bind_textures()
 	{
 		for (const auto & texture_pair : m_textures)
