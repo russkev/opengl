@@ -119,6 +119,7 @@ namespace gl_engine
 	{
 		//std::printf("Shader \"%s\" loaded.\n", m_name.c_str());
 		fetch_uniforms();
+		set_uniform_defualts();
 	}
 	//Get all the uniforms from the shader and store their information with the shader
 	void Material::fetch_uniforms()
