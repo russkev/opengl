@@ -5,6 +5,7 @@
 
 #include "../shading/Framebuffer.h"
 #include "../material/Material.h"
+#include "../material/MaterialLibrary.h"
 #include "../node/MeshNode.h"
 
 namespace gl_engine
@@ -41,7 +42,7 @@ namespace gl_engine
 		Texture m_blur_texture;
 
 		Material m_blur_material{ "Gaussian Blur Shader", "ScreenPassthrough.vert", "GaussianBlur.frag" };
-		Material m_bloom_material{ "Bloom Shader", "ScreenPassthrough.vert", "Bloom.frag" };
+		BloomMaterial m_bloom_material{ "Bloom Shader" };
 		MeshNode m_blur_node{ "Blur Screen Node", PostEffect::mesh(), &m_blur_material };
 		MeshNode m_bloom_node{ "Bloom Screen Node", PostEffect::mesh(), &m_bloom_material };
 	};

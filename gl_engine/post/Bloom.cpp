@@ -23,8 +23,8 @@ namespace gl_engine
 
 		m_blur_texture = Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, dimensions);
 		m_blur_material.set_texture("image", &m_blur_texture);
-		m_bloom_material.set_texture("color", m_tone_map->beauty());
-		m_bloom_material.set_texture("bright", &m_blur_texture);
+		m_bloom_material.set_texture(BloomMaterial::k_color , m_tone_map->beauty());
+		m_bloom_material.set_texture(BloomMaterial::k_bright, &m_blur_texture);
 	}
 
 	// // ----- GENERAL METHODS ----- // //

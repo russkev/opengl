@@ -43,7 +43,7 @@ namespace gl_engine
 	private:
 		float m_radius = 0.5f;
 		Mesh m_light_mesh;
-		Material m_material;
+		LightMaterial m_material;
 		FreeCamera m_camera;
 	};
 } // namespace gl_engine

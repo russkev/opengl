@@ -49,7 +49,7 @@ namespace gl_engine
 		GLfloat m_inner_angle = 30.0f;
 		GLfloat m_outer_angle = 35.0f;
 		Mesh m_light_mesh;
-		Material m_material;
+		LightMaterial m_material;
 		FreeCamera m_camera;
 	};
 } // namespace gl_engine
