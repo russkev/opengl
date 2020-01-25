@@ -57,6 +57,7 @@ namespace gl_engine
 		bool contains_uniform(const std::string uniform_name);
 		bool is_uniform(const GLenum type);
 		virtual void update_lights(const std::vector<LightNode*>& light_nodes) {}
+		virtual void update_light_transform(LightNode* light_node, CameraNode* camera_node) {};
 		void bind_textures();
 		void unbind_textures();
 		void update_texture_id(const std::string uniform_name, const GLuint id);
@@ -78,6 +79,7 @@ namespace gl_engine
 		void set_sampler_color(const std::string& uniform_name, glm::vec3& color);
 		void set_sampler_value(const std::string& uniform_name, GLfloat value);
 		void set_texture(const std::string& uniform_name, Texture* texture);
+
 
 		// Set uniform of shader.
 		// Automatically choose correct upload path based on data type

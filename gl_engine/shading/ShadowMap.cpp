@@ -6,6 +6,7 @@
 #include "../light/SpotLight.h"
 #include "../node/LightNode.h"
 #include "../node/MeshNode.h"
+#include "../material/MaterialLibrary.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -78,7 +79,8 @@ namespace gl_engine
 
 	void ShadowMap::init_directional_shadowMap()
 	{
-		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_2D_ARRAY, &glm::uvec2(SHADOW_WIDTH, SHADOW_HEIGHT));
+		glm::uvec2 dimensions{ SHADOW_WIDTH, SHADOW_HEIGHT };
+		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_2D_ARRAY, &dimensions);
 
 		m_texture.bind();
 		m_framebuffer.bind();
@@ -91,13 +93,15 @@ namespace gl_engine
 		m_framebuffer.unbind();
 
 		// Create depth material
-		m_depth_material = Material(DEPTH_MAP_NAME, DEPTH_MAP_VERT, DEPTH_MAP_FRAG);
+		//m_depth_material = Material(DEPTH_MAP_NAME, DEPTH_MAP_VERT, DEPTH_MAP_FRAG);
+		m_depth_material = DepthMaterial(DEPTH_MAP_NAME);
 		m_texture.unbind();
 	}
 
 	void ShadowMap::init_point_shadowMap()
 	{
-		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_CUBE_MAP, &glm::uvec2(SHADOW_WIDTH, SHADOW_HEIGHT));
+		glm::uvec2 dimensions{ SHADOW_WIDTH, SHADOW_HEIGHT };
+		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_CUBE_MAP, &dimensions);
 
 		m_texture.bind();
 		m_framebuffer.bind();
@@ -109,7 +113,7 @@ namespace gl_engine
 		m_framebuffer.unbind();
 
 		// Create depth material
-		m_depth_material = Material(DEPTH_MAP_NAME, CUBE_MAP_VERT, CUBE_MAP_GEOM, CUBE_MAP_FRAG);
+		m_depth_material = DepthCubeMaterial(DEPTH_MAP_NAME);
 		m_texture.unbind();
 	}
 
@@ -123,7 +127,8 @@ namespace gl_engine
 
 			if (is_directional())
 			{
-				material->set_uniform(type + "[" + index + "]." + LIGHT_SPACE_TRANSFORM, m_cameraNode.world_to_projection());
+				material->update_light_transform(m_lightNode, &m_cameraNode);
+				//material->set_uniform(type + "[" + index + "]." + LIGHT_SPACE_TRANSFORM, m_cameraNode.world_to_projection());
 			}
 		}
 	}
@@ -154,14 +159,15 @@ namespace gl_engine
 		std::string type = m_lightNode->light()->type();
 		std::string index = std::to_string(m_lightNode->shader_pos());
 
-		m_depth_material.set_uniform(LIGHT_SPACE_TRANSFORM, m_cameraNode.world_to_projection());
+		//m_depth_material.set_uniform(LIGHT_SPACE_TRANSFORM, m_cameraNode.world_to_projection());
 		for (auto const& node_pair : root_nodes)
 		{
 			Node* node = node_pair.second;
 			node->update_view(&m_cameraNode);
 			if (MeshNode* meshNode = dynamic_cast<MeshNode*>(node))
 			{
-				m_depth_material.set_uniform(MODEL_TRANSFORM, meshNode->world_to_node());
+				//m_depth_material.set_uniform(MODEL_TRANSFORM, meshNode->world_to_node());
+				m_depth_material.update_view(&m_cameraNode, meshNode);
 				meshNode->draw_material(&m_depth_material);
 			}
 		}
@@ -200,14 +206,16 @@ namespace gl_engine
 			{
 				std::string type = m_lightNode->light()->type();
 				std::string index = std::to_string(m_lightNode->shader_pos());
-
-				m_depth_material.set_uniform(MODEL_TRANSFORM, meshNode->world_to_node());
+				m_depth_material.update_view(&m_cameraNode, meshNode);
+				//m_depth_material.set_uniform(MODEL_TRANSFORM, meshNode->world_to_node());
 				for (GLuint i = 0; i < 6; ++i)
 				{
-					m_depth_material.set_uniform(SHADOW + "[" + std::to_string(i) + "]." + TRANSFORMS, shadow_transforms.at(i));
+					std::string index = std::to_string(i);
+					//m_depth_material.set_uniform(SHADOW + "[" + std::to_string(i) + "]." + TRANSFORMS, shadow_transforms.at(i));
+					m_depth_material.set_uniform(DepthCubeMaterial::k_shadow + "[" + index + "]." + DepthCubeMaterial::k_transform, shadow_transforms.at(i));
 				}
-				m_depth_material.set_uniform(type + "." + LightNode::LIGHT_POSITION, m_lightNode->world_position());
-				m_depth_material.set_uniform(type + "." + FAR_PLANE, m_cameraNode.camera()->clip_far());
+				//m_depth_material.set_uniform(type + "." + LightNode::LIGHT_POSITION, m_lightNode->world_position());
+				//m_depth_material.set_uniform(type + "." + FAR_PLANE, m_cameraNode.camera()->clip_far());
 				meshNode->draw_material(&m_depth_material);
 			}
 		}

@@ -60,21 +60,22 @@ namespace gl_engine
 	private:
 		void init();
 	public:
-		void update_view(CameraNode* cameraNode, Node* node) override;
+		void update_view(CameraNode* camera_node, Node* model_node) override;
 		void update_lights(const std::vector<LightNode*>& light_nodes) override;
+		void update_light_transform(LightNode* light_node, CameraNode* camera_node) override;
+
 	private:
 		void update_light(LightNode* light_node, const PointLight* point_light);
 		void update_light(LightNode* light_node, const DirectionalLight* directional_light);
 		void update_light(LightNode* light_node, const SpotLight* spot_light);
-
-
 	};
+
 	// BLOOM
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 	struct BloomMaterial : public Material
 	{
-		inline static const std::string k_color =	"color";
-		inline static const std::string k_bright =	"bright";
+		inline static const std::string k_color		= "color";
+		inline static const std::string k_bright	= "bright";
 
 		BloomMaterial(const std::string& name);
 
@@ -83,6 +84,40 @@ namespace gl_engine
 
 	};
 
+	// DEPTH
+	//------------------------------------------------------------------------------------------------------------------------------------------//	
+	struct DepthMaterial : public Material
+	{
+		inline static const std::string k_transform_model_to_projection = "transform.model_to_projection";
+
+		DepthMaterial(const std::string& name);
+
+	private:
+		void init();
+	public:
+		void update_view(CameraNode* camera_node, Node* model_node) override;
+	};
+
+	// DEPTH CUBE
+	//------------------------------------------------------------------------------------------------------------------------------------------//	
+	struct DepthCubeMaterial : public Material
+	{
+		inline static const GLuint k_num_faces = 6;
+
+		inline static const std::string k_transform_model_to_world = "transform.model_to_world";
+		inline static const std::string k_shadow = "shadow";
+		inline static const std::string k_transform = "transform";
+		inline static const std::string k_point_light_position = "pointLight.position";
+		inline static const std::string k_point_light_far_plane = "pointLight.far_plane";
+	
+		DepthCubeMaterial(const std::string& name);
+
+	private:
+		void init();
+	public:
+		void update_view(CameraNode* camera_node, Node* model_node);
+	
+	};
 
 	// LIGHT
 	//------------------------------------------------------------------------------------------------------------------------------------------//
@@ -96,7 +131,7 @@ namespace gl_engine
 
 		LightMaterial(const std::string& name);
 
-		void update_view(CameraNode* cameraNode, Node* node) override;
+		void update_view(CameraNode* cameraNode, Node* model_node) override;
 	private:
 		void init();
 	};
