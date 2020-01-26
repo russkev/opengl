@@ -163,11 +163,11 @@ namespace gl_engine
 		for (auto const& node_pair : root_nodes)
 		{
 			Node* node = node_pair.second;
-			node->update_view(&m_cameraNode);
+			//node->update_view(&m_cameraNode);
 			if (MeshNode* meshNode = dynamic_cast<MeshNode*>(node))
 			{
-				m_depth_material.set_uniform(MODEL_TRANSFORM, meshNode->world_to_node());
-				//m_depth_material.update_view(&m_cameraNode, meshNode);
+				//m_depth_material.set_uniform(MODEL_TRANSFORM, meshNode->world_to_node());
+				m_depth_material.update_view(&m_cameraNode, meshNode);
 				meshNode->draw_material(&m_depth_material);
 			}
 		}
