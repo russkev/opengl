@@ -28,7 +28,6 @@ struct PointLight
 	float brightness;
 	vec3 color;
 	samplerCube depth;
-	mat4 projection;
 	float far_plane;
 };
 uniform PointLight pointLight[NUM_LIGHTS];

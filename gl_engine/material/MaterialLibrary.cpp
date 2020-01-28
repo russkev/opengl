@@ -172,9 +172,9 @@ namespace gl_engine
 		set_uniform(k_transform_model_to_projection, glm::mat4{ 1.0f });
 	}
 
-	void DepthMaterial::update_view(CameraNode* camera_node, Node* model_node)
+	void DepthMaterial::update_view(CameraNode* camera_node, Node* mesh_node)
 	{
-		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * model_node->world_to_node());
+		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * mesh_node->world_to_node());
 	}
 
 	// DEPTH CUBE
