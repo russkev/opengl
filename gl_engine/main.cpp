@@ -229,13 +229,13 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	spotLight2.set_outer_angle(70.0f);
 
 	// Shadow map
-	gl_engine::ShadowMap shadowMap_spot1{ &spotLight_node1 };
-	gl_engine::ShadowMap shadowMap_spot2{ &spotLight_node2 };
 	gl_engine::ShadowMap shadowMap_directional1{ &directionalLight_node1 };
-	gl_engine::ShadowMap shadowMap_point1{ &pointLight_node };
-	gl_engine::ShadowMap shadowMap_point2{ &pointLight_node2 };
+	//gl_engine::ShadowMap shadowMap_spot1{ &spotLight_node1 };
+	//gl_engine::ShadowMap shadowMap_spot2{ &spotLight_node2 };
+	//gl_engine::ShadowMap shadowMap_point1{ &pointLight_node };
+	//gl_engine::ShadowMap shadowMap_point2{ &pointLight_node2 };
 
-	shadowMap_point2.set_clip_far(25.0f);
+	//shadowMap_point2.set_clip_far(25.0f);
 
 	// Null node 1
 	gl_engine::Node lightRotate1{ "light rotate 01" };
@@ -272,11 +272,11 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	render.add_node(&shaderBall_node);
 	render.add_node(&plane_node);
 
-	render.add_node(&pointLight_node);
-	render.add_node(&pointLight_node2);
 	render.add_node(&directionalLight_node1);
-	render.add_node(&spotLight_node1);
-	render.add_node(&spotLight_node2);
+	//render.add_node(&pointLight_node);
+	//render.add_node(&pointLight_node2);
+	//render.add_node(&spotLight_node1);
+	//render.add_node(&spotLight_node2);
 
 	//render.add_node(&lightRotate1);
 

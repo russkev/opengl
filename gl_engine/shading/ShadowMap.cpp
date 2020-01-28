@@ -159,15 +159,22 @@ namespace gl_engine
 		std::string type = m_lightNode->light()->type();
 		std::string index = std::to_string(m_lightNode->shader_pos());
 
-		m_depth_material.set_uniform(LIGHT_SPACE_TRANSFORM, m_cameraNode.world_to_projection());
+		//m_depth_material.set_uniform(LIGHT_SPACE_TRANSFORM, m_cameraNode.world_to_projection());
+		//glm::mat4 projection = m_cameraNode.world_to_projection();
 		for (auto const& node_pair : root_nodes)
 		{
 			Node* node = node_pair.second;
-			//node->update_view(&m_cameraNode);
+			node->update_view(&m_cameraNode);
 			if (MeshNode* meshNode = dynamic_cast<MeshNode*>(node))
 			{
+				glm::mat4 model_to_world = meshNode->world_to_node();
+				glm::mat4 projection = m_cameraNode.world_to_projection();
+				CameraNode* cam_node_pointer = &m_cameraNode;
 				//m_depth_material.set_uniform(MODEL_TRANSFORM, meshNode->world_to_node());
-				m_depth_material.update_view(&m_cameraNode, meshNode);
+				m_depth_material.set_uniform("transform.model_to_projection", cam_node_pointer->world_to_projection() * meshNode->world_to_node());
+				//m_depth_material.set_uniform("transform.model_to_projection", m_cameraNode.world_to_projection() * meshNode->world_to_node());
+				//m_depth_material.set_uniform("transform.model_to_projection", projection * model_to_world);
+				//m_depth_material.update_view(&m_cameraNode, meshNode);
 				meshNode->draw_material(&m_depth_material);
 			}
 		}
