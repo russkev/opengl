@@ -56,7 +56,7 @@ namespace gl_engine
 	private:
 		void init_camera();
 		void init_directional_shadowMap();
-		//void init_point_shadowMap();
+		void init_point_shadowMap();
 
 		// // ----- UPDATE ----- // //
 	public:
@@ -66,7 +66,8 @@ namespace gl_engine
 		void render_shadowMap(std::map<std::string, Node*>& root_nodes);
 	private:
 		void render_directional_shadowMap(std::map<std::string, Node*>& root_nodes);
-		//void render_point_shadowMap(std::map<std::string, Node*>& root_nodes);
+		void render_point_shadowMap(std::map<std::string, Node*>& root_nodes);
+		std::vector<glm::mat4> make_poin_shadow_transforms(const glm::vec3& position);
 
 		// // ----- GENERAL METHODS ----- // //
 	public:
