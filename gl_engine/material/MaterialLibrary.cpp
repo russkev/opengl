@@ -161,8 +161,12 @@ namespace gl_engine
 
 	// DEPTH
 	//------------------------------------------------------------------------------------------------------------------------------------------//
+	DepthMaterial::DepthMaterial() :
+		DepthMaterial{ "Depth Material" }
+	{}
+	
 	DepthMaterial::DepthMaterial(const std::string& name) :
-		Material(name, "Depth.vert", "Depth.frag")
+		Material{ name, "Depth.vert", "Depth.frag" }
 	{
 		init();
 	}
