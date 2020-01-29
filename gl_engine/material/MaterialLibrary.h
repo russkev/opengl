@@ -54,6 +54,7 @@ namespace gl_engine
 		inline static const std::string k_material_displacement_amount	= "material.displacement_amount";
 		inline static const std::string k_material_displacement_enabled = "material.displacement_enabled";
 
+		BlinnMaterial();
 		BlinnMaterial(const std::string& name);
 	private:
 		void init();
@@ -75,6 +76,7 @@ namespace gl_engine
 		inline static const std::string k_color		= "color";
 		inline static const std::string k_bright	= "bright";
 
+		BloomMaterial();
 		BloomMaterial(const std::string& name);
 
 	private:
@@ -109,6 +111,7 @@ namespace gl_engine
 		inline static const std::string k_point_light_position = "pointLight.position";
 		inline static const std::string k_point_light_far_plane = "pointLight.far_plane";
 	
+		DepthCubeMaterial();
 		DepthCubeMaterial(const std::string& name);
 
 	private:
@@ -128,6 +131,7 @@ namespace gl_engine
 		inline static const std::string k_light_brightness	= "light.brightness";
 		inline static const std::string k_light_color		= "light.color";
 
+		LightMaterial();
 		LightMaterial(const std::string& name);
 
 		void update_view(CameraNode* cameraNode, Node* model_node) override;

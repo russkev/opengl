@@ -12,6 +12,10 @@ namespace gl_engine
 	// BLINN
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 
+	BlinnMaterial::BlinnMaterial() :
+		BlinnMaterial("Blinn Material")
+	{}
+	
 	BlinnMaterial::BlinnMaterial(const std::string& name) :
 		Material{ name, "Blinn.vert", "Blinn.frag"}
 	{
@@ -147,6 +151,10 @@ namespace gl_engine
 
 	// BLOOM
 	//------------------------------------------------------------------------------------------------------------------------------------------//
+	BloomMaterial::BloomMaterial() :
+		BloomMaterial("Bloom Material")
+	{}
+	
 	BloomMaterial::BloomMaterial(const std::string& name) :
 		Material(name, "ScreenPassthrough.vert", "Bloom.frag")
 	{
@@ -183,6 +191,10 @@ namespace gl_engine
 
 	// DEPTH CUBE
 	//------------------------------------------------------------------------------------------------------------------------------------------//
+	DepthCubeMaterial::DepthCubeMaterial() :
+		DepthCubeMaterial("Depth Cube Material")
+	{}
+	
 	DepthCubeMaterial::DepthCubeMaterial(const std::string& name) :
 		Material(name, "DepthCube.vert", "DepthCube.geom", "DepthCube.frag")
 	{
@@ -206,8 +218,12 @@ namespace gl_engine
 		set_uniform(k_point_light_position, camera_node->world_position());
 		set_uniform(k_point_light_far_plane, camera_node->camera()->clip_far());
 	}
+
 	// LIGHT
 	//------------------------------------------------------------------------------------------------------------------------------------------//
+	LightMaterial::LightMaterial() :
+		LightMaterial("Light Material")
+	{}
 
 	LightMaterial::LightMaterial(const std::string& name) :
 		Material{name, "Light.vert", "Light.frag"}

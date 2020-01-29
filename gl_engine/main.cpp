@@ -92,8 +92,8 @@ int main(int, char**)
 
 	gl_engine::Window window{ "GL Engine", st_config, width, height };
 
-	spinning_shader_ball_scene(window);
-	//three_shader_ball_scene(window);
+	//spinning_shader_ball_scene(window);
+	three_shader_ball_scene(window);
 	//g_buffer_scene(window);
 
 	return 0;
@@ -230,10 +230,10 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 
 	// Shadow map
 	gl_engine::ShadowMap shadowMap_directional1{ &directionalLight_node1 };
-	//gl_engine::ShadowMap shadowMap_spot1{ &spotLight_node1 };
-	//gl_engine::ShadowMap shadowMap_spot2{ &spotLight_node2 };
-	//gl_engine::ShadowMap shadowMap_point1{ &pointLight_node };
-	//gl_engine::ShadowMap shadowMap_point2{ &pointLight_node2 };
+	gl_engine::ShadowMap shadowMap_spot1{ &spotLight_node1 };
+	gl_engine::ShadowMap shadowMap_spot2{ &spotLight_node2 };
+	gl_engine::ShadowMap shadowMap_point1{ &pointLight_node };
+	gl_engine::ShadowMap shadowMap_point2{ &pointLight_node2 };
 
 	//shadowMap_point2.set_clip_far(25.0f);
 
@@ -273,10 +273,10 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	render.add_node(&plane_node);
 
 	render.add_node(&directionalLight_node1);
-	//render.add_node(&pointLight_node);
-	//render.add_node(&pointLight_node2);
-	//render.add_node(&spotLight_node1);
-	//render.add_node(&spotLight_node2);
+	render.add_node(&pointLight_node);
+	render.add_node(&pointLight_node2);
+	render.add_node(&spotLight_node1);
+	render.add_node(&spotLight_node2);
 
 	//render.add_node(&lightRotate1);
 
@@ -285,7 +285,6 @@ void spinning_shader_ball_scene(gl_engine::Window window)
 	//render.add_node(&axis_arrow_y_node);
 	//render.add_node(&axis_arrow_z_node);
 
-	//uv_template_b_tex.unbind();
 
 	gl_engine::Timer timer;
 
@@ -336,12 +335,12 @@ void three_shader_ball_scene(gl_engine::Window window)
 
 
 	// Shader Grey
-	gl_engine::Material grey_material_rough{		"grey material rough",	"Blinn.vert", "Blinn.frag" };
-	gl_engine::Material grey_material_mid{			"grey material mid",	"Blinn.vert", "Blinn.frag" };
-	gl_engine::Material grey_material_shiny{		"grey material shiny",	"Blinn.vert", "Blinn.frag" };
-	gl_engine::Material grey_material_rough_mapped{	"grey material rough",	"Blinn.vert", "Blinn.frag" };
-	gl_engine::Material grey_material_mid_mapped{	"grey material mid",	"Blinn.vert", "Blinn.frag" };
-	gl_engine::Material grey_material_shiny_mapped{	"grey material shiny",	"Blinn.vert", "Blinn.frag" };
+	gl_engine::BlinnMaterial grey_material_rough{			"grey material rough" };
+	gl_engine::BlinnMaterial grey_material_mid{				"grey material mid" };
+	gl_engine::BlinnMaterial grey_material_shiny{			"grey material shiny" };
+	gl_engine::BlinnMaterial grey_material_rough_mapped{	"grey material rough" };
+	gl_engine::BlinnMaterial grey_material_mid_mapped{		"grey material mid" };
+	gl_engine::BlinnMaterial grey_material_shiny_mapped{	"grey material shiny" };
 
 	grey_material_rough.set_sampler_value(		"material.glossiness", 0.01f);
 	grey_material_mid.set_sampler_value(		"material.glossiness", 0.50f);
