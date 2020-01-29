@@ -56,7 +56,7 @@ namespace gl_engine
 	private:
 		void init_camera();
 		void init_directional_shadowMap();
-		void init_point_shadowMap();
+		//void init_point_shadowMap();
 
 		// // ----- UPDATE ----- // //
 	public:
@@ -66,7 +66,7 @@ namespace gl_engine
 		void render_shadowMap(std::map<std::string, Node*>& root_nodes);
 	private:
 		void render_directional_shadowMap(std::map<std::string, Node*>& root_nodes);
-		void render_point_shadowMap(std::map<std::string, Node*>& root_nodes);
+		//void render_point_shadowMap(std::map<std::string, Node*>& root_nodes);
 
 		// // ----- GENERAL METHODS ----- // //
 	public:
@@ -81,8 +81,8 @@ namespace gl_engine
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		//GLuint		m_depthMap_FBO;
-		Material	m_depth_material{ "Depth material", "Depth.vert", "Depth.frag" };
+		//Material	m_depth_material;
+		std::unique_ptr<Material> m_depth_material;
 		Texture		m_texture;
 		Framebuffer m_framebuffer;
 		LightNode*	m_lightNode = NULL;

@@ -10,9 +10,7 @@
 #include <set>
 
 #include <glm/glm.hpp>
-
 #include <GL/glew.h>
-
 namespace gl_engine
 {
 	struct PointLight;
@@ -90,6 +88,7 @@ namespace gl_engine
 	{
 		inline static const std::string k_transform_model_to_projection = "transform.model_to_projection";
 
+		DepthMaterial();
 		DepthMaterial(const std::string& name);
 
 	private:

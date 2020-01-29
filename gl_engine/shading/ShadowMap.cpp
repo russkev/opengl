@@ -46,10 +46,10 @@ namespace gl_engine
 		{
 			init_directional_shadowMap();
 		}
-		else if (is_point())
-		{
-			init_point_shadowMap();
-		}
+		//else if (is_point())
+		//{
+		//	init_point_shadowMap();
+		//}
 	}
 
 
@@ -94,28 +94,29 @@ namespace gl_engine
 
 		// Create depth material
 		//m_depth_material = Material(DEPTH_MAP_NAME, DEPTH_MAP_VERT, DEPTH_MAP_FRAG);
-		m_depth_material = DepthMaterial(DEPTH_MAP_NAME);
+		//m_depth_material = DepthMaterial(DEPTH_MAP_NAME);
+		m_depth_material = std::make_unique<DepthMaterial>();
 		m_texture.unbind();
 	}
 
-	void ShadowMap::init_point_shadowMap()
-	{
-		glm::uvec2 dimensions{ SHADOW_WIDTH, SHADOW_HEIGHT };
-		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_CUBE_MAP, &dimensions);
+	//void ShadowMap::init_point_shadowMap()
+	//{
+	//	glm::uvec2 dimensions{ SHADOW_WIDTH, SHADOW_HEIGHT };
+	//	m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_CUBE_MAP, &dimensions);
 
-		m_texture.bind();
-		m_framebuffer.bind();
+	//	m_texture.bind();
+	//	m_framebuffer.bind();
 
-		m_framebuffer.process_texture(&m_texture);
-		glDrawBuffer(GL_NONE);
-		glReadBuffer(GL_NONE);
-		m_framebuffer.check_bound_framebuffer();
-		m_framebuffer.unbind();
+	//	m_framebuffer.process_texture(&m_texture);
+	//	glDrawBuffer(GL_NONE);
+	//	glReadBuffer(GL_NONE);
+	//	m_framebuffer.check_bound_framebuffer();
+	//	m_framebuffer.unbind();
 
-		// Create depth material
-		m_depth_material = DepthCubeMaterial(DEPTH_MAP_NAME);
-		m_texture.unbind();
-	}
+	//	// Create depth material
+	//	m_depth_material = DepthCubeMaterial(DEPTH_MAP_NAME);
+	//	m_texture.unbind();
+	//}
 
 	// // ----- UPDATE ----- // //
 	void ShadowMap::update_materials(std::vector<Material*>& materials)
@@ -146,10 +147,10 @@ namespace gl_engine
 		{
 			render_directional_shadowMap(root_nodes);
 		}
-		else if (is_point())
-		{
-			render_point_shadowMap(root_nodes);
-		}
+		//else if (is_point())
+		//{
+		//	render_point_shadowMap(root_nodes);
+		//}
 		m_framebuffer.unbind();
 		m_texture.unbind();
 	}
@@ -171,62 +172,67 @@ namespace gl_engine
 				glm::mat4 projection = m_cameraNode.world_to_projection();
 				CameraNode* cam_node_pointer = &m_cameraNode;
 				//m_depth_material.set_uniform(MODEL_TRANSFORM, meshNode->world_to_node());
-				m_depth_material.set_uniform("transform.model_to_projection", cam_node_pointer->world_to_projection() * meshNode->world_to_node());
+				//m_depth_material.set_uniform("transform.model_to_projection", cam_node_pointer->world_to_projection() * meshNode->world_to_node());
 				//m_depth_material.set_uniform("transform.model_to_projection", m_cameraNode.world_to_projection() * meshNode->world_to_node());
 				//m_depth_material.set_uniform("transform.model_to_projection", projection * model_to_world);
-				//m_depth_material.update_view(&m_cameraNode, meshNode);
-				meshNode->draw_material(&m_depth_material);
+				//Material* m_depth_material_pointer = &m_depth_material;
+				//DepthMaterial* depth_material = dynamic_cast<DepthMaterial*>(m_depth_material_pointer);
+				//depth_material->update_view(&m_cameraNode, meshNode);
+
+				DepthMaterial* depth_material = dynamic_cast<DepthMaterial*>(m_depth_material.get());
+				depth_material->update_view(&m_cameraNode, meshNode);
+				meshNode->draw_material(depth_material);
 			}
 		}
 	}
 
-	void ShadowMap::render_point_shadowMap(std::map<std::string, Node*>& root_nodes)
-	{
-		m_depth_material.use();
+	//void ShadowMap::render_point_shadowMap(std::map<std::string, Node*>& root_nodes)
+	//{
+	//	m_depth_material.use();
 
-		std::vector<glm::mat4> shadow_transforms;
-		glm::vec3 position = m_lightNode->world_position();
+	//	std::vector<glm::mat4> shadow_transforms;
+	//	glm::vec3 position = m_lightNode->world_position();
 
-		shadow_transforms.push_back(m_cameraNode.camera()->cam_to_projection() * 
-			glm::lookAt(position, position + glm::vec3(+1.0f, +0.0f, +0.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
+	//	shadow_transforms.push_back(m_cameraNode.camera()->cam_to_projection() * 
+	//		glm::lookAt(position, position + glm::vec3(+1.0f, +0.0f, +0.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
 
-		shadow_transforms.push_back(m_cameraNode.camera()->cam_to_projection() * 
-			glm::lookAt(position, position + glm::vec3(-1.0f, +0.0f, +0.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
+	//	shadow_transforms.push_back(m_cameraNode.camera()->cam_to_projection() * 
+	//		glm::lookAt(position, position + glm::vec3(-1.0f, +0.0f, +0.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
 
-		shadow_transforms.push_back(m_cameraNode.camera()->cam_to_projection() * 
-			glm::lookAt(position, position + glm::vec3(+0.0f, +1.0f, +0.0f), glm::vec3(+0.0f, +0.0f, +1.0f)));
+	//	shadow_transforms.push_back(m_cameraNode.camera()->cam_to_projection() * 
+	//		glm::lookAt(position, position + glm::vec3(+0.0f, +1.0f, +0.0f), glm::vec3(+0.0f, +0.0f, +1.0f)));
 
-		shadow_transforms.push_back(m_cameraNode.camera()->cam_to_projection() * 
-			glm::lookAt(position, position + glm::vec3(+0.0f, -1.0f, +0.0f), glm::vec3(+0.0f, +0.0f, -1.0f)));
+	//	shadow_transforms.push_back(m_cameraNode.camera()->cam_to_projection() * 
+	//		glm::lookAt(position, position + glm::vec3(+0.0f, -1.0f, +0.0f), glm::vec3(+0.0f, +0.0f, -1.0f)));
 
-		shadow_transforms.push_back(m_cameraNode.camera()->cam_to_projection() * 
-			glm::lookAt(position, position + glm::vec3(+0.0f, +0.0f, +1.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
+	//	shadow_transforms.push_back(m_cameraNode.camera()->cam_to_projection() * 
+	//		glm::lookAt(position, position + glm::vec3(+0.0f, +0.0f, +1.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
 
-		shadow_transforms.push_back(m_cameraNode.camera()->cam_to_projection() * 
-			glm::lookAt(position, position + glm::vec3(+0.0f, +0.0f, -1.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
+	//	shadow_transforms.push_back(m_cameraNode.camera()->cam_to_projection() * 
+	//		glm::lookAt(position, position + glm::vec3(+0.0f, +0.0f, -1.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
 
-		for (auto const& node_pair : root_nodes)
-		{
-			Node* node = node_pair.second;
-			node->update_view(&m_cameraNode);
-			if (MeshNode* meshNode = dynamic_cast<MeshNode*>(node))
-			{
-				std::string type = m_lightNode->light()->type();
-				std::string index = std::to_string(m_lightNode->shader_pos());
-				m_depth_material.update_view(&m_cameraNode, meshNode);
-				//m_depth_material.set_uniform(MODEL_TRANSFORM, meshNode->world_to_node());
-				for (GLuint i = 0; i < 6; ++i)
-				{
-					std::string index = std::to_string(i);
-					//m_depth_material.set_uniform(SHADOW + "[" + std::to_string(i) + "]." + TRANSFORMS, shadow_transforms.at(i));
-					m_depth_material.set_uniform(DepthCubeMaterial::k_shadow + "[" + index + "]." + DepthCubeMaterial::k_transform, shadow_transforms.at(i));
-				}
-				//m_depth_material.set_uniform(type + "." + LightNode::LIGHT_POSITION, m_lightNode->world_position());
-				//m_depth_material.set_uniform(type + "." + FAR_PLANE, m_cameraNode.camera()->clip_far());
-				meshNode->draw_material(&m_depth_material);
-			}
-		}
-	}
+	//	for (auto const& node_pair : root_nodes)
+	//	{
+	//		Node* node = node_pair.second;
+	//		node->update_view(&m_cameraNode);
+	//		if (MeshNode* meshNode = dynamic_cast<MeshNode*>(node))
+	//		{
+	//			std::string type = m_lightNode->light()->type();
+	//			std::string index = std::to_string(m_lightNode->shader_pos());
+	//			m_depth_material.update_view(&m_cameraNode, meshNode);
+	//			//m_depth_material.set_uniform(MODEL_TRANSFORM, meshNode->world_to_node());
+	//			for (GLuint i = 0; i < 6; ++i)
+	//			{
+	//				std::string index = std::to_string(i);
+	//				//m_depth_material.set_uniform(SHADOW + "[" + std::to_string(i) + "]." + TRANSFORMS, shadow_transforms.at(i));
+	//				m_depth_material.set_uniform(DepthCubeMaterial::k_shadow + "[" + index + "]." + DepthCubeMaterial::k_transform, shadow_transforms.at(i));
+	//			}
+	//			//m_depth_material.set_uniform(type + "." + LightNode::LIGHT_POSITION, m_lightNode->world_position());
+	//			//m_depth_material.set_uniform(type + "." + FAR_PLANE, m_cameraNode.camera()->clip_far());
+	//			meshNode->draw_material(&m_depth_material);
+	//		}
+	//	}
+	//}
 
 	// // ----- GENERAL METHODS ----- // //
 	bool ShadowMap::check_bound_framebuffer()
