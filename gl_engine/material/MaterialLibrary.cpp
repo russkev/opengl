@@ -219,6 +219,85 @@ namespace gl_engine
 		set_uniform(k_point_light_far_plane, camera_node->camera()->clip_far());
 	}
 
+	// GAUSSIAN BLUR
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	GaussianBlurMaterial::GaussianBlurMaterial() :
+		GaussianBlurMaterial("Gaussian Blur Material")
+	{}
+
+	GaussianBlurMaterial::GaussianBlurMaterial(const std::string& name) :
+		Material{name, "ScreenPassthrough.vert", "GaussianBlur.frag"}
+	{
+		init();
+	}
+
+	void GaussianBlurMaterial::init()
+	{
+		set_sampler_value(k_image, 0.0f);
+		set_uniform(k_is_horizontal, true);
+	}
+
+	// G-BUFFER
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	GBufferMaterial::GBufferMaterial() :
+		GBufferMaterial("G-Buffer Material")
+	{}
+
+	GBufferMaterial::GBufferMaterial(const std::string& name) :
+		Material(name, "GBuffer.vert", "GBuffer.frag")
+	{
+		init();
+	}
+
+	void GBufferMaterial::init()
+	{
+		set_uniform(k_transform_model_to_projection, glm::mat4{ 1.0f });
+		set_uniform(k_transform_model_to_world, glm::mat4{ 1.0f });
+		set_uniform(k_transform_model_to_world_normal, glm::mat3{ 1.0f });
+
+		set_sampler_value(k_material_diffuse, 0.0f);
+		set_uniform(k_material_diffuse_amount, 1.0f);
+
+		set_sampler_value(k_material_specular, 0.0f);
+		set_uniform(k_material_specular_amount, 1.0f);
+
+		set_sampler_value(k_material_glossiness, 0.5f);
+
+		set_sampler_color(k_material_normal, glm::vec3{ 0.5f, 0.5f, 1.0f });
+		set_uniform(k_material_normal_directx_mode, false);
+
+		set_sampler_value(k_material_displacement, 0.0f);
+		set_uniform(k_material_displacement_amount, 0.0f);
+		set_uniform(k_material_displacement_enabled, false);
+	}
+
+	void GBufferMaterial::update_view(CameraNode* camera_node, Node* model_node)
+	{
+		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * model_node->world_to_node());
+		set_uniform(k_transform_model_to_world, model_node->world_to_node());
+		set_uniform(k_transform_model_to_world_normal, model_node->world_normal_to_node());
+	}
+
+	// HDR
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	HDRMaterial::HDRMaterial() :
+		HDRMaterial("HDR Material")
+	{}
+
+	HDRMaterial::HDRMaterial(const std::string& name) :
+		Material(name, "ScreenPassthrough.vert", "HDR.frag")
+	{
+		init();
+	}
+
+	void HDRMaterial::init()
+	{
+		set_sampler_value(k_hdr_image, 0.0f);
+		set_uniform(k_is_hdr, true);
+		set_uniform(k_exposure, 1.0f);
+	}
+
+
 	// LIGHT
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 	LightMaterial::LightMaterial() :

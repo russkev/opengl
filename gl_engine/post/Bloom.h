@@ -41,8 +41,8 @@ namespace gl_engine
 		Texture m_pingpong_textures[DIRECTIONS];
 		Texture m_blur_texture;
 
-		Material m_blur_material{ "Gaussian Blur Shader", "ScreenPassthrough.vert", "GaussianBlur.frag" };
-		BloomMaterial m_bloom_material{ "Bloom Shader" };
+		GaussianBlurMaterial m_blur_material{};
+		BloomMaterial m_bloom_material{};
 		MeshNode m_blur_node{ "Blur Screen Node", PostEffect::mesh(), &m_blur_material };
 		MeshNode m_bloom_node{ "Bloom Screen Node", PostEffect::mesh(), &m_bloom_material };
 	};

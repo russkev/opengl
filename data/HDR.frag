@@ -59,8 +59,7 @@ void main()
 
 	vec3 tonemapped_color = exposure_tonemap(gamma_corrected_color, exposure);
 
-
-	frag_color = vec4(tonemapped_color, 1.0);
+	frag_color = is_hdr ? vec4(tonemapped_color, 1.0) : vec4(gamma_corrected_color, 1.0);
 	bright_color = vec4(threshold_color(gamma_corrected_color, 3.0), 1.0);
 //	frag_color = vec4(0.1, 0.8, 0.2, 1.0)  + vec4(tonemapped_color, 1.0) * 0.01;
 //	bright_color = vec4(0.9, 0.1, 0.2, 1.0);

@@ -22,7 +22,7 @@ namespace gl_engine
 		}
 
 		m_blur_texture = Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, dimensions);
-		m_blur_material.set_texture("image", &m_blur_texture);
+		m_blur_material.set_texture(GaussianBlurMaterial::k_image, &m_blur_texture);
 		m_bloom_material.set_texture(BloomMaterial::k_color , m_tone_map->beauty());
 		m_bloom_material.set_texture(BloomMaterial::k_bright, &m_blur_texture);
 	}
@@ -36,20 +36,20 @@ namespace gl_engine
 
 	void Bloom::gaussian_blur()
 	{
-		bool horizontal = true;
+		bool is_horizontal = true;
 		GLuint amount = 20;
 		GLuint texture_id = m_tone_map->bright()->id();
 
 		m_blur_material.use();
 		for (GLuint i = 0; i < amount; ++i)
 		{
-			m_pingpong_fbos[horizontal].bind();
-			m_blur_material.set_uniform("is_horizontal", horizontal);
+			m_pingpong_fbos[is_horizontal].bind();
+			m_blur_material.set_uniform(GaussianBlurMaterial::k_is_horizontal, is_horizontal);
 			m_blur_texture.set_new_id(texture_id);
 			m_blur_node.draw();
-			texture_id = m_pingpong_textures[horizontal].id();
-			horizontal = !horizontal;
+			texture_id = m_pingpong_textures[is_horizontal].id();
+			is_horizontal = !is_horizontal;
 		}
-		m_pingpong_fbos[horizontal].unbind();
+		m_pingpong_fbos[is_horizontal].unbind();
 	}
 }

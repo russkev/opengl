@@ -12,8 +12,9 @@ namespace gl_engine
 	{
 		backbuffer_fbo()->push_back_color_buffer_textures(std::vector<const Texture*>{&m_beauty, &m_bright});
 
-		m_material.set_texture("hdr_image", &m_beauty);
-		m_material.set_uniform("exposure", 2.0f);
+		m_material.set_texture(HDRMaterial::k_hdr_image, &m_beauty);
+		m_material.set_uniform(HDRMaterial::k_exposure, 2.0f);
+
 	}
 
 	// // ----- GENERAL METHODS ----- // //

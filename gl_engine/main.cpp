@@ -93,8 +93,8 @@ int main(int, char**)
 	gl_engine::Window window{ "GL Engine", st_config, width, height };
 
 	//spinning_shader_ball_scene(window);
-	three_shader_ball_scene(window);
-	//g_buffer_scene(window);
+	//three_shader_ball_scene(window);
+	g_buffer_scene(window);
 
 	return 0;
 }
@@ -318,12 +318,12 @@ void three_shader_ball_scene(gl_engine::Window window)
 	targetCam.set_clip_far(1000.0f);
 
 	// Colors
-	gl_engine::Texture white_tex(		glm::vec3(1.00f, 1.00f, 1.00f));
-	gl_engine::Texture lighter_grey_tex(glm::vec3(0.95f, 0.95f, 0.95f));
-	gl_engine::Texture light_grey_tex(	glm::vec3(0.85f, 0.85f, 0.85f));
-	gl_engine::Texture grey_tex(		glm::vec3(0.50f, 0.50f, 0.50f));
-	gl_engine::Texture dark_grey_tex(	glm::vec3(0.25f, 0.25f, 0.25f));
-	gl_engine::Texture darker_grey_tex(	glm::vec3(0.10f, 0.10f, 0.10f));
+	gl_engine::Texture white_tex{		glm::vec3{1.00f, 1.00f, 1.00f} };
+	gl_engine::Texture lighter_grey_tex{glm::vec3{0.95f, 0.95f, 0.95f} };
+	gl_engine::Texture light_grey_tex{	glm::vec3{0.85f, 0.85f, 0.85f} };
+	gl_engine::Texture grey_tex{		glm::vec3{0.50f, 0.50f, 0.50f} };
+	gl_engine::Texture dark_grey_tex{	glm::vec3{0.25f, 0.25f, 0.25f} };
+	gl_engine::Texture darker_grey_tex{	glm::vec3{0.10f, 0.10f, 0.10f} };
 	gl_engine::Texture red_tex{			glm::vec3{1.00f, 0.00f, 0.00f} };
 	gl_engine::Texture green_tex{		glm::vec3{0.00f, 1.00f, 0.00f} };
 	gl_engine::Texture blue_tex{		glm::vec3{0.00f, 0.00f, 1.00f} };
@@ -379,7 +379,7 @@ void three_shader_ball_scene(gl_engine::Window window)
 	grey_material_shiny_mapped.set_texture(	"material.displacement", &brick_displacement);
 
 	grey_material_rough.set_uniform(		"material.displacement_amount", 0.0f);
-	grey_material_mid.set_uniform(		"material.displacement_amount", 0.0f);
+	grey_material_mid.set_uniform(			"material.displacement_amount", 0.0f);
 	grey_material_shiny.set_uniform(		"material.displacement_amount", 0.0f);
 	grey_material_rough_mapped.set_uniform(	"material.displacement_amount", 0.03f);
 	grey_material_mid_mapped.set_uniform(	"material.displacement_amount", 0.03f);
@@ -394,7 +394,7 @@ void three_shader_ball_scene(gl_engine::Window window)
 	gl_engine::MeshNode shaderBall_mid_node{		"shaderBall mid",			&shaderBall, &grey_material_mid };
 	gl_engine::MeshNode shaderBall_shiny_node{		"shaderBall shiny",			&shaderBall, &grey_material_shiny };
 	gl_engine::MeshNode shaderBall_rough_mapped_node{"shaderBall blinn rough",	&shaderBall, &grey_material_rough_mapped };
-	gl_engine::MeshNode shaderBall_mid_mapped_node{  "shaderBall blinn mid",		&shaderBall, &grey_material_mid_mapped };
+	gl_engine::MeshNode shaderBall_mid_mapped_node{  "shaderBall blinn mid",	&shaderBall, &grey_material_mid_mapped };
 	gl_engine::MeshNode shaderBall_shiny_mapped_node{"shaderBall blinn shiny",	&shaderBall, &grey_material_shiny_mapped };
 
 	std::vector<gl_engine::MeshNode*> shaderBalls;
@@ -465,7 +465,8 @@ void g_buffer_scene(gl_engine::Window window)
 	gl_engine::Mesh shaderBall = gl_engine::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
 
 	// GBuffer material
-	gl_engine::Material g_buffer_material{ "G Buffer Material", "GBuffer.vert", "GBuffer.frag" };
+	//gl_engine::Material g_buffer_material{ "G Buffer Material", "GBuffer.vert", "GBuffer.frag" };
+	gl_engine::GBufferMaterial g_buffer_material{};
 
 	//gl_engine::Material test_material{ "Test material", "Blinn.vert", "Blinn.frag" };
 
@@ -473,8 +474,8 @@ void g_buffer_scene(gl_engine::Window window)
 	gl_engine::Texture diffuse_texture{ "uvtemplate.tga" };
 	gl_engine::Texture spec_texture{ "greyGrid_01.tga" };
 
-	g_buffer_material.set_texture("material.diffuse", &diffuse_texture);
-	g_buffer_material.set_texture("material.specular", &spec_texture);
+	g_buffer_material.set_texture(gl_engine::GBufferMaterial::k_material_diffuse, &diffuse_texture);
+	g_buffer_material.set_texture(gl_engine::GBufferMaterial::k_material_specular, &spec_texture);
 
 	// Mesh node
 	gl_engine::MeshNode g_buffer_node{ "G Buffer Mesh Node", &shaderBall, &g_buffer_material };
