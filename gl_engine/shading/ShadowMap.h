@@ -28,24 +28,10 @@ namespace gl_engine
 	struct ShadowMap
 	{
 		// // ----- CONSTANTS ----- // //
-		static const GLuint SHADOW_WIDTH;
-		static const GLuint SHADOW_HEIGHT;
-		static const GLfloat DEFAULT_CLIP_NEAR;
-		static const GLfloat DEFAULT_CLIP_FAR;
-		static const std::string MODEL_TRANSFORM;
-		static const std::string LIGHT_SPACE_TRANSFORM;
-		static const std::string DEPTH_MAP;
-		
-		static const std::string DEPTH_MAP_NAME;
-		static const char* DEPTH_MAP_VERT;
-		static const char* DEPTH_MAP_FRAG;
-		static const char* CUBE_MAP_VERT;
-		static const char* CUBE_MAP_GEOM;
-		static const char* CUBE_MAP_FRAG;
-
-		static const std::string SHADOW;
-		static const std::string TRANSFORMS;
-		static const std::string FAR_PLANE;
+		static const GLuint k_shadow_width;
+		static const GLuint k_shadow_height;
+		static const GLfloat k_default_clip_near;
+		static const GLfloat k_default_clip_far;
 
 		// // ----- CONSTRUCTOR ----- // //
 		ShadowMap(LightNode* lightNode);
