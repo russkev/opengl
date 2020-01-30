@@ -196,6 +196,7 @@
   <ItemGroup>
     <None Include="..\data\Blinn.frag" />
     <None Include="..\data\Blinn.vert" />
+    <None Include="..\data\BlinnDeferred.frag" />
     <None Include="..\data\Bloom.frag" />
     <None Include="..\data\Depth.frag" />
     <None Include="..\data\Depth.vert" />

@@ -273,9 +273,9 @@ namespace gl_engine
 
 	void GBufferMaterial::update_view(CameraNode* camera_node, Node* model_node)
 	{
-		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * model_node->world_to_node());
-		set_uniform(k_transform_model_to_world, model_node->world_to_node());
-		set_uniform(k_transform_model_to_world_normal, model_node->world_normal_to_node());
+		set_uniform(k_transform_model_to_projection,	camera_node->world_to_projection() * model_node->world_to_node());
+		set_uniform(k_transform_model_to_world,			model_node->world_to_node());
+		set_uniform(k_transform_model_to_world_normal,	model_node->world_normal_to_node());
 	}
 
 	// HDR

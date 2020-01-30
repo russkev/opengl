@@ -15,24 +15,10 @@ namespace gl_engine
 {
 	// // ----- CONSTANTS ----- // //
 
-	const GLuint ShadowMap::SHADOW_WIDTH = 1024;
-	const GLuint ShadowMap::SHADOW_HEIGHT = 1024;
-	const GLfloat ShadowMap::DEFAULT_CLIP_NEAR = 0.1f;
-	const GLfloat ShadowMap::DEFAULT_CLIP_FAR = 100.0f;
-	const std::string ShadowMap::MODEL_TRANSFORM = "transform.model_to_world";
-	const std::string ShadowMap::LIGHT_SPACE_TRANSFORM = "projection";
-	const std::string ShadowMap::DEPTH_MAP = "depth";
-
-	const std::string ShadowMap::DEPTH_MAP_NAME = "depth map";
-	const char* ShadowMap::DEPTH_MAP_VERT = "Depth.vert";
-	const char* ShadowMap::DEPTH_MAP_FRAG = "Depth.frag";
-	const char* ShadowMap::CUBE_MAP_VERT = "DepthCube.vert";
-	const char* ShadowMap::CUBE_MAP_GEOM = "DepthCube.geom";
-	const char* ShadowMap::CUBE_MAP_FRAG = "DepthCube.frag";
-
-	const std::string ShadowMap::SHADOW = "shadow";
-	const std::string ShadowMap::TRANSFORMS = "transforms";
-	const std::string ShadowMap::FAR_PLANE = "far_plane";
+	const GLuint ShadowMap::k_shadow_width = 1024;
+	const GLuint ShadowMap::k_shadow_height = 1024;
+	const GLfloat ShadowMap::k_default_clip_near = 0.1f;
+	const GLfloat ShadowMap::k_default_clip_far = 100.0f;
 
 	// // ----- CONSTRUCTORS ----- // //
 	ShadowMap::ShadowMap(LightNode* lightNode) :
@@ -61,10 +47,10 @@ namespace gl_engine
 			std::string index = std::to_string(m_lightNode->shader_pos());
 			std::string type = m_lightNode->light()->type();
 
-			material->set_texture(type + "[" + index + "]." + DEPTH_MAP, &m_texture);
+			material->set_texture(type + "[" + index + "]." + BlinnMaterial::k_depth, &m_texture);
 			if (is_point())
 			{
-				material->set_uniform(type + "[" + index + "]." + FAR_PLANE, m_cameraNode.camera()->clip_far());
+				material->set_uniform(type + "[" + index + "]." + BlinnMaterial::k_far_plane, m_cameraNode.camera()->clip_far());
 			}
 		}
 	}
@@ -72,14 +58,14 @@ namespace gl_engine
 	void ShadowMap::init_camera()
 	{
 		m_cameraNode.set_parent(m_lightNode);
-		m_cameraNode.camera()->set_dimensions(glm::vec2(SHADOW_WIDTH, SHADOW_HEIGHT));
-		m_cameraNode.camera()->set_clip_near(DEFAULT_CLIP_NEAR);
-		m_cameraNode.camera()->set_clip_far(DEFAULT_CLIP_FAR);
+		m_cameraNode.camera()->set_dimensions(glm::vec2(k_shadow_width, k_shadow_height));
+		m_cameraNode.camera()->set_clip_near(k_default_clip_near);
+		m_cameraNode.camera()->set_clip_far(k_default_clip_far);
 	}
 
 	void ShadowMap::init_directional_shadowMap()
 	{
-		glm::uvec2 dimensions{ SHADOW_WIDTH, SHADOW_HEIGHT };
+		glm::uvec2 dimensions{ k_shadow_width, k_shadow_height };
 		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_2D_ARRAY, &dimensions);
 
 		m_texture.bind();
@@ -99,7 +85,7 @@ namespace gl_engine
 
 	void ShadowMap::init_point_shadowMap()
 	{
-		glm::uvec2 dimensions{ SHADOW_WIDTH, SHADOW_HEIGHT };
+		glm::uvec2 dimensions{ k_shadow_width, k_shadow_height };
 		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_CUBE_MAP, &dimensions);
 
 		m_texture.bind();
@@ -137,7 +123,7 @@ namespace gl_engine
 		m_texture.bind();
 		m_framebuffer.bind();
 
-		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+		glViewport(0, 0, k_shadow_width, k_shadow_height);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		if (is_directional())
