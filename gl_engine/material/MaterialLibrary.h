@@ -121,6 +121,71 @@ namespace gl_engine
 	
 	};
 
+	// GAUSSIAN BLUR
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	struct GaussianBlurMaterial : public Material
+	{
+		inline static const std::string k_image = "image";
+		inline static const std::string k_is_horizontal = "is_horizontal";
+
+		GaussianBlurMaterial();
+		GaussianBlurMaterial(const std::string& name);
+
+	private:
+		void init();
+	public:
+
+	};
+
+	// G-BUFFER
+	//------------------------------------------------------------------------------------------------------------------------------------------//	
+	struct GBufferMaterial : public Material
+	{
+		inline static const std::string k_transform = "transform";
+		inline static const std::string k_material = "material";
+
+		inline static const std::string k_transform_model_to_projection = k_transform + ".model_to_projection";
+		inline static const std::string k_transform_model_to_world = k_transform + ".model_to_world";
+		inline static const std::string k_transform_model_to_world_normal = k_transform + ".model_to_world_normal";
+		
+		inline static const std::string k_material_diffuse = k_material + ".diffuse";
+		inline static const std::string k_material_diffuse_amount = k_material + ".diffuse_amount";
+
+		inline static const std::string k_material_specular = k_material + ".specular";
+		inline static const std::string k_material_specular_amount = k_material + ".specular_amount";
+		
+		inline static const std::string k_material_glossiness = k_material + ".glossiness";
+		
+		inline static const std::string k_material_normal = k_material + ".normal";
+		inline static const std::string k_material_normal_directx_mode = k_material + ".normal_directx_mode";
+
+		inline static const std::string k_material_displacement = k_material + ".displacement";
+		inline static const std::string k_material_displacement_amount = k_material + ".diaplcement_amount";
+		inline static const std::string k_material_displacement_enabled = k_material + ".displacement_enabled";
+
+		GBufferMaterial();
+		GBufferMaterial(const std::string& name);
+
+	private:
+		void init();
+	public:
+		void update_view(CameraNode* camera_node, Node* model_node) override;
+	};
+
+	// HDR
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	struct HDRMaterial : public Material
+	{
+		inline static const std::string k_hdr_image = "hdr_image";
+		inline static const std::string k_is_hdr = "is_hdr";
+		inline static const std::string k_exposure = "exposure";
+
+		HDRMaterial();
+		HDRMaterial(const std::string& name);
+
+	private:
+		void init();
+	};
 
 	// LIGHT
 	//------------------------------------------------------------------------------------------------------------------------------------------//

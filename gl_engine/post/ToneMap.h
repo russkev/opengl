@@ -4,6 +4,7 @@
 #include "PostEffect.h"
 
 #include "../material/Material.h"
+#include "../material/MaterialLibrary.h"
 #include "../node/MeshNode.h"
 
 namespace gl_engine
@@ -28,7 +29,8 @@ namespace gl_engine
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		Material m_material{ "HDR Shader", "screenPassthrough.vert", "HDR.frag" };
+		//Material m_material{ "HDR Shader", "screenPassthrough.vert", "HDR.frag" };
+		HDRMaterial m_material{};
 		MeshNode m_mesh_node{ "HDR Screen Node", PostEffect::mesh(), &m_material };
 
 		Texture m_beauty;
