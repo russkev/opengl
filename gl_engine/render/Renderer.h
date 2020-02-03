@@ -14,7 +14,6 @@
 #include "../mesh/Cube.h"
 #include "../mesh/Plane.h"
 #include "../post/ToneMap.h"
-#include "../post/DepthMap.h"
 #include "../post/Bloom.h"
 #include "../post/PostEffect.h"
 
@@ -88,7 +87,6 @@ namespace gl_engine
 		Texture m_backbuffer_depth{ Texture::create_depth_null_texture(GL_TEXTURE_2D, &m_dimensions) };
 
 		ToneMap m_tone_map{ &m_backbuffer_FBO, &m_dimensions };
-		//DepthMap m_depth_map{ &m_backbuffer_FBO, &m_dimensions };
 		Bloom m_bloom{ &m_backbuffer_FBO, &m_dimensions, &m_tone_map };
 
 		// // ----- DEFERRRED RENDER VARIABLES ----- // //
@@ -105,7 +103,6 @@ namespace gl_engine
 		BlinnDeferredMaterial m_deferred_material;
 		
 		Mesh m_deferred_mesh{ WindowQuad::create_windowQuad() };
-		//Mesh m_deferred_mesh{ WindowQuad::create_windowQuad() };
 		MeshNode m_deferred_mesh_node{ "Deferred Screen Node", &m_deferred_mesh, &m_deferred_material };
 
 	};

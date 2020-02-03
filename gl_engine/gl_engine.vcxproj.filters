@@ -144,9 +144,6 @@
     <ClCompile Include="post\ToneMap.cpp">
       <Filter>Post</Filter>
     </ClCompile>
-    <ClCompile Include="post\DepthMap.cpp">
-      <Filter>Post</Filter>
-    </ClCompile>
     <ClCompile Include="post\Bloom.cpp">
       <Filter>Post</Filter>
     </ClCompile>
@@ -323,9 +320,6 @@
       <Filter>Post</Filter>
     </ClInclude>
     <ClInclude Include="post\ToneMap.h">
-      <Filter>Post</Filter>
-    </ClInclude>
-    <ClInclude Include="post\DepthMap.h">
       <Filter>Post</Filter>
     </ClInclude>
     <ClInclude Include="post\Bloom.h">
