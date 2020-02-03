@@ -26,6 +26,8 @@ namespace gl_engine
 	{
 		m_cameraNode->camera()->set_dimensions(dimensions);
 		init_settings();
+		init_post_effects();
+		init_deferred_renderer();
 	}
 
 	// // ----- RENDER ----- // //
@@ -55,6 +57,20 @@ namespace gl_engine
 
 			clear_screen();
 			m_bloom.draw();
+		}
+		else if (m_deferred_render_enabled)
+		{
+			m_g_buffer_FBO.bind();
+
+			render_geometry();
+
+			m_g_buffer_FBO.unbind();
+
+			clear_screen();
+
+
+			m_deferred_mesh_node.draw();
+
 		}
 		else
 		{
@@ -160,11 +176,28 @@ namespace gl_engine
 		}
 	}
 
+	void Renderer::init_post_effects()
+	{
+		m_backbuffer_FBO.set_depth_buffer_texture(&m_backbuffer_depth);
+	}
+
 	void Renderer::init_deferred_renderer()
 	{
 		m_g_position	= Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
 		m_g_normal		= Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
 		m_g_color_spec	= Texture::create_8bit_rgba_null_texture(GL_TEXTURE_2D, &m_dimensions);
+		m_g_depth		= Texture::create_depth_null_texture(GL_TEXTURE_2D, &m_dimensions);
+
+		m_g_buffer_FBO.push_back_color_buffer_textures(std::vector<const Texture*>{
+			&m_g_position, &m_g_normal, &m_g_color_spec	});
+
+		m_g_buffer_FBO.set_depth_buffer_texture(&m_g_depth);
+
+		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_position, &m_g_position);
+		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_normal, &m_g_normal);
+		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_diffuse_spec, &m_g_color_spec);
+
+		m_materials.push_back(&m_deferred_material);
 	}
 
 	bool Renderer::poll_events()
@@ -244,5 +277,15 @@ namespace gl_engine
 	void Renderer::disable_post_effects()
 	{
 		m_post_effects_enabled = false;
+	}
+
+	void Renderer::enable_deferred_render()
+	{
+		m_deferred_render_enabled = true;
+	}
+
+	void Renderer::disable_deferred_render()
+	{
+		m_deferred_render_enabled = false;
 	}
 } // namespace gl_engine

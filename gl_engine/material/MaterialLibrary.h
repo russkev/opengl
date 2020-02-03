@@ -56,6 +56,7 @@ namespace gl_engine
 
 		BlinnMaterial();
 		BlinnMaterial(const std::string& name);
+
 	private:
 		void init();
 	public:
@@ -67,6 +68,32 @@ namespace gl_engine
 		void update_light(LightNode* light_node, const PointLight* point_light);
 		void update_light(LightNode* light_node, const DirectionalLight* directional_light);
 		void update_light(LightNode* light_node, const SpotLight* spot_light);
+	};
+
+	// BLINN DEFERRED
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	struct BlinnDeferredMaterial : public Material
+	{
+		const static constexpr GLuint k_num_lights = 3;
+
+		inline static const std::string k_g_position = "g_position";
+		inline static const std::string k_g_normal = "g_normal";
+		inline static const std::string k_g_diffuse_spec = "g_diffuse_spec";
+		inline static const std::string k_view_position = "view_position";
+
+		inline static const std::string k_lights = "lights";
+		inline static const std::string k_position = "position";
+		inline static const std::string k_color = "color";
+
+		BlinnDeferredMaterial();
+		BlinnDeferredMaterial(const std::string& name);
+
+		void update_lights(const std::vector<LightNode*>& light_nodes) override;
+
+
+	private:
+		void init();
+
 	};
 
 	// BLOOM
