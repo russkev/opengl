@@ -179,7 +179,6 @@
     <ClCompile Include="node\MeshNode.cpp" />
     <ClCompile Include="node\Node.cpp" />
     <ClCompile Include="post\Bloom.cpp" />
-    <ClCompile Include="post\DepthMap.cpp" />
     <ClCompile Include="post\ToneMap.cpp" />
     <ClCompile Include="render\Renderer.cpp" />
     <ClCompile Include="render\Window.cpp" />
@@ -239,7 +238,6 @@
     <ClInclude Include="node\MeshNode.h" />
     <ClInclude Include="node\Node.h" />
     <ClInclude Include="post\Bloom.h" />
-    <ClInclude Include="post\DepthMap.h" />
     <ClInclude Include="post\PostEffect.h" />
     <ClInclude Include="post\ToneMap.h" />
     <ClInclude Include="render\Renderer.h" />
