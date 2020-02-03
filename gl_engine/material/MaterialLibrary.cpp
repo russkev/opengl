@@ -108,6 +108,7 @@ namespace gl_engine
 			}
 		}
 	}
+
 	void BlinnMaterial::update_light_transform(LightNode* light_node, CameraNode* camera_node)
 	{
 		std::string index = std::to_string(light_node->shader_pos());
@@ -147,7 +148,37 @@ namespace gl_engine
 		set_uniform(k_spot_light + "[" + index + "]." + k_color, light_node->light()->color());
 	}
 
+	// BLINN DEFERRED
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	BlinnDeferredMaterial::BlinnDeferredMaterial() :
+		BlinnDeferredMaterial("Blinn Deferred Material")
+	{}
 
+	BlinnDeferredMaterial::BlinnDeferredMaterial(const std::string& name) :
+		Material(name, "ScreenPassthrough.vert", "BlinnDeferred.frag")
+	{
+		init();
+	}
+
+	void BlinnDeferredMaterial::init()
+	{
+		set_sampler_value(k_g_position, 0.0f);
+		set_sampler_value(k_g_normal, 0.0f);
+		set_sampler_value(k_g_diffuse_spec, 0.0f);
+		set_uniform(k_view_position, glm::vec3{ 0.0f });
+
+		for (GLuint i = 0; i < k_num_lights; ++i)
+		{
+			set_uniform(k_lights + "[" + std::to_string(i) + "]." + k_position,	glm::vec3(0.0f));
+			set_uniform(k_lights + "[" + std::to_string(i) + "]." + k_color,		glm::vec3(0.0f));
+		}
+	}
+
+	void BlinnDeferredMaterial::update_lights(const std::vector<LightNode*>& light_nodes)
+	{
+		set_uniform(k_lights + "[" + "0" + "]." + k_position, light_nodes.at(0)->world_position());
+		set_uniform(k_lights + "[" + "0" + "]." + k_color, light_nodes.at(0)->light()->color());
+	}
 
 	// BLOOM
 	//------------------------------------------------------------------------------------------------------------------------------------------//

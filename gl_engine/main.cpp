@@ -488,6 +488,8 @@ void g_buffer_scene(gl_engine::Window window)
 
 	// Renderer
 	gl_engine::Renderer render{ &targetCam_node, glm::uvec2(window.width(), window.height()) };
+	render.disable_post_effects();
+	render.enable_deferred_render();
 
 	render.add_node(&g_buffer_node);
 	render.add_node(&directionalLight_node1);
