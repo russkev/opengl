@@ -165,13 +165,20 @@ namespace gl_engine
 		set_sampler_value(k_g_position, 0.0f);
 		set_sampler_value(k_g_normal, 0.0f);
 		set_sampler_value(k_g_diffuse_spec, 0.0f);
-		set_uniform(k_view_position, glm::vec3{ 0.0f });
+		//set_uniform(k_view_position, glm::vec3{ 0.0f });
 
 		for (GLuint i = 0; i < k_num_lights; ++i)
 		{
 			set_uniform(k_lights + "[" + std::to_string(i) + "]." + k_position,	glm::vec3(0.0f));
-			set_uniform(k_lights + "[" + std::to_string(i) + "]." + k_color,		glm::vec3(0.0f));
+			set_uniform(k_lights + "[" + std::to_string(i) + "]." + k_color,	glm::vec3(0.0f));
 		}
+
+		set_uniform(k_camera_position, glm::vec3(0.0f));
+	}
+
+	void BlinnDeferredMaterial::update_view(CameraNode* camera_node, Node* model_node)
+	{
+		set_uniform(k_camera_position, camera_node->world_position());
 	}
 
 	void BlinnDeferredMaterial::update_lights(const std::vector<LightNode*>& light_nodes)
