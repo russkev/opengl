@@ -486,6 +486,14 @@ void g_buffer_scene(gl_engine::Window window)
 	directionalLight_node1.set_rotation({ 33.0f, 225.0f, 0.0f });
 	directionalLight_node1.set_position({ 16.0f, 16.0f, 16.0f });
 
+	// Point Light 1
+	gl_engine::PointLight pointLight{ 1.0f, { 0.0f, 0.0f, 0.0f } };
+	pointLight.set_brightness(4.1f);
+	pointLight.set_color(glm::vec3(1.0, 0.7, 0.2));
+	pointLight.set_radius(0.1f);
+	gl_engine::LightNode pointLight_node{ "Point Light 1", &pointLight };
+	pointLight_node.set_position({ -4.0f, 1.2f, 0.0f });
+
 	// Renderer
 	gl_engine::Renderer render{ &targetCam_node, glm::uvec2(window.width(), window.height()) };
 	render.disable_post_effects();
@@ -493,6 +501,7 @@ void g_buffer_scene(gl_engine::Window window)
 
 	render.add_node(&g_buffer_node);
 	render.add_node(&directionalLight_node1);
+	render.add_node(&pointLight_node);
 	render.disable_post_effects();
 
 	gl_engine::Timer timer;
