@@ -107,11 +107,13 @@ namespace gl_engine
 		glDrawBuffers(amount, attachments.data());
 	}
 
-	void Framebuffer::blit(Texture* source, GLuint destination_id)
+	void Framebuffer::blit_depth_to_default(const glm::uvec2& dimensions)
 	{
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_id);
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, destination_id);
-		//glBlitFramebuffer(0, 0, source->width(), source->height(), 0, 0, source->width(), source->height(), source->)
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+		glBlitFramebuffer(
+			0, 0, (GLuint)(m_depth_texture->width()), m_depth_texture->height(), 0, 0, dimensions.x, dimensions.y, GL_DEPTH_BUFFER_BIT, m_depth_texture->)
 	}
 
 

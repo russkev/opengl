@@ -346,19 +346,69 @@ namespace gl_engine
 
 
 	// // ----- GETTERS ----- // //
-	GLsizei Texture::width()
+	const GLuint Texture::id() const
+	{
+		return m_id;
+	}
+
+	const GLsizei Texture::width() const
 	{
 		return m_width;
 	}
 
-	GLsizei Texture::height()
+	const GLsizei Texture::height() const
 	{
 		return m_height;
 	}
 
-	const GLuint Texture::id() const
+	const GLint Texture::level() const 
 	{
-		return m_id;
+		return m_level;
+	}
+
+	const GLenum Texture::internal_format() const
+	{
+		return m_internal_format;
+	}
+
+	const GLint Texture::border() const 
+	{
+		return m_border;
+	}
+
+	const GLenum Texture::format() const 
+	{
+		return m_format;
+	}
+
+	const GLenum Texture::type() const 
+	{
+		return m_type;
+	}
+
+	const GLenum Texture::min_filter() const
+	{
+		return m_min_filter;
+	}
+
+	const GLenum Texture::mag_filter() const
+	{
+		return m_mag_filter;
+	}
+
+	const GLenum Texture::wrap_s() const
+	{
+		return m_wrap_s;
+	}
+
+	const GLenum Texture::wrap_t() const
+	{
+		return m_wrap_t;
+	}
+
+	const GLenum Texture::wrap_r() const
+	{
+		return m_wrap_r;
 	}
 
 	const GLenum Texture::target() const
