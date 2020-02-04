@@ -55,10 +55,23 @@ namespace gl_engine
 
 		// // ----- GETTERS ----- // //
 	public:
-		GLsizei width();
-		GLsizei height();
 		const GLuint id() const;
+		const GLsizei width() const;
+		const GLsizei height() const;
+
 		const GLenum target() const;
+		const GLint level() const;
+		const GLenum internal_format() const;
+		const GLint border() const;
+		const GLenum format() const;
+		const GLenum type() const;
+
+		const GLenum min_filter() const;
+		const GLenum mag_filter() const;
+		const GLenum wrap_s() const;
+		const GLenum wrap_t() const;
+		const GLenum wrap_r() const;
+
 		bool has_alpha();
 		void* data();
 
@@ -89,7 +102,7 @@ namespace gl_engine
 
 		GLenum			m_target = GL_TEXTURE_2D;	// Type of texture
 		GLint			m_level = 0;				// Mipmap base level
-		GLint			m_internal_format = GL_RGB;	// Number and size of color components
+		GLenum			m_internal_format = GL_RGB;	// Number and size of color components
 		GLint			m_border = 0;				// Size of the border
 		GLenum			m_format = GL_RGB;			// Format of the pixel data
 		GLenum			m_type = GL_UNSIGNED_BYTE;	// The data type of each pixel
