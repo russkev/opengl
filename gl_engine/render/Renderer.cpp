@@ -68,6 +68,7 @@ namespace gl_engine
 
 			clear_screen();
 
+			m_deferred_material.update_view(m_cameraNode, NULL);
 
 			m_deferred_mesh_node.draw();
 
@@ -197,7 +198,10 @@ namespace gl_engine
 		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_normal, &m_g_normal);
 		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_diffuse_spec, &m_g_color_spec);
 
-		m_materials.push_back(&m_deferred_material);
+		//m_materials.push_back(&m_deferred_material);
+		
+		add_material(&m_deferred_material);
+		//add_node(&m_deferred_mesh_node);
 	}
 
 	bool Renderer::poll_events()

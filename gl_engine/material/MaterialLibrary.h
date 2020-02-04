@@ -79,14 +79,18 @@ namespace gl_engine
 		inline static const std::string k_g_position = "g_position";
 		inline static const std::string k_g_normal = "g_normal";
 		inline static const std::string k_g_diffuse_spec = "g_diffuse_spec";
-		inline static const std::string k_view_position = "view_position";
+		//inline static const std::string k_view_position = "view_position";
 
 		inline static const std::string k_lights = "lights";
 		inline static const std::string k_position = "position";
 		inline static const std::string k_color = "color";
 
+		inline static const std::string k_camera_position = "camera.position";
+
 		BlinnDeferredMaterial();
 		BlinnDeferredMaterial(const std::string& name);
+		
+		void update_view(CameraNode* camera_node, Node* model_node);
 
 		void update_lights(const std::vector<LightNode*>& light_nodes) override;
 
