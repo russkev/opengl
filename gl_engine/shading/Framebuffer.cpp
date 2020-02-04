@@ -107,6 +107,14 @@ namespace gl_engine
 		glDrawBuffers(amount, attachments.data());
 	}
 
+	void Framebuffer::blit(Texture* source, GLuint destination_id)
+	{
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_id);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, destination_id);
+		//glBlitFramebuffer(0, 0, source->width(), source->height(), 0, 0, source->width(), source->height(), source->)
+	}
+
+
 	void Framebuffer::push_back_color_buffer_texture(const Texture* texture)
 	{
 		push_back_color_buffer_textures(std::vector<const Texture*>{ texture });
