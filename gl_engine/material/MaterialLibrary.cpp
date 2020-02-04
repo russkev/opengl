@@ -183,8 +183,13 @@ namespace gl_engine
 
 	void BlinnDeferredMaterial::update_lights(const std::vector<LightNode*>& light_nodes)
 	{
-		set_uniform(k_lights + "[" + "0" + "]." + k_position, light_nodes.at(0)->world_position());
-		set_uniform(k_lights + "[" + "0" + "]." + k_color, light_nodes.at(0)->light()->color());
+		for (int i = 0; i < light_nodes.size(); ++i)
+		{
+			std::string index = std::to_string(i);
+			set_uniform(k_lights + "[" + index + "]." + k_position, light_nodes.at(i)->world_position());
+			set_uniform(k_lights + "[" + index + "]." + k_color, light_nodes.at(i)->light()->color());
+		}
+	
 	}
 
 	// BLOOM
