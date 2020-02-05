@@ -42,8 +42,11 @@ void main ()
 
 	g_normal = normalize(in_frag.world_space_normal);
 
+//	g_diffuse_spec.rgb =  texture(material.diffuse, uv).rgb;
+//	g_diffuse_spec.a =  texture(material.specular, uv).r;
 	g_diffuse_spec.rgb =  texture(material.diffuse, uv).rgb;
-	g_diffuse_spec.a =  texture(material.specular, uv).r;
+	g_diffuse_spec.a =  0;
+
 
 }
 
