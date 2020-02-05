@@ -5,6 +5,7 @@
 #include <map>
 
 #include <GL/glew.h>
+#include <glm/glm.hpp>
 
 namespace gl_engine
 {
@@ -26,8 +27,12 @@ namespace gl_engine
 		bool check_bound_framebuffer();
 		void init_color_attachments(GLuint amount, GLuint offset);
 		void init_color_attachments_for_bound_framebuffer(GLuint amount, GLuint offset);
+		void blit_color_to_default(const glm::uvec2& dimensions, const size_t loc);
+		void blit_stencil_to_default(const glm::uvec2& dimensions);
 		void blit_depth_to_default(const glm::uvec2& dimensions);
+
 	private:
+		void blit(const Texture* texture, GLuint destination_id, const glm::uvec2& dimensions, const GLbitfield bitfield_mask);
 		void attach_texture_to_bound_framebuffer(const Texture* texture, const GLenum attachment);
 		void attach_single_texture(const Texture* texture, const GLenum attachment);
 

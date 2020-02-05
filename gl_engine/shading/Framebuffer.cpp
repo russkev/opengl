@@ -107,13 +107,30 @@ namespace gl_engine
 		glDrawBuffers(amount, attachments.data());
 	}
 
+	void Framebuffer::blit_color_to_default(const glm::uvec2& dimensions, const size_t loc)
+	{
+		blit(color_texture_at(loc), 0, dimensions, GL_COLOR_BUFFER_BIT);
+	}
+
 	void Framebuffer::blit_depth_to_default(const glm::uvec2& dimensions)
 	{
+		blit(m_depth_texture, 0, dimensions, GL_DEPTH_BUFFER_BIT);
+	}
+
+	void Framebuffer::blit_stencil_to_default(const glm::uvec2& dimensions)
+	{
+		blit(m_stencil_texture, 0, dimensions, GL_STENCIL_BUFFER_BIT);
+	}
+
+	void Framebuffer::blit(const Texture* texture, GLuint destination_id, const glm::uvec2& dimensions, const GLbitfield bitfield_mask)
+	{
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_id);
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, destination_id);
 
 		glBlitFramebuffer(
-			0, 0, (GLuint)(m_depth_texture->width()), m_depth_texture->height(), 0, 0, dimensions.x, dimensions.y, GL_DEPTH_BUFFER_BIT, m_depth_texture->)
+			0, 0, (GLuint)(texture->width()), texture->height(), 0, 0, dimensions.x, dimensions.y, bitfield_mask, texture->min_filter());
+
+		unbind();
 	}
 
 

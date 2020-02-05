@@ -30,8 +30,88 @@ namespace gl_engine
 		init_deferred_renderer();
 	}
 
+	// // ----- INIT ----- // //
+	void Renderer::init_settings()
+	{
+		/*
+
+			!!! Eventually this should be abstracted out to be a part of the material settings
+
+		*/
+
+		// // Dark blue background // //
+		glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+		// // Enable depth test // //
+		glEnable(GL_DEPTH_TEST);
+		// // Enable backface culling // //
+		glEnable(GL_CULL_FACE);
+		// // Set winding direction // // 
+		glFrontFace(GL_CCW);
+		// // Accept fragment shader if it closer to the camera than the previous one
+		glDepthFunc(GL_LESS);
+		//glDepthFunc(GL_ALWAYS);
+		// // Enable alpha
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		// // Enable gamma correction
+		//glEnable(GL_FRAMEBUFFER_SRGB);
+	}
+
+	void Renderer::init_first_frame()
+	{
+		GLuint num_pointLights = 0, num_directionalLights = 0, num_spotLights = 0;
+		// Shadow map		
+		for (LightNode* lightNode : m_light_nodes)
+		{
+			if (DirectionalLight* spotLight = dynamic_cast<DirectionalLight*> (lightNode->light()))
+			{
+				lightNode->set_shader_pos(num_directionalLights);
+				num_directionalLights++;
+			}
+			if (PointLight* spotLight = dynamic_cast<PointLight*> (lightNode->light()))
+			{
+				lightNode->set_shader_pos(num_pointLights);
+				num_pointLights++;
+			}
+			if (SpotLight* spotLight = dynamic_cast<SpotLight*> (lightNode->light()))
+			{
+				lightNode->set_shader_pos(num_spotLights);
+				num_spotLights++;
+			}
+			if (ShadowMap* shadowMap = lightNode->shadowMap())
+			{
+				shadowMap->init_materials(m_materials);
+			}
+		}
+	}
+
+	void Renderer::init_post_effects()
+	{
+		m_backbuffer_FBO.set_depth_buffer_texture(&m_backbuffer_depth);
+	}
+
+	void Renderer::init_deferred_renderer()
+	{
+		m_g_position = Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
+		m_g_normal = Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
+		m_g_color_spec = Texture::create_8bit_rgba_null_texture(GL_TEXTURE_2D, &m_dimensions);
+		m_g_depth = Texture::create_depth_null_texture(GL_TEXTURE_2D, &m_dimensions);
+		m_g_stencil = Texture::create_stencil_texture(GL_TEXTURE_2D, &m_dimensions);
+
+		m_g_buffer_FBO.push_back_color_buffer_textures(std::vector<const Texture*>{
+			&m_g_position, &m_g_normal, &m_g_color_spec	});
+
+		m_g_buffer_FBO.set_depth_buffer_texture(&m_g_depth);
+		m_g_buffer_FBO.set_stencil_buffer_texture(&m_g_stencil);
+
+		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_position, &m_g_position);
+		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_normal, &m_g_normal);
+		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_diffuse_spec, &m_g_color_spec);
+
+		add_material(&m_deferred_material);
+	}
+
 	// // ----- RENDER ----- // //
-	//Draw all nodes to screen
 	void Renderer::render()
 	{
 		if (m_first_frame)
@@ -60,17 +140,33 @@ namespace gl_engine
 		}
 		else if (m_deferred_render_enabled)
 		{
+
+
 			m_g_buffer_FBO.bind();
+
+			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 			render_geometry();
 
 			m_g_buffer_FBO.unbind();
 
-			clear_screen();
+			glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+
+			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			//glClear(GL_COLOR_BUFFER_BIT );
+			//clear_screen();
 
 			m_deferred_material.update_view(m_cameraNode, NULL);
 
 			m_deferred_mesh_node.draw();
+
+			m_g_buffer_FBO.blit_depth_to_default(m_dimensions);
+			m_g_buffer_FBO.blit_stencil_to_default(m_dimensions);
+
+
+			render_lights();
+
 
 		}
 		else
@@ -112,96 +208,35 @@ namespace gl_engine
 
 		for (Material* material : m_materials)
 		{
-			material->update_lights(m_lightNodes);
+			material->update_lights(m_light_nodes);
 		}
 
 		for (auto const& node : m_root_nodes)
 		{
 			node.second->update_view(m_cameraNode);
-			node.second->draw();
+			if (MeshNode* mesh_node = dynamic_cast<MeshNode*> (node.second) )
+			{
+				mesh_node->draw();
+			}
+			//node.second->draw();
 		}
 	}
 
-	// // ----- GENERAL METHODS ----- // //
-	void Renderer::init_settings()
+	void Renderer::render_lights()
 	{
-		/*
-
-			!!! Eventually this should be abstracted out to be a part of the material settings
-
-		*/
-
-		// // Dark blue background // //
-		glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-		// // Enable depth test // //
-		glEnable(GL_DEPTH_TEST);
-		// // Enable backface culling // //
-		glEnable(GL_CULL_FACE);
-		// // Set winding direction // // 
-		glFrontFace(GL_CCW);
-		// // Accept fragment shader if it closer to the camera than the previous one
-		glDepthFunc(GL_LESS);
-		//glDepthFunc(GL_ALWAYS);
-		// // Enable alpha
-		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		// // Enable gamma correction
-		//glEnable(GL_FRAMEBUFFER_SRGB);
-	}
-
-	void Renderer::init_first_frame()
-	{
-		GLuint num_pointLights = 0, num_directionalLights = 0, num_spotLights = 0;
-		// Shadow map		
-		for (LightNode* lightNode : m_lightNodes)
+		for (auto const& light_node : m_light_nodes)
 		{
-			if (DirectionalLight* spotLight = dynamic_cast<DirectionalLight*> (lightNode->light()))
-			{
-				lightNode->set_shader_pos(num_directionalLights);
-				num_directionalLights++;
-			}
-			if (PointLight* spotLight = dynamic_cast<PointLight*> (lightNode->light()))
-			{
-				lightNode->set_shader_pos(num_pointLights);
-				num_pointLights++;
-			}
-			if (SpotLight* spotLight = dynamic_cast<SpotLight*> (lightNode->light()))
-			{
-				lightNode->set_shader_pos(num_spotLights);
-				num_spotLights++;
-			}
-			if (ShadowMap* shadowMap = lightNode->shadowMap())
-			{
-				shadowMap->init_materials(m_materials);
-			}
+			light_node->draw();
 		}
 	}
 
-	void Renderer::init_post_effects()
+	// // ----- GENERAL METHODS ----- // //	
+	void Renderer::update(Window * window, Timer * timer)
 	{
-		m_backbuffer_FBO.set_depth_buffer_texture(&m_backbuffer_depth);
-	}
-
-	void Renderer::init_deferred_renderer()
-	{
-		m_g_position	= Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
-		m_g_normal		= Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
-		m_g_color_spec	= Texture::create_8bit_rgba_null_texture(GL_TEXTURE_2D, &m_dimensions);
-		m_g_depth		= Texture::create_depth_null_texture(GL_TEXTURE_2D, &m_dimensions);
-
-		m_g_buffer_FBO.push_back_color_buffer_textures(std::vector<const Texture*>{
-			&m_g_position, &m_g_normal, &m_g_color_spec	});
-
-		m_g_buffer_FBO.set_depth_buffer_texture(&m_g_depth);
-
-		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_position, &m_g_position);
-		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_normal, &m_g_normal);
-		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_diffuse_spec, &m_g_color_spec);
-
-		//m_materials.push_back(&m_deferred_material);
-		
-		add_material(&m_deferred_material);
-		//add_node(&m_deferred_mesh_node);
+		timer->update();
+		render();
+		window->finish_frame();
+		window->append_title(("FPS: " + (std::string)timer->fps()));
 	}
 
 	bool Renderer::poll_events()
@@ -215,15 +250,6 @@ namespace gl_engine
 			}
 		}
 		return true;
-	}
-
-
-	void Renderer::update(Window * window, Timer * timer)
-	{
-		timer->update();
-		render();
-		window->finish_frame();
-		window->append_title(("FPS: " + (std::string)timer->fps()));
 	}
 
 	// // ----- SETTERS ----- // //
@@ -252,7 +278,7 @@ namespace gl_engine
 	{
 		if (LightNode* derived_lightNode = dynamic_cast<LightNode*>(root_node))
 		{
-			m_lightNodes.push_back(derived_lightNode);
+			m_light_nodes.push_back(derived_lightNode);
 			if (ShadowMap* shadowMap = derived_lightNode->shadowMap())
 			{
 				m_shadow_maps.push_back(shadowMap);

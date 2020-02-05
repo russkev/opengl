@@ -46,6 +46,7 @@ namespace gl_engine
 		void clear_screen();
 		void render_shadow_maps();
 		void render_geometry();
+		void render_lights();
 
 		// // ----- GENERAL METHODS ----- // //
 	public:
@@ -72,7 +73,7 @@ namespace gl_engine
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
 		CameraNode* m_cameraNode;
-		std::vector<LightNode*> m_lightNodes;
+		std::vector<LightNode*> m_light_nodes;
 		std::vector<ShadowMap*> m_shadow_maps;
 		std::vector<Material*> m_materials;
 		std::map<std::string, Node*> m_root_nodes;
@@ -96,6 +97,7 @@ namespace gl_engine
 		Texture m_g_normal;
 		Texture m_g_color_spec;
 		Texture m_g_depth;
+		Texture m_g_stencil;
 
 		//DepthMap m_deferred_depth_map{ &m_g_buffer_FBO, &m_dimensions };
 
