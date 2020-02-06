@@ -97,7 +97,6 @@ namespace gl_engine
 		Texture m_g_normal;
 		Texture m_g_color_spec;
 		Texture m_g_depth;
-		Texture m_g_stencil;
 
 		//DepthMap m_deferred_depth_map{ &m_g_buffer_FBO, &m_dimensions };
 
