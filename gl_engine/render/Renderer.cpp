@@ -96,13 +96,11 @@ namespace gl_engine
 		m_g_normal = Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
 		m_g_color_spec = Texture::create_8bit_rgba_null_texture(GL_TEXTURE_2D, &m_dimensions);
 		m_g_depth = Texture::create_depth_null_texture(GL_TEXTURE_2D, &m_dimensions);
-		m_g_stencil = Texture::create_stencil_texture(GL_TEXTURE_2D, &m_dimensions);
 
 		m_g_buffer_FBO.push_back_color_buffer_textures(std::vector<const Texture*>{
 			&m_g_position, &m_g_normal, &m_g_color_spec	});
 
 		m_g_buffer_FBO.set_depth_buffer_texture(&m_g_depth);
-		m_g_buffer_FBO.set_stencil_buffer_texture(&m_g_stencil);
 
 		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_position, &m_g_position);
 		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_normal, &m_g_normal);
@@ -153,16 +151,15 @@ namespace gl_engine
 			glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
 			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			//glClear(GL_COLOR_BUFFER_BIT );
-			//clear_screen();
+			clear_screen();
 
 			m_deferred_material.update_view(m_cameraNode, NULL);
 
 			m_deferred_mesh_node.draw();
 
 			m_g_buffer_FBO.blit_depth_to_default(m_dimensions);
-			m_g_buffer_FBO.blit_stencil_to_default(m_dimensions);
 
 
 			render_lights();
