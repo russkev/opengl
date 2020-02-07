@@ -70,17 +70,16 @@ void main()
 	}
 
 
-//	if (frag_position != vec3(0.0))
-//	{
+	if (normal != vec3(0.0))
+	{
 		vec3 out_color  = 
 			diffuse_out + 
 			specular_out;
 	
-		frag_color = vec4(out_color, specular);
-//	}
-//	else
-//	{
-//		frag_color = vec4(0.0f);
-//	}
-//	frag_color = vec4(camera.position, 1.0);
+		frag_color = vec4(out_color, 1.0);
+	}
+	else
+	{
+		frag_color = vec4(0.0);
+	}
 }

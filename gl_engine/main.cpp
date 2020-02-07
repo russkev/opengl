@@ -92,9 +92,9 @@ int main(int, char**)
 
 	gl_engine::Window window{ "GL Engine", st_config, width, height };
 
-	//spinning_shader_ball_scene(window);
+	spinning_shader_ball_scene(window);
 	//three_shader_ball_scene(window);
-	g_buffer_scene(window);
+	//g_buffer_scene(window);
 
 	return 0;
 }

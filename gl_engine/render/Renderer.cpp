@@ -125,6 +125,7 @@ namespace gl_engine
 			m_backbuffer_FBO.bind();
 
 			render_geometry();
+			render_lights();
 
 			m_backbuffer_FBO.unbind();
 
@@ -149,10 +150,6 @@ namespace gl_engine
 			m_g_buffer_FBO.unbind();
 
 			glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-
-			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-			//glClear(GL_COLOR_BUFFER_BIT );
 			clear_screen();
 
 			m_deferred_material.update_view(m_cameraNode, NULL);
