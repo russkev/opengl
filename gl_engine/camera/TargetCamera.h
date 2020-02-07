@@ -32,8 +32,8 @@ namespace gl_engine
 		void focus(const glm::vec3& focusTarget);
 
 		// // ----- GETTERS ----- // //
-		glm::mat4 transform_to_cam(const glm::mat4& transform) override;
-		glm::mat4 cam_to_projection() override;
+		const glm::mat4 transform_to_cam(const glm::mat4& transform) const override;
+		const glm::mat4 cam_to_projection() const override;
 
 
 		// // ----- SETTERS ----- // //

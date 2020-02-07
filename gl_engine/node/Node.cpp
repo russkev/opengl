@@ -51,15 +51,15 @@ namespace gl_engine
 	}
 
 	// Calculate the transform matrix in local space
-	glm::mat4& Node::local_to_node()
+	const glm::mat4& Node::local_to_node() const
 	{
 		return m_local_transform;
 	}
 
 	// Calculate the transform matrix in world space
-	const glm::mat4 Node::world_to_node()
+	const glm::mat4 Node::world_to_node() const
 	{
-		Node* currentNode = this;
+		const Node* currentNode = this;
 		glm::mat4 outTransform(1.0f);
 
 		while (currentNode != NULL)
@@ -86,7 +86,7 @@ namespace gl_engine
 		return VectorUtils::extract_position(m_local_transform);
 	}
 
-	const glm::vec3 Node::world_position()
+	const glm::vec3 Node::world_position() const
 	{
 		return VectorUtils::extract_position(world_to_node());
 	}

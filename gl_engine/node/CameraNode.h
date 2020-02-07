@@ -27,14 +27,15 @@ namespace gl_engine
 		void update();
 
 		// // ----- GETTERS ----- // //
-		Camera* camera();
-		const glm::vec3 world_position() override;
+		const Camera* camera() const;
+		const glm::vec3 world_position() const override;
 
-		glm::mat4 world_to_cam();
-		glm::mat4 world_to_projection();
+		const glm::mat4 world_to_cam() const;
+		const glm::mat4 world_to_projection() const;
 
 		// // ----- SETTERS ----- // //
 		void set_position(const glm::vec3&) override;
+		Camera* camera();
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:

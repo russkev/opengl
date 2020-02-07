@@ -16,6 +16,7 @@
 #include "../post/ToneMap.h"
 #include "../post/Bloom.h"
 #include "../post/PostEffect.h"
+#include "DeferredRender.h"
 
 namespace gl_engine
 {
@@ -91,18 +92,18 @@ namespace gl_engine
 		Bloom m_bloom{ &m_backbuffer_FBO, &m_dimensions, &m_tone_map };
 
 		// // ----- DEFERRRED RENDER VARIABLES ----- // //
-		Framebuffer m_g_buffer_FBO{ GL_FRAMEBUFFER };
+		DeferredRender m_deferred_render;
+		//Framebuffer m_g_buffer_FBO{ GL_FRAMEBUFFER };
 
-		Texture m_g_position;
-		Texture m_g_normal;
-		Texture m_g_color_spec;
-		Texture m_g_depth;
+		//Texture m_g_position;
+		//Texture m_g_normal;
+		//Texture m_g_color_spec;
+		//Texture m_g_depth;
 
-		Texture m_g_buffer_texture;
-		BlinnDeferredMaterial m_deferred_material;
-		
-		Mesh m_deferred_mesh{ WindowQuad::create_windowQuad() };
-		MeshNode m_deferred_mesh_node{ "Deferred Screen Node", &m_deferred_mesh, &m_deferred_material };
+		//BlinnDeferredMaterial m_deferred_material;
+		//
+		//Mesh m_deferred_mesh{ WindowQuad::create_windowQuad() };
+		//MeshNode m_deferred_mesh_node{ "Deferred Screen Node", &m_deferred_mesh, &m_deferred_material };
 
 	};
 } // namespace gl_engine

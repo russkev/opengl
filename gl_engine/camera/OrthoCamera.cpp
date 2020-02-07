@@ -23,7 +23,7 @@ namespace gl_engine
 	}
 
 	// // ----- GETTERS ----- // //
-	glm::mat4 OrthoCamera::transform_to_cam(const glm::mat4& transform)
+	const glm::mat4 OrthoCamera::transform_to_cam(const glm::mat4& transform) const
 	{
 		glm::vec3 position	= VectorUtils::extract_position(transform);
 		glm::vec3 right		= glm::vec3{ transform[0][0], transform[0][1], transform[0][2] };
@@ -33,7 +33,7 @@ namespace gl_engine
 		return glm::lookAt(position, position + forward, up);
 	}
 
-	glm::mat4 OrthoCamera::cam_to_projection()
+	const glm::mat4 OrthoCamera::cam_to_projection() const
 	{
 		return glm::ortho(m_left, m_right, m_bottom, m_top, Camera::clip_near(), Camera::clip_far());
 	}

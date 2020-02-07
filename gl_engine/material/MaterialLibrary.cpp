@@ -75,7 +75,7 @@ namespace gl_engine
 		set_uniform(k_material_displacement_enabled, false);
 	}
 
-	void BlinnMaterial::update_view(CameraNode* camera_node, Node* model_node)
+	void BlinnMaterial::update_view(const CameraNode* camera_node, Node* model_node)
 	{
 		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * model_node->world_to_node());
 		set_uniform(k_transform_model_to_world, model_node->world_to_node());
@@ -176,7 +176,7 @@ namespace gl_engine
 		set_uniform(k_camera_position, glm::vec3(0.0f));
 	}
 
-	void BlinnDeferredMaterial::update_view(CameraNode* camera_node, Node* model_node)
+	void BlinnDeferredMaterial::update_view(const CameraNode* camera_node, Node* model_node)
 	{
 		set_uniform(k_camera_position, camera_node->world_position());
 	}
@@ -227,7 +227,7 @@ namespace gl_engine
 		set_uniform(k_transform_model_to_projection, glm::mat4{ 1.0f });
 	}
 
-	void DepthMaterial::update_view(CameraNode* camera_node, Node* mesh_node)
+	void DepthMaterial::update_view(const CameraNode* camera_node, Node* mesh_node)
 	{
 		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * mesh_node->world_to_node());
 	}
@@ -255,7 +255,7 @@ namespace gl_engine
 		set_uniform(k_point_light_far_plane, 100.0f);
 	}
 
-	void DepthCubeMaterial::update_view(CameraNode* camera_node, Node* model_node)
+	void DepthCubeMaterial::update_view(const CameraNode* camera_node, Node* model_node)
 	{
 		set_uniform(k_transform_model_to_world, model_node->world_to_node());
 		set_uniform(k_point_light_position, camera_node->world_position());
@@ -314,7 +314,7 @@ namespace gl_engine
 		set_uniform(k_material_displacement_enabled, false);
 	}
 
-	void GBufferMaterial::update_view(CameraNode* camera_node, Node* model_node)
+	void GBufferMaterial::update_view(const CameraNode* camera_node, Node* model_node)
 	{
 		set_uniform(k_transform_model_to_projection,	camera_node->world_to_projection() * model_node->world_to_node());
 		set_uniform(k_transform_model_to_world,			model_node->world_to_node());
@@ -361,7 +361,7 @@ namespace gl_engine
 	}
 
 
-	void LightMaterial::update_view(CameraNode* cameraNode, Node* model_node)
+	void LightMaterial::update_view(const CameraNode* cameraNode, Node* model_node)
 	{
 		set_uniform(k_transform_model_to_projection, cameraNode->world_to_projection() * model_node->world_to_node());
 	}
