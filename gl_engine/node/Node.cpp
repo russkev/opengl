@@ -44,6 +44,11 @@ namespace gl_engine
 		}
 	}
 
+	glm::mat4* Node::local_to_node()
+	{
+		return &m_local_transform;
+	}
+
 	// // ----- GETTERS ----- // //
 	const std::string& Node::name() const
 	{
@@ -51,7 +56,7 @@ namespace gl_engine
 	}
 
 	// Calculate the transform matrix in local space
-	const glm::mat4& Node::local_to_node() const
+	const glm::mat4 Node::local_to_node() const
 	{
 		return m_local_transform;
 	}

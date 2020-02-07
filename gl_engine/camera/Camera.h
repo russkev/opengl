@@ -40,7 +40,7 @@ namespace gl_engine
 		void set_clip_far(GLfloat);
 		void set_position(const glm::vec3& position);
 		void add_to_position(const glm::vec3& position);
-		void register_transform(const glm::mat4& transform);
+		void register_transform(glm::mat4* transform);
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
@@ -48,7 +48,8 @@ namespace gl_engine
 		GLfloat m_clip_near = 0.1f;
 		GLfloat m_clip_far = 10.0f;
 
-		glm::mat4 m_transform = glm::mat4{ 1.0f };
+		glm::mat4 m_default_transform = glm::mat4{ 1.0f };
+		glm::mat4* m_parent_transform = &m_default_transform;
 	};
 } // namespace gl_engine
 
