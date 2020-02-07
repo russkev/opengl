@@ -153,6 +153,9 @@
     <ClCompile Include="material\MaterialLibrary.cpp">
       <Filter>Material</Filter>
     </ClCompile>
+    <ClCompile Include="render\DeferredRender.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -330,6 +333,9 @@
     </ClInclude>
     <ClInclude Include="material\MaterialLibrary.h">
       <Filter>Material</Filter>
+    </ClInclude>
+    <ClInclude Include="render\DeferredRender.h">
+      <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

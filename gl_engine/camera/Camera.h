@@ -26,13 +26,13 @@ namespace gl_engine
 		const GLfloat& clip_near() const;
 		const GLfloat& clip_far() const;
 		virtual const glm::vec3 position() const;
-		glm::mat4* transform();
+		const glm::mat4 transform() const;
 
-		glm::mat4 object_to_cam();
-		glm::mat4 object_to_projection();
-		virtual glm::mat4 cam_to_projection() = 0;
-		virtual glm::mat4 transform_to_cam(const glm::mat4& transform) = 0;
-		glm::mat4 transform_to_projection(const glm::mat4& transform);
+		const glm::mat4 object_to_cam() const;
+		const glm::mat4 object_to_projection() const;
+		virtual const glm::mat4 cam_to_projection() const = 0;
+		virtual const glm::mat4 transform_to_cam(const glm::mat4& transform) const = 0;
+		const glm::mat4 transform_to_projection(const glm::mat4& transform) const;
 
 		// // ----- SETTERS ----- // //
 		void set_dimensions(glm::uvec2);
@@ -40,7 +40,7 @@ namespace gl_engine
 		void set_clip_far(GLfloat);
 		void set_position(const glm::vec3& position);
 		void add_to_position(const glm::vec3& position);
-		void register_transform(glm::mat4* transform);
+		void register_transform(const glm::mat4& transform);
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
@@ -48,8 +48,7 @@ namespace gl_engine
 		GLfloat m_clip_near = 0.1f;
 		GLfloat m_clip_far = 10.0f;
 
-		glm::mat4 m_default_transform = glm::mat4{ 1.0f };
-		glm::mat4* m_transform = &m_default_transform;
+		glm::mat4 m_transform = glm::mat4{ 1.0f };
 	};
 } // namespace gl_engine
 

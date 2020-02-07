@@ -49,13 +49,13 @@ namespace gl_engine
 		// // ----- GETTERS ----- // //
 		const std::string& name() const;
 
-		glm::mat4& local_to_node();
-		const glm::mat4 world_to_node();
+		const glm::mat4& local_to_node() const;
+		const glm::mat4 world_to_node() const;
 		const glm::mat3 world_normal_to_node();
 		const glm::vec3 direction();
 
 		virtual const glm::vec3 local_position() const;
-		virtual const glm::vec3 world_position();
+		virtual const glm::vec3 world_position() const;
 		const glm::vec3 local_rotation() const;
 		const glm::vec3 local_scale() const;
 

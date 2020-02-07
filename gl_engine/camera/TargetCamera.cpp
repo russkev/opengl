@@ -76,7 +76,7 @@ namespace gl_engine
 		Camera::set_position(pitch * yaw * Camera::position());
 		Camera::add_to_position(m_look_target);
 
-		m_view_direction = VectorUtils::extract_position(*Camera::transform());
+		m_view_direction = VectorUtils::extract_position(Camera::transform());
 		m_cam_right = yaw * m_cam_right;
 		m_cam_up = cross(m_cam_right, m_view_direction);
 
@@ -85,7 +85,7 @@ namespace gl_engine
 
 	void TargetCamera::print_data(const glm::vec2& rotate_delta)
 	{
-		glm::vec3 position = VectorUtils::extract_position(*Camera::transform());
+		glm::vec3 position = VectorUtils::extract_position(Camera::transform());
 		if (rotate_delta.y != 0) {
 			std::cout << "rotate_delta,     y: " << rotate_delta.y << "\n";
 			std::cout << "rotate_delta, sin y: " << sin(rotate_delta.y) << "\n";
@@ -105,13 +105,13 @@ namespace gl_engine
 
 	// // ----- GETTERS ----- // //
 
-	glm::mat4 TargetCamera::transform_to_cam(const glm::mat4& transform)
+	const glm::mat4 TargetCamera::transform_to_cam(const glm::mat4& transform) const
 	{
 		glm::vec3 position = VectorUtils::extract_position(transform);
 		return glm::lookAt(position, m_look_target, m_cam_up);
 	}
 
-	glm::mat4 TargetCamera::cam_to_projection()
+	const glm::mat4 TargetCamera::cam_to_projection() const
 	{
 		return glm::perspective(
 			glm::radians(m_angle_of_view), 

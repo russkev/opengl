@@ -22,7 +22,8 @@ namespace gl_engine
 	// // ----- CONSTRUCTORS ----- // //
 	Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
 		m_cameraNode{ camera }, 
-		m_dimensions{ dimensions }
+		m_dimensions{ dimensions },
+		m_deferred_render{ GL_TEXTURE_2D, dimensions }
 	{
 		m_cameraNode->camera()->set_dimensions(dimensions);
 		init_settings();
@@ -92,21 +93,23 @@ namespace gl_engine
 
 	void Renderer::init_deferred_renderer()
 	{
-		m_g_position = Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
-		m_g_normal = Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
-		m_g_color_spec = Texture::create_8bit_rgba_null_texture(GL_TEXTURE_2D, &m_dimensions);
-		m_g_depth = Texture::create_depth_null_texture(GL_TEXTURE_2D, &m_dimensions);
+		//m_g_position = Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
+		//m_g_normal = Texture::create_16bit_rgb_null_texture(GL_TEXTURE_2D, &m_dimensions);
+		//m_g_color_spec = Texture::create_8bit_rgba_null_texture(GL_TEXTURE_2D, &m_dimensions);
+		//m_g_depth = Texture::create_depth_null_texture(GL_TEXTURE_2D, &m_dimensions);
 
-		m_g_buffer_FBO.push_back_color_buffer_textures(std::vector<const Texture*>{
-			&m_g_position, &m_g_normal, &m_g_color_spec	});
+		//m_g_buffer_FBO.push_back_color_buffer_textures(std::vector<const Texture*>{
+		//	&m_g_position, &m_g_normal, &m_g_color_spec	});
 
-		m_g_buffer_FBO.set_depth_buffer_texture(&m_g_depth);
+		//m_g_buffer_FBO.set_depth_buffer_texture(&m_g_depth);
 
-		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_position, &m_g_position);
-		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_normal, &m_g_normal);
-		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_diffuse_spec, &m_g_color_spec);
+		//m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_position, &m_g_position);
+		//m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_normal, &m_g_normal);
+		//m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_diffuse_spec, &m_g_color_spec);
 
-		add_material(&m_deferred_material);
+		//add_material(&m_deferred_material);
+
+		add_material(m_deferred_render.material());
 	}
 
 	// // ----- RENDER ----- // //
@@ -141,22 +144,28 @@ namespace gl_engine
 		{
 
 
-			m_g_buffer_FBO.bind();
+			//m_g_buffer_FBO.bind();
+
+			m_deferred_render.bind();
 
 			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 			render_geometry();
 
-			m_g_buffer_FBO.unbind();
+			//m_g_buffer_FBO.unbind();
+			m_deferred_render.unbind();
 
 			glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 			clear_screen();
 
-			m_deferred_material.update_view(m_cameraNode, NULL);
+			//m_deferred_material.update_view(m_cameraNode, NULL);
+			m_deferred_render.update_view(m_cameraNode);
 
-			m_deferred_mesh_node.draw();
+			//m_deferred_mesh_node.draw();
+			m_deferred_render.draw();
 
-			m_g_buffer_FBO.blit_depth_to_default(m_dimensions);
+			//m_g_buffer_FBO.blit_depth_to_default(m_dimensions);
+			m_deferred_render.framebuffer()->blit_depth_to_default(m_dimensions);
 
 
 			render_lights();

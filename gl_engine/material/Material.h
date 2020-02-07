@@ -61,7 +61,7 @@ namespace gl_engine
 		void bind_textures();
 		void unbind_textures();
 		void update_texture_id(const std::string uniform_name, const GLuint id);
-		virtual void update_view(CameraNode* cameraNode, Node* node) {};
+		virtual void update_view(const CameraNode* cameraNode, Node* node) {};
 
 	private:
 		void init();

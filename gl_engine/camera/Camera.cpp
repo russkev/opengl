@@ -22,25 +22,25 @@ namespace gl_engine
 
 	const glm::vec3 Camera::position() const
 	{
-		return VectorUtils::extract_position(*m_transform);
+		return VectorUtils::extract_position(m_transform);
 	}
 
-	glm::mat4* Camera::transform()
+	const glm::mat4 Camera::transform() const
 	{
 		return m_transform;
 	}
 
-	glm::mat4 Camera::object_to_cam()
+	const glm::mat4 Camera::object_to_cam() const
 	{
-		return transform_to_cam(*m_transform);
+		return transform_to_cam(m_transform);
 	}
 
-	glm::mat4 Camera::object_to_projection()
+	const glm::mat4 Camera::object_to_projection() const
 	{
-		return transform_to_projection(*m_transform);
+		return transform_to_projection(m_transform);
 	}
 
-	glm::mat4 Camera::transform_to_projection(const glm::mat4& transform)
+	const glm::mat4 Camera::transform_to_projection(const glm::mat4& transform) const
 	{
 		return cam_to_projection() * transform_to_cam(transform);
 	}
@@ -64,15 +64,15 @@ namespace gl_engine
 
 	void Camera::set_position(const glm::vec3& position)
 	{
-		VectorUtils::set_position(*m_transform, position);
+		VectorUtils::set_position(m_transform, position);
 	}
 
 	void Camera::add_to_position(const glm::vec3& position)
 	{
-		VectorUtils::add_position_to_transform(*m_transform, position);
+		VectorUtils::add_position_to_transform(m_transform, position);
 	}
 
-	void Camera::register_transform(glm::mat4* transform)
+	void Camera::register_transform(const glm::mat4& transform)
 	{
 		m_transform = transform;
 	}

@@ -45,7 +45,7 @@ namespace gl_engine
 	}
 
 	// // ----- GETTERS ----- // //
-	glm::mat4 FreeCamera::transform_to_cam(const glm::mat4& transform)
+	const glm::mat4 FreeCamera::transform_to_cam(const glm::mat4& transform) const
 	{
 		glm::vec3 position	= VectorUtils::extract_position(transform);
 		glm::vec3 right		= glm::vec3{ transform[0][0], transform[0][1], transform[0][2] };
@@ -55,7 +55,7 @@ namespace gl_engine
 		return glm::lookAt(position, position + forward, up);
 	}
 
-	glm::mat4 FreeCamera::cam_to_projection()
+	const glm::mat4 FreeCamera::cam_to_projection() const
 	{
 		return glm::perspective(
 			glm::radians(m_angle_of_view), 

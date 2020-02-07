@@ -180,6 +180,7 @@
     <ClCompile Include="node\Node.cpp" />
     <ClCompile Include="post\Bloom.cpp" />
     <ClCompile Include="post\ToneMap.cpp" />
+    <ClCompile Include="render\DeferredRender.cpp" />
     <ClCompile Include="render\Renderer.cpp" />
     <ClCompile Include="render\Window.cpp" />
     <ClCompile Include="resources\Buffer.cpp" />
@@ -240,6 +241,7 @@
     <ClInclude Include="post\Bloom.h" />
     <ClInclude Include="post\PostEffect.h" />
     <ClInclude Include="post\ToneMap.h" />
+    <ClInclude Include="render\DeferredRender.h" />
     <ClInclude Include="render\Renderer.h" />
     <ClInclude Include="render\Window.h" />
     <ClInclude Include="resources\Buffer.h" />
