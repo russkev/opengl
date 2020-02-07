@@ -45,11 +45,12 @@ namespace gl_engine
 		virtual void update_view(CameraNode*);
 		virtual void draw(const Pass& pass = rgb);
 		virtual void draw_material(Material* material);
+		glm::mat4* local_to_node();
 
 		// // ----- GETTERS ----- // //
 		const std::string& name() const;
 
-		const glm::mat4& local_to_node() const;
+		const glm::mat4 local_to_node() const;
 		const glm::mat4 world_to_node() const;
 		const glm::mat3 world_normal_to_node();
 		const glm::vec3 direction();
