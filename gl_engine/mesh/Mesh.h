@@ -11,7 +11,7 @@
 #include <GL\glew.h>
 #include <glm/glm.hpp>
 
-#include "../utils/VectorUtils.h"
+#include "utils/VectorUtils.h"
 #include "Vertex.h"
 
 namespace glen

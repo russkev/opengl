@@ -56,5 +56,5 @@ namespace glen
 		glm::vec2 m_old_mouse_position;
 		GLfloat m_angle_of_view = 60.0f; // In degrees
 	};
-} // namespace gl_engine
+}
 #endif

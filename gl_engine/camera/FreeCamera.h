@@ -36,5 +36,5 @@ namespace glen
 	};
 
 
-} // namespace gl_engine
+} 
 #endif

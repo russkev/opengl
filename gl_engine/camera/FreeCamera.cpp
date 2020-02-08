@@ -3,7 +3,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../utils/VectorUtils.h"
+#include "utils/VectorUtils.h"
 
 
 namespace glen

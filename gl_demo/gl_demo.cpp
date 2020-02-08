@@ -40,10 +40,5 @@ int main()
 	glen::OrthoCamera ortho_camera{};
 	glen::TargetCamera target_camera{};
 
-	std::cout << "a + b = " <<
-		MathFuncs::MyMathFuncs::Add(a, b) << "\n";
-
-    std::cout << "Hello World!\n";
-
 	return 0;
 }
