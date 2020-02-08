@@ -152,6 +152,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="camera\Camera.h" />
+    <ClInclude Include="camera\FreeCamera.h" />
+    <ClInclude Include="camera\OrthoCamera.h" />
+    <ClInclude Include="camera\TargetCamera.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MathsFuncs.h" />
     <ClInclude Include="mesh\Arrow.h" />
@@ -168,6 +172,10 @@
     <ClInclude Include="utils\VectorUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="camera\Camera.cpp" />
+    <ClCompile Include="camera\FreeCamera.cpp" />
+    <ClCompile Include="camera\OrthoCamera.cpp" />
+    <ClCompile Include="camera\TargetCamera.cpp" />
     <ClCompile Include="gl_engine.cpp" />
     <ClCompile Include="MathsFuncs.cpp" />
     <ClCompile Include="mesh\Arrow.cpp" />
