@@ -1,2 +1,4 @@
 ﻿  pch.cpp
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\helper.h(5): fatal error C1083: Cannot open include file: '../gl_engine/render/Window.h': No such file or directory
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\helper.h(25): error C2653: 'gl_engine': is not a class or namespace name
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\helper.h(25): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+e:\docs\programming\cpp\opengl\repos\opengl\gl_test\helper.h(25): error C2146: syntax error: missing ';' before identifier 'create_gl_window'
