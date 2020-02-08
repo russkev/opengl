@@ -183,6 +183,4 @@ namespace glen
 		SDL_GetWindowSize(m_st_window, NULL, &height);
 		return height;
 	}
-
-
 }

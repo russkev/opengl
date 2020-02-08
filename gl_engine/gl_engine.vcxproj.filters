@@ -1,26 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Render">
       <UniqueIdentifier>{f80c63e7-8d20-4b5f-8e3b-b248711a0025}</UniqueIdentifier>
     </Filter>
     <Filter Include="Mesh">
       <UniqueIdentifier>{b6eb0b48-6293-41d7-a3ef-ae5d0c2f2ad0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="utils">
-      <UniqueIdentifier>{b0b28b46-a206-47f4-84f8-68d3a66f8ab6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Light">
       <UniqueIdentifier>{644b35ff-48f3-4dd6-b10e-68842f5afa42}</UniqueIdentifier>
@@ -40,16 +25,27 @@
     <Filter Include="Shading">
       <UniqueIdentifier>{1813d30f-e624-44ec-a73e-a3e9409b6c28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{b0b28b46-a206-47f4-84f8-68d3a66f8ab6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Post">
+      <UniqueIdentifier>{964c1e31-3346-4b73-afbd-1d0fab1d788a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Boiolerplate">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
-      <Filter>Header Files</Filter>
+      <Filter>Boiolerplate</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MathsFuncs.h">
-      <Filter>Header Files</Filter>
+      <Filter>Boiolerplate</Filter>
     </ClInclude>
     <ClInclude Include="render\Window.h">
       <Filter>Render</Filter>
@@ -61,7 +57,7 @@
       <Filter>Mesh</Filter>
     </ClInclude>
     <ClInclude Include="utils\VectorUtils.h">
-      <Filter>utils</Filter>
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="mesh\Cube.h">
       <Filter>Mesh</Filter>
@@ -154,18 +150,27 @@
       <Filter>Shading</Filter>
     </ClInclude>
     <ClInclude Include="utils\Timer.h">
-      <Filter>utils</Filter>
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="render\DeferredRender.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Renderer.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="post\Bloom.h">
+      <Filter>Post</Filter>
+    </ClInclude>
+    <ClInclude Include="post\PostEffect.h">
+      <Filter>Post</Filter>
+    </ClInclude>
+    <ClInclude Include="post\ToneMap.h">
+      <Filter>Post</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gl_engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MathsFuncs.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="render\Window.cpp">
       <Filter>Render</Filter>
@@ -180,7 +185,7 @@
       <Filter>Mesh</Filter>
     </ClCompile>
     <ClCompile Include="utils\VectorUtils.cpp">
-      <Filter>utils</Filter>
+      <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="mesh\Arrow.cpp">
       <Filter>Mesh</Filter>
@@ -264,7 +269,22 @@
       <Filter>Shading</Filter>
     </ClCompile>
     <ClCompile Include="utils\Timer.cpp">
-      <Filter>utils</Filter>
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DeferredRender.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Renderer.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="post\Bloom.cpp">
+      <Filter>Post</Filter>
+    </ClCompile>
+    <ClCompile Include="post\ToneMap.cpp">
+      <Filter>Post</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Boiolerplate</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
