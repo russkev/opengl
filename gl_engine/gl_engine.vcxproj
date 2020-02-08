@@ -158,6 +158,7 @@
     <ClInclude Include="camera\OrthoCamera.h" />
     <ClInclude Include="camera\TargetCamera.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="gl_engine.h" />
     <ClInclude Include="light\DirectionalLight.h" />
     <ClInclude Include="light\Light.h" />
     <ClInclude Include="light\PointLight.h" />
@@ -201,7 +202,6 @@
     <ClCompile Include="camera\FreeCamera.cpp" />
     <ClCompile Include="camera\OrthoCamera.cpp" />
     <ClCompile Include="camera\TargetCamera.cpp" />
-    <ClCompile Include="gl_engine.cpp" />
     <ClCompile Include="light\DirectionalLight.cpp" />
     <ClCompile Include="light\Light.cpp" />
     <ClCompile Include="light\PointLight.cpp" />

@@ -21,10 +21,10 @@ void matricesAreSimilar(glm::mat4 result, glm::mat4 expected);
 
 BOOST_AUTO_TEST_CASE(test_minValue)
 {
-	BOOST_TEST(gl_engine::VectorUtils::min_value(1, 2) == 1);
-	BOOST_TEST(gl_engine::VectorUtils::min_value(1, 2, 3, 4, 5) == 1);
-	BOOST_TEST(gl_engine::VectorUtils::min_value(0, 0) == 0);
-	BOOST_TEST(gl_engine::VectorUtils::min_value(0, 0, 0, 0) == 0);
+	BOOST_TEST(glen::VectorUtils::min_value(1, 2) == 1);
+	BOOST_TEST(glen::VectorUtils::min_value(1, 2, 3, 4, 5) == 1);
+	BOOST_TEST(glen::VectorUtils::min_value(0, 0) == 0);
+	BOOST_TEST(glen::VectorUtils::min_value(0, 0, 0, 0) == 0);
 }
 
 BOOST_AUTO_TEST_CASE(test_trs)
@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(test_trs)
 		glm::vec3 t = { 0.0, 0.0, 0.0 };
 		glm::vec3 r = { 0.0, 0.0, 0.0 };
 		glm::vec3 s = { 1.0, 1.0, 1.0 };
-		glm::mat4 result1 = gl_engine::VectorUtils::translate_rotate_scale(glm::mat3(t, r, s));
+		glm::mat4 result1 = glen::VectorUtils::translate_rotate_scale(glm::mat3(t, r, s));
 		glm::mat4 expected = glm::mat4(1.0f);
 		BOOST_CHECK(result1 == expected);
 	}
@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(test_trs)
 		glm::vec3 t = { 1.0, 2.0, 3.0 };
 		glm::vec3 r = { 0.0, 0.0, 0.0 };
 		glm::vec3 s = { 1.0, 1.0, 1.0 };
-		glm::mat4 result2 = gl_engine::VectorUtils::translate_rotate_scale(glm::mat3(t, r, s));
+		glm::mat4 result2 = glen::VectorUtils::translate_rotate_scale(glm::mat3(t, r, s));
 		glm::mat4 expected = glm::mat4(1.0f);
 		expected[3][0] = 1.0;
 		expected[3][1] = 2.0;
@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(test_trs)
 		glm::vec3 t = { 1.0, 2.0, 3.0 };
 		glm::vec3 r = { 0.0, 0.0, 0.0 };
 		glm::vec3 s = { 1.0, 1.0, 1.0 };
-		glm::mat4 result3 = gl_engine::VectorUtils::translate_rotate_scale(glm::mat3(t, r, s));
+		glm::mat4 result3 = glen::VectorUtils::translate_rotate_scale(glm::mat3(t, r, s));
 		glm::mat4 expected = glm::mat4(1.0f);
 		expected[3][0] = 1.0;
 		expected[3][1] = 2.0;
@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE(test_trs)
 		glm::vec3 t = { 0.0, 0.0, 0.0 };
 		glm::vec3 r = { 30.0, 0.0, 0.0 };
 		glm::vec3 s = { 1.0, 1.0, 1.0 };
-		glm::mat4 result4 = gl_engine::VectorUtils::translate_rotate_scale(glm::mat3(t, r, s));
+		glm::mat4 result4 = glen::VectorUtils::translate_rotate_scale(glm::mat3(t, r, s));
 
 
 		float result_array[16] = {

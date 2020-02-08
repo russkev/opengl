@@ -1,4 +1,2 @@
-﻿  pch.cpp
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\helper.h(25): error C2653: 'gl_engine': is not a class or namespace name
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\helper.h(25): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-e:\docs\programming\cpp\opengl\repos\opengl\gl_test\helper.h(25): error C2146: syntax error: missing ';' before identifier 'create_gl_window'
+﻿  test_Overall.cpp
+  gl_test.vcxproj -> E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\x64\Debug\gl_test.exe

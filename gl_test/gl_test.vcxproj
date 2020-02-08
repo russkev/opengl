@@ -94,11 +94,13 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\gl_engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -170,6 +172,7 @@
     </ClCompile>
     <ClCompile Include="test_Framebuffer.cpp" />
     <ClCompile Include="test_Node.cpp" />
+    <ClCompile Include="test_Overall.cpp" />
     <ClCompile Include="test_Timer.cpp" />
     <ClCompile Include="test_VectorUtils.cpp" />
   </ItemGroup>
@@ -178,7 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\gl_engine\gl_engine.vcxproj">
-      <Project>{458f2dc3-55ff-4465-9d45-c570758b098f}</Project>
+      <Project>{444123f4-28bc-4b85-b884-ab664c376ca0}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
