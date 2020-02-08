@@ -1,0 +1,122 @@
+#ifndef GL_ENGINE_SHADING_TEXTURE_H
+#define GL_ENGINE_SHADING_TEXTURE_H
+
+#include <SDL.h>
+#include <SDL_image.h>
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+
+
+namespace gl_engine_exe
+{
+	/*
+	
+		A texture is used to prepare sampler objects for shaders
+	
+	*/
+	struct Texture
+	{
+		// // ----- CONSTRUCTORS ----- // //
+	public:
+		Texture() {};
+
+		// Create a texture from an image file
+		Texture(const char* file_name);
+
+		// Create an internal texture
+		Texture(const GLenum target);
+
+		// Create color solid color texture
+		Texture(const glm::vec3& color);
+		Texture(const glm::vec4& color);
+		
+		// // ----- GENERAL ----- // //
+		void process();
+		void bind();
+		void bind(GLuint texture_unit);
+		void unbind();
+		bool is_framebuffer();
+	private:
+		void process_uniform_2d();
+		void process_uniform_2d_array();
+		void process_cube_map();
+		void flip_surface();
+
+		// // ----- FACTORY ----- // //
+	public:
+		static Texture create_16bit_rgba_null_texture(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_16bit_rgb_null_texture(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_8bit_rgba_null_texture(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_8bit_rgb_null_texture(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_depth_null_texture(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_stencil_texture(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_depth_null_texture_for_shadow(const GLenum target, const glm::uvec2* dimensions);
+
+
+		// // ----- GETTERS ----- // //
+	public:
+		const GLuint id() const;
+		const GLsizei width() const;
+		const GLsizei height() const;
+
+		const GLenum target() const;
+		const GLint level() const;
+		const GLenum internal_format() const;
+		const GLint border() const;
+		const GLenum format() const;
+		const GLenum type() const;
+
+		const GLenum min_filter() const;
+		const GLenum mag_filter() const;
+		const GLenum wrap_s() const;
+		const GLenum wrap_t() const;
+		const GLenum wrap_r() const;
+
+		bool has_alpha();
+		void* data();
+
+		// // ----- SETTERS ----- // //
+		void set_new_id(const GLuint id);
+		void set_target(const GLenum target);
+		void set_width(const GLsizei width);
+		void set_height(const GLsizei height);
+		void set_internal_format(const GLint internal_format);
+		void set_format(const GLenum format);
+		void set_type(const GLenum type);
+		void set_data(void* data);
+		void set_min_filter(const GLenum min_filter);
+		void set_mag_filter(const GLenum max_filter);
+		void set_st_wrap(const GLenum wrap);
+		void set_mipmap(const bool value);
+		void set_border_color(const GLfloat r, const GLfloat g, const GLfloat b, const GLfloat a);
+		void resize(const GLsizei width, const GLsizei height);
+
+		// // ----- MEMBER VARIABLES ----- // //
+	private:
+		SDL_Surface*		m_surface = NULL;
+		glm::tvec4<GLubyte>	m_color;
+
+		GLuint			m_id = 0;
+		GLsizei			m_width = 0;
+		GLsizei			m_height = 0;
+
+		GLenum			m_target = GL_TEXTURE_2D;	// Type of texture
+		GLint			m_level = 0;				// Mipmap base level
+		GLenum			m_internal_format = GL_RGB;	// Number and size of color components
+		GLint			m_border = 0;				// Size of the border
+		GLenum			m_format = GL_RGB;			// Format of the pixel data
+		GLenum			m_type = GL_UNSIGNED_BYTE;	// The data type of each pixel
+		void*			m_data = NULL;				// Pointer to the actual data
+
+		GLenum			m_min_filter = GL_LINEAR_MIPMAP_LINEAR;
+		GLenum			m_mag_filter = GL_LINEAR;
+		GLenum			m_wrap_s = GL_REPEAT;
+		GLenum			m_wrap_t = GL_REPEAT;
+		GLenum			m_wrap_r = GL_REPEAT;
+		GLfloat			m_border_color[4] = { 1.0f, 0.0f, 0.0f, 0.0f };
+
+		bool			m_generate_mipmap = true;
+	};
+} // namespace gl_engine
+
+#endif
