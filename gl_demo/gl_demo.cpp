@@ -4,51 +4,68 @@
 
 int main()
 {
-	GLuint width = 800u, height = 600u;
-	const glm::uvec2 dimensions{ width, height };
-	glen::Window window{ "Window", width, height };
+	GLuint width = 800u;
+	GLuint height = 600u;
 
-	glen::Mesh cube{ glen::Cube::create_cube() };
-	glen::Mesh arrow{ glen::Arrow::create_arrow() };
-	glen::Mesh cylinder{ glen::Cylinder::create_cylinder() };
-	glen::Mesh shader_ball{ glen::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj") };
-	glen::Mesh plane{ glen::Plane::create_plane() };
-	glen::Mesh sphere{ glen::Sphere::create_sphere(2.0f) };
-	glen::Mesh window_quad{ glen::WindowQuad::create_windowQuad() };
+	glen::Window window{ "GL Engine", width, height };
 
-	glen::FreeCamera free_camera{};
-	glen::OrthoCamera ortho_camera{};
-	glen::TargetCamera target_camera{};
+	// Target Camera
+	glen::TargetCamera targetCam{};
+	glen::CameraNode targetCam_node{ "Target Camera 1", &targetCam };
+	targetCam.set_position({ 0.0f, 8.0f, 8.0f });
+	targetCam.set_focus_target({ 0.0f, 0.0f, 0.0f });
+	targetCam.focus(glm::vec3{ 0.0f, 0.0f, 0.0f });
+	targetCam.set_clip_far(1000.0f);
 
-	glen::DirectionalLight directional_light{ 1.0f, glm::vec3{1.0f} };
-	glen::PointLight point_light{ 1.0f, glm::vec3{1.0f} };
-	glen::SpotLight spot_light{ 1.0f, glm::vec3{1.0f} };
+	// Shader ball mesh
+	glen::Mesh shaderBall = glen::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
 
-	glen::BlinnMaterial blinn_material{};
-	glen::BlinnDeferredMaterial blinn_deferred_material{};
-	glen::BloomMaterial bloom_material{};
-	glen::DepthCubeMaterial depth_cube_material{};
-	glen::GaussianBlurMaterial gaussian_blur_material{};
-	glen::HDRMaterial hdr_material{};
-	glen::LightMaterial light_material{};
+	// GBuffer material
+	//gl_engine::Material g_buffer_material{ "G Buffer Material", "GBuffer.vert", "GBuffer.frag" };
+	glen::GBufferMaterial g_buffer_material{};
 
-	glen::CameraNode camera_node{ "Camera Node", &free_camera };
-	glen::LightNode light_node{ "Light Node", &point_light };
-	glen::MeshNode mesh_node{ "Mesh Node", &cube, &blinn_material };
+	//gl_engine::Material test_material{ "Test material", "Blinn.vert", "Blinn.frag" };
 
-	glen::Framebuffer framebuffer{ GL_TEXTURE_2D };
-	glen::ShadowMap shadow_map{ &light_node };
-	glen::Text2D text_2d{ "font_calibri_01.tga" };
-	glen::Texture texture{ GL_TEXTURE_2D };
+	// Textures
+	glen::Texture diffuse_texture{ "uvtemplate.tga" };
+	glen::Texture spec_texture{ "greyGrid_01.tga" };
 
-	glen::ToneMap tone_map{ &framebuffer, &dimensions };
-	glen::Bloom bloom{ &framebuffer, &dimensions, &tone_map };
+	g_buffer_material.set_texture(glen::GBufferMaterial::k_material_diffuse, &diffuse_texture);
+	g_buffer_material.set_texture(glen::GBufferMaterial::k_material_specular, &spec_texture);
 
-	glen::Timer timer{ 1.0f };
+	// Mesh node
+	glen::MeshNode g_buffer_node{ "G Buffer Mesh Node", &shaderBall, &g_buffer_material };
 
-	glen::DeferredRender{ GL_TEXTURE_2D, dimensions };
-	glen::Renderer{ &camera_node, dimensions };
+	// Directional light 1
+	glen::DirectionalLight directionalLight1{ 0.8f, {1.0f, 0.4f, 1.0f} };
+	glen::LightNode directionalLight_node1{ "Directional Light 1", &directionalLight1 };
+	directionalLight_node1.set_rotation({ 33.0f, 225.0f, 0.0f });
+	directionalLight_node1.set_position({ 16.0f, 16.0f, 16.0f });
 
+	// Point Light 1
+	glen::PointLight pointLight{ 1.0f, { 0.0f, 0.0f, 0.0f } };
+	pointLight.set_brightness(4.1f);
+	pointLight.set_color(glm::vec3(1.0, 0.7, 0.2));
+	pointLight.set_radius(0.1f);
+	glen::LightNode pointLight_node{ "Point Light 1", &pointLight };
+	pointLight_node.set_position({ -4.0f, 1.2f, 0.0f });
+
+	// Renderer
+	glen::Renderer render{ &targetCam_node, glm::uvec2(window.width(), window.height()) };
+	render.disable_post_effects();
+	render.enable_deferred_render();
+
+	render.add_node(&g_buffer_node);
+	render.add_node(&directionalLight_node1);
+	render.add_node(&pointLight_node);
+	render.disable_post_effects();
+
+	glen::Timer timer;
+
+	while (render.poll_events())
+	{
+		render.update(&window, &timer);
+	}
 
 	return 0;
 }
