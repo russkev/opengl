@@ -39,5 +39,5 @@ namespace glen
 		GLfloat m_bottom = -10.0f;
 		GLfloat m_top = 10.0f;
 	};
-} // namespace gl_engine
+} 
 #endif

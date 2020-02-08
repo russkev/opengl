@@ -92,6 +92,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\gl_engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -157,6 +158,12 @@
     <ClInclude Include="camera\OrthoCamera.h" />
     <ClInclude Include="camera\TargetCamera.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="light\DirectionalLight.h" />
+    <ClInclude Include="light\Light.h" />
+    <ClInclude Include="light\PointLight.h" />
+    <ClInclude Include="light\SpotLight.h" />
+    <ClInclude Include="material\Material.h" />
+    <ClInclude Include="material\MaterialLibrary.h" />
     <ClInclude Include="MathsFuncs.h" />
     <ClInclude Include="mesh\Arrow.h" />
     <ClInclude Include="mesh\Cylinder.h" />
@@ -167,8 +174,22 @@
     <ClInclude Include="mesh\Sphere.h" />
     <ClInclude Include="mesh\Vertex.h" />
     <ClInclude Include="mesh\WindowQuad.h" />
+    <ClInclude Include="node\CameraNode.h" />
+    <ClInclude Include="node\LightNode.h" />
+    <ClInclude Include="node\MeshNode.h" />
+    <ClInclude Include="node\Node.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="render\Window.h" />
+    <ClInclude Include="resources\Buffer.h" />
+    <ClInclude Include="resources\GL_Tuple_Introspect.h" />
+    <ClInclude Include="resources\GL_Type_Traits.h" />
+    <ClInclude Include="resources\VAO.h" />
+    <ClInclude Include="shading\Framebuffer.h" />
+    <ClInclude Include="shading\LoadShader.h" />
+    <ClInclude Include="shading\ShadowMap.h" />
+    <ClInclude Include="shading\Text2D.h" />
+    <ClInclude Include="shading\Texture.h" />
+    <ClInclude Include="utils\Timer.h" />
     <ClInclude Include="utils\VectorUtils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +198,12 @@
     <ClCompile Include="camera\OrthoCamera.cpp" />
     <ClCompile Include="camera\TargetCamera.cpp" />
     <ClCompile Include="gl_engine.cpp" />
+    <ClCompile Include="light\DirectionalLight.cpp" />
+    <ClCompile Include="light\Light.cpp" />
+    <ClCompile Include="light\PointLight.cpp" />
+    <ClCompile Include="light\SpotLight.cpp" />
+    <ClCompile Include="material\Material.cpp" />
+    <ClCompile Include="material\MaterialLibrary.cpp" />
     <ClCompile Include="MathsFuncs.cpp" />
     <ClCompile Include="mesh\Arrow.cpp" />
     <ClCompile Include="mesh\Cube.cpp" />
@@ -187,6 +214,10 @@
     <ClCompile Include="mesh\Sphere.cpp" />
     <ClCompile Include="mesh\Vertex.cpp" />
     <ClCompile Include="mesh\WindowQuad.cpp" />
+    <ClCompile Include="node\CameraNode.cpp" />
+    <ClCompile Include="node\LightNode.cpp" />
+    <ClCompile Include="node\MeshNode.cpp" />
+    <ClCompile Include="node\Node.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -194,6 +225,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="render\Window.cpp" />
+    <ClCompile Include="resources\Buffer.cpp" />
+    <ClCompile Include="resources\VAO.cpp" />
+    <ClCompile Include="shading\Framebuffer.cpp" />
+    <ClCompile Include="shading\LoadShader.cpp" />
+    <ClCompile Include="shading\ShadowMap.cpp" />
+    <ClCompile Include="shading\Text2D.cpp" />
+    <ClCompile Include="shading\Texture.cpp" />
+    <ClCompile Include="utils\Timer.cpp" />
     <ClCompile Include="utils\VectorUtils.cpp" />
   </ItemGroup>
   <ItemGroup>

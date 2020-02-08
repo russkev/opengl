@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../utils/VectorUtils.h"
+#include "utils/VectorUtils.h"
 
 namespace glen
 {
@@ -67,4 +67,4 @@ namespace glen
 	{
 		m_top = top;
 	}
-} // namespace gl_engine
+} 

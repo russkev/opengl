@@ -9,7 +9,7 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
-#include "../utils/VectorUtils.h"
+#include "utils/VectorUtils.h"
 
 
 namespace glen
@@ -156,4 +156,4 @@ namespace glen
 	{
 		m_cam_up = glm::cross(m_view_direction, m_cam_right);
 	}
-} // namespace gl_engine
+}

@@ -22,8 +22,23 @@
     <Filter Include="utils">
       <UniqueIdentifier>{b0b28b46-a206-47f4-84f8-68d3a66f8ab6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="camera">
+    <Filter Include="Light">
+      <UniqueIdentifier>{644b35ff-48f3-4dd6-b10e-68842f5afa42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
       <UniqueIdentifier>{6e068c6f-bfc6-4063-a8c2-e326a5b9f6f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Material">
+      <UniqueIdentifier>{865e330f-40f7-4d18-af40-c9f9bea28e5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Node">
+      <UniqueIdentifier>{2480fb76-0ad1-4a8b-8a1e-16681359b42b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{28f6fa77-9247-4bb5-8068-f9569027050f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shading">
+      <UniqueIdentifier>{1813d30f-e624-44ec-a73e-a3e9409b6c28}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -70,16 +85,76 @@
       <Filter>Mesh</Filter>
     </ClInclude>
     <ClInclude Include="camera\Camera.h">
-      <Filter>camera</Filter>
+      <Filter>Camera</Filter>
     </ClInclude>
     <ClInclude Include="camera\FreeCamera.h">
-      <Filter>camera</Filter>
+      <Filter>Camera</Filter>
     </ClInclude>
     <ClInclude Include="camera\OrthoCamera.h">
-      <Filter>camera</Filter>
+      <Filter>Camera</Filter>
     </ClInclude>
     <ClInclude Include="camera\TargetCamera.h">
-      <Filter>camera</Filter>
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="light\DirectionalLight.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\Light.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\PointLight.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\SpotLight.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="material\Material.h">
+      <Filter>Material</Filter>
+    </ClInclude>
+    <ClInclude Include="material\MaterialLibrary.h">
+      <Filter>Material</Filter>
+    </ClInclude>
+    <ClInclude Include="node\CameraNode.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="node\LightNode.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="node\MeshNode.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="node\Node.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\Buffer.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\GL_Tuple_Introspect.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\GL_Type_Traits.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\VAO.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\Framebuffer.h">
+      <Filter>Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\LoadShader.h">
+      <Filter>Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\ShadowMap.h">
+      <Filter>Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\Text2D.h">
+      <Filter>Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="shading\Texture.h">
+      <Filter>Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Timer.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -126,16 +201,70 @@
       <Filter>Mesh</Filter>
     </ClCompile>
     <ClCompile Include="camera\Camera.cpp">
-      <Filter>camera</Filter>
+      <Filter>Camera</Filter>
     </ClCompile>
     <ClCompile Include="camera\FreeCamera.cpp">
-      <Filter>camera</Filter>
+      <Filter>Camera</Filter>
     </ClCompile>
     <ClCompile Include="camera\OrthoCamera.cpp">
-      <Filter>camera</Filter>
+      <Filter>Camera</Filter>
     </ClCompile>
     <ClCompile Include="camera\TargetCamera.cpp">
-      <Filter>camera</Filter>
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="light\DirectionalLight.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="light\Light.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="light\PointLight.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="light\SpotLight.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="material\Material.cpp">
+      <Filter>Material</Filter>
+    </ClCompile>
+    <ClCompile Include="material\MaterialLibrary.cpp">
+      <Filter>Material</Filter>
+    </ClCompile>
+    <ClCompile Include="node\CameraNode.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="node\LightNode.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="node\MeshNode.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="node\Node.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\Buffer.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\VAO.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="shading\Framebuffer.cpp">
+      <Filter>Shading</Filter>
+    </ClCompile>
+    <ClCompile Include="shading\LoadShader.cpp">
+      <Filter>Shading</Filter>
+    </ClCompile>
+    <ClCompile Include="shading\ShadowMap.cpp">
+      <Filter>Shading</Filter>
+    </ClCompile>
+    <ClCompile Include="shading\Text2D.cpp">
+      <Filter>Shading</Filter>
+    </ClCompile>
+    <ClCompile Include="shading\Texture.cpp">
+      <Filter>Shading</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Timer.cpp">
+      <Filter>utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
