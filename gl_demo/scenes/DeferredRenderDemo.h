@@ -1,9 +1,10 @@
-#pragma once
+#ifndef GL_DEMO_DEFERRED_RENDER_H
+#define GL_DEMO_DEFERRED_RENDER_H
 
 #include "gl_engine.h"
 
 
-namespace glemo
+namespace gl_demo
 {
 	static void deferred_demo()
 	{
@@ -72,3 +73,4 @@ namespace glemo
 
 	}
 }
+#endif
