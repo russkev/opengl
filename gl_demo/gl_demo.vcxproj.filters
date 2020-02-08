@@ -21,5 +21,11 @@
     <ClInclude Include="scenes\DeferredRenderDemo.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="scenes\SpecularityDemo.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="scenes\ParallaxDemo.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

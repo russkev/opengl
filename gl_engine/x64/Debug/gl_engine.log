@@ -1,13 +1,1 @@
-﻿  Material.cpp
-  MaterialLibrary.cpp
-  CameraNode.cpp
-  LightNode.cpp
-  MeshNode.cpp
-  Node.cpp
-  Bloom.cpp
-  ToneMap.cpp
-  DeferredRender.cpp
-  Renderer.cpp
-  ShadowMap.cpp
-  Generating Code...
-  gl_engine.vcxproj -> E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\x64\Debug\gl_engine.lib
+﻿  gl_engine.vcxproj -> C:\Users\kev_k\Documents\_DOCS\PROGRAMMING\OpenGL\repo\opengl\x64\Debug\gl_engine.lib
