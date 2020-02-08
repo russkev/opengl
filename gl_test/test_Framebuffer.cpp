@@ -16,16 +16,16 @@ struct FramebufferTestContext
 {
 	FramebufferTestContext(){}
 	
-	gl_engine::Window window{ Helper::create_gl_window() };
+	glen::Window window{ Helper::create_gl_window() };
 	const glm::uvec2 dimensions{ 2048, 2048 };
-	gl_engine::Framebuffer F1{ GL_FRAMEBUFFER };
-	gl_engine::Texture color_buffer_1{ gl_engine::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, &dimensions) };
-	gl_engine::Texture color_buffer_2{ gl_engine::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, &dimensions) };
-	gl_engine::Texture color_buffer_3{ gl_engine::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, &dimensions) };
-	gl_engine::Texture depth_buffer_1{ gl_engine::Texture::create_depth_null_texture (GL_TEXTURE_2D, &dimensions) };
-	gl_engine::Texture depth_buffer_2{ gl_engine::Texture::create_depth_null_texture(GL_TEXTURE_2D, &dimensions) };
-	gl_engine::Texture stencil_buffer_1{ gl_engine::Texture::create_stencil_texture(GL_TEXTURE_2D, &dimensions) };
-	gl_engine::Texture stencil_buffer_2{ gl_engine::Texture::create_stencil_texture(GL_TEXTURE_2D, &dimensions) };
+	glen::Framebuffer F1{ GL_FRAMEBUFFER };
+	glen::Texture color_buffer_1{ glen::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, &dimensions) };
+	glen::Texture color_buffer_2{ glen::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, &dimensions) };
+	glen::Texture color_buffer_3{ glen::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, &dimensions) };
+	glen::Texture depth_buffer_1{ glen::Texture::create_depth_null_texture (GL_TEXTURE_2D, &dimensions) };
+	glen::Texture depth_buffer_2{ glen::Texture::create_depth_null_texture(GL_TEXTURE_2D, &dimensions) };
+	glen::Texture stencil_buffer_1{ glen::Texture::create_stencil_texture(GL_TEXTURE_2D, &dimensions) };
+	glen::Texture stencil_buffer_2{ glen::Texture::create_stencil_texture(GL_TEXTURE_2D, &dimensions) };
 
 };
 
@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE(F1_overwrite_color_1)
 
 BOOST_AUTO_TEST_CASE(F1_set_multiple_color_buffer_textures)
 {
-	std::vector<const gl_engine::Texture*> colors{ &color_buffer_2, &color_buffer_3 };
+	std::vector<const glen::Texture*> colors{ &color_buffer_2, &color_buffer_3 };
 	F1.set_color_buffer_texture(&color_buffer_1, 0);
 	F1.push_back_color_buffer_textures(colors);
 	BOOST_TEST(F1.num_color_textures() == 3);

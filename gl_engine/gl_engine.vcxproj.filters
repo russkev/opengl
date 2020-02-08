@@ -167,11 +167,11 @@
     <ClInclude Include="post\ToneMap.h">
       <Filter>Post</Filter>
     </ClInclude>
+    <ClInclude Include="gl_engine.h">
+      <Filter>Main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="gl_engine.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="render\Window.cpp">
       <Filter>Render</Filter>
     </ClCompile>

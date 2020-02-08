@@ -3,7 +3,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include "../gl_engine/node/Node.h"
-#include "../gl_engine/node/Node.cpp"
+//#include "../gl_engine/node/Node.cpp"
 
 #include <glm/glm.hpp>
 
@@ -18,10 +18,10 @@ namespace tt = boost::test_tools;
 struct NodeTestContext
 {
 	NodeTestContext() :
-		N1(gl_engine::Node("N1")),
-		N2(gl_engine::Node("N2")),
-		N3(gl_engine::Node("N3")),
-		N4(gl_engine::Node("N4"))
+		N1(glen::Node("N1")),
+		N2(glen::Node("N2")),
+		N3(glen::Node("N3")),
+		N4(glen::Node("N4"))
 	{
 		N1.add_child(&N2);
 		N2.add_child(&N3);
@@ -41,10 +41,10 @@ struct NodeTestContext
 		expectedMatrix2[3][2] = 3.0f;
 	}
 
-	gl_engine::Node N1;
-	gl_engine::Node N2;
-	gl_engine::Node N3;
-	gl_engine::Node N4;
+	glen::Node N1;
+	glen::Node N2;
+	glen::Node N3;
+	glen::Node N4;
 	
 	glm::mat4 expectedMatrix1;
 	glm::mat4 expectedMatrix2;
@@ -60,11 +60,11 @@ BOOST_AUTO_TEST_SUITE(transform_tests)
 
 BOOST_AUTO_TEST_CASE(N1_local)
 {
-	BOOST_TEST(Helper::matrix_is_similar(N1.local_to_node(), expectedMatrix1, 0.1f));
+	BOOST_TEST(Helper::matrix_is_similar(*N1.local_to_node(), expectedMatrix1, 0.1f));
 }
 BOOST_AUTO_TEST_CASE(N1_world)
 {
-	BOOST_TEST(Helper::matrix_is_similar(N1.local_to_node(), expectedMatrix1, 0.1f));
+	BOOST_TEST(Helper::matrix_is_similar(N1.world_to_node(), expectedMatrix1, 0.1f));
 }
 BOOST_AUTO_TEST_CASE(N2_world)
 {
@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_CASE(N3_world)
 }
 BOOST_AUTO_TEST_CASE(N4_local)
 {
-	BOOST_TEST(Helper::matrix_is_similar(N4.local_to_node(), expectedMatrix2, 0.1f));
+	BOOST_TEST(Helper::matrix_is_similar(*N4.local_to_node(), expectedMatrix2, 0.1f));
 }
 BOOST_AUTO_TEST_CASE(N4_world)
 {
@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE(N1_relationships)
 	auto children = N1.children();
 	BOOST_CHECK(children["N2"] == &N2);
 	BOOST_CHECK(N1.parent() == false);
-	gl_engine::Node newNode = gl_engine::Node("N2");
+	glen::Node newNode = glen::Node("N2");
 	BOOST_CHECK_THROW(N1.add_child(&newNode), std::runtime_error);
 }
 BOOST_AUTO_TEST_CASE(N2_relationships)
@@ -109,7 +109,7 @@ BOOST_AUTO_TEST_CASE(N2_relationships)
 }
 BOOST_AUTO_TEST_CASE(N2_disconnect)
 {
-	gl_engine::Node* N2_b = N1.disconnect_child("N2");
+	glen::Node* N2_b = N1.disconnect_child("N2");
 	BOOST_TEST(N2_b == &N2);
 	BOOST_CHECK(N2.parent() == false);
 	BOOST_TEST(N2.children().size() == 2);

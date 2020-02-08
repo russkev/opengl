@@ -15,7 +15,7 @@ BOOST_AUTO_TEST_SUITE(Timer_tests)
 
 BOOST_AUTO_TEST_CASE(normalSecond, * utf::tolerance(0.01))
 {
-	gl_engine::Timer timer;
+	glen::Timer timer;
 	Sleep(1000);
 	timer.update();
 	BOOST_TEST(timer.delta_time_ms() == 1000.0);
@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(normalSecond, * utf::tolerance(0.01))
 
 BOOST_AUTO_TEST_CASE(nonNormalSpeed, * utf::tolerance(0.01))
 {
-	gl_engine::Timer timer(0.1);
+	glen::Timer timer(0.1);
 	Sleep(1000);
 	timer.update();
 	BOOST_TEST(timer.delta_time_ms() == 100.0);
@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(nonNormalSpeed, * utf::tolerance(0.01))
 
 BOOST_AUTO_TEST_CASE(totalTime, * utf::tolerance(0.01))
 {
-	gl_engine::Timer timer;
+	glen::Timer timer;
 	Sleep(500);
 	timer.update();
 	Sleep(500);
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(totalTime, * utf::tolerance(0.01))
 
 BOOST_AUTO_TEST_CASE(fps, *utf::tolerance(0.01))
 {
-	gl_engine::Timer timer;
+	glen::Timer timer;
 	Sleep(100);
 	timer.update();
 	Sleep(100);

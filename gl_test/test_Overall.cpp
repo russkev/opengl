@@ -1,8 +1,11 @@
-#define SDL_MAIN_HANDLED
+#include "pch.h"
+#include <boost/test/unit_test.hpp>
 
 #include "gl_engine.h"
 
-int main()
+BOOST_AUTO_TEST_SUITE(Overall)
+
+BOOST_AUTO_TEST_CASE(Construct_everything)
 {
 	GLuint width = 800u, height = 600u;
 	const glm::uvec2 dimensions{ width, height };
@@ -49,6 +52,7 @@ int main()
 	glen::DeferredRender{ GL_TEXTURE_2D, dimensions };
 	glen::Renderer{ &camera_node, dimensions };
 
-
-	return 0;
+	BOOST_TEST(true);
 }
+
+BOOST_AUTO_TEST_SUITE_END()
