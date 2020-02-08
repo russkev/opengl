@@ -15,6 +15,12 @@
 #include "mesh/Sphere.h"
 #include "mesh/WindowQuad.h"
 
+#include "camera/Camera.h"
+#include "camera/FreeCamera.h"
+#include "camera/OrthoCamera.h"
+#include "camera/TargetCamera.h"
+
+
 int main()
 {
 	double a = 7.4;
@@ -30,6 +36,9 @@ int main()
 	glen::Mesh sphere{ glen::Sphere::create_sphere(2.0f) };
 	glen::Mesh window_quad{ glen::WindowQuad::create_windowQuad() };
 
+	glen::FreeCamera free_camera{};
+	glen::OrthoCamera ortho_camera{};
+	glen::TargetCamera target_camera{};
 
 	std::cout << "a + b = " <<
 		MathFuncs::MyMathFuncs::Add(a, b) << "\n";
