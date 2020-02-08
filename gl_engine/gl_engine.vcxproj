@@ -164,7 +164,6 @@
     <ClInclude Include="light\SpotLight.h" />
     <ClInclude Include="material\Material.h" />
     <ClInclude Include="material\MaterialLibrary.h" />
-    <ClInclude Include="MathsFuncs.h" />
     <ClInclude Include="mesh\Arrow.h" />
     <ClInclude Include="mesh\Cylinder.h" />
     <ClInclude Include="mesh\Mesh.h" />
@@ -179,6 +178,11 @@
     <ClInclude Include="node\MeshNode.h" />
     <ClInclude Include="node\Node.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="post\Bloom.h" />
+    <ClInclude Include="post\PostEffect.h" />
+    <ClInclude Include="post\ToneMap.h" />
+    <ClInclude Include="render\DeferredRender.h" />
+    <ClInclude Include="render\Renderer.h" />
     <ClInclude Include="render\Window.h" />
     <ClInclude Include="resources\Buffer.h" />
     <ClInclude Include="resources\GL_Tuple_Introspect.h" />
@@ -204,7 +208,6 @@
     <ClCompile Include="light\SpotLight.cpp" />
     <ClCompile Include="material\Material.cpp" />
     <ClCompile Include="material\MaterialLibrary.cpp" />
-    <ClCompile Include="MathsFuncs.cpp" />
     <ClCompile Include="mesh\Arrow.cpp" />
     <ClCompile Include="mesh\Cube.cpp" />
     <ClCompile Include="mesh\Cylinder.cpp" />
@@ -224,6 +227,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="post\Bloom.cpp" />
+    <ClCompile Include="post\ToneMap.cpp" />
+    <ClCompile Include="render\DeferredRender.cpp" />
+    <ClCompile Include="render\Renderer.cpp" />
     <ClCompile Include="render\Window.cpp" />
     <ClCompile Include="resources\Buffer.cpp" />
     <ClCompile Include="resources\VAO.cpp" />

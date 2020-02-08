@@ -52,5 +52,4 @@ namespace glen
 		std::string m_name = "";
 	};
 }
-
 #endif
