@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{f80c63e7-8d20-4b5f-8e3b-b248711a0025}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mesh">
+      <UniqueIdentifier>{b6eb0b48-6293-41d7-a3ef-ae5d0c2f2ad0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{b0b28b46-a206-47f4-84f8-68d3a66f8ab6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -24,6 +33,39 @@
     <ClInclude Include="MathsFuncs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="render\Window.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh\Mesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh\Vertex.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\VectorUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh\Cube.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh\Arrow.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh\Cylinder.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh\OBJ.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh\Plane.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh\Sphere.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh\WindowQuad.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gl_engine.cpp">
@@ -34,6 +76,39 @@
     </ClCompile>
     <ClCompile Include="MathsFuncs.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Window.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh\Cube.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh\Mesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh\Vertex.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\VectorUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh\Arrow.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh\Cylinder.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh\OBJ.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh\Plane.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh\Sphere.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh\WindowQuad.cpp">
+      <Filter>Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
