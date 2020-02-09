@@ -16,7 +16,7 @@ namespace glen
 
 	VAO::~VAO()
 	{
-		//glDeleteVertexArrays(1, &m_VAO_ID);
+		glDeleteVertexArrays(1, &m_VAO_ID);
 	}
 
 	// // ----- GENERAL METHODS ----- // //

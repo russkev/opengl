@@ -1,4 +1,2 @@
-﻿  Window.cpp
-  VAO.cpp
-  Generating Code...
-  gl_engine.vcxproj -> C:\Users\kev_k\Documents\_DOCS\PROGRAMMING\OpenGL\repo\opengl\x64\Debug\gl_engine.lib
+﻿  Texture.cpp
+c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_engine\shading\texture.cpp(133): error C4716: 'glen::Texture::operator=': must return a value

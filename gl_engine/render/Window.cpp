@@ -21,8 +21,8 @@ namespace glen
 
 	Window::~Window()
 	{
-		//SDL_DestroyWindow(m_st_window);
-		//SDL_GL_DeleteContext(m_st_opengl);
+		SDL_DestroyWindow(m_st_window);
+		SDL_GL_DeleteContext(m_st_opengl);
 	}
 
 
