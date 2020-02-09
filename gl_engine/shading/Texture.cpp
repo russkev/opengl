@@ -19,7 +19,7 @@ namespace glen
 		m_surface(IMG_Load(filepath)),
 		m_width(m_surface->w),
 		m_height(m_surface->h)
-		
+
 	{
 		if (has_alpha())
 		{
@@ -78,8 +78,10 @@ namespace glen
 
 	Texture::Texture(Texture&& other) :
 		m_surface{ other.m_surface },
-		m_color{ std::exchange(other.m_color, glm::tvec4<GLubyte>{0}) },
-		m_id{ std::exchange(other.m_id, 0) },
+		//m_color{ std::exchange(other.m_color, glm::tvec4<GLubyte>{0}) },
+		m_color{ other.m_color },
+		//m_id{ std::exchange(other.m_id, 0) },
+		m_id{ other.m_id },
 		m_width{ std::exchange(other.m_width, 0) },
 		m_height{ std::exchange(other.m_height, 0) },
 		m_target{ std::exchange(other.m_target, 0) },
@@ -97,62 +99,39 @@ namespace glen
 		m_border_color{ other.m_border_color[0], other.m_border_color[1], other.m_border_color[2], other.m_border_color[3] },
 		m_generate_mipmap{ std::exchange(other.m_generate_mipmap, false) }
 	{
-		other.m_surface = NULL;
-		other.m_data = NULL;
+		//other.m_surface = NULL;
+		//other.m_data = NULL;
+		//std::printf("MOVE_CONSTRUCTOR\n");
+
 	}
 
 	Texture& Texture::operator=(Texture&& other)
 	{
-		(*this).~Texture();
-		//return *new (this) Texture(std::move(other));
-		//if (this != &other)
-		//{
-		//	//free_external_memory();
-
-		//	std::swap(m_surface, other.m_surface);
-		//	std::swap(m_color, other.m_color);
-		//	std::swap(m_id, other.m_id);
-		//	std::swap(m_width, other.m_width);
-		//	std::swap(m_height, other.m_height);
-		//	std::swap(m_target, other.m_target);
-		//	std::swap(m_level, other.m_level);
-		//	std::swap(m_internal_format, other.m_internal_format);
-		//	std::swap(m_border, other.m_border);
-		//	std::swap(m_format, other.m_format);
-		//	std::swap(m_type, other.m_type);
-		//	std::swap(m_data, other.m_data);
-		//	std::swap(m_min_filter, other.m_min_filter);
-		//	std::swap(m_mag_filter, other.m_mag_filter);
-		//	std::swap(m_wrap_s, other.m_wrap_s);
-		//	std::swap(m_wrap_t, other.m_wrap_t);
-		//	std::swap(m_wrap_r, other.m_wrap_r);
-		//	std::swap(m_border_color, other.m_border_color);
-		//	std::swap(m_generate_mipmap, other.m_generate_mipmap);
-		//}
-		//return *this;
+		//std::printf("MOVE_ASSIGN\n");
+		//(*this).~Texture();
+		return *new (this) Texture(std::move(other));
+		
+		//Texture return_texture{ std::move(other) };
+		//return return_texture;
 	}
 
 	Texture::~Texture()
 	{
-		free_external_memory();
+		auto aksj = 54;
+		//if (m_id != 0)
+		//{
+		//	glDeleteTextures(1, &m_id);
+		//}
+		//if (m_surface)
+		//{
+		//	SDL_FreeSurface(m_surface);
+		//}
+		//m_surface = NULL;
+		//m_id = 0;
 	}
 
 
 	// // ----- GENERAL METHODS ----- // //
-	void Texture::free_external_memory()
-	{
-		if (m_id != 0)
-		{
-			glDeleteTextures(1, &m_id);
-		}
-		if (m_surface)
-		{
-			SDL_FreeSurface(m_surface);
-		}
-		m_surface = NULL;
-		m_id = 0;
-	}
-
 	void Texture::process()
 	{
 		bind();
@@ -286,11 +265,11 @@ namespace glen
 	}
 
 	// // ----- FACTORY ----- // //
-	Texture Texture::create_16bit_rgba_null_texture(const GLenum target, const glm::uvec2* dimensions)
+	Texture Texture::create_16bit_rgba_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
-		texture.set_width(dimensions->x);
-		texture.set_height(dimensions->y);
+		texture.set_width(dimensions.x);
+		texture.set_height(dimensions.y);
 		texture.set_internal_format(GL_RGBA16F);
 		texture.set_format(GL_RGBA);
 		texture.set_type(GL_FLOAT);
@@ -305,11 +284,11 @@ namespace glen
 		return texture;
 	}
 
-	Texture Texture::create_16bit_rgb_null_texture(const GLenum target, const glm::uvec2* dimensions)
+	Texture Texture::create_16bit_rgb_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
-		texture.set_width(dimensions->x);
-		texture.set_height(dimensions->y);
+		texture.set_width(dimensions.x);
+		texture.set_height(dimensions.y);
 		texture.set_internal_format(GL_RGB16F);
 		texture.set_format(GL_RGB);
 		texture.set_type(GL_FLOAT);
@@ -324,11 +303,11 @@ namespace glen
 		return texture;
 	}
 
-	Texture Texture::create_8bit_rgba_null_texture(const GLenum target, const glm::uvec2* dimensions)
+	Texture Texture::create_8bit_rgba_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
-		texture.set_width(dimensions->x);
-		texture.set_height(dimensions->y);
+		texture.set_width(dimensions.x);
+		texture.set_height(dimensions.y);
 		texture.set_internal_format(GL_RGBA);
 		texture.set_format(GL_RGBA);
 		texture.set_type(GL_UNSIGNED_BYTE);
@@ -343,11 +322,11 @@ namespace glen
 		return texture;
 	}
 
-	Texture Texture::create_8bit_rgb_null_texture(const GLenum target, const glm::uvec2* dimensions)
+	Texture Texture::create_8bit_rgb_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
-		texture.set_width(dimensions->x);
-		texture.set_height(dimensions->y);
+		texture.set_width(dimensions.x);
+		texture.set_height(dimensions.y);
 		texture.set_internal_format(GL_RGB);
 		texture.set_format(GL_RGB);
 		texture.set_type(GL_UNSIGNED_BYTE);
@@ -362,12 +341,12 @@ namespace glen
 		return texture;
 	}
 
-	Texture Texture::create_depth_null_texture(const GLenum target, const glm::uvec2* dimensions)
+	Texture Texture::create_depth_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
 		texture.set_internal_format(GL_DEPTH_COMPONENT);
-		texture.set_width(dimensions->x);
-		texture.set_height(dimensions->y);
+		texture.set_width(dimensions.x);
+		texture.set_height(dimensions.y);
 		texture.set_format(GL_DEPTH_COMPONENT);
 		texture.set_type(GL_FLOAT);
 		texture.set_data(NULL);
@@ -381,12 +360,12 @@ namespace glen
 		return texture;
 	}
 
-	Texture Texture::create_stencil_texture(const GLenum target, const glm::uvec2* dimensions)
+	Texture Texture::create_stencil_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
 		texture.set_internal_format(GL_STENCIL_INDEX8);
-		texture.set_width(dimensions->x);
-		texture.set_height(dimensions->y);
+		texture.set_width(dimensions.x);
+		texture.set_height(dimensions.y);
 		texture.set_format(GL_STENCIL_INDEX);
 		texture.set_type(GL_UNSIGNED_BYTE);
 		texture.set_data(NULL);
@@ -400,11 +379,11 @@ namespace glen
 		return texture;
 	}
 
-	Texture Texture::create_depth_null_texture_for_shadow(const GLenum target, const glm::uvec2* dimensions)
+	Texture Texture::create_depth_null_texture_for_shadow(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
-		texture.set_width((GLsizei)dimensions->x);
-		texture.set_height((GLsizei)dimensions->y);
+		texture.set_width((GLsizei)dimensions.x);
+		texture.set_height((GLsizei)dimensions.y);
 		texture.set_internal_format(GL_DEPTH_COMPONENT);
 		texture.set_format(GL_DEPTH_COMPONENT);
 		texture.set_type(GL_FLOAT);

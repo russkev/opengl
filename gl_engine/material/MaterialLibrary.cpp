@@ -10,6 +10,11 @@
 
 namespace glen
 {
+	static glen::Texture normal_up{ glm::vec3{0.50f, 0.50f, 1.00f} };
+	//static glm::vec3 default_normal{ 0.5f, 0.5f, 1.0f };
+
+
+
 	// BLINN
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -64,6 +69,11 @@ namespace glen
 		}
 
 
+		//glen::Texture default_normal_up{ glm::vec3{0.50f, 0.50f, 1.00f} };
+		//glm::vec3 temp_normal{ 0.5f, 0.5f, 1.0f };
+
+		//glen::Texture normal_up{ glm::vec3{0.50f, 0.50f, 1.00f} };
+
 		set_uniform(k_camera_position, glm::vec3{ 0.0f });
 
 		set_sampler_value(k_material_diffuse, 0.5f);
@@ -71,14 +81,20 @@ namespace glen
 		set_sampler_value(k_material_specular, 0.0f);
 		set_uniform(k_material_specular_amount, 0.0f);
 		set_sampler_value(k_material_glossiness, 0.5f);
+		//set_sampler_color(k_material_normal, glm::vec3{ 0.5f, 0.5f, 1.0f });
 		set_sampler_color(k_material_normal, default_normal);
+		//set_texture(k_material_normal, &default_normal_up);
 		set_uniform(k_material_normal_directx_mode, false);
 		set_sampler_value(k_material_displacement, 0.0f);
 		set_uniform(k_material_displacement_amount, 0.1f);
 		set_uniform(k_material_displacement_enabled, false);
+
+
+		//set_texture(k_material_normal, &normal_up);
+
 	}
 
-	void BlinnMaterial::update_view(const CameraNode* camera_node, Node* model_node)
+	void BlinnMaterial::update_view(const CameraNode* camera_node, const Node* model_node)
 	{
 		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * model_node->world_to_node());
 		set_uniform(k_transform_model_to_world, model_node->world_to_node());
@@ -112,7 +128,7 @@ namespace glen
 		}
 	}
 
-	void BlinnMaterial::update_light_transform(LightNode* light_node, CameraNode* camera_node)
+	void BlinnMaterial::update_light_transform(const LightNode* light_node, const CameraNode* camera_node)
 	{
 		std::string index = std::to_string(light_node->shader_pos());
 		std::string type = light_node->light()->type();
@@ -179,7 +195,7 @@ namespace glen
 		set_uniform(k_camera_position, glm::vec3(0.0f));
 	}
 
-	void BlinnDeferredMaterial::update_view(const CameraNode* camera_node, Node* model_node)
+	void BlinnDeferredMaterial::update_view(const CameraNode* camera_node, const Node* model_node)
 	{
 		set_uniform(k_camera_position, camera_node->world_position());
 	}
@@ -230,7 +246,7 @@ namespace glen
 		set_uniform(k_transform_model_to_projection, glm::mat4{ 1.0f });
 	}
 
-	void DepthMaterial::update_view(const CameraNode* camera_node, Node* mesh_node)
+	void DepthMaterial::update_view(const CameraNode* camera_node, const Node* mesh_node)
 	{
 		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * mesh_node->world_to_node());
 	}
@@ -258,7 +274,7 @@ namespace glen
 		set_uniform(k_point_light_far_plane, 100.0f);
 	}
 
-	void DepthCubeMaterial::update_view(const CameraNode* camera_node, Node* model_node)
+	void DepthCubeMaterial::update_view(const CameraNode* camera_node, const Node* model_node)
 	{
 		set_uniform(k_transform_model_to_world, model_node->world_to_node());
 		set_uniform(k_point_light_position, camera_node->world_position());
@@ -319,7 +335,7 @@ namespace glen
 		set_uniform(k_material_displacement_enabled, false);
 	}
 
-	void GBufferMaterial::update_view(const CameraNode* camera_node, Node* model_node)
+	void GBufferMaterial::update_view(const CameraNode* camera_node, const Node* model_node)
 	{
 		set_uniform(k_transform_model_to_projection,	camera_node->world_to_projection() * model_node->world_to_node());
 		set_uniform(k_transform_model_to_world,			model_node->world_to_node());
@@ -366,7 +382,7 @@ namespace glen
 	}
 
 
-	void LightMaterial::update_view(const CameraNode* cameraNode, Node* model_node)
+	void LightMaterial::update_view(const CameraNode* cameraNode, const Node* model_node)
 	{
 		set_uniform(k_transform_model_to_projection, cameraNode->world_to_projection() * model_node->world_to_node());
 	}

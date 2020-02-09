@@ -142,15 +142,24 @@ namespace glen
 		m_name = name;
 	}
 
-	void Material::set_sampler_color(const std::string& uniform_name, glm::vec3& color)
+	void Material::set_sampler_color(const std::string& uniform_name, const glm::vec3& color)
 	{
+		Texture texture{ color };
+		m_colors.push_back(std::move(texture));
+		//m_colors.emplace_back(Texture{ color });
+		//set_texture(uniform_name, &m_colors.back());
+
+		//if (uniform_name == "material.normal")
+		//{
+		//	__debugbreak();
+		//}
+
 		//Texture texture{ color };
-		//m_colors.push_back(std::move(texture));
-		m_colors.emplace_back(Texture{ color });
-		set_texture(uniform_name, &m_colors.back());
+		set_texture(uniform_name, &texture);
+
 	}
 
-	void Material::set_sampler_value(const std::string& uniform_name, GLfloat value)
+	void Material::set_sampler_value(const std::string& uniform_name, const GLfloat value)
 	{
 		glm::vec3 color_value{ value };
 		set_sampler_color(uniform_name, color_value);
@@ -167,6 +176,12 @@ namespace glen
 				return;
 			}
 		}
+
+		//if (uniform_name == "material.normal" && m_name == "Floor Blinn")
+		//{
+		//	__debugbreak();
+		//}
+
 
 		m_textures[uniform_name] = texture;
 		texture->process();

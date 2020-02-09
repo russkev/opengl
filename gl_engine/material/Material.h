@@ -57,11 +57,11 @@ namespace glen
 		bool contains_uniform(const std::string uniform_name);
 		bool is_uniform(const GLenum type);
 		virtual void update_lights(const std::vector<LightNode*>& light_nodes) {}
-		virtual void update_light_transform(LightNode* light_node, CameraNode* camera_node) {};
+		virtual void update_light_transform(const LightNode* light_node, const CameraNode* camera_node) {};
 		void bind_textures();
 		void unbind_textures();
 		void update_texture_id(const std::string uniform_name, const GLuint id);
-		virtual void update_view(const CameraNode* cameraNode, Node* node) {};
+		virtual void update_view(const CameraNode* cameraNode, const Node* node) {};
 
 	private:
 		void init();
@@ -76,8 +76,8 @@ namespace glen
 
 		// // ----- SETTERS ----- // //
 		void set_name(const std::string& name);
-		void set_sampler_color(const std::string& uniform_name, glm::vec3& color);
-		void set_sampler_value(const std::string& uniform_name, GLfloat value);
+		void set_sampler_color(const std::string& uniform_name, const glm::vec3& color);
+		void set_sampler_value(const std::string& uniform_name, const GLfloat value);
 		void set_texture(const std::string& uniform_name, Texture* texture);
 
 
@@ -85,7 +85,7 @@ namespace glen
 		// Automatically choose correct upload path based on data type
 		// Defined in header because of template usage
 		template<typename T>
-		void set_uniform(const std::string& name, T data)
+		void set_uniform(const std::string& name, const T data)
 		{
 			GLenum dataEnumType = ShaderType::gl_types.at(&typeid(T));
 			Uniform* thisUniform;
@@ -133,37 +133,37 @@ namespace glen
 
 		// // ----- UNIFORM UPLOAD METHODS ----- // //
 	private:
-		void upload_uniform(Uniform* uniform, const GLfloat& data) { glUniform1f(uniform->location, data); };
-		void upload_uniform(Uniform* uniform, const glm::vec2& data) { glUniform2fv(uniform->location, 1, &data[0]); };
-		void upload_uniform(Uniform* uniform, const glm::vec3& data) { glUniform3fv(uniform->location, 1, &data[0]); };
-		void upload_uniform(Uniform* uniform, const glm::vec4& data) { glUniform4fv(uniform->location, 1, &data[0]); };
-		void upload_uniform(Uniform* uniform, const GLdouble& data) { glUniform1d(uniform->location, data); };
-		void upload_uniform(Uniform* uniform, const glm::dvec2& data) { glUniform2dv(uniform->location, 1, &data[0]); };
-		void upload_uniform(Uniform* uniform, const glm::dvec3& data) { glUniform3dv(uniform->location, 1, &data[0]); };
-		void upload_uniform(Uniform* uniform, const glm::dvec4& data) { glUniform4dv(uniform->location, 1, &data[0]); };
-		void upload_uniform(Uniform* uniform, const GLint& data) { glUniform1i(uniform->location, data); };
-		void upload_uniform(Uniform* uniform, const GLuint& data) { glUniform1i(uniform->location, data); };
-		void upload_uniform(Uniform* uniform, const glm::ivec2& data) { glUniform2iv(uniform->location, 1, &data[0]); };
-		void upload_uniform(Uniform* uniform, const glm::ivec3& data) { glUniform3iv(uniform->location, 1, &data[0]); };
-		void upload_uniform(Uniform* uniform, const glm::ivec4& data) { glUniform4iv(uniform->location, 1, &data[0]); };
-		void upload_uniform(Uniform* uniform, const glm::mat2& data) { glUniformMatrix2fv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::mat3& data) { glUniformMatrix3fv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::mat4& data) { glUniformMatrix4fv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::mat2x3& data) { glUniformMatrix2x3fv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::mat2x4& data) { glUniformMatrix2x4fv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::mat3x2& data) { glUniformMatrix3x2fv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::mat3x4& data) { glUniformMatrix3x4fv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::mat4x2& data) { glUniformMatrix4x2fv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::mat4x3& data) { glUniformMatrix4x3fv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::dmat2& data) { glUniformMatrix2dv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::dmat3& data) { glUniformMatrix3dv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::dmat4& data) { glUniformMatrix4dv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::dmat2x3& data) { glUniformMatrix2x3dv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::dmat2x4& data) { glUniformMatrix2x4dv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::dmat3x2& data) { glUniformMatrix3x2dv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::dmat3x4& data) { glUniformMatrix3x4dv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::dmat4x2& data) { glUniformMatrix4x2dv(uniform->location, 1, false, &data[0][0]); };
-		void upload_uniform(Uniform* uniform, const glm::dmat4x3& data) { glUniformMatrix4x3dv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const GLfloat& data) { glUniform1f(uniform->location, data); };
+		void upload_uniform(const Uniform* uniform, const glm::vec2& data) { glUniform2fv(uniform->location, 1, &data[0]); };
+		void upload_uniform(const Uniform* uniform, const glm::vec3& data) { glUniform3fv(uniform->location, 1, &data[0]); };
+		void upload_uniform(const Uniform* uniform, const glm::vec4& data) { glUniform4fv(uniform->location, 1, &data[0]); };
+		void upload_uniform(const Uniform* uniform, const GLdouble& data) { glUniform1d(uniform->location, data); };
+		void upload_uniform(const Uniform* uniform, const glm::dvec2& data) { glUniform2dv(uniform->location, 1, &data[0]); };
+		void upload_uniform(const Uniform* uniform, const glm::dvec3& data) { glUniform3dv(uniform->location, 1, &data[0]); };
+		void upload_uniform(const Uniform* uniform, const glm::dvec4& data) { glUniform4dv(uniform->location, 1, &data[0]); };
+		void upload_uniform(const Uniform* uniform, const GLint& data) { glUniform1i(uniform->location, data); };
+		void upload_uniform(const Uniform* uniform, const GLuint& data) { glUniform1i(uniform->location, data); };
+		void upload_uniform(const Uniform* uniform, const glm::ivec2& data) { glUniform2iv(uniform->location, 1, &data[0]); };
+		void upload_uniform(const Uniform* uniform, const glm::ivec3& data) { glUniform3iv(uniform->location, 1, &data[0]); };
+		void upload_uniform(const Uniform* uniform, const glm::ivec4& data) { glUniform4iv(uniform->location, 1, &data[0]); };
+		void upload_uniform(const Uniform* uniform, const glm::mat2& data) { glUniformMatrix2fv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::mat3& data) { glUniformMatrix3fv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::mat4& data) { glUniformMatrix4fv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::mat2x3& data) { glUniformMatrix2x3fv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::mat2x4& data) { glUniformMatrix2x4fv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::mat3x2& data) { glUniformMatrix3x2fv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::mat3x4& data) { glUniformMatrix3x4fv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::mat4x2& data) { glUniformMatrix4x2fv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::mat4x3& data) { glUniformMatrix4x3fv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::dmat2& data) { glUniformMatrix2dv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::dmat3& data) { glUniformMatrix3dv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::dmat4& data) { glUniformMatrix4dv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::dmat2x3& data) { glUniformMatrix2x3dv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::dmat2x4& data) { glUniformMatrix2x4dv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::dmat3x2& data) { glUniformMatrix3x2dv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::dmat3x4& data) { glUniformMatrix3x4dv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::dmat4x2& data) { glUniformMatrix4x2dv(uniform->location, 1, false, &data[0][0]); };
+		void upload_uniform(const Uniform* uniform, const glm::dmat4x3& data) { glUniformMatrix4x3dv(uniform->location, 1, false, &data[0][0]); };
 	};
 
 

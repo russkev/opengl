@@ -76,7 +76,7 @@ namespace glen
 		return outTransform;
 	}
 
-	const glm::mat3 Node::world_normal_to_node()
+	const glm::mat3 Node::world_normal_to_node() const
 	{
 		return glm::mat3(glm::transpose(glm::inverse(world_to_node())));
 	}

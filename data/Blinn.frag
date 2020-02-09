@@ -529,10 +529,10 @@ void main ()
 	}
 
 	vec3 outColor = 
-		diffuse_out * texture(material.diffuse, uv).rgb * material.diffuse_amount
-		+ 
-		specular_out * material.specular_amount
-//		vec3(uv, 1.0)
+//		diffuse_out * texture(material.diffuse, uv).rgb * material.diffuse_amount
+//		+ 
+//		specular_out * material.specular_amount
+		texture(material.normal, uv).rgb
 		* vec3(1.0);
 
 	frag_color = vec4(outColor.xyz, 1.0);

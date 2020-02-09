@@ -67,7 +67,7 @@ namespace glen
 	void ShadowMap::init_directional_shadowMap()
 	{
 		glm::uvec2 dimensions{ k_shadow_width, k_shadow_height };
-		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_2D_ARRAY, &dimensions);
+		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_2D_ARRAY, dimensions);
 
 		m_texture.bind();
 		m_framebuffer.bind();
@@ -87,7 +87,7 @@ namespace glen
 	void ShadowMap::init_point_shadowMap()
 	{
 		glm::uvec2 dimensions{ k_shadow_width, k_shadow_height };
-		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_CUBE_MAP, &dimensions);
+		m_texture = std::move(Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_CUBE_MAP, dimensions));
 
 		m_texture.bind();
 		m_framebuffer.bind();

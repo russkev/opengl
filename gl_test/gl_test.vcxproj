@@ -173,6 +173,7 @@
     <ClCompile Include="test_Framebuffer.cpp" />
     <ClCompile Include="test_Node.cpp" />
     <ClCompile Include="test_Overall.cpp" />
+    <ClCompile Include="test_Texture.cpp" />
     <ClCompile Include="test_Timer.cpp" />
     <ClCompile Include="test_VectorUtils.cpp" />
   </ItemGroup>

@@ -1,2 +1,2 @@
 ﻿  Texture.cpp
-c:\users\kev_k\documents\_docs\programming\opengl\repo\opengl\gl_engine\shading\texture.cpp(133): error C4716: 'glen::Texture::operator=': must return a value
+  gl_engine.vcxproj -> E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\x64\Debug\gl_engine.lib
