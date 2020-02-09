@@ -78,10 +78,8 @@ namespace glen
 
 	Texture::Texture(Texture&& other) :
 		m_surface{ other.m_surface },
-		//m_color{ std::exchange(other.m_color, glm::tvec4<GLubyte>{0}) },
 		m_color{ other.m_color },
-		//m_id{ std::exchange(other.m_id, 0) },
-		m_id{ other.m_id },
+		m_id{ std::exchange(other.m_id, 0) },
 		m_width{ std::exchange(other.m_width, 0) },
 		m_height{ std::exchange(other.m_height, 0) },
 		m_target{ std::exchange(other.m_target, 0) },
@@ -99,35 +97,28 @@ namespace glen
 		m_border_color{ other.m_border_color[0], other.m_border_color[1], other.m_border_color[2], other.m_border_color[3] },
 		m_generate_mipmap{ std::exchange(other.m_generate_mipmap, false) }
 	{
-		//other.m_surface = NULL;
-		//other.m_data = NULL;
-		//std::printf("MOVE_CONSTRUCTOR\n");
-
+		other.m_surface = NULL;
+		other.m_data = NULL;
 	}
 
 	Texture& Texture::operator=(Texture&& other)
 	{
-		//std::printf("MOVE_ASSIGN\n");
-		//(*this).~Texture();
+		(*this).~Texture();
 		return *new (this) Texture(std::move(other));
-		
-		//Texture return_texture{ std::move(other) };
-		//return return_texture;
 	}
 
 	Texture::~Texture()
 	{
-		auto aksj = 54;
-		//if (m_id != 0)
-		//{
-		//	glDeleteTextures(1, &m_id);
-		//}
-		//if (m_surface)
-		//{
-		//	SDL_FreeSurface(m_surface);
-		//}
-		//m_surface = NULL;
-		//m_id = 0;
+		if (m_id != 0)
+		{
+			glDeleteTextures(1, &m_id);
+		}
+		if (m_surface)
+		{
+			SDL_FreeSurface(m_surface);
+		}
+		m_surface = NULL;
+		m_id = 0;
 	}
 
 

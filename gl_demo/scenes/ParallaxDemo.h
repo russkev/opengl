@@ -45,8 +45,6 @@ namespace gl_demo
 		glen::Texture brick_normals{ "bricks2_normal.tga" };
 		glen::Texture brick_displacement{ "bricks2_disp.tga" };
 
-
-
 		// Shader 1
 		glen::BlinnMaterial shaderBall_material{ "Shaderball Blinn" };
 		shaderBall_material.set_sampler_value(shaderBall_material.k_material_glossiness, 0.5f);
@@ -64,26 +62,6 @@ namespace gl_demo
 		floor_material.set_sampler_value(floor_material.k_material_glossiness, 0.03f);
 		floor_material.set_sampler_value(floor_material.k_material_specular, 0.30f);
 		floor_material.set_texture(floor_material.k_material_diffuse, &grey_grid_tex);
-		//floor_material.set_sampler_color(floor_material.k_material_normal, glm::vec3{ 0.5f, 0.5f, 1.0f });
-		//floor_material.set_texture(floor_material.k_material_normal, &normal_up);
-		//floor_material.set_texture("material.normal", &normal_up);
-		//floor_material.set_uniform("material.displacement_enabled", false);
-		//floor_material.set_sampler_value("material.displacement", 0.0f);
-		//floor_material.set_uniform("material.displacement_amount", 0.0f);
-
-		//floor_material.set_sampler_value("material.glossiness", 0.03f);
-		//floor_material.set_sampler_value("material.specular", 0.30f);
-		//floor_material.set_texture("material.diffuse", &grey_grid_tex);
-		//floor_material.set_texture("material.normal", &normal_up);
-		//floor_material.set_uniform("material.displacement_enabled", false);
-		//floor_material.set_sampler_value("material.displacement", 0.0f);
-		//floor_material.set_uniform("material.displacement_amount", 0.0f);
-
-
-		// Texture 3
-		//gl_engine::Texture arrayTest_tex("uvtemplate.tga");
-		//arrayTest_tex.set_target(GL_TEXTURE_2D_ARRAY);
-		//shaderBall_material.set_texture("shadowMap", &arrayTest_tex);
 
 		// Mesh 1
 		glen::Mesh shaderBall = glen::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
@@ -93,12 +71,6 @@ namespace gl_demo
 		glen::Mesh plane = glen::Plane::create_plane(100.0f, 100.0f, 1, 1);
 		plane.scale_uvs(10.0f);
 		glen::MeshNode plane_node{ "Plane 1", &plane, &floor_material };
-
-		// Mesh 3
-		//gl_engine::Mesh cube = gl_engine::Cube::create_cube(5.0f);
-		//gl_engine::MeshNode cube_node{ "Cube 1", &cube, &cShadMat };
-		//cube_node.set_parent(&freeCam_node);
-		//cube_node.set_position({ 0.0f, 3.0f, 6.0f });
 
 
 		// Point Light 1
@@ -148,8 +120,6 @@ namespace gl_demo
 		glen::ShadowMap shadowMap_point1{ &pointLight_node };
 		glen::ShadowMap shadowMap_point2{ &pointLight_node2 };
 
-		//shadowMap_point2.set_clip_far(25.0f);
-
 		// Null node 1
 		glen::Node lightRotate1{ "light rotate 01" };
 		//lightRotate1.add_child(&pointLight_node);
@@ -185,11 +155,11 @@ namespace gl_demo
 		render.add_node(&shaderBall_node);
 		render.add_node(&plane_node);
 
-		//render.add_node(&directionalLight_node1);
+		render.add_node(&directionalLight_node1);
 		render.add_node(&pointLight_node);
-		//render.add_node(&pointLight_node2);
-		//render.add_node(&spotLight_node1);
-		//render.add_node(&spotLight_node2);
+		render.add_node(&pointLight_node2);
+		render.add_node(&spotLight_node1);
+		render.add_node(&spotLight_node2);
 
 		//render.add_node(&lightRotate1);
 

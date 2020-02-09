@@ -10,11 +10,6 @@
 
 namespace glen
 {
-	static glen::Texture normal_up{ glm::vec3{0.50f, 0.50f, 1.00f} };
-	//static glm::vec3 default_normal{ 0.5f, 0.5f, 1.0f };
-
-
-
 	// BLINN
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -68,12 +63,6 @@ namespace glen
 			set_uniform(k_spot_light + "[" + index + "]." + k_projection, glm::mat4{ 1.0f });
 		}
 
-
-		//glen::Texture default_normal_up{ glm::vec3{0.50f, 0.50f, 1.00f} };
-		//glm::vec3 temp_normal{ 0.5f, 0.5f, 1.0f };
-
-		//glen::Texture normal_up{ glm::vec3{0.50f, 0.50f, 1.00f} };
-
 		set_uniform(k_camera_position, glm::vec3{ 0.0f });
 
 		set_sampler_value(k_material_diffuse, 0.5f);
@@ -81,16 +70,13 @@ namespace glen
 		set_sampler_value(k_material_specular, 0.0f);
 		set_uniform(k_material_specular_amount, 0.0f);
 		set_sampler_value(k_material_glossiness, 0.5f);
-		//set_sampler_color(k_material_normal, glm::vec3{ 0.5f, 0.5f, 1.0f });
 		set_sampler_color(k_material_normal, default_normal);
-		//set_texture(k_material_normal, &default_normal_up);
 		set_uniform(k_material_normal_directx_mode, false);
 		set_sampler_value(k_material_displacement, 0.0f);
 		set_uniform(k_material_displacement_amount, 0.1f);
 		set_uniform(k_material_displacement_enabled, false);
 
 
-		//set_texture(k_material_normal, &normal_up);
 
 	}
 
