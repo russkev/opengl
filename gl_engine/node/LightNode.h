@@ -36,6 +36,7 @@ namespace glen
 		void draw(const Pass& pass = rgb) override;
 
 		// // ----- GETTERS ----- // //
+		const Light* light() const;
 		Light* light();
 		ShadowMap* shadowMap();
 		const GLuint shader_pos() const;

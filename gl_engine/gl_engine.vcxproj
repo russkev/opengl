@@ -243,6 +243,23 @@
     <ClCompile Include="utils\VectorUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\data\Blinn.frag" />
+    <None Include="..\data\Blinn.vert" />
+    <None Include="..\data\BlinnDeferred.frag" />
+    <None Include="..\data\Bloom.frag" />
+    <None Include="..\data\Depth.frag" />
+    <None Include="..\data\Depth.vert" />
+    <None Include="..\data\DepthCube.frag" />
+    <None Include="..\data\DepthCube.vert" />
+    <None Include="..\data\GaussianBlur.frag" />
+    <None Include="..\data\GBuffer.frag" />
+    <None Include="..\data\GBuffer.vert" />
+    <None Include="..\data\HDR.frag" />
+    <None Include="..\data\Light.frag" />
+    <None Include="..\data\Light.vert" />
+    <None Include="..\data\ScreenPassthrough.vert" />
+    <None Include="..\data\Text2D.frag" />
+    <None Include="..\data\Text2D.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

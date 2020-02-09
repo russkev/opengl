@@ -59,6 +59,11 @@ namespace glen
 	}
 
 	// // ----- GETTERS ----- // //
+	const Light* LightNode::light() const
+	{
+		return m_light;
+	}
+
 	Light* LightNode::light()
 	{
 		return m_light;

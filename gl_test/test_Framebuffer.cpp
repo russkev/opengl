@@ -19,13 +19,13 @@ struct FramebufferTestContext
 	glen::Window window{ Helper::create_gl_window() };
 	const glm::uvec2 dimensions{ 2048, 2048 };
 	glen::Framebuffer F1{ GL_FRAMEBUFFER };
-	glen::Texture color_buffer_1{ glen::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, &dimensions) };
-	glen::Texture color_buffer_2{ glen::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, &dimensions) };
-	glen::Texture color_buffer_3{ glen::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, &dimensions) };
-	glen::Texture depth_buffer_1{ glen::Texture::create_depth_null_texture (GL_TEXTURE_2D, &dimensions) };
-	glen::Texture depth_buffer_2{ glen::Texture::create_depth_null_texture(GL_TEXTURE_2D, &dimensions) };
-	glen::Texture stencil_buffer_1{ glen::Texture::create_stencil_texture(GL_TEXTURE_2D, &dimensions) };
-	glen::Texture stencil_buffer_2{ glen::Texture::create_stencil_texture(GL_TEXTURE_2D, &dimensions) };
+	glen::Texture color_buffer_1{ glen::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, dimensions) };
+	glen::Texture color_buffer_2{ glen::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, dimensions) };
+	glen::Texture color_buffer_3{ glen::Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, dimensions) };
+	glen::Texture depth_buffer_1{ glen::Texture::create_depth_null_texture (GL_TEXTURE_2D, dimensions) };
+	glen::Texture depth_buffer_2{ glen::Texture::create_depth_null_texture(GL_TEXTURE_2D, dimensions) };
+	glen::Texture stencil_buffer_1{ glen::Texture::create_stencil_texture(GL_TEXTURE_2D, dimensions) };
+	glen::Texture stencil_buffer_2{ glen::Texture::create_stencil_texture(GL_TEXTURE_2D, dimensions) };
 
 };
 

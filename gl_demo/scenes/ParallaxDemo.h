@@ -64,6 +64,8 @@ namespace gl_demo
 		floor_material.set_sampler_value(floor_material.k_material_glossiness, 0.03f);
 		floor_material.set_sampler_value(floor_material.k_material_specular, 0.30f);
 		floor_material.set_texture(floor_material.k_material_diffuse, &grey_grid_tex);
+		//floor_material.set_sampler_color(floor_material.k_material_normal, glm::vec3{ 0.5f, 0.5f, 1.0f });
+		//floor_material.set_texture(floor_material.k_material_normal, &normal_up);
 		//floor_material.set_texture("material.normal", &normal_up);
 		//floor_material.set_uniform("material.displacement_enabled", false);
 		//floor_material.set_sampler_value("material.displacement", 0.0f);

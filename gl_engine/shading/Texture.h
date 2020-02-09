@@ -46,17 +46,16 @@ namespace glen
 		void process_uniform_2d_array();
 		void process_cube_map();
 		void flip_surface();
-		void free_external_memory();
 
 		// // ----- FACTORY ----- // //
 	public:
-		static Texture create_16bit_rgba_null_texture(const GLenum target, const glm::uvec2* dimensions);
-		static Texture create_16bit_rgb_null_texture(const GLenum target, const glm::uvec2* dimensions);
-		static Texture create_8bit_rgba_null_texture(const GLenum target, const glm::uvec2* dimensions);
-		static Texture create_8bit_rgb_null_texture(const GLenum target, const glm::uvec2* dimensions);
-		static Texture create_depth_null_texture(const GLenum target, const glm::uvec2* dimensions);
-		static Texture create_stencil_texture(const GLenum target, const glm::uvec2* dimensions);
-		static Texture create_depth_null_texture_for_shadow(const GLenum target, const glm::uvec2* dimensions);
+		static Texture create_16bit_rgba_null_texture(const GLenum target, const glm::uvec2& dimensions);
+		static Texture create_16bit_rgb_null_texture(const GLenum target, const glm::uvec2& dimensions);
+		static Texture create_8bit_rgba_null_texture(const GLenum target, const glm::uvec2& dimensions);
+		static Texture create_8bit_rgb_null_texture(const GLenum target, const glm::uvec2& dimensions);
+		static Texture create_depth_null_texture(const GLenum target, const glm::uvec2& dimensions);
+		static Texture create_stencil_texture(const GLenum target, const glm::uvec2& dimensions);
+		static Texture create_depth_null_texture_for_shadow(const GLenum target, const glm::uvec2& dimensions);
 
 
 		// // ----- GETTERS ----- // //

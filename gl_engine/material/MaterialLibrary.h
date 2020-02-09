@@ -61,9 +61,9 @@ namespace glen
 	private:
 		void init();
 	public:
-		void update_view(const CameraNode* camera_node, Node* model_node) override;
+		void update_view(const CameraNode* camera_node, const Node* model_node) override;
 		void update_lights(const std::vector<LightNode*>& light_nodes) override;
-		void update_light_transform(LightNode* light_node, CameraNode* camera_node) override;
+		void update_light_transform(const LightNode* light_node, const CameraNode* camera_node) override;
 
 	private:
 		void update_light(LightNode* light_node, const PointLight* point_light);
@@ -91,7 +91,7 @@ namespace glen
 		BlinnDeferredMaterial();
 		BlinnDeferredMaterial(const std::string& name);
 		
-		void update_view(const CameraNode* camera_node, Node* model_node);
+		void update_view(const CameraNode* camera_node, const Node* model_node);
 
 		void update_lights(const std::vector<LightNode*>& light_nodes) override;
 
@@ -128,7 +128,7 @@ namespace glen
 	private:
 		void init();
 	public:
-		void update_view(const CameraNode* camera_node, Node* model_node) override;
+		void update_view(const CameraNode* camera_node, const Node* model_node) override;
 	};
 
 	// DEPTH CUBE
@@ -149,7 +149,7 @@ namespace glen
 	private:
 		void init();
 	public:
-		void update_view(const CameraNode* camera_node, Node* model_node);
+		void update_view(const CameraNode* camera_node, const Node* model_node);
 	
 	};
 
@@ -201,7 +201,7 @@ namespace glen
 	private:
 		void init();
 	public:
-		void update_view(const CameraNode* camera_node, Node* model_node) override;
+		void update_view(const CameraNode* camera_node, const Node* model_node) override;
 	};
 
 	// HDR
@@ -231,7 +231,7 @@ namespace glen
 		LightMaterial();
 		LightMaterial(const std::string& name);
 
-		void update_view(const CameraNode* cameraNode, Node* model_node) override;
+		void update_view(const CameraNode* cameraNode, const Node* model_node) override;
 	private:
 		void init();
 	};
