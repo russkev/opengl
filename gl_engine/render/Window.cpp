@@ -19,6 +19,12 @@ namespace glen
 		init(st_config, width, height);
 	}
 
+	Window::~Window()
+	{
+		//SDL_DestroyWindow(m_st_window);
+		//SDL_GL_DeleteContext(m_st_opengl);
+	}
+
 
 	void DebugOutputCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
 		if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)

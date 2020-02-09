@@ -76,8 +76,61 @@ namespace glen
 		glGenTextures(1, &m_id);
 	}
 
+	Texture::Texture(Texture&& other)
+	{
+		*this = std::move(other);
+	}
+
+	Texture& Texture::operator=(Texture&& other)
+	{
+		if (this != &other)
+		{
+			free_external_memory();
+
+			std::swap(m_surface, other.m_surface);
+			std::swap(m_color, other.m_color);
+			std::swap(m_id, other.m_id);
+			std::swap(m_width, other.m_width);
+			std::swap(m_height, other.m_height);
+			std::swap(m_target, other.m_target);
+			std::swap(m_level, other.m_level);
+			std::swap(m_internal_format, other.m_internal_format);
+			std::swap(m_border, other.m_border);
+			std::swap(m_format, other.m_format);
+			std::swap(m_type, other.m_type);
+			std::swap(m_data, other.m_data);
+			std::swap(m_min_filter, other.m_min_filter);
+			std::swap(m_mag_filter, other.m_mag_filter);
+			std::swap(m_wrap_s, other.m_wrap_s);
+			std::swap(m_wrap_t, other.m_wrap_t);
+			std::swap(m_wrap_r, other.m_wrap_r);
+			std::swap(m_border_color, other.m_border_color);
+			std::swap(m_generate_mipmap, other.m_generate_mipmap);
+		}
+		return *this;
+	}
+
+	Texture::~Texture()
+	{
+		//free_external_memory();
+	}
+
 
 	// // ----- GENERAL METHODS ----- // //
+	void Texture::free_external_memory()
+	{
+		if (m_id != 0)
+		{
+			glDeleteTextures(1, &m_id);
+		}
+		if (m_surface)
+		{
+			SDL_FreeSurface(m_surface);
+		}
+		m_surface = NULL;
+		m_id = 0;
+	}
+
 	void Texture::process()
 	{
 		bind();
@@ -408,6 +461,16 @@ namespace glen
 	const GLenum Texture::wrap_r() const
 	{
 		return m_wrap_r;
+	}
+
+	const SDL_Surface* Texture::surface() const
+	{
+		return m_surface;
+	}
+
+	const glm::tvec4<GLubyte> Texture::color() const
+	{
+		return m_color;
 	}
 
 	const GLenum Texture::target() const

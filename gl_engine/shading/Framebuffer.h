@@ -18,6 +18,7 @@ namespace glen
 		// // ----- CONSTRUCTORS ----- // //
 		Framebuffer();
 		Framebuffer(const GLenum target);
+		~Framebuffer();
 
 		// // ----- GENERAL METHODS ----- // //
 		void process_texture(Texture* texture);

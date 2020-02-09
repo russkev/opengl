@@ -25,6 +25,7 @@ namespace glen
 		// // ----- CONSTRUCTORS ----- // //
 		Window(std::string name, GLuint width, GLuint height);
 		Window(std::string name, std::vector<OpenGLAttrPair> st_config, GLuint width, GLuint height);
+		~Window();
 
 		// // ----- INIT ----- // //
 		void init(std::vector<OpenGLAttrPair> st_config, GLuint width, GLuint height);

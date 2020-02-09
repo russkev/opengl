@@ -28,6 +28,12 @@ namespace glen
 		// Create color solid color texture
 		Texture(const glm::vec3& color);
 		Texture(const glm::vec4& color);
+
+		//Texture(const Texture& other) = delete;
+		Texture(Texture&& other);
+		//Texture& operator=(const Texture& other) = delete;
+		Texture& operator=(Texture&& other);
+		~Texture();
 		
 		// // ----- GENERAL ----- // //
 		void process();
@@ -40,6 +46,7 @@ namespace glen
 		void process_uniform_2d_array();
 		void process_cube_map();
 		void flip_surface();
+		void free_external_memory();
 
 		// // ----- FACTORY ----- // //
 	public:
@@ -70,6 +77,9 @@ namespace glen
 		const GLenum wrap_s() const;
 		const GLenum wrap_t() const;
 		const GLenum wrap_r() const;
+
+		const SDL_Surface* surface() const;
+		const glm::tvec4<GLubyte> color() const;
 
 		bool has_alpha();
 		void* data();

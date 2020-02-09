@@ -14,6 +14,11 @@ namespace glen
 		m_VAO_ID(0)
 	{};
 
+	VAO::~VAO()
+	{
+		//glDeleteVertexArrays(1, &m_VAO_ID);
+	}
+
 	// // ----- GENERAL METHODS ----- // //
 	void VAO::generate_VAO(const Buffer& inBuffer, std::size_t divisor, const member_info_type* begin, const member_info_type* end, std::uint32_t id_offset) {
 		generate_id();

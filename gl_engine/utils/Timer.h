@@ -8,7 +8,7 @@ namespace glen
 
 		Basic high accuracy timer.
 		Gives change in time and total time since initialisation
-		Optional multiplier to adjust overall time
+		Optional multiplier to adjust overall timegit s
 
 	*/
 	struct Timer
