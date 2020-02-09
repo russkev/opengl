@@ -18,6 +18,7 @@ namespace glen
 		// // ----- CONSTRUCTOR ----- // //
 	public:
 		VAO();
+		~VAO();
 
 		// // ----- GENERAL METHODS ----- // //
 		void generate_id();

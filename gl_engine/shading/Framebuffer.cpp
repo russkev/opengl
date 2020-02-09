@@ -20,6 +20,11 @@ namespace glen
 		glGenFramebuffers(1, &m_id);
 	}
 
+	Framebuffer::~Framebuffer()
+	{
+		//glDeleteFramebuffers(1, &m_id);
+	}
+
 
 	// // ----- GENERAL METHODS ----- // //
 	void Framebuffer::process_texture(Texture* texture)

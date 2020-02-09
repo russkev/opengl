@@ -27,6 +27,11 @@ namespace glen
 		init();
 	}
 
+	Material::~Material()
+	{
+		glDeleteProgram(m_program_id);
+	}
+
 	// // ----- GENERAL METHODS ----- // //
 
 	// Tell opengl to use this shader for upcoming commands
@@ -139,8 +144,9 @@ namespace glen
 
 	void Material::set_sampler_color(const std::string& uniform_name, glm::vec3& color)
 	{
-		Texture texture{ color };
-		m_colors.push_back(texture);
+		//Texture texture{ color };
+		//m_colors.push_back(std::move(texture));
+		m_colors.emplace_back(Texture{ color });
 		set_texture(uniform_name, &m_colors.back());
 	}
 

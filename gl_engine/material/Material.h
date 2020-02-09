@@ -50,6 +50,7 @@ namespace glen
 		Material() {};
 		Material(const std::string& name, const char* vertex_shader, const char* fragment_shader);
 		Material(const std::string& name, const char* vertex_shader, const char* geometry_shader, const char* fragment_shader);
+		~Material();
 
 		// // ----- GENERAL METHODS ----- // //
 		void use();

@@ -11,11 +11,11 @@ namespace glen
 {
 	namespace LoadShaders
 	{
-		std::string read_shader_code(const char * shader_code);
+		static std::string read_shader_code(const char * shader_code);
 
-		void compile_shader(const GLuint id, const std::string& shader_code);
+		static void compile_shader(const GLuint id, const std::string& shader_code);
 
-		void check_program(const GLuint program_id);
+		static void check_program(const GLuint program_id);
 
 		GLuint load(const char * vertex_file_path, const char * geometry_file_path, const char* fragment_file_path) {
 
@@ -59,7 +59,7 @@ namespace glen
 			return program_id;
 		}
 
-		std::string read_shader_code(const char* file_path)
+		static std::string read_shader_code(const char* file_path)
 		{
 			std::string shader_code;
 			std::ifstream shader_stream(file_path, std::ios::in);
@@ -80,7 +80,7 @@ namespace glen
 			return shader_code;
 		}
 
-		void compile_shader(const GLuint id, const std::string& shader_code)
+		static void compile_shader(const GLuint id, const std::string& shader_code)
 		{
 			GLint result = GL_FALSE;
 			GLint log_length;
@@ -106,7 +106,7 @@ namespace glen
 			return load(vertex_file_path, NULL, fragment_file_path);
 		}
 
-		void check_program(const GLuint program_id)
+		static void check_program(const GLuint program_id)
 		{
 			GLint result = GL_FALSE;
 			GLint log_length;

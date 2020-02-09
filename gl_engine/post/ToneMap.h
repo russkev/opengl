@@ -16,7 +16,7 @@ namespace glen
 	struct ToneMap : public PostEffect
 	{
 		// // ----- CONSTRUCTOR ----- // //
-		ToneMap(Framebuffer* backbuffer, const glm::uvec2* dimensions);
+		ToneMap(Framebuffer* backbuffer, const glm::uvec2& dimensions);
 
 		// // ----- GENERAL METHODS ----- // //
 		void draw() override;

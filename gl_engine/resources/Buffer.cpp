@@ -28,7 +28,6 @@ namespace glen
 
 	// Destructor
 	Buffer::~Buffer() {
-		std::cout << "Buffer object destructed\n";
 		if (m_buffer_id != 0) {
 			glDeleteBuffers(1, &m_buffer_id);
 		}
