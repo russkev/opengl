@@ -144,19 +144,8 @@ namespace glen
 
 	void Material::set_sampler_color(const std::string& uniform_name, const glm::vec3& color)
 	{
-		Texture texture{ color };
-		m_colors.push_back(std::move(texture));
-		//m_colors.emplace_back(Texture{ color });
-		//set_texture(uniform_name, &m_colors.back());
-
-		//if (uniform_name == "material.normal")
-		//{
-		//	__debugbreak();
-		//}
-
-		//Texture texture{ color };
-		set_texture(uniform_name, &texture);
-
+		m_colors.emplace_back(Texture{ color });
+		set_texture(uniform_name, &m_colors.back());
 	}
 
 	void Material::set_sampler_value(const std::string& uniform_name, const GLfloat value)
@@ -176,12 +165,6 @@ namespace glen
 				return;
 			}
 		}
-
-		//if (uniform_name == "material.normal" && m_name == "Floor Blinn")
-		//{
-		//	__debugbreak();
-		//}
-
 
 		m_textures[uniform_name] = texture;
 		texture->process();
