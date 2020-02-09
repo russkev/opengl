@@ -20,10 +20,10 @@ namespace glen
 		glGenFramebuffers(1, &m_id);
 	}
 
-	Framebuffer::~Framebuffer()
-	{
-		//glDeleteFramebuffers(1, &m_id);
-	}
+	//Framebuffer::~Framebuffer()
+	//{
+	//	//glDeleteFramebuffers(1, &m_id);
+	//}
 
 
 	// // ----- GENERAL METHODS ----- // //

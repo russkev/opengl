@@ -29,9 +29,9 @@ namespace glen
 		Texture(const glm::vec3& color);
 		Texture(const glm::vec4& color);
 
-		//Texture(const Texture& other) = delete;
+		Texture(const Texture& other) = delete;
 		Texture(Texture&& other);
-		//Texture& operator=(const Texture& other) = delete;
+		Texture& operator=(const Texture& other) = delete;
 		Texture& operator=(Texture&& other);
 		~Texture();
 		
