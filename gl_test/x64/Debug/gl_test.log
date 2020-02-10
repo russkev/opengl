@@ -1,2 +1,2 @@
-﻿  test_Texture.cpp
-  gl_test.vcxproj -> E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\x64\Debug\gl_test.exe
+﻿gl_test_main.obj : error LNK2019: unresolved external symbol gluErrorString referenced in function "public: __cdecl glen::Texture::Texture(unsigned int)" (??0Texture@glen@@QEAA@I@Z)
+E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\x64\Debug\gl_test.exe : fatal error LNK1120: 1 unresolved externals
