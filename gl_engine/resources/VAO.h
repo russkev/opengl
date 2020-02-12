@@ -18,6 +18,11 @@ namespace glen
 		// // ----- CONSTRUCTOR ----- // //
 	public:
 		VAO();
+
+		VAO(const VAO& other) = delete;
+		VAO(VAO&& other);
+		VAO& operator = (const VAO& other) = delete;
+		VAO& operator = (VAO&& other);
 		~VAO();
 
 		// // ----- GENERAL METHODS ----- // //

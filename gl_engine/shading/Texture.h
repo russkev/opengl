@@ -31,8 +31,8 @@ namespace glen
 
 		Texture(const Texture& other) = delete;
 		Texture(Texture&& other);
-		Texture& operator=(const Texture& other) = delete;
-		Texture& operator=(Texture&& other);
+		Texture& operator = (const Texture& other) = delete;
+		Texture& operator = (Texture&& other);
 		~Texture();
 		
 		// // ----- GENERAL ----- // //

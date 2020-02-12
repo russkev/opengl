@@ -1,9 +1,19 @@
-﻿  LightNode.cpp
+﻿  DirectionalLight.cpp
+  Light.cpp
+  PointLight.cpp
+  SpotLight.cpp
+  Material.cpp
+  MaterialLibrary.cpp
+  LightNode.cpp
+  MeshNode.cpp
   Bloom.cpp
   ToneMap.cpp
   DeferredRender.cpp
   Renderer.cpp
+  VAO.cpp
   Framebuffer.cpp
   ShadowMap.cpp
+  Text2D.cpp
+  Texture.cpp
   Generating Code...
   gl_engine.vcxproj -> C:\Users\kev_k\Documents\_DOCS\PROGRAMMING\OpenGL\repo\opengl\x64\Debug\gl_engine.lib

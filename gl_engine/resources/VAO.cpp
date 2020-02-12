@@ -14,6 +14,17 @@ namespace glen
 		m_VAO_ID(0)
 	{};
 
+	VAO::VAO(VAO&& other) :
+		m_target{ std::exchange(other.m_target, 0) },
+		m_VAO_ID{ std::exchange(other.m_VAO_ID, 0)}
+	{}
+
+	VAO& VAO::operator = (VAO&& other)
+	{
+		(this)->~VAO();
+		return *new (this) VAO(std::move(other));
+	}
+
 	VAO::~VAO()
 	{
 		glDeleteVertexArrays(1, &m_VAO_ID);
