@@ -31,7 +31,7 @@ namespace glen
 		void bind();
 
 		// // ----- GETTERS ----- // //
-		std::uint32_t VAO_id() { return m_VAO_ID; }
+		std::uint32_t id() { return m_VAO_ID; }
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:

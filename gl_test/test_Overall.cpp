@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_CASE(Construct_Window)
 
 BOOST_AUTO_TEST_CASE(Construct_Meshes)
 {
-	glen::Mesh cube{ glen::Cube::create_cube() };
+	glen::Mesh m_cube{ glen::Cube::create_cube() };
 	glen::Mesh arrow{ glen::Arrow::create_arrow() };
 	glen::Mesh cylinder{ glen::Cylinder::create_cylinder() };
 	glen::Mesh plane{ glen::Plane::create_plane() };
