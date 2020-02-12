@@ -101,7 +101,7 @@ namespace glen
 		other.m_data = NULL;
 	}
 
-	Texture& Texture::operator=(Texture&& other)
+	Texture& Texture::operator = (Texture&& other)
 	{
 		(*this).~Texture();
 		return *new (this) Texture(std::move(other));
