@@ -20,10 +20,29 @@ namespace glen
 		glGenFramebuffers(1, &m_id);
 	}
 
-	//Framebuffer::~Framebuffer()
-	//{
-	//	//glDeleteFramebuffers(1, &m_id);
-	//}
+	Framebuffer::Framebuffer(Framebuffer&& other) :
+		m_id{ std::exchange(other.m_id, 0) },
+		m_target{ std::exchange(other.m_target, 0) },
+		m_attachment{ std::exchange(other.m_attachment, 0) },
+		m_level{ std::exchange(other.m_level, 0) },
+		m_color_textures{ std::move(other.m_color_textures) },
+		m_depth_texture{ std::move(other.m_depth_texture) },
+		m_stencil_texture{ std::move(other.m_stencil_texture) }
+	{
+		other.m_depth_texture = NULL;
+		other.m_stencil_texture = NULL;
+	}
+
+	Framebuffer& Framebuffer::operator = (Framebuffer&& other)
+	{
+		(*this).~Framebuffer();
+		return *new (this) Framebuffer(std::move(other));
+	}
+
+	Framebuffer::~Framebuffer()
+	{
+		glDeleteFramebuffers(1, &m_id);
+	}
 
 
 	// // ----- GENERAL METHODS ----- // //
@@ -182,6 +201,11 @@ namespace glen
 		unbind();
 	}
 
+	void Framebuffer::set_color_buffer_texture(const Texture* texture)
+	{
+		set_color_buffer_texture(texture, 0);
+	}
+
 	void Framebuffer::set_depth_buffer_texture(const Texture* texture)
 	{
 		attach_single_texture(texture, GL_DEPTH_ATTACHMENT);
@@ -209,12 +233,27 @@ namespace glen
 
 
 	// // ----- GETTERS ----- // //
-	GLuint Framebuffer::id()
+	const GLuint Framebuffer::id() const
 	{
 		return m_id;
 	}
+	
+	const GLenum Framebuffer::target() const
+	{
+		return m_target;
+	}
 
-	GLuint Framebuffer::num_color_textures()
+	const GLenum Framebuffer::attachment() const
+	{
+		return m_attachment;
+	}
+
+	const GLint Framebuffer::level() const
+	{
+		return m_level;
+	}
+
+	const GLuint Framebuffer::num_color_textures() const
 	{
 		return (GLuint)m_color_textures.size();
 	}

@@ -18,7 +18,12 @@ namespace glen
 		// // ----- CONSTRUCTORS ----- // //
 		Framebuffer();
 		Framebuffer(const GLenum target);
-		//~Framebuffer();
+
+		Framebuffer(const Framebuffer& other) = delete;
+		Framebuffer(Framebuffer&& other);
+		Framebuffer& operator = (const Framebuffer& other) = delete;
+		Framebuffer& operator = (Framebuffer&& other);
+		~Framebuffer();
 
 		// // ----- GENERAL METHODS ----- // //
 		void process_texture(Texture* texture);
@@ -39,8 +44,11 @@ namespace glen
 
 		// // ----- GETTERS ----- // //
 	public:
-		GLuint id();
-		GLuint num_color_textures();
+		const GLuint id() const;
+		const GLenum target() const;
+		const GLenum attachment() const;
+		const GLint level() const;
+		const GLuint num_color_textures() const;
 		const Texture* color_texture_at(const size_t loc);
 		const Texture* depth_texture();
 		const Texture* stencil_texture();
@@ -51,6 +59,7 @@ namespace glen
 		void push_back_color_buffer_textures(const std::vector<const Texture*> textures);
 		void push_back_color_buffer_texture(const Texture* texture);
 		void set_color_buffer_texture(const Texture* texture, const GLuint loc);
+		void set_color_buffer_texture(const Texture* texture);
 		void set_depth_buffer_texture(const Texture* texture);
 		void set_stencil_buffer_texture(const Texture* texture);
 
@@ -60,7 +69,6 @@ namespace glen
 		GLenum m_target = GL_FRAMEBUFFER;
 		GLenum m_attachment = GL_DEPTH_ATTACHMENT;
 		GLint m_level = 0;
-		//GLuint m_num_color_buffers = 0;
 		std::vector<const Texture*> m_color_textures;
 		const Texture* m_depth_texture = NULL;
 		const Texture* m_stencil_texture = NULL;

@@ -7,7 +7,5 @@
 namespace Helper
 {
 	bool matrix_is_similar(const glm::mat4& result, const glm::mat4& expected, float tolerance);
-
-	glen::Window create_gl_window();
 }
 #endif
