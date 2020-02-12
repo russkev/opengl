@@ -7,5 +7,7 @@
 namespace Helper
 {
 	bool matrix_is_similar(const glm::mat4& result, const glm::mat4& expected, float tolerance);
+
+	//GLint check_binding(const GLenum target, const GLenum binding_name, const GLuint id);
 }
 #endif

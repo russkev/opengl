@@ -1,6 +1,8 @@
 #include "pch.h"
 #include <boost/test/unit_test.hpp>
 
+#include "helper.h"
+
 #include "shading/Texture.h"
 #include "render/Window.h"
 
@@ -9,11 +11,12 @@ struct TextureTestContext
 
 	glen::Window window{ "Test window", 800u, 600u };
 
-	static GLint check_texture_id(const GLuint id)
+	static GLint check_texture_binding(const GLuint id)
 	{
 		glBindTexture(GL_TEXTURE_2D, id);
 		GLint which_id;
 		glGetIntegerv(GL_TEXTURE_BINDING_2D, &which_id);
+		glBindTexture(GL_TEXTURE_2D, 0);
 		return which_id;
 	}
 
@@ -30,12 +33,12 @@ BOOST_AUTO_TEST_CASE(Destructor)
 		id = texture.id();
 		surface = texture.surface();
 
-		GLint which_id = check_texture_id(id);
+		GLint which_id = check_texture_binding(id);
 
 		BOOST_CHECK(which_id == id);
 		BOOST_CHECK(surface->map != NULL);
 	}
-	GLint which_id = check_texture_id(id);
+	GLint which_id = check_texture_binding(id);
 
 	BOOST_CHECK(which_id == 0);
 	BOOST_CHECK(surface->map == NULL);
@@ -47,13 +50,13 @@ BOOST_AUTO_TEST_CASE(Move_Constructor_With_Texture)
 	const SDL_Surface* surface = texture_old.surface();
 	const GLuint id = texture_old.id();
 
-	GLint which_id = check_texture_id(id);
+	GLint which_id = check_texture_binding(id);
 
 	BOOST_CHECK(which_id == id);
 	BOOST_CHECK(surface->map != NULL);
 
 	glen::Texture texture_new(std::move(texture_old));
-	which_id = check_texture_id(texture_new.id());
+	which_id = check_texture_binding(texture_new.id());
 
 	BOOST_CHECK(which_id == id);
 	BOOST_CHECK(texture_old.id() == 0);
@@ -77,13 +80,13 @@ BOOST_AUTO_TEST_CASE(Move_Assign_With_Texture)
 	const SDL_Surface* surface = texture_old.surface();
 	const GLuint id = texture_old.id();
 
-	GLint which_id = check_texture_id(id);
+	GLint which_id = check_texture_binding(id);
 
 	BOOST_CHECK(which_id == id);
 	BOOST_CHECK(surface->map != NULL);
 
 	texture_new = std::move(texture_old);
-	which_id = check_texture_id(texture_new.id());
+	which_id = check_texture_binding(texture_new.id());
 
 	BOOST_CHECK(which_id == id);
 	BOOST_CHECK(texture_old.id() == 0);
