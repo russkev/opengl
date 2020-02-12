@@ -6,28 +6,17 @@ namespace Helper
 {
 	bool Helper::matrix_is_similar(const glm::mat4& result, const glm::mat4& expected, float tolerance)
 	{
-		bool isSimilar = true;
+		bool is_similar = true;
 		for (auto i = 0; i < 4; ++i)
 		{
 			for (auto j = 0; j < 4; ++j)
 			{
 				if ((std::abs(result[i][j] - expected[i][j])) > tolerance)
 				{
-					isSimilar = false;
+					is_similar = false;
 				}
 			}
 		}
-		return isSimilar;
-	}
-
-
-	glen::Window create_gl_window()
-	{
-
-		glm::uvec2 dimensions{ 512, 512 };
-
-		glen::Window window{ "GL Test Window", dimensions.x, dimensions.y };
-
-		return window;
+		return is_similar;
 	}
 }
