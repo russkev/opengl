@@ -1,3 +1,9 @@
+/*
+
+	GL_Tuple_Introsopect code provided by Aleksandras Sevcenko
+
+*/
+
 #ifndef GL_ENGINE_GL_TUPLE_INTROSPECT_H
 #define GL_ENGINE_GL_TUPLE_INTROSPECT_H
 

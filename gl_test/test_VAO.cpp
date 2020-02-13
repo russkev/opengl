@@ -1,8 +1,6 @@
 #include "pch.h"
 #include <boost/test/unit_test.hpp>
 
-#include "helper.h"
-
 #include "resources/VAO.h"
 #include "mesh/Mesh.h"
 #include "mesh/Cube.h"
@@ -52,11 +50,25 @@ BOOST_AUTO_TEST_CASE(Destructor)
 	BOOST_CHECK(check_vao_binding(id) == 0);
 }
 
-//BOOST_AUTO_TEST_CASE(Move_Constructor)
-//{
-//	GLuint old_vao_id = m_vao.id();
-//	GLuint old_buffer_id = m_buffer.buffer_id()
-//
-//}
+BOOST_AUTO_TEST_CASE(Move_Constructor)
+{
+	GLuint old_vao_id = m_vao.id();
+
+	glen::VAO new_vao{ std::move(m_vao) };
+
+	BOOST_CHECK(new_vao.id() == old_vao_id);
+	BOOST_CHECK(check_vao_binding(old_vao_id) == new_vao.id());
+}
+
+
+BOOST_AUTO_TEST_CASE(Move_Assign)
+{
+	GLuint old_vao_id = m_vao.id();
+
+	glen::VAO new_vao = std::move(m_vao);
+
+	BOOST_CHECK(new_vao.id() == old_vao_id);
+	BOOST_CHECK(check_vao_binding(old_vao_id) == new_vao.id());
+}
 
 BOOST_AUTO_TEST_SUITE_END()

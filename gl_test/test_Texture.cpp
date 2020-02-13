@@ -1,16 +1,11 @@
 #include "pch.h"
 #include <boost/test/unit_test.hpp>
 
-#include "helper.h"
-
 #include "shading/Texture.h"
 #include "render/Window.h"
 
 struct TextureTestContext
 {
-
-	glen::Window window{ "Test window", 800u, 600u };
-
 	static GLint check_texture_binding(const GLuint id)
 	{
 		glBindTexture(GL_TEXTURE_2D, id);
@@ -20,6 +15,7 @@ struct TextureTestContext
 		return which_id;
 	}
 
+	glen::Window window{ "Test window", 800u, 600u };
 };
 
 BOOST_FIXTURE_TEST_SUITE(Texture, TextureTestContext)
