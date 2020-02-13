@@ -15,19 +15,19 @@ namespace glen
 		m_indices(s_indices)
 	{};
 
-	// // ----- Move Constructor ----- // //
-	Mesh::Mesh(const Mesh&& other) :
-		m_vertices(std::move(other.m_vertices)),
-		m_indices(std::move(other.m_indices)),
-		m_id(std::move(other.m_id))
-	{};
+	//// // ----- Move Constructor ----- // //
+	//Mesh::Mesh(const Mesh&& other) :
+	//	m_vertices(std::move(other.m_vertices)),
+	//	m_indices(std::move(other.m_indices)),
+	//	m_id(std::move(other.m_id))
+	//{};
 
-	// // ----- Move Assign ----- // //
-	Mesh& Mesh::operator = (Mesh&& other)
-	{
-		(*this).~Mesh();
-		return *new (this) Mesh(std::move(other));
-	}
+	//// // ----- Move Assign ----- // //
+	//Mesh& Mesh::operator = (Mesh&& other)
+	//{
+	//	(*this).~Mesh();
+	//	return *new (this) Mesh(std::move(other));
+	//}
 
 	// // ----- Addition Assign ----- // //
 	Mesh& Mesh::operator += (Mesh& other)

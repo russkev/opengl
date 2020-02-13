@@ -27,6 +27,25 @@ namespace glen
 		init();
 	}
 
+	Material::Material(Material&& other) :
+		m_name{ other.m_name },
+		m_program_id{ std::exchange(other.m_program_id, 0) },
+		m_uniforms{ std::move(other.m_uniforms) },
+		m_textures{ std::move(other.m_textures) },
+		m_failed_uniforms{ std::move(other.m_failed_uniforms) },
+		m_failed_textures{ std::move(other.m_failed_textures) },
+		m_num_uniforms{ std::exchange(other.m_num_uniforms, 0) },
+		m_colors{ std::move(other.m_colors) }
+	{
+		other.m_name = "";
+	}
+
+	Material& Material::operator = (Material&& other)
+	{
+		(*this).~Material();
+		return *new (this) Material(std::move(other));
+	}
+
 	Material::~Material()
 	{
 		glDeleteProgram(m_program_id);
@@ -93,6 +112,7 @@ namespace glen
 	{
 		fetch_uniforms();
 	}
+
 	//Get all the uniforms from the shader and store their information with the shader
 	void Material::fetch_uniforms()
 	{
@@ -110,8 +130,8 @@ namespace glen
 
 			if (is_uniform(newUniform.type))
 			{
-				newUniform.texture_unit = m_num_textures;
-				m_num_textures++;
+				newUniform.texture_unit = m_num_uniforms;
+				m_num_uniforms++;
 			}
 
 			std::string uniformNameString(uniformNameChars);

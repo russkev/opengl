@@ -172,6 +172,7 @@
     </ClCompile>
     <ClCompile Include="test_Buffer.cpp" />
     <ClCompile Include="test_Framebuffer.cpp" />
+    <ClCompile Include="test_Material.cpp" />
     <ClCompile Include="test_Node.cpp" />
     <ClCompile Include="test_Overall.cpp" />
     <ClCompile Include="test_Texture.cpp" />

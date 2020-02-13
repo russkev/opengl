@@ -50,6 +50,10 @@ namespace glen
 		Material() {};
 		Material(const std::string& name, const char* vertex_shader, const char* fragment_shader);
 		Material(const std::string& name, const char* vertex_shader, const char* geometry_shader, const char* fragment_shader);
+		Material(const Material& other) = delete;
+		Material(Material&& other);
+		Material& operator = (const Material& other) = delete;
+		Material& operator = (Material&& other);
 		~Material();
 
 		// // ----- GENERAL METHODS ----- // //
@@ -128,7 +132,7 @@ namespace glen
 		std::set<std::string> m_failed_uniforms;
 		std::set<std::string> m_failed_textures;
 
-		GLuint m_num_textures = 0;
+		GLuint m_num_uniforms = 0;
 		std::list<Texture> m_colors;
 
 		// // ----- UNIFORM UPLOAD METHODS ----- // //
