@@ -40,11 +40,12 @@ namespace glen
 	public:
 		Mesh();
 		Mesh(const vertices_type vertices, const indices_type indices);
-		//~Mesh() {};
-		//Mesh(const Mesh&) = delete;
-		Mesh(const Mesh&& other);
-		//Mesh& operator = (const Mesh&) = delete;
-		Mesh& operator = (Mesh&& other);
+		Mesh(const Mesh&) = delete;
+		Mesh(Mesh&& other) = default;
+		Mesh& operator = (const Mesh&) = delete;
+		Mesh& operator = (Mesh&& other) = default;
+		~Mesh() {};
+
 
 		// // ----- OPERATOR OVERLOADS ----- // //
 		Mesh& operator += (Mesh& other);

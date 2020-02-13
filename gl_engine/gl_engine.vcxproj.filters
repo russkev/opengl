@@ -31,10 +31,6 @@
     <Filter Include="Post">
       <UniqueIdentifier>{964c1e31-3346-4b73-afbd-1d0fab1d788a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Boiolerplate">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Main">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
@@ -42,13 +38,17 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{1dd8560d-a045-4aca-b30d-a99d2a4b76a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Boilerplate">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
-      <Filter>Boiolerplate</Filter>
+      <Filter>Boilerplate</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>Boiolerplate</Filter>
+      <Filter>Boilerplate</Filter>
     </ClInclude>
     <ClInclude Include="render\Window.h">
       <Filter>Render</Filter>
@@ -287,7 +287,7 @@
       <Filter>Post</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
-      <Filter>Boiolerplate</Filter>
+      <Filter>Boilerplate</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
