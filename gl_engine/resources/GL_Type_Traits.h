@@ -1,3 +1,9 @@
+/*
+
+	GL_Type_Traits code provided by Aleksandras Sevcenko
+
+*/
+
 #ifndef GL_ENGINE_GL_TYPE_TRAITS_H
 #define GL_ENGINE_GL_TYPE_TRAITS_H
 
