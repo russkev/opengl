@@ -18,6 +18,19 @@ namespace glen
 	struct DirectionalLight;
 	struct SpotLight;
 
+	struct AO_GBufferMaterial : public Material
+	{
+		inline static const std::string k_transform_model_to_world	= "transform.model_to_world";
+		inline static const std::string k_transform_world_to_cam	= "transform.world_to_cam";
+		inline static const std::string k_transform_model_to_projection		= "transform.model_to_projection";
+		
+		AO_GBufferMaterial();
+		AO_GBufferMaterial(const std::string& name);
+	private:
+		void init();
+		void update_view(const CameraNode* camera_node, const Node* model_node) override;
+	};
+
 	struct BlinnMaterial : public Material
 	{
 		inline static GLuint k_num_point_lights			= 3;

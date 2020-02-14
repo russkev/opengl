@@ -128,7 +128,6 @@ namespace glen
 			}
 			else
 			{
-
 				newVertices.push_back(m_vertices.at(i));
 				index_type newIndex = (index_type)newVertices.size() - 1;
 				newIndices.push_back(newIndex);

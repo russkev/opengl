@@ -23,6 +23,7 @@ namespace glen
 	struct DeferredRender
 	{
 		// // ----- CONSTRUCTOR ----- // //
+		DeferredRender() {};
 		DeferredRender(const GLenum target, const glm::uvec2& dimensions);
 
 		// // ----- GENERAL ----- // //
@@ -31,6 +32,10 @@ namespace glen
 		void update_view(const CameraNode* camera_node);
 		void draw();
 
+		// // ----- FACTORIES ----- // //
+		static DeferredRender create_blinn_deferred(const GLenum target, const glm::uvec2& dimensions);
+		static DeferredRender create_ao_g_buffer(const GLenum target, const glm::uvec2& dimensions);
+
 		// // ----- GETTERS ----- // //
 		glm::uvec2 dimensions();
 		Framebuffer* framebuffer();
@@ -38,24 +43,25 @@ namespace glen
 		Mesh* mesh();
 		MeshNode* mesh_node();
 
+		// // ----- SETTERS ----- // //
+		void set_target(const GLenum target);
+		void set_dimensions(const glm::uvec2& dimensions);
 
 		// // ----- MEMBER VARIABLES ----- // //
+		GLenum m_target;
 		glm::uvec2 m_dimensions;
 
 		Framebuffer m_g_buffer_FBO{ GL_FRAMEBUFFER };
 
-		Texture m_g_position;
-		Texture m_g_normal;
-		Texture m_g_color_spec;
-		Texture m_g_depth;
+		//Texture m_g_position;
+		//Texture m_g_normal;
+		//Texture m_g_color_spec;
+		//Texture m_g_depth;
 
 		BlinnDeferredMaterial m_deferred_material;
 
 		Mesh m_deferred_mesh{ WindowQuad::create_windowQuad() };
 		MeshNode m_deferred_mesh_node{ "Deferred Screen Node", &m_deferred_mesh, &m_deferred_material };
 	};
-
-
-
 }
 #endif

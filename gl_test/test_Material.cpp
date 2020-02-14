@@ -36,11 +36,6 @@ BOOST_AUTO_TEST_CASE(Destructor)
 		old_program_id = material.program_id();
 		BOOST_CHECK(old_program_id != 0);
 
-		glValidateProgram(old_program_id);
-
-		glGetProgramiv(old_program_id, GL_VALIDATE_STATUS, &valid_status);
-		BOOST_CHECK(valid_status == 1);
-
 		glGetProgramiv(old_program_id, GL_ACTIVE_UNIFORMS, &num_attached_uniforms);
 		BOOST_CHECK(num_attached_uniforms != 0);
 
@@ -51,6 +46,52 @@ BOOST_AUTO_TEST_CASE(Destructor)
 	glGetProgramiv(old_program_id, GL_DELETE_STATUS, &delete_status);
 	BOOST_CHECK(delete_status == 1);
 
+}
+
+BOOST_AUTO_TEST_CASE(Move_Constructor)
+{
+	glen::BlinnMaterial old_material{ std::move(create_test_material()) };
+	GLuint old_id = old_material.program_id();
+	GLuint old_num_uniforms = old_material.num_uniforms();
+	GLuint old_num_textures = old_material.num_textures();
+	GLint delete_status = 0;
+
+	BOOST_CHECK(old_num_uniforms != 0);
+	BOOST_CHECK(old_num_textures != 0);
+
+	glen::BlinnMaterial new_material{ std::move(old_material) };
+
+	BOOST_CHECK(new_material.program_id() == old_id);
+	BOOST_CHECK(new_material.num_textures() == old_num_textures);
+	BOOST_CHECK(new_material.num_uniforms() == old_num_uniforms);
+
+	glValidateProgram(new_material.program_id());
+
+	glGetProgramiv(new_material.program_id(), GL_DELETE_STATUS, &delete_status);
+	BOOST_CHECK(delete_status == 0);
+}
+
+BOOST_AUTO_TEST_CASE(Move_Assign)
+{
+	glen::BlinnMaterial old_material{ std::move(create_test_material()) };
+	GLuint old_id = old_material.program_id();
+	GLuint old_num_uniforms = old_material.num_uniforms();
+	GLuint old_num_textures = old_material.num_textures();
+	GLint delete_status = 0;
+
+	BOOST_CHECK(old_num_uniforms != 0);
+	BOOST_CHECK(old_num_textures != 0);
+
+	glen::BlinnMaterial new_material = std::move(old_material);
+
+	BOOST_CHECK(new_material.program_id() == old_id);
+	BOOST_CHECK(new_material.num_textures() == old_num_textures);
+	BOOST_CHECK(new_material.num_uniforms() == old_num_uniforms);
+
+	glValidateProgram(new_material.program_id());
+
+	glGetProgramiv(new_material.program_id(), GL_DELETE_STATUS, &delete_status);
+	BOOST_CHECK(delete_status == 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

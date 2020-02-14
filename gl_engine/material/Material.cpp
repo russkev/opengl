@@ -156,6 +156,16 @@ namespace glen
 		return m_uniforms;
 	}
 
+	const GLuint Material::num_uniforms() const
+	{
+		return (GLuint)m_uniforms.size();
+	}
+
+	const GLuint Material::num_textures() const
+	{
+		return (GLuint)m_textures.size();
+	}
+
 	// // ----- SETTERS ----- // //
 	void Material::set_name(const std::string& name)
 	{
