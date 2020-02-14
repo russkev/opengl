@@ -54,9 +54,7 @@ struct NodeTestContext
 //----------------------------------------------------------------------------------------------------//
 
 
-BOOST_FIXTURE_TEST_SUITE(Node_tests, NodeTestContext)
-
-BOOST_AUTO_TEST_SUITE(transform_tests)
+BOOST_FIXTURE_TEST_SUITE(Node, NodeTestContext)
 
 BOOST_AUTO_TEST_CASE(N1_local)
 {
@@ -84,12 +82,6 @@ BOOST_AUTO_TEST_CASE(N4_world)
 	BOOST_TEST(Helper::matrix_is_similar(N4.world_to_node(), finalExpectedMatrix, 0.1f));
 }
 
-BOOST_AUTO_TEST_SUITE_END()
-
-//----------------------------------------------------------------------------------------------------//
-
-BOOST_AUTO_TEST_SUITE(relationship_tests)
-
 BOOST_AUTO_TEST_CASE(N1_relationships)
 {
 	BOOST_TEST(N1.children().size() == 1);
@@ -114,7 +106,5 @@ BOOST_AUTO_TEST_CASE(N2_disconnect)
 	BOOST_CHECK(N2.parent() == false);
 	BOOST_TEST(N2.children().size() == 2);
 }
-
-BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE_END()

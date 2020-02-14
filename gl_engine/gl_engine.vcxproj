@@ -243,6 +243,8 @@
     <ClCompile Include="utils\VectorUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\data\AO_GBuffer.frag" />
+    <None Include="..\data\AO_GBuffer.vert" />
     <None Include="..\data\Blinn.frag" />
     <None Include="..\data\Blinn.vert" />
     <None Include="..\data\BlinnDeferred.frag" />

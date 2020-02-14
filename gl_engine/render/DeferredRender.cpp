@@ -5,21 +5,9 @@ namespace glen
 {
 	// // ----- CONSTRUCTOR ----- // //
 	DeferredRender::DeferredRender(const GLenum target, const glm::uvec2& dimensions) :
-		m_dimensions{ dimensions },
-		m_g_position{ Texture::create_16bit_rgb_null_texture(target, m_dimensions) },
-		m_g_normal{ Texture::create_16bit_rgb_null_texture(target, m_dimensions) },
-		m_g_color_spec{ Texture::create_8bit_rgba_null_texture(target, m_dimensions) },
-		m_g_depth{ Texture::create_depth_null_texture(target, m_dimensions) }
-	{
-		m_g_buffer_FBO.push_back_color_buffer_textures(std::vector<const Texture*>{
-			&m_g_position, &m_g_normal, &m_g_color_spec	});
-
-		m_g_buffer_FBO.set_depth_buffer_texture(&m_g_depth);
-
-		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_position, &m_g_position);
-		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_normal, &m_g_normal);
-		m_deferred_material.set_texture(BlinnDeferredMaterial::k_g_diffuse_spec, &m_g_color_spec);
-	}
+		m_target{ target },
+		m_dimensions{ dimensions }
+	{}
 
 	// // ----- GENERAL ----- // //
 	void DeferredRender::bind()
@@ -42,9 +30,25 @@ namespace glen
 		m_deferred_mesh_node.draw();
 	}
 
+	// // ----- FACTORIES ----- // //
+	DeferredRender DeferredRender::create_blinn_deferred(const GLenum target, const glm::uvec2& dimensions)
+	{
+		DeferredRender deferred_render(target, dimensions);
+		Texture g_position{		Texture::create_16bit_rgb_null_texture(target, dimensions) };
+		Texture g_normal{		Texture::create_16bit_rgb_null_texture(target, dimensions) };
+		Texture g_color_spec{	Texture::create_8bit_rgba_null_texture(target, dimensions) };
+		Texture g_depth{		Texture::create_depth_null_texture(target, dimensions) };
 
+		deferred_render.framebuffer()->push_back_color_buffer_textures( std::vector<const Texture*>{
+			&g_position, &g_normal, &g_color_spec	});
+		deferred_render.framebuffer()->set_depth_buffer_texture(&g_depth);
 
+		deferred_render.material()->set_texture(BlinnDeferredMaterial::k_g_position, &g_position);
+		deferred_render.material()->set_texture(BlinnDeferredMaterial::k_g_normal, &g_normal);
+		deferred_render.material()->set_texture(BlinnDeferredMaterial::k_g_diffuse_spec, &g_color_spec);
 
+		return deferred_render;
+	}
 
 	// // ----- GETTERS ----- // //
 	glm::uvec2 DeferredRender::dimensions() 
@@ -70,5 +74,16 @@ namespace glen
 	MeshNode* DeferredRender::mesh_node()
 	{
 		return &m_deferred_mesh_node;
+	}
+
+	// // ----- SETTERS ----- // //
+	void DeferredRender::set_target(const GLenum target)
+	{
+		m_target = target;
+	}
+
+	void DeferredRender::set_dimensions(const glm::uvec2& dimensions)
+	{
+		m_dimensions = dimensions;
 	}
 }

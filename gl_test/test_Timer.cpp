@@ -11,7 +11,7 @@
 namespace tt = boost::test_tools;
 namespace utf = boost::unit_test;
 
-BOOST_AUTO_TEST_SUITE(Timer_tests)
+BOOST_AUTO_TEST_SUITE(Timer)
 
 BOOST_AUTO_TEST_CASE(normalSecond, * utf::tolerance(0.01))
 {

@@ -10,6 +10,35 @@
 
 namespace glen
 {
+	// AO G-BUFFER
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	AO_GBufferMaterial::AO_GBufferMaterial()
+	{
+		AO_GBufferMaterial("AU G_Buffer Material");
+	}
+
+	AO_GBufferMaterial::AO_GBufferMaterial(const std::string& name) :
+		Material{ name, "AO_GBufferMaterial.vert", "AO_GBufferMaterial.frag" }
+	{
+		init();
+	}
+
+	void AO_GBufferMaterial::init()
+	{
+		glm::mat4 default_transform{ 1.0f };
+
+		set_uniform(k_transform_model_to_world, default_transform);
+		set_uniform(k_transform_world_to_cam, default_transform);
+		set_uniform(k_transform_model_to_projection, default_transform);
+	}
+
+	void AO_GBufferMaterial::update_view(const CameraNode* camera_node, const Node* model_node)
+	{
+		set_uniform(k_transform_model_to_world, model_node->world_to_node());
+		set_uniform(k_transform_world_to_cam, camera_node->world_to_node());
+		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * model_node->world_to_node());
+	}
+
 	// BLINN
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 
