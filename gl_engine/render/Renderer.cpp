@@ -22,7 +22,7 @@ namespace glen
 	Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
 		m_cameraNode{ camera }, 
 		m_dimensions{ dimensions },
-		m_deferred_render{ DeferredRender::create_blinn_deferred(GL_TEXTURE_2D, dimensions) }
+		m_deferred_render{ std::move(DeferredRender::create_blinn_deferred(GL_TEXTURE_2D, dimensions)) }
 	{
 		m_cameraNode->camera()->set_dimensions(dimensions);
 		init_settings();

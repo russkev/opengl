@@ -25,6 +25,11 @@ namespace glen
 		// // ----- CONSTRUCTOR ----- // //
 		DeferredRender() {};
 		DeferredRender(const GLenum target, const glm::uvec2& dimensions);
+		DeferredRender(const DeferredRender& other) = delete;
+		DeferredRender(DeferredRender&& other) = default;
+		DeferredRender& operator = (const DeferredRender& other) = delete;
+		DeferredRender& operator = (DeferredRender&& other) = default;
+		~DeferredRender() = default;
 
 		// // ----- GENERAL ----- // //
 		void bind();
@@ -34,7 +39,7 @@ namespace glen
 
 		// // ----- FACTORIES ----- // //
 		static DeferredRender create_blinn_deferred(const GLenum target, const glm::uvec2& dimensions);
-		static DeferredRender create_ao_g_buffer(const GLenum target, const glm::uvec2& dimensions);
+		//static DeferredRender create_ao_g_buffer(const GLenum target, const glm::uvec2& dimensions);
 
 		// // ----- GETTERS ----- // //
 		glm::uvec2 dimensions();
