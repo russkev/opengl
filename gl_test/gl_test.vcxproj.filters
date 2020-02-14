@@ -59,6 +59,9 @@
     <ClCompile Include="test_Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_DeferredRender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

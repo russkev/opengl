@@ -32,6 +32,11 @@ namespace glen
 	public:
 		MeshNode() {};
 		MeshNode(const std::string name, Mesh* mesh, Material* material);
+		MeshNode(const MeshNode& other) = delete;
+		MeshNode(MeshNode&& other) = default;
+		MeshNode& operator = (const MeshNode& other) = delete;
+		MeshNode& operator = (MeshNode&& other) = default;
+		~MeshNode() = default;
 
 		// // ----- GENERAL METHODS ----- // //
 		void update_view(CameraNode* cameraNode) override;
