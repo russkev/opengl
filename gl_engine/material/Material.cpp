@@ -70,7 +70,6 @@ namespace glen
 			);
 	}
 
-
 	bool Material::contains_uniform(std::string uniform_name)
 	{
 		return m_uniforms.find(uniform_name) != m_uniforms.end();
@@ -93,7 +92,6 @@ namespace glen
 			texture->bind(texture_unit);
 		}
 	}
-
 
 	void Material::unbind_textures()
 	{
@@ -157,6 +155,11 @@ namespace glen
 	{
 		return m_uniforms;
 	}
+
+	//const std::map<std::string, Texture*>& Material::textures() const
+	//{
+	//	return m_textures;
+	//}
 
 	const GLuint Material::num_uniforms() const
 	{

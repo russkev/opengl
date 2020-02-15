@@ -169,7 +169,6 @@ namespace glen
 		bind();
 		GLuint offset = num_color_textures();
 		init_color_attachments_for_bound_framebuffer((GLuint)textures.size(), num_color_textures());
-		//num_color_textures() += (GLuint)textures.size();
 
 		for (int i = 0; i < textures.size(); ++i)
 		{

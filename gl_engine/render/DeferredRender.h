@@ -44,7 +44,6 @@ namespace glen
 		void draw();
 
 		// // ----- FACTORIES ----- // //
-		//void setup_blinn_deferred(const GLenum target, const glm::uvec2& dimensions);
 		static DeferredRender create_blinn_deferred(const GLenum target, const glm::uvec2& dimensions);
 		//static DeferredRender create_ao_g_buffer(const GLenum target, const glm::uvec2& dimensions);
 
@@ -73,7 +72,8 @@ namespace glen
 		glm::uvec2 m_dimensions;
 		Framebuffer m_g_buffer_FBO{ GL_FRAMEBUFFER };
 		Texture m_g_depth;
-		std::unordered_map<std::string, Texture> m_textures;
+		std::unordered_map<std::string, Texture> m_internal_textures;
+		std::unordered_map<std::string, Texture*> m_external_textures;
 		BlinnDeferredMaterial m_deferred_material;
 		Mesh m_deferred_mesh{ WindowQuad::create_windowQuad() };
 		MeshNode m_deferred_mesh_node{ "Deferred Screen Node", &m_deferred_mesh, &m_deferred_material };

@@ -1,2 +1,5 @@
 ﻿  test_DeferredRender.cpp
+  test_Material.cpp
+  test_Overall.cpp
+  Generating Code...
   gl_test.vcxproj -> E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\x64\Debug\gl_test.exe

@@ -20,9 +20,13 @@ namespace glen
 
 	struct AO_GBufferMaterial : public Material
 	{
-		inline static const std::string k_transform_model_to_world	= "transform.model_to_world";
-		inline static const std::string k_transform_world_to_cam	= "transform.world_to_cam";
-		inline static const std::string k_transform_model_to_projection		= "transform.model_to_projection";
+		//inline static const std::string k_g_position	= "g_position";
+		//inline static const std::string k_g_normal		= "g_normal";
+		//inline static const std::string k_g_diffuse		= "g_diffuse";
+
+		inline static const std::string k_transform_model_to_world		= "transform.model_to_world";
+		inline static const std::string k_transform_world_to_cam		= "transform.world_to_cam";
+		inline static const std::string k_transform_model_to_projection	= "transform.model_to_projection";
 		
 		AO_GBufferMaterial();
 		AO_GBufferMaterial(const std::string& name);
