@@ -16,7 +16,7 @@
 #include "post/ToneMap.h"
 #include "post/Bloom.h"
 #include "post/PostEffect.h"
-#include "DeferredRender.h"
+#include "post/Deferred.h"
 
 namespace glen
 {
@@ -93,7 +93,7 @@ namespace glen
 
 		// // ----- DEFERRRED RENDER VARIABLES ----- // //
 		Framebuffer m_g_buffer{ GL_FRAMEBUFFER };
-		DeferredRender m_deferred_render;
+		Deferred m_deferred_render;
 
 	};
 }

@@ -1,22 +1,21 @@
 #include "pch.h"
-#include "DeferredRender.h"
+#include "Deferred.h"
 
 namespace glen
 {
 	// // ----- CONSTRUCTOR ----- // //
-	DeferredRender::DeferredRender(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions) :
+	Deferred::Deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions) :
 		m_target{ target },
 		m_dimensions{ dimensions },
 		m_g_buffer_FBO{ g_buffer }
 	{}
 
-	DeferredRender::DeferredRender(DeferredRender&& other) :
+	Deferred::Deferred(Deferred&& other) :
 		m_target{ other.m_target },
 		m_dimensions{ std::exchange(other.m_dimensions, glm::uvec2{ 0u }) },
 		m_external_textures{ std::move(other.m_external_textures)},
 		m_deferred_material{ std::move(other.m_deferred_material)},
-		m_deferred_mesh{ std::move(other.m_deferred_mesh) },
-		m_deferred_mesh_node{ other.m_deferred_mesh_node.name(), &m_deferred_mesh, &m_deferred_material }
+		m_deferred_mesh_node{ other.m_deferred_mesh_node.name(), PostEffect::mesh(), &m_deferred_material }
 	{
 		bool using_local_depth_texture = other.m_g_buffer_FBO->depth_texture() == &other.m_g_depth;
 
@@ -32,7 +31,7 @@ namespace glen
 
 	}
 
-	void DeferredRender::relink_framebuffer_color_textures(const std::vector<const Texture*>& framebuffer_textures)
+	void Deferred::relink_framebuffer_color_textures(const std::vector<const Texture*>& framebuffer_textures)
 	{
 		for (const Texture* framebuffer_texture : framebuffer_textures)
 		{
@@ -48,38 +47,38 @@ namespace glen
 
 
 
-	DeferredRender& DeferredRender::operator = (DeferredRender&& other)
+	Deferred& Deferred::operator = (Deferred&& other)
 	{
-		(*this).~DeferredRender();
-		return *new (this) DeferredRender(std::move(other));
+		(*this).~Deferred();
+		return *new (this) Deferred(std::move(other));
 	}
 
 
 	// // ----- GENERAL ----- // //
-	void DeferredRender::bind()
+	void Deferred::bind()
 	{
 		m_g_buffer_FBO->bind();
 	}
 
-	void DeferredRender::unbind()
+	void Deferred::unbind()
 	{
 		m_g_buffer_FBO->unbind();
 	}
 
-	void DeferredRender::update_view(const CameraNode* camera_node)
+	void Deferred::update_view(const CameraNode* camera_node)
 	{
 		m_deferred_material.update_view(camera_node, NULL);
 	}
 
-	void DeferredRender::draw()
+	void Deferred::draw()
 	{
 		m_deferred_mesh_node.draw();
 	}
 
 	// // ----- FACTORIES ----- // //	
-	DeferredRender DeferredRender::create_blinn_deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions)
+	Deferred Deferred::create_blinn_deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions)
 	{
-		DeferredRender deferred_render{ target, g_buffer, dimensions };
+		Deferred deferred_render{ target, g_buffer, dimensions };
 
 		deferred_render.set_color_texture(BlinnDeferredMaterial::k_g_position, Texture::create_16bit_rgb_null_texture(target, dimensions));
 		deferred_render.set_color_texture(BlinnDeferredMaterial::k_g_normal, Texture::create_16bit_rgb_null_texture(target, dimensions));
@@ -91,9 +90,9 @@ namespace glen
 		return deferred_render;
 	}
 
-	//DeferredRender DeferredRender::create_ao_g_buffer(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions)
+	//Deferred Deferred::create_ao_g_buffer(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions)
 	//{
-	//	DeferredRender deferred_render{ target, dimensions };
+	//	Deferred deferred_render{ target, dimensions };
 	//	m_g_buffer = g_buffer;
 
 	//	deferred_render.set_color_texture(AO_GBufferMaterial::k_g_position, Texture::create_16bit_rgb_null_texture(target, dimensions));
@@ -106,76 +105,71 @@ namespace glen
 	//}
 
 	// // ----- GETTERS ----- // //
-	glm::uvec2 DeferredRender::dimensions() 
+	glm::uvec2 Deferred::dimensions() 
 	{
 		return m_dimensions;
 	}
 
-	Framebuffer* DeferredRender::framebuffer()
+	Framebuffer* Deferred::framebuffer()
 	{
 		return m_g_buffer_FBO;
 	}
 
-	Material* DeferredRender::material()
+	Material* Deferred::material()
 	{
 		return &m_deferred_material;
 	}
 
-	Mesh* DeferredRender::mesh()
-	{
-		return &m_deferred_mesh;
-	}
-
-	MeshNode* DeferredRender::mesh_node()
+	MeshNode* Deferred::mesh_node()
 	{
 		return &m_deferred_mesh_node;
 	}
 
-	const Texture* DeferredRender::texture(const std::string& name)
+	const Texture* Deferred::texture(const std::string& name)
 	{
 		return &m_internal_textures[name];
 	}
 
-	const Texture* DeferredRender::depth_texture()
+	const Texture* Deferred::depth_texture()
 	{
 		return &m_g_depth;
 	}
 
 	// // ----- SETTERS ----- // //
-	void DeferredRender::set_target(const GLenum target)
+	void Deferred::set_target(const GLenum target)
 	{
 		m_target = target;
 	}
 
-	void DeferredRender::set_dimensions(const glm::uvec2& dimensions)
+	void Deferred::set_dimensions(const glm::uvec2& dimensions)
 	{
 		m_dimensions = dimensions;
 	}
 
-	void DeferredRender::set_color_texture(const std::string& name, Texture texture)
+	void Deferred::set_color_texture(const std::string& name, Texture texture)
 	{
 		m_internal_textures[name] = std::move(texture);
 		m_deferred_material.set_texture(name, &m_internal_textures[name]);
 	}
 
-	void DeferredRender::set_color_texture(const std::string& name, Texture* texture)
+	void Deferred::set_color_texture(const std::string& name, Texture* texture)
 	{
 		m_external_textures[name] = texture;
 		m_deferred_material.set_texture(name, texture);
 	}
 
-	void DeferredRender::set_depth_texture(Texture texture)
+	void Deferred::set_depth_texture(Texture texture)
 	{
 		m_g_depth = std::move(texture);
 		set_depth_texture(&m_g_depth);
 	}
 
-	void DeferredRender::set_depth_texture(Texture* texture)
+	void Deferred::set_depth_texture(Texture* texture)
 	{
 		m_g_buffer_FBO->set_depth_buffer_texture(texture);
 	}
 
-	void DeferredRender::send_color_textures_to_framebuffer()
+	void Deferred::send_color_textures_to_framebuffer()
 	{
 		std::vector<const Texture*> texture_vector;
 		for (const auto & texture_pair : m_internal_textures)

@@ -6,6 +6,7 @@
 
 #include <glm/glm.hpp>
 
+#include "PostEffect.h"
 #include "shading/Framebuffer.h"
 #include "shading/Texture.h"
 #include "mesh/Mesh.h"
@@ -23,16 +24,16 @@ namespace glen
 	Struct for adding a deferred render stage to the primary renderer
 
 	*/
-	struct DeferredRender
+	struct Deferred : public PostEffect
 	{
 		// // ----- CONSTRUCTOR ----- // //
-		DeferredRender() {};
-		DeferredRender(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
-		DeferredRender(const DeferredRender& other) = delete;
-		DeferredRender(DeferredRender&& other);
-		DeferredRender& operator = (const DeferredRender& other) = delete;
-		DeferredRender& operator = (DeferredRender&& other);
-		~DeferredRender() = default;
+		Deferred() {};
+		Deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
+		Deferred(const Deferred& other) = delete;
+		Deferred(Deferred&& other);
+		Deferred& operator = (const Deferred& other) = delete;
+		Deferred& operator = (Deferred&& other);
+		~Deferred() = default;
 
 		// // ----- GENERAL ----- // //
 	private:
@@ -41,17 +42,16 @@ namespace glen
 		void bind();
 		void unbind();
 		void update_view(const CameraNode* camera_node);
-		void draw();
+		void draw() override;
 
 		// // ----- FACTORIES ----- // //
-		static DeferredRender create_blinn_deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
-		//static DeferredRender create_ao_g_buffer(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
+		static Deferred create_blinn_deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
+		//static Deferred create_ao_g_buffer(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
 
 		// // ----- GETTERS ----- // //
 		glm::uvec2 dimensions();
 		Framebuffer* framebuffer();
 		Material* material();
-		Mesh* mesh();
 		MeshNode* mesh_node();
 		const Texture* texture(const std::string& name);
 		const Texture* depth_texture();
@@ -63,7 +63,6 @@ namespace glen
 		void set_color_texture(const std::string& name, Texture* texture);
 		void set_depth_texture(Texture* texture);
 		void send_color_textures_to_framebuffer();
-	//private:
 		void set_color_texture(const std::string& name, Texture texture);
 		void set_depth_texture(Texture texture);
 
@@ -75,8 +74,7 @@ namespace glen
 		std::unordered_map<std::string, Texture> m_internal_textures;
 		std::unordered_map<std::string, Texture*> m_external_textures;
 		BlinnDeferredMaterial m_deferred_material;
-		Mesh m_deferred_mesh{ WindowQuad::create_windowQuad() };
-		MeshNode m_deferred_mesh_node{ "Deferred Screen Node", &m_deferred_mesh, &m_deferred_material };
+		MeshNode m_deferred_mesh_node{ "Deferred Screen Node", PostEffect::mesh(), &m_deferred_material };
 	};
 }
 #endif
