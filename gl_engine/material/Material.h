@@ -77,6 +77,7 @@ namespace glen
 		const GLuint program_id() const;
 		const std::string name() const;
 		const std::map<std::string, Uniform>& uniforms() const;
+		//const std::map<std::string, Texture*>& textures() const;
 		const GLuint num_uniforms() const;
 		const GLuint num_textures() const;
 
