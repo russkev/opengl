@@ -35,6 +35,7 @@ namespace glen
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
 		// !!! Tonemapping should really be done after the glow effect
+		//Framebuffer* m_backbuffer_fbo;
 		ToneMap* m_tone_map;
 
 		Framebuffer m_pingpong_fbos[DIRECTIONS];

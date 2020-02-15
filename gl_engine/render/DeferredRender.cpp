@@ -90,18 +90,18 @@ namespace glen
 		return deferred_render;
 	}
 
-	//DeferredRender DeferredRender::create_ao_g_buffer(const GLenum target, const glm::uvec2& dimensions)
-	//{
-	//	DeferredRender deferred_render{ target, dimensions };
+	DeferredRender DeferredRender::create_ao_g_buffer(const GLenum target, const glm::uvec2& dimensions)
+	{
+		DeferredRender deferred_render{ target, dimensions };
 
-	//	deferred_render.set_color_texture(AO_GBufferMaterial::k_g_position, Texture::create_16bit_rgb_null_texture(target, dimensions));
-	//	deferred_render.set_color_texture(AO_GBufferMaterial::k_g_normal, Texture::create_16bit_rgb_null_texture(target, dimensions));
-	//	deferred_render.set_color_texture(AO_GBufferMaterial::k_g_diffuse, Texture::create_8bit_rgb_null_texture(target, dimensions));
-	//	deferred_render.set_depth_texture(Texture::create_depth_null_texture(target, dimensions));
+		deferred_render.set_color_texture(AO_GBufferMaterial::k_g_position, Texture::create_16bit_rgb_null_texture(target, dimensions));
+		deferred_render.set_color_texture(AO_GBufferMaterial::k_g_normal, Texture::create_16bit_rgb_null_texture(target, dimensions));
+		deferred_render.set_color_texture(AO_GBufferMaterial::k_g_diffuse, Texture::create_8bit_rgb_null_texture(target, dimensions));
+		deferred_render.set_depth_texture(Texture::create_depth_null_texture(target, dimensions));
 
-	//	deferred_render.send_color_textures_to_framebuffer();
-	//	return deferred_render;
-	//}
+		deferred_render.send_color_textures_to_framebuffer();
+		return deferred_render;
+	}
 
 	// // ----- GETTERS ----- // //
 	glm::uvec2 DeferredRender::dimensions() 

@@ -5,6 +5,7 @@
 #include "material/Material.h"
 #include "material/MaterialLibrary.h"
 #include "node/MeshNode.h"
+#include "shading/Framebuffer.h"
 
 namespace glen
 {
@@ -27,6 +28,7 @@ namespace glen
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
+		Framebuffer* m_backbuffer_fbo;
 		HDRMaterial m_material{};
 		MeshNode m_mesh_node{ "HDR Screen Node", PostEffect::mesh(), &m_material };
 
