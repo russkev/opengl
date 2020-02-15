@@ -27,7 +27,8 @@ namespace glen
 	{
 		// // ----- CONSTRUCTOR ----- // //
 		DeferredRender() {};
-		DeferredRender(const GLenum target, const glm::uvec2& dimensions);
+		//DeferredRender(const GLenum target, const glm::uvec2& dimensions);
+		DeferredRender(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
 		DeferredRender(const DeferredRender& other) = delete;
 		DeferredRender(DeferredRender&& other);
 		DeferredRender& operator = (const DeferredRender& other) = delete;
@@ -44,8 +45,8 @@ namespace glen
 		void draw();
 
 		// // ----- FACTORIES ----- // //
-		static DeferredRender create_blinn_deferred(const GLenum target, const glm::uvec2& dimensions);
-		static DeferredRender create_ao_g_buffer(const GLenum target, const glm::uvec2& dimensions);
+		static DeferredRender create_blinn_deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
+		//static DeferredRender create_ao_g_buffer(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
 
 		// // ----- GETTERS ----- // //
 		glm::uvec2 dimensions();
@@ -70,7 +71,7 @@ namespace glen
 		// // ----- MEMBER VARIABLES ----- // //
 		GLenum m_target;
 		glm::uvec2 m_dimensions;
-		Framebuffer m_g_buffer_FBO{ GL_FRAMEBUFFER };
+		Framebuffer* m_g_buffer_FBO = NULL; //{ GL_FRAMEBUFFER };
 		Texture m_g_depth;
 		std::unordered_map<std::string, Texture> m_internal_textures;
 		std::unordered_map<std::string, Texture*> m_external_textures;

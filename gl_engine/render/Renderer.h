@@ -92,6 +92,7 @@ namespace glen
 		Bloom m_bloom{ m_dimensions, &m_tone_map };
 
 		// // ----- DEFERRRED RENDER VARIABLES ----- // //
+		Framebuffer m_g_buffer{ GL_FRAMEBUFFER };
 		DeferredRender m_deferred_render;
 
 	};
