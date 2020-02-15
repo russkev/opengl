@@ -45,7 +45,7 @@ namespace glen
 
 		// // ----- FACTORIES ----- // //
 		static DeferredRender create_blinn_deferred(const GLenum target, const glm::uvec2& dimensions);
-		//static DeferredRender create_ao_g_buffer(const GLenum target, const glm::uvec2& dimensions);
+		static DeferredRender create_ao_g_buffer(const GLenum target, const glm::uvec2& dimensions);
 
 		// // ----- GETTERS ----- // //
 		glm::uvec2 dimensions();
