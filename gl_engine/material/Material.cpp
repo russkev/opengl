@@ -49,6 +49,8 @@ namespace glen
 	Material::~Material()
 	{
 		glDeleteProgram(m_program_id);
+		m_program_id = 0;
+		m_num_uniforms = 0;
 	}
 
 	// // ----- GENERAL METHODS ----- // //

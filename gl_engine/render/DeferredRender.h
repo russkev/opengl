@@ -1,6 +1,9 @@
 #ifndef GL_ENGINE_RENDER_DEFERRED_RENDER_H
 #define GL_ENGINE_RENDER_DEFERRED_RENDER_H
 
+#include <unordered_set>
+#include <unordered_map>
+
 #include <glm/glm.hpp>
 
 #include "shading/Framebuffer.h"
@@ -26,9 +29,9 @@ namespace glen
 		DeferredRender() {};
 		DeferredRender(const GLenum target, const glm::uvec2& dimensions);
 		DeferredRender(const DeferredRender& other) = delete;
-		DeferredRender(DeferredRender&& other) = default;
+		DeferredRender(DeferredRender&& other);
 		DeferredRender& operator = (const DeferredRender& other) = delete;
-		DeferredRender& operator = (DeferredRender&& other) = default;
+		DeferredRender& operator = (DeferredRender&& other);
 		~DeferredRender() = default;
 
 		// // ----- GENERAL ----- // //
@@ -38,7 +41,8 @@ namespace glen
 		void draw();
 
 		// // ----- FACTORIES ----- // //
-		static DeferredRender create_blinn_deferred(const GLenum target, const glm::uvec2& dimensions);
+		void setup_blinn_deferred(const GLenum target, const glm::uvec2& dimensions);
+		//static DeferredRender create_blinn_deferred(const GLenum target, const glm::uvec2& dimensions);
 		//static DeferredRender create_ao_g_buffer(const GLenum target, const glm::uvec2& dimensions);
 
 		// // ----- GETTERS ----- // //
@@ -51,6 +55,12 @@ namespace glen
 		// // ----- SETTERS ----- // //
 		void set_target(const GLenum target);
 		void set_dimensions(const glm::uvec2& dimensions);
+		void set_color_texture(const std::string& name, Texture* texture);
+		void set_depth_texture(Texture* texture);
+		void send_color_textures_to_framebuffer();
+	private:
+		void set_color_texture(const std::string& name, Texture texture);
+		void set_depth_texture(Texture texture);
 
 		// // ----- MEMBER VARIABLES ----- // //
 		GLenum m_target;
@@ -61,7 +71,9 @@ namespace glen
 		//Texture m_g_position;
 		//Texture m_g_normal;
 		//Texture m_g_color_spec;
-		//Texture m_g_depth;
+		Texture m_g_depth;
+
+		std::unordered_map<std::string, Texture> m_textures;
 
 		BlinnDeferredMaterial m_deferred_material;
 
