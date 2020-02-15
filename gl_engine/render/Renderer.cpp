@@ -21,9 +21,8 @@ namespace glen
 	// // ----- CONSTRUCTORS ----- // //
 	Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
 		m_cameraNode{ camera }, 
-		m_dimensions{ dimensions }
-		//m_deferred_render{ std::move(DeferredRender::create_blinn_deferred(GL_TEXTURE_2D, dimensions)) }
-		//m_deferred_render{ GL_TEXTURE_2D, dimensions }
+		m_dimensions{ dimensions },
+		m_deferred_render{ std::move(DeferredRender::create_blinn_deferred(GL_TEXTURE_2D, dimensions)) }
 	{
 		m_cameraNode->camera()->set_dimensions(dimensions);
 		init_settings();
@@ -93,9 +92,7 @@ namespace glen
 
 	void Renderer::init_deferred_renderer()
 	{
-		m_deferred_render.setup_blinn_deferred(GL_TEXTURE_2D, m_dimensions);
 		add_material(m_deferred_render.material());
-		//add_node(m_deferred_render.mesh_node());
 	}
 
 	// // ----- RENDER ----- // //
