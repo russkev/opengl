@@ -195,7 +195,6 @@ namespace glen
 			{
 				mesh_node->draw();
 			}
-			//node.second->draw();
 		}
 	}
 
