@@ -155,9 +155,6 @@
     <ClInclude Include="utils\Timer.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="render\DeferredRender.h">
-      <Filter>Render</Filter>
-    </ClInclude>
     <ClInclude Include="render\Renderer.h">
       <Filter>Render</Filter>
     </ClInclude>
@@ -172,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="gl_engine.h">
       <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="post\Deferred.h">
+      <Filter>Post</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -274,9 +274,6 @@
     <ClCompile Include="utils\Timer.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="render\DeferredRender.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="render\Renderer.cpp">
       <Filter>Render</Filter>
     </ClCompile>
@@ -288,6 +285,9 @@
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Boilerplate</Filter>
+    </ClCompile>
+    <ClCompile Include="post\Deferred.cpp">
+      <Filter>Post</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,9 +7,7 @@
 namespace glen
 {
 	// // ----- CONSTRUCTOR ----- // //
-	Bloom::Bloom(Framebuffer* backbuffer, const glm::uvec2& dimensions, ToneMap* tone_map) :
-		//m_backbuffer_fbo{ backbuffer },
-		PostEffect{ backbuffer },
+	Bloom::Bloom(const glm::uvec2& dimensions, ToneMap* tone_map) :
 		m_tone_map{tone_map}
 	{
 		for (GLuint i = 0; i < DIRECTIONS; ++i)

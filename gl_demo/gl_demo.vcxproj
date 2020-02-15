@@ -169,6 +169,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scenes\AODemo.h" />
     <ClInclude Include="scenes\DeferredRenderDemo.h" />
     <ClInclude Include="scenes\ParallaxDemo.h" />
     <ClInclude Include="scenes\SpecularityDemo.h" />

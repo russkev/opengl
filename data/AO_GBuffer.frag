@@ -16,7 +16,7 @@ out layout (location = 2) vec3 g_diffuse;
 // // ----- MAIN ----- // //
 void main ()
 {
-	g_position = in_frag.position;
-	g_normal = normalize(in_frag.g_normal);
+	g_position = in_frag.cam_space_position;
+	g_normal = normalize(in_frag.cam_space_normal);
 	g_diffuse = vec3(0.95);
 }

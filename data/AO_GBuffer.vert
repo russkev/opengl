@@ -26,7 +26,7 @@ uniform Transform transform;
 // // ----- SEND FUNCTIONS ----- // //
 void send_cam_space_coordinates()
 {
-	mat4 model_to_cam = world_to_cam * model_to_world;
+	mat4 model_to_cam = transform.world_to_cam * transform.model_to_world;
 	vec4 cam_position = model_to_cam * vec4(vertex_position, 1.0);
 	mat3 normal_model_to_cam = transpose(inverse(mat3(model_to_cam)));
 
@@ -38,6 +38,6 @@ void send_cam_space_coordinates()
 // // ----- MAIN ----- // //
 void main()
 {
-	sent_cam_space_coordinates();
+	send_cam_space_coordinates();
 	uv = vertex_uv;
 }
