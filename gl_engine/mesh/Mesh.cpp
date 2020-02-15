@@ -251,6 +251,11 @@ namespace glen
 		return m_indices.at(pos);
 	}
 
+	const GLuint Mesh::id() const
+	{
+		return m_id;
+	}
+
 	// // ----- SETTERS ----- // //
 	void Mesh::set_vertex(std::size_t pos, Vertex& vertex)
 	{

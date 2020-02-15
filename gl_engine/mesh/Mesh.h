@@ -87,6 +87,7 @@ namespace glen
 		std::size_t num_vertices() { return m_vertices.size(); }
 		vertices_type vertices() { return m_vertices; }
 		const indices_type& indices() const { return m_indices; }
+		const GLuint id() const;
 
 		// // ----- SIZE GETTERS----- // //
 		GLsizeiptr size_vertices() { return m_vertices.size() * sizeof(Vertex); }
