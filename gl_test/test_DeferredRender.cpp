@@ -134,10 +134,10 @@ BOOST_AUTO_TEST_CASE(Move_Assign_External_Textures)
 	BOOST_CHECK(new_deferred_render.framebuffer()->color_texture_at(0) == &g_position);
 }
 
-BOOST_AUTO_TEST_CASE(Factory)
+BOOST_AUTO_TEST_CASE(BlinnDeferred)
 {
 	glm::uvec2 dimensions{ 800u, 600u };
-	glen::Deferred deferred_render = glen::Deferred::create_blinn_deferred(GL_TEXTURE_2D, &framebuffer, dimensions);
+	glen::BlinnDeferred deferred_render{ GL_TEXTURE_2D, &framebuffer, dimensions };
 	BOOST_CHECK(deferred_render.framebuffer()->id() != 0);
 	BOOST_CHECK(deferred_render.material()->program_id() != 0);
 	BOOST_CHECK(deferred_render.dimensions() == dimensions);
