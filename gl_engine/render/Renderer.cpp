@@ -125,13 +125,15 @@ namespace glen
 		}
 		else if (m_deferred_render_enabled)
 		{
-			m_deferred_render.bind();
+			//m_deferred_render.bind();
+			m_g_buffer.bind();
 
 			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 			render_geometry();
 
-			m_deferred_render.unbind();
+			//m_deferred_render.unbind();
+			m_g_buffer.unbind();
 
 			glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 			clear_screen();
@@ -140,7 +142,9 @@ namespace glen
 
 			m_deferred_render.draw();
 
-			m_deferred_render.framebuffer()->blit_depth_to_default(m_dimensions);
+			//m_deferred_render.framebuffer()->blit_depth_to_default(m_dimensions);
+
+			m_g_buffer.blit_depth_to_default(m_dimensions);
 
 			render_lights();
 		}
