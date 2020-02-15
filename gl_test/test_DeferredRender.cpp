@@ -17,6 +17,7 @@ struct DeferredRenderTestContext
 	glm::uvec2 dimensions{ 800u, 600u };
 	GLenum target{ GL_TEXTURE_2D };
 	glen::Framebuffer framebuffer{ GL_FRAMEBUFFER };
+	glen::BlinnDeferredMaterial material;
 };
 
 BOOST_FIXTURE_TEST_SUITE(Deferred, DeferredRenderTestContext)
@@ -27,7 +28,7 @@ BOOST_AUTO_TEST_CASE(Destructor)
 	glen::Mesh* mesh_pointer = NULL;
 
 	{
-		glen::Deferred deferred(target, &framebuffer, dimensions);
+		glen::Deferred deferred(target, &framebuffer, &material, dimensions);
 		glen::Texture g_position{ glen::Texture::create_16bit_rgb_null_texture(target, dimensions) };
 		glen::Texture g_normal{ glen::Texture::create_16bit_rgb_null_texture(target, dimensions) };
 		glen::Texture g_color_spec{ glen::Texture::create_8bit_rgba_null_texture(target, dimensions) };
@@ -49,13 +50,12 @@ BOOST_AUTO_TEST_CASE(Destructor)
 		BOOST_CHECK(mesh_pointer->num_indices() != 0);
 	}
 
-	BOOST_CHECK(material_pointer->program_id() == 0);
 	BOOST_CHECK(mesh_pointer->num_indices() == 0);
 }
 
 BOOST_AUTO_TEST_CASE(Move_Constructor)
 {
-	glen::Deferred old_deferred_render(target, &framebuffer, dimensions);
+	glen::Deferred old_deferred_render(target, &framebuffer, &material, dimensions);
 
 	old_deferred_render.set_depth_texture(glen::Texture::create_depth_null_texture(target, dimensions));
 	old_deferred_render.set_color_texture(
@@ -81,7 +81,7 @@ BOOST_AUTO_TEST_CASE(Move_Constructor)
 
 BOOST_AUTO_TEST_CASE(Move_Assign_Internal_Textures)
 {
-	glen::Deferred old_deferred_render(target, &framebuffer, dimensions);
+	glen::Deferred old_deferred_render(target, &framebuffer, &material, dimensions);
 
 	old_deferred_render.set_depth_texture(glen::Texture::create_depth_null_texture(target, dimensions));
 	old_deferred_render.set_color_texture(
@@ -107,7 +107,8 @@ BOOST_AUTO_TEST_CASE(Move_Assign_Internal_Textures)
 
 BOOST_AUTO_TEST_CASE(Move_Assign_External_Textures)
 {
-	glen::Deferred old_deferred_render(target, &framebuffer, dimensions);
+
+	glen::Deferred old_deferred_render(target, &framebuffer, &material, dimensions);
 
 	glen::Texture g_position{ glen::Texture::create_16bit_rgb_null_texture(target, dimensions) };
 	glen::Texture g_depth{ glen::Texture::create_depth_null_texture(target, dimensions) };

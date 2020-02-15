@@ -71,8 +71,6 @@ namespace glen
 		std::unordered_map<std::string, Texture*> m_external_textures;
 		Material* m_material;
 		MeshNode m_mesh_node;
-		//BlinnDeferredMaterial m_deferred_material;
-		//MeshNode m_deferred_mesh_node{ "Deferred Screen Node", PostEffect::mesh(), &m_deferred_material };
 	};
 
 	struct BlinnDeferred : public Deferred
@@ -82,9 +80,11 @@ namespace glen
 		BlinnDeferredMaterial m_material;
 	};
 
-	//struct AODeferred : public Deferred
-	//{
-	//	AODeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
-	//};
+	struct AODeferred : public Deferred
+	{
+		AODeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
+
+		AO_GBufferMaterial m_material;
+	};
 }
 #endif

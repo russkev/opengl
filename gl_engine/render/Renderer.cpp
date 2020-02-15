@@ -148,6 +148,7 @@ namespace glen
 		else
 		{
 			render_geometry();
+			render_lights();
 		}
 
 	}
