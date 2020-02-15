@@ -273,6 +273,11 @@ namespace glen
 		return m_stencil_texture;
 	}
 
+	std::vector<const Texture*> Framebuffer::color_textures()
+	{
+		return m_color_textures;
+	}
+
 	// // ----- SETTERS ----- // //
 	void Framebuffer::set_attachment(GLenum attachment)
 	{

@@ -52,6 +52,7 @@ namespace glen
 		const Texture* color_texture_at(const size_t loc);
 		const Texture* depth_texture();
 		const Texture* stencil_texture();
+		std::vector<const Texture*> color_textures();
 
 		// // ----- SETTERS ----- // //
 	public:
