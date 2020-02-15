@@ -77,35 +77,6 @@ namespace glen
 		m_mesh_node.draw();
 	}
 
-	// // ----- FACTORIES ----- // //	
-	//Deferred Deferred::create_blinn_deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions)
-	//{
-	//	Deferred deferred_render{ target, g_buffer, dimensions };
-
-	//	deferred_render.set_color_texture(BlinnDeferredMaterial::k_g_position, Texture::create_16bit_rgb_null_texture(target, dimensions));
-	//	deferred_render.set_color_texture(BlinnDeferredMaterial::k_g_normal, Texture::create_16bit_rgb_null_texture(target, dimensions));
-	//	deferred_render.set_color_texture(BlinnDeferredMaterial::k_g_diffuse_spec, Texture::create_8bit_rgba_null_texture(target, dimensions));
-	//	deferred_render.set_depth_texture(Texture::create_depth_null_texture(target, dimensions));
-	//	
-	//	deferred_render.send_color_textures_to_framebuffer();
-
-	//	return deferred_render;
-	//}
-
-	//Deferred Deferred::create_ao_g_buffer(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions)
-	//{
-	//	Deferred deferred_render{ target, dimensions };
-	//	m_g_buffer = g_buffer;
-
-	//	deferred_render.set_color_texture(AO_GBufferMaterial::k_g_position, Texture::create_16bit_rgb_null_texture(target, dimensions));
-	//	deferred_render.set_color_texture(AO_GBufferMaterial::k_g_normal, Texture::create_16bit_rgb_null_texture(target, dimensions));
-	//	deferred_render.set_color_texture(AO_GBufferMaterial::k_g_diffuse, Texture::create_8bit_rgb_null_texture(target, dimensions));
-	//	deferred_render.set_depth_texture(Texture::create_depth_null_texture(target, dimensions));
-
-	//	deferred_render.send_color_textures_to_framebuffer();
-	//	return deferred_render;
-	//}
-
 	// // ----- GETTERS ----- // //
 	glm::uvec2 Deferred::dimensions() 
 	{
@@ -196,14 +167,14 @@ namespace glen
 		send_color_textures_to_framebuffer();
 	}
 
-	//AODeferred::AODeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions) :
-	//	Deferred{ target, g_buffer, AO_GBufferMaterial{}, dimensions }
-	//{
-	//	set_color_texture(AO_GBufferMaterial::k_g_position, Texture::create_16bit_rgb_null_texture(target, dimensions));
-	//	set_color_texture(AO_GBufferMaterial::k_g_normal, Texture::create_16bit_rgb_null_texture(target, dimensions));
-	//	set_color_texture(AO_GBufferMaterial::k_g_diffuse, Texture::create_8bit_rgb_null_texture(target, dimensions));
-	//	set_depth_texture(Texture::create_depth_null_texture(target, dimensions));
+	AODeferred::AODeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions) :
+		Deferred{ target, g_buffer, &m_material, dimensions }
+	{
+		set_color_texture(AO_GBufferMaterial::k_g_position, Texture::create_16bit_rgb_null_texture(target, dimensions));
+		set_color_texture(AO_GBufferMaterial::k_g_normal, Texture::create_16bit_rgb_null_texture(target, dimensions));
+		set_color_texture(AO_GBufferMaterial::k_g_diffuse, Texture::create_8bit_rgb_null_texture(target, dimensions));
+		set_depth_texture(Texture::create_depth_null_texture(target, dimensions));
 
-	//	send_color_textures_to_framebuffer();
-	//}
+		send_color_textures_to_framebuffer();
+	}
 }
