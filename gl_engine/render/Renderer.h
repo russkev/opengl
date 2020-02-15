@@ -89,7 +89,7 @@ namespace glen
 		Texture m_backbuffer_depth{ Texture::create_depth_null_texture(GL_TEXTURE_2D, m_dimensions) };
 
 		ToneMap m_tone_map{ &m_backbuffer_FBO, m_dimensions };
-		Bloom m_bloom{ &m_backbuffer_FBO, m_dimensions, &m_tone_map };
+		Bloom m_bloom{ m_dimensions, &m_tone_map };
 
 		// // ----- DEFERRRED RENDER VARIABLES ----- // //
 		DeferredRender m_deferred_render;

@@ -17,10 +17,8 @@ namespace glen
 	struct PostEffect
 	{
 		// // ----- CONSTRUCTOR ----- // //
-		PostEffect(Framebuffer* backbuffer)
-		{
-			m_backbuffer_fbo = backbuffer;
-		}
+		PostEffect()
+		{}
 
 		// // ----- GENERAL METHODS ----- // //
 		virtual void draw() {};
@@ -31,15 +29,9 @@ namespace glen
 			return &m_mesh;
 		}
 
-		Framebuffer* backbuffer_fbo()
-		{
-			return m_backbuffer_fbo;
-		}
-
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		Framebuffer* m_backbuffer_fbo;
 		Mesh m_mesh{ WindowQuad::create_windowQuad() };
 	};
 }

@@ -12,7 +12,7 @@ namespace glen
 	DeferredRender::DeferredRender(DeferredRender&& other) :
 		m_target{ other.m_target },
 		m_dimensions{ std::exchange(other.m_dimensions, glm::uvec2{ 0u }) },
-		//m_external_textures{ std::move(other.m_external_textures)},
+		m_external_textures{ std::move(other.m_external_textures)},
 		m_deferred_material{ std::move(other.m_deferred_material)},
 		m_deferred_mesh{ std::move(other.m_deferred_mesh) },
 		m_deferred_mesh_node{ other.m_deferred_mesh_node.name(), &m_deferred_mesh, &m_deferred_material }
