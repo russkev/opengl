@@ -27,7 +27,6 @@ namespace glen
 	{
 		// // ----- CONSTRUCTOR ----- // //
 		DeferredRender() {};
-		//DeferredRender(const GLenum target, const glm::uvec2& dimensions);
 		DeferredRender(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
 		DeferredRender(const DeferredRender& other) = delete;
 		DeferredRender(DeferredRender&& other);
@@ -71,7 +70,7 @@ namespace glen
 		// // ----- MEMBER VARIABLES ----- // //
 		GLenum m_target;
 		glm::uvec2 m_dimensions;
-		Framebuffer* m_g_buffer_FBO = NULL; //{ GL_FRAMEBUFFER };
+		Framebuffer* m_g_buffer_FBO = NULL;
 		Texture m_g_depth;
 		std::unordered_map<std::string, Texture> m_internal_textures;
 		std::unordered_map<std::string, Texture*> m_external_textures;

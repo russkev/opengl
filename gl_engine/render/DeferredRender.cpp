@@ -4,11 +4,6 @@
 namespace glen
 {
 	// // ----- CONSTRUCTOR ----- // //
-	//DeferredRender::DeferredRender(const GLenum target, const glm::uvec2& dimensions) :
-	//	m_target{ target },
-	//	m_dimensions{ dimensions }
-	//{}
-
 	DeferredRender::DeferredRender(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions) :
 		m_target{ target },
 		m_dimensions{ dimensions },
@@ -27,7 +22,6 @@ namespace glen
 
 		relink_framebuffer_color_textures(other.m_g_buffer_FBO->color_textures());
 
-		//m_g_buffer_FBO = std::move(other.m_g_buffer_FBO);
 		std::swap(m_g_buffer_FBO, other.m_g_buffer_FBO);
 		m_g_depth = std::move(other.m_g_depth);
 		m_internal_textures = std::move(other.m_internal_textures);
@@ -162,9 +156,6 @@ namespace glen
 	{
 		m_internal_textures[name] = std::move(texture);
 		m_deferred_material.set_texture(name, &m_internal_textures[name]);
-
-		//set_color_texture(name, &m_textures[name]);
-
 	}
 
 	void DeferredRender::set_color_texture(const std::string& name, Texture* texture)
