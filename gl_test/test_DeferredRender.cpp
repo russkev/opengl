@@ -5,7 +5,7 @@
 
 #include <glm/glm.hpp>
 
-#include "render/DeferredRender.h"
+#include "post/Deferred.h"
 
 #include "render/Window.h"
 #include "material/Material.h"
@@ -13,12 +13,13 @@
 
 struct DeferredRenderTestContext
 {
+	glen::Window window{ "Test Window", dimensions.x, dimensions.y };
 	glm::uvec2 dimensions{ 800u, 600u };
 	GLenum target{ GL_TEXTURE_2D };
-	glen::Window window{ "Test Window", dimensions.x, dimensions.y };
+	glen::Framebuffer framebuffer{ GL_FRAMEBUFFER };
 };
 
-BOOST_FIXTURE_TEST_SUITE(DeferredRender, DeferredRenderTestContext)
+BOOST_FIXTURE_TEST_SUITE(Deferred, DeferredRenderTestContext)
 
 BOOST_AUTO_TEST_CASE(Destructor)
 {
@@ -26,23 +27,23 @@ BOOST_AUTO_TEST_CASE(Destructor)
 	glen::Mesh* mesh_pointer = NULL;
 
 	{
-		glen::DeferredRender deferred_render(target, dimensions);
+		glen::Deferred deferred(target, &framebuffer, dimensions);
 		glen::Texture g_position{ glen::Texture::create_16bit_rgb_null_texture(target, dimensions) };
 		glen::Texture g_normal{ glen::Texture::create_16bit_rgb_null_texture(target, dimensions) };
 		glen::Texture g_color_spec{ glen::Texture::create_8bit_rgba_null_texture(target, dimensions) };
 		glen::Texture g_depth{ glen::Texture::create_depth_null_texture(target, dimensions) };
 
-		deferred_render.framebuffer()->push_back_color_buffer_textures(std::vector<const glen::Texture*>{
+		deferred.framebuffer()->push_back_color_buffer_textures(std::vector<const glen::Texture*>{
 			&g_position, &g_normal, &g_color_spec	});
-		deferred_render.framebuffer()->set_depth_buffer_texture(&g_depth);
+		deferred.framebuffer()->set_depth_buffer_texture(&g_depth);
 
-		deferred_render.material()->set_texture(glen::BlinnDeferredMaterial::k_g_position, &g_position);
-		deferred_render.material()->set_texture(glen::BlinnDeferredMaterial::k_g_normal, &g_normal);
-		deferred_render.material()->set_texture(glen::BlinnDeferredMaterial::k_g_diffuse_spec, &g_color_spec);
+		deferred.material()->set_texture(glen::BlinnDeferredMaterial::k_g_position, &g_position);
+		deferred.material()->set_texture(glen::BlinnDeferredMaterial::k_g_normal, &g_normal);
+		deferred.material()->set_texture(glen::BlinnDeferredMaterial::k_g_diffuse_spec, &g_color_spec);
 
 
-		material_pointer = deferred_render.material();
-		mesh_pointer = deferred_render.mesh();
+		material_pointer = deferred.material();
+		mesh_pointer = deferred.mesh();
 
 		BOOST_CHECK(material_pointer->program_id() != 0);
 		BOOST_CHECK(mesh_pointer->num_indices() != 0);
@@ -54,7 +55,7 @@ BOOST_AUTO_TEST_CASE(Destructor)
 
 BOOST_AUTO_TEST_CASE(Move_Constructor)
 {
-	glen::DeferredRender old_deferred_render(target, dimensions);
+	glen::Deferred old_deferred_render(target, &framebuffer, dimensions);
 
 	old_deferred_render.set_depth_texture(glen::Texture::create_depth_null_texture(target, dimensions));
 	old_deferred_render.set_color_texture(
@@ -67,7 +68,7 @@ BOOST_AUTO_TEST_CASE(Move_Constructor)
 	BOOST_CHECK(old_FBO_id != 0);
 	BOOST_CHECK(old_material_id != 0);
 
-	glen::DeferredRender new_deferred_render{ std::move(old_deferred_render) };
+	glen::Deferred new_deferred_render{ std::move(old_deferred_render) };
 
 	BOOST_CHECK(new_deferred_render.framebuffer()->id() == old_FBO_id);
 	BOOST_CHECK(new_deferred_render.material()->program_id() == old_material_id);
@@ -80,7 +81,7 @@ BOOST_AUTO_TEST_CASE(Move_Constructor)
 
 BOOST_AUTO_TEST_CASE(Move_Assign_Internal_Textures)
 {
-	glen::DeferredRender old_deferred_render(target, dimensions);
+	glen::Deferred old_deferred_render(target, &framebuffer, dimensions);
 
 	old_deferred_render.set_depth_texture(glen::Texture::create_depth_null_texture(target, dimensions));
 	old_deferred_render.set_color_texture(
@@ -93,7 +94,7 @@ BOOST_AUTO_TEST_CASE(Move_Assign_Internal_Textures)
 	BOOST_CHECK(old_FBO_id != 0);
 	BOOST_CHECK(old_material_id != 0);
 
-	glen::DeferredRender new_deferred_render = std::move(old_deferred_render);
+	glen::Deferred new_deferred_render = std::move(old_deferred_render);
 
 	BOOST_CHECK(new_deferred_render.framebuffer()->id() == old_FBO_id);
 	BOOST_CHECK(new_deferred_render.material()->program_id() == old_material_id);
@@ -106,7 +107,7 @@ BOOST_AUTO_TEST_CASE(Move_Assign_Internal_Textures)
 
 BOOST_AUTO_TEST_CASE(Move_Assign_External_Textures)
 {
-	glen::DeferredRender old_deferred_render(target, dimensions);
+	glen::Deferred old_deferred_render(target, &framebuffer, dimensions);
 
 	glen::Texture g_position{ glen::Texture::create_16bit_rgb_null_texture(target, dimensions) };
 	glen::Texture g_depth{ glen::Texture::create_depth_null_texture(target, dimensions) };
@@ -123,7 +124,7 @@ BOOST_AUTO_TEST_CASE(Move_Assign_External_Textures)
 	BOOST_CHECK(old_FBO_id != 0);
 	BOOST_CHECK(old_material_id != 0);
 
-	glen::DeferredRender new_deferred_render = std::move(old_deferred_render);
+	glen::Deferred new_deferred_render = std::move(old_deferred_render);
 
 	BOOST_CHECK(new_deferred_render.framebuffer()->id() == old_FBO_id);
 	BOOST_CHECK(new_deferred_render.material()->program_id() == old_material_id);
@@ -136,7 +137,7 @@ BOOST_AUTO_TEST_CASE(Move_Assign_External_Textures)
 BOOST_AUTO_TEST_CASE(Factory)
 {
 	glm::uvec2 dimensions{ 800u, 600u };
-	glen::DeferredRender deferred_render = glen::DeferredRender::create_blinn_deferred(GL_TEXTURE_2D, dimensions);
+	glen::Deferred deferred_render = glen::Deferred::create_blinn_deferred(GL_TEXTURE_2D, &framebuffer, dimensions);
 	BOOST_CHECK(deferred_render.framebuffer()->id() != 0);
 	BOOST_CHECK(deferred_render.material()->program_id() != 0);
 	BOOST_CHECK(deferred_render.dimensions() == dimensions);

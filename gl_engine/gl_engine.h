@@ -36,6 +36,7 @@
 #include "post/Bloom.h"
 #include "post/PostEffect.h"
 #include "post/ToneMap.h"
+#include "post/Deferred.h"
 
 #include "resources/Buffer.h"
 #include "resources/GL_Tuple_Introspect.h"
@@ -50,6 +51,5 @@
 #include "utils/Timer.h"
 #include "utils/VectorUtils.h"
 
-#include "render/DeferredRender.h"
 #include "render/Renderer.h"
 #include "render/Window.h"
