@@ -25,7 +25,7 @@ namespace glen
 		static constexpr GLuint PASSES = 10;
 
 		// // ----- CONSTRUCTOR ----- // //
-		Bloom(Framebuffer* backbuffer, const glm::uvec2& dimensions, ToneMap* tone_map);
+		Bloom(const glm::uvec2& dimensions, ToneMap* tone_map);
 
 		// // ----- GENERAL METHODS ----- // //
 		void draw() override;
@@ -35,7 +35,6 @@ namespace glen
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
 		// !!! Tonemapping should really be done after the glow effect
-		//Framebuffer* m_backbuffer_fbo;
 		ToneMap* m_tone_map;
 
 		Framebuffer m_pingpong_fbos[DIRECTIONS];

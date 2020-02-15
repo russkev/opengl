@@ -12,13 +12,12 @@ namespace glen
 {
 	// AO G-BUFFER
 	//------------------------------------------------------------------------------------------------------------------------------------------//
-	AO_GBufferMaterial::AO_GBufferMaterial()
-	{
-		AO_GBufferMaterial("AU G_Buffer Material");
-	}
+	AO_GBufferMaterial::AO_GBufferMaterial() :
+		AO_GBufferMaterial("AO G-Buffer Material")
+	{}
 
 	AO_GBufferMaterial::AO_GBufferMaterial(const std::string& name) :
-		Material{ name, "AO_GBufferMaterial.vert", "AO_GBufferMaterial.frag" }
+		Material{ name, "AO_GBuffer.vert", "AO_GBuffer.frag" }
 	{
 		init();
 	}
@@ -150,7 +149,6 @@ namespace glen
 
 		set_uniform(type + "[" + index + "]." + k_projection, camera_node->world_to_projection());
 	}
-
 
 	void BlinnMaterial::update_light(LightNode* light_node, const PointLight* point_light)
 	{

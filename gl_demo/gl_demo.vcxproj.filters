@@ -27,5 +27,8 @@
     <ClInclude Include="scenes\ParallaxDemo.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="scenes\AODemo.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

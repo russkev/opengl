@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE(Construct_Render_Elements)
 	//glen::CameraNode camera_node{ "Camera Node", &free_camera };
 
 
-	//glen::DeferredRender{ GL_TEXTURE_2D, dimensions };
+	//glen::Deferred{ GL_TEXTURE_2D, dimensions };
 	//glen::Renderer{ &camera_node, dimensions };
 	
 	BOOST_TEST(true);
