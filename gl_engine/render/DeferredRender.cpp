@@ -29,9 +29,12 @@ namespace glen
 		m_dimensions{ std::exchange(other.m_dimensions, glm::uvec2{ 0u }) },
 		m_g_buffer_FBO{ std::move(other.m_g_buffer_FBO) },
 		m_deferred_material{ std::move(other.m_deferred_material)},
+		m_textures{ std::exchange(other.m_textures, {}) },
+		m_g_depth{std::move(other.m_g_depth)},
 		m_deferred_mesh{ std::move(other.m_deferred_mesh) },
 		m_deferred_mesh_node{ other.m_deferred_mesh_node.name(), &m_deferred_mesh, &m_deferred_material }
-	{}
+	{
+	}
 
 	DeferredRender& DeferredRender::operator = (DeferredRender&& other)
 	{
@@ -138,6 +141,16 @@ namespace glen
 	MeshNode* DeferredRender::mesh_node()
 	{
 		return &m_deferred_mesh_node;
+	}
+
+	const Texture* DeferredRender::texture(const std::string& name)
+	{
+		return &m_textures[name];
+	}
+
+	const Texture* DeferredRender::depth_texture()
+	{
+		return &m_g_depth;
 	}
 
 	// // ----- SETTERS ----- // //
