@@ -79,6 +79,8 @@ BOOST_AUTO_TEST_CASE(Move_Constructor)
 	BOOST_CHECK(new_deferred_render.material()->program_id() == old_material_id);
 	BOOST_CHECK(new_deferred_render.mesh_node()->material() == new_deferred_render.mesh_node()->material());
 	BOOST_CHECK(new_deferred_render.mesh_node()->mesh() == new_deferred_render.mesh());
+	//BOOST_CHECK(new_deferred_render.framebuffer()->color_texture_at(0) == new_deferred_render.texture(glen::BlinnDeferredMaterial::k_g_position));
+	BOOST_CHECK(new_deferred_render.framebuffer()->depth_texture() == new_deferred_render.depth_texture());
 }
 
 BOOST_AUTO_TEST_CASE(Move_Assign)
@@ -111,16 +113,16 @@ BOOST_AUTO_TEST_CASE(Move_Assign)
 	BOOST_CHECK(new_deferred_render.mesh_node()->mesh() == new_deferred_render.mesh());
 }
 
-BOOST_AUTO_TEST_CASE(Factory)
-{
-	glm::uvec2 dimensions{ 800u, 600u };
-	glen::DeferredRender deferred_render = glen::DeferredRender::create_blinn_deferred(GL_TEXTURE_2D, dimensions);
-	BOOST_CHECK(deferred_render.framebuffer()->id() != 0);
-	BOOST_CHECK(deferred_render.material()->program_id() != 0);
-	BOOST_CHECK(deferred_render.dimensions() == dimensions);
-	BOOST_CHECK(deferred_render.mesh()->num_vertices() != 0);
-	BOOST_CHECK(deferred_render.mesh_node()->material() == deferred_render.material());
-	BOOST_CHECK(deferred_render.mesh_node()->mesh() == deferred_render.mesh());
-}
+//BOOST_AUTO_TEST_CASE(Factory)
+//{
+//	glm::uvec2 dimensions{ 800u, 600u };
+//	glen::DeferredRender deferred_render = glen::DeferredRender::create_blinn_deferred(GL_TEXTURE_2D, dimensions);
+//	BOOST_CHECK(deferred_render.framebuffer()->id() != 0);
+//	BOOST_CHECK(deferred_render.material()->program_id() != 0);
+//	BOOST_CHECK(deferred_render.dimensions() == dimensions);
+//	BOOST_CHECK(deferred_render.mesh()->num_vertices() != 0);
+//	BOOST_CHECK(deferred_render.mesh_node()->material() == deferred_render.material());
+//	BOOST_CHECK(deferred_render.mesh_node()->mesh() == deferred_render.mesh());
+//}
 
 BOOST_AUTO_TEST_SUITE_END()

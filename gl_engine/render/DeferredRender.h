@@ -51,6 +51,8 @@ namespace glen
 		Material* material();
 		Mesh* mesh();
 		MeshNode* mesh_node();
+		const Texture* texture(const std::string& name);
+		const Texture* depth_texture();
 
 		// // ----- SETTERS ----- // //
 		void set_target(const GLenum target);
