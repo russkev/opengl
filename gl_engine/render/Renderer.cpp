@@ -22,7 +22,7 @@ namespace glen
 	Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
 		m_cameraNode{ camera }, 
 		m_dimensions{ dimensions },
-		m_deferred_render{ std::move(Deferred::create_blinn_deferred(GL_TEXTURE_2D, &m_g_buffer, dimensions)) }
+		m_blinn_deferred{ GL_TEXTURE_2D, &m_g_buffer, dimensions }
 	{
 		m_cameraNode->camera()->set_dimensions(dimensions);
 		init_settings();
@@ -92,7 +92,7 @@ namespace glen
 
 	void Renderer::init_deferred_renderer()
 	{
-		add_material(m_deferred_render.material());
+		add_material(m_blinn_deferred.material());
 	}
 
 	// // ----- RENDER ----- // //
@@ -136,9 +136,9 @@ namespace glen
 			glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 			clear_screen();
 
-			m_deferred_render.update_view(m_cameraNode);
+			m_blinn_deferred.update_view(m_cameraNode);
 
-			m_deferred_render.draw();
+			m_blinn_deferred.draw();
 
 
 			m_g_buffer.blit_depth_to_default(m_dimensions);

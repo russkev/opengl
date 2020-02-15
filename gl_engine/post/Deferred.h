@@ -28,7 +28,7 @@ namespace glen
 	{
 		// // ----- CONSTRUCTOR ----- // //
 		Deferred() {};
-		Deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
+		Deferred(const GLenum target, Framebuffer* g_buffer, BlinnDeferredMaterial material, const glm::uvec2& dimensions);
 		Deferred(const Deferred& other) = delete;
 		Deferred(Deferred&& other);
 		Deferred& operator = (const Deferred& other) = delete;
@@ -43,10 +43,6 @@ namespace glen
 		void unbind();
 		void update_view(const CameraNode* camera_node);
 		void draw() override;
-
-		// // ----- FACTORIES ----- // //
-		static Deferred create_blinn_deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
-		//static Deferred create_ao_g_buffer(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
 
 		// // ----- GETTERS ----- // //
 		glm::uvec2 dimensions();
@@ -73,8 +69,20 @@ namespace glen
 		Texture m_g_depth;
 		std::unordered_map<std::string, Texture> m_internal_textures;
 		std::unordered_map<std::string, Texture*> m_external_textures;
-		BlinnDeferredMaterial m_deferred_material;
-		MeshNode m_deferred_mesh_node{ "Deferred Screen Node", PostEffect::mesh(), &m_deferred_material };
+		BlinnDeferredMaterial m_material;
+		MeshNode m_mesh_node;
+		//BlinnDeferredMaterial m_deferred_material;
+		//MeshNode m_deferred_mesh_node{ "Deferred Screen Node", PostEffect::mesh(), &m_deferred_material };
 	};
+
+	struct BlinnDeferred : public Deferred
+	{
+		BlinnDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
+	};
+
+	//struct AODeferred : public Deferred
+	//{
+	//	AODeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
+	//};
 }
 #endif

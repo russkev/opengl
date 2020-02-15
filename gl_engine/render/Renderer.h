@@ -93,7 +93,7 @@ namespace glen
 
 		// // ----- DEFERRRED RENDER VARIABLES ----- // //
 		Framebuffer m_g_buffer{ GL_FRAMEBUFFER };
-		Deferred m_deferred_render;
+		BlinnDeferred m_blinn_deferred;
 
 	};
 }
