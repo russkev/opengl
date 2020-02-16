@@ -1,6 +1,8 @@
 #ifndef GL_ENGINE_SHADING_TEXTURE_H
 #define GL_ENGINE_SHADING_TEXTURE_H
 
+#include <vector>
+
 #include <SDL.h>
 #include <SDL_image.h>
 #include <GL/glew.h>
@@ -56,7 +58,8 @@ namespace glen
 		static Texture create_depth_null_texture(const GLenum target, const glm::uvec2& dimensions);
 		static Texture create_stencil_texture(const GLenum target, const glm::uvec2& dimensions);
 		static Texture create_depth_null_texture_for_shadow(const GLenum target, const glm::uvec2& dimensions);
-
+		static Texture create_square_noise_tile_texture(const GLenum target, const glm::uvec2& dimensions, const std::vector<glm::vec3>& data);
+		static Texture create_bw_null_texture(const GLenum target, const glm::uvec2& dimensions);
 
 		// // ----- GETTERS ----- // //
 	public:

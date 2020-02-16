@@ -194,6 +194,7 @@
     <ClInclude Include="shading\ShadowMap.h" />
     <ClInclude Include="shading\Text2D.h" />
     <ClInclude Include="shading\Texture.h" />
+    <ClInclude Include="utils\ScalarUtils.h" />
     <ClInclude Include="utils\Timer.h" />
     <ClInclude Include="utils\VectorUtils.h" />
   </ItemGroup>
@@ -243,6 +244,8 @@
     <ClCompile Include="utils\VectorUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\data\AO.frag" />
+    <None Include="..\data\Passthrough.vert" />
     <None Include="..\data\AO_GBuffer.frag" />
     <None Include="..\data\AO_GBuffer.vert" />
     <None Include="..\data\Blinn.frag" />

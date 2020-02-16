@@ -20,11 +20,13 @@ namespace glen
 {
 	// // ----- CONSTRUCTORS ----- // //
 	Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
-		m_cameraNode{ camera }, 
+		m_camera_node{ camera }, 
 		m_dimensions{ dimensions },
-		m_blinn_deferred{ GL_TEXTURE_2D, &m_g_buffer, dimensions }
+		m_blinn_deferred{ GL_TEXTURE_2D, &m_g_buffer, dimensions },
+		//m_ao_g_buffer_deferred{ GL_TEXTURE_2D, &m_ao_g_buffer_fbo, dimensions },
+		m_ao_deferred{ GL_TEXTURE_2D, &m_ao_g_buffer_fbo, dimensions }
 	{
-		m_cameraNode->camera()->set_dimensions(dimensions);
+		m_camera_node->camera()->set_dimensions(dimensions);
 		init_settings();
 		init_post_effects();
 		init_deferred_renderer();
@@ -95,6 +97,12 @@ namespace glen
 		add_material(m_blinn_deferred.material());
 	}
 
+	void Renderer::init_ao()
+	{
+		//add_material(m_ao_g_buffer_deferred.material());
+		add_material(m_ao_deferred.material());
+	}
+
 	// // ----- RENDER ----- // //
 	void Renderer::render()
 	{
@@ -136,7 +144,7 @@ namespace glen
 			glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 			clear_screen();
 
-			m_blinn_deferred.update_view(m_cameraNode);
+			m_blinn_deferred.update_view(m_camera_node);
 
 			m_blinn_deferred.draw();
 
@@ -145,6 +153,28 @@ namespace glen
 
 			render_lights();
 		}
+		else if (m_ao_enabled)
+		{
+			m_ao_g_buffer_fbo.bind();
+
+			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+			render_geometry();
+
+			m_ao_g_buffer_fbo.unbind();
+
+			glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+			clear_screen();
+
+			m_ao_deferred.update_view(m_camera_node);
+
+			m_ao_deferred.draw();
+
+			m_ao_g_buffer_fbo.blit_depth_to_default(m_dimensions);
+
+			render_lights();
+		}
+
 		else
 		{
 			render_geometry();
@@ -181,7 +211,7 @@ namespace glen
 	{
 		clear_screen();
 
-		m_cameraNode->update();
+		m_camera_node->update();
 
 		for (Material* material : m_materials)
 		{
@@ -190,7 +220,7 @@ namespace glen
 
 		for (auto const& node : m_root_nodes)
 		{
-			node.second->update_view(m_cameraNode);
+			node.second->update_view(m_camera_node);
 			if (MeshNode* mesh_node = dynamic_cast<MeshNode*> (node.second) )
 			{
 				mesh_node->draw();
@@ -293,5 +323,15 @@ namespace glen
 	void Renderer::disable_deferred_render()
 	{
 		m_deferred_render_enabled = false;
+	}
+
+	void Renderer::enable_ao()
+	{
+		m_ao_enabled = true;
+	}
+
+	void Renderer::disable_ao()
+	{
+		m_ao_enabled = false;
 	}
 }

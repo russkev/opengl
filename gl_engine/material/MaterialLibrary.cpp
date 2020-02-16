@@ -41,6 +41,43 @@ namespace glen
 		set_uniform(k_transform_cam_to_projection, camera_node->camera()->cam_to_projection());
 	}
 
+	// AO
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	AO_Material::AO_Material() :
+		AO_Material("AO Material")
+	{}
+
+	AO_Material::AO_Material(const std::string& name) :
+		Material{ name, "Passthrough.vert", "AO.frag" }
+	{
+		init();
+	}
+
+	void AO_Material::init()
+	{
+		set_sampler_value(k_g_position, 0.0f );
+		set_sampler_color(k_g_normal, glm::vec3(0.5f, 0.5f, 1.0f));
+		set_sampler_value(k_noise, 0.0f);
+
+		for (GLuint i = 0; i < k_num_samples; ++i)
+		{
+			set_uniform(k_samples + "[" + std::to_string(i) + "]", glm::vec3{ 0.0f });
+		}
+		
+		set_uniform(k_radius, 1.0f);
+		set_uniform(k_bias, 0.05f);
+
+		set_uniform(k_screen_dimensions, glm::uvec2{ 100u });
+		set_uniform(k_noise_tile_dimensions, glm::uvec2{ 4u });
+
+		set_uniform(k_cam_to_projection, glm::mat4{ 1.0f });
+	}
+
+	void AO_Material::update_view(const CameraNode* camera_node, const Node* model_node)
+	{
+		set_uniform(k_cam_to_projection, camera_node->camera()->cam_to_projection());
+	}
+
 	// BLINN
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 

@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Deferred.h"
 
+#include "utils/ScalarUtils.h"
+
 namespace glen
 {
 	// // ----- CONSTRUCTOR ----- // //
@@ -15,8 +17,8 @@ namespace glen
 	Deferred::Deferred(Deferred&& other) :
 		m_target{ other.m_target },
 		m_dimensions{ std::exchange(other.m_dimensions, glm::uvec2{ 0u }) },
-		m_external_textures{ std::move(other.m_external_textures)},
-		m_material{ std::move(other.m_material)},
+		m_external_textures{ std::move(other.m_external_textures) },
+		m_material{ std::move(other.m_material) },
 		m_mesh_node{ other.m_mesh_node.name(), PostEffect::mesh(), m_material }
 	{
 		bool using_local_depth_texture = other.m_g_buffer_FBO->depth_texture() == &other.m_g_depth;
@@ -78,7 +80,7 @@ namespace glen
 	}
 
 	// // ----- GETTERS ----- // //
-	glm::uvec2 Deferred::dimensions() 
+	glm::uvec2 Deferred::dimensions()
 	{
 		return m_dimensions;
 	}
@@ -167,7 +169,7 @@ namespace glen
 		send_color_textures_to_framebuffer();
 	}
 
-	AODeferred::AODeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions) :
+	AO_GBufferDeferred::AO_GBufferDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions) :
 		Deferred{ target, g_buffer, &m_material, dimensions }
 	{
 		set_color_texture(AO_GBufferMaterial::k_g_position, Texture::create_16bit_rgb_null_texture(target, dimensions));
@@ -177,4 +179,49 @@ namespace glen
 
 		send_color_textures_to_framebuffer();
 	}
+
+	void AO_GBufferDeferred::init_kernal()
+	{
+		GLuint num_samples = 64;
+
+		for (GLuint i = 0; i < num_samples; ++i)
+		{
+			glm::vec3 sample{
+				m_random_floats(m_generator) * 2.0f - 1.0f,
+				m_random_floats(m_generator) * 2.0f - 1.0f,
+				m_random_floats(m_generator)
+			};
+
+			sample = glm::normalize(sample);
+			sample *= m_random_floats(m_generator);
+			sample *= increase_nearby_samples(i, num_samples);
+
+			m_kernal.push_back(sample);
+		}
+	}
+
+	float AO_GBufferDeferred::increase_nearby_samples(const GLuint i, const GLuint num_samples)
+	{
+		GLfloat scale = (GLfloat)i / (GLfloat)num_samples;
+		scale = ScalarUtils::lerp(0.1f, 1.0f, scale * scale);
+		return scale;
+	}
+
+	void AO_GBufferDeferred::init_noise()
+	{
+		GLuint num_fragments = m_noise_tile_dimensions.x * m_noise_tile_dimensions.y;
+		for (unsigned int i = 0; i < num_fragments; ++i)
+		{
+			glm::vec3 noise_fragment(
+				m_random_floats(m_generator) * 2.0f - 1.0f,
+				m_random_floats(m_generator) * 2.0f - 1.0f,
+				0.0f);
+			m_noise_tile.push_back(noise_fragment);
+		}
+		m_noise_tile_texture = Texture::create_square_noise_tile_texture(GL_TEXTURE_2D, m_noise_tile_dimensions, m_noise_tile);
+	}
+
+	AO_Deferred::AO_Deferred(const GLenum target, Framebuffer* ao_buffer, const glm::uvec2& dimensions) :
+		Deferred{ target, ao_buffer, &m_material, dimensions }
+	{}
 }

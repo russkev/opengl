@@ -23,7 +23,7 @@ namespace glen
 
 	// // ----- CONSTRUCTORS ----- // //
 	ShadowMap::ShadowMap(LightNode* lightNode) :
-		m_cameraNode{ std::string(lightNode->name() + " shadow"), lightNode->light()->camera() },
+		m_camera_node{ std::string(lightNode->name() + " shadow"), lightNode->light()->camera() },
 		m_lightNode{ lightNode }
 	{
 		init_camera();
@@ -51,17 +51,17 @@ namespace glen
 			material->set_texture(type + "[" + index + "]." + BlinnMaterial::k_depth, &m_texture);
 			if (is_point())
 			{
-				material->set_uniform(type + "[" + index + "]." + BlinnMaterial::k_far_plane, m_cameraNode.camera()->clip_far());
+				material->set_uniform(type + "[" + index + "]." + BlinnMaterial::k_far_plane, m_camera_node.camera()->clip_far());
 			}
 		}
 	}
 
 	void ShadowMap::init_camera()
 	{
-		m_cameraNode.set_parent(m_lightNode);
-		m_cameraNode.camera()->set_dimensions(glm::vec2(k_shadow_width, k_shadow_height));
-		m_cameraNode.camera()->set_clip_near(k_default_clip_near);
-		m_cameraNode.camera()->set_clip_far(k_default_clip_far);
+		m_camera_node.set_parent(m_lightNode);
+		m_camera_node.camera()->set_dimensions(glm::vec2(k_shadow_width, k_shadow_height));
+		m_camera_node.camera()->set_clip_near(k_default_clip_near);
+		m_camera_node.camera()->set_clip_far(k_default_clip_far);
 	}
 
 	void ShadowMap::init_directional_shadowMap()
@@ -113,7 +113,7 @@ namespace glen
 
 			if (is_directional())
 			{
-				material->update_light_transform(m_lightNode, &m_cameraNode);
+				material->update_light_transform(m_lightNode, &m_camera_node);
 			}
 		}
 	}
@@ -149,11 +149,11 @@ namespace glen
 		{
 			Node* node = node_pair.second;
 			DepthMaterial* depth_material = dynamic_cast<DepthMaterial*>(m_depth_material.get());
-			node->update_view(&m_cameraNode);
+			node->update_view(&m_camera_node);
 
 			if (MeshNode* meshNode = dynamic_cast<MeshNode*>(node))
 			{
-				depth_material->update_view(&m_cameraNode, meshNode);
+				depth_material->update_view(&m_camera_node, meshNode);
 				meshNode->draw_material(depth_material);
 			}
 		}
@@ -170,10 +170,10 @@ namespace glen
 		for (auto const& node_pair : root_nodes)
 		{
 			Node* node = node_pair.second;
-			node->update_view(&m_cameraNode);
+			node->update_view(&m_camera_node);
 			if (MeshNode* meshNode = dynamic_cast<MeshNode*>(node))
 			{
-				depth_cube_material->update_view(&m_cameraNode, meshNode);
+				depth_cube_material->update_view(&m_camera_node, meshNode);
 				for (GLuint i = 0; i < 6; ++i)
 				{
 					std::string index = std::to_string(i);
@@ -187,22 +187,22 @@ namespace glen
 	std::vector<glm::mat4> ShadowMap::make_poin_shadow_transforms(const glm::vec3& position)
 	{
 		std::vector<glm::mat4> out_transforms;
-		out_transforms.push_back(m_cameraNode.camera()->cam_to_projection() *
+		out_transforms.push_back(m_camera_node.camera()->cam_to_projection() *
 			glm::lookAt(position, position + glm::vec3(+1.0f, +0.0f, +0.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
 
-		out_transforms.push_back(m_cameraNode.camera()->cam_to_projection() *
+		out_transforms.push_back(m_camera_node.camera()->cam_to_projection() *
 			glm::lookAt(position, position + glm::vec3(-1.0f, +0.0f, +0.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
 
-		out_transforms.push_back(m_cameraNode.camera()->cam_to_projection() *
+		out_transforms.push_back(m_camera_node.camera()->cam_to_projection() *
 			glm::lookAt(position, position + glm::vec3(+0.0f, +1.0f, +0.0f), glm::vec3(+0.0f, +0.0f, +1.0f)));
 
-		out_transforms.push_back(m_cameraNode.camera()->cam_to_projection() *
+		out_transforms.push_back(m_camera_node.camera()->cam_to_projection() *
 			glm::lookAt(position, position + glm::vec3(+0.0f, -1.0f, +0.0f), glm::vec3(+0.0f, +0.0f, -1.0f)));
 
-		out_transforms.push_back(m_cameraNode.camera()->cam_to_projection() *
+		out_transforms.push_back(m_camera_node.camera()->cam_to_projection() *
 			glm::lookAt(position, position + glm::vec3(+0.0f, +0.0f, +1.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
 
-		out_transforms.push_back(m_cameraNode.camera()->cam_to_projection() *
+		out_transforms.push_back(m_camera_node.camera()->cam_to_projection() *
 			glm::lookAt(position, position + glm::vec3(+0.0f, +0.0f, -1.0f), glm::vec3(+0.0f, -1.0f, +0.0f)));
 
 		return out_transforms;
@@ -259,10 +259,10 @@ namespace glen
 	// // ----- SETTERS ----- // //
 	void ShadowMap::set_clip_near(GLfloat clip_near)
 	{
-		m_cameraNode.camera()->set_clip_near(clip_near);
+		m_camera_node.camera()->set_clip_near(clip_near);
 	}
 	void ShadowMap::set_clip_far(GLfloat clip_far)
 	{
-		m_cameraNode.camera()->set_clip_far(clip_far);
+		m_camera_node.camera()->set_clip_far(clip_far);
 	}
 }

@@ -74,7 +74,7 @@ namespace glen
 		Framebuffer m_framebuffer;
 		LightNode*	m_lightNode = NULL;
 
-		CameraNode	m_cameraNode;
+		CameraNode	m_camera_node;
 	};
 }
 
