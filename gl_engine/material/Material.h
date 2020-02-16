@@ -111,11 +111,11 @@ namespace glen
 			{
 				thisUniform = &m_uniforms.at(name);
 			}
-			catch (const std::out_of_range& e)
+			catch (std::out_of_range)
 			{
 				if (m_failed_uniforms.find(name_s) == m_failed_uniforms.end())
 				{
-					printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Uniform not found (%s)\n", name_s.c_str(), m_name.c_str(), e.what());
+					printf("WARNING: Setting uniform \"%s\" for shader \"%s\" failed. Uniform not found\n", name_s.c_str(), m_name.c_str());
 					m_failed_uniforms.insert(name_s);
 				}
 				return;
