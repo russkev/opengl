@@ -171,7 +171,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="test_Buffer.cpp" />
-    <ClCompile Include="test_DeferredRender.cpp" />
+    <ClCompile Include="test_Deferred.cpp" />
     <ClCompile Include="test_Framebuffer.cpp" />
     <ClCompile Include="test_Material.cpp" />
     <ClCompile Include="test_Node.cpp" />

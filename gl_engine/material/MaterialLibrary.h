@@ -33,6 +33,29 @@ namespace glen
 		AO_GBufferMaterial(const std::string& name);
 	private:
 		void init();
+	public:
+		void update_view(const CameraNode* camera_node, const Node* model_node) override;
+	};
+
+	struct AO_Material : public Material
+	{
+		const static constexpr GLuint k_num_samples = 64;
+
+		inline static const std::string k_g_position = "g_position";
+		inline static const std::string k_g_normal = "g_normal";
+		inline static const std::string k_noise = "noise";
+		inline static const std::string k_samples = "samples";
+		inline static const std::string k_radius = "radius";
+		inline static const std::string k_bias = "bias";
+		inline static const std::string k_screen_dimensions = "screen_dimensions";
+		inline static const std::string k_noise_tile_dimensions = "noise_tile_dimensions";
+		inline static const std::string k_cam_to_projection = "cam_to_projection";
+	
+		AO_Material();
+		AO_Material(const std::string& name);
+	private:
+		void init();
+	public:
 		void update_view(const CameraNode* camera_node, const Node* model_node) override;
 	};
 

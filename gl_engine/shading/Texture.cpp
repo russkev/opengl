@@ -388,6 +388,44 @@ namespace glen
 		return texture;
 	}
 
+	Texture Texture::create_square_noise_tile_texture(const GLenum target, const glm::uvec2& dimensions, const std::vector<glm::vec3>& data)
+	{
+		Texture texture{ target };
+		texture.set_width((GLsizei)dimensions.x);
+		texture.set_height((GLsizei)dimensions.y);
+		texture.set_internal_format(GL_RGB16F);
+		texture.set_format(GL_RGB);
+		texture.set_data((void*)data.data());
+		texture.set_type(GL_FLOAT);
+		texture.set_min_filter(GL_NEAREST);
+		texture.set_mag_filter(GL_NEAREST);
+		texture.set_mipmap(true);
+		texture.set_st_wrap(GL_REPEAT);
+
+		texture.process();
+
+		return texture;
+	}
+
+	Texture Texture::create_bw_null_texture(const GLenum target, const glm::uvec2& dimensions)
+	{
+		Texture texture{ target };
+		texture.set_width((GLsizei)dimensions.x);
+		texture.set_height((GLsizei)dimensions.y);
+		texture.set_internal_format(GL_RED);
+		texture.set_format(GL_RGB);
+		texture.set_type(GL_FLOAT);
+		texture.set_data(NULL);
+		texture.set_min_filter(GL_NEAREST);
+		texture.set_mag_filter(GL_NEAREST);
+		texture.set_mipmap(true);
+		texture.set_st_wrap(GL_CLAMP_TO_EDGE);
+
+		texture.process();
+
+		return texture;
+	}
+
 
 	// // ----- GETTERS ----- // //
 	const GLuint Texture::id() const

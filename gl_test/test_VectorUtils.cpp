@@ -7,7 +7,8 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../gl_engine/utils/VectorUtils.h"
+#include "utils/VectorUtils.h"
+#include "utils/ScalarUtils.h"
 
 //namespace Helper
 //{
@@ -18,16 +19,26 @@ namespace utf = boost::unit_test;
 namespace tt = boost::test_tools;
 
 void matricesAreSimilar(glm::mat4 result, glm::mat4 expected);
+BOOST_AUTO_TEST_SUITE(Scalar_Utils)
 
-BOOST_AUTO_TEST_CASE(test_minValue)
+BOOST_AUTO_TEST_CASE(Min_Value)
 {
-	BOOST_TEST(glen::VectorUtils::min_value(1, 2) == 1);
-	BOOST_TEST(glen::VectorUtils::min_value(1, 2, 3, 4, 5) == 1);
-	BOOST_TEST(glen::VectorUtils::min_value(0, 0) == 0);
-	BOOST_TEST(glen::VectorUtils::min_value(0, 0, 0, 0) == 0);
+	BOOST_CHECK(glen::ScalarUtils::min_value(1, 2) == 1);
+	BOOST_CHECK(glen::ScalarUtils::min_value(1, 2, 3, 4, 5) == 1);
+	BOOST_CHECK(glen::ScalarUtils::min_value(0, 0) == 0);
+	BOOST_CHECK(glen::ScalarUtils::min_value(0, 0, 0, 0) == 0);
 }
 
-BOOST_AUTO_TEST_CASE(test_trs)
+BOOST_AUTO_TEST_CASE(Lerp)
+{
+	BOOST_CHECK(glen::ScalarUtils::lerp(0.0f, 4.0f, 0.25f) == 1.0f);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(Vector_Utils)
+
+BOOST_AUTO_TEST_CASE(TRS)
 {
 	{ // Test 1
 		glm::vec3 t = { 0.0, 0.0, 0.0 };
@@ -83,15 +94,16 @@ BOOST_AUTO_TEST_CASE(test_trs)
 	}
 }
 
+BOOST_AUTO_TEST_SUITE_END()
 
-void matricesAreSimilar(glm::mat4 result, glm::mat4 expected)
-{
-	for (auto i = 0; i < 4; ++i)
-	{
-		for (auto j = 0; j < 4; ++j)
-		{
-			BOOST_TEST(result[i][j] == expected[i][j], tt::tolerance(0.1f));
-		}
-	}
-
-}
+//void matricesAreSimilar(glm::mat4 result, glm::mat4 expected)
+//{
+//	for (auto i = 0; i < 4; ++i)
+//	{
+//		for (auto j = 0; j < 4; ++j)
+//		{
+//			BOOST_TEST(result[i][j] == expected[i][j], tt::tolerance(0.1f));
+//		}
+//	}
+//
+//}

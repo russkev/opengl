@@ -58,6 +58,7 @@ namespace glen
 		void init_first_frame();
 		void init_post_effects();
 		void init_deferred_renderer();
+		void init_ao();
 
 		// // ----- SETTERS ----- // //
 	public:
@@ -66,6 +67,8 @@ namespace glen
 		void disable_post_effects();
 		void enable_deferred_render();
 		void disable_deferred_render();
+		void enable_ao();
+		void disable_ao();
 
 	private:
 		void add_light_nodes(Node* root_node);
@@ -73,7 +76,7 @@ namespace glen
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		CameraNode* m_cameraNode;
+		CameraNode* m_camera_node;
 		std::vector<LightNode*> m_light_nodes;
 		std::vector<ShadowMap*> m_shadow_maps;
 		std::vector<Material*> m_materials;
@@ -82,6 +85,7 @@ namespace glen
 		bool m_first_frame = true;
 		bool m_post_effects_enabled = true;
 		bool m_deferred_render_enabled = false;
+		bool m_ao_enabled = false;
 
 		// // ----- BACKBUFFER VARIABLES ----- // //
 		Framebuffer m_backbuffer_FBO{ GL_FRAMEBUFFER };
@@ -94,6 +98,14 @@ namespace glen
 		// // ----- DEFERRRED RENDER VARIABLES ----- // //
 		Framebuffer m_g_buffer{ GL_FRAMEBUFFER };
 		BlinnDeferred m_blinn_deferred;
+
+		// // ----- AO VARIABLES ----- // //
+		Framebuffer m_ao_g_buffer_fbo{ GL_FRAMEBUFFER };
+		//Framebuffer m_ao_fbo{ GL_FRAMEBUFFER };
+
+		//AO_GBufferDeferred m_ao_g_buffer_deferred;
+		AO_Deferred m_ao_deferred;
+
 
 	};
 }

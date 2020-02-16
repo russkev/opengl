@@ -173,6 +173,9 @@
     <ClInclude Include="post\Deferred.h">
       <Filter>Post</Filter>
     </ClInclude>
+    <ClInclude Include="utils\ScalarUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="render\Window.cpp">
@@ -347,6 +350,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\data\AO_GBuffer.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\data\AO.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\data\Passthrough.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

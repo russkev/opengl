@@ -13,7 +13,7 @@ namespace glen
 {
 	/*
 
-		Various helpot methods
+		Various helper methods
 
 	*/
 	namespace VectorUtils
@@ -42,28 +42,6 @@ namespace glen
 			outDistances.insert(outDistances.end(), s_second.begin(), s_second.end());
 
 			return outDistances;
-		}
-
-		// // ----- MIN/MAX VALUES ----- // //
-		template <typename T1, typename T2>
-		T1 min_value(T1 first, T2 second)
-		{
-			return (first < second) ? first : second;
-		}
-		template <typename T1, typename T2, typename ...Args>
-		T1 min_value(T1 first, T2 second, Args ...args)
-		{
-			return (first < second) ? min_value(first, args...) : min_value(second, args...);
-		}
-		template<typename T1, typename T2>
-		T1 max_value(T1 first, T2 second)
-		{
-			return (first > second) ? first : second;
-		}
-		template<typename T1, typename T2, typename ...Args>
-		T1 max_value(T1 first, T2 second, Args... args)
-		{
-			return (first > second) ? max_value(first, args...) : max_value(second, args...);
 		}
 
 		// // ----- AVERAGE VECTOR ----- // //
@@ -211,24 +189,6 @@ namespace glen
 					),
 					*scale_vec
 				);
-		}
-
-		// // ----- MIN MAX LOOP ----- // //
-		template<typename T>
-		T min_max_loop(T num, T min = 0, T max = 1)
-		{
-			T p_max = max - min;
-			T p_num = num - min;
-			T out;
-			if (!fmod(p_num, p_max))
-			{
-				out = abs(fmod(p_num, p_max * 2));
-			}
-			else
-			{
-				out = p_num < 0 ? p_max + fmod(p_num, p_max) : fmod(p_num, p_max);
-			}
-			return out;
 		}
 	};
 }
