@@ -27,6 +27,7 @@ namespace glen
 		inline static const std::string k_transform_model_to_world		= "transform.model_to_world";
 		inline static const std::string k_transform_world_to_cam		= "transform.world_to_cam";
 		inline static const std::string k_transform_model_to_projection	= "transform.model_to_projection";
+		inline static const std::string k_transform_cam_to_projection	= "transform.cam_to_projection";
 		
 		AO_GBufferMaterial();
 		AO_GBufferMaterial(const std::string& name);
