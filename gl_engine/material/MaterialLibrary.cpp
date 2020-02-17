@@ -67,8 +67,8 @@ namespace glen
 		set_uniform(k_radius, 1.0f);
 		set_uniform(k_bias, 0.05f);
 
-		set_uniform(k_screen_dimensions, glm::uvec2{ 100u });
-		set_uniform(k_noise_tile_dimensions, glm::uvec2{ 4u });
+		//set_uniform(k_screen_dimensions, glm::uvec2{ 100u });
+		//set_uniform(k_noise_tile_dimensions, glm::uvec2{ 4u });
 
 		set_uniform(k_cam_to_projection, glm::mat4{ 1.0f });
 	}
