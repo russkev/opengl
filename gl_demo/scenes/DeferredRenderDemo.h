@@ -58,6 +58,7 @@ namespace gl_demo
 		glen::Renderer render{ &targetCam_node, glm::uvec2(window.width(), window.height()) };
 		render.disable_post_effects();
 		render.enable_deferred_render();
+		render.disable_ao();
 		//render.enable_ao();
 
 		render.add_node(&g_buffer_node);

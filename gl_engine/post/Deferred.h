@@ -82,31 +82,31 @@ namespace glen
 		BlinnDeferredMaterial m_material;
 	};
 
-	struct AO_GBufferDeferred : public Deferred
-	{
-		AO_GBufferDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
+	//struct AO_GBufferDeferred : public Deferred
+	//{
+	//	AO_GBufferDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
 
-		//void init_kernal();
-		//float increase_nearby_samples(const unsigned int i, const unsigned int num_samples);
-		//void init_noise();
+	//	//void init_kernal();
+	//	//float increase_nearby_samples(const unsigned int i, const unsigned int num_samples);
+	//	//void init_noise();
 
-		//std::uniform_real_distribution<GLfloat> m_random_floats{ 0.0f, 1.0f };
-		//std::default_random_engine m_generator;
+	//	//std::uniform_real_distribution<GLfloat> m_random_floats{ 0.0f, 1.0f };
+	//	//std::default_random_engine m_generator;
 
-		AO_GBufferMaterial m_material;
-		//glm::uvec2 m_noise_tile_dimensions{ 4, 4 };
-		//std::vector<glm::vec3> m_kernal, m_noise_tile;
-		//Texture m_noise_tile_texture;
-		//Texture m_ao_texture{ Texture::create_bw_null_texture(GL_TEXTURE_2D, m_dimensions) };
-	};
+	//	AO_GBufferMaterial m_material;
+	//	//glm::uvec2 m_noise_tile_dimensions{ 4, 4 };
+	//	//std::vector<glm::vec3> m_kernal, m_noise_tile;
+	//	//Texture m_noise_tile_texture;
+	//	//Texture m_ao_texture{ Texture::create_bw_null_texture(GL_TEXTURE_2D, m_dimensions) };
+	//};
 
-	struct AO_Deferred : public Deferred
-	{
-		AO_Deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
+	//struct AO_Deferred : public Deferred
+	//{
+	//	AO_Deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
 
-		//AO_Material m_material;
-		AO_GBufferMaterial m_material;
+	//	//AO_Material m_material;
+	//	AO_GBufferMaterial m_material;
 
-	};
+	//};
 }
 #endif

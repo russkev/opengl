@@ -169,16 +169,16 @@ namespace glen
 		send_color_textures_to_framebuffer();
 	}
 
-	AO_GBufferDeferred::AO_GBufferDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions) :
-		Deferred{ target, g_buffer, &m_material, dimensions }
-	{
-		set_color_texture(AO_GBufferMaterial::k_g_position, Texture::create_16bit_rgb_null_texture(target, dimensions));
-		set_color_texture(AO_GBufferMaterial::k_g_normal, Texture::create_16bit_rgb_null_texture(target, dimensions));
-		set_color_texture(AO_GBufferMaterial::k_g_diffuse, Texture::create_8bit_rgb_null_texture(target, dimensions));
-		set_depth_texture(Texture::create_depth_null_texture(target, dimensions));
+	//AO_GBufferDeferred::AO_GBufferDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions) :
+	//	Deferred{ target, g_buffer, &m_material, dimensions }
+	//{
+	//	set_color_texture(AO_GBufferMaterial::k_g_position, Texture::create_16bit_rgb_null_texture(target, dimensions));
+	//	set_color_texture(AO_GBufferMaterial::k_g_normal, Texture::create_16bit_rgb_null_texture(target, dimensions));
+	//	set_color_texture(AO_GBufferMaterial::k_g_diffuse, Texture::create_8bit_rgb_null_texture(target, dimensions));
+	//	set_depth_texture(Texture::create_depth_null_texture(target, dimensions));
 
-		send_color_textures_to_framebuffer();
-	}
+	//	send_color_textures_to_framebuffer();
+	//}
 
 	//void AO_GBufferDeferred::init_kernal()
 	//{
@@ -221,7 +221,7 @@ namespace glen
 	//	m_noise_tile_texture = Texture::create_square_noise_tile_texture(GL_TEXTURE_2D, m_noise_tile_dimensions, m_noise_tile);
 	//}
 
-	AO_Deferred::AO_Deferred(const GLenum target, Framebuffer* ao_buffer, const glm::uvec2& dimensions) :
-		Deferred{ target, ao_buffer, &m_material, dimensions }
-	{}
+	//AO_Deferred::AO_Deferred(const GLenum target, Framebuffer* ao_buffer, const glm::uvec2& dimensions) :
+	//	Deferred{ target, ao_buffer, &m_material, dimensions }
+	//{}
 }

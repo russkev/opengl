@@ -149,13 +149,14 @@ namespace glen
 		void upload_uniform(const Uniform* uniform, const glm::dvec3& data) { glUniform3dv(uniform->location, 1, &data[0]); };
 		void upload_uniform(const Uniform* uniform, const glm::dvec4& data) { glUniform4dv(uniform->location, 1, &data[0]); };
 		void upload_uniform(const Uniform* uniform, const GLint& data) { glUniform1i(uniform->location, data); };
-		void upload_uniform(const Uniform* uniform, const GLuint& data) { glUniform1ui(uniform->location, data); };
+		void upload_uniform(const Uniform* uniform, const GLuint& data) { glUniform1i(uniform->location, data); };
+		//void upload_uniform(const Uniform* uniform, const GLuint& data) { glUniform1ui(uniform->location, data); };
 		void upload_uniform(const Uniform* uniform, const glm::ivec2& data) { glUniform2iv(uniform->location, 1, &data[0]); };
 		void upload_uniform(const Uniform* uniform, const glm::ivec3& data) { glUniform3iv(uniform->location, 1, &data[0]); };
 		void upload_uniform(const Uniform* uniform, const glm::ivec4& data) { glUniform4iv(uniform->location, 1, &data[0]); };
-		void upload_uniform(const Uniform* uniform, const glm::uvec2& data) { glUniform2uiv(uniform->location, 1, &data[0]); };
-		void upload_uniform(const Uniform* uniform, const glm::uvec3& data) { glUniform3uiv(uniform->location, 1, &data[0]); };
-		void upload_uniform(const Uniform* uniform, const glm::uvec4& data) { glUniform4uiv(uniform->location, 1, &data[0]); };
+		//void upload_uniform(const Uniform* uniform, const glm::uvec2& data) { glUniform2uiv(uniform->location, 1, &data[0]); };
+		//void upload_uniform(const Uniform* uniform, const glm::uvec3& data) { glUniform3uiv(uniform->location, 1, &data[0]); };
+		//void upload_uniform(const Uniform* uniform, const glm::uvec4& data) { glUniform4uiv(uniform->location, 1, &data[0]); };
 		void upload_uniform(const Uniform* uniform, const glm::mat2& data) { glUniformMatrix2fv(uniform->location, 1, false, &data[0][0]); };
 		void upload_uniform(const Uniform* uniform, const glm::mat3& data) { glUniformMatrix3fv(uniform->location, 1, false, &data[0][0]); };
 		void upload_uniform(const Uniform* uniform, const glm::mat4& data) { glUniformMatrix4fv(uniform->location, 1, false, &data[0][0]); };
