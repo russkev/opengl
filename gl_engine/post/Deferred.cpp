@@ -180,46 +180,46 @@ namespace glen
 		send_color_textures_to_framebuffer();
 	}
 
-	void AO_GBufferDeferred::init_kernal()
-	{
-		GLuint num_samples = 64;
+	//void AO_GBufferDeferred::init_kernal()
+	//{
+	//	GLuint num_samples = 64;
 
-		for (GLuint i = 0; i < num_samples; ++i)
-		{
-			glm::vec3 sample{
-				m_random_floats(m_generator) * 2.0f - 1.0f,
-				m_random_floats(m_generator) * 2.0f - 1.0f,
-				m_random_floats(m_generator)
-			};
+	//	for (GLuint i = 0; i < num_samples; ++i)
+	//	{
+	//		glm::vec3 sample{
+	//			m_random_floats(m_generator) * 2.0f - 1.0f,
+	//			m_random_floats(m_generator) * 2.0f - 1.0f,
+	//			m_random_floats(m_generator)
+	//		};
 
-			sample = glm::normalize(sample);
-			sample *= m_random_floats(m_generator);
-			sample *= increase_nearby_samples(i, num_samples);
+	//		sample = glm::normalize(sample);
+	//		sample *= m_random_floats(m_generator);
+	//		sample *= increase_nearby_samples(i, num_samples);
 
-			m_kernal.push_back(sample);
-		}
-	}
+	//		m_kernal.push_back(sample);
+	//	}
+	//}
 
-	float AO_GBufferDeferred::increase_nearby_samples(const GLuint i, const GLuint num_samples)
-	{
-		GLfloat scale = (GLfloat)i / (GLfloat)num_samples;
-		scale = ScalarUtils::lerp(0.1f, 1.0f, scale * scale);
-		return scale;
-	}
+	//float AO_GBufferDeferred::increase_nearby_samples(const GLuint i, const GLuint num_samples)
+	//{
+	//	GLfloat scale = (GLfloat)i / (GLfloat)num_samples;
+	//	scale = ScalarUtils::lerp(0.1f, 1.0f, scale * scale);
+	//	return scale;
+	//}
 
-	void AO_GBufferDeferred::init_noise()
-	{
-		GLuint num_fragments = m_noise_tile_dimensions.x * m_noise_tile_dimensions.y;
-		for (unsigned int i = 0; i < num_fragments; ++i)
-		{
-			glm::vec3 noise_fragment(
-				m_random_floats(m_generator) * 2.0f - 1.0f,
-				m_random_floats(m_generator) * 2.0f - 1.0f,
-				0.0f);
-			m_noise_tile.push_back(noise_fragment);
-		}
-		m_noise_tile_texture = Texture::create_square_noise_tile_texture(GL_TEXTURE_2D, m_noise_tile_dimensions, m_noise_tile);
-	}
+	//void AO_GBufferDeferred::init_noise()
+	//{
+	//	GLuint num_fragments = m_noise_tile_dimensions.x * m_noise_tile_dimensions.y;
+	//	for (unsigned int i = 0; i < num_fragments; ++i)
+	//	{
+	//		glm::vec3 noise_fragment(
+	//			m_random_floats(m_generator) * 2.0f - 1.0f,
+	//			m_random_floats(m_generator) * 2.0f - 1.0f,
+	//			0.0f);
+	//		m_noise_tile.push_back(noise_fragment);
+	//	}
+	//	m_noise_tile_texture = Texture::create_square_noise_tile_texture(GL_TEXTURE_2D, m_noise_tile_dimensions, m_noise_tile);
+	//}
 
 	AO_Deferred::AO_Deferred(const GLenum target, Framebuffer* ao_buffer, const glm::uvec2& dimensions) :
 		Deferred{ target, ao_buffer, &m_material, dimensions }
