@@ -93,8 +93,8 @@ namespace glen
 		//std::uniform_real_distribution<GLfloat> m_random_floats{ 0.0f, 1.0f };
 		//std::default_random_engine m_generator;
 
-		//AO_GBufferMaterial m_material;
-		BlinnDeferredMaterial m_material;
+		AO_GBufferMaterial m_material;
+		//BlinnDeferredMaterial m_material;
 
 
 		//glm::uvec2 m_noise_tile_dimensions{ 4, 4 };
