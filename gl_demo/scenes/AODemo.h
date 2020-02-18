@@ -7,7 +7,7 @@ namespace gl_demo
 {
 	static void ao_demo()
 	{
-		GLuint width = 800u;
+		GLuint width  = 800u;
 		GLuint height = 600u;
 
 		glen::Window window{ "GL_Engine", width, height };

@@ -22,13 +22,14 @@ namespace glen
 	Renderer::Renderer(CameraNode* camera, const glm::uvec2& dimensions) :
 		m_camera_node{ camera }, 
 		m_dimensions{ dimensions },
-		m_blinn_deferred{ GL_TEXTURE_2D, &m_g_buffer, dimensions }
-		//m_ao_deferred{ GL_TEXTURE_2D, &m_ao_g_buffer_fbo, dimensions }
+		m_blinn_deferred{ GL_TEXTURE_2D, &m_g_buffer, dimensions },
+		m_ao_g_buffer_deferred{ GL_TEXTURE_2D, &m_ao_g_buffer_fbo, dimensions }
 	{
 		m_camera_node->camera()->set_dimensions(dimensions);
 		init_settings();
 		init_post_effects();
 		init_deferred_renderer();
+		init_ao();
 	}
 
 	// // ----- INIT ----- // //
@@ -98,7 +99,7 @@ namespace glen
 
 	void Renderer::init_ao()
 	{
-		//add_material(m_ao_deferred.material());
+		add_material(m_ao_g_buffer_deferred.material());
 	}
 
 	// // ----- RENDER ----- // //
@@ -164,11 +165,31 @@ namespace glen
 			//glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 			//clear_screen();
 
-			//m_ao_deferred.update_view(m_camera_node);
+			//m_ao_g_buffer_deferred.update_view(m_camera_node);
 
-			//m_ao_deferred.draw();
+			//m_ao_g_buffer_deferred.draw();
 
 			//m_ao_g_buffer_fbo.blit_depth_to_default(m_dimensions);
+
+			//render_lights();
+
+			m_ao_g_buffer_fbo.bind();
+
+			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+			render_geometry();
+
+			m_ao_g_buffer_fbo.unbind();
+
+			glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+			clear_screen();
+
+			m_ao_g_buffer_deferred.update_view(m_camera_node);
+
+			m_ao_g_buffer_deferred.draw();
+
+
+			m_ao_g_buffer_fbo.blit_depth_to_default(m_dimensions);
 
 			render_lights();
 		}
