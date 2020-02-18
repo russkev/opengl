@@ -5,8 +5,8 @@
 in vec2 uv;
 
 // // ----- UNIFORMS ----- // //
-uniform sampler2D g_position;
-uniform sampler2D g_normal;
+uniform sampler2D g_cam_space_position;
+uniform sampler2D g_cam_space_normal;
 uniform sampler2D noise;
 
 uniform vec3 samples[NUM_SAMPLES];
@@ -30,6 +30,6 @@ const vec2 noise_scale = vec2(
 // // ----- MAIN ----- // //
 void main()
 {
-	frag_color = vec4(texture(g_normal, uv).xyz, 1.0);
+	frag_color = vec4(texture(g_cam_space_position, uv).xyz, 1.0);
 }
 

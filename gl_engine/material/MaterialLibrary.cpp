@@ -48,7 +48,7 @@ namespace glen
 	{}
 
 	AO_Material::AO_Material(const std::string& name) :
-		Material{ name, "Passthrough.vert", "AO.frag" }
+		Material{ name, "ScreenPassthrough.vert", "AO.frag" }
 	{
 		init();
 	}
@@ -75,7 +75,7 @@ namespace glen
 
 	void AO_Material::update_view(const CameraNode* camera_node, const Node* model_node)
 	{
-		set_uniform(k_cam_to_projection, camera_node->camera()->cam_to_projection());
+		//set_uniform(k_cam_to_projection, camera_node->camera()->cam_to_projection());
 	}
 
 	// BLINN
