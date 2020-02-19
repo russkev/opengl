@@ -55,8 +55,8 @@ namespace glen
 
 	void AO_Material::init()
 	{
-		set_sampler_value(k_g_position, 0.0f );
-		set_sampler_color(k_g_normal, glm::vec3(0.5f, 0.5f, 1.0f));
+		set_sampler_value(k_g_cam_space_position, 0.0f );
+		set_sampler_color(k_g_cam_space_normal, glm::vec3(0.5f, 0.5f, 1.0f));
 		set_sampler_value(k_noise, 0.0f);
 
 		for (GLuint i = 0; i < k_num_samples; ++i)
@@ -75,6 +75,7 @@ namespace glen
 
 	void AO_Material::update_view(const CameraNode* camera_node, const Node* model_node)
 	{
+		//set_uniform(k_camera_position, camera_node->world_position());
 		//set_uniform(k_cam_to_projection, camera_node->camera()->cam_to_projection());
 	}
 

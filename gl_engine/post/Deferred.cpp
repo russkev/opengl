@@ -172,9 +172,9 @@ namespace glen
 	AO_GBufferDeferred::AO_GBufferDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions) :
 		Deferred{ target, g_buffer, &m_material, dimensions }
 	{
-		set_color_texture(BlinnDeferredMaterial::k_g_position, Texture::create_16bit_rgb_null_texture(target, dimensions));
-		set_color_texture(BlinnDeferredMaterial::k_g_normal, Texture::create_16bit_rgb_null_texture(target, dimensions));
-		set_color_texture(BlinnDeferredMaterial::k_g_diffuse_spec, Texture::create_8bit_rgba_null_texture(target, dimensions));
+		set_color_texture(AO_Material::k_g_cam_space_position, Texture::create_16bit_rgb_null_texture(target, dimensions));
+		set_color_texture(AO_Material::k_g_cam_space_normal, Texture::create_16bit_rgb_null_texture(target, dimensions));
+		//set_color_texture(AO_Material::k_, Texture::create_8bit_rgba_null_texture(target, dimensions));
 		set_depth_texture(Texture::create_depth_null_texture(target, dimensions));
 
 		send_color_textures_to_framebuffer();
