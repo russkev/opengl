@@ -1,11 +1,11 @@
 {
     "rdocCaptureSettings": 1,
     "settings": {
-        "autoStart": false,
+        "autoStart": true,
         "commandLine": "",
         "environment": [
         ],
-        "executable": "C:\\Users\\kev_k\\Documents\\_DOCS\\PROGRAMMING\\OpenGL\\repo\\opengl\\x64\\Debug\\gl_demo.exe",
+        "executable": "E:\\DOCS\\PROGRAMMING\\CPP\\OpenGL\\repos\\opengl\\x64\\Debug\\gl_demo.exe",
         "inject": false,
         "numQueuedFrames": 1,
         "options": {
@@ -21,7 +21,7 @@
             "refAllResources": false,
             "verifyBufferAccess": false
         },
-        "queuedFrameCap": 1,
-        "workingDir": "C:/Users/kev_k/Documents/_DOCS/PROGRAMMING/OpenGL/repo/opengl/data"
+        "queuedFrameCap": 0,
+        "workingDir": "E:/DOCS/PROGRAMMING/CPP/OpenGL/repos/opengl/data"
     }
 }

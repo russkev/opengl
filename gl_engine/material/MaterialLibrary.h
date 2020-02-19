@@ -41,8 +41,8 @@ namespace glen
 	{
 		const static constexpr GLuint k_num_samples = 64;
 
-		inline static const std::string k_g_position = "g_position";
-		inline static const std::string k_g_normal = "g_normal";
+		inline static const std::string k_g_cam_space_position = "g_cam_space_position";
+		inline static const std::string k_g_cam_space_normal = "g_cam_space_normal";
 		inline static const std::string k_noise = "noise";
 		inline static const std::string k_samples = "samples";
 		inline static const std::string k_radius = "radius";
