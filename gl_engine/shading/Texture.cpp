@@ -16,9 +16,10 @@ namespace glen
 
 	*/
 	Texture::Texture(const char* filepath) :
-		m_surface(IMG_Load(filepath)),
-		m_width(m_surface->w),
-		m_height(m_surface->h)
+		m_name{ filepath },
+		m_surface{ IMG_Load(filepath) },
+		m_width{ m_surface->w },
+		m_height{ m_surface->h }
 
 	{
 		if (has_alpha())
@@ -45,12 +46,14 @@ namespace glen
 	}
 
 	Texture::Texture(const GLenum target) :
-		m_target(target)
+		m_name{ "Texture" },
+		m_target{ target }
 	{
 		glGenTextures(1, &m_id);
 	}
 
 	Texture::Texture(const glm::vec3& color) :
+		m_name{ "Constant Color Texture" },
 		m_color{ (GLubyte)(color.r * 255), (GLubyte)(color.g * 255), (GLubyte)(color.b * 255), 255 },
 		m_internal_format{ GL_RGB },
 		m_format{ GL_RGB },
@@ -64,6 +67,7 @@ namespace glen
 	}
 
 	Texture::Texture(const glm::vec4& color) :
+		m_name{ "Constant Color Texture With Alpha" },
 		m_color{ (GLubyte)(color.r * 255), (GLubyte)(color.g * 255), (GLubyte)(color.b * 255), (GLubyte)(color.a * 255) },
 		m_internal_format{ GL_RGBA },
 		m_format{ GL_RGBA },
@@ -77,6 +81,7 @@ namespace glen
 	}
 
 	Texture::Texture(Texture&& other) :
+		m_name{ std::exchange(other.m_name, "") },
 		m_surface{ other.m_surface },
 		m_color{ other.m_color },
 		m_id{ std::exchange(other.m_id, 0) },
@@ -259,6 +264,7 @@ namespace glen
 	Texture Texture::create_16bit_rgba_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
+		texture.set_name("16 Bit RGBA Null Texture");
 		texture.set_width(dimensions.x);
 		texture.set_height(dimensions.y);
 		texture.set_internal_format(GL_RGBA16F);
@@ -278,6 +284,7 @@ namespace glen
 	Texture Texture::create_16bit_rgb_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
+		texture.set_name("16 Bit RGB Null Texture");
 		texture.set_width(dimensions.x);
 		texture.set_height(dimensions.y);
 		texture.set_internal_format(GL_RGB16F);
@@ -297,6 +304,7 @@ namespace glen
 	Texture Texture::create_8bit_rgba_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
+		texture.set_name("8 Bit RGBA Null Texture");
 		texture.set_width(dimensions.x);
 		texture.set_height(dimensions.y);
 		texture.set_internal_format(GL_RGBA);
@@ -316,6 +324,7 @@ namespace glen
 	Texture Texture::create_8bit_rgb_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
+		texture.set_name("8 Bit RGB Null Texture");
 		texture.set_width(dimensions.x);
 		texture.set_height(dimensions.y);
 		texture.set_internal_format(GL_RGB);
@@ -335,6 +344,7 @@ namespace glen
 	Texture Texture::create_depth_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
+		texture.set_name("Depth Null Texture");
 		texture.set_internal_format(GL_DEPTH_COMPONENT);
 		texture.set_width(dimensions.x);
 		texture.set_height(dimensions.y);
@@ -354,6 +364,7 @@ namespace glen
 	Texture Texture::create_stencil_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
+		texture.set_name("Stencil Texture");
 		texture.set_internal_format(GL_STENCIL_INDEX8);
 		texture.set_width(dimensions.x);
 		texture.set_height(dimensions.y);
@@ -373,6 +384,7 @@ namespace glen
 	Texture Texture::create_depth_null_texture_for_shadow(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
+		texture.set_name("Depth Null Texture For Shadows");
 		texture.set_width((GLsizei)dimensions.x);
 		texture.set_height((GLsizei)dimensions.y);
 		texture.set_internal_format(GL_DEPTH_COMPONENT);
@@ -391,6 +403,7 @@ namespace glen
 	Texture Texture::create_square_noise_tile_texture(const GLenum target, const glm::uvec2& dimensions, const std::vector<glm::vec3>& data)
 	{
 		Texture texture{ target };
+		texture.set_name("Square Noise Tile Texture");
 		texture.set_width((GLsizei)dimensions.x);
 		texture.set_height((GLsizei)dimensions.y);
 		texture.set_internal_format(GL_RGB16F);
@@ -410,6 +423,7 @@ namespace glen
 	Texture Texture::create_bw_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
 		Texture texture{ target };
+		texture.set_name("Monochrome Null Texture");
 		texture.set_width((GLsizei)dimensions.x);
 		texture.set_height((GLsizei)dimensions.y);
 		texture.set_internal_format(GL_RED);
@@ -428,6 +442,12 @@ namespace glen
 
 
 	// // ----- GETTERS ----- // //
+	const std::string Texture::name() const
+	{
+		return m_name;
+	}
+
+
 	const GLuint Texture::id() const
 	{
 		return m_id;
@@ -527,6 +547,11 @@ namespace glen
 	}
 
 	// // ----- SETTERS ----- // //
+	void Texture::set_name(const std::string& name)
+	{
+		m_name = name;
+	}
+
 	void Texture::set_new_id(GLuint id)
 	{
 		m_id = id;
