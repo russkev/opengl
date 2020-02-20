@@ -2,7 +2,7 @@
 #define GL_ENGINE_RENDER_DEFERRED_RENDER_H
 
 #include <unordered_set>
-#include <unordered_map>
+#include <map>
 #include <random>
 
 #include <glm/glm.hpp>
@@ -28,6 +28,10 @@ namespace glen
 	*/
 	struct Deferred : public PostEffect
 	{
+		// // ----- TYPEDEEFS ----- // //
+		typedef std::vector <Texture*>		texture_references_t;
+		typedef std::map < GLuint, Texture> textures_t;
+
 		// // ----- CONSTRUCTOR ----- // //
 		Deferred() {};
 		Deferred(const GLenum target, Framebuffer* g_buffer, Material* material, const glm::uvec2& dimensions);
@@ -58,19 +62,24 @@ namespace glen
 		// // ----- SETTERS ----- // //
 		void set_target(const GLenum target);
 		void set_dimensions(const glm::uvec2& dimensions);
-		void set_color_texture(const std::string& name, Texture* texture);
+		void set_color_texture(const GLuint g_buffer_location, Texture* texture);
+		void set_color_texture(const GLuint g_buffer_location, Texture texture);
 		void set_depth_texture(Texture* texture);
-		void send_color_textures_to_framebuffer();
-		void set_color_texture(const std::string& name, Texture texture);
 		void set_depth_texture(Texture texture);
+		void send_color_textures_to_framebuffer();
+
 
 		// // ----- MEMBER VARIABLES ----- // //
 		GLenum m_target;
 		glm::uvec2 m_dimensions;
 		Framebuffer* m_g_buffer_FBO = NULL;
 		Texture m_g_depth;
-		std::unordered_map<std::string, Texture> m_internal_textures;
-		std::unordered_map<std::string, Texture*> m_external_textures;
+		Texture m_null_texture{ Texture::create_bw_null_texture(GL_TEXTURE_2D, {1u, 1u}) };
+		//std::unordered_map<std::string, Texture> m_internal_textures;
+		//std::unordered_map<std::string, Texture*> m_external_textures;
+		std::map <GLuint, Texture*> m_all_textures;
+		std::map < GLuint, Texture> m_internal_textures;
+
 		Material* m_material;
 		MeshNode m_mesh_node;
 	};

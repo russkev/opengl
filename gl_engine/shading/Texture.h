@@ -63,6 +63,7 @@ namespace glen
 
 		// // ----- GETTERS ----- // //
 	public:
+		const std::string name() const;
 		const GLuint id() const;
 		const GLsizei width() const;
 		const GLsizei height() const;
@@ -87,6 +88,7 @@ namespace glen
 		void* data();
 
 		// // ----- SETTERS ----- // //
+		void set_name(const std::string& name);
 		void set_new_id(const GLuint id);
 		void set_target(const GLenum target);
 		void set_width(const GLsizei width);
@@ -104,6 +106,7 @@ namespace glen
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
+		std::string			m_name;
 		SDL_Surface*		m_surface = NULL;
 		glm::tvec4<GLubyte>	m_color;
 

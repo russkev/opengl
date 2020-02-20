@@ -17,7 +17,7 @@ namespace glen
 	Deferred::Deferred(Deferred&& other) :
 		m_target{ other.m_target },
 		m_dimensions{ std::exchange(other.m_dimensions, glm::uvec2{ 0u }) },
-		m_external_textures{ std::move(other.m_external_textures) },
+		m_all_textures{ std::move(other.m_all_textures) },
 		m_material{ std::move(other.m_material) },
 		m_mesh_node{ other.m_mesh_node.name(), PostEffect::mesh(), m_material }
 	{
@@ -39,9 +39,9 @@ namespace glen
 	{
 		for (const Texture* framebuffer_texture : framebuffer_textures)
 		{
-			for (const auto & texture_pair : m_internal_textures)
+			for (const auto & texture_pair : m_all_textures)
 			{
-				if (&texture_pair.second == framebuffer_texture)
+				if (&texture_pair.second.second == framebuffer_texture)
 				{
 					framebuffer_texture = &m_internal_textures[texture_pair.first];
 				}
@@ -121,16 +121,40 @@ namespace glen
 		m_dimensions = dimensions;
 	}
 
-	void Deferred::set_color_texture(const std::string& name, Texture texture)
+	void Deferred::set_color_texture(const GLuint g_buffer_location, Texture texture)
 	{
-		m_internal_textures[name] = std::move(texture);
-		m_material->set_texture(name, &m_internal_textures[name]);
+		m_internal_textures[g_buffer_location] = std::move(texture);
+
+		set_color_texture(g_buffer_location, &m_internal_textures[g_buffer_location]);
+
+		//if (g_buffer_location >= m_all_textures.size())
+		//{
+		//	for (GLuint i = m_all_textures.size() - 1; i < g_buffer_location; ++i)
+		//	{
+		//		m_all_textures.push_back(&m_null_texture);
+		//	}
+
+		//}
+
+
+
 	}
 
-	void Deferred::set_color_texture(const std::string& name, Texture* texture)
+	void Deferred::set_color_texture(const GLuint g_buffer_location, Texture* texture)
 	{
-		m_external_textures[name] = texture;
-		m_material->set_texture(name, texture);
+		//m_external_textures[name] = texture;
+		//m_material->set_texture(name, texture);
+
+		for (GLuint i = 0; i < g_buffer_location; ++i)
+		{
+			if (m_all_textures[i] != &m_null_texture)
+			{
+				m_all_textures[i] = &m_null_texture;
+			}
+			m_all_textures[g_buffer_location] = texture;
+		}
+
+		m_material->set_texture(m_all_textures[g_buffer_location]->name(), m_all_textures[g_buffer_location]);
 	}
 
 	void Deferred::set_depth_texture(Texture texture)

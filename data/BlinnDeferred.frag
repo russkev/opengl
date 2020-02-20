@@ -82,5 +82,5 @@ void main()
 //	{
 //		frag_color = vec4(0.0);
 //	}
-	frag_color = vec4(texture(g_position, uv).rgb, 1.0);
+	frag_color = vec4(texture(g_diffuse_spec, uv).rgb, 1.0);
 }

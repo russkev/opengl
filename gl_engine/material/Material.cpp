@@ -180,12 +180,14 @@ namespace glen
 	void Material::set_sampler_color(const std::string& uniform_name, const glm::vec3& color)
 	{
 		m_colors.emplace_back(Texture{ color });
+		m_colors.back().set_name(uniform_name);
 		set_texture(uniform_name, &m_colors.back());
 	}
 
 	void Material::set_sampler_value(const std::string& uniform_name, const GLfloat value)
 	{
 		glm::vec3 color_value{ value };
+		m_colors.back().set_name(uniform_name);
 		set_sampler_color(uniform_name, color_value);
 	}
 
