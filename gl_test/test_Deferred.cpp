@@ -58,8 +58,8 @@ BOOST_AUTO_TEST_CASE(Move_Constructor)
 	glen::Deferred old_deferred_render(target, &framebuffer, &material, dimensions);
 
 	old_deferred_render.set_depth_texture(glen::Texture::create_depth_null_texture(target, dimensions));
-	old_deferred_render.set_color_texture(
-		glen::BlinnDeferredMaterial::k_g_position, glen::Texture::create_16bit_rgb_null_texture(target, dimensions) );
+	old_deferred_render.set_color_texture(0, 
+		glen::Texture::create_16bit_rgb_null_texture(glen::BlinnDeferredMaterial::k_g_position, target, dimensions) );
 	old_deferred_render.send_color_textures_to_framebuffer();
 
 	GLuint old_FBO_id = old_deferred_render.framebuffer()->id();
@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_CASE(Move_Constructor)
 	BOOST_CHECK(new_deferred_render.mesh_node()->mesh() == new_deferred_render.mesh());
 	BOOST_CHECK(new_deferred_render.framebuffer()->depth_texture() == new_deferred_render.depth_texture());
 	BOOST_CHECK(new_deferred_render.framebuffer()->color_texture_at(0) == 
-		new_deferred_render.texture(glen::BlinnDeferredMaterial::k_g_position));
+		new_deferred_render.texture(0u));
 }
 
 BOOST_AUTO_TEST_CASE(Move_Assign_Internal_Textures)
@@ -84,8 +84,8 @@ BOOST_AUTO_TEST_CASE(Move_Assign_Internal_Textures)
 	glen::Deferred old_deferred_render(target, &framebuffer, &material, dimensions);
 
 	old_deferred_render.set_depth_texture(glen::Texture::create_depth_null_texture(target, dimensions));
-	old_deferred_render.set_color_texture(
-		glen::BlinnDeferredMaterial::k_g_position, glen::Texture::create_16bit_rgb_null_texture(target, dimensions));
+	old_deferred_render.set_color_texture(0,
+		glen::Texture::create_16bit_rgb_null_texture(glen::BlinnDeferredMaterial::k_g_position, target, dimensions));
 	old_deferred_render.send_color_textures_to_framebuffer();
 
 	GLuint old_FBO_id = old_deferred_render.framebuffer()->id();
@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_CASE(Move_Assign_Internal_Textures)
 	BOOST_CHECK(new_deferred_render.mesh_node()->mesh() == new_deferred_render.mesh());
 	BOOST_CHECK(new_deferred_render.framebuffer()->depth_texture() == new_deferred_render.depth_texture());
 	BOOST_CHECK(new_deferred_render.framebuffer()->color_texture_at(0) ==
-		new_deferred_render.texture(glen::BlinnDeferredMaterial::k_g_position));
+		new_deferred_render.texture(0u));
 }
 
 BOOST_AUTO_TEST_CASE(Move_Assign_External_Textures)
@@ -110,13 +110,13 @@ BOOST_AUTO_TEST_CASE(Move_Assign_External_Textures)
 
 	glen::Deferred old_deferred_render(target, &framebuffer, &material, dimensions);
 
-	glen::Texture g_position{ glen::Texture::create_16bit_rgb_null_texture(target, dimensions) };
+	glen::Texture g_position{ glen::Texture::create_16bit_rgb_null_texture(glen::BlinnDeferredMaterial::k_g_position, target, dimensions) };
 	glen::Texture g_depth{ glen::Texture::create_depth_null_texture(target, dimensions) };
 
 
 
 	old_deferred_render.set_depth_texture(&g_depth);
-	old_deferred_render.set_color_texture(glen::BlinnDeferredMaterial::k_g_position, &g_position);
+	old_deferred_render.set_color_texture(0u, &g_position);
 	old_deferred_render.send_color_textures_to_framebuffer();
 
 	GLuint old_FBO_id = old_deferred_render.framebuffer()->id();

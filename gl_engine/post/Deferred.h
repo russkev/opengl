@@ -43,7 +43,7 @@ namespace glen
 
 		// // ----- GENERAL ----- // //
 	private:
-		void relink_framebuffer_color_textures(const std::vector<const Texture*>& framebuffer_textures);
+		void relink_internal_framebuffer_color_textures(const std::vector<const Texture*>& framebuffer_textures);
 	public:
 		void bind();
 		void unbind();
@@ -55,7 +55,7 @@ namespace glen
 		Framebuffer* framebuffer();
 		Material* material();
 		MeshNode* mesh_node();
-		const Texture* texture(const std::string& name);
+		const Texture* texture(const GLuint g_buffer_location);
 		const Texture* depth_texture();
 
 
