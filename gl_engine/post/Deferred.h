@@ -74,7 +74,7 @@ namespace glen
 		glm::uvec2 m_dimensions;
 		Framebuffer* m_g_buffer_FBO = NULL;
 		Texture m_g_depth;
-		Texture m_null_texture;// { Texture::create_bw_null_texture(GL_TEXTURE_2D, { 1u, 1u }) };
+		Texture m_null_texture;
 		std::map <GLuint, Texture*> m_all_textures;
 		std::map < GLuint, Texture> m_internal_textures;
 
@@ -93,21 +93,21 @@ namespace glen
 	{
 		AO_GBufferDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
 
-		//void init_kernal();
-		//float increase_nearby_samples(const unsigned int i, const unsigned int num_samples);
-		//void init_noise();
+		void init_kernal();
+		float increase_nearby_samples(const unsigned int i, const unsigned int num_samples);
+		void init_noise();
 
-		//std::uniform_real_distribution<GLfloat> m_random_floats{ 0.0f, 1.0f };
-		//std::default_random_engine m_generator;
+		std::uniform_real_distribution<GLfloat> m_random_floats{ 0.0f, 1.0f };
+		std::default_random_engine m_generator;
 
 		AO_Material m_material;
 		//BlinnDeferredMaterial m_material;
 
 
-		//glm::uvec2 m_noise_tile_dimensions{ 4, 4 };
-		//std::vector<glm::vec3> m_kernal, m_noise_tile;
-		//Texture m_noise_tile_texture;
-		//Texture m_ao_texture{ Texture::create_bw_null_texture(GL_TEXTURE_2D, m_dimensions) };
+		glm::uvec2 m_noise_tile_dimensions{ 4, 4 };
+		std::vector<glm::vec3> m_kernal, m_noise_tile;
+		Texture m_noise_tile_texture;
+		Texture m_ao_texture{ Texture::create_bw_null_texture(GL_TEXTURE_2D, m_dimensions) };
 	};
 
 	//struct AO_Deferred : public Deferred

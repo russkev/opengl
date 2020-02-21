@@ -163,8 +163,8 @@ namespace glen
 	BlinnDeferred::BlinnDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions) :
 		Deferred{ target, g_buffer, &m_material, dimensions }
 	{
-		//set_color_texture(0u, Texture::create_16bit_rgb_null_texture(BlinnDeferredMaterial::k_g_position, target, dimensions));
-		//set_color_texture(1u, Texture::create_16bit_rgb_null_texture(BlinnDeferredMaterial::k_g_normal, target, dimensions));
+		set_color_texture(0u, Texture::create_16bit_rgb_null_texture(BlinnDeferredMaterial::k_g_position, target, dimensions));
+		set_color_texture(1u, Texture::create_16bit_rgb_null_texture(BlinnDeferredMaterial::k_g_normal, target, dimensions));
 		set_color_texture(2u, Texture::create_8bit_rgba_null_texture(BlinnDeferredMaterial::k_g_diffuse_spec, target, dimensions));
 		set_depth_texture(Texture::create_depth_null_texture(target, dimensions));
 
@@ -179,60 +179,78 @@ namespace glen
 		//set_color_texture(AO_Material::k_, Texture::create_8bit_rgba_null_texture(target, dimensions));
 		set_depth_texture(Texture::create_depth_null_texture(target, dimensions));
 
+
+		init_noise();
+
 		send_color_textures_to_framebuffer();
 	}
 
-	//AO_GBufferDeferred::AO_GBufferDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions) :
-	//	Deferred{ target, g_buffer, &m_material, dimensions }
-	//{
-	//	set_color_texture(AO_GBufferMaterial::k_g_position, Texture::create_16bit_rgb_null_texture(target, dimensions));
-	//	set_color_texture(AO_GBufferMaterial::k_g_normal, Texture::create_16bit_rgb_null_texture(target, dimensions));
-	//	set_color_texture(AO_GBufferMaterial::k_g_diffuse, Texture::create_8bit_rgb_null_texture(target, dimensions));
-	//	set_depth_texture(Texture::create_depth_null_texture(target, dimensions));
+	void AO_GBufferDeferred::init_kernal()
+	{
+		GLuint num_samples = 64;
 
-	//	send_color_textures_to_framebuffer();
-	//}
+		for (GLuint i = 0; i < num_samples; ++i)
+		{
+			glm::vec3 sample{
+				m_random_floats(m_generator) * 2.0f - 1.0f,
+				m_random_floats(m_generator) * 2.0f - 1.0f,
+				m_random_floats(m_generator)
+			};
 
-	//void AO_GBufferDeferred::init_kernal()
-	//{
-	//	GLuint num_samples = 64;
+			sample = glm::normalize(sample);
+			sample *= m_random_floats(m_generator);
+			sample *= increase_nearby_samples(i, num_samples);
 
-	//	for (GLuint i = 0; i < num_samples; ++i)
-	//	{
-	//		glm::vec3 sample{
-	//			m_random_floats(m_generator) * 2.0f - 1.0f,
-	//			m_random_floats(m_generator) * 2.0f - 1.0f,
-	//			m_random_floats(m_generator)
-	//		};
+			m_kernal.push_back(sample);
+		}
+	}
 
-	//		sample = glm::normalize(sample);
-	//		sample *= m_random_floats(m_generator);
-	//		sample *= increase_nearby_samples(i, num_samples);
+	float AO_GBufferDeferred::increase_nearby_samples(const GLuint i, const GLuint num_samples)
+	{
+		GLfloat scale = (GLfloat)i / (GLfloat)num_samples;
+		scale = ScalarUtils::lerp(0.1f, 1.0f, scale * scale);
+		return scale;
+	}
 
-	//		m_kernal.push_back(sample);
-	//	}
-	//}
+	void AO_GBufferDeferred::init_noise()
+	{
+//		GLuint num_fragments = m_noise_tile_dimensions.x * m_noise_tile_dimensions.y;
+//		for (unsigned int i = 0; i < num_fragments; ++i)
+//		{
+//			//glm::vec3 noise_fragment(
+//			//	m_random_floats(m_generator) * 2.0f - 1.0f,
+//			//	m_random_floats(m_generator) * 2.0f - 1.0f,
+//			//	0.0f);
+//			glm::vec3 noise_fragment(0.2f, 0.9f, 0.0f);
+//			m_noise_tile.push_back(noise_fragment);
+//		}
+///*		m_noise_tile_texture = Texture::create_square_noise_tile_texture(
+//			AO_Material::k_noise,
+//			GL_TEXTURE_2D, m_noise_tile_dimensions, m_noise_tile)*/;
 
-	//float AO_GBufferDeferred::increase_nearby_samples(const GLuint i, const GLuint num_samples)
-	//{
-	//	GLfloat scale = (GLfloat)i / (GLfloat)num_samples;
-	//	scale = ScalarUtils::lerp(0.1f, 1.0f, scale * scale);
-	//	return scale;
-	//}
 
-	//void AO_GBufferDeferred::init_noise()
-	//{
-	//	GLuint num_fragments = m_noise_tile_dimensions.x * m_noise_tile_dimensions.y;
-	//	for (unsigned int i = 0; i < num_fragments; ++i)
-	//	{
-	//		glm::vec3 noise_fragment(
-	//			m_random_floats(m_generator) * 2.0f - 1.0f,
-	//			m_random_floats(m_generator) * 2.0f - 1.0f,
-	//			0.0f);
-	//		m_noise_tile.push_back(noise_fragment);
-	//	}
-	//	m_noise_tile_texture = Texture::create_square_noise_tile_texture(GL_TEXTURE_2D, m_noise_tile_dimensions, m_noise_tile);
-	//}
+		
+		for (GLuint i = 0; i < m_dimensions.x * m_dimensions.y; ++i)
+		{
+			//m_noise_tile.push_back(glm::vec3{ 1.0f, 0.4f, 0.2f });
+			m_noise_tile.push_back(glm::uvec3{ 128u, 90u, 30u });
+		}
+
+		//m_noise_tile_texture = Texture{ GL_TEXTURE_2D };
+		//m_noise_tile_texture.set_name(AO_Material::k_noise);
+		//m_noise_tile_texture.set_width(m_dimensions.x);
+		//m_noise_tile_texture.set_height(m_dimensions.y);
+		//m_noise_tile_texture.set_internal_format(GL_RGB);
+		//m_noise_tile_texture.set_format(GL_RGB);
+		//m_noise_tile_texture.set_type(GL_UNSIGNED_BYTE);
+		//m_noise_tile_texture.set_data(m_noise_tile.data());
+		//m_noise_tile_texture.process();
+
+		m_noise_tile_texture = Texture{ "greyGrid_01.tga" };
+		m_noise_tile_texture.set_name(AO_Material::k_noise);
+
+		set_color_texture(3u, &m_noise_tile_texture);
+	}
 
 	//AO_Deferred::AO_Deferred(const GLenum target, Framebuffer* ao_buffer, const glm::uvec2& dimensions) :
 	//	Deferred{ target, ao_buffer, &m_material, dimensions }
