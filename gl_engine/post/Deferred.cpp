@@ -12,6 +12,7 @@ namespace glen
 		m_target{ target },
 		m_dimensions{ dimensions },
 		m_g_buffer_FBO{ g_buffer },
+		m_null_texture{ Texture::create_8bit_rgb_null_texture(GL_TEXTURE_2D, dimensions) },
 		m_material{ std::move(material) },
 		m_mesh_node{ "Screen Node", PostEffect::mesh(), m_material }
 	{}
@@ -126,38 +127,12 @@ namespace glen
 	void Deferred::set_color_texture(const GLuint g_buffer_location, Texture texture)
 	{
 		m_internal_textures[g_buffer_location] = std::move(texture);
-
 		set_color_texture(g_buffer_location, &m_internal_textures[g_buffer_location]);
-
-		//if (g_buffer_location >= m_all_textures.size())
-		//{
-		//	for (GLuint i = m_all_textures.size() - 1; i < g_buffer_location; ++i)
-		//	{
-		//		m_all_textures.push_back(&m_null_texture);
-		//	}
-
-		//}
-
-
-
 	}
 
 	void Deferred::set_color_texture(const GLuint g_buffer_location, Texture* texture)
 	{
-		//m_external_textures[name] = texture;
-		//m_material->set_texture(name, texture);
-
-		//for (GLuint i = 0; i < g_buffer_location; ++i)
-		//{
-		//	if (m_all_textures[i] != &m_null_texture)
-		//	{
-		//		m_all_textures[i] = &m_null_texture;
-		//	}
-		//	m_all_textures[g_buffer_location] = texture;
-		//}
-
 		m_all_textures[g_buffer_location] = texture;
-
 		m_material->set_texture(m_all_textures[g_buffer_location]->name(), m_all_textures[g_buffer_location]);
 	}
 
@@ -175,27 +150,10 @@ namespace glen
 	void Deferred::send_color_textures_to_framebuffer()
 	{
 		std::vector<const Texture*> texture_vector;
-		//for (const auto & texture_pair : m_internal_textures)
-		//{
-		//	texture_vector.push_back(&texture_pair.second);
-		//}
-		//for (const auto & texture_pair : m_external_textures)
-		//{
-		//	texture_vector.push_back(texture_pair.second);
-		//}
-
 		GLuint max = std::max_element(m_all_textures.begin(), m_all_textures.end())->first;
-		for (int i = 0; i <= max; i++)
+		for (GLuint i = 0; i <= max; i++)
 		{
 			const Texture* current_texture = m_all_textures[i];
-			//if (current_texture)
-			//{
-			//	texture_vector.push_back(texture);
-			//}
-			//else
-			//{
-			//	texture_vector.push_back(&m_null_texture);
-			//}
 			texture_vector.push_back(current_texture ? current_texture : &m_null_texture);
 		}
 
@@ -205,8 +163,8 @@ namespace glen
 	BlinnDeferred::BlinnDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions) :
 		Deferred{ target, g_buffer, &m_material, dimensions }
 	{
-		set_color_texture(0u, Texture::create_16bit_rgb_null_texture(BlinnDeferredMaterial::k_g_position, target, dimensions));
-		set_color_texture(1u, Texture::create_16bit_rgb_null_texture(BlinnDeferredMaterial::k_g_normal, target, dimensions));
+		//set_color_texture(0u, Texture::create_16bit_rgb_null_texture(BlinnDeferredMaterial::k_g_position, target, dimensions));
+		//set_color_texture(1u, Texture::create_16bit_rgb_null_texture(BlinnDeferredMaterial::k_g_normal, target, dimensions));
 		set_color_texture(2u, Texture::create_8bit_rgba_null_texture(BlinnDeferredMaterial::k_g_diffuse_spec, target, dimensions));
 		set_depth_texture(Texture::create_depth_null_texture(target, dimensions));
 

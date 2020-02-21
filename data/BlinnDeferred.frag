@@ -70,17 +70,17 @@ void main()
 	}
 
 
-	if (normal != vec3(0.0))
-	{
-		vec3 out_color  = 
-			diffuse_out + 
-			specular_out;
-	
-		frag_color = vec4(out_color, 1.0);
-	}
-	else
-	{
-		frag_color = vec4(0.0);
-	}
-//	frag_color = vec4(texture(g_diffuse_spec, uv).rgb, 1.0);
+//	if (normal != vec3(0.0))
+//	{
+//		vec3 out_color  = 
+//			diffuse_out + 
+//			specular_out;
+//	
+//		frag_color = vec4(out_color, 1.0);
+//	}
+//	else
+//	{
+//		frag_color = vec4(0.0);
+//	}
+	frag_color = vec4(texture(g_diffuse_spec, uv).rgb, 1.0);
 }

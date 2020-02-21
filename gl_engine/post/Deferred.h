@@ -74,9 +74,7 @@ namespace glen
 		glm::uvec2 m_dimensions;
 		Framebuffer* m_g_buffer_FBO = NULL;
 		Texture m_g_depth;
-		Texture m_null_texture{ Texture::create_bw_null_texture(GL_TEXTURE_2D, {1u, 1u}) };
-		//std::unordered_map<std::string, Texture> m_internal_textures;
-		//std::unordered_map<std::string, Texture*> m_external_textures;
+		Texture m_null_texture;// { Texture::create_bw_null_texture(GL_TEXTURE_2D, { 1u, 1u }) };
 		std::map <GLuint, Texture*> m_all_textures;
 		std::map < GLuint, Texture> m_internal_textures;
 
