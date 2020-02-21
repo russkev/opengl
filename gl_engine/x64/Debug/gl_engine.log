@@ -1,3 +1,2 @@
 ﻿  Deferred.cpp
-e:\docs\programming\cpp\opengl\repos\opengl\gl_engine\post\deferred.cpp(188): warning C4018: '<=': signed/unsigned mismatch
   gl_engine.vcxproj -> E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\x64\Debug\gl_engine.lib
