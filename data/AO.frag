@@ -9,7 +9,12 @@ uniform sampler2D g_cam_space_position;
 uniform sampler2D g_cam_space_normal;
 uniform sampler2D noise;
 
-uniform vec3 samples[NUM_SAMPLES];
+uniform vec3 samples[4];
+//struct Samples
+//{
+//	vec3 samp;
+//};
+//uniform Samples samples[4];
 
 uniform float radius;
 uniform float bias;
@@ -23,15 +28,68 @@ uniform mat4 cam_to_projection;
 out vec4 frag_color;
 
 // // ----- LOCALS ----- // //
-const vec2 noise_scale = vec2(
+const vec2 m_noise_scale = vec2(
 	screen_dimensions.x / noise_tile_dimensions.x,
 	screen_dimensions.y / noise_tile_dimensions.y);
+
+struct m_Cam_Space
+{
+	vec3 position;
+	vec3 normal;
+} m_cam_space;
+
+vec3 m_randomized_vector;
+
+// // ----- INITIALIZATION OF LOCALS ----- // //
+void init()
+{
+	m_cam_space.position = texture(g_cam_space_position, uv).xyz;
+	m_cam_space.normal = texture(g_cam_space_normal, uv).xyz;
+	m_randomized_vector = texture(noise, uv * m_noise_scale).xyz;
+}
+
+mat3 tangent_space_basis(vec3 normal, vec3 randomized_vector)
+{
+	vec3 tangent = normalize(randomized_vector - normal * dot(randomized_vector, normal));
+	vec3 bitangent = cross(normal, tangent);
+	return mat3(tangent, bitangent, normal);
+}
+
 
 // // ----- MAIN ----- // //
 void main()
 {
-//	frag_color = vec4(texture(g_cam_space_position, uv).xyz, 1.0);
-//	frag_color = vec4(texture(g_cam_space_normal, uv).xyz, 1.0);
-	frag_color = vec4(texture(noise, uv).xyz, 1.0);
+	vec3 out_color;
+//	init();
+//
+//	mat3 tbn = tangent_space_basis(m_cam_space.normal, m_randomized_vector);
+//
+//	float occlusion = 0.0;
+//
+//	vec4 offset = vec4(0.0);
+//	for (int i = 0; i < NUM_SAMPLES; ++i)
+//	{
+//		vec3 ao_sample = tbn * samples[i];
+//		ao_sample = m_cam_space.position + ao_sample * radius;
+//
+//		/*vec4*/ offset = vec4(ao_sample, 1.0f);
+//		offset = cam_to_projection * offset;
+//		offset.xyz /= offset.w;
+//		offset.xyz = offset.xyz * 0.5 + 0.5;
+//	}
+//
+	out_color = vec3(0.0);
+
+	for (int i = 0; i < NUM_SAMPLES; ++i)
+	{
+//		out_color += samples[i].samp * 0.1;
+		out_color += samples[i] * 0.01;
+	}
+
+//	out_color = samples[0] * 0.5 + samples[1] * 0.5;
+
+//	out_color = samples[1];
+
+	frag_color = vec4(out_color, 1.0);
 }
 
