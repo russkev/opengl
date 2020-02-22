@@ -59,10 +59,12 @@ namespace glen
 		set_sampler_color(k_g_cam_space_normal, glm::vec3(0.5f, 0.5f, 1.0f));
 		set_sampler_value(k_noise, 0.0f);
 
+		std::vector<glm::vec3> samples_vector;
 		for (GLuint i = 0; i < k_num_samples; ++i)
 		{
-			set_uniform(k_samples + "[" + std::to_string(i) + "]", glm::vec3{ 0.0f });
-		}
+			samples_vector.push_back(glm::vec3{ 0.0f });
+		};
+		set_uniform(k_samples, samples_vector);
 		
 		set_uniform(k_radius, 1.0f);
 		set_uniform(k_bias, 0.05f);
@@ -76,7 +78,7 @@ namespace glen
 	void AO_Material::update_view(const CameraNode* camera_node, const Node* model_node)
 	{
 		//set_uniform(k_camera_position, camera_node->world_position());
-		//set_uniform(k_cam_to_projection, camera_node->camera()->cam_to_projection());
+		set_uniform(k_cam_to_projection, camera_node->camera()->cam_to_projection());
 	}
 
 	// BLINN

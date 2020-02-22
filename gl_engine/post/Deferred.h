@@ -104,7 +104,7 @@ namespace glen
 		//BlinnDeferredMaterial m_material;
 
 
-		glm::uvec2 m_noise_tile_dimensions{ 4, 4 };
+		glm::uvec2 m_noise_tile_dimensions{ 100, 100 };
 		std::vector<glm::vec3> m_kernal, m_noise_tile;
 		Texture m_noise_tile_texture;
 		Texture m_ao_texture{ Texture::create_bw_null_texture(GL_TEXTURE_2D, m_dimensions) };

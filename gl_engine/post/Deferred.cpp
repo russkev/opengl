@@ -180,10 +180,10 @@ namespace glen
 		//set_color_texture(AO_Material::k_, Texture::create_8bit_rgba_null_texture(target, dimensions));
 		set_depth_texture(Texture::create_depth_null_texture(target, dimensions));
 
+		send_color_textures_to_framebuffer();
 
 		init_noise();
-
-		send_color_textures_to_framebuffer();
+		//init_kernal();
 	}
 
 	void AO_GBufferDeferred::init_kernal()
@@ -203,6 +203,13 @@ namespace glen
 			sample *= increase_nearby_samples(i, num_samples);
 
 			m_kernal.push_back(sample);
+		}
+
+		m_ao_material.set_uniform(m_ao_material.k_samples, m_kernal);
+
+		for (GLuint i = 0; i < num_samples; ++i)
+		{
+			m_ao_material.set_uniform(AO_Material::k_samples + "[" + std::to_string(i) + "]", m_kernal.at(i));
 		}
 	}
 
@@ -226,42 +233,28 @@ namespace glen
 				m_random_floats(m_generator) * 2.0f - 1.0f,
 				m_random_floats(m_generator) * 2.0f - 1.0f,
 				0.0f);
-			//glm::vec3 noise_fragment(0.2f, 0.9f, 0.0f);
+
+			//glm::vec3 noise_fragment{ 0.5f, 0.5f, 0.5f };
 			m_noise_tile.push_back(noise_fragment);
 		}
-/*		m_noise_tile_texture = Texture::create_square_noise_tile_texture(
-			AO_Material::k_noise,
-			GL_TEXTURE_2D, m_noise_tile_dimensions, m_noise_tile)*/;
-
-
-
-		//for (GLuint i = 0; i < width * height; ++i)
-		//{
-		//	m_noise_tile.push_back(glm::vec3{ 1.0f, 0.4f, 0.2f });
-		//	//m_noise_tile.push_back(glm::uvec3{ 128u, 90u, 30u });
-		//}
 
 		m_noise_tile_texture = Texture{ GL_TEXTURE_2D };
 		m_noise_tile_texture.set_name(AO_Material::k_noise);
 		m_noise_tile_texture.set_width(width);
 		m_noise_tile_texture.set_height(height);
-		//m_noise_tile_texture.set_internal_format(GL_RGB);
-		//m_noise_tile_texture.set_format(GL_RGB);
+		m_noise_tile_texture.set_internal_format(GL_RGB16F);
+		m_noise_tile_texture.set_format(GL_RGB);
 		m_noise_tile_texture.set_type(GL_FLOAT);
 		m_noise_tile_texture.set_data(m_noise_tile.data());
+		m_noise_tile_texture.set_min_filter(GL_NEAREST);
+		m_noise_tile_texture.set_mag_filter(GL_NEAREST);
+		m_noise_tile_texture.set_st_wrap(GL_REPEAT);
 		m_noise_tile_texture.process();
 
-		////m_noise_tile_texture = Texture{ "bricks2_normal.tga" };
-		////m_noise_tile_texture.set_name(AO_Material::k_noise);
-
-		////m_noise_tile_texture = std::move(Texture{ glm::vec3{0.3, 0.4, 0.2} });
-		////m_noise_tile_texture.set_name(AO_Material::k_noise);
-
+		m_ao_material.set_uniform(AO_Material::k_screen_dimensions, m_dimensions);
+		m_ao_material.set_uniform(AO_Material::k_noise_tile_dimensions, m_noise_tile_dimensions);
 		m_ao_material.set_texture(AO_Material::k_noise, &m_noise_tile_texture);
-		//set_color_texture(3u, &m_noise_tile_texture);
+		m_ao_material.set_uniform(AO_Material::k_radius, 0.5f);
+		m_ao_material.set_uniform(AO_Material::k_radius, 0.025f);
 	}
-
-	//AO_Deferred::AO_Deferred(const GLenum target, Framebuffer* ao_buffer, const glm::uvec2& dimensions) :
-	//	Deferred{ target, ao_buffer, &m_material, dimensions }
-	//{}
 }
