@@ -40,6 +40,12 @@ vec3 m_randomized_vector;
 void init()
 {
 	m_cam_space.position = texture(g_cam_space_position, uv).xyz;
+	if(m_cam_space.position == vec3(0.0, 0.0, 0.0))
+	{
+//		m_cam_space.position = vec3(0.0, 1.0, 0.0);
+		frag_color = vec4(1.0, 0.0, 0.0, 1.0);
+	}
+
 	m_cam_space.normal = texture(g_cam_space_normal, uv).xyz;
 	m_randomized_vector = texture(noise, uv * m_noise_scale).xyz;
 }
@@ -74,6 +80,10 @@ void main()
 		offset.xyz = offset.xyz * 0.5 + 0.5;
 
 		float sample_depth = texture(g_cam_space_position, offset.xy).z;
+		if (sample_depth == 0.0)
+		{
+			sample_depth = -1000;
+		}
 
 		float range_check = smoothstep(0.0, 1.0, radius / abs(m_cam_space.position.z - sample_depth));
 		occlusion += (sample_depth >= ao_sample.z + bias ? 1.0 : 0.0) * range_check;
