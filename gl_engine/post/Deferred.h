@@ -100,7 +100,7 @@ namespace glen
 		std::uniform_real_distribution<GLfloat> m_random_floats{ 0.0f, 1.0f };
 		std::default_random_engine m_generator;
 
-		AO_Material m_material;
+		AO_Material m_ao_material;
 		//BlinnDeferredMaterial m_material;
 
 
