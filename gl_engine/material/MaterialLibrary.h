@@ -26,7 +26,6 @@ namespace glen
 
 		inline static const std::string k_transform_model_to_world		= "transform.model_to_world";
 		inline static const std::string k_transform_world_to_cam		= "transform.world_to_cam";
-		inline static const std::string k_transform_model_to_projection	= "transform.model_to_projection";
 		inline static const std::string k_transform_cam_to_projection	= "transform.cam_to_projection";
 		
 		AO_GBufferMaterial();
@@ -39,7 +38,7 @@ namespace glen
 
 	struct AO_Material : public Material
 	{
-		const static constexpr GLuint k_num_samples = 64;
+		const static constexpr GLuint k_num_samples = 128;
 
 		inline static const std::string k_g_cam_space_position = "g_cam_space_position";
 		inline static const std::string k_g_cam_space_normal = "g_cam_space_normal";

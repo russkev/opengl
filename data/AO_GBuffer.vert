@@ -19,7 +19,6 @@ struct Transform
 {
 	mat4 model_to_world;
 	mat4 world_to_cam;
-	mat4 model_to_projection;
 	mat4 cam_to_projection;
 };
 uniform Transform transform;
@@ -35,9 +34,6 @@ void send_cam_space_coordinates()
 	out_frag.cam_space_normal	= normal_model_to_cam * vertex_normal;
 
 	gl_Position = transform.cam_to_projection * cam_position;
-//	gl_Position = transform.model_to_projection * vec4(vertex_position, 1.0);
-
-//	gl_Position = transform.cam_to_projection * transform.world_to_cam * transform.model_to_world * vec4(vertex_position, 1.0);
 }
 
 // // ----- MAIN ----- // //

@@ -28,16 +28,13 @@ namespace glen
 
 		set_uniform(k_transform_model_to_world, default_transform);
 		set_uniform(k_transform_world_to_cam, default_transform);
-		set_uniform(k_transform_model_to_projection, default_transform);
 		set_uniform(k_transform_cam_to_projection, default_transform);
 	}
 
 	void AO_GBufferMaterial::update_view(const CameraNode* camera_node, const Node* model_node)
 	{
 		set_uniform(k_transform_model_to_world, model_node->world_to_node());
-		//set_uniform(k_transform_world_to_cam, camera_node->world_to_cam());
 		set_uniform(k_transform_world_to_cam, camera_node->camera()->transform_to_cam(camera_node->world_to_node()));
-		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * model_node->world_to_node());
 		set_uniform(k_transform_cam_to_projection, camera_node->camera()->cam_to_projection());
 	}
 

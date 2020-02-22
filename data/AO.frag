@@ -1,5 +1,5 @@
 #version 440 core
-#define NUM_SAMPLES 64
+#define NUM_SAMPLES 128
 
 // // ----- INS ----- // //
 in vec2 uv;
@@ -9,7 +9,7 @@ uniform sampler2D g_cam_space_position;
 uniform sampler2D g_cam_space_normal;
 uniform sampler2D noise;
 
-uniform vec3 samples[4];
+uniform vec3 samples[NUM_SAMPLES];
 //struct Samples
 //{
 //	vec3 samp;
@@ -60,35 +60,32 @@ mat3 tangent_space_basis(vec3 normal, vec3 randomized_vector)
 void main()
 {
 	vec3 out_color;
-//	init();
-//
-//	mat3 tbn = tangent_space_basis(m_cam_space.normal, m_randomized_vector);
-//
-//	float occlusion = 0.0;
-//
-//	vec4 offset = vec4(0.0);
-//	for (int i = 0; i < NUM_SAMPLES; ++i)
-//	{
-//		vec3 ao_sample = tbn * samples[i];
-//		ao_sample = m_cam_space.position + ao_sample * radius;
-//
-//		/*vec4*/ offset = vec4(ao_sample, 1.0f);
-//		offset = cam_to_projection * offset;
-//		offset.xyz /= offset.w;
-//		offset.xyz = offset.xyz * 0.5 + 0.5;
-//	}
-//
-	out_color = vec3(0.0);
+	init();
 
+	mat3 tbn = tangent_space_basis(m_cam_space.normal, m_randomized_vector);
+
+	float occlusion = 0.0;
+
+//	vec4 offset = vec4(0.0);
 	for (int i = 0; i < NUM_SAMPLES; ++i)
 	{
-//		out_color += samples[i].samp * 0.1;
-		out_color += samples[i] * 0.01;
+		vec3 ao_sample = tbn * samples[i];
+		ao_sample = m_cam_space.position + ao_sample * radius;
+
+		vec4 offset = vec4(ao_sample, 1.0);
+		offset = cam_to_projection * offset;
+		offset.xyz /= offset.w;
+		offset.xyz = offset.xyz * 0.5 + 0.5;
+
+		float sample_depth = texture(g_cam_space_position, offset.xy).z;
+
+		float range_check = smoothstep(0.0, 1.0, radius / abs(m_cam_space.position.z - sample_depth));
+		occlusion += (sample_depth >= ao_sample.z + bias ? 1.0 : 0.0) * range_check;
 	}
 
-//	out_color = samples[0] * 0.5 + samples[1] * 0.5;
+	occlusion = 1.0 - (occlusion / NUM_SAMPLES);
 
-//	out_color = samples[1];
+	out_color = vec3(occlusion);
 
 	frag_color = vec4(out_color, 1.0);
 }
