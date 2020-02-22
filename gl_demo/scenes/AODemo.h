@@ -38,7 +38,7 @@ namespace gl_demo
 
 		// Mesh Nodes
 		glen::MeshNode shader_ball_node{ "Shader Ball Node", &shader_ball,  &ao_g_buffer_material };
-		glen::MeshNode floor_node{ "Floor Node", &plane, &white_material };
+		glen::MeshNode floor_node{ "Floor Node", &plane, &ao_g_buffer_material };
 
 		// Point Light 1
 		glen::PointLight point_light{ 1.0f, { 0.0f, 0.0f, 0.0f } };

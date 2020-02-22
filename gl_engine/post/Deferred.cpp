@@ -183,14 +183,14 @@ namespace glen
 		send_color_textures_to_framebuffer();
 
 		init_noise();
-		//init_kernal();
+		init_kernal();
 	}
 
 	void AO_GBufferDeferred::init_kernal()
 	{
-		GLuint num_samples = 64;
+		//GLuint num_samples = 64;
 
-		for (GLuint i = 0; i < num_samples; ++i)
+		for (GLuint i = 0; i < m_ao_material.k_num_samples; ++i)
 		{
 			glm::vec3 sample{
 				m_random_floats(m_generator) * 2.0f - 1.0f,
@@ -200,17 +200,12 @@ namespace glen
 
 			sample = glm::normalize(sample);
 			sample *= m_random_floats(m_generator);
-			sample *= increase_nearby_samples(i, num_samples);
+			sample *= increase_nearby_samples(i, m_ao_material.k_num_samples);
 
 			m_kernal.push_back(sample);
 		}
 
 		m_ao_material.set_uniform(m_ao_material.k_samples, m_kernal);
-
-		for (GLuint i = 0; i < num_samples; ++i)
-		{
-			m_ao_material.set_uniform(AO_Material::k_samples + "[" + std::to_string(i) + "]", m_kernal.at(i));
-		}
 	}
 
 	float AO_GBufferDeferred::increase_nearby_samples(const GLuint i, const GLuint num_samples)
@@ -254,7 +249,7 @@ namespace glen
 		m_ao_material.set_uniform(AO_Material::k_screen_dimensions, m_dimensions);
 		m_ao_material.set_uniform(AO_Material::k_noise_tile_dimensions, m_noise_tile_dimensions);
 		m_ao_material.set_texture(AO_Material::k_noise, &m_noise_tile_texture);
-		m_ao_material.set_uniform(AO_Material::k_radius, 0.5f);
-		m_ao_material.set_uniform(AO_Material::k_radius, 0.025f);
+		m_ao_material.set_uniform(AO_Material::k_radius, 10.0f);
+		m_ao_material.set_uniform(AO_Material::k_bias, 0.025f);
 	}
 }
