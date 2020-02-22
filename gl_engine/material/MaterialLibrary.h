@@ -18,6 +18,17 @@ namespace glen
 	struct DirectionalLight;
 	struct SpotLight;
 
+
+	struct AO_BlurMaterial : public Material
+	{
+		inline static const std::string k_ao_input = "ao_input";
+
+		AO_BlurMaterial();
+		AO_BlurMaterial(const std::string& name);
+	private:
+		void init();
+	};
+
 	struct AO_GBufferMaterial : public Material
 	{
 		inline static const std::string k_g_position	= "g_position";

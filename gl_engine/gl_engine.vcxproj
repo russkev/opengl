@@ -245,6 +245,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\AO.frag" />
+    <None Include="..\data\AO_Blur.frag" />
     <None Include="..\data\Passthrough.vert" />
     <None Include="..\data\AO_GBuffer.frag" />
     <None Include="..\data\AO_GBuffer.vert" />

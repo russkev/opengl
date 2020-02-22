@@ -100,11 +100,14 @@ namespace glen
 		BlinnDeferred m_blinn_deferred;
 
 		// // ----- AO VARIABLES ----- // //
-		Framebuffer m_ao_g_buffer_fbo{ GL_FRAMEBUFFER };
+		Framebuffer m_ao_g_buffer_FBO{ GL_FRAMEBUFFER };
 		AO_GBufferDeferred m_ao_g_buffer_deferred;
 
+		Framebuffer m_ao_FBO{ GL_FRAMEBUFFER };
+		AO_BlurDeferred m_ao_blur_deferred;
 
-		//Framebuffer m_ao_fbo{ GL_FRAMEBUFFER };
+
+		//Framebuffer m_ao_FBO{ GL_FRAMEBUFFER };
 
 		//AO_GBufferDeferred m_ao_g_buffer_deferred;
 		
