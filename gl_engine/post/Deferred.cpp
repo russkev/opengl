@@ -188,8 +188,6 @@ namespace glen
 
 	void AO_GBufferDeferred::init_kernal()
 	{
-		//GLuint num_samples = 64;
-
 		for (GLuint i = 0; i < m_ao_material.k_num_samples; ++i)
 		{
 			glm::vec3 sample{
@@ -228,8 +226,6 @@ namespace glen
 				m_random_floats(m_generator) * 2.0f - 1.0f,
 				m_random_floats(m_generator) * 2.0f - 1.0f,
 				0.0f);
-
-			//glm::vec3 noise_fragment{ 0.5f, 0.5f, 0.5f };
 			m_noise_tile.push_back(noise_fragment);
 		}
 
@@ -251,5 +247,12 @@ namespace glen
 		m_ao_material.set_texture(AO_Material::k_noise, &m_noise_tile_texture);
 		m_ao_material.set_uniform(AO_Material::k_radius, 10.0f);
 		m_ao_material.set_uniform(AO_Material::k_bias, 0.025f);
+	}
+
+	AO_BlurDeferred::AO_BlurDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions) :
+		Deferred{ target, g_buffer, &m_material, dimensions }
+	{
+		set_color_texture(0u, Texture::create_16bit_rgb_null_texture(m_material.k_ao_input, target, dimensions));
+		send_color_textures_to_framebuffer();
 	}
 }

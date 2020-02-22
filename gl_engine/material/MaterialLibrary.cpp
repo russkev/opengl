@@ -10,6 +10,23 @@
 
 namespace glen
 {
+	// AO BLUR
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	AO_BlurMaterial::AO_BlurMaterial() :
+		AO_BlurMaterial("AO Blur Material")
+	{}
+
+	AO_BlurMaterial::AO_BlurMaterial(const std::string& name) :
+		Material{ name, "ScreenPassthrough.vert", "AO_Blur.frag"}
+	{
+		init();
+	}
+
+	void AO_BlurMaterial::init()
+	{
+		set_sampler_value(k_ao_input, 0.0f);
+	}
+
 	// AO G-BUFFER
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 	AO_GBufferMaterial::AO_GBufferMaterial() :
