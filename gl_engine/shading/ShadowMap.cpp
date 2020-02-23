@@ -22,13 +22,13 @@ namespace glen
 	const GLfloat ShadowMap::k_default_clip_far = 100.0f;
 
 	// // ----- CONSTRUCTORS ----- // //
-	ShadowMap::ShadowMap(LightNode* lightNode) :
-		m_camera_node{ std::string(lightNode->name() + " shadow"), lightNode->light()->camera() },
-		m_lightNode{ lightNode }
+	ShadowMap::ShadowMap(LightNode* light_node) :
+		m_camera_node{ std::string(light_node->name() + " shadow"), light_node->light()->camera() },
+		m_lightNode{ light_node }
 	{
 		init_camera();
 
-		lightNode->set_shadowMap(this);
+		light_node->set_shadowMap(this);
 		if (is_directional())
 		{
 			init_directional_shadowMap();

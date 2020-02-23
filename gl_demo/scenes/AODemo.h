@@ -32,13 +32,17 @@ namespace gl_demo
 		white_material.set_uniform(white_material.k_light_color, glm::vec3{ 0.8f });
 		white_material.set_uniform(white_material.k_light_brightness, 1.0f);
 
+
+		glen::BlinnMaterial blinn_material{ "Blinn Material " };
+		blinn_material.set_sampler_value(blinn_material.k_color, 0.8f);
+
 		glen::AO_GBufferMaterial ao_g_buffer_material{};
 
 		//ao_g_buffer_material.set_sampler_color(ao_g_buffer_material.k_g_diffuse, glm::vec3{ 0.2f, 0.9f, 0.2f });
 
 		// Mesh Nodes
-		glen::MeshNode shader_ball_node{ "Shader Ball Node", &shader_ball,  &ao_g_buffer_material };
-		glen::MeshNode floor_node{ "Floor Node", &plane, &ao_g_buffer_material };
+		glen::MeshNode shader_ball_node{ "Shader Ball Node", &shader_ball,  &blinn_material };
+		glen::MeshNode floor_node{ "Floor Node", &plane, &blinn_material };
 
 		// Point Light 1
 		glen::PointLight point_light{ 1.0f, { 0.0f, 0.0f, 0.0f } };
@@ -48,17 +52,27 @@ namespace gl_demo
 		glen::LightNode point_light_node{ "Point Light 1", &point_light };
 		point_light_node.set_position({ -4.0f, 1.2f, 0.0f });
 
+		// Directional Light 1
+		glen::DirectionalLight directional_light{ 0.7f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
+		glen::LightNode directional_light_node{ "Directional Light 1", &directional_light };
+		directional_light_node.set_rotation({ 33.0f, 225.0f, 0.0f });
+		directional_light_node.set_position({ 16.0f, 16.0f, 16.0f });
+
+		glen::ShadowMap directional_light_shadow{ &directional_light_node };
+
 		// Renderer
 		glen::Renderer render{ &target_cam_node, glm::uvec2{ window.width(), window.height() } };
 		render.disable_post_effects();
 		render.disable_deferred_render();
 		//render.enable_deferred_render();
 		render.enable_ao();
+		render.disable_ao();
 
 		render.add_node(&shader_ball_node);
 		render.add_node(&floor_node);
 
 		render.add_node(&point_light_node);
+		render.add_node(&directional_light_node);
 
 		glen::Timer timer;
 
