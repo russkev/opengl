@@ -94,7 +94,7 @@ namespace glen
 		AO_GBufferDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
 
 		void init_kernal();
-		float increase_nearby_samples(const unsigned int i, const unsigned int num_samples);
+		float increase_nearby_samples(const GLuint i, const GLuint num_samples);
 		void init_noise();
 
 		std::uniform_real_distribution<GLfloat> m_random_floats{ 0.0f, 1.0f };
