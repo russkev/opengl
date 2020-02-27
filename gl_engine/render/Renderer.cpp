@@ -29,6 +29,7 @@ namespace glen
 		m_camera_node->camera()->set_dimensions(dimensions);
 		init_settings();
 		init_post_effects();
+		init_post_beauty();
 		init_deferred_renderer();
 		init_ao();
 	}
@@ -94,6 +95,13 @@ namespace glen
 		m_backbuffer_FBO.set_depth_buffer_texture(&m_backbuffer_depth);
 	}
 
+	void Renderer::init_post_beauty()
+	{
+		m_composite_material.set_texture(m_composite_material.k_base, &m_beauty_texture);
+		m_beauty_FBO.set_depth_buffer_texture(&m_backbuffer_depth);
+		m_beauty_FBO.push_back_color_buffer_texture(&m_beauty_texture);
+	}
+
 	void Renderer::init_deferred_renderer()
 	{
 		add_material(m_blinn_deferred.material());
@@ -103,6 +111,11 @@ namespace glen
 	{
 		add_material(m_ao_g_buffer_deferred.material());
 		add_material(m_ao_blur_deferred.material());
+
+		Texture* ao_texture = m_ao_blur_deferred.texture(0u);
+
+		m_beauty_FBO.push_back_color_buffer_texture(ao_texture);
+		m_composite_material.set_texture(m_composite_material.k_layer_1, ao_texture);
 	}
 
 	// // ----- RENDER ----- // //
@@ -157,28 +170,32 @@ namespace glen
 		}
 		else if (m_ao_enabled)
 		{
-			m_ao_g_buffer_FBO.bind();
+			//m_beauty_FBO.bind();
 
-			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+			//render_geometry();
 
-			render_geometry();
+			//m_ao_g_buffer_FBO.bind();
 
-			m_ao_g_buffer_FBO.unbind();
+			//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-			glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-			clear_screen();
+			render_geometry(&m_ao_g_buffer_material);
 
-			m_ao_g_buffer_deferred.update_view(m_camera_node);
+			//m_ao_g_buffer_FBO.unbind();
 
-			m_ao_FBO.bind();
-			m_ao_g_buffer_deferred.draw();
-			m_ao_FBO.unbind();
-
+			//glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 			//clear_screen();
 
-			m_ao_g_buffer_FBO.blit_depth_to_default(m_dimensions);
+			//m_ao_g_buffer_deferred.update_view(m_camera_node);
 
-			m_ao_blur_deferred.draw();
+			//m_ao_FBO.bind();
+			//m_ao_g_buffer_deferred.draw();
+			//m_ao_FBO.unbind();
+
+			////clear_screen();
+
+			//m_ao_g_buffer_FBO.blit_depth_to_default(m_dimensions);
+
+			//m_ao_blur_deferred.draw();
 
 
 
@@ -237,6 +254,24 @@ namespace glen
 			if (MeshNode* mesh_node = dynamic_cast<MeshNode*> (node.second) )
 			{
 				mesh_node->draw();
+			}
+		}
+	}
+
+	void Renderer::render_geometry(Material* material)
+	{
+		clear_screen();
+
+		m_camera_node->update();
+
+		material->update_lights(m_light_nodes);
+
+		for (auto const& node : m_root_nodes)
+		{
+			node.second->update_view(m_camera_node);
+			if (MeshNode* mesh_node = dynamic_cast<MeshNode*> (node.second))
+			{
+				mesh_node->draw_material(material);
 			}
 		}
 	}

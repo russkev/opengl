@@ -66,7 +66,7 @@ namespace gl_demo
 		render.disable_deferred_render();
 		//render.enable_deferred_render();
 		render.enable_ao();
-		render.disable_ao();
+		//render.disable_ao();
 
 		render.add_node(&shader_ball_node);
 		render.add_node(&floor_node);

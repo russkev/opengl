@@ -47,6 +47,7 @@ namespace glen
 		void clear_screen();
 		void render_shadow_maps();
 		void render_geometry();
+		void render_geometry(Material* material);
 		void render_lights();
 
 		// // ----- GENERAL METHODS ----- // //
@@ -57,6 +58,7 @@ namespace glen
 		void init_settings();
 		void init_first_frame();
 		void init_post_effects();
+		void init_post_beauty();
 		void init_deferred_renderer();
 		void init_ao();
 
@@ -95,11 +97,18 @@ namespace glen
 		ToneMap m_tone_map{ &m_backbuffer_FBO, m_dimensions };
 		Bloom m_bloom{ m_dimensions, &m_tone_map };
 
+		// // ----- BEAUTY ----- // //
+		Framebuffer m_beauty_FBO{ GL_FRAMEBUFFER };
+		Texture m_beauty_texture{ Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, m_dimensions) };
+		CompositeMaterial m_composite_material{};
+
+
 		// // ----- DEFERRRED RENDER VARIABLES ----- // //
 		Framebuffer m_g_buffer{ GL_FRAMEBUFFER };
 		BlinnDeferred m_blinn_deferred;
 
 		// // ----- AO VARIABLES ----- // //
+		AO_GBufferMaterial m_ao_g_buffer_material{};
 		Framebuffer m_ao_g_buffer_FBO{ GL_FRAMEBUFFER };
 		AO_GBufferDeferred m_ao_g_buffer_deferred;
 

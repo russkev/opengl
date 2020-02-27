@@ -299,6 +299,24 @@ namespace glen
 		set_sampler_value(k_bright, 0.0f);
 	}
 
+	// COMPOSITE
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	CompositeMaterial::CompositeMaterial() :
+		CompositeMaterial("Composite Material")
+	{}
+
+	CompositeMaterial::CompositeMaterial(const std::string& name) :
+		Material(name, "ScreenPassthrough.vert", "Composite.frag")
+	{
+		init();
+	}
+
+	void CompositeMaterial::init()
+	{
+		set_sampler_value(k_base, 0.0f);
+		set_sampler_value(k_layer_1, 0.0f);
+	}
+
 	// DEPTH
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 	DepthMaterial::DepthMaterial() :
