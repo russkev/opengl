@@ -55,7 +55,7 @@ namespace glen
 		Framebuffer* framebuffer();
 		Material* material();
 		MeshNode* mesh_node();
-		const Texture* texture(const GLuint g_buffer_location);
+		Texture* texture(const GLuint g_buffer_location);
 		const Texture* depth_texture();
 
 
@@ -114,5 +114,12 @@ namespace glen
 
 		AO_BlurMaterial m_material;
 	};
+
+	//struct Beauty_Deferred : public Deferred
+	//{
+	//	Beauty_Deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
+
+
+	//};
 }
 #endif

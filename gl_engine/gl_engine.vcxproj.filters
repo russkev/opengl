@@ -361,5 +361,8 @@
     <None Include="..\data\AO_Blur.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="..\data\Composite.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

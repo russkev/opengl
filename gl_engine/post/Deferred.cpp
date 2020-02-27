@@ -103,7 +103,7 @@ namespace glen
 		return &m_mesh_node;
 	}
 
-	const Texture* Deferred::texture(const GLuint g_buffer_location)
+	Texture* Deferred::texture(const GLuint g_buffer_location)
 	{
 		return &m_internal_textures[g_buffer_location];
 	}

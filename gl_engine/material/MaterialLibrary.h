@@ -167,6 +167,21 @@ namespace glen
 
 	};
 
+	// COMPOSITE
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	struct CompositeMaterial : public Material
+	{
+		inline static const std::string k_base = "base";
+		inline static const std::string k_layer_1 = "layer_1";
+
+		CompositeMaterial();
+		CompositeMaterial(const std::string& name);
+
+	private:
+		void init();
+	};
+
+
 	// DEPTH
 	//------------------------------------------------------------------------------------------------------------------------------------------//	
 	struct DepthMaterial : public Material
@@ -269,6 +284,7 @@ namespace glen
 	private:
 		void init();
 	};
+
 
 	// LIGHT
 	//------------------------------------------------------------------------------------------------------------------------------------------//
