@@ -265,12 +265,15 @@ namespace glen
 		m_camera_node->update();
 
 		material->update_lights(m_light_nodes);
+		//material->update_view(m_camera_node, m_camera_node);
 
 		for (auto const& node : m_root_nodes)
 		{
 			node.second->update_view(m_camera_node);
+			//material->update_view(m_camera_node, node);
 			if (MeshNode* mesh_node = dynamic_cast<MeshNode*> (node.second))
 			{
+				material->update_view(m_camera_node, mesh_node);
 				mesh_node->draw_material(material);
 			}
 		}
