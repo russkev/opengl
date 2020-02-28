@@ -23,7 +23,9 @@ Current features:
     - Various primitive shapes
     - Custom OBJ loader
  - Shading
-    - Blinn master shader
+    - Blinn master shader with texture maps for diffuse, specularity, roughness, etc.
+    - Normal mapping
+    - Parallax mapping
     - Self illuminated shader
     - Shadow mapping for all light types
     - Handles multiple lights and shadows
@@ -31,6 +33,8 @@ Current features:
     - 2D Text overlay
  - Post effects
     - HDR Tone mapping
+    - Deferred rendering
+    - Screen space ambient occlusion
     
 Big thank you to:
   - [Aleksandras Ševčenko](https://github.com/Coldberg) for being an excellent guide while I've been fumbling around.
