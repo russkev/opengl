@@ -5,6 +5,7 @@
 /gl_engine/x64
 /gl_demo/x64
 /gl_test/x64
+/x64
 *.VC.VC.opendb
 *.VC.db
 *.db
