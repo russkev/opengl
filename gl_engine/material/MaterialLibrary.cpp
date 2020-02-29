@@ -24,7 +24,8 @@ namespace glen
 
 	void AO_BlurMaterial::init()
 	{
-		set_sampler_value(k_ao_input, 0.0f);
+		set_sampler_value(k_ao_input, 1.0f);
+		set_sampler_value(k_color_input, 0.5f);
 	}
 
 	// AO G-BUFFER

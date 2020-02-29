@@ -100,8 +100,6 @@ namespace glen
 		// // ----- BEAUTY ----- // //
 		Framebuffer m_beauty_FBO{ GL_FRAMEBUFFER };
 		Texture m_beauty_texture{ Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, m_dimensions) };
-		CompositeMaterial m_composite_material{};
-
 
 		// // ----- DEFERRRED RENDER VARIABLES ----- // //
 		Framebuffer m_g_buffer{ GL_FRAMEBUFFER };
@@ -115,11 +113,6 @@ namespace glen
 		Framebuffer m_ao_FBO{ GL_FRAMEBUFFER };
 		AO_BlurDeferred m_ao_blur_deferred;
 
-
-		//Framebuffer m_ao_FBO{ GL_FRAMEBUFFER };
-
-		//AO_GBufferDeferred m_ao_g_buffer_deferred;
-		
 
 	};
 }

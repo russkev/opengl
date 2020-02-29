@@ -22,6 +22,7 @@ namespace glen
 	struct AO_BlurMaterial : public Material
 	{
 		inline static const std::string k_ao_input = "ao_input";
+		inline static const std::string k_color_input = "color_input";
 
 		AO_BlurMaterial();
 		AO_BlurMaterial(const std::string& name);
