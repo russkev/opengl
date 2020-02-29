@@ -97,7 +97,7 @@ namespace glen
 
 	void Renderer::init_post_beauty()
 	{
-		m_composite_material.set_texture(m_composite_material.k_base, &m_beauty_texture);
+		m_ao_blur_deferred.material()->set_texture(AO_BlurMaterial::k_color_input, &m_beauty_texture);
 		m_beauty_FBO.set_depth_buffer_texture(&m_backbuffer_depth);
 		m_beauty_FBO.push_back_color_buffer_texture(&m_beauty_texture);
 	}
@@ -113,9 +113,6 @@ namespace glen
 		add_material(m_ao_blur_deferred.material());
 
 		Texture* ao_texture = m_ao_blur_deferred.texture(0u);
-
-		m_beauty_FBO.push_back_color_buffer_texture(ao_texture);
-		m_composite_material.set_texture(m_composite_material.k_layer_1, ao_texture);
 	}
 
 	// // ----- RENDER ----- // //
@@ -170,36 +167,30 @@ namespace glen
 		}
 		else if (m_ao_enabled)
 		{
-			//m_beauty_FBO.bind();
+			m_beauty_FBO.bind();
 
-			//render_geometry();
+			render_geometry();
 
-			//m_ao_g_buffer_FBO.bind();
+			m_ao_g_buffer_FBO.bind();
 
-			//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 			render_geometry(&m_ao_g_buffer_material);
 
-			//m_ao_g_buffer_FBO.unbind();
+			m_ao_g_buffer_FBO.unbind();
 
-			//glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-			//clear_screen();
+			glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+			clear_screen();
 
-			//m_ao_g_buffer_deferred.update_view(m_camera_node);
+			m_ao_g_buffer_deferred.update_view(m_camera_node);
 
-			//m_ao_FBO.bind();
-			//m_ao_g_buffer_deferred.draw();
-			//m_ao_FBO.unbind();
+			m_ao_FBO.bind();
+			m_ao_g_buffer_deferred.draw();
+			m_ao_FBO.unbind();
 
-			////clear_screen();
+			m_ao_blur_deferred.draw();
 
-			//m_ao_g_buffer_FBO.blit_depth_to_default(m_dimensions);
-
-			//m_ao_blur_deferred.draw();
-
-
-
-
+			m_ao_g_buffer_FBO.blit_depth_to_default(m_dimensions);
 
 
 			render_lights();
@@ -265,12 +256,10 @@ namespace glen
 		m_camera_node->update();
 
 		material->update_lights(m_light_nodes);
-		//material->update_view(m_camera_node, m_camera_node);
 
 		for (auto const& node : m_root_nodes)
 		{
 			node.second->update_view(m_camera_node);
-			//material->update_view(m_camera_node, node);
 			if (MeshNode* mesh_node = dynamic_cast<MeshNode*> (node.second))
 			{
 				material->update_view(m_camera_node, mesh_node);
