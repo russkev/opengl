@@ -152,6 +152,10 @@ namespace gl_demo
 
 		// Renderer
 		glen::Renderer render{ &targetCam_node, glm::uvec2(window.width(), window.height()) };
+		render.enable_post_effects();
+		render.disable_deferred_render();
+		render.disable_ao();
+
 		render.add_node(&shaderBall_node);
 		render.add_node(&plane_node);
 

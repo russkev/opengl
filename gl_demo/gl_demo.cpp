@@ -9,7 +9,7 @@
 
 int main()
 {
-	//gl_demo::parallax_demo();
+	gl_demo::parallax_demo();
 	//gl_demo::specularity_demo();
 	//gl_demo::deferred_demo();
 	//gl_demo::ao_demo();
