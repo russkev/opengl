@@ -10,6 +10,24 @@
 
 namespace glen
 {
+	// AO BLUR
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	AO_BlurMaterial::AO_BlurMaterial() :
+		AO_BlurMaterial("AO Blur Material")
+	{}
+
+	AO_BlurMaterial::AO_BlurMaterial(const std::string& name) :
+		Material{ name, "ScreenPassthrough.vert", "AO_Blur.frag"}
+	{
+		init();
+	}
+
+	void AO_BlurMaterial::init()
+	{
+		set_sampler_value(k_ao_input, 1.0f);
+		set_sampler_value(k_color_input, 0.5f);
+	}
+
 	// AO G-BUFFER
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 	AO_GBufferMaterial::AO_GBufferMaterial() :
@@ -28,16 +46,13 @@ namespace glen
 
 		set_uniform(k_transform_model_to_world, default_transform);
 		set_uniform(k_transform_world_to_cam, default_transform);
-		set_uniform(k_transform_model_to_projection, default_transform);
 		set_uniform(k_transform_cam_to_projection, default_transform);
 	}
 
 	void AO_GBufferMaterial::update_view(const CameraNode* camera_node, const Node* model_node)
 	{
 		set_uniform(k_transform_model_to_world, model_node->world_to_node());
-		//set_uniform(k_transform_world_to_cam, camera_node->world_to_cam());
 		set_uniform(k_transform_world_to_cam, camera_node->camera()->transform_to_cam(camera_node->world_to_node()));
-		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * model_node->world_to_node());
 		set_uniform(k_transform_cam_to_projection, camera_node->camera()->cam_to_projection());
 	}
 
@@ -59,10 +74,12 @@ namespace glen
 		set_sampler_color(k_g_cam_space_normal, glm::vec3(0.5f, 0.5f, 1.0f));
 		set_sampler_value(k_noise, 0.0f);
 
+		std::vector<glm::vec3> samples_vector;
 		for (GLuint i = 0; i < k_num_samples; ++i)
 		{
-			set_uniform(k_samples + "[" + std::to_string(i) + "]", glm::vec3{ 0.0f });
-		}
+			samples_vector.push_back(glm::vec3{ 0.0f });
+		};
+		set_uniform(k_samples, samples_vector);
 		
 		set_uniform(k_radius, 1.0f);
 		set_uniform(k_bias, 0.05f);
@@ -76,7 +93,7 @@ namespace glen
 	void AO_Material::update_view(const CameraNode* camera_node, const Node* model_node)
 	{
 		//set_uniform(k_camera_position, camera_node->world_position());
-		//set_uniform(k_cam_to_projection, camera_node->camera()->cam_to_projection());
+		set_uniform(k_cam_to_projection, camera_node->camera()->cam_to_projection());
 	}
 
 	// BLINN
@@ -281,6 +298,24 @@ namespace glen
 	{
 		set_sampler_value(k_color, 0.0f);
 		set_sampler_value(k_bright, 0.0f);
+	}
+
+	// COMPOSITE
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	CompositeMaterial::CompositeMaterial() :
+		CompositeMaterial("Composite Material")
+	{}
+
+	CompositeMaterial::CompositeMaterial(const std::string& name) :
+		Material(name, "ScreenPassthrough.vert", "Composite.frag")
+	{
+		init();
+	}
+
+	void CompositeMaterial::init()
+	{
+		set_sampler_value(k_base, 0.0f);
+		set_sampler_value(k_layer_1, 0.0f);
 	}
 
 	// DEPTH

@@ -54,7 +54,6 @@ namespace glen
 
 	void MeshNode::draw_material(Material* material)
 	{
-
 		material->use();
 		m_vao.bind();
 		m_index_buffer.bind(GL_ELEMENT_ARRAY_BUFFER);

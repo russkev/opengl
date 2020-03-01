@@ -18,6 +18,18 @@ namespace glen
 	struct DirectionalLight;
 	struct SpotLight;
 
+
+	struct AO_BlurMaterial : public Material
+	{
+		inline static const std::string k_ao_input = "ao_input";
+		inline static const std::string k_color_input = "color_input";
+
+		AO_BlurMaterial();
+		AO_BlurMaterial(const std::string& name);
+	private:
+		void init();
+	};
+
 	struct AO_GBufferMaterial : public Material
 	{
 		inline static const std::string k_g_position	= "g_position";
@@ -26,7 +38,6 @@ namespace glen
 
 		inline static const std::string k_transform_model_to_world		= "transform.model_to_world";
 		inline static const std::string k_transform_world_to_cam		= "transform.world_to_cam";
-		inline static const std::string k_transform_model_to_projection	= "transform.model_to_projection";
 		inline static const std::string k_transform_cam_to_projection	= "transform.cam_to_projection";
 		
 		AO_GBufferMaterial();
@@ -39,7 +50,7 @@ namespace glen
 
 	struct AO_Material : public Material
 	{
-		const static constexpr GLuint k_num_samples = 64;
+		const static constexpr GLuint k_num_samples = 128;
 
 		inline static const std::string k_g_cam_space_position = "g_cam_space_position";
 		inline static const std::string k_g_cam_space_normal = "g_cam_space_normal";
@@ -157,6 +168,21 @@ namespace glen
 
 	};
 
+	// COMPOSITE
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	struct CompositeMaterial : public Material
+	{
+		inline static const std::string k_base = "base";
+		inline static const std::string k_layer_1 = "layer_1";
+
+		CompositeMaterial();
+		CompositeMaterial(const std::string& name);
+
+	private:
+		void init();
+	};
+
+
 	// DEPTH
 	//------------------------------------------------------------------------------------------------------------------------------------------//	
 	struct DepthMaterial : public Material
@@ -259,6 +285,7 @@ namespace glen
 	private:
 		void init();
 	};
+
 
 	// LIGHT
 	//------------------------------------------------------------------------------------------------------------------------------------------//
