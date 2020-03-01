@@ -209,6 +209,7 @@
     <Import Project="..\packages\glew.v140.1.12.0\build\native\glew.v140.targets" Condition="Exists('..\packages\glew.v140.1.12.0\build\native\glew.v140.targets')" />
     <Import Project="..\packages\glm.0.9.9.700\build\native\glm.targets" Condition="Exists('..\packages\glm.0.9.9.700\build\native\glm.targets')" />
     <Import Project="..\packages\Zstandard.dyn.x64.1.4.0\build\native\Zstandard.dyn.x64.targets" Condition="Exists('..\packages\Zstandard.dyn.x64.1.4.0\build\native\Zstandard.dyn.x64.targets')" />
+    <Import Project="..\packages\vcpkg-export-20200301-141656.1.0.0\build\native\vcpkg-export-20200301-141656.targets" Condition="Exists('..\packages\vcpkg-export-20200301-141656.1.0.0\build\native\vcpkg-export-20200301-141656.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -229,5 +230,6 @@
     <Error Condition="!Exists('..\packages\glew.v140.1.12.0\build\native\glew.v140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glew.v140.1.12.0\build\native\glew.v140.targets'))" />
     <Error Condition="!Exists('..\packages\glm.0.9.9.700\build\native\glm.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glm.0.9.9.700\build\native\glm.targets'))" />
     <Error Condition="!Exists('..\packages\Zstandard.dyn.x64.1.4.0\build\native\Zstandard.dyn.x64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Zstandard.dyn.x64.1.4.0\build\native\Zstandard.dyn.x64.targets'))" />
+    <Error Condition="!Exists('..\packages\vcpkg-export-20200301-141656.1.0.0\build\native\vcpkg-export-20200301-141656.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg-export-20200301-141656.1.0.0\build\native\vcpkg-export-20200301-141656.targets'))" />
   </Target>
 </Project>
