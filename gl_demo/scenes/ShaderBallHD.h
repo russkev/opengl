@@ -27,41 +27,43 @@ namespace gl_demo
 		glen::Mesh ball_inside_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_ball_inside.obj");
 		glen::Mesh ball_trim_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_ball_trim.obj");
 		glen::Mesh base_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_base.obj");
-		glen::Mesh base_inside_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_base_inside.obj");
-		glen::Mesh cushion_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_cushion.obj");
+		//glen::Mesh base_inside_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_base_inside.obj");
+		//glen::Mesh cushion_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_cushion.obj");
 		glen::Mesh cyc_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_cyc.obj");
 
 		// Materials
 		glen::BlinnMaterial white_blinn_material{ "Blinn Material " };
-		white_blinn_material.set_sampler_value(white_blinn_material.k_color, 0.8f);
+		white_blinn_material.set_sampler_value(white_blinn_material.k_material_diffuse, 0.8f);
 
 		// Mesh Nodes
 		glen::MeshNode ball_node{ "Ball Node", &ball_mesh, &white_blinn_material };
 		glen::MeshNode ball_inside_node{ "Ball Inside Node", &ball_inside_mesh, &white_blinn_material };
 		glen::MeshNode ball_trim_node{ "Ball Trim Node", &ball_trim_mesh, &white_blinn_material };
 		glen::MeshNode base_node{ "Base Node", &base_mesh, &white_blinn_material };
-		glen::MeshNode base_inside_node{ "Base Inside Node", &base_inside_mesh, &white_blinn_material };
-		glen::MeshNode cushion_node{ "Cushion Node", &cushion_mesh, &white_blinn_material };
+		//glen::MeshNode base_inside_node{ "Base Inside Node", &base_inside_mesh, &white_blinn_material };
+		//glen::MeshNode cushion_node{ "Cushion Node", &cushion_mesh, &white_blinn_material };
 		glen::MeshNode cyc_node{ "Cyc Node", &cyc_mesh, &white_blinn_material };
 
 		// Directional Light 1
 		glen::DirectionalLight directional_light{ 0.7f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
 		glen::LightNode directional_light_node{ "Directional Light 1", &directional_light };
 		directional_light_node.set_rotation({ 33.0f, 225.0f, 0.0f });
-		directional_light_node.set_position({ 16.0f, 16.0f, 16.0f });
+		directional_light_node.set_position({ 300.0f, 300.0f, 0.0f });
 
 		// Shadow Map
 		//glen::ShadowMap directional_light_shadow{ &directional_light_node };
 
 		glen::Renderer render{ &target_cam_node, glm::uvec2{ window.width(), window.height() } };
+		render.disable_post_effects();
+		render.enable_deferred_render();
 
 		// Add mesh nodes
 		render.add_node(&ball_node);
 		render.add_node(&ball_inside_node);
 		render.add_node(&ball_trim_node);
 		render.add_node(&base_node);
-		render.add_node(&base_inside_node);
-		render.add_node(&cushion_node);
+		//render.add_node(&base_inside_node);
+		//render.add_node(&cushion_node);
 		render.add_node(&cyc_node);
 
 		// Add light nodes
