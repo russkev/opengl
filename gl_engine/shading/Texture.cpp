@@ -263,8 +263,13 @@ namespace glen
 	// // ----- FACTORY ----- // //
 	Texture Texture::create_16bit_rgba_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
+		return create_16bit_rgba_null_texture("16 Bit RGBA Null Texture", target, dimensions);
+	}
+
+	Texture Texture::create_16bit_rgba_null_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions)
+	{
 		Texture texture{ target };
-		texture.set_name("16 Bit RGBA Null Texture");
+		texture.set_name(name);
 		texture.set_width(dimensions.x);
 		texture.set_height(dimensions.y);
 		texture.set_internal_format(GL_RGBA16F);
@@ -283,8 +288,13 @@ namespace glen
 
 	Texture Texture::create_16bit_rgb_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
+		return create_16bit_rgb_null_texture("16 Bit RGB Null Texture", target, dimensions);
+	}
+
+	Texture Texture::create_16bit_rgb_null_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions)
+	{
 		Texture texture{ target };
-		texture.set_name("16 Bit RGB Null Texture");
+		texture.set_name(name);
 		texture.set_width(dimensions.x);
 		texture.set_height(dimensions.y);
 		texture.set_internal_format(GL_RGB16F);
@@ -303,8 +313,13 @@ namespace glen
 
 	Texture Texture::create_8bit_rgba_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
+		return create_8bit_rgba_null_texture("8 Bit RGBA Null Texture", target, dimensions);
+	}
+
+	Texture Texture::create_8bit_rgba_null_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions)
+	{
 		Texture texture{ target };
-		texture.set_name("8 Bit RGBA Null Texture");
+		texture.set_name(name);
 		texture.set_width(dimensions.x);
 		texture.set_height(dimensions.y);
 		texture.set_internal_format(GL_RGBA);
@@ -323,8 +338,13 @@ namespace glen
 
 	Texture Texture::create_8bit_rgb_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
+		return create_8bit_rgb_null_texture("8 Bit RGB Null Texture", target, dimensions);
+	}
+
+	Texture Texture::create_8bit_rgb_null_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions)
+	{
 		Texture texture{ target };
-		texture.set_name("8 Bit RGB Null Texture");
+		texture.set_name(name);
 		texture.set_width(dimensions.x);
 		texture.set_height(dimensions.y);
 		texture.set_internal_format(GL_RGB);
@@ -343,8 +363,13 @@ namespace glen
 
 	Texture Texture::create_depth_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
+		return create_depth_null_texture("Depth Null Texture", target, dimensions);
+	}
+
+	Texture Texture::create_depth_null_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions)
+	{
 		Texture texture{ target };
-		texture.set_name("Depth Null Texture");
+		texture.set_name(name);
 		texture.set_internal_format(GL_DEPTH_COMPONENT);
 		texture.set_width(dimensions.x);
 		texture.set_height(dimensions.y);
@@ -363,8 +388,13 @@ namespace glen
 
 	Texture Texture::create_stencil_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
+		return create_stencil_texture("Stencil Texture", target, dimensions);
+	}
+
+	Texture Texture::create_stencil_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions)
+	{
 		Texture texture{ target };
-		texture.set_name("Stencil Texture");
+		texture.set_name(name);
 		texture.set_internal_format(GL_STENCIL_INDEX8);
 		texture.set_width(dimensions.x);
 		texture.set_height(dimensions.y);
@@ -383,8 +413,13 @@ namespace glen
 
 	Texture Texture::create_depth_null_texture_for_shadow(const GLenum target, const glm::uvec2& dimensions)
 	{
+		return create_depth_null_texture_for_shadow("Depth Null Texture For Shadows", target, dimensions);
+	}
+
+	Texture Texture::create_depth_null_texture_for_shadow(const std::string& name, const GLenum target, const glm::uvec2& dimensions)
+	{
 		Texture texture{ target };
-		texture.set_name("Depth Null Texture For Shadows");
+		texture.set_name(name);
 		texture.set_width((GLsizei)dimensions.x);
 		texture.set_height((GLsizei)dimensions.y);
 		texture.set_internal_format(GL_DEPTH_COMPONENT);
@@ -402,8 +437,13 @@ namespace glen
 
 	Texture Texture::create_square_noise_tile_texture(const GLenum target, const glm::uvec2& dimensions, const std::vector<glm::vec3>& data)
 	{
+		return create_square_noise_tile_texture("Square Noise Tile Texture", target, dimensions, data);
+	}
+
+	Texture Texture::create_square_noise_tile_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions, const std::vector<glm::vec3>& data)
+	{
 		Texture texture{ target };
-		texture.set_name("Square Noise Tile Texture");
+		texture.set_name(name);
 		texture.set_width((GLsizei)dimensions.x);
 		texture.set_height((GLsizei)dimensions.y);
 		texture.set_internal_format(GL_RGB16F);
@@ -422,8 +462,13 @@ namespace glen
 
 	Texture Texture::create_bw_null_texture(const GLenum target, const glm::uvec2& dimensions)
 	{
+		return create_bw_null_texture("Monochrome Null Texture", target, dimensions);
+	}
+
+	Texture Texture::create_bw_null_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions)
+	{
 		Texture texture{ target };
-		texture.set_name("Monochrome Null Texture");
+		texture.set_name(name);
 		texture.set_width((GLsizei)dimensions.x);
 		texture.set_height((GLsizei)dimensions.y);
 		texture.set_internal_format(GL_RED);

@@ -11,7 +11,6 @@
 #include "../gl_engine/shading/Texture.cpp"
 #include "../gl_engine/shading/Framebuffer.cpp"
 
-
 //#include <iostream>
 //#define BOOT_TEST_MODULE
 //#include <boost/test/included/unit_test.hpp>
