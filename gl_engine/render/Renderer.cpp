@@ -59,7 +59,7 @@ namespace glen
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		// // Enable gamma correction
 		//glEnable(GL_FRAMEBUFFER_SRGB);
-		//glDisable(GL_FRAMEBUFFER_SRGB);
+		glDisable(GL_FRAMEBUFFER_SRGB);
 	}
 
 	void Renderer::init_first_frame()
@@ -104,7 +104,10 @@ namespace glen
 
 	void Renderer::init_deferred_renderer()
 	{
-		add_material(m_blinn_deferred.material());
+		if (m_deferred_render_enabled)
+		{
+			add_material(m_blinn_deferred.material());
+		}
 	}
 
 	void Renderer::init_ao()

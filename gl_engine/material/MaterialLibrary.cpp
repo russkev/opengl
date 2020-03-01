@@ -173,7 +173,7 @@ namespace glen
 	{
 		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * model_node->world_to_node());
 		set_uniform(k_transform_model_to_world, model_node->world_to_node());
-		set_uniform(k_transform_model_world_to_normal, model_node->world_normal_to_node());
+		//set_uniform(k_transform_model_world_to_normal, model_node->world_normal_to_node());
 		set_uniform(k_camera_position, camera_node->world_position());
 	}
 
