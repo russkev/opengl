@@ -12,5 +12,4 @@
   test_VAO.cpp
   test_VectorUtils.cpp
   Generating Code...
-SDL2main.lib(SDL_windows_main.obj) : error LNK2019: unresolved external symbol SDL_main referenced in function main_utf8
-C:\_DOCS\PROGRAMMING\17-02_GL_Engine\opengl\x64\Debug\gl_test.exe : fatal error LNK1120: 1 unresolved externals
+  gl_test.vcxproj -> E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\x64\Debug\gl_test.exe
