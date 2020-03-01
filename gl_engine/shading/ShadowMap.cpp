@@ -48,10 +48,14 @@ namespace glen
 			std::string index = std::to_string(m_lightNode->shader_pos());
 			std::string type = m_lightNode->light()->type();
 
-			material->set_texture(type + "[" + index + "]." + BlinnMaterial::k_depth, &m_texture);
-			if (is_point())
+			if (BlinnMaterial* blinn_material = dynamic_cast<BlinnMaterial*>(material))
 			{
-				material->set_uniform(type + "[" + index + "]." + BlinnMaterial::k_far_plane, m_camera_node.camera()->clip_far());
+				material->set_texture(type + "[" + index + "]." + BlinnMaterial::k_depth, &m_texture);
+				if (is_point())
+				{
+					material->set_uniform(type + "[" + index + "]." + BlinnMaterial::k_far_plane, m_camera_node.camera()->clip_far());
+				}
+				material->set_uniform(type + "[" + index + "]." + BlinnMaterial::k_shadow_enabled, true);
 			}
 		}
 	}

@@ -66,6 +66,7 @@ struct PointLight
 	vec3 color;
 	samplerCube depth;
 	float far_plane;
+	bool shadow_enabled;
 };
 uniform PointLight pointLight[NUM_LIGHTS];
 
@@ -76,6 +77,7 @@ struct DirectionalLight
 	vec3 color;
 	sampler2DArray depth;
 	mat4 projection;
+	bool shadow_enabled;
 };
 uniform DirectionalLight directionalLight[NUM_LIGHTS];
 
@@ -89,6 +91,7 @@ struct SpotLight
 	float outer;
 	sampler2DArray depth;
 	mat4 projection;
+	bool shadow_enabled;
 };
 uniform SpotLight spotLight[NUM_LIGHTS];
 
@@ -388,8 +391,9 @@ float create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_lig
 
 	vec3 projection_coordinates = lightSpace_position.xyz / lightSpace_position.w;
 	projection_coordinates = projection_coordinates * 0.5 + 0.5;
-
 	float closest_depth = texture(depth, vec3(projection_coordinates.xy, 0)).r;
+
+
 	float current_depth = projection_coordinates.z;
 
 	for(float x = -1; x < 1; x+= step_size)
@@ -459,10 +463,14 @@ void main ()
 	// Point lights
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		float temp_shadow = create_point_shadow(
-			pointLight[i].position,
-			pointLight[i].far_plane,
-			pointLight[i].depth);
+		float temp_shadow = 010;
+		if (pointLight[i].shadow_enabled)
+		{
+			temp_shadow = create_point_shadow(
+				pointLight[i].position,
+				pointLight[i].far_plane,
+				pointLight[i].depth);
+		}
 		float temp_attenuation = attenuation(pointLight[i].position);
 
 		diffuse_out += 
@@ -484,10 +492,14 @@ void main ()
 	// Directional lights
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		float temp_shadow = create_directional_shadow(
-			in_directionalLight[i].light_space_position, 
-			m_directionalLight[i].tangent_space_direction,
-			directionalLight[i].depth);
+		float temp_shadow = 1.0;
+		if (directionalLight[i].shadow_enabled)
+		{
+			temp_shadow = create_directional_shadow(
+				in_directionalLight[i].light_space_position, 
+				m_directionalLight[i].tangent_space_direction,
+				directionalLight[i].depth);
+		}
 
 		diffuse_out += 
 			diffuse_directional_tangent_space(i) *
@@ -506,11 +518,16 @@ void main ()
 	// Spot lights
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
+		float temp_shadow = 1.0;
+		if(spotLight[i].shadow_enabled)
+		{
+			temp_shadow = create_directional_shadow(
+				in_spotLight[i].light_space_position,
+				m_spotLight[i].tangent_space_direction,
+				spotLight[i].depth);
+		}
 		float temp_attenuation = attenuation(spotLight[i].position);
-		float temp_shadow = create_directional_shadow(
-			in_spotLight[i].light_space_position,
-			m_spotLight[i].tangent_space_direction,
-			spotLight[i].depth);
+
 
 		diffuse_out +=
 			diffuse_spot_tangent_space(i) *
@@ -532,7 +549,6 @@ void main ()
 		diffuse_out * texture(material.diffuse, uv).rgb * material.diffuse_amount
 		+ 
 		specular_out * material.specular_amount
-//		texture(material.normal, uv).rgb
 		* vec3(1.0);
 
 	frag_color = vec4(outColor.xyz, 1.0);

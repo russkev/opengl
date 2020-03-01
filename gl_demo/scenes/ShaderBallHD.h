@@ -27,8 +27,6 @@ namespace gl_demo
 		glen::Mesh ball_inside_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_ball_inside.obj");
 		glen::Mesh ball_trim_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_ball_trim.obj");
 		glen::Mesh base_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_base.obj");
-		//glen::Mesh base_inside_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_base_inside.obj");
-		//glen::Mesh cushion_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_cushion.obj");
 		glen::Mesh cyc_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_cyc.obj");
 
 		// Materials
@@ -40,8 +38,6 @@ namespace gl_demo
 		glen::MeshNode ball_inside_node{ "Ball Inside Node", &ball_inside_mesh, &white_blinn_material };
 		glen::MeshNode ball_trim_node{ "Ball Trim Node", &ball_trim_mesh, &white_blinn_material };
 		glen::MeshNode base_node{ "Base Node", &base_mesh, &white_blinn_material };
-		//glen::MeshNode base_inside_node{ "Base Inside Node", &base_inside_mesh, &white_blinn_material };
-		//glen::MeshNode cushion_node{ "Cushion Node", &cushion_mesh, &white_blinn_material };
 		glen::MeshNode cyc_node{ "Cyc Node", &cyc_mesh, &white_blinn_material };
 
 		// Directional Light 1
@@ -62,8 +58,6 @@ namespace gl_demo
 		render.add_node(&ball_inside_node);
 		render.add_node(&ball_trim_node);
 		render.add_node(&base_node);
-		//render.add_node(&base_inside_node);
-		//render.add_node(&cushion_node);
 		render.add_node(&cyc_node);
 
 		// Add light nodes

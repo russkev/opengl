@@ -93,6 +93,7 @@ namespace glen
 		inline static const std::string k_depth			= "depth";
 		inline static const std::string k_projection	= "projection";
 		inline static const std::string k_far_plane		= "far_plane";
+		inline static const std::string k_shadow_enabled = "shadow_enabled";
 
 		inline static const std::string k_camera_position = "camera.position";
 

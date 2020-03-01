@@ -2,7 +2,6 @@
 #pragma optionNV unroll all
 #define NUM_LIGHTS 3
 
-
 // // ----- INS ----- // //
 in layout(location = 0 ) vec3 vertex_position;
 in layout(location = 1 ) vec3 vertex_color;
@@ -11,7 +10,6 @@ in layout(location = 3 ) vec2 vertex_uv;
 in layout(location = 4 ) int  vertex_id;
 in layout(location = 5 ) vec3 vertex_tangent;
 in layout(location = 6 ) vec3 vertex_bitangent;
-
 
 // // ----- UNIFORMS ----- // //
 struct Transform
@@ -60,7 +58,6 @@ struct Camera
 	vec3 position;
 };
 uniform Camera camera;
-
 
 // // ----- OUTS ----- // //
 out vec3 test;

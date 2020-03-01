@@ -124,7 +124,7 @@ namespace glen
 			m_first_frame = false;
 		}
 
-		//render_shadow_maps();
+		render_shadow_maps();
 
 		if (m_post_effects_enabled)
 		{
