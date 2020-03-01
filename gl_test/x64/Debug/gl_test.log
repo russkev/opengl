@@ -1,15 +1,2 @@
-﻿  pch.cpp
-  gl_test_main.cpp
-  Helper.cpp
-  test_Buffer.cpp
-  test_Deferred.cpp
-  test_Framebuffer.cpp
-  test_Material.cpp
-  test_Node.cpp
-  test_Overall.cpp
-  test_Texture.cpp
-  test_Timer.cpp
-  test_VAO.cpp
-  test_VectorUtils.cpp
-  Generating Code...
+﻿  gl_test_main.cpp
   gl_test.vcxproj -> E:\DOCS\PROGRAMMING\CPP\OpenGL\repos\opengl\x64\Debug\gl_test.exe
