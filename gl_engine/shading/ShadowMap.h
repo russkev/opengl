@@ -61,10 +61,19 @@ namespace glen
 		bool is_directional();
 		bool is_point();
 
+		// // ----- GETTERS ----- // //
+	public:
+		const GLfloat bias() const;
+		const GLfloat radius() const;
+		const GLint num_samples() const;
+
 		// // ----- SETTERS ----- // //
 	public:
-		void set_clip_near(GLfloat);
-		void set_clip_far(GLfloat);
+		void set_clip_near(const GLfloat);
+		void set_clip_far(const GLfloat);
+		void set_bias(const GLfloat);
+		void set_radius(const GLfloat);
+		void set_num_samples(const GLint);
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
@@ -75,6 +84,10 @@ namespace glen
 		LightNode*	m_lightNode = NULL;
 
 		CameraNode	m_camera_node;
+
+		GLfloat m_bias = 0.05f;
+		GLfloat m_radius = 0.05f;
+		GLint m_num_samples = 20;
 	};
 }
 
