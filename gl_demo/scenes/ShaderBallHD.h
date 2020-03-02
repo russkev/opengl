@@ -34,6 +34,7 @@ namespace gl_demo
 		white_blinn_material.set_sampler_value(white_blinn_material.k_material_diffuse, 0.8f);
 		white_blinn_material.set_uniform(white_blinn_material.k_material_specular_amount, 0.8f);
 		white_blinn_material.set_sampler_value(white_blinn_material.k_material_specular, 0.9f);
+		white_blinn_material.set_uniform("directionalLight[1].shadow_enabled", true);
 
 
 		// Mesh Nodes
@@ -45,16 +46,25 @@ namespace gl_demo
 
 		// Directional Light 1
 		glen::SpotLight spot_light{ 70.0f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
+		spot_light.camera()->set_clip_far(2000.0f);
 		spot_light.set_inner_angle(50.0f);
 		spot_light.set_outer_angle(90.0f);
 		glen::LightNode spot_light_node{ "Spot Light 1", &spot_light };
 		spot_light_node.set_rotation({ 33.0f, 270.0f, 0.0f });
 		spot_light_node.set_position({ 300.0f, 300.0f, 0.0f });
 
+		// Point Light 1
+		glen::PointLight point_light{ 80.0f, glm::vec3{0.0f, 1.0f, 0.0f} };
+		point_light.camera()->set_clip_far(2000.0f);
+		point_light.camera()->set_clip_near(10.0f);
+		glen::LightNode point_light_node{ "Point Light 1", &point_light };
+		point_light_node.set_position(glm::vec3{ -300.0f, 300.0f, 0.0f });
+
 		// Shadow Map
 		glen::ShadowMap spot_light_shadow{ &spot_light_node };
 		spot_light_shadow.set_clip_near(1.0f);
 		spot_light_shadow.set_clip_far(2000.0f);
+		glen::ShadowMap point_light_shadow{ &point_light_node };
 
 		glen::Renderer render{ &target_cam_node, glm::uvec2{ window.width(), window.height() } };
 		render.enable_post_effects();
@@ -70,6 +80,7 @@ namespace gl_demo
 
 		// Add light nodes
 		render.add_node(&spot_light_node);
+		render.add_node(&point_light_node);
 
 		glen::Timer timer;
 		while (render.poll_events())

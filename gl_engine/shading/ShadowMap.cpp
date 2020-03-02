@@ -19,7 +19,7 @@ namespace glen
 	const GLuint ShadowMap::k_shadow_width = 1024;
 	const GLuint ShadowMap::k_shadow_height = 1024;
 	const GLfloat ShadowMap::k_default_clip_near = 0.1f;
-	const GLfloat ShadowMap::k_default_clip_far = 100.0f;
+	const GLfloat ShadowMap::k_default_clip_far = 1000.0f;
 
 	// // ----- CONSTRUCTORS ----- // //
 	ShadowMap::ShadowMap(LightNode* light_node) :
