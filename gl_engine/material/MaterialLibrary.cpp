@@ -165,6 +165,10 @@ namespace glen
 		set_uniform(k_material_displacement_amount, 0.1f);
 		set_uniform(k_material_displacement_enabled, false);
 
+		set_uniform(k_shadow_bias, 0.05f);
+		set_uniform(k_shadow_radius, 0.05f);
+		set_uniform(k_shadow_num_samples, 20);
+
 
 
 	}
