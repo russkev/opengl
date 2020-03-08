@@ -15,6 +15,10 @@ namespace glen
 		http://lazyfoo.net/tutorials/SDL/06_extension_libraries_and_loading_other_image_formats/index2.php
 
 	*/
+	Texture::Texture() :
+		m_name{ "Texture" }
+	{}
+
 	Texture::Texture(const char* filepath) :
 		m_name{ filepath },
 		m_surface{ IMG_Load(filepath) },
@@ -80,7 +84,7 @@ namespace glen
 		glGenTextures(1, &m_id);
 	}
 
-	Texture::Texture(Texture&& other) :
+	Texture::Texture(Texture&& other) noexcept:
 		m_name{ std::exchange(other.m_name, "") },
 		m_surface{ other.m_surface },
 		m_color{ other.m_color },
@@ -106,7 +110,7 @@ namespace glen
 		other.m_data = NULL;
 	}
 
-	Texture& Texture::operator = (Texture&& other)
+	Texture& Texture::operator = (Texture&& other) noexcept
 	{
 		(*this).~Texture();
 		return *new (this) Texture(std::move(other));
@@ -588,7 +592,7 @@ namespace glen
 		{
 			return m_surface->pixels;
 		}
-		return false;
+		return (void*)false;
 	}
 
 	// // ----- SETTERS ----- // //

@@ -1,7 +1,6 @@
 #ifndef GL_ENGINE_MATERIAL_LIGHT_MATERIAL_H
 #define GL_ENGINE_MATERIAL_LIGHT_MATERIAL_H
 
-#include <tuple>
 #include <string>
 #include <vector>
 #include <map>

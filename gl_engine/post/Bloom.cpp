@@ -8,18 +8,22 @@ namespace glen
 {
 	// // ----- CONSTRUCTOR ----- // //
 	Bloom::Bloom(const glm::uvec2& dimensions, ToneMap* tone_map) :
-		m_tone_map{tone_map}
+		m_tone_map{ tone_map },
+		m_blur_texture { Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, dimensions) },
+		m_pingpong_textures{ 
+			Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, dimensions),  
+			Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, dimensions) }
 	{
 		for (GLuint i = 0; i < DIRECTIONS; ++i)
 		{
-			m_pingpong_textures[i] = Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, dimensions);
+			
 			m_pingpong_fbos[i].bind();
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_pingpong_textures[i].id(), 0);
 			m_pingpong_fbos[i].check_bound_framebuffer();
 			m_pingpong_fbos[i].unbind();
 		}
 
-		m_blur_texture = Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, dimensions);
+		
 		m_blur_material.set_texture(GaussianBlurMaterial::k_image, &m_blur_texture);
 		m_bloom_material.set_texture(BloomMaterial::k_color , m_tone_map->beauty());
 		m_bloom_material.set_texture(BloomMaterial::k_bright, &m_blur_texture);

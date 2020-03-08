@@ -176,6 +176,9 @@
     <ClInclude Include="utils\ScalarUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="material\ShaderType.h">
+      <Filter>Material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="render\Window.cpp">
