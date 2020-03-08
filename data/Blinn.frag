@@ -67,6 +67,9 @@ struct PointLight
 	samplerCube depth;
 	float far_plane;
 	bool shadow_enabled;
+	float shadow_bias;
+	float shadow_radius;
+	int shadow_num_samples;
 };
 uniform PointLight pointLight[NUM_LIGHTS];
 
@@ -78,6 +81,9 @@ struct DirectionalLight
 	sampler2DArray depth;
 	mat4 projection;
 	bool shadow_enabled;
+	float shadow_bias;
+	float shadow_radius;
+	int shadow_num_samples;
 };
 uniform DirectionalLight directionalLight[NUM_LIGHTS];
 
@@ -92,6 +98,9 @@ struct SpotLight
 	sampler2DArray depth;
 	mat4 projection;
 	bool shadow_enabled;
+	float shadow_bias;
+	float shadow_radius;
+	int shadow_num_samples;
 };
 uniform SpotLight spotLight[NUM_LIGHTS];
 
@@ -101,13 +110,13 @@ struct Camera
 };
 uniform Camera camera;
 
-struct Shadow
+struct ShadowInfo
 {
 	float bias;
 	float radius;
 	int num_samples;
 };
-uniform Shadow shadow;
+//uniform Shadow shadow;
 
 // // ----- OUTS ----- // //
 out layout(location = 0) vec4 frag_color;
@@ -385,17 +394,17 @@ vec3 specular_spot_tangent_space(int index)
 }
 
 // // ----- SHADOWS ----- // //
-float create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_lightDirection, sampler2DArray depth)
+vec3 create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_lightDirection, sampler2DArray depth, ShadowInfo shadow_info)
 {
-	float num_passes	= 1;
-	float step_size		= 3 / num_passes;
-	float texel_ratio	= 1.0;
-	vec2 texelSize		= texel_ratio / vec2(1024, 1024) /*!!!textureSize(depthMap, 0)*/;
+//	float num_passes	= 1;
+	float step_size		= 3 / shadow_info.num_samples;
+//	float texel_ratio	= 1.0;
+	vec2 texelSize		= shadow_info.radius / vec2(1024, 1024) /*!!!textureSize(depthMap, 0)*/;
 
 	float out_shadow	= 0.0;
-	float max_bias		= 0.002;
+//	float max_bias		= 0.00000;
 	float bias_ratio	= 0.2;
-	float bias =  max(max_bias * (1.0 - dot(m_frag.tangent_space_normal, tangent_space_lightDirection)), max_bias * bias_ratio);
+	float bias =  max(shadow_info.bias * (1.0 - dot(m_frag.tangent_space_normal, tangent_space_lightDirection)), shadow_info.bias * bias_ratio);
 
 	vec3 projection_coordinates = lightSpace_position.xyz / lightSpace_position.w;
 	projection_coordinates = projection_coordinates * 0.5 + 0.5;
@@ -404,24 +413,27 @@ float create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_lig
 
 	float current_depth = projection_coordinates.z;
 
-	for(float x = -1; x < 1; x+= step_size)
-	{
-		for (float y = -1; y < 1; y += step_size)
-		{
-			float pcfDepth = texture(depth, vec3(projection_coordinates.xy + vec2(x, y) * texelSize, 0)).r;
-			out_shadow += current_depth - bias > pcfDepth ? 0.0 : 1.0;
-		}
-	}
-	out_shadow /= (num_passes * num_passes);
+	float shadow = current_depth - shadow_info.bias > closest_depth ? 0.0 : 1.0;
+	return vec3(shadow);
 
-	if (projection_coordinates.z > 1.0f)
-	{
-		out_shadow = 1.0;
-	}
-	return out_shadow;
+//	for(float x = -1; x < 1; x+= step_size)
+//	{
+//		for (float y = -1; y < 1; y += step_size)
+//		{
+//			float pcfDepth = texture(depth, vec3(projection_coordinates.xy + vec2(x, y) * texelSize, 0)).r;
+//			out_shadow += current_depth - bias > pcfDepth ? 0.0 : 1.0;
+//		}
+//	}
+//	out_shadow /= (shadow_info.num_samples * shadow_info.num_samples);
+//
+//	if (projection_coordinates.z > 1.0f)
+//	{
+//		out_shadow = 1.0;
+//	}
+//	return vec3(out_shadow);
 }
 
-float create_point_shadow(vec3 light_pos, float light_far_plane, samplerCube depth)
+float create_point_shadow(vec3 light_pos, float light_far_plane, samplerCube depth, ShadowInfo shadow_info)
 {
 	float out_shadow = 1;
 //	float bias = 0.05;
@@ -439,13 +451,13 @@ float create_point_shadow(vec3 light_pos, float light_far_plane, samplerCube dep
 		vec3(+0, +1, +1), vec3(+0, -1, +1), vec3(+0, -1, -1), vec3(+0, +1, -1)
 	);
 
-	for (int i = 0; i < shadow.num_samples; ++i)
+	for (int i = 0; i < shadow_info.num_samples; ++i)
 	{
 		float closest_depth = 
-			texture(depth, frag_to_light + sample_offset_directions[i] * shadow.radius).r * light_far_plane;
-		out_shadow += current_depth - shadow.bias > closest_depth ? 0.0 : 1.0;
+			texture(depth, frag_to_light + sample_offset_directions[i] * shadow_info.radius).r * light_far_plane;
+		out_shadow += current_depth - shadow_info.bias > closest_depth ? 0.0 : 1.0;
 	}
-	out_shadow /= float(shadow.num_samples);
+	out_shadow /= float(shadow_info.num_samples);
 
 	return out_shadow;
 }
@@ -468,95 +480,114 @@ void main ()
     uv = flat_uv;
 	init();
 	   
-	// Point lights
-	for (int i = 0; i < NUM_LIGHTS; i++)
-	{
-		float temp_shadow = 010;
-		if (pointLight[i].shadow_enabled)
-		{
-			temp_shadow = create_point_shadow(
-				pointLight[i].position,
-				pointLight[i].far_plane,
-				pointLight[i].depth);
-		}
-		float temp_attenuation = attenuation(pointLight[i].position);
+//	// Point lights
+//	for (int i = 0; i < NUM_LIGHTS; i++)
+//	{
+//		float temp_shadow = 010;
+//		if (pointLight[i].shadow_enabled)
+//		{
+//			temp_shadow = create_point_shadow(
+//				pointLight[i].position,
+//				pointLight[i].far_plane,
+//				pointLight[i].depth);
+//		}
+//		float temp_attenuation = attenuation(pointLight[i].position);
+//
+//		diffuse_out += 
+//			diffuse_point_tangent_space(i) *
+//			pointLight[i].brightness * pointLight[i].brightness *
+//			pointLight[i].color * 
+//			temp_attenuation * 
+//			temp_shadow;
+//
+//		specular_out +=
+//			specular_point_tangent_space(i) * 
+//			pointLight[i].brightness *  pointLight[i].brightness *
+//			texture(material.specular, uv).rgb * 
+//			pointLight[i].color * 
+//			temp_attenuation * 
+//			temp_shadow;
+//	}
+//
+//	// Directional lights
+//	for (int i = 0; i < NUM_LIGHTS; i++)
+//	{
+//		float temp_shadow = 1.0;
+//		if (directionalLight[i].shadow_enabled)
+//		{
+//			temp_shadow = create_directional_shadow(
+//				in_directionalLight[i].light_space_position, 
+//				m_directionalLight[i].tangent_space_direction,
+//				directionalLight[i].depth);
+//		}
+//
+//		diffuse_out += 
+////			diffuse_directional_tangent_space(i) *
+////			directionalLight[i].brightness *
+////			directionalLight[i].color * 
+//			temp_shadow;
+//
+////		specular_out +=
+////			specular_directional_tangent_space(i) *
+////			directionalLight[i].brightness *
+////			texture(material.specular, uv).rgb * 
+////			directionalLight[i].color * 
+////			temp_shadow;
+//	}
+//
+//	// Spot lights
+//	for (int i = 0; i < NUM_LIGHTS; i++)
+//	{
+//		float temp_shadow = 1.0;
+//		if(spotLight[i].shadow_enabled)
+//		{
+//			temp_shadow = create_directional_shadow(
+//				in_spotLight[i].light_space_position,
+//				m_spotLight[i].tangent_space_direction,
+//				spotLight[i].depth);
+//		}
+//		float temp_attenuation = attenuation(spotLight[i].position);
+//
+//
+//		diffuse_out +=
+//			diffuse_spot_tangent_space(i) *
+//			spotLight[i].brightness * spotLight[i].brightness *
+//			spotLight[i].color * 
+//			temp_attenuation * 
+//			temp_shadow;
+//
+//		specular_out +=
+//			specular_spot_tangent_space(i) *
+//			pointLight[i].brightness * spotLight[i].brightness *
+//			texture(material.specular, uv).rgb * 
+//			spotLight[i].color * 
+//			temp_attenuation * 
+//			temp_shadow;
+//	}
 
-		diffuse_out += 
-			diffuse_point_tangent_space(i) *
-			pointLight[i].brightness * pointLight[i].brightness *
-			pointLight[i].color * 
-			temp_attenuation * 
-			temp_shadow;
 
-		specular_out +=
-			specular_point_tangent_space(i) * 
-			pointLight[i].brightness *  pointLight[i].brightness *
-			texture(material.specular, uv).rgb * 
-			pointLight[i].color * 
-			temp_attenuation * 
-			temp_shadow;
-	}
-
-	// Directional lights
-	for (int i = 0; i < NUM_LIGHTS; i++)
-	{
-		float temp_shadow = 1.0;
-		if (directionalLight[i].shadow_enabled)
-		{
-			temp_shadow = create_directional_shadow(
-				in_directionalLight[i].light_space_position, 
-				m_directionalLight[i].tangent_space_direction,
-				directionalLight[i].depth);
-		}
-
-		diffuse_out += 
-			diffuse_directional_tangent_space(i) *
-			directionalLight[i].brightness *
-			directionalLight[i].color * 
-			temp_shadow;
-
-		specular_out +=
-			specular_directional_tangent_space(i) *
-			directionalLight[i].brightness *
-			texture(material.specular, uv).rgb * 
-			directionalLight[i].color * 
-			temp_shadow;
-	}
-
-	// Spot lights
-	for (int i = 0; i < NUM_LIGHTS; i++)
-	{
-		float temp_shadow = 1.0;
-		if(spotLight[i].shadow_enabled)
-		{
-			temp_shadow = create_directional_shadow(
-				in_spotLight[i].light_space_position,
-				m_spotLight[i].tangent_space_direction,
-				spotLight[i].depth);
-		}
-		float temp_attenuation = attenuation(spotLight[i].position);
-
-
-		diffuse_out +=
-			diffuse_spot_tangent_space(i) *
-			spotLight[i].brightness * spotLight[i].brightness *
-			spotLight[i].color * 
-			temp_attenuation * 
-			temp_shadow;
-
-		specular_out +=
-			specular_spot_tangent_space(i) *
-			pointLight[i].brightness * spotLight[i].brightness *
-			texture(material.specular, uv).rgb * 
-			spotLight[i].color * 
-			temp_attenuation * 
-			temp_shadow;
-	}
+		ShadowInfo shadow_info;
+		shadow_info.bias = directionalLight[0].shadow_bias;
+		shadow_info.radius = directionalLight[0].shadow_radius;
+		shadow_info.num_samples = directionalLight[0].shadow_num_samples;
 
 	vec3 outColor = 
-		diffuse_out * texture(material.diffuse, uv).rgb * material.diffuse_amount
-		+ 
-		specular_out * material.specular_amount
+//		diffuse_out * texture(material.diffuse, uv).rgb * material.diffuse_amount
+//		+ 
+//		specular_out * material.specular_amount
+
+
+		create_directional_shadow(
+				in_directionalLight[0].light_space_position, 
+				m_directionalLight[0].tangent_space_direction,
+				directionalLight[0].depth,
+				shadow_info)
+
+//		create_directional_shadow(
+//			in_spotLight[0].light_space_position,
+//			m_spotLight[0].tangent_space_direction,
+//			spotLight[0].depth)
+
 		* vec3(1.0);
 
 	frag_color = vec4(outColor.xyz, 1.0);

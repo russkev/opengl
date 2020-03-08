@@ -50,17 +50,15 @@ namespace glen
 
 			if (BlinnMaterial* blinn_material = dynamic_cast<BlinnMaterial*>(material))
 			{
-				material->set_texture(type + "[" + index + "]." + BlinnMaterial::k_depth, &m_texture);
+				material->set_texture(type + "[" + index + "]." + blinn_material->k_depth, &m_texture);
 				if (is_point())
 				{
-					material->set_uniform(type + "[" + index + "]." + BlinnMaterial::k_far_plane, m_camera_node.camera()->clip_far());
+					material->set_uniform(type + "[" + index + "]." + blinn_material->k_far_plane, m_camera_node.camera()->clip_far());
 				}
-				material->set_uniform(type + "[" + index + "]." + BlinnMaterial::k_shadow_enabled, true);
-				
-				// !!! These should really be sent per light
-				material->set_uniform(blinn_material->k_shadow_bias, m_bias);
-				material->set_uniform(blinn_material->k_shadow_radius, m_radius);
-				material->set_uniform(blinn_material->k_shadow_num_samples, m_num_samples);
+				material->set_uniform(type + "[" + index + "]." + blinn_material->k_shadow_enabled, true);
+				material->set_uniform(type + "[" + index + "]." + blinn_material->k_shadow_bias, m_bias);
+				material->set_uniform(type + "[" + index + "]." + blinn_material->k_shadow_radius, m_radius);
+				material->set_uniform(type + "[" + index + "]." + blinn_material->k_shadow_num_samples, m_num_samples);
 			}
 		}
 	}

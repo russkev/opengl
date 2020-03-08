@@ -125,6 +125,9 @@ namespace glen
 			set_sampler_value(k_point_light + "[" + index + "]." + k_depth, 0.0f);
 			set_uniform(k_point_light + "[" + index + "]." + k_far_plane, 100.0f);
 			set_uniform(k_point_light + "[" + index + "]." + k_shadow_enabled, false);
+			set_uniform(k_point_light + "[" + index + "]." + k_shadow_bias, 0.05f);
+			set_uniform(k_point_light + "[" + index + "]." + k_shadow_radius, 0.05f);
+			set_uniform(k_point_light + "[" + index + "]." + k_shadow_num_samples, 20);
 		}
 
 		for (GLuint i = 0; i < k_num_directional_lights; ++i)
@@ -136,6 +139,9 @@ namespace glen
 			set_sampler_value(k_directional_light + "[" + index + "]." + k_depth, 0.0f);
 			set_uniform(k_directional_light + "[" + index + "]." + k_projection, glm::mat4{ 1.0f });
 			set_uniform(k_directional_light + "[" + index + "]." + k_shadow_enabled, false);
+			set_uniform(k_directional_light + "[" + index + "]." + k_shadow_bias, 0.05f);
+			set_uniform(k_directional_light + "[" + index + "]." + k_shadow_radius, 0.05f);
+			set_uniform(k_directional_light + "[" + index + "]." + k_shadow_num_samples, 20);
 		}
 
 		for (GLuint i = 0; i < k_num_spot_lights; ++i)
@@ -150,6 +156,9 @@ namespace glen
 			set_sampler_value(k_spot_light + "[" + index + "]." + k_depth, 0.0f);
 			set_uniform(k_spot_light + "[" + index + "]." + k_projection, glm::mat4{ 1.0f });
 			set_uniform(k_spot_light + "[" + index + "]." + k_shadow_enabled, false);
+			set_uniform(k_spot_light + "[" + index + "]." + k_shadow_bias, 0.05f);
+			set_uniform(k_spot_light + "[" + index + "]." + k_shadow_radius, 0.05f);
+			set_uniform(k_spot_light + "[" + index + "]." + k_shadow_num_samples, 20);
 		}
 
 		set_uniform(k_camera_position, glm::vec3{ 0.0f });
@@ -164,13 +173,6 @@ namespace glen
 		set_sampler_value(k_material_displacement, 0.0f);
 		set_uniform(k_material_displacement_amount, 0.1f);
 		set_uniform(k_material_displacement_enabled, false);
-
-		set_uniform(k_shadow_bias, 0.05f);
-		set_uniform(k_shadow_radius, 0.05f);
-		set_uniform(k_shadow_num_samples, 20);
-
-
-
 	}
 
 	void BlinnMaterial::update_view(const CameraNode* camera_node, const Node* model_node)
