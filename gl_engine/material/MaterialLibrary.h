@@ -92,7 +92,10 @@ namespace glen
 		inline static const std::string k_depth			= "depth";
 		inline static const std::string k_projection	= "projection";
 		inline static const std::string k_far_plane		= "far_plane";
-		inline static const std::string k_shadow_enabled = "shadow_enabled";
+		inline static const std::string k_shadow_enabled		= "shadow_enabled";
+		inline static const std::string k_shadow_bias			= "shadow_bias";
+		inline static const std::string k_shadow_radius			= "shadow_radius";
+		inline static const std::string k_shadow_num_samples	= "shadow_num_samples";
 
 		inline static const std::string k_camera_position = "camera.position";
 
@@ -106,10 +109,6 @@ namespace glen
 		inline static const std::string k_material_displacement			= "material.displacement";
 		inline static const std::string k_material_displacement_amount	= "material.displacement_amount";
 		inline static const std::string k_material_displacement_enabled = "material.displacement_enabled";
-
-		inline static const std::string k_shadow_bias			= "shadow.bias";
-		inline static const std::string k_shadow_radius			= "shadow.radius";
-		inline static const std::string k_shadow_num_samples	= "shadow.num_samples";
 
 		BlinnMaterial();
 		BlinnMaterial(const std::string& name);
