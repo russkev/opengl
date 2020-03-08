@@ -4,6 +4,7 @@
 #include <string>
 
 #include <GL/glew.h>
+#include <glm/glm.hpp>
 
 #include "material/Material.h"
 #include "Texture.h"
@@ -28,8 +29,9 @@ namespace glen
 	struct ShadowMap
 	{
 		// // ----- CONSTANTS ----- // //
-		static const GLuint k_shadow_width;
-		static const GLuint k_shadow_height;
+		//static const GLuint k_shadow_width;
+		//static const GLuint k_shadow_height;
+		static const glm::uvec2 k_shadow_dimensions;
 		static const GLfloat k_default_clip_near;
 		static const GLfloat k_default_clip_far;
 
@@ -72,7 +74,7 @@ namespace glen
 		std::unique_ptr<Material> m_depth_material;
 		Texture		m_texture;
 		Framebuffer m_framebuffer;
-		LightNode*	m_lightNode = NULL;
+		LightNode*	m_light_node = NULL;
 
 		CameraNode	m_camera_node;
 	};

@@ -12,14 +12,17 @@ namespace glen
 		m_target{ target },
 		m_dimensions{ dimensions },
 		m_g_buffer_FBO{ g_buffer },
-		m_null_texture{ Texture::create_8bit_rgb_null_texture(GL_TEXTURE_2D, dimensions) },
+		m_g_depth{ Texture::create_depth_null_texture(GL_TEXTURE_2D, m_dimensions) },
+		m_null_texture{ Texture::create_8bit_rgb_null_texture(GL_TEXTURE_2D, m_dimensions) },
 		m_material{ std::move(material) },
 		m_mesh_node{ "Screen Node", PostEffect::mesh(), m_material }
 	{}
 
-	Deferred::Deferred(Deferred&& other) :
+	Deferred::Deferred(Deferred&& other) noexcept :
 		m_target{ other.m_target },
 		m_dimensions{ std::exchange(other.m_dimensions, glm::uvec2{ 0u }) },
+		m_g_depth{ std::move(other.m_g_depth) },
+		m_null_texture{ std::move(other.m_null_texture) },
 		m_all_textures{ std::move(other.m_all_textures) },
 		m_material{ std::move(other.m_material) },
 		m_mesh_node{ other.m_mesh_node.name(), PostEffect::mesh(), m_material }
@@ -54,7 +57,7 @@ namespace glen
 
 
 
-	Deferred& Deferred::operator = (Deferred&& other)
+	Deferred& Deferred::operator = (Deferred&& other) noexcept
 	{
 		(*this).~Deferred();
 		return *new (this) Deferred(std::move(other));
@@ -229,7 +232,6 @@ namespace glen
 			m_noise_tile.push_back(noise_fragment);
 		}
 
-		m_noise_tile_texture = Texture{ GL_TEXTURE_2D };
 		m_noise_tile_texture.set_name(AO_Material::k_noise);
 		m_noise_tile_texture.set_width(width);
 		m_noise_tile_texture.set_height(height);

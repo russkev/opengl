@@ -33,7 +33,7 @@ namespace glen
 		Node::update_view(cameraNode);
 	}
 
-	void MeshNode::draw(const Pass& pass)
+	void MeshNode::draw()
 	{
 		m_material->use();
 		m_vao.bind();

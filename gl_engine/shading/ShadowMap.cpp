@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "ShadowMap.h"
 
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "light/Light.h"
@@ -16,15 +15,17 @@ namespace glen
 {
 	// // ----- CONSTANTS ----- // //
 
-	const GLuint ShadowMap::k_shadow_width = 1024;
-	const GLuint ShadowMap::k_shadow_height = 1024;
+	//const GLuint ShadowMap::k_shadow_width = 1024;
+	//const GLuint ShadowMap::k_shadow_height = 1024;
+	const glm::uvec2 ShadowMap::k_shadow_dimensions = glm::uvec2{ 1024, 1024 };
 	const GLfloat ShadowMap::k_default_clip_near = 0.1f;
 	const GLfloat ShadowMap::k_default_clip_far = 100.0f;
 
 	// // ----- CONSTRUCTORS ----- // //
 	ShadowMap::ShadowMap(LightNode* light_node) :
-		m_camera_node{ std::string(light_node->name() + " shadow"), light_node->light()->camera() },
-		m_lightNode{ light_node }
+		m_texture{ Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_2D_ARRAY, k_shadow_dimensions) },
+		m_light_node{ light_node },
+		m_camera_node{ std::string(light_node->name() + " shadow"), light_node->light()->camera() }
 	{
 		init_camera();
 
@@ -45,8 +46,8 @@ namespace glen
 	{
 		for (Material* material : materials)
 		{
-			std::string index = std::to_string(m_lightNode->shader_pos());
-			std::string type = m_lightNode->light()->type();
+			std::string index = std::to_string(m_light_node->shader_pos());
+			std::string type = m_light_node->light()->type();
 
 			if (BlinnMaterial* blinn_material = dynamic_cast<BlinnMaterial*>(material))
 			{
@@ -62,16 +63,16 @@ namespace glen
 
 	void ShadowMap::init_camera()
 	{
-		m_camera_node.set_parent(m_lightNode);
-		m_camera_node.camera()->set_dimensions(glm::vec2(k_shadow_width, k_shadow_height));
+		m_camera_node.set_parent(m_light_node);
+		m_camera_node.camera()->set_dimensions(k_shadow_dimensions);
 		m_camera_node.camera()->set_clip_near(k_default_clip_near);
 		m_camera_node.camera()->set_clip_far(k_default_clip_far);
 	}
 
 	void ShadowMap::init_directional_shadowMap()
 	{
-		glm::uvec2 dimensions{ k_shadow_width, k_shadow_height };
-		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_2D_ARRAY, dimensions);
+		//glm::uvec2 dimensions{ k_shadow_width, k_shadow_height };
+		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_2D_ARRAY, k_shadow_dimensions);
 
 		m_texture.bind();
 		m_framebuffer.bind();
@@ -90,8 +91,8 @@ namespace glen
 
 	void ShadowMap::init_point_shadowMap()
 	{
-		glm::uvec2 dimensions{ k_shadow_width, k_shadow_height };
-		m_texture = std::move(Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_CUBE_MAP, dimensions));
+		//glm::uvec2 dimensions{ k_shadow_width, k_shadow_height };
+		m_texture = std::move(Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_CUBE_MAP, k_shadow_dimensions));
 
 		m_texture.bind();
 		m_framebuffer.bind();
@@ -112,12 +113,12 @@ namespace glen
 	{
 		for (Material* material : materials)
 		{
-			std::string index = std::to_string(m_lightNode->shader_pos());
-			std::string type = m_lightNode->light()->type();
+			std::string index = std::to_string(m_light_node->shader_pos());
+			std::string type = m_light_node->light()->type();
 
 			if (is_directional())
 			{
-				material->update_light_transform(m_lightNode, &m_camera_node);
+				material->update_light_transform(m_light_node, &m_camera_node);
 			}
 		}
 	}
@@ -128,7 +129,7 @@ namespace glen
 		m_texture.bind();
 		m_framebuffer.bind();
 
-		glViewport(0, 0, k_shadow_width, k_shadow_height);
+		glViewport(0, 0, k_shadow_dimensions.x, k_shadow_dimensions.y);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		if (is_directional())
@@ -145,8 +146,8 @@ namespace glen
 
 	void ShadowMap::render_directional_shadowMap(std::map<std::string, Node*>& root_nodes)
 	{
-		std::string type = m_lightNode->light()->type();
-		std::string index = std::to_string(m_lightNode->shader_pos());
+		std::string type = m_light_node->light()->type();
+		std::string index = std::to_string(m_light_node->shader_pos());
 
 
 		for (auto const& node_pair : root_nodes)
@@ -166,7 +167,7 @@ namespace glen
 	void ShadowMap::render_point_shadowMap(std::map<std::string, Node*>& root_nodes)
 	{
 		DepthCubeMaterial* depth_cube_material = dynamic_cast<DepthCubeMaterial*>(m_depth_material.get());
-		std::vector<glm::mat4> shadow_transforms = make_poin_shadow_transforms(m_lightNode->world_position());
+		std::vector<glm::mat4> shadow_transforms = make_poin_shadow_transforms(m_light_node->world_position());
 
 
 		depth_cube_material->use();
@@ -252,12 +253,12 @@ namespace glen
 
 	bool ShadowMap::is_directional()
 	{
-		return m_lightNode->light()->type() == DirectionalLight::TYPE || m_lightNode->light()->type() == SpotLight::TYPE;
+		return m_light_node->light()->type() == DirectionalLight::TYPE || m_light_node->light()->type() == SpotLight::TYPE;
 	}
 
 	bool ShadowMap::is_point()
 	{
-		return m_lightNode->light()->type() == PointLight::TYPE;
+		return m_light_node->light()->type() == PointLight::TYPE;
 	}
 
 	// // ----- SETTERS ----- // //
