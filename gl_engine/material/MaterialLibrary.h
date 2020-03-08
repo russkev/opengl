@@ -107,6 +107,10 @@ namespace glen
 		inline static const std::string k_material_displacement_amount	= "material.displacement_amount";
 		inline static const std::string k_material_displacement_enabled = "material.displacement_enabled";
 
+		inline static const std::string k_shadow_bias			= "shadow.bias";
+		inline static const std::string k_shadow_radius			= "shadow.radius";
+		inline static const std::string k_shadow_num_samples	= "shadow.num_samples";
+
 		BlinnMaterial();
 		BlinnMaterial(const std::string& name);
 

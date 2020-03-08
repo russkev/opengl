@@ -27,6 +27,7 @@ struct PointLight
 	vec3 color;
 	samplerCube depth;
 	float far_plane;
+	bool shadow_enabled;
 };
 uniform PointLight pointLight[NUM_LIGHTS];
 
@@ -37,6 +38,7 @@ struct DirectionalLight
 	vec3 color;
 	sampler2DArray depth;
 	mat4 projection;
+	bool shadow_enabled;
 };
 uniform DirectionalLight directionalLight[NUM_LIGHTS];
 
@@ -50,6 +52,7 @@ struct SpotLight
 	float outer;
 	sampler2DArray depth;
 	mat4 projection;
+	bool shadow_enabled;
 };
 uniform SpotLight spotLight[NUM_LIGHTS];
 
