@@ -58,13 +58,17 @@ namespace gl_demo
 		point_light.camera()->set_clip_far(2000.0f);
 		point_light.camera()->set_clip_near(10.0f);
 		glen::LightNode point_light_node{ "Point Light 1", &point_light };
-		point_light_node.set_position(glm::vec3{ -300.0f, 300.0f, 0.0f });
+		point_light_node.set_position(glm::vec3{ -300.0f, 300.0f, 100.0f });
 
 		// Shadow Map
 		glen::ShadowMap spot_light_shadow{ &spot_light_node };
 		spot_light_shadow.set_clip_near(1.0f);
-		spot_light_shadow.set_clip_far(2000.0f);
+		spot_light_shadow.set_clip_far(5000.0f);
+
 		glen::ShadowMap point_light_shadow{ &point_light_node };
+		point_light_shadow.set_bias(10.0f);
+		point_light_shadow.set_clip_far(5000.0f);
+		point_light_shadow.set_radius(1.0f);
 
 		glen::Renderer render{ &target_cam_node, glm::uvec2{ window.width(), window.height() } };
 		render.enable_post_effects();

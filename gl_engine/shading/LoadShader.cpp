@@ -74,8 +74,7 @@ namespace glen
 			else 
 			{
 				printf("Impossible to open %s. Are you in the right directory?\n", file_path);
-				getchar();
-				return 0;
+				return "";
 			}
 			return shader_code;
 		}
@@ -95,7 +94,7 @@ namespace glen
 			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &log_length);
 			if (log_length > 0) 
 			{
-				std::vector<char> VertexShaderErrorMessage(log_length + 1);
+				std::vector<char> VertexShaderErrorMessage{ (char)(log_length + 1) };
 				glGetShaderInfoLog(id, log_length, NULL, &VertexShaderErrorMessage[0]);
 				printf("%s\n", &VertexShaderErrorMessage[0]);
 			}
@@ -115,7 +114,7 @@ namespace glen
 			glGetProgramiv(program_id, GL_INFO_LOG_LENGTH, &log_length);
 			if (log_length > 0) 
 			{
-				std::vector<char> ProgramErrorMessage(log_length + 1);
+				std::vector<char> ProgramErrorMessage{ (char)(log_length + 1) };
 				glGetProgramInfoLog(program_id, log_length, NULL, &ProgramErrorMessage[0]);
 				printf("%s\n", &ProgramErrorMessage[0]);
 			}

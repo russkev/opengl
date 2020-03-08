@@ -1,5 +1,7 @@
 # This file uses centimeters as units for non-parametric coordinates.
 
+mtllib shaderball_hd_base_inside.mtl
+g default
 v 53.217213 2.335000 -64.845300
 v 59.317634 2.335000 -59.317634
 v 59.229245 2.125800 -59.229245
@@ -12259,6 +12261,8 @@ vn 0.000000 -1.000000 0.000000
 vn 0.000000 -1.000000 0.000000
 vn 0.000000 -1.000000 0.000000
 s 1
+g base_inside
+usemtl lambert2SG
 f 1/1/1 2/2/2 4/4/3
 f 4/4/3 2/2/2 3/3/4
 s 2
