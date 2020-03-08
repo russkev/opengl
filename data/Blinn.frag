@@ -59,6 +59,14 @@ struct Material
 };
 uniform Material material;
 
+struct Shadow
+{
+	bool enabled;
+	float bias;
+	float radius;
+	int num_samples;
+};
+
 struct PointLight
 {
 	vec3 position;
@@ -66,10 +74,7 @@ struct PointLight
 	vec3 color;
 	samplerCube depth;
 	float far_plane;
-	bool shadow_enabled;
-	float shadow_bias;
-	float shadow_radius;
-	int shadow_num_samples;
+	Shadow shadow;
 };
 uniform PointLight pointLight[NUM_LIGHTS];
 
@@ -80,10 +85,7 @@ struct DirectionalLight
 	vec3 color;
 	sampler2DArray depth;
 	mat4 projection;
-	bool shadow_enabled;
-	float shadow_bias;
-	float shadow_radius;
-	int shadow_num_samples;
+	Shadow shadow;
 };
 uniform DirectionalLight directionalLight[NUM_LIGHTS];
 
@@ -97,10 +99,7 @@ struct SpotLight
 	float outer;
 	sampler2DArray depth;
 	mat4 projection;
-	bool shadow_enabled;
-	float shadow_bias;
-	float shadow_radius;
-	int shadow_num_samples;
+	Shadow shadow;
 };
 uniform SpotLight spotLight[NUM_LIGHTS];
 
@@ -394,17 +393,14 @@ vec3 specular_spot_tangent_space(int index)
 }
 
 // // ----- SHADOWS ----- // //
-vec3 create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_lightDirection, sampler2DArray depth, ShadowInfo shadow_info)
+vec3 create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_lightDirection, sampler2DArray depth, Shadow shadow)
 {
-//	float num_passes	= 1;
-	float step_size		= 3 / shadow_info.num_samples;
-//	float texel_ratio	= 1.0;
-	vec2 texelSize		= shadow_info.radius / vec2(1024, 1024) /*!!!textureSize(depthMap, 0)*/;
+	float step_size		= 3 / shadow.num_samples;
+	vec2 texelSize		= shadow.radius / vec2(1024, 1024) /*!!!textureSize(depthMap, 0)*/;
 
 	float out_shadow	= 0.0;
-//	float max_bias		= 0.00000;
 	float bias_ratio	= 0.2;
-	float bias =  max(shadow_info.bias * (1.0 - dot(m_frag.tangent_space_normal, tangent_space_lightDirection)), shadow_info.bias * bias_ratio);
+	float bias =  max(shadow.bias * (1.0 - dot(m_frag.tangent_space_normal, tangent_space_lightDirection)), shadow.bias * bias_ratio);
 
 	vec3 projection_coordinates = lightSpace_position.xyz / lightSpace_position.w;
 	projection_coordinates = projection_coordinates * 0.5 + 0.5;
@@ -413,8 +409,8 @@ vec3 create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_ligh
 
 	float current_depth = projection_coordinates.z;
 
-	float shadow = current_depth - shadow_info.bias > closest_depth ? 0.0 : 1.0;
-	return vec3(shadow);
+	float return_shadow = current_depth - shadow.bias > closest_depth ? 0.0 : 1.0;
+	return vec3(return_shadow);
 
 //	for(float x = -1; x < 1; x+= step_size)
 //	{
@@ -566,11 +562,6 @@ void main ()
 //	}
 
 
-		ShadowInfo shadow_info;
-		shadow_info.bias = directionalLight[0].shadow_bias;
-		shadow_info.radius = directionalLight[0].shadow_radius;
-		shadow_info.num_samples = directionalLight[0].shadow_num_samples;
-
 	vec3 outColor = 
 //		diffuse_out * texture(material.diffuse, uv).rgb * material.diffuse_amount
 //		+ 
@@ -581,7 +572,7 @@ void main ()
 				in_directionalLight[0].light_space_position, 
 				m_directionalLight[0].tangent_space_direction,
 				directionalLight[0].depth,
-				shadow_info)
+				directionalLight[0].shadow)
 
 //		create_directional_shadow(
 //			in_spotLight[0].light_space_position,

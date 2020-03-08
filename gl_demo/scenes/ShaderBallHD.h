@@ -77,7 +77,7 @@ namespace gl_demo
 		shadowMap_spot2.set_bias(0.0f);
 
 		glen::ShadowMap shadowMap_directional2{ &directionalLight_node2 };
-		shadowMap_directional2.set_bias(0.00005f);
+		shadowMap_directional2.set_bias(0.0001f);
 		//shadowMap_directional2.set_radius(1.0f);
 		//shadowMap_directional2.set_num_samples(9);
 
