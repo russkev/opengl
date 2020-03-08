@@ -20,6 +20,14 @@ struct Transform
 };
 uniform Transform transform;
 
+struct Shadow
+{
+	bool enabled;
+	float bias;
+	float radius;
+	int num_samples;
+};
+
 struct PointLight
 {
 	vec3 position;
@@ -27,7 +35,7 @@ struct PointLight
 	vec3 color;
 	samplerCube depth;
 	float far_plane;
-	bool shadow_enabled;
+	Shadow shadow;
 };
 uniform PointLight pointLight[NUM_LIGHTS];
 
@@ -38,7 +46,7 @@ struct DirectionalLight
 	vec3 color;
 	sampler2DArray depth;
 	mat4 projection;
-	bool shadow_enabled;
+	Shadow shadow;
 };
 uniform DirectionalLight directionalLight[NUM_LIGHTS];
 
@@ -52,7 +60,7 @@ struct SpotLight
 	float outer;
 	sampler2DArray depth;
 	mat4 projection;
-	bool shadow_enabled;
+	Shadow shadow;
 };
 uniform SpotLight spotLight[NUM_LIGHTS];
 
