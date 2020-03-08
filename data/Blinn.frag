@@ -101,6 +101,14 @@ struct Camera
 };
 uniform Camera camera;
 
+struct Shadow
+{
+	float bias;
+	float radius;
+	int num_samples;
+};
+uniform Shadow shadow;
+
 // // ----- OUTS ----- // //
 out layout(location = 0) vec4 frag_color;
 
@@ -416,9 +424,9 @@ float create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_lig
 float create_point_shadow(vec3 light_pos, float light_far_plane, samplerCube depth)
 {
 	float out_shadow = 1;
-	float bias = 0.05;
-	int samples = 20;
-	float disk_radius = 0.05;
+//	float bias = 0.05;
+//	int samples = 20;
+//	float disk_radius = 0.05;
 	vec3 frag_to_light = in_frag.world_space_position - light_pos;
 	float current_depth = length(frag_to_light);
 
@@ -431,13 +439,13 @@ float create_point_shadow(vec3 light_pos, float light_far_plane, samplerCube dep
 		vec3(+0, +1, +1), vec3(+0, -1, +1), vec3(+0, -1, -1), vec3(+0, +1, -1)
 	);
 
-	for (int i = 0; i < samples; ++i)
+	for (int i = 0; i < shadow.num_samples; ++i)
 	{
 		float closest_depth = 
-			texture(depth, frag_to_light + sample_offset_directions[i] * disk_radius).r * light_far_plane;
-		out_shadow += current_depth - bias > closest_depth ? 0.0 : 1.0;
+			texture(depth, frag_to_light + sample_offset_directions[i] * shadow.radius).r * light_far_plane;
+		out_shadow += current_depth - shadow.bias > closest_depth ? 0.0 : 1.0;
 	}
-	out_shadow /= float(samples);
+	out_shadow /= float(shadow.num_samples);
 
 	return out_shadow;
 }

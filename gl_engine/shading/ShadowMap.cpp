@@ -19,7 +19,7 @@ namespace glen
 	//const GLuint ShadowMap::k_shadow_height = 1024;
 	const glm::uvec2 ShadowMap::k_shadow_dimensions = glm::uvec2{ 1024, 1024 };
 	const GLfloat ShadowMap::k_default_clip_near = 0.1f;
-	const GLfloat ShadowMap::k_default_clip_far = 100.0f;
+	const GLfloat ShadowMap::k_default_clip_far = 1000.0f;
 
 	// // ----- CONSTRUCTORS ----- // //
 	ShadowMap::ShadowMap(LightNode* light_node) :
@@ -40,7 +40,6 @@ namespace glen
 		}
 	}
 
-
 	// // ----- INIT ----- // //
 	void ShadowMap::init_materials(std::vector<Material*>& materials)
 	{
@@ -57,6 +56,11 @@ namespace glen
 					material->set_uniform(type + "[" + index + "]." + BlinnMaterial::k_far_plane, m_camera_node.camera()->clip_far());
 				}
 				material->set_uniform(type + "[" + index + "]." + BlinnMaterial::k_shadow_enabled, true);
+				
+				// !!! These should really be sent per light
+				material->set_uniform(blinn_material->k_shadow_bias, m_bias);
+				material->set_uniform(blinn_material->k_shadow_radius, m_radius);
+				material->set_uniform(blinn_material->k_shadow_num_samples, m_num_samples);
 			}
 		}
 	}
@@ -261,13 +265,41 @@ namespace glen
 		return m_light_node->light()->type() == PointLight::TYPE;
 	}
 
+	// // ----- GETTERS ----- // //
+	const GLfloat ShadowMap::bias() const
+	{
+		return m_bias;
+	}
+
+	const GLfloat ShadowMap::radius() const
+	{
+		return m_radius;
+	}
+
+	const GLint ShadowMap::num_samples() const
+	{
+		return m_num_samples;
+	}
+
 	// // ----- SETTERS ----- // //
-	void ShadowMap::set_clip_near(GLfloat clip_near)
+	void ShadowMap::set_clip_near(const GLfloat clip_near)
 	{
 		m_camera_node.camera()->set_clip_near(clip_near);
 	}
-	void ShadowMap::set_clip_far(GLfloat clip_far)
+	void ShadowMap::set_clip_far(const GLfloat clip_far)
 	{
 		m_camera_node.camera()->set_clip_far(clip_far);
+	}
+	void ShadowMap::set_bias(const GLfloat bias)
+	{
+		m_bias = bias;
+	}
+	void ShadowMap::set_radius(const GLfloat radius)
+	{
+		m_radius = radius;
+	}
+	void ShadowMap::set_num_samples(const GLint num_samples)
+	{
+		m_num_samples = num_samples;
 	}
 }
