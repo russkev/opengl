@@ -13,14 +13,6 @@
 
 namespace glen
 {
-	// // ----- CONSTANTS ----- // //
-
-	//const GLuint ShadowMap::k_shadow_width = 1024;
-	//const GLuint ShadowMap::k_shadow_height = 1024;
-	const glm::uvec2 ShadowMap::k_shadow_dimensions = glm::uvec2{ 1024, 1024 };
-	const GLfloat ShadowMap::k_default_clip_near = 0.1f;
-	const GLfloat ShadowMap::k_default_clip_far = 1000.0f;
-
 	// // ----- CONSTRUCTORS ----- // //
 	ShadowMap::ShadowMap(LightNode* light_node) :
 		m_texture{ Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_2D_ARRAY, k_shadow_dimensions) },
@@ -56,9 +48,18 @@ namespace glen
 					material->set_uniform(type + "[" + index + "]." + blinn_material->k_far_plane, m_camera_node.camera()->clip_far());
 				}
 				material->set_uniform(type + "[" + index + "]." + blinn_material->k_shadow_enabled, true);
-				material->set_uniform(type + "[" + index + "]." + blinn_material->k_shadow_bias, m_bias);
-				material->set_uniform(type + "[" + index + "]." + blinn_material->k_shadow_radius, m_radius);
-				material->set_uniform(type + "[" + index + "]." + blinn_material->k_shadow_num_samples, m_num_samples);
+				if (m_bias != k_no_value_float)
+				{
+					material->set_uniform(type + "[" + index + "]." + blinn_material->k_shadow_bias, m_bias);
+				}
+				if (m_radius != k_no_value_float)
+				{
+					material->set_uniform(type + "[" + index + "]." + blinn_material->k_shadow_radius, m_radius);
+				}
+				if (m_num_samples != k_no_value_int)
+				{
+					material->set_uniform(type + "[" + index + "]." + blinn_material->k_shadow_num_samples, m_num_samples);
+				}
 			}
 		}
 	}

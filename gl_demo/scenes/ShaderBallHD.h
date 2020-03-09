@@ -69,17 +69,21 @@ namespace gl_demo
 		//glm::vec3 spotLight2_start_position{ 6.0f, 12.0f, 2.0f };
 		directionalLight_node2.set_position(directinoalLight2_start_position * 1.0f);
 		directionalLight_node2.set_rotation({ 20.0f, 0.0f, 0.0f });
-		//spotLight2.set_inner_angle(25.0f);
-		//spotLight2.set_outer_angle(35.0f);
+
 
 		// Test Shadow Map
 		glen::ShadowMap shadowMap_spot2{ &spotLight_node2 };
-		shadowMap_spot2.set_bias(0.0f);
+		shadowMap_spot2.set_bias(0.0005f);
+		shadowMap_spot2.set_radius(0.0f);
+		shadowMap_spot2.set_num_samples(1);
+		//shadowMap_spot2.set_clip_near(0.1f);
+		//shadowMap_spot2.set_clip_far(1000.0f);
+
 
 		glen::ShadowMap shadowMap_directional2{ &directionalLight_node2 };
-		shadowMap_directional2.set_bias(0.0001f);
-		//shadowMap_directional2.set_radius(1.0f);
-		//shadowMap_directional2.set_num_samples(9);
+		shadowMap_directional2.set_bias(0.0005f);
+		shadowMap_directional2.set_radius(1.0f);
+		shadowMap_directional2.set_num_samples(3);
 
 
 
@@ -111,6 +115,7 @@ namespace gl_demo
 
 		glen::Renderer render{ &target_cam_node, glm::uvec2{ window.width(), window.height() } };
 		render.enable_post_effects();
+		render.disable_post_effects();
 		render.disable_deferred_render();
 		render.disable_ao();
 
@@ -123,8 +128,8 @@ namespace gl_demo
 
 		// Test bit
 		render.add_node(&shaderBall_node);
-		//render.add_node(&spotLight_node2);
-		render.add_node(&directionalLight_node2);
+		render.add_node(&spotLight_node2);
+		//render.add_node(&directionalLight_node2);
 
 		// Add light nodes
 		//render.add_node(&spot_light_node);

@@ -395,41 +395,48 @@ vec3 specular_spot_tangent_space(int index)
 // // ----- SHADOWS ----- // //
 vec3 create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_lightDirection, sampler2DArray depth, Shadow shadow)
 {
-	float step_size		= 3 / shadow.num_samples;
-	vec2 texelSize		= shadow.radius / vec2(1024, 1024) /*!!!textureSize(depthMap, 0)*/;
-
 	float out_shadow	= 0.0;
-	float bias_ratio	= 0.2;
-	float bias =  max(shadow.bias * (1.0 - dot(m_frag.tangent_space_normal, tangent_space_lightDirection)), shadow.bias * bias_ratio);
-
 	vec3 projection_coordinates = lightSpace_position.xyz / lightSpace_position.w;
-	projection_coordinates = projection_coordinates * 0.5 + 0.5;
-	float closest_depth = texture(depth, vec3(projection_coordinates.xy, 0)).r;
+
+	if (projection_coordinates.z < 1.0)
+	{
+		float step_size		= 3 / shadow.num_samples;
+		vec2 texelSize		= shadow.radius / vec2(1024, 1024) /*!!!textureSize(depthMap, 0)*/;
+
+		float bias_ratio	= 0.2;
+		float adjusted_bias =  max(shadow.bias * (1.0 - dot(m_frag.tangent_space_normal, tangent_space_lightDirection)), shadow.bias * bias_ratio);
+
+		projection_coordinates = projection_coordinates * 0.5 + 0.5;
+		float closest_depth = texture(depth, vec3(projection_coordinates.xy, 0)).r;
 
 
-	float current_depth = projection_coordinates.z;
+		float current_depth = projection_coordinates.z;
 
-	float return_shadow = current_depth - shadow.bias > closest_depth ? 0.0 : 1.0;
-	return vec3(return_shadow);
+//		out_shadow = current_depth - adjusted_bias > closest_depth ? 0.0 : 1.0;
 
-//	for(float x = -1; x < 1; x+= step_size)
-//	{
-//		for (float y = -1; y < 1; y += step_size)
-//		{
-//			float pcfDepth = texture(depth, vec3(projection_coordinates.xy + vec2(x, y) * texelSize, 0)).r;
-//			out_shadow += current_depth - bias > pcfDepth ? 0.0 : 1.0;
-//		}
-//	}
-//	out_shadow /= (shadow_info.num_samples * shadow_info.num_samples);
-//
-//	if (projection_coordinates.z > 1.0f)
-//	{
-//		out_shadow = 1.0;
-//	}
-//	return vec3(out_shadow);
+		for(float x = -1; x < 1; x+= step_size)
+		{
+			for (float y = -1; y < 1; y += step_size)
+			{
+				float pcfDepth = texture(depth, vec3(projection_coordinates.xy + vec2(x, y) * texelSize, 0)).r;
+				out_shadow += current_depth - adjusted_bias > pcfDepth ? 0.0 : 1.0;
+			}
+		}
+		out_shadow /= (shadow.num_samples * shadow.num_samples);
+	}
+	else
+	{
+		out_shadow = 1.0;
+	}
+
+	if (out_shadow > 1.0)
+	{
+		return vec3(1.0, 0.0, 0.0);
+	}
+	return vec3(out_shadow);
 }
 
-float create_point_shadow(vec3 light_pos, float light_far_plane, samplerCube depth, ShadowInfo shadow_info)
+float create_point_shadow(vec3 light_pos, float light_far_plane, samplerCube depth, Shadow shadow_info)
 {
 	float out_shadow = 1;
 //	float bias = 0.05;
@@ -568,16 +575,17 @@ void main ()
 //		specular_out * material.specular_amount
 
 
-		create_directional_shadow(
-				in_directionalLight[0].light_space_position, 
-				m_directionalLight[0].tangent_space_direction,
-				directionalLight[0].depth,
-				directionalLight[0].shadow)
-
 //		create_directional_shadow(
-//			in_spotLight[0].light_space_position,
-//			m_spotLight[0].tangent_space_direction,
-//			spotLight[0].depth)
+//				in_directionalLight[0].light_space_position, 
+//				m_directionalLight[0].tangent_space_direction,
+//				directionalLight[0].depth,
+//				directionalLight[0].shadow)
+
+		create_directional_shadow(
+			in_spotLight[0].light_space_position,
+			m_spotLight[0].tangent_space_direction,
+			spotLight[0].depth,
+			spotLight[0].shadow)
 
 		* vec3(1.0);
 
