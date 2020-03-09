@@ -73,16 +73,16 @@ namespace gl_demo
 
 		// Test Shadow Map
 		glen::ShadowMap shadowMap_spot2{ &spotLight_node2 };
-		shadowMap_spot2.set_bias(0.0005f);
-		shadowMap_spot2.set_radius(0.0f);
-		shadowMap_spot2.set_num_samples(1);
+		shadowMap_spot2.set_bias(0.00005f);
+		shadowMap_spot2.set_radius(1.0f);
+		shadowMap_spot2.set_num_samples(4);
 		//shadowMap_spot2.set_clip_near(0.1f);
 		//shadowMap_spot2.set_clip_far(1000.0f);
 
 
 		glen::ShadowMap shadowMap_directional2{ &directionalLight_node2 };
-		shadowMap_directional2.set_bias(0.0005f);
-		shadowMap_directional2.set_radius(1.0f);
+		shadowMap_directional2.set_bias(0.00005f);
+		shadowMap_directional2.set_radius(0.01f);
 		shadowMap_directional2.set_num_samples(3);
 
 
