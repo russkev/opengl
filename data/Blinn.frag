@@ -400,8 +400,11 @@ vec3 create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_ligh
 
 	if (projection_coordinates.z < 1.0)
 	{
-		float step_size		= 3 / shadow.num_samples;
-		vec2 texelSize		= shadow.radius / vec2(1024, 1024) /*!!!textureSize(depthMap, 0)*/;
+		vec2 dimensions		= vec2(1024);
+		vec2 texel_size		= 1.0 / dimensions;
+
+		float step_size = shadow.num_samples < 2 ? 0 : (shadow.radius * 2.0) / shadow.num_samples;
+		vec2 pcf_coordinates = vec2(-1 * shadow.radius);
 
 		float bias_ratio	= 0.2;
 		float adjusted_bias =  max(shadow.bias * (1.0 - dot(m_frag.tangent_space_normal, tangent_space_lightDirection)), shadow.bias * bias_ratio);
@@ -412,16 +415,15 @@ vec3 create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_ligh
 
 		float current_depth = projection_coordinates.z;
 
-//		out_shadow = current_depth - adjusted_bias > closest_depth ? 0.0 : 1.0;
-
-		for(float x = -1; x < 1; x+= step_size)
+		for(int i = 0; i < shadow.num_samples; ++i, pcf_coordinates.x += step_size)
 		{
-			for (float y = -1; y < 1; y += step_size)
+			for(int j = 0; j < shadow.num_samples; ++j, pcf_coordinates.y += step_size)
 			{
-				float pcfDepth = texture(depth, vec3(projection_coordinates.xy + vec2(x, y) * texelSize, 0)).r;
-				out_shadow += current_depth - adjusted_bias > pcfDepth ? 0.0 : 1.0;
+				float pcf_depth = texture(depth, vec3(projection_coordinates.xy + pcf_coordinates * texel_size, 0)).r;
+				out_shadow += current_depth - adjusted_bias > pcf_depth ? 0.0 : 1.0;
 			}
 		}
+
 		out_shadow /= (shadow.num_samples * shadow.num_samples);
 	}
 	else
@@ -438,10 +440,8 @@ vec3 create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_ligh
 
 float create_point_shadow(vec3 light_pos, float light_far_plane, samplerCube depth, Shadow shadow_info)
 {
+	int total_samples = shadow_info.num_samples * shadow_info.num_samples;
 	float out_shadow = 1;
-//	float bias = 0.05;
-//	int samples = 20;
-//	float disk_radius = 0.05;
 	vec3 frag_to_light = in_frag.world_space_position - light_pos;
 	float current_depth = length(frag_to_light);
 
@@ -454,13 +454,13 @@ float create_point_shadow(vec3 light_pos, float light_far_plane, samplerCube dep
 		vec3(+0, +1, +1), vec3(+0, -1, +1), vec3(+0, -1, -1), vec3(+0, +1, -1)
 	);
 
-	for (int i = 0; i < shadow_info.num_samples; ++i)
+	for (int i = 0; i < total_samples; ++i)
 	{
 		float closest_depth = 
 			texture(depth, frag_to_light + sample_offset_directions[i] * shadow_info.radius).r * light_far_plane;
 		out_shadow += current_depth - shadow_info.bias > closest_depth ? 0.0 : 1.0;
 	}
-	out_shadow /= float(shadow_info.num_samples);
+	out_shadow /= float(total_samples);
 
 	return out_shadow;
 }
