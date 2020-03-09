@@ -28,12 +28,11 @@ namespace glen
 	*/
 	struct ShadowMap
 	{
-		// // ----- CONSTANTS ----- // //
-		//static const GLuint k_shadow_width;
-		//static const GLuint k_shadow_height;
-		static const glm::uvec2 k_shadow_dimensions;
-		static const GLfloat k_default_clip_near;
-		static const GLfloat k_default_clip_far;
+		inline static const glm::uvec2 k_shadow_dimensions = glm::uvec2{ 1024, 1024 };
+		static constexpr GLfloat k_default_clip_near = 0.1f;
+		static constexpr GLfloat k_default_clip_far = 1000.0f;
+		static constexpr GLfloat k_no_value_float = -1.0f;
+		static constexpr GLint k_no_value_int = -1;
 
 		// // ----- CONSTRUCTOR ----- // //
 		ShadowMap(LightNode* lightNode);
@@ -87,9 +86,9 @@ namespace glen
 
 		CameraNode	m_camera_node;
 
-		GLfloat m_bias = 0.05f;
-		GLfloat m_radius = 0.05f;
-		GLint m_num_samples = 20;
+		GLfloat m_bias = k_no_value_float;
+		GLfloat m_radius = k_no_value_float;
+		GLint m_num_samples = k_no_value_int;
 	};
 }
 
