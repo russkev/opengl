@@ -116,6 +116,9 @@ namespace glen
 		set_uniform(k_transform_model_to_projection, glm::mat4{ 1.0f });
 		set_uniform(k_transform_model_to_world, glm::mat4{ 1.0f });
 
+		set_uniform(k_ambient_light_color, glm::vec3{ 1.0f });
+		set_uniform(k_ambient_light_brightness, 0.0f);
+
 		for (GLuint i = 0; i < k_num_point_lights; ++i)
 		{
 			std::string index = std::to_string(i);

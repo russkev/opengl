@@ -83,6 +83,9 @@ namespace glen
 		inline static const std::string k_directional_light = "directionalLight";
 		inline static const std::string k_spot_light		= "spotLight";
 
+		inline static const std::string k_ambient_light_color = "ambientLight.color";
+		inline static const std::string k_ambient_light_brightness = "ambientLight.brightness";
+
 		inline static const std::string k_position		= "position";
 		inline static const std::string k_direction		= "direction";
 		inline static const std::string k_brightness	= "brightness";

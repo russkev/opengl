@@ -68,6 +68,13 @@ struct Shadow
 	int num_samples;
 };
 
+struct AmbientLight
+{
+	vec3 color;
+	vec3 brightness;
+};
+uniform AmbientLight ambientLight;
+
 struct PointLight
 {
 	vec3 position;
@@ -574,6 +581,8 @@ void main ()
 
 
 	vec3 outColor = 
+		ambientLight.color * ambientLight.brightness
+		+
 		diffuse_out * texture(material.diffuse, uv).rgb * material.diffuse_amount
 		+ 
 		specular_out * material.specular_amount

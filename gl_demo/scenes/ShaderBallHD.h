@@ -35,6 +35,7 @@ namespace gl_demo
 		white_blinn_material.set_uniform(white_blinn_material.k_material_specular_amount, 0.8f);
 		white_blinn_material.set_sampler_value(white_blinn_material.k_material_specular, 0.9f);
 		white_blinn_material.set_sampler_value(white_blinn_material.k_material_glossiness, 0.5f);
+		white_blinn_material.set_uniform(white_blinn_material.k_ambient_light_brightness, 0.2f);
 
 		// Mesh Nodes
 		glen::MeshNode ball_node{ "Ball Node", &ball_mesh, &white_blinn_material };
@@ -77,27 +78,38 @@ namespace gl_demo
 		spot_light_fill_shadow.set_num_samples(5);
 		spot_light_fill_shadow.set_clip_far(4000);
 
+		// Point Light Fill 1
+		glen::PointLight point_light_fill{0.0, {0.0f, 0.0f, 0.0f} };
+		point_light_fill.set_brightness(0.5f);
+		point_light_fill.set_color(glm::vec3{ 0.0f, 1.0f, 0.0f });
+		point_light_fill.set_radius(10.0f);
+		
+		glen::LightNode point_light_fill_node{ "Point Light Fill 1", &point_light_fill };
+		point_light_fill_node.set_position({ 0.0f, 80.0f, 100.0f });
+
+
+
 		// Spot Light BG 1
 		glen::SpotLight spot_light_bg_01{ 140.0f, {1.0f, 1.0f, 1.0f} };
 		spot_light_bg_01.set_brightness(200.0f);
-		spot_light_bg_01.set_color(glm::vec3(1.0f, 0.9f, 0.8f));
+		spot_light_bg_01.set_color(glm::vec3(0.6f, 0.7f, 1.0f));
 		spot_light_bg_01.set_inner_angle(5.0f);
 		spot_light_bg_01.set_outer_angle(60.0f);
 
 		glen::LightNode spot_light_bg_01_node{ "Spot Light BG 1", &spot_light_bg_01 };
-		spot_light_bg_01_node.set_rotation({ 25.0f, 220.0f, 0.0f });
+		spot_light_bg_01_node.set_rotation({ 25.0f, 200.0f, 0.0f });
 		spot_light_bg_01_node.set_position({ -200.0f, 600.0f, -100.0f });
 
 		// Spot Light BG 2
 		glen::SpotLight spot_light_bg_02{ 140.0f, {1.0f, 1.0f, 1.0f} };
-		spot_light_bg_02.set_brightness(200.0f);
+		spot_light_bg_02.set_brightness(150.0f);
 		spot_light_bg_02.set_color(glm::vec3(1.0f, 0.9f, 0.8f));
-		spot_light_bg_02.set_inner_angle(5.0f);
+		spot_light_bg_02.set_inner_angle(1.0f);
 		spot_light_bg_02.set_outer_angle(60.0f);
 
 		glen::LightNode spot_light_bg_02_node{ "Spot Light BG 2", &spot_light_bg_02 };
-		spot_light_bg_02_node.set_rotation({ 25.0f, 220.0f, 0.0f });
-		spot_light_bg_02_node.set_position({ -200.0f, 600.0f, -100.0f });
+		spot_light_bg_02_node.set_rotation({ 35.0f, 140.0f, 0.0f });
+		spot_light_bg_02_node.set_position({ 300.0f, 400.0f, -100.0f });
 
 
 
@@ -116,32 +128,20 @@ namespace gl_demo
 		// Add light nodes
 		render.add_node(&spot_light_key_node);
 		render.add_node(&spot_light_fill_node);
+		render.add_node(&point_light_fill_node);
 		render.add_node(&spot_light_bg_01_node);
 		render.add_node(&spot_light_bg_02_node);
 
 		glen::Timer timer;
 		while (render.poll_events())
 		{
-			spot_light_bg_01.set_brightness(200.0f);
-			spot_light_bg_01.set_color(glm::vec3(0.6f, 0.7f, 1.0f));
-			spot_light_bg_01.set_inner_angle(5.0f);
-			spot_light_bg_01.set_outer_angle(60.0f);
+			point_light_fill.set_brightness(2.0f);
+			point_light_fill.set_color(glm::vec3{ 1.0f, 1.0f, 1.0f });
+			point_light_fill.set_radius(10.0f);
+			point_light_fill.disable_mesh();
 
-			spot_light_bg_01_node.set_rotation({ 25.0f, 200.0f, 0.0f });
-			spot_light_bg_01_node.set_position({ -200.0f, 600.0f, -100.0f });
+			point_light_fill_node.set_position({ 60.0f, 35.0f, 120.0f });
 
-
-			spot_light_bg_02.set_brightness(150.0f);
-			spot_light_bg_02.set_color(glm::vec3(1.0f, 0.9f, 0.8f));
-
-			spot_light_bg_02.set_inner_angle(1.0f);
-			spot_light_bg_02.set_outer_angle(60.0f);
-
-			spot_light_bg_02_node.set_rotation({ 35.0f, 140.0f, 0.0f });
-			spot_light_bg_02_node.set_position({ 300.0f, 400.0f, -100.0f });
-
-
-			
 
 			render.update(&window, &timer);
 		}
