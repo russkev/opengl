@@ -14,8 +14,18 @@
 namespace glen
 {
 	// // ----- CONSTRUCTORS ----- // //
-	ShadowMap::ShadowMap(LightNode* light_node) :
-		m_texture{ Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_2D_ARRAY, k_shadow_dimensions) },
+
+	ShadowMap::ShadowMap( LightNode * light_node ) :
+		ShadowMap{light_node, glm::uvec2{ 1024 } }
+	{}
+
+	ShadowMap::ShadowMap(LightNode* light_node, const GLuint resolution) :
+		ShadowMap{light_node, glm::uvec2{ resolution } }
+	{}
+
+	ShadowMap::ShadowMap(LightNode* light_node, const glm::uvec2& dimensions) :
+		m_dimensions{ dimensions },
+		m_texture{ Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_2D_ARRAY, m_dimensions) },
 		m_light_node{ light_node },
 		m_camera_node{ std::string(light_node->name() + " shadow"), light_node->light()->camera() }
 	{
@@ -67,7 +77,7 @@ namespace glen
 	void ShadowMap::init_camera()
 	{
 		m_camera_node.set_parent(m_light_node);
-		m_camera_node.camera()->set_dimensions(k_shadow_dimensions);
+		m_camera_node.camera()->set_dimensions(m_dimensions);
 		m_camera_node.camera()->set_clip_near(k_default_clip_near);
 		m_camera_node.camera()->set_clip_far(k_default_clip_far);
 	}
@@ -75,7 +85,7 @@ namespace glen
 	void ShadowMap::init_directional_shadowMap()
 	{
 		//glm::uvec2 dimensions{ k_shadow_width, k_shadow_height };
-		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_2D_ARRAY, k_shadow_dimensions);
+		m_texture = Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_2D_ARRAY, m_dimensions);
 
 		m_texture.bind();
 		m_framebuffer.bind();
@@ -95,7 +105,7 @@ namespace glen
 	void ShadowMap::init_point_shadowMap()
 	{
 		//glm::uvec2 dimensions{ k_shadow_width, k_shadow_height };
-		m_texture = std::move(Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_CUBE_MAP, k_shadow_dimensions));
+		m_texture = std::move(Texture::create_depth_null_texture_for_shadow(GL_TEXTURE_CUBE_MAP, m_dimensions));
 
 		m_texture.bind();
 		m_framebuffer.bind();
@@ -132,7 +142,7 @@ namespace glen
 		m_texture.bind();
 		m_framebuffer.bind();
 
-		glViewport(0, 0, k_shadow_dimensions.x, k_shadow_dimensions.y);
+		glViewport(0, 0, m_dimensions.x, m_dimensions.y);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		if (is_directional())
@@ -280,23 +290,32 @@ namespace glen
 		return m_num_samples;
 	}
 
+	const GLuint ShadowMap::resolution() const
+	{
+		return m_dimensions.x;
+	}
+
 	// // ----- SETTERS ----- // //
 	void ShadowMap::set_clip_near(const GLfloat clip_near)
 	{
 		m_camera_node.camera()->set_clip_near(clip_near);
 	}
+
 	void ShadowMap::set_clip_far(const GLfloat clip_far)
 	{
 		m_camera_node.camera()->set_clip_far(clip_far);
 	}
+
 	void ShadowMap::set_bias(const GLfloat bias)
 	{
 		m_bias = bias;
 	}
+
 	void ShadowMap::set_radius(const GLfloat radius)
 	{
 		m_radius = radius;
 	}
+
 	void ShadowMap::set_num_samples(const GLint num_samples)
 	{
 		m_num_samples = num_samples;

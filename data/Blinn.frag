@@ -1,7 +1,8 @@
 #version 440 core
 #pragma optionNV unroll all
 #extension GL_EXT_texture_array : enable
-#define NUM_LIGHTS 3
+#define NUM_LIGHTS 2
+#define NUM_SPOT_LIGHTS 5
 #define MAX_BLINN_SPECULAR_POWER 8
 #define MAX_PHONG_SPECULAR_POWER 150
 
@@ -27,7 +28,7 @@ in Out_SpotLight
 {
 	vec4 light_space_position;
 	vec3 tangent_space_position;
-} in_spotLight[NUM_LIGHTS];
+} in_spotLight[NUM_SPOT_LIGHTS];
 
 in Out_DirectionalLight
 {
@@ -101,7 +102,7 @@ struct SpotLight
 	mat4 projection;
 	Shadow shadow;
 };
-uniform SpotLight spotLight[NUM_LIGHTS];
+uniform SpotLight spotLight[NUM_SPOT_LIGHTS];
 
 struct Camera
 {
@@ -157,7 +158,7 @@ struct m_SpotLight
 	vec3 tangent_space_direction;
 	float world_space_intensity;
 	float tangent_space_intensity;
-} m_spotLight[NUM_LIGHTS];
+} m_spotLight[NUM_SPOT_LIGHTS];
 
 
 // // ----- UTILITY STRUCTS ----- // //
@@ -234,6 +235,10 @@ void init_tangent_space_lights()
 	{
 		m_pointLight[i].tangent_space_direction = normalize(in_pointLight[i].tangent_space_position - in_frag.tangent_space_position);
 		m_directionalLight[i].tangent_space_direction = -in_directionalLight[i].tangent_space_position;
+	}
+
+	for (int i = 0; i < NUM_SPOT_LIGHTS; i++)
+	{
 		m_spotLight[i].tangent_space_direction = normalize(in_spotLight[i].tangent_space_position - in_frag.tangent_space_position);
 		m_spotLight[i].tangent_space_intensity = spot_intensity(
 			in_frag.world_space_position,
@@ -400,7 +405,7 @@ float create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_lig
 
 	if (projection_coordinates.z < 1.0)
 	{
-		vec2 dimensions		= vec2(1024);
+		vec2 dimensions		= textureSize(depth, 0).xy;
 		vec2 texel_size		= 1.0 / dimensions;
 
 		float step_size = shadow.num_samples < 2 ? 0 : (shadow.radius * 2.0) / shadow.num_samples;
@@ -528,16 +533,16 @@ void main ()
 			directionalLight[i].color * 
 			temp_shadow;
 
-//		specular_out +=
-//			specular_directional_tangent_space(i) *
-//			directionalLight[i].brightness *
-//			texture(material.specular, uv).rgb * 
-//			directionalLight[i].color * 
-//			temp_shadow;
+		specular_out +=
+			specular_directional_tangent_space(i) *
+			directionalLight[i].brightness *
+			texture(material.specular, uv).rgb * 
+			directionalLight[i].color * 
+			temp_shadow;
 	}
 
 	// Spot lights
-	for (int i = 0; i < NUM_LIGHTS; i++)
+	for (int i = 0; i < NUM_SPOT_LIGHTS; i++)
 	{
 		float temp_shadow = 1.0;
 		if(spotLight[i].shadow.enabled)
@@ -560,7 +565,7 @@ void main ()
 
 		specular_out +=
 			specular_spot_tangent_space(i) *
-			pointLight[i].brightness * spotLight[i].brightness *
+			spotLight[i].brightness * spotLight[i].brightness *
 			texture(material.specular, uv).rgb * 
 			spotLight[i].color * 
 			temp_attenuation * 
@@ -570,21 +575,8 @@ void main ()
 
 	vec3 outColor = 
 		diffuse_out * texture(material.diffuse, uv).rgb * material.diffuse_amount
-//		+ 
-//		specular_out * material.specular_amount
-
-
-////		create_directional_shadow(
-////				in_directionalLight[0].light_space_position, 
-////				m_directionalLight[0].tangent_space_direction,
-////				directionalLight[0].depth,
-////				directionalLight[0].shadow)
-//
-//		create_directional_shadow(
-//			in_spotLight[0].light_space_position,
-//			m_spotLight[0].tangent_space_direction,
-//			spotLight[0].depth,
-//			spotLight[0].shadow)
+		+ 
+		specular_out * material.specular_amount
 
 		* vec3(1.0);
 

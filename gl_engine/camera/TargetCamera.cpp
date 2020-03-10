@@ -14,11 +14,6 @@
 
 namespace glen
 {
-	// // ----- CONSTANTS ----- // //
-	const glm::vec3 TargetCamera::UP_AXIS = { 0.0f, 1.0f, 0.0f };
-	const float TargetCamera::MOVE_SPEED = 0.005f;
-	const float TargetCamera::ROTATION_SPEED = 0.007f;
-
 	// // ----- CONSTRUCTORS ----- // //
 	TargetCamera::TargetCamera()
 	{}
@@ -42,19 +37,19 @@ namespace glen
 		}
 		if (mouseButton & SDL_BUTTON(SDL_BUTTON_MIDDLE))
 		{
-			axisDelta.x = -(float)mouseDelta.x;
-			axisDelta.y = (float)mouseDelta.y;
+			axisDelta.x = -(float)mouseDelta.x * MOVE_SPEED.x;
+			axisDelta.y = (float)mouseDelta.y * MOVE_SPEED.y;
 		}
 
 		if (mouseButton & SDL_BUTTON(SDL_BUTTON_RIGHT))
 		{
-			axisDelta.z = (float)mouseDelta.y;
+			axisDelta.z = (float)mouseDelta.y * MOVE_SPEED.z;
 		}
 		if (keyboardState[SDL_SCANCODE_F] || keyboardState[SDL_SCANCODE_Z])
 		{
 			focus(m_focus_target);
 		}
-		move_relative(axisDelta * MOVE_SPEED);
+		move_relative(axisDelta);
 		rotate_relative(rotateDelta * ROTATION_SPEED);
 	}
 
