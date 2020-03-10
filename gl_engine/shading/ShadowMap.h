@@ -28,7 +28,7 @@ namespace glen
 	*/
 	struct ShadowMap
 	{
-		inline static const glm::uvec2 k_shadow_dimensions = glm::uvec2{ 1024, 1024 };
+		//inline static const glm::uvec2 k_shadow_dimensions = glm::uvec2{ 1024, 1024 };
 		static constexpr GLfloat k_default_clip_near = 0.1f;
 		static constexpr GLfloat k_default_clip_far = 1000.0f;
 		static constexpr GLfloat k_no_value_float = -1.0f;
@@ -36,6 +36,8 @@ namespace glen
 
 		// // ----- CONSTRUCTOR ----- // //
 		ShadowMap(LightNode* lightNode);
+		ShadowMap(LightNode* lightNode, const GLuint resolution);
+		ShadowMap(LightNode* lightNode, const glm::uvec2& dimensions);
 
 		// // ----- INITIALIZATION ----- // //
 	public:
@@ -67,6 +69,7 @@ namespace glen
 		const GLfloat bias() const;
 		const GLfloat radius() const;
 		const GLint num_samples() const;
+		const GLuint resolution() const;
 
 		// // ----- SETTERS ----- // //
 	public:
@@ -78,7 +81,7 @@ namespace glen
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		//Material	m_depth_material;
+		glm::uvec2 m_dimensions;
 		std::unique_ptr<Material> m_depth_material;
 		Texture		m_texture;
 		Framebuffer m_framebuffer;

@@ -39,6 +39,7 @@ namespace glen
 		// // ----- SETTERS ----- // //
 		void set_inner_angle(const GLfloat theta);
 		void set_outer_angle(const GLfloat theta);
+		void set_light_mesh_scale(const GLfloat scale);
 
 	private:
 		void set_camera_angle();

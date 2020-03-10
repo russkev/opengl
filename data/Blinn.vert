@@ -1,6 +1,7 @@
 #version 440 core
 #pragma optionNV unroll all
-#define NUM_LIGHTS 3
+#define NUM_LIGHTS 2
+#define NUM_SPOT_LIGHTS 5
 
 // // ----- INS ----- // //
 in layout(location = 0 ) vec3 vertex_position;
@@ -62,7 +63,7 @@ struct SpotLight
 	mat4 projection;
 	Shadow shadow;
 };
-uniform SpotLight spotLight[NUM_LIGHTS];
+uniform SpotLight spotLight[NUM_SPOT_LIGHTS];
 
 struct Camera
 {
@@ -94,7 +95,7 @@ out Out_SpotLight
 {
 	vec4 light_space_position;
 	vec3 tangent_space_position;
-} out_spotLight[NUM_LIGHTS];
+} out_spotLight[NUM_SPOT_LIGHTS];
 
 out Out_DirectionalLight
 {
@@ -137,8 +138,14 @@ void send_tangent_space_coordinates()
 	{
 		out_pointLight[i].tangent_space_position		= world_to_tangent * pointLight[i].position;
 		out_directionalLight[i].tangent_space_position	= world_to_tangent * directionalLight[i].direction;
+		
+	}
+	for (int i = 0; i < NUM_SPOT_LIGHTS; i++)
+	{
 		out_spotLight[i].tangent_space_position			= world_to_tangent * spotLight[i].position;
 	}
+		
+
 	out_frag.tangent_space_position	= world_to_tangent * out_frag.world_space_position;
 }
 
@@ -146,8 +153,11 @@ void send_light_space_coordinates()
 {
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		out_spotLight[i].light_space_position = spotLight[i].projection * vec4(out_frag.world_space_position, 1.0f);
 		out_directionalLight[i].light_space_position = directionalLight[i].projection * vec4(out_frag.world_space_position, 1.0f);
+	}
+	for (int i = 0; i < NUM_SPOT_LIGHTS; i++)
+	{
+		out_spotLight[i].light_space_position = spotLight[i].projection * vec4(out_frag.world_space_position, 1.0f);
 	}
 }
 

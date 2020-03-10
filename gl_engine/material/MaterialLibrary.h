@@ -71,9 +71,9 @@ namespace glen
 
 	struct BlinnMaterial : public Material
 	{
-		inline static GLuint k_num_point_lights			= 3;
-		inline static GLuint k_num_directional_lights	= 3;
-		inline static GLuint k_num_spot_lights			= 3;
+		inline static GLuint k_num_point_lights			= 2;
+		inline static GLuint k_num_directional_lights	= 2;
+		inline static GLuint k_num_spot_lights			= 5;
 
 		inline static const std::string k_transform_model_to_projection		= "transform.model_to_projection";
 		inline static const std::string k_transform_model_to_world			= "transform.model_to_world";
