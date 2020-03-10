@@ -36,7 +36,6 @@ namespace gl_demo
 		white_blinn_material.set_sampler_value(white_blinn_material.k_material_diffuse, 0.8f);
 		white_blinn_material.set_uniform(white_blinn_material.k_material_specular_amount, 0.8f);
 		white_blinn_material.set_sampler_value(white_blinn_material.k_material_specular, 0.9f);
-		white_blinn_material.set_uniform("directionalLight[1].shadow_enabled", true);
 
 
 		// Mesh Nodes
@@ -54,44 +53,49 @@ namespace gl_demo
 		// Test Spot Light Node
 		glen::SpotLight spotLight2{ 100.0f, { 0.2f, 0.3f, 1.0f } };
 		glen::LightNode spotLight_node2{ "Spot Light 2", &spotLight2 };
-		glm::vec3 spotLight2_start_position{ 11.0f, 5.0f, 0.0f };
+		//glm::vec3 spotLight2_start_position{ 11.0f, 5.0f, 0.0f };
 		//glm::vec3 spotLight2_start_position{ 6.0f, 12.0f, 2.0f };
-		spotLight_node2.set_position(spotLight2_start_position * 25.0f);
-		spotLight_node2.set_rotation({ 20.0f, -90.0f, 0.0f });
+		//spotLight_node2.set_position(spotLight2_start_position * 25.0f);
+		//spotLight_node2.set_rotation({ 20.0f, -90.0f, 0.0f });
 		//spotLight2.set_inner_angle(25.0f);
 		//spotLight2.set_outer_angle(35.0f);
 
+		spotLight_node2.set_rotation({ 33.0f, 270.0f, 0.0f });
+		spotLight_node2.set_position({ 300.0f, 300.0f, 0.0f });
+		//spotLight2.set_inner_angle(50.0f);
+		//spotLight2.set_outer_angle(90.0f);
+
 
 		// Test Directional Light Node
-		glen::DirectionalLight directionalLight2{ 14.0f, {0.0f, 0.0f, 1.0f } };
-		glen::LightNode directionalLight_node2{ "Directional Light 2", &directionalLight2 };
-		glm::vec3 directinoalLight2_start_position{ 0.0f, 5.0f, -20.0f };
-		//glm::vec3 spotLight2_start_position{ 6.0f, 12.0f, 2.0f };
-		directionalLight_node2.set_position(directinoalLight2_start_position * 1.0f);
-		directionalLight_node2.set_rotation({ 20.0f, 0.0f, 0.0f });
+		//glen::DirectionalLight directionalLight2{ 14.0f, {0.0f, 0.0f, 1.0f } };
+		//glen::LightNode directionalLight_node2{ "Directional Light 2", &directionalLight2 };
+		//glm::vec3 directinoalLight2_start_position{ 0.0f, 5.0f, -20.0f };
+		////glm::vec3 spotLight2_start_position{ 6.0f, 12.0f, 2.0f };
+		//directionalLight_node2.set_position(directinoalLight2_start_position * 1.0f);
+		//directionalLight_node2.set_rotation({ 20.0f, 0.0f, 0.0f });
 
 
 		// Test Shadow Map
 		glen::ShadowMap shadowMap_spot2{ &spotLight_node2 };
-		shadowMap_spot2.set_bias(0.0000005f);
-		shadowMap_spot2.set_radius(1.0f);
+		shadowMap_spot2.set_bias(0.000005f);
+		shadowMap_spot2.set_radius(0.2f);
 		shadowMap_spot2.set_num_samples(4);
 		//shadowMap_spot2.set_clip_near(0.1f);
 		//shadowMap_spot2.set_clip_far(1000.0f);
 
 
-		glen::ShadowMap shadowMap_directional2{ &directionalLight_node2 };
-		shadowMap_directional2.set_bias(0.00005f);
-		shadowMap_directional2.set_radius(0.01f);
-		shadowMap_directional2.set_num_samples(3);
+		//glen::ShadowMap shadowMap_directional2{ &directionalLight_node2 };
+		//shadowMap_directional2.set_bias(0.00005f);
+		//shadowMap_directional2.set_radius(0.01f);
+		//shadowMap_directional2.set_num_samples(3);
 
 
 
-		// Directional Light 1
+		// Spot Light 1
 		glen::SpotLight spot_light{ 70.0f, {1.0f, 1.0f, 1.0f} /*{ 0.2f, 1.0f, 0.1f }*/ };
 		spot_light.camera()->set_clip_far(2000.0f);
-		spot_light.set_inner_angle(50.0f);
-		spot_light.set_outer_angle(90.0f);
+		//spot_light.set_inner_angle(40.0f);
+		//spot_light.set_outer_angle(45.0f);
 		glen::LightNode spot_light_node{ "Spot Light 1", &spot_light };
 		spot_light_node.set_rotation({ 33.0f, 270.0f, 0.0f });
 		spot_light_node.set_position({ 300.0f, 300.0f, 0.0f });
@@ -105,7 +109,7 @@ namespace gl_demo
 
 		// Shadow Map
 		glen::ShadowMap spot_light_shadow{ &spot_light_node };
-		spot_light_shadow.set_bias(0.00000f);
+		spot_light_shadow.set_bias(0.000002f);
 		spot_light_shadow.set_radius(0.01f);
 		spot_light_shadow.set_num_samples(1);
 		//spot_light_shadow.set_clip_near(1.0f);
@@ -129,17 +133,20 @@ namespace gl_demo
 		render.add_node(&cyc_node);
 
 		// Test bit
-		render.add_node(&shaderBall_node);
-		render.add_node(&spotLight_node2);
+		//render.add_node(&shaderBall_node);
+		//render.add_node(&spotLight_node2);
 		//render.add_node(&directionalLight_node2);
 
 		// Add light nodes
-		//render.add_node(&spot_light_node);
+		render.add_node(&spot_light_node);
 		//render.add_node(&point_light_node);
 
 		glen::Timer timer;
 		while (render.poll_events())
 		{
+			spotLight2.set_brightness(200.0f);
+			spotLight2.set_inner_angle(39.0f);
+			spotLight2.set_outer_angle(80.0f);
 			render.update(&window, &timer);
 		}
 
