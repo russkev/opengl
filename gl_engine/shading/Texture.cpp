@@ -20,6 +20,10 @@ namespace glen
 	{}
 
 	Texture::Texture(const char* filepath) :
+		Texture(filepath, false)
+	{}
+
+	Texture::Texture(const char* filepath, const bool is_srgb) :
 		m_name{ filepath },
 		m_surface{ IMG_Load(filepath) },
 		m_width{ m_surface->w },
@@ -28,12 +32,26 @@ namespace glen
 	{
 		if (has_alpha())
 		{
-			m_internal_format = GL_RGBA;
+			if (is_srgb)
+			{
+				m_internal_format = GL_SRGB_ALPHA;
+			}
+			else
+			{
+				m_internal_format = GL_RGBA;
+			}
 			m_format = GL_BGRA;
 		}
 		else
 		{
-			m_internal_format = GL_RGB;
+			if (is_srgb)
+			{
+				m_internal_format = GL_SRGB;
+			}
+			else
+			{
+				m_internal_format = GL_RGB;
+			}
 			m_format = GL_BGR;
 		}
 

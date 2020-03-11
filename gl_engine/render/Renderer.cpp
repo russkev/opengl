@@ -30,7 +30,6 @@ namespace glen
 		init_settings();
 		init_post_effects();
 		init_post_beauty();
-		init_deferred_renderer();
 		init_ao();
 	}
 
@@ -53,13 +52,9 @@ namespace glen
 		glFrontFace(GL_CCW);
 		// // Accept fragment shader if it closer to the camera than the previous one
 		glDepthFunc(GL_LESS);
-		//glDepthFunc(GL_ALWAYS);
 		// // Enable alpha
 		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		// // Enable gamma correction
-		//glEnable(GL_FRAMEBUFFER_SRGB);
-		glDisable(GL_FRAMEBUFFER_SRGB);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
 	void Renderer::init_first_frame()
@@ -83,10 +78,14 @@ namespace glen
 				lightNode->set_shader_pos(num_spotLights);
 				num_spotLights++;
 			}
-			if (ShadowMap* shadowMap = lightNode->shadowMap())
+			if (ShadowMap* shadowMap = dynamic_cast<ShadowMap*> (lightNode->shadowMap()))
 			{
 				shadowMap->init_materials(m_materials);
 			}
+		}
+		if (m_deferred_render_enabled)
+		{
+			add_material(m_blinn_deferred.material());
 		}
 	}
 
@@ -100,11 +99,6 @@ namespace glen
 		m_ao_blur_deferred.material()->set_texture(AO_BlurMaterial::k_color_input, &m_beauty_texture);
 		m_beauty_FBO.set_depth_buffer_texture(&m_backbuffer_depth);
 		m_beauty_FBO.push_back_color_buffer_texture(&m_beauty_texture);
-	}
-
-	void Renderer::init_deferred_renderer()
-	{
-		add_material(m_blinn_deferred.material());
 	}
 
 	void Renderer::init_ao()

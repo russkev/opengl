@@ -5,6 +5,7 @@
 #define NUM_SPOT_LIGHTS 5
 #define MAX_BLINN_SPECULAR_POWER 8
 #define MAX_PHONG_SPECULAR_POWER 150
+#define GAMMA 2.2
 
 // // ----- INS ----- // //
 in Out_Frag
@@ -604,6 +605,8 @@ void main ()
 		}
 	}
 
+	vec3 diffuse_corrected = texture(material.diffuse, uv).rgb;
+	
 
 	vec3 outColor = 
 		ambientLight.color * ambientLight.brightness
@@ -611,7 +614,7 @@ void main ()
 		diffuse_out * texture(material.diffuse, uv).rgb * material.diffuse_amount
 		+ 
 		specular_out * material.specular_amount
-//		vec3(1.0)
+		
 		* vec3(1.0);
 
 	frag_color = vec4(outColor.xyz, 1.0);
