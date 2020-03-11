@@ -336,19 +336,31 @@ namespace gl_demo
 		reset_materials();
 
 		glen::PointLight point_light{};
-		point_light.set_brightness(100.0f);
-		point_light.set_color({ 0.2f, 0.5f, 1.0f });
-		//point_light.set_radius(50.0f);
+		point_light.set_brightness(60.0f);
+		point_light.set_color({ 0.05f, 0.7f, 1.0f });
 		point_light.enable_mesh();
+
 		glen::LightNode point_light_node{ "Point Light Node", &point_light };
-		point_light_node.set_position({ 100.0f, 100.0f, 100.0f });
-		point_light_node.set_scale(20.0f);
+		point_light_node.set_position({ 90.0f, 90.0f, 100.0f });
+		point_light_node.set_scale(4.0f);
+
+		glen::ShadowMap point_light_shadow{ &point_light_node, 1024 };
+		point_light_shadow.set_bias(0.0006f);
+		point_light_shadow.set_radius(2.0f);
+		point_light_shadow.set_num_samples(5);
+		point_light_shadow.set_clip_far(4000);
 
 
 		glen::Renderer render{ &m_target_cam_node, glm::uvec2{ m_window.width(), m_window.height() } };
-		set_render_settings(render);
+		render.enable_post_effects();
+		render.disable_ao();
+		render.disable_deferred_render();
+
 		render.add_node(&point_light_node);
 		add_geometry_to_renderer(render);
+
+
+
 
 		while (render.poll_events())
 		{
