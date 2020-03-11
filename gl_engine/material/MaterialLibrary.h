@@ -256,19 +256,7 @@ namespace glen
 		inline static const std::string k_transform_model_to_world_normal = k_transform + ".model_to_world_normal";
 		
 		inline static const std::string k_material_diffuse = k_material + ".diffuse";
-		inline static const std::string k_material_diffuse_amount = k_material + ".diffuse_amount";
-
 		inline static const std::string k_material_specular = k_material + ".specular";
-		inline static const std::string k_material_specular_amount = k_material + ".specular_amount";
-		
-		inline static const std::string k_material_glossiness = k_material + ".glossiness";
-		
-		inline static const std::string k_material_normal = k_material + ".normal";
-		inline static const std::string k_material_normal_directx_mode = k_material + ".normal_directx_mode";
-
-		inline static const std::string k_material_displacement = k_material + ".displacement";
-		inline static const std::string k_material_displacement_amount = k_material + ".diaplcement_amount";
-		inline static const std::string k_material_displacement_enabled = k_material + ".displacement_enabled";
 
 		GBufferMaterial();
 		GBufferMaterial(const std::string& name);
