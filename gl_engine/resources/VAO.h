@@ -20,9 +20,9 @@ namespace glen
 		VAO();
 
 		VAO(const VAO& other) = delete;
-		VAO(VAO&& other);
+		VAO(VAO&& other) noexcept;
 		VAO& operator = (const VAO& other) = delete;
-		VAO& operator = (VAO&& other);
+		VAO& operator = (VAO&& other) noexcept;
 		~VAO();
 
 		// // ----- GENERAL METHODS ----- // //
@@ -35,7 +35,6 @@ namespace glen
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		std::uint32_t					m_target;
 		std::uint32_t					m_VAO_ID;
 	};
 }

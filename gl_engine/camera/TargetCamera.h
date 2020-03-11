@@ -15,10 +15,9 @@ namespace glen
 	{
 		// // ----- CONSTANTS ----- // //
 	private:
-		static const glm::vec3 UP_AXIS;
-		static const float MOVE_SPEED;
-		static const float MOUSE_MOVE_SPEED;
-		static const float ROTATION_SPEED;
+		inline static const glm::vec3 UP_AXIS = { 0.0f, 1.0f, 0.0f };
+		inline static const glm::vec3 MOVE_SPEED = { 1.0f, 0.005f, 0.005f };
+		static constexpr float ROTATION_SPEED = 0.007f;
 
 		// // ----- CONSTRUCTOR ----- // //
 	public:

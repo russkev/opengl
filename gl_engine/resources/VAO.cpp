@@ -14,12 +14,11 @@ namespace glen
 		m_VAO_ID(0)
 	{};
 
-	VAO::VAO(VAO&& other) :
-		m_target{ std::exchange(other.m_target, 0) },
+	VAO::VAO(VAO&& other) noexcept:
 		m_VAO_ID{ std::exchange(other.m_VAO_ID, 0)}
 	{}
 
-	VAO& VAO::operator = (VAO&& other)
+	VAO& VAO::operator = (VAO&& other) noexcept
 	{
 		(this)->~VAO();
 		return *new (this) VAO(std::move(other));
@@ -36,20 +35,20 @@ namespace glen
 		bind();
 		inBuffer.bind();
 
-		std::for_each(begin, end, [&](const member_info_type& mi)
+		std::for_each(begin, end, [&](const member_info_type& member_info)
 		{
-			for (auto i = 0u; i < mi.slot_occupancy; ++i)
+			for (auto i = 0u; i < member_info.slot_occupancy; ++i)
 			{
-				glEnableVertexAttribArray(id_offset + mi.attribute_slot + i);
-				if (mi.gl_type_enum == GL_FLOAT || mi.gl_type_enum == GL_DOUBLE)
+				glEnableVertexAttribArray(id_offset + member_info.attribute_slot + i);
+				if (member_info.gl_type_enum == GL_FLOAT || member_info.gl_type_enum == GL_DOUBLE)
 				{
-					glVertexAttribPointer(id_offset + mi.attribute_slot + i, mi.component_count, mi.gl_type_enum, GL_TRUE, mi.tuple_stride, mi.offset_from_start + i * mi.slot_size_in_bytes);
+					glVertexAttribPointer(id_offset + member_info.attribute_slot + i, member_info.component_count, member_info.gl_type_enum, GL_TRUE, member_info.tuple_stride, member_info.offset_from_start + i * member_info.slot_size_in_bytes);
 				}
 				else
 				{
-					glVertexAttribIPointer(id_offset + mi.attribute_slot + i, mi.component_count, mi.gl_type_enum, mi.tuple_stride, mi.offset_from_start + i * mi.slot_size_in_bytes);
+					glVertexAttribIPointer(id_offset + member_info.attribute_slot + i, member_info.component_count, member_info.gl_type_enum, member_info.tuple_stride, member_info.offset_from_start + i * member_info.slot_size_in_bytes);
 				}
-				glVertexAttribDivisor(id_offset + mi.attribute_slot + i, (GLuint)divisor);
+				glVertexAttribDivisor(id_offset + member_info.attribute_slot + i, (GLuint)divisor);
 
 			}
 		});

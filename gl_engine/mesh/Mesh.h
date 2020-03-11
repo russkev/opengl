@@ -2,7 +2,6 @@
 #define GL_ENGINE_MESH_MESH_H
 
 #include <vector>
-#include <tuple>
 #include <cassert>
 #include <string>
 #include <map>

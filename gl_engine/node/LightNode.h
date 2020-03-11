@@ -27,13 +27,12 @@ namespace glen
 
 		// // ----- CONSTRUCTORS ----- // //
 	public:
-		LightNode() {};
 		LightNode(const std::string name, Light* light);
 
 		// // ----- GENERAL ----- // //
 
 		void update_view(CameraNode* camera_node) override;
-		void draw(const Pass& pass = rgb) override;
+		void draw() override;
 
 		// // ----- GETTERS ----- // //
 		const Light* light() const;
@@ -52,11 +51,11 @@ namespace glen
 		GLuint m_shader_pos;
 
 		VAO m_vao;
-		Buffer m_vertex_buffer = { GL_ARRAY_BUFFER, 0 };
-		Buffer m_index_buffer = { GL_ARRAY_BUFFER, 0 };
+		Buffer m_vertex_buffer{ GL_ARRAY_BUFFER, 0 };
+		Buffer m_index_buffer{ GL_ARRAY_BUFFER, 0 };
 
-		glm::mat4 m_model_to_perspective;
-		bool m_shader_warned = false;
+		glm::mat4 m_model_to_perspective{ 1.0 };
+		bool m_shader_warned{ false };
 	};
 }
 #endif

@@ -49,11 +49,11 @@ namespace glen
 	
 		// // ----- MEMBER VARIABLES ----- // //
 	public:
-		Texture				m_texture;
+		Texture				m_texture{ GL_TEXTURE_2D };
 		vertices_2d_type	m_vertices;
-		int					m_x, m_y, m_size;
-		int					m_text_array[MAX_LETTERS];
-		GLuint				m_program_id, m_width_uniform_id, m_height_uniform_id, m_string_uniform_id, m_screen_width, m_screen_height;
+		GLint				m_x = 0, m_y = 0, m_size = 0;
+		GLint				m_text_array[MAX_LETTERS] = { 0 };
+		GLuint				m_program_id = 0, m_width_uniform_id = 0, m_height_uniform_id = 0, m_string_uniform_id = 0, m_screen_width = 0, m_screen_height = 0;
 		Buffer				m_buffer = { GL_ARRAY_BUFFER, 0 };
 		VAO					m_vao;
 	};

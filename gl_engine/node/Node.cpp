@@ -28,11 +28,11 @@ namespace glen
 			child.second->update_view(camera_node);
 		}
 	}
-	void Node::draw(const Pass& pass)
+	void Node::draw()
 	{
 		for (auto child : m_children)
 		{
-			child.second->draw(pass);
+			child.second->draw();
 		}
 	}
 

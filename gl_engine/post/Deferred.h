@@ -33,12 +33,11 @@ namespace glen
 		typedef std::map < GLuint, Texture> textures_t;
 
 		// // ----- CONSTRUCTOR ----- // //
-		Deferred() {};
 		Deferred(const GLenum target, Framebuffer* g_buffer, Material* material, const glm::uvec2& dimensions);
 		Deferred(const Deferred& other) = delete;
-		Deferred(Deferred&& other);
+		Deferred(Deferred&& other) noexcept;
 		Deferred& operator = (const Deferred& other) = delete;
-		Deferred& operator = (Deferred&& other);
+		Deferred& operator = (Deferred&& other) noexcept;
 		~Deferred() = default;
 
 		// // ----- GENERAL ----- // //
@@ -104,7 +103,7 @@ namespace glen
 
 		glm::uvec2 m_noise_tile_dimensions{ 4, 4 };
 		std::vector<glm::vec3> m_kernal, m_noise_tile;
-		Texture m_noise_tile_texture;
+		Texture m_noise_tile_texture{ GL_TEXTURE_2D };
 		Texture m_ao_texture{ Texture::create_bw_null_texture(GL_TEXTURE_2D, m_dimensions) };
 	};
 

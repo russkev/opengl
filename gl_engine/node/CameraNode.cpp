@@ -10,8 +10,8 @@ namespace glen
 {
 	// // ----- CONSTRUCTORS ----- // //
 	CameraNode::CameraNode(const std::string name, Camera* camera) :
-		Node(name), 
-		m_camera(camera)
+		Node{ name },
+		m_camera{ camera }
 	{
 		m_camera->register_transform(Node::local_to_node());
 	}
