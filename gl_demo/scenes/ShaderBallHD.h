@@ -57,7 +57,7 @@ namespace gl_demo
 
 		glen::ShadowMap spot_light_key_shadow{ &spot_light_key_node, 4096 };
 		spot_light_key_shadow.set_bias(0.000006f);
-		spot_light_key_shadow.set_radius(2.0f);
+		spot_light_key_shadow.set_radius(6.0f);
 		spot_light_key_shadow.set_num_samples(5);
 		spot_light_key_shadow.set_clip_far(4000);
 
@@ -125,7 +125,7 @@ namespace gl_demo
 
 
 		glen::Renderer render{ &target_cam_node, glm::uvec2{ window.width(), window.height() } };
-		render.enable_post_effects();
+		render.disable_post_effects();
 		render.disable_deferred_render();
 		render.enable_ao();
 

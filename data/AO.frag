@@ -68,7 +68,6 @@ void main()
 
 	float occlusion = 0.0;
 
-//	vec4 offset = vec4(0.0);
 	for (int i = 0; i < NUM_SAMPLES; ++i)
 	{
 		vec3 ao_sample = tbn * samples[i];
@@ -85,11 +84,14 @@ void main()
 			sample_depth = -1000;
 		}
 
-		float range_check = smoothstep(0.0, 1.0, radius / abs(m_cam_space.position.z - sample_depth));
+		float range_check = smoothstep(0.0, 1.0, (radius / 5) / abs(m_cam_space.position.z - sample_depth));
 		occlusion += (sample_depth >= ao_sample.z + bias ? 1.0 : 0.0) * range_check;
+
+		// !!! There's a few magic numbers here, convert them to uniforms
+
 	}
 
-	occlusion = 1.0 - (occlusion / NUM_SAMPLES);
+	occlusion = pow(1.0 - (occlusion / NUM_SAMPLES), 4);
 
 	out_color = vec3(occlusion);
 
