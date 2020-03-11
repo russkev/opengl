@@ -22,7 +22,7 @@ namespace gl_demo
 		targetCam.set_clip_far(1000.0f);
 
 		// Shader ball mesh
-		glen::Mesh shaderBall = glen::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
+		glen::Mesh shaderBall = glen::OBJ_Loader::load_obj("shaderball_lowpoly.obj");
 
 		// GBuffer material
 		glen::GBufferMaterial g_buffer_material{};

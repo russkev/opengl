@@ -169,7 +169,7 @@ namespace gl_demo
 		glen::BlinnMaterial m_white_diffuse_material{ "White Diffuse Material" };
 		glen::BlinnMaterial m_rubber_material{ "Rubber Material" };
 		glen::BlinnMaterial m_grid_material{ "Grid Material" };
-		glen::Texture m_grid_texture{ "greyGrid_01.tga" };
+		glen::Texture m_grid_texture{ "grey_grid.tga" };
 		glen::Texture m_checker_texture{ "checker_02.tga" };
 
 		glen::Mesh m_ball_mesh{ glen::OBJ_Loader::load_obj("shaderball_hd_ball.obj") };
