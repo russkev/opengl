@@ -80,6 +80,12 @@ namespace glen
 	{
 		return m_material;
 	}
+
+	// // ----- SETTERS ----- // //
+	void MeshNode::set_material(Material* material)
+	{
+		m_material = material;
+	}
 } 
 
 

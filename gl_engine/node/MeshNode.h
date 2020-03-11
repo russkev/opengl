@@ -47,6 +47,7 @@ namespace glen
 		Material* material();
 
 		// // ----- SETTERS ----- // //
+		void set_material(Material* material);
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
