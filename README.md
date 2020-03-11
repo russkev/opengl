@@ -42,6 +42,7 @@
 ![Demo 04](https://raw.githubusercontent.com/russkev/opengl/master/screenshots/demo_04.jpg)
 ![Demo 05](https://raw.githubusercontent.com/russkev/opengl/master/screenshots/demo_05.jpg)
 ![Demo 06](https://raw.githubusercontent.com/russkev/opengl/master/screenshots/demo_06.jpg)
+![Demo 07](https://raw.githubusercontent.com/russkev/opengl/master/screenshots/demo_07.jpg)
 
 ## Big thank you to:
   - [Aleksandras Ševčenko](https://github.com/Coldberg) for being an excellent guide while I've been fumbling around.
