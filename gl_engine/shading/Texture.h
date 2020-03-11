@@ -23,6 +23,7 @@ namespace glen
 		Texture();
 		// Create a texture from an image file
 		Texture(const char* file_name);
+		Texture(const char* file_name, const bool is_srgb);
 
 		// Create an internal texture
 		Texture(const GLenum target);
