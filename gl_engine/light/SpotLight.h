@@ -24,6 +24,7 @@ namespace glen
 
 		// // ----- CONSTRUCTORS ----- // //
 	public:
+		SpotLight();
 		SpotLight(GLfloat brightness, glm::vec3 color);
 
 		// // ----- GETTERS ----- // //

@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="gl_demo.cpp" />
+    <ClCompile Include="scenes\ShaderBallHD.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\gl_engine\gl_engine.vcxproj">

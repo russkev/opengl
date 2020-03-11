@@ -10,6 +10,9 @@ namespace glen
 	const std::string PointLight::TYPE = "pointLight";
 
 	// // ----- CONSTRUCTORS ----- // //
+	PointLight::PointLight() :
+		PointLight(1.0f, { 1.0f, 1.0f, 1.0f })
+	{}
 
 	PointLight::PointLight(const GLfloat brightness, const glm::vec3 color) :
 		m_light_mesh(Sphere::create_sphere(m_radius)),
