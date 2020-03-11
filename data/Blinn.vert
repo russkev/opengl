@@ -50,6 +50,8 @@ struct DirectionalLight
 	sampler2DArray depth;
 	mat4 projection;
 	Shadow shadow;
+	bool diffuse_enabled;
+	bool specular_enabled;
 };
 uniform DirectionalLight directionalLight[NUM_LIGHTS];
 
@@ -64,6 +66,8 @@ struct SpotLight
 	sampler2DArray depth;
 	mat4 projection;
 	Shadow shadow;
+	bool diffuse_enabled;
+	bool specular_enabled;
 };
 uniform SpotLight spotLight[NUM_SPOT_LIGHTS];
 
