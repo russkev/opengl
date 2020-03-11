@@ -6,16 +6,15 @@
 
 int main()
 {
-	//gl_demo::deferred_demo();
+	gl_demo::deferred_demo();
 
 	gl_demo::ShaderBallHD hd_demo;
-	//hd_demo.demo_01();
-	//hd_demo.demo_02();
-	//hd_demo.demo_03();
-	//hd_demo.demo_04();
-	//hd_demo.demo_05();
+	hd_demo.demo_01();
+	hd_demo.demo_02();
+	hd_demo.demo_03();
+	hd_demo.demo_04();
+	hd_demo.demo_05();
 	hd_demo.demo_06();
-	hd_demo.demo_07();
 
 	return 0;
 } 

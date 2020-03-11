@@ -356,6 +356,9 @@ namespace gl_demo
 		render.disable_ao();
 		render.disable_deferred_render();
 
+		// !!! Lights still being called in from previous scene
+		// !!! Possibly because destructors being called incorrectly
+
 		render.add_node(&point_light_node);
 		add_geometry_to_renderer(render);
 
