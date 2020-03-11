@@ -229,6 +229,8 @@ namespace glen
 		set_uniform(k_point_light + "[" + index + "]." + k_position, light_node->world_position());
 		set_uniform(k_point_light + "[" + index + "]." + k_brightness, light_node->light()->brightness());
 		set_uniform(k_point_light + "[" + index + "]." + k_color, light_node->light()->color());
+		set_uniform(k_point_light + "[" + index + "]." + k_diffuse_enabled, light_node->light()->diffuse_enabled());
+		set_uniform(k_point_light + "[" + index + "]." + k_specular_enabled, light_node->light()->specular_enabled());
 	}
 
 	void BlinnMaterial::update_light(LightNode* light_node, const DirectionalLight* directional_light)
@@ -238,6 +240,8 @@ namespace glen
 		set_uniform(k_directional_light + "[" + index + "]." + k_direction, light_node->direction());
 		set_uniform(k_directional_light + "[" + index + "]." + k_brightness, light_node->light()->brightness());
 		set_uniform(k_directional_light + "[" + index + "]." + k_color, light_node->light()->color());
+		set_uniform(k_directional_light + "[" + index + "]." + k_diffuse_enabled, light_node->light()->diffuse_enabled());
+		set_uniform(k_directional_light + "[" + index + "]." + k_specular_enabled, light_node->light()->specular_enabled());
 	}
 
 	void BlinnMaterial::update_light(LightNode* light_node, const SpotLight* spot_light)
@@ -250,6 +254,8 @@ namespace glen
 		set_uniform(k_spot_light + "[" + index + "]." + k_outer, spot_light->cos_outer_angle());
 		set_uniform(k_spot_light + "[" + index + "]." + k_brightness, light_node->light()->brightness());
 		set_uniform(k_spot_light + "[" + index + "]." + k_color, light_node->light()->color());
+		set_uniform(k_spot_light + "[" + index + "]." + k_diffuse_enabled, light_node->light()->diffuse_enabled());
+		set_uniform(k_spot_light + "[" + index + "]." + k_specular_enabled, light_node->light()->specular_enabled());
 	}
 
 	// BLINN DEFERRED

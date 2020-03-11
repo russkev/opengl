@@ -89,6 +89,17 @@ namespace gl_demo
 		glen::LightNode point_light_fill_node{ "Point Light Fill 1", &point_light_fill };
 		point_light_fill_node.set_position({ 60.0f, 35.0f, 120.0f });
 
+		// Point Light Fill 2
+		glen::PointLight point_light_fill_2{ 0.0, {0.0f, 0.0f, 0.0f} };
+		point_light_fill_2.set_brightness(1.0f);
+		point_light_fill_2.set_color(glm::vec3{ 1.0f, 1.0f, 1.0f });
+		point_light_fill_2.set_radius(10.0f);
+		point_light_fill_2.disable_mesh();
+		point_light_fill_2.disable_specular();
+
+		glen::LightNode point_light_fill_2_node{ "Point Light Fill 2", &point_light_fill_2 };
+		point_light_fill_2_node.set_position({ 0.0f, 50.0f, 0.0f });
+
 		// Spot Light BG 1
 		glen::SpotLight spot_light_bg_01{ 140.0f, {1.0f, 1.0f, 1.0f} };
 		spot_light_bg_01.set_brightness(200.0f);
@@ -116,7 +127,7 @@ namespace gl_demo
 		glen::Renderer render{ &target_cam_node, glm::uvec2{ window.width(), window.height() } };
 		render.enable_post_effects();
 		render.disable_deferred_render();
-		render.disable_ao();
+		render.enable_ao();
 
 		// Add mesh nodes
 		render.add_node(&ball_node);
@@ -129,12 +140,15 @@ namespace gl_demo
 		render.add_node(&spot_light_key_node);
 		render.add_node(&spot_light_fill_node);
 		render.add_node(&point_light_fill_node);
+		render.add_node(&point_light_fill_2_node);
 		render.add_node(&spot_light_bg_01_node);
 		render.add_node(&spot_light_bg_02_node);
 
 		glen::Timer timer;
 		while (render.poll_events())
 		{
+			spot_light_fill_node.set_rotation({ 40.0f, 120.0f, 0.0f });
+			spot_light_fill_node.set_position({ -400.0f, 500.0f, 200.0f });
 			render.update(&window, &timer);
 		}
 
