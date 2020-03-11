@@ -429,19 +429,7 @@ namespace glen
 		set_uniform(k_transform_model_to_world_normal, glm::mat3{ 1.0f });
 
 		set_sampler_value(k_material_diffuse, 0.0f);
-		set_uniform(k_material_diffuse_amount, 1.0f);
-
 		set_sampler_value(k_material_specular, 0.0f);
-		set_uniform(k_material_specular_amount, 1.0f);
-
-		set_sampler_value(k_material_glossiness, 0.5f);
-
-		set_sampler_color(k_material_normal, default_normal);
-		set_uniform(k_material_normal_directx_mode, false);
-
-		set_sampler_value(k_material_displacement, 0.0f);
-		set_uniform(k_material_displacement_amount, 0.0f);
-		set_uniform(k_material_displacement_enabled, false);
 	}
 
 	void GBufferMaterial::update_view(const CameraNode* camera_node, const Node* model_node)

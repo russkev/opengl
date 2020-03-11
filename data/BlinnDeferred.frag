@@ -66,7 +66,7 @@ void main()
 		float specular_amount = specular_lighting(light_direction, normal, cam_direction);
 
 		diffuse_out += diffuse_amount * diffuse * lights[i].color;
-		specular_out += specular_amount * lights[i].color;
+		specular_out += specular_amount * specular * lights[i].color;
 	}
 
 

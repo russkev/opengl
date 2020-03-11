@@ -21,15 +21,6 @@
     <ClInclude Include="scenes\DeferredRenderDemo.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="scenes\SpecularityDemo.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="scenes\ParallaxDemo.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="scenes\AODemo.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="scenes\ShaderBallHD.h">
       <Filter>Scenes</Filter>
     </ClInclude>

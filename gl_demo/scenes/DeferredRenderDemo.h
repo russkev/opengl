@@ -25,17 +25,15 @@ namespace gl_demo
 		glen::Mesh shaderBall = glen::OBJ_Loader::load_obj("shaderball_lowpoly_02_tris.obj");
 
 		// GBuffer material
-		//gl_engine::Material g_buffer_material{ "G Buffer Material", "GBuffer.vert", "GBuffer.frag" };
 		glen::GBufferMaterial g_buffer_material{};
 
-		//gl_engine::Material test_material{ "Test material", "Blinn.vert", "Blinn.frag" };
 
 		// Textures
-		glen::Texture diffuse_texture{ "uvtemplate.tga" };
-		glen::Texture spec_texture{ "greyGrid_01.tga" };
+		glen::Texture uv_template_texture{ "uv_template.tga" };
+		glen::Texture grid_texture{ "grey_grid.tga" };
 
-		g_buffer_material.set_texture(glen::GBufferMaterial::k_material_diffuse, &diffuse_texture);
-		g_buffer_material.set_texture(glen::GBufferMaterial::k_material_specular, &spec_texture);
+		g_buffer_material.set_texture(glen::GBufferMaterial::k_material_diffuse, &uv_template_texture);
+		g_buffer_material.set_texture(glen::GBufferMaterial::k_material_specular, &grid_texture);
 
 		// Mesh node
 		glen::MeshNode g_buffer_node{ "G Buffer Mesh Node", &shaderBall, &g_buffer_material };
@@ -57,17 +55,12 @@ namespace gl_demo
 		// Renderer
 		glen::Renderer render{ &targetCam_node, glm::uvec2(window.width(), window.height()) };
 		render.disable_post_effects();
-
 		render.enable_deferred_render();
 		render.disable_ao();
-		
-		//render.disable_deferred_render();
-		//render.enable_ao();
 
 		render.add_node(&g_buffer_node);
 		render.add_node(&directionalLight_node1);
 		render.add_node(&pointLight_node);
-		render.disable_post_effects();
 
 		glen::Timer timer;
 

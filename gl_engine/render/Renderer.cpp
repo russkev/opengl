@@ -104,10 +104,7 @@ namespace glen
 
 	void Renderer::init_deferred_renderer()
 	{
-		if (m_deferred_render_enabled)
-		{
-			add_material(m_blinn_deferred.material());
-		}
+		add_material(m_blinn_deferred.material());
 	}
 
 	void Renderer::init_ao()
@@ -162,7 +159,6 @@ namespace glen
 			m_blinn_deferred.update_view(m_camera_node);
 
 			m_blinn_deferred.draw();
-
 
 			m_g_buffer.blit_depth_to_default(m_dimensions);
 
