@@ -70,4 +70,13 @@ namespace glen
 	{
 		m_mesh_enabled = false;
 	}
+
+	void Light::disable_specular()
+	{
+		if (material() != NULL)
+		{
+			material()->set_uniform(std::string(LIGHT_SHADER_TYPE + "." + "specular_enabled"), false);
+		}
+
+	}
 }

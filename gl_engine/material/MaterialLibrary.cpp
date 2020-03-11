@@ -131,6 +131,8 @@ namespace glen
 			set_uniform(k_point_light + "[" + index + "]." + k_shadow_bias, 0.0005f);
 			set_uniform(k_point_light + "[" + index + "]." + k_shadow_radius, 1.0f);
 			set_uniform(k_point_light + "[" + index + "]." + k_shadow_num_samples, 1);
+			set_uniform(k_point_light + "[" + index + "]." + k_diffuse_enabled, true);
+			set_uniform(k_point_light + "[" + index + "]." + k_specular_enabled, true);
 		}
 
 		for (GLuint i = 0; i < k_num_directional_lights; ++i)

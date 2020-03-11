@@ -47,6 +47,7 @@ namespace glen
 		void set_color(const glm::vec3 color);
 		void enable_mesh();
 		void disable_mesh();
+		void disable_specular();
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:

@@ -99,6 +99,8 @@ namespace glen
 		inline static const std::string k_shadow_bias			= "shadow.bias";
 		inline static const std::string k_shadow_radius			= "shadow.radius";
 		inline static const std::string k_shadow_num_samples	= "shadow.num_samples";
+		inline static const std::string k_diffuse_enabled		= "diffuse_enabled";
+		inline static const std::string k_specular_enabled		= "specular_enabled";
 
 		inline static const std::string k_camera_position = "camera.position";
 
