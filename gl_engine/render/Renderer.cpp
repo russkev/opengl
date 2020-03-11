@@ -191,7 +191,10 @@ namespace glen
 			m_ao_g_buffer_deferred.draw();
 			m_ao_FBO.unbind();
 
+			m_backbuffer_FBO.bind();
 			m_ao_blur_deferred.draw();
+			m_backbuffer_FBO.unbind();
+			m_tone_map.draw();
 
 			m_ao_g_buffer_FBO.blit_depth_to_default(m_dimensions);
 
