@@ -23,6 +23,7 @@ namespace glen
 
 		// // ----- CONSTRUCTORS ----- // //
 	public:
+		PointLight();
 		PointLight(const GLfloat brightness, const glm::vec3 color);
 
 		// // ----- GETTERS ----- // //

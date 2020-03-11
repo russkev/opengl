@@ -91,6 +91,7 @@ namespace glen
 
 		// // ----- BACKBUFFER VARIABLES ----- // //
 		Framebuffer m_backbuffer_FBO{ GL_FRAMEBUFFER };
+		Framebuffer m_ao_backbuffer_FBO{ GL_FRAMEBUFFER };
 
 		Texture m_backbuffer_depth{ Texture::create_depth_null_texture(GL_TEXTURE_2D, m_dimensions) };
 

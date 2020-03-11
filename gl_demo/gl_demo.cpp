@@ -15,6 +15,7 @@ int main()
 	hd_demo.demo_04();
 	hd_demo.demo_05();
 	hd_demo.demo_06();
+	hd_demo.demo_07();
 
 	return 0;
 } 
