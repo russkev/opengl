@@ -83,6 +83,8 @@ struct PointLight
 	samplerCube depth;
 	float far_plane;
 	Shadow shadow;
+	bool diffuse_enabled;
+	bool specular_enabled;
 };
 uniform PointLight pointLight[NUM_LIGHTS];
 
@@ -505,20 +507,26 @@ void main ()
 		}
 		float temp_attenuation = attenuation(pointLight[i].position);
 
-		diffuse_out += 
-			diffuse_point_tangent_space(i) *
-			pointLight[i].brightness * pointLight[i].brightness *
-			pointLight[i].color * 
-			temp_attenuation * 
-			temp_shadow;
+		if (pointLight[i].diffuse_enabled)
+		{
+			diffuse_out += 
+				diffuse_point_tangent_space(i) *
+				pointLight[i].brightness * pointLight[i].brightness *
+				pointLight[i].color * 
+				temp_attenuation * 
+				temp_shadow;
+		}
 
-		specular_out +=
-			specular_point_tangent_space(i) * 
-			pointLight[i].brightness *  pointLight[i].brightness *
-			texture(material.specular, uv).rgb * 
-			pointLight[i].color * 
-			temp_attenuation * 
-			temp_shadow;
+		if (pointLight[i].specular_enabled)
+		{
+			specular_out +=
+				specular_point_tangent_space(i) * 
+				pointLight[i].brightness *  pointLight[i].brightness *
+				texture(material.specular, uv).rgb * 
+				pointLight[i].color * 
+				temp_attenuation * 
+				temp_shadow;
+		}
 	}
 
 	// Directional lights

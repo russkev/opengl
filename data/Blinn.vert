@@ -37,6 +37,8 @@ struct PointLight
 	samplerCube depth;
 	float far_plane;
 	Shadow shadow;
+	bool diffuse_enabled;
+	bool specular_enabled;
 };
 uniform PointLight pointLight[NUM_LIGHTS];
 

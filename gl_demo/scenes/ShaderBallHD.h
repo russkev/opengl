@@ -80,14 +80,14 @@ namespace gl_demo
 
 		// Point Light Fill 1
 		glen::PointLight point_light_fill{0.0, {0.0f, 0.0f, 0.0f} };
-		point_light_fill.set_brightness(0.5f);
-		point_light_fill.set_color(glm::vec3{ 0.0f, 1.0f, 0.0f });
+		point_light_fill.set_brightness(2.0f);
+		point_light_fill.set_color(glm::vec3{ 1.0f, 1.0f, 1.0f });
 		point_light_fill.set_radius(10.0f);
+		point_light_fill.disable_mesh();
+		point_light_fill.disable_specular();
 		
 		glen::LightNode point_light_fill_node{ "Point Light Fill 1", &point_light_fill };
-		point_light_fill_node.set_position({ 0.0f, 80.0f, 100.0f });
-
-
+		point_light_fill_node.set_position({ 60.0f, 35.0f, 120.0f });
 
 		// Spot Light BG 1
 		glen::SpotLight spot_light_bg_01{ 140.0f, {1.0f, 1.0f, 1.0f} };
@@ -135,14 +135,6 @@ namespace gl_demo
 		glen::Timer timer;
 		while (render.poll_events())
 		{
-			point_light_fill.set_brightness(2.0f);
-			point_light_fill.set_color(glm::vec3{ 1.0f, 1.0f, 1.0f });
-			point_light_fill.set_radius(10.0f);
-			point_light_fill.disable_mesh();
-
-			point_light_fill_node.set_position({ 60.0f, 35.0f, 120.0f });
-
-
 			render.update(&window, &timer);
 		}
 
