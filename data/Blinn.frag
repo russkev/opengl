@@ -433,13 +433,15 @@ float create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_lig
 
 		float current_depth = projection_coordinates.z;
 
-		for(int i = 0; i < shadow.num_samples; ++i, pcf_coordinates.x += step_size)
+		for(int i = 0; i < shadow.num_samples; ++i)
 		{
-			for(int j = 0; j < shadow.num_samples; ++j, pcf_coordinates.y += step_size)
+			for(int j = 0; j < shadow.num_samples; ++j)
 			{
 				float pcf_depth = texture(depth, vec3(projection_coordinates.xy + pcf_coordinates * texel_size, 0)).r;
 				out_shadow += current_depth - adjusted_bias > pcf_depth ? 0.0 : 1.0;
+				pcf_coordinates.y += step_size;
 			}
+			pcf_coordinates.x += step_size;
 		}
 
 		out_shadow /= (shadow.num_samples * shadow.num_samples);
@@ -609,7 +611,7 @@ void main ()
 		diffuse_out * texture(material.diffuse, uv).rgb * material.diffuse_amount
 		+ 
 		specular_out * material.specular_amount
-
+//		vec3(1.0)
 		* vec3(1.0);
 
 	frag_color = vec4(outColor.xyz, 1.0);

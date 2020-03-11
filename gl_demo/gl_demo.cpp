@@ -13,6 +13,9 @@ int main()
 	//gl_demo::specularity_demo();
 	//gl_demo::deferred_demo();
 	//gl_demo::ao_demo();
-	gl_demo::shader_ball_hd_demo();
+	gl_demo::ShaderBallHD hd_demo;
+	hd_demo.demo_01();
+	hd_demo.demo_02();
+
 	return 0;
 }

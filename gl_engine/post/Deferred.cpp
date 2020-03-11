@@ -247,7 +247,7 @@ namespace glen
 		m_ao_material.set_uniform(AO_Material::k_screen_dimensions, m_dimensions);
 		m_ao_material.set_uniform(AO_Material::k_noise_tile_dimensions, m_noise_tile_dimensions);
 		m_ao_material.set_texture(AO_Material::k_noise, &m_noise_tile_texture);
-		m_ao_material.set_uniform(AO_Material::k_radius, 10.0f);
+		m_ao_material.set_uniform(AO_Material::k_radius, 100.0f);
 		m_ao_material.set_uniform(AO_Material::k_bias, 1.0f);
 	}
 
