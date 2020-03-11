@@ -116,6 +116,9 @@ namespace glen
 		set_uniform(k_transform_model_to_projection, glm::mat4{ 1.0f });
 		set_uniform(k_transform_model_to_world, glm::mat4{ 1.0f });
 
+		set_uniform(k_ambient_light_color, glm::vec3{ 1.0f });
+		set_uniform(k_ambient_light_brightness, 0.0f);
+
 		for (GLuint i = 0; i < k_num_point_lights; ++i)
 		{
 			std::string index = std::to_string(i);
@@ -124,6 +127,12 @@ namespace glen
 			set_uniform(k_point_light + "[" + index + "]." + k_color, glm::vec3{ 1.0f });
 			set_sampler_value(k_point_light + "[" + index + "]." + k_depth, 0.0f);
 			set_uniform(k_point_light + "[" + index + "]." + k_far_plane, 100.0f);
+			set_uniform(k_point_light + "[" + index + "]." + k_shadow_enabled, false);
+			set_uniform(k_point_light + "[" + index + "]." + k_shadow_bias, 0.0005f);
+			set_uniform(k_point_light + "[" + index + "]." + k_shadow_radius, 1.0f);
+			set_uniform(k_point_light + "[" + index + "]." + k_shadow_num_samples, 1);
+			set_uniform(k_point_light + "[" + index + "]." + k_diffuse_enabled, true);
+			set_uniform(k_point_light + "[" + index + "]." + k_specular_enabled, true);
 		}
 
 		for (GLuint i = 0; i < k_num_directional_lights; ++i)
@@ -134,6 +143,10 @@ namespace glen
 			set_uniform(k_directional_light + "[" + index + "]." + k_color, glm::vec3{ 1.0f });
 			set_sampler_value(k_directional_light + "[" + index + "]." + k_depth, 0.0f);
 			set_uniform(k_directional_light + "[" + index + "]." + k_projection, glm::mat4{ 1.0f });
+			set_uniform(k_directional_light + "[" + index + "]." + k_shadow_enabled, false);
+			set_uniform(k_directional_light + "[" + index + "]." + k_shadow_bias, 0.0005f);
+			set_uniform(k_directional_light + "[" + index + "]." + k_shadow_radius, 1.0f);
+			set_uniform(k_directional_light + "[" + index + "]." + k_shadow_num_samples, 1);
 		}
 
 		for (GLuint i = 0; i < k_num_spot_lights; ++i)
@@ -147,6 +160,10 @@ namespace glen
 			set_uniform(k_spot_light + "[" + index + "]." + k_outer, 40.0f);
 			set_sampler_value(k_spot_light + "[" + index + "]." + k_depth, 0.0f);
 			set_uniform(k_spot_light + "[" + index + "]." + k_projection, glm::mat4{ 1.0f });
+			set_uniform(k_spot_light + "[" + index + "]." + k_shadow_enabled, false);
+			set_uniform(k_spot_light + "[" + index + "]." + k_shadow_bias, 0.0005);
+			set_uniform(k_spot_light + "[" + index + "]." + k_shadow_radius, 1.0f);
+			set_uniform(k_spot_light + "[" + index + "]." + k_shadow_num_samples, 1);
 		}
 
 		set_uniform(k_camera_position, glm::vec3{ 0.0f });
@@ -161,16 +178,13 @@ namespace glen
 		set_sampler_value(k_material_displacement, 0.0f);
 		set_uniform(k_material_displacement_amount, 0.1f);
 		set_uniform(k_material_displacement_enabled, false);
-
-
-
 	}
 
 	void BlinnMaterial::update_view(const CameraNode* camera_node, const Node* model_node)
 	{
 		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * model_node->world_to_node());
 		set_uniform(k_transform_model_to_world, model_node->world_to_node());
-		set_uniform(k_transform_model_world_to_normal, model_node->world_normal_to_node());
+		//set_uniform(k_transform_model_world_to_normal, model_node->world_normal_to_node());
 		set_uniform(k_camera_position, camera_node->world_position());
 	}
 
@@ -215,6 +229,8 @@ namespace glen
 		set_uniform(k_point_light + "[" + index + "]." + k_position, light_node->world_position());
 		set_uniform(k_point_light + "[" + index + "]." + k_brightness, light_node->light()->brightness());
 		set_uniform(k_point_light + "[" + index + "]." + k_color, light_node->light()->color());
+		set_uniform(k_point_light + "[" + index + "]." + k_diffuse_enabled, light_node->light()->diffuse_enabled());
+		set_uniform(k_point_light + "[" + index + "]." + k_specular_enabled, light_node->light()->specular_enabled());
 	}
 
 	void BlinnMaterial::update_light(LightNode* light_node, const DirectionalLight* directional_light)
@@ -224,6 +240,8 @@ namespace glen
 		set_uniform(k_directional_light + "[" + index + "]." + k_direction, light_node->direction());
 		set_uniform(k_directional_light + "[" + index + "]." + k_brightness, light_node->light()->brightness());
 		set_uniform(k_directional_light + "[" + index + "]." + k_color, light_node->light()->color());
+		set_uniform(k_directional_light + "[" + index + "]." + k_diffuse_enabled, light_node->light()->diffuse_enabled());
+		set_uniform(k_directional_light + "[" + index + "]." + k_specular_enabled, light_node->light()->specular_enabled());
 	}
 
 	void BlinnMaterial::update_light(LightNode* light_node, const SpotLight* spot_light)
@@ -236,6 +254,8 @@ namespace glen
 		set_uniform(k_spot_light + "[" + index + "]." + k_outer, spot_light->cos_outer_angle());
 		set_uniform(k_spot_light + "[" + index + "]." + k_brightness, light_node->light()->brightness());
 		set_uniform(k_spot_light + "[" + index + "]." + k_color, light_node->light()->color());
+		set_uniform(k_spot_light + "[" + index + "]." + k_diffuse_enabled, light_node->light()->diffuse_enabled());
+		set_uniform(k_spot_light + "[" + index + "]." + k_specular_enabled, light_node->light()->specular_enabled());
 	}
 
 	// BLINN DEFERRED
@@ -409,19 +429,7 @@ namespace glen
 		set_uniform(k_transform_model_to_world_normal, glm::mat3{ 1.0f });
 
 		set_sampler_value(k_material_diffuse, 0.0f);
-		set_uniform(k_material_diffuse_amount, 1.0f);
-
 		set_sampler_value(k_material_specular, 0.0f);
-		set_uniform(k_material_specular_amount, 1.0f);
-
-		set_sampler_value(k_material_glossiness, 0.5f);
-
-		set_sampler_color(k_material_normal, default_normal);
-		set_uniform(k_material_normal_directx_mode, false);
-
-		set_sampler_value(k_material_displacement, 0.0f);
-		set_uniform(k_material_displacement_amount, 0.0f);
-		set_uniform(k_material_displacement_enabled, false);
 	}
 
 	void GBufferMaterial::update_view(const CameraNode* camera_node, const Node* model_node)

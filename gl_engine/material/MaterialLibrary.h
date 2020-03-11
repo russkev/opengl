@@ -1,7 +1,6 @@
 #ifndef GL_ENGINE_MATERIAL_LIGHT_MATERIAL_H
 #define GL_ENGINE_MATERIAL_LIGHT_MATERIAL_H
 
-#include <tuple>
 #include <string>
 #include <vector>
 #include <map>
@@ -72,9 +71,9 @@ namespace glen
 
 	struct BlinnMaterial : public Material
 	{
-		inline static GLuint k_num_point_lights			= 3;
-		inline static GLuint k_num_directional_lights	= 3;
-		inline static GLuint k_num_spot_lights			= 3;
+		inline static GLuint k_num_point_lights			= 2;
+		inline static GLuint k_num_directional_lights	= 2;
+		inline static GLuint k_num_spot_lights			= 5;
 
 		inline static const std::string k_transform_model_to_projection		= "transform.model_to_projection";
 		inline static const std::string k_transform_model_to_world			= "transform.model_to_world";
@@ -83,6 +82,9 @@ namespace glen
 		inline static const std::string k_point_light		= "pointLight";
 		inline static const std::string k_directional_light = "directionalLight";
 		inline static const std::string k_spot_light		= "spotLight";
+
+		inline static const std::string k_ambient_light_color = "ambientLight.color";
+		inline static const std::string k_ambient_light_brightness = "ambientLight.brightness";
 
 		inline static const std::string k_position		= "position";
 		inline static const std::string k_direction		= "direction";
@@ -93,6 +95,12 @@ namespace glen
 		inline static const std::string k_depth			= "depth";
 		inline static const std::string k_projection	= "projection";
 		inline static const std::string k_far_plane		= "far_plane";
+		inline static const std::string k_shadow_enabled		= "shadow.enabled";
+		inline static const std::string k_shadow_bias			= "shadow.bias";
+		inline static const std::string k_shadow_radius			= "shadow.radius";
+		inline static const std::string k_shadow_num_samples	= "shadow.num_samples";
+		inline static const std::string k_diffuse_enabled		= "diffuse_enabled";
+		inline static const std::string k_specular_enabled		= "specular_enabled";
 
 		inline static const std::string k_camera_position = "camera.position";
 
@@ -248,19 +256,7 @@ namespace glen
 		inline static const std::string k_transform_model_to_world_normal = k_transform + ".model_to_world_normal";
 		
 		inline static const std::string k_material_diffuse = k_material + ".diffuse";
-		inline static const std::string k_material_diffuse_amount = k_material + ".diffuse_amount";
-
 		inline static const std::string k_material_specular = k_material + ".specular";
-		inline static const std::string k_material_specular_amount = k_material + ".specular_amount";
-		
-		inline static const std::string k_material_glossiness = k_material + ".glossiness";
-		
-		inline static const std::string k_material_normal = k_material + ".normal";
-		inline static const std::string k_material_normal_directx_mode = k_material + ".normal_directx_mode";
-
-		inline static const std::string k_material_displacement = k_material + ".displacement";
-		inline static const std::string k_material_displacement_amount = k_material + ".diaplcement_amount";
-		inline static const std::string k_material_displacement_enabled = k_material + ".displacement_enabled";
 
 		GBufferMaterial();
 		GBufferMaterial(const std::string& name);

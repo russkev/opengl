@@ -30,7 +30,6 @@ namespace glen
 
 		// // ----- CONSTRUCTOR ----- // //
 	public:
-		MeshNode() {};
 		MeshNode(const std::string name, Mesh* mesh, Material* material);
 		MeshNode(const MeshNode& other) = delete;
 		MeshNode(MeshNode&& other) = default;
@@ -40,7 +39,7 @@ namespace glen
 
 		// // ----- GENERAL METHODS ----- // //
 		void update_view(CameraNode* cameraNode) override;
-		void draw(const Pass& pass = rgb) override;
+		void draw() override;
 		void draw_material(Material* material) override;
 
 		// // ----- GETTERS ----- // //
@@ -48,6 +47,7 @@ namespace glen
 		Material* material();
 
 		// // ----- SETTERS ----- // //
+		void set_material(Material* material);
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:

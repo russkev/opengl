@@ -15,7 +15,15 @@ namespace glen
 		http://lazyfoo.net/tutorials/SDL/06_extension_libraries_and_loading_other_image_formats/index2.php
 
 	*/
+	Texture::Texture() :
+		m_name{ "Texture" }
+	{}
+
 	Texture::Texture(const char* filepath) :
+		Texture(filepath, false)
+	{}
+
+	Texture::Texture(const char* filepath, const bool is_srgb) :
 		m_name{ filepath },
 		m_surface{ IMG_Load(filepath) },
 		m_width{ m_surface->w },
@@ -24,12 +32,26 @@ namespace glen
 	{
 		if (has_alpha())
 		{
-			m_internal_format = GL_RGBA;
+			if (is_srgb)
+			{
+				m_internal_format = GL_SRGB_ALPHA;
+			}
+			else
+			{
+				m_internal_format = GL_RGBA;
+			}
 			m_format = GL_BGRA;
 		}
 		else
 		{
-			m_internal_format = GL_RGB;
+			if (is_srgb)
+			{
+				m_internal_format = GL_SRGB;
+			}
+			else
+			{
+				m_internal_format = GL_RGB;
+			}
 			m_format = GL_BGR;
 		}
 
@@ -80,7 +102,7 @@ namespace glen
 		glGenTextures(1, &m_id);
 	}
 
-	Texture::Texture(Texture&& other) :
+	Texture::Texture(Texture&& other) noexcept:
 		m_name{ std::exchange(other.m_name, "") },
 		m_surface{ other.m_surface },
 		m_color{ other.m_color },
@@ -106,7 +128,7 @@ namespace glen
 		other.m_data = NULL;
 	}
 
-	Texture& Texture::operator = (Texture&& other)
+	Texture& Texture::operator = (Texture&& other) noexcept
 	{
 		(*this).~Texture();
 		return *new (this) Texture(std::move(other));
@@ -588,7 +610,7 @@ namespace glen
 		{
 			return m_surface->pixels;
 		}
-		return false;
+		return (void*)false;
 	}
 
 	// // ----- SETTERS ----- // //

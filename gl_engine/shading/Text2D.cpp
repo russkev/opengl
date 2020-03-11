@@ -38,10 +38,10 @@ namespace glen
 			float uv_x = (character % 16) * uv_size;
 			float uv_y = (character / 16) * uv_size;
 
-			vertex_2d_type top_left = { { m_x + i * m_size,			m_y + m_size },{ uv_x,				1.0 - uv_y }, i*num_points + 0 };
-			vertex_2d_type top_right = { { m_x + i * m_size + m_size,	m_y + m_size },{ uv_x + uv_size,	1.0 - uv_y }, i*num_points + 1 };
-			vertex_2d_type bottom_left = { { m_x + i * m_size,			m_y },{ uv_x,				1.0 - uv_y - uv_size }, i*num_points + 2 };
-			vertex_2d_type bottom_right = { { m_x + i * m_size + m_size,	m_y },{ uv_x + uv_size,	1.0 - uv_y - uv_size }, i*num_points + 3 };
+			vertex_2d_type top_left =		{ { m_x + i * m_size,			m_y + m_size },	{ uv_x,				1.0 - uv_y },			i*num_points + 0 };
+			vertex_2d_type top_right =		{ { m_x + i * m_size + m_size,	m_y + m_size },	{ uv_x + uv_size,	1.0 - uv_y },			i*num_points + 1 };
+			vertex_2d_type bottom_left =	{ { m_x + i * m_size,			m_y },			{ uv_x,				1.0 - uv_y - uv_size }, i*num_points + 2 };
+			vertex_2d_type bottom_right =	{ { m_x + i * m_size + m_size,	m_y },			{ uv_x + uv_size,	1.0 - uv_y - uv_size }, i*num_points + 3 };
 
 			m_vertices.push_back(top_left);
 			m_vertices.push_back(bottom_left);

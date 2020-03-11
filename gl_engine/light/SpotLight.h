@@ -24,6 +24,7 @@ namespace glen
 
 		// // ----- CONSTRUCTORS ----- // //
 	public:
+		SpotLight();
 		SpotLight(GLfloat brightness, glm::vec3 color);
 
 		// // ----- GETTERS ----- // //
@@ -39,6 +40,7 @@ namespace glen
 		// // ----- SETTERS ----- // //
 		void set_inner_angle(const GLfloat theta);
 		void set_outer_angle(const GLfloat theta);
+		void set_light_mesh_scale(const GLfloat scale);
 
 	private:
 		void set_camera_angle();

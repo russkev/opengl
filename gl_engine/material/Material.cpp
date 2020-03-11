@@ -27,7 +27,7 @@ namespace glen
 		init();
 	}
 
-	Material::Material(Material&& other) :
+	Material::Material(Material&& other) noexcept :
 		m_name{ other.m_name },
 		m_program_id{ std::exchange(other.m_program_id, 0) },
 		m_uniforms{ std::move(other.m_uniforms) },
@@ -40,7 +40,7 @@ namespace glen
 		other.m_name = "";
 	}
 
-	Material& Material::operator = (Material&& other)
+	Material& Material::operator = (Material&& other) noexcept
 	{
 		(*this).~Material();
 		return *new (this) Material(std::move(other));
@@ -122,11 +122,15 @@ namespace glen
 		for (int i = 0; i < numUniforms; ++i)
 		{
 			Uniform newUniform;
-			char uniformNameChars[GL_ACTIVE_UNIFORM_MAX_LENGTH];
+			
+			GLchar* uniform_name_chars_buffer_raw;
+			uniform_name_chars_buffer_raw = (GLchar*)malloc(GL_ACTIVE_UNIFORM_MAX_LENGTH * sizeof(GLchar));
+			std::unique_ptr<GLchar> uniform_name_chars_buffer(uniform_name_chars_buffer_raw);
+
 			GLsizei uniformNameLength;
 
-			glGetActiveUniform(m_program_id, i, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformNameLength, &newUniform.data_size, &newUniform.type, uniformNameChars);
-			newUniform.location = glGetUniformLocation(m_program_id, uniformNameChars);
+			glGetActiveUniform(m_program_id, i, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformNameLength, &newUniform.data_size, &newUniform.type, uniform_name_chars_buffer.get());
+			newUniform.location = glGetUniformLocation(m_program_id, uniform_name_chars_buffer.get());
 
 			if (is_uniform(newUniform.type))
 			{
@@ -134,8 +138,7 @@ namespace glen
 				m_num_uniforms++;
 			}
 
-			std::string uniformNameString(uniformNameChars);
-
+			std::string uniformNameString{ uniform_name_chars_buffer.get() };
 			m_uniforms[uniformNameString] = newUniform;
 		}
 	}
