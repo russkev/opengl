@@ -275,7 +275,10 @@ namespace glen
 	{
 		for (auto const& light_node : m_light_nodes)
 		{
-			light_node->draw();
+			if (light_node->light()->mesh_enabled())
+			{
+				light_node->draw();
+			}
 		}
 	}
 

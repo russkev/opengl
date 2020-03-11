@@ -5,11 +5,6 @@
 
 namespace glen
 {
-	// // ----- CONSTANTS ----- // //
-	const std::string Light::LIGHT_SHADER_TYPE = "light";
-	const std::string Light::LIGHT_BRIGHTNESS = "brightness";
-	const std::string Light::LIGHT_COLOR = "color";
-
 	// // ----- GETTERS ----- // //
 	const GLfloat& Light::brightness() const
 	{
@@ -31,7 +26,7 @@ namespace glen
 		return NULL;
 	}
 
-	const bool& Light::is_enabled() const
+	const bool& Light::mesh_enabled() const
 	{
 		return m_mesh_enabled;
 	}
@@ -41,6 +36,16 @@ namespace glen
 		return NULL;
 	}
 
+	const bool& Light::diffuse_enabled() const
+	{
+		return m_diffuse_enabled;
+	}
+
+	const bool& Light::specular_enabled() const
+	{
+		return m_specular_enabled;
+	}
+
 
 	// // ----- SETTERS ----- // //
 	void Light::set_brightness(const GLfloat brightness)
@@ -48,7 +53,7 @@ namespace glen
 		m_brightness = brightness;
 		if (material() != NULL)
 		{
-			material()->set_uniform(std::string(LIGHT_SHADER_TYPE + "." + LIGHT_BRIGHTNESS), m_brightness);
+			material()->set_uniform(std::string(k_light_shader_type + "." + k_light_brightness), m_brightness);
 		}
 	}
 
@@ -57,7 +62,7 @@ namespace glen
 		m_color = color;
 		if (material() != NULL)
 		{
-			material()->set_uniform(std::string(LIGHT_SHADER_TYPE + "." + LIGHT_COLOR), m_color);
+			material()->set_uniform(std::string(k_light_shader_type + "." + k_light_color), m_color);
 		}
 	}
 
@@ -71,12 +76,23 @@ namespace glen
 		m_mesh_enabled = false;
 	}
 
+	void Light::enable_diffuse()
+	{
+		m_diffuse_enabled = true;
+	}
+
+	void Light::disable_diffuse()
+	{
+		m_diffuse_enabled = false;
+	}
+
+	void Light::enable_specular()
+	{
+		m_specular_enabled = true;
+	}
+
 	void Light::disable_specular()
 	{
-		if (material() != NULL)
-		{
-			material()->set_uniform(std::string(LIGHT_SHADER_TYPE + "." + "specular_enabled"), false);
-		}
-
+		m_specular_enabled = false;
 	}
 }

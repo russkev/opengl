@@ -22,9 +22,14 @@ namespace glen
 	struct Light
 	{
 		// // ----- CONSTANTS ----- // //
-		static const std::string LIGHT_SHADER_TYPE;
-		static const std::string LIGHT_COLOR;
-		static const std::string LIGHT_BRIGHTNESS;		
+		static inline const std::string k_light_shader_type = "light";
+		static inline const std::string k_light_brightness = "brightness";
+		static inline const std::string k_light_color = "color";
+		/*
+		
+		!!! These should constants should really be restricted to MaterialLibrary
+
+		*/
 
 		// // ----- CONSTRUCTORS ----- // //
 	public:
@@ -33,12 +38,13 @@ namespace glen
 		// // ----- GETTERS ----- // //
 		const GLfloat& brightness() const;
 		const glm::vec3& color() const;
-		const bool& is_enabled() const;
+		const bool& mesh_enabled() const;
 		virtual Mesh* mesh();
 		virtual Material* material();
 		virtual Camera* camera();
+		const bool& specular_enabled() const;
+		const bool& diffuse_enabled() const;
 		
-
 		// // ----- SHADER COMMANDS ----- // //
 		virtual const std::string& type() const = 0;
 
@@ -47,13 +53,19 @@ namespace glen
 		void set_color(const glm::vec3 color);
 		void enable_mesh();
 		void disable_mesh();
+		void enable_diffuse();
+		void disable_diffuse();
+		void enable_specular();
 		void disable_specular();
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
 		bool m_mesh_enabled = true;
+		bool m_specular_enabled = true;
+		bool m_diffuse_enabled = true;
 		GLfloat m_brightness = 0.0;
 		glm::vec3 m_color = { 0.0f, 0.0f, 0.0f };
+
 	};
 }
 #endif

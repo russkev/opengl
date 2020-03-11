@@ -96,6 +96,8 @@ struct DirectionalLight
 	sampler2DArray depth;
 	mat4 projection;
 	Shadow shadow;
+	bool diffuse_enabled;
+	bool specular_enabled;
 };
 uniform DirectionalLight directionalLight[NUM_LIGHTS];
 
@@ -110,6 +112,8 @@ struct SpotLight
 	sampler2DArray depth;
 	mat4 projection;
 	Shadow shadow;
+	bool diffuse_enabled;
+	bool specular_enabled;
 };
 uniform SpotLight spotLight[NUM_SPOT_LIGHTS];
 
@@ -542,18 +546,24 @@ void main ()
 				directionalLight[i].shadow);
 		}
 
-		diffuse_out += 
-			diffuse_directional_tangent_space(i) *
-			directionalLight[i].brightness *
-			directionalLight[i].color * 
-			temp_shadow;
+		if (directionalLight[i].diffuse_enabled)
+		{
+			diffuse_out += 
+				diffuse_directional_tangent_space(i) *
+				directionalLight[i].brightness *
+				directionalLight[i].color * 
+				temp_shadow;
+		}
 
-		specular_out +=
-			specular_directional_tangent_space(i) *
-			directionalLight[i].brightness *
-			texture(material.specular, uv).rgb * 
-			directionalLight[i].color * 
-			temp_shadow;
+		if (directionalLight[i].specular_enabled)
+		{
+			specular_out +=
+				specular_directional_tangent_space(i) *
+				directionalLight[i].brightness *
+				texture(material.specular, uv).rgb * 
+				directionalLight[i].color * 
+				temp_shadow;
+		}
 	}
 
 	// Spot lights
@@ -570,21 +580,26 @@ void main ()
 		}
 		float temp_attenuation = attenuation(spotLight[i].position);
 
+		if (spotLight[i].diffuse_enabled)
+		{
+			diffuse_out +=
+				diffuse_spot_tangent_space(i) *
+				spotLight[i].brightness * spotLight[i].brightness *
+				spotLight[i].color * 
+				temp_attenuation * 
+				temp_shadow;
+		}
 
-		diffuse_out +=
-			diffuse_spot_tangent_space(i) *
-			spotLight[i].brightness * spotLight[i].brightness *
-			spotLight[i].color * 
-			temp_attenuation * 
-			temp_shadow;
-
-		specular_out +=
-			specular_spot_tangent_space(i) *
-			spotLight[i].brightness * spotLight[i].brightness *
-			texture(material.specular, uv).rgb * 
-			spotLight[i].color * 
-			temp_attenuation * 
-			temp_shadow;
+		if (spotLight[i].specular_enabled)
+		{
+			specular_out +=
+				specular_spot_tangent_space(i) *
+				spotLight[i].brightness * spotLight[i].brightness *
+				texture(material.specular, uv).rgb * 
+				spotLight[i].color * 
+				temp_attenuation * 
+				temp_shadow;
+		}
 	}
 
 
