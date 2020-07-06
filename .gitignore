@@ -2,6 +2,7 @@
 /artifacts
 /build
 /packages
+/x64
 *.VC.VC.opendb
 *.VC.db
 *.db
