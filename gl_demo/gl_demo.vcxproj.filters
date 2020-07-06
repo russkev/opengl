@@ -13,6 +13,9 @@
     <ClCompile Include="gl_demo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scenes\ShaderBallHD.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -21,13 +24,7 @@
     <ClInclude Include="scenes\DeferredRenderDemo.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="scenes\SpecularityDemo.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="scenes\ParallaxDemo.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="scenes\AODemo.h">
+    <ClInclude Include="scenes\ShaderBallHD.h">
       <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>

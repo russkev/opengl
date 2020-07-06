@@ -23,12 +23,13 @@ namespace glen
 		m_camera_node{ camera }, 
 		m_dimensions{ dimensions },
 		m_blinn_deferred{ GL_TEXTURE_2D, &m_g_buffer, dimensions },
-		m_ao_g_buffer_deferred{ GL_TEXTURE_2D, &m_ao_g_buffer_fbo, dimensions }
+		m_ao_g_buffer_deferred{ GL_TEXTURE_2D, &m_ao_g_buffer_FBO, dimensions },
+		m_ao_blur_deferred{ GL_TEXTURE_2D, &m_ao_FBO, dimensions }
 	{
 		m_camera_node->camera()->set_dimensions(dimensions);
 		init_settings();
 		init_post_effects();
-		init_deferred_renderer();
+		init_post_beauty();
 		init_ao();
 	}
 
@@ -51,12 +52,9 @@ namespace glen
 		glFrontFace(GL_CCW);
 		// // Accept fragment shader if it closer to the camera than the previous one
 		glDepthFunc(GL_LESS);
-		//glDepthFunc(GL_ALWAYS);
 		// // Enable alpha
 		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		// // Enable gamma correction
-		//glEnable(GL_FRAMEBUFFER_SRGB);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
 	void Renderer::init_first_frame()
@@ -80,26 +78,36 @@ namespace glen
 				lightNode->set_shader_pos(num_spotLights);
 				num_spotLights++;
 			}
-			if (ShadowMap* shadowMap = lightNode->shadowMap())
+			if (ShadowMap* shadowMap = dynamic_cast<ShadowMap*> (lightNode->shadowMap()))
 			{
 				shadowMap->init_materials(m_materials);
 			}
+		}
+		if (m_deferred_render_enabled)
+		{
+			add_material(m_blinn_deferred.material());
 		}
 	}
 
 	void Renderer::init_post_effects()
 	{
 		m_backbuffer_FBO.set_depth_buffer_texture(&m_backbuffer_depth);
+		m_ao_backbuffer_FBO.set_depth_buffer_texture(&m_backbuffer_depth);
 	}
 
-	void Renderer::init_deferred_renderer()
+	void Renderer::init_post_beauty()
 	{
-		add_material(m_blinn_deferred.material());
+		m_ao_blur_deferred.material()->set_texture(AO_BlurMaterial::k_color_input, &m_beauty_texture);
+		m_beauty_FBO.set_depth_buffer_texture(&m_backbuffer_depth);
+		m_beauty_FBO.push_back_color_buffer_texture(&m_beauty_texture);
 	}
 
 	void Renderer::init_ao()
 	{
 		add_material(m_ao_g_buffer_deferred.material());
+		add_material(m_ao_blur_deferred.material());
+
+		Texture* ao_texture = m_ao_blur_deferred.texture(0u);
 	}
 
 	// // ----- RENDER ----- // //
@@ -147,49 +155,40 @@ namespace glen
 
 			m_blinn_deferred.draw();
 
-
 			m_g_buffer.blit_depth_to_default(m_dimensions);
 
 			render_lights();
 		}
 		else if (m_ao_enabled)
 		{
-			//m_ao_g_buffer_fbo.bind();
-
-			//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-			//render_geometry();
-
-			//m_ao_g_buffer_fbo.unbind();
-
-			//glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-			//clear_screen();
-
-			//m_ao_g_buffer_deferred.update_view(m_camera_node);
-
-			//m_ao_g_buffer_deferred.draw();
-
-			//m_ao_g_buffer_fbo.blit_depth_to_default(m_dimensions);
-
-			//render_lights();
-
-			m_ao_g_buffer_fbo.bind();
-
-			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+			m_beauty_FBO.bind();
 
 			render_geometry();
 
-			m_ao_g_buffer_fbo.unbind();
+			m_ao_g_buffer_FBO.bind();
+
+			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+			render_geometry(&m_ao_g_buffer_material);
+
+			m_ao_g_buffer_FBO.unbind();
 
 			glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 			clear_screen();
 
 			m_ao_g_buffer_deferred.update_view(m_camera_node);
 
+			m_ao_FBO.bind();
 			m_ao_g_buffer_deferred.draw();
+			m_ao_FBO.unbind();
 
+			m_backbuffer_FBO.bind();
+			m_ao_blur_deferred.draw();
+			m_backbuffer_FBO.unbind();
 
-			m_ao_g_buffer_fbo.blit_depth_to_default(m_dimensions);
+			m_tone_map.draw();
+			m_ao_g_buffer_FBO.blit_depth_to_default(m_dimensions);
+
 
 			render_lights();
 		}
@@ -247,11 +246,33 @@ namespace glen
 		}
 	}
 
+	void Renderer::render_geometry(Material* material)
+	{
+		clear_screen();
+
+		m_camera_node->update();
+
+		material->update_lights(m_light_nodes);
+
+		for (auto const& node : m_root_nodes)
+		{
+			node.second->update_view(m_camera_node);
+			if (MeshNode* mesh_node = dynamic_cast<MeshNode*> (node.second))
+			{
+				material->update_view(m_camera_node, mesh_node);
+				mesh_node->draw_material(material);
+			}
+		}
+	}
+
 	void Renderer::render_lights()
 	{
 		for (auto const& light_node : m_light_nodes)
 		{
-			light_node->draw();
+			if (light_node->light()->mesh_enabled())
+			{
+				light_node->draw();
+			}
 		}
 	}
 

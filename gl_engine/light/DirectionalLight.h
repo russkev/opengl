@@ -21,6 +21,7 @@ namespace glen
 
 		// // ----- CONSTRUCTORS ----- // //
 	public:
+		DirectionalLight();
 		DirectionalLight(GLfloat brightness, glm::vec3 color);
 
 		// // ----- GETTERS ----- // //

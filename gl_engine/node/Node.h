@@ -43,7 +43,7 @@ namespace glen
 
 		// // ----- GENERAL METHODS ----- // //
 		virtual void update_view(CameraNode*);
-		virtual void draw(const Pass& pass = rgb);
+		virtual void draw();
 		virtual void draw_material(Material* material);
 		glm::mat4* local_to_node();
 

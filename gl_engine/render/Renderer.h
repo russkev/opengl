@@ -47,6 +47,7 @@ namespace glen
 		void clear_screen();
 		void render_shadow_maps();
 		void render_geometry();
+		void render_geometry(Material* material);
 		void render_lights();
 
 		// // ----- GENERAL METHODS ----- // //
@@ -57,6 +58,7 @@ namespace glen
 		void init_settings();
 		void init_first_frame();
 		void init_post_effects();
+		void init_post_beauty();
 		void init_deferred_renderer();
 		void init_ao();
 
@@ -89,25 +91,29 @@ namespace glen
 
 		// // ----- BACKBUFFER VARIABLES ----- // //
 		Framebuffer m_backbuffer_FBO{ GL_FRAMEBUFFER };
+		Framebuffer m_ao_backbuffer_FBO{ GL_FRAMEBUFFER };
 
 		Texture m_backbuffer_depth{ Texture::create_depth_null_texture(GL_TEXTURE_2D, m_dimensions) };
 
 		ToneMap m_tone_map{ &m_backbuffer_FBO, m_dimensions };
 		Bloom m_bloom{ m_dimensions, &m_tone_map };
 
+		// // ----- BEAUTY ----- // //
+		Framebuffer m_beauty_FBO{ GL_FRAMEBUFFER };
+		Texture m_beauty_texture{ Texture::create_16bit_rgba_null_texture(GL_TEXTURE_2D, m_dimensions) };
+
 		// // ----- DEFERRRED RENDER VARIABLES ----- // //
 		Framebuffer m_g_buffer{ GL_FRAMEBUFFER };
 		BlinnDeferred m_blinn_deferred;
 
 		// // ----- AO VARIABLES ----- // //
-		Framebuffer m_ao_g_buffer_fbo{ GL_FRAMEBUFFER };
+		AO_GBufferMaterial m_ao_g_buffer_material{};
+		Framebuffer m_ao_g_buffer_FBO{ GL_FRAMEBUFFER };
 		AO_GBufferDeferred m_ao_g_buffer_deferred;
 
+		Framebuffer m_ao_FBO{ GL_FRAMEBUFFER };
+		AO_BlurDeferred m_ao_blur_deferred;
 
-		//Framebuffer m_ao_fbo{ GL_FRAMEBUFFER };
-
-		//AO_GBufferDeferred m_ao_g_buffer_deferred;
-		
 
 	};
 }

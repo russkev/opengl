@@ -20,7 +20,6 @@ namespace glen
 	{
 		// // ----- CONSTRUCTORS ----- // //
 	public:
-		CameraNode() {};
 		CameraNode(const std::string name, Camera* camera);
 
 		// // ----- GENERAL METHODS ----- // //
@@ -39,7 +38,7 @@ namespace glen
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		Camera* m_camera;
+		Camera* m_camera{ NULL };
 	};
 }
 #endif
