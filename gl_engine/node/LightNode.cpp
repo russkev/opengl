@@ -13,8 +13,9 @@ namespace glen
 
 	// // ----- CONSTRUCTORS ----- // //
 	LightNode::LightNode(const std::string name, Light* light) :
-		Node(name),
-		m_light(light)
+		Node{ name },
+		m_light{ light },
+		m_shader_pos{ 0 }
 	{
 		m_vertex_buffer.append(m_light->mesh()->vertices());
 		m_index_buffer.append(m_light->mesh()->indices());
@@ -26,31 +27,27 @@ namespace glen
 	// // ----- GENERAL ----- // //
 	void LightNode::update_view(CameraNode* cameraNode)
 	{
-		//m_model_to_perspective = cameraNode->world_to_projection() * Node::world_to_node();
 		m_light->material()->update_view(cameraNode, this);
 		Node::update_view(cameraNode);
 	}
 
-	void LightNode::draw(const Pass& pass)
+	void LightNode::draw()
 	{
-		if (m_light->is_enabled() && pass != shadow)
-		{
-			if (m_light->material() == NULL)
-			{
-				if (!m_shader_warned)
-				{
-					printf("WARNING \"%s\" does not have a shader associated with it. Light mesh will not be rendered", Node::name().c_str());
-					m_shader_warned = true;
-				}
-				return;
-			}
-			//m_light->material()->set_uniform(U_MODEL_TO_PROJECTION, m_model_to_perspective);
-			m_light->material()->use();
 
-			m_vao.bind();
-			m_index_buffer.bind(GL_ELEMENT_ARRAY_BUFFER);
-			glDrawElements(GL_TRIANGLES, (GLsizei)m_index_buffer.size(), GL_UNSIGNED_SHORT, 0);
+		if (m_light->material() == NULL)
+		{
+			if (!m_shader_warned)
+			{
+				printf("WARNING \"%s\" does not have a shader associated with it. Light mesh will not be rendered", Node::name().c_str());
+				m_shader_warned = true;
+			}
+			return;
 		}
+		m_light->material()->use();
+
+		m_vao.bind();
+		m_index_buffer.bind(GL_ELEMENT_ARRAY_BUFFER);
+		glDrawElements(GL_TRIANGLES, (GLsizei)m_index_buffer.size(), GL_UNSIGNED_SHORT, 0);
 
 		for (auto child : Node::children())
 		{

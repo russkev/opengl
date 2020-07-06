@@ -66,21 +66,21 @@ void main()
 		float specular_amount = specular_lighting(light_direction, normal, cam_direction);
 
 		diffuse_out += diffuse_amount * diffuse * lights[i].color;
-		specular_out += specular_amount * lights[i].color;
+		specular_out += specular_amount * specular * lights[i].color;
 	}
 
 
-//	if (normal != vec3(0.0))
-//	{
-//		vec3 out_color  = 
-//			diffuse_out + 
-//			specular_out;
-//	
-//		frag_color = vec4(out_color, 1.0);
-//	}
-//	else
-//	{
-//		frag_color = vec4(0.0);
-//	}
-	frag_color = vec4(texture(g_diffuse_spec, uv).rgb, 1.0);
+	if (normal != vec3(0.0))
+	{
+		vec3 out_color  = 
+			diffuse_out + 
+			specular_out;
+	
+		frag_color = vec4(out_color, 1.0);
+	}
+	else
+	{
+		frag_color = vec4(0.0);
+	}
+//	frag_color = vec4(texture(g_diffuse_spec, uv).rgb, 1.0);
 }

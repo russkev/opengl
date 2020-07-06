@@ -33,7 +33,7 @@ namespace glen
 		Node::update_view(cameraNode);
 	}
 
-	void MeshNode::draw(const Pass& pass)
+	void MeshNode::draw()
 	{
 		m_material->use();
 		m_vao.bind();
@@ -54,7 +54,6 @@ namespace glen
 
 	void MeshNode::draw_material(Material* material)
 	{
-
 		material->use();
 		m_vao.bind();
 		m_index_buffer.bind(GL_ELEMENT_ARRAY_BUFFER);
@@ -80,6 +79,12 @@ namespace glen
 	Material* MeshNode::material()
 	{
 		return m_material;
+	}
+
+	// // ----- SETTERS ----- // //
+	void MeshNode::set_material(Material* material)
+	{
+		m_material = material;
 	}
 } 
 

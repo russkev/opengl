@@ -33,17 +33,16 @@ namespace glen
 		typedef std::map < GLuint, Texture> textures_t;
 
 		// // ----- CONSTRUCTOR ----- // //
-		Deferred() {};
 		Deferred(const GLenum target, Framebuffer* g_buffer, Material* material, const glm::uvec2& dimensions);
 		Deferred(const Deferred& other) = delete;
-		Deferred(Deferred&& other);
+		Deferred(Deferred&& other) noexcept;
 		Deferred& operator = (const Deferred& other) = delete;
-		Deferred& operator = (Deferred&& other);
+		Deferred& operator = (Deferred&& other) noexcept;
 		~Deferred() = default;
 
 		// // ----- GENERAL ----- // //
 	private:
-		void relink_framebuffer_color_textures(const std::vector<const Texture*>& framebuffer_textures);
+		void relink_internal_framebuffer_color_textures(const std::vector<const Texture*>& framebuffer_textures);
 	public:
 		void bind();
 		void unbind();
@@ -55,7 +54,7 @@ namespace glen
 		Framebuffer* framebuffer();
 		Material* material();
 		MeshNode* mesh_node();
-		const Texture* texture(const std::string& name);
+		Texture* texture(const GLuint g_buffer_location);
 		const Texture* depth_texture();
 
 
@@ -74,9 +73,7 @@ namespace glen
 		glm::uvec2 m_dimensions;
 		Framebuffer* m_g_buffer_FBO = NULL;
 		Texture m_g_depth;
-		Texture m_null_texture{ Texture::create_bw_null_texture(GL_TEXTURE_2D, {1u, 1u}) };
-		//std::unordered_map<std::string, Texture> m_internal_textures;
-		//std::unordered_map<std::string, Texture*> m_external_textures;
+		Texture m_null_texture;
 		std::map <GLuint, Texture*> m_all_textures;
 		std::map < GLuint, Texture> m_internal_textures;
 
@@ -95,29 +92,32 @@ namespace glen
 	{
 		AO_GBufferDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
 
-		//void init_kernal();
-		//float increase_nearby_samples(const unsigned int i, const unsigned int num_samples);
-		//void init_noise();
+		void init_kernal();
+		float increase_nearby_samples(const GLuint i, const GLuint num_samples);
+		void init_noise();
 
-		//std::uniform_real_distribution<GLfloat> m_random_floats{ 0.0f, 1.0f };
-		//std::default_random_engine m_generator;
+		std::uniform_real_distribution<GLfloat> m_random_floats{ 0.0f, 1.0f };
+		std::default_random_engine m_generator;
 
-		AO_Material m_material;
-		//BlinnDeferredMaterial m_material;
+		AO_Material m_ao_material;
 
-
-		//glm::uvec2 m_noise_tile_dimensions{ 4, 4 };
-		//std::vector<glm::vec3> m_kernal, m_noise_tile;
-		//Texture m_noise_tile_texture;
-		//Texture m_ao_texture{ Texture::create_bw_null_texture(GL_TEXTURE_2D, m_dimensions) };
+		glm::uvec2 m_noise_tile_dimensions{ 4, 4 };
+		std::vector<glm::vec3> m_kernal, m_noise_tile;
+		Texture m_noise_tile_texture{ GL_TEXTURE_2D };
+		Texture m_ao_texture{ Texture::create_bw_null_texture(GL_TEXTURE_2D, m_dimensions) };
 	};
 
-	//struct AO_Deferred : public Deferred
-	//{
-	//	AO_Deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
+	struct AO_BlurDeferred : public Deferred
+	{
+		AO_BlurDeferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
 
-	//	//AO_Material m_material;
-	//	AO_GBufferMaterial m_material;
+		AO_BlurMaterial m_material;
+	};
+
+	//struct Beauty_Deferred : public Deferred
+	//{
+	//	Beauty_Deferred(const GLenum target, Framebuffer* g_buffer, const glm::uvec2& dimensions);
+
 
 	//};
 }

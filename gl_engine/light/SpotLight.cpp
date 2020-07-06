@@ -14,6 +14,10 @@ namespace glen
 	const std::string SpotLight::OUTER = "outer";
 
 	// // ----- CONSTRUCTORS ----- // //
+	SpotLight::SpotLight() :
+		SpotLight(1.0f, { 1.0f, 1.0f, 1.0f })
+	{}
+
 	SpotLight::SpotLight(GLfloat brightness, glm::vec3 color) :
 		m_light_mesh{ Cylinder::create_cylinder() },
 		m_material{ LightMaterial{ "lightShader" } }

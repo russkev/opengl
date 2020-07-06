@@ -2,6 +2,7 @@
 #define GL_ENGINE_SHADING_TEXTURE_H
 
 #include <vector>
+#include <string>
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -19,10 +20,10 @@ namespace glen
 	{
 		// // ----- CONSTRUCTORS ----- // //
 	public:
-		Texture() {};
-
+		Texture();
 		// Create a texture from an image file
 		Texture(const char* file_name);
+		Texture(const char* file_name, const bool is_srgb);
 
 		// Create an internal texture
 		Texture(const GLenum target);
@@ -32,9 +33,9 @@ namespace glen
 		Texture(const glm::vec4& color);
 
 		Texture(const Texture& other) = delete;
-		Texture(Texture&& other);
+		Texture(Texture&& other) noexcept;
 		Texture& operator = (const Texture& other) = delete;
-		Texture& operator = (Texture&& other);
+		Texture& operator = (Texture&& other) noexcept;
 		~Texture();
 		
 		// // ----- GENERAL ----- // //
@@ -52,14 +53,23 @@ namespace glen
 		// // ----- FACTORY ----- // //
 	public:
 		static Texture create_16bit_rgba_null_texture(const GLenum target, const glm::uvec2& dimensions);
+		static Texture create_16bit_rgba_null_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions);
 		static Texture create_16bit_rgb_null_texture(const GLenum target, const glm::uvec2& dimensions);
+		static Texture create_16bit_rgb_null_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions);
 		static Texture create_8bit_rgba_null_texture(const GLenum target, const glm::uvec2& dimensions);
+		static Texture create_8bit_rgba_null_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions);
 		static Texture create_8bit_rgb_null_texture(const GLenum target, const glm::uvec2& dimensions);
+		static Texture create_8bit_rgb_null_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions);
 		static Texture create_depth_null_texture(const GLenum target, const glm::uvec2& dimensions);
+		static Texture create_depth_null_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions);
 		static Texture create_stencil_texture(const GLenum target, const glm::uvec2& dimensions);
+		static Texture create_stencil_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions);
 		static Texture create_depth_null_texture_for_shadow(const GLenum target, const glm::uvec2& dimensions);
+		static Texture create_depth_null_texture_for_shadow(const std::string& name, const GLenum target, const glm::uvec2& dimensions);
 		static Texture create_square_noise_tile_texture(const GLenum target, const glm::uvec2& dimensions, const std::vector<glm::vec3>& data);
+		static Texture create_square_noise_tile_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions, const std::vector<glm::vec3>& data);
 		static Texture create_bw_null_texture(const GLenum target, const glm::uvec2& dimensions);
+		static Texture create_bw_null_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions);
 
 		// // ----- GETTERS ----- // //
 	public:
@@ -108,7 +118,7 @@ namespace glen
 	private:
 		std::string			m_name;
 		SDL_Surface*		m_surface = NULL;
-		glm::tvec4<GLubyte>	m_color;
+		glm::tvec4<GLubyte>	m_color{ 0, 0, 0, 0 };
 
 		GLuint			m_id = 0;
 		GLsizei			m_width = 0;

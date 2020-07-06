@@ -1,16 +1,15 @@
 # gl_engine
+  - Working with OpenGL to create a functional realtime rendering engine.
+  
+  - OpenGL version: 4.40
+  
+  - Built and compiled using Visual Studio Core Community 2019
+  
+  - C++ for main program and GLSL for shaders.
+  
+  - SDL for window display.
 
-Working with OpenGL to create a functional realtime rendering engine.
-
-OpenGL version: 4.40
-
-Built and compiled using Visual Studio Core Community 2017
-
-C++ for main program and GLSL for shaders.
-
-SDL for window display.
-
-Current features:
+## Current features:
  - Cameras
     - Target camera for orbiting
     - Free camera
@@ -23,7 +22,9 @@ Current features:
     - Various primitive shapes
     - Custom OBJ loader
  - Shading
-    - Blinn master shader
+    - Blinn master shader with texture maps for diffuse, specularity, roughness, etc.
+    - Normal mapping
+    - Parallax mapping
     - Self illuminated shader
     - Shadow mapping for all light types
     - Handles multiple lights and shadows
@@ -31,8 +32,19 @@ Current features:
     - 2D Text overlay
  - Post effects
     - HDR Tone mapping
+    - Deferred rendering
+    - Screen space ambient occlusion
+    - Glow effect
     
-Big thank you to:
+## Screenshots
+![Demo 01](https://raw.githubusercontent.com/russkev/opengl/master/screenshots/demo_01.jpg)
+![Demo 02](https://raw.githubusercontent.com/russkev/opengl/master/screenshots/demo_02.jpg)
+![Demo 04](https://raw.githubusercontent.com/russkev/opengl/master/screenshots/demo_04.jpg)
+![Demo 05](https://raw.githubusercontent.com/russkev/opengl/master/screenshots/demo_05.jpg)
+![Demo 06](https://raw.githubusercontent.com/russkev/opengl/master/screenshots/demo_06.jpg)
+![Demo 07](https://raw.githubusercontent.com/russkev/opengl/master/screenshots/demo_07a.jpg)
+
+## Big thank you to:
   - [Aleksandras Ševčenko](https://github.com/Coldberg) for being an excellent guide while I've been fumbling around.
   - [Joey Devries](https://joeydevries.com/#home) for his excellent tutorials and his example game engine here on github.
   - [OpenGL Tutorial](http://www.opengl-tutorial.org/). Another excellent resource.
