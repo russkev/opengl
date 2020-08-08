@@ -11,8 +11,8 @@ struct MaterialTestContext
 	{
 
 		glen::BlinnMaterial material{};
-		glen::Texture grid_tex{ "greyGrid_01.tga" };
-		glen::Texture brick_normals{ "bricks2_normal.tga" };
+		glen::Texture grid_tex{ "grey_grid.tga" };
+		glen::Texture brick_normals{ "bricks_normal.tga" };
 
 		material.set_texture(material.k_material_diffuse, &grid_tex);
 		material.set_texture(material.k_material_specular, &brick_normals);
