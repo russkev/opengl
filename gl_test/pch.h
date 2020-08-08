@@ -8,9 +8,10 @@
 #ifndef PCH_H
 #define PCH_H
 
-#define SDL_MAIN_HANDLED
-#define BOOST_TEST_DYN_LINK
-#include "SDL.h"
+//#define SDL_MAIN_HANDLED
+//#define BOOST_TEST_DYN_LINK
+//#include "SDL.h"
+
 // TODO: add headers that you want to pre-compile here
 //#include "../gl_engine/utils/VectorUtils.h"
 #include "Helper.h"
