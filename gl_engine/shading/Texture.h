@@ -52,6 +52,7 @@ namespace glen
 		void process_uniform_2d();
 		void process_uniform_2d_array();
 		void process_cube_map();
+		void process_cube_map(const std::vector<const char*> face_paths);
 		void flip_surface();
 
 		// // ----- FACTORY ----- // //
@@ -74,6 +75,8 @@ namespace glen
 		static Texture create_square_noise_tile_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions, const std::vector<glm::vec3>& data);
 		static Texture create_bw_null_texture(const GLenum target, const glm::uvec2& dimensions);
 		static Texture create_bw_null_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions);
+
+		static Texture create_cubemap_texture(const std::vector<std::string> face_paths, const glm::uvec2& dimensions);
 
 		// // ----- GETTERS ----- // //
 	public:
