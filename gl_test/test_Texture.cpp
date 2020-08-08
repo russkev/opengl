@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE(Destructor)
 	GLuint id = 0;
 	const SDL_Surface* surface;
 	{
-		glen::Texture texture("uvtemplate.tga");
+		glen::Texture texture("uv_template.tga");
 		id = texture.id();
 		surface = texture.surface();
 
@@ -44,7 +44,7 @@ BOOST_AUTO_TEST_CASE(Destructor)
 
 BOOST_AUTO_TEST_CASE(Move_Constructor_With_Texture)
 {
-	glen::Texture texture_old("uvtemplate.tga");
+	glen::Texture texture_old("uv_template.tga");
 	const SDL_Surface* surface = texture_old.surface();
 	const GLuint id = texture_old.id();
 
@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(Move_Constructor_With_Color)
 
 BOOST_AUTO_TEST_CASE(Move_Assign_With_Texture)
 {
-	glen::Texture texture_old("uvtemplate.tga");
+	glen::Texture texture_old("uv_template.tga");
 	glen::Texture texture_new{ GL_TEXTURE_2D };
 	const SDL_Surface* surface = texture_old.surface();
 	const GLuint id = texture_old.id();
