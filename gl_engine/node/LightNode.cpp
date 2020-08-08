@@ -17,8 +17,8 @@ namespace glen
 		m_light{ light },
 		m_shader_pos{ 0 }
 	{
-		m_vertex_buffer.append(m_light->mesh()->vertices());
-		m_index_buffer.append(m_light->mesh()->indices());
+		m_vertex_buffer.append(*m_light->mesh()->vertices());
+		m_index_buffer.append(*m_light->mesh()->indices());
 
 		// // Upload the VAO information
 		m_vao.generate_VAO(m_vertex_buffer, 0, MESH_VAO_INFO.data(), MESH_VAO_INFO.data() + MESH_VAO_INFO.size(), POSITION_ATTR);
