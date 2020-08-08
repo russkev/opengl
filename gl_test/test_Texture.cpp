@@ -4,6 +4,8 @@
 #include "shading/Texture.h"
 #include "render/Window.h"
 
+#undef main
+
 struct TextureTestContext
 {
 	static GLint check_texture_binding(const GLuint id)

@@ -18,6 +18,9 @@
 #include "post/PostEffect.h"
 #include "post/Deferred.h"
 
+
+int main(int argc, char* args[]);
+
 namespace glen
 {
 	// // ----- FORWARD DECLERATIONS ----- // //

@@ -3,10 +3,19 @@
 
 #include "pch.h"
 
+//#define BOOST_ALL_NO_LIB
+#define SDL_MAIN_HANDLED
 #define BOOST_TEST_MAIN
+#define BOOST_TEST_DYN_LINK
+
 #define BOOST_TEST_MODULE Main
 
+
+
 #include <boost/test/unit_test.hpp>
+
+//int main(int argc, char* args[]);
+
 #include "../gl_engine/render/Window.cpp"
 #include "../gl_engine/shading/Texture.cpp"
 #include "../gl_engine/shading/Framebuffer.cpp"

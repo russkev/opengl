@@ -4,8 +4,9 @@
 #include <vector>
 #include <string>
 
-
+#define SDL_MAIN_HANDLED
 #include <SDL.h>
+#undef main
 #include <GL/glew.h>
 
 

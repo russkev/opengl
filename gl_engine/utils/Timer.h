@@ -1,6 +1,8 @@
 #ifndef GL_ENGINE_TIMER_H
 #define GL_ENGINE_TIMER_H
+#define SDL_MAIN_HANDLED
 #include <SDL.h>
+#undef main
 
 namespace glen
 {

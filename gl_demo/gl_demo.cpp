@@ -3,8 +3,8 @@
 #include "scenes/DeferredRenderDemo.h"
 #include "scenes/ShaderBallHD.h"
 
-
-int main()
+#undef main
+int main(int argc, char* args[])
 {
 	gl_demo::deferred_demo();
 
