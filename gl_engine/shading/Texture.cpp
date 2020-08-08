@@ -231,6 +231,35 @@ namespace glen
 		}
 	}
 
+	void Texture::process_cube_map(const std::vector<const char*> face_paths)
+	{
+		for (GLuint i = 0; i < 6; ++i)
+		{
+			auto surface = IMG_Load(face_paths.at(i));
+			if (m_surface == NULL)
+			{
+				printf("WARNING: Loading \"%s\" failed. (%s)", face_paths.at(i), IMG_GetError());
+				return;
+			}
+			else
+			{
+				auto data = surface->pixels;
+			}
+
+			glTexImage2D(
+				GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+				m_level,
+				m_internal_format,
+				m_width,
+				m_height,
+				m_border,
+				m_format,
+				m_type,
+				m_data);
+
+		}
+	}
+
 	void Texture::flip_surface()
 	{
 		// Algorithm thanks to GitHub user wduminy
@@ -505,6 +534,15 @@ namespace glen
 		texture.process();
 
 		return texture;
+	}
+
+	Texture create_cubemap_texture(const std::vector<const char*> face_paths, const glm::uvec2& dimensions)
+	{
+		Texture texture{GL_TEXTURE_CUBE_MAP};
+		texture.set_name("Cube Map Texture");
+		texture.set_width((GLsizei)dimensions.x);
+		texture.set_height((GLsizei)dimensions.y);
+		texture
 	}
 
 
