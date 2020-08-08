@@ -1,7 +1,9 @@
 #ifndef GL_ENGINE_CAMERA_CAMERA_H
 #define GL_ENGINE_CAMERA_CAMERA_H
 
+#define SDL_MAIN_HANDLED
 #include <SDL.h>
+#undef main
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 

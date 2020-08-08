@@ -8,17 +8,20 @@
 
 #include "utils/VectorUtils.h"
 #include "CameraNode.h"
+#include <stdexcept>
 
 namespace glen
 {
 	// // ----- CONSTANTS ----- // //
 	const std::string Node::U_MODEL_TO_PROJECTION = "transform.model_to_projection";
 	const glm::vec3 Node::FORWARD_DIRECTION = { 0.0, 0.0, 1.0 };
-
+	//const std::array<member_info_type, 7> MESH_VAO_INFO = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
 
 	// // ----- CONSTRUCTORS ----- // //
 	Node::Node(const std::string name) : m_name(name)
-	{}
+	{
+		//MESH_VAO_INFO = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
+	}
 
 	// // ----- GENERAL METHODS ----- // //
 	void Node::update_view(CameraNode* camera_node)

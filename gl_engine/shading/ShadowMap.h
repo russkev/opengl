@@ -2,6 +2,7 @@
 #define GL_ENGINE_SHADING_SHADOW_MAP
 
 #include <string>
+#include <memory>
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>

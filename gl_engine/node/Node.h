@@ -31,8 +31,8 @@ namespace glen
 		// // ----- CONSTANTS ----- // //
 		static const std::string U_MODEL_TO_PROJECTION;
 		static constexpr auto POSITION_ATTR = 0u;
-		inline static const auto MESH_VAO_INFO = gl_introspect_tuple<
-			std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
+		const std::array<member_info_type, 7> MESH_VAO_INFO = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
+		//inline static const std::array<member_info_type, 7> MESH_VAO_INFO = gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
 
 		static const glm::vec3 FORWARD_DIRECTION;
 
@@ -78,6 +78,8 @@ namespace glen
 		void add_parent(Node* parent);
 
 		// // ----- MEMBER VARIABLES ----- // //
+	//public:
+	//	std::array<member_info_type, 7> MESH_VAO_INFO;
 	private:
 		std::string m_name;
 		glm::vec3 m_rotation{ 0.0f, 0.0f, 0.0f };

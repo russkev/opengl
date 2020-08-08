@@ -5,7 +5,9 @@
 #include "mesh/Mesh.h"
 #include "mesh/Cube.h"
 #include "resources/Buffer.h"
+#include "resources/GL_Tuple_Introspect.h"
 #include "node/Node.h"
+
 
 
 struct VAOTestContext
@@ -13,7 +15,8 @@ struct VAOTestContext
 	VAOTestContext()
 	{
 		m_buffer.append(m_cube.vertices());
-		m_vao.generate_VAO(m_buffer, 0, glen::Node::MESH_VAO_INFO.data(), glen::Node::MESH_VAO_INFO.data() + glen::Node::MESH_VAO_INFO.size(), 0);
+		const std::array<glen::member_info_type, 7> mesh_vao_info = glen::gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
+		m_vao.generate_VAO(m_buffer, 0, mesh_vao_info.data(), mesh_vao_info.data() + mesh_vao_info.size(), 0);
 	}
 
 	glen::Window window{ "Test Window", 800u, 600u };

@@ -78,7 +78,7 @@ namespace glen
 		glUniform1iv(m_string_uniform_id, MAX_LETTERS, m_text_array);
 		m_buffer.bind();
 		m_buffer.append(m_vertices);
-		static const auto text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2, GLuint>>::get();
+		const std::array<member_info_type, 3> text2D_info = gl_introspect_tuple<std::tuple<glm::vec2, glm::vec2, GLuint>>::get();
 		m_vao.generate_VAO(m_buffer, 0, text2D_info.data(), text2D_info.data() + text2D_info.size());
 		glUseProgram(0);
 	}

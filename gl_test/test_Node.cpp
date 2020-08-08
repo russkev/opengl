@@ -87,7 +87,7 @@ BOOST_AUTO_TEST_CASE(N1_relationships)
 	BOOST_TEST(N1.children().size() == 1);
 	auto children = N1.children();
 	BOOST_CHECK(children["N2"] == &N2);
-	BOOST_CHECK(N1.parent() == false);
+	BOOST_CHECK(N1.parent() == NULL);
 	glen::Node newNode = glen::Node("N2");
 	BOOST_CHECK_THROW(N1.add_child(&newNode), std::runtime_error);
 }
@@ -103,7 +103,7 @@ BOOST_AUTO_TEST_CASE(N2_disconnect)
 {
 	glen::Node* N2_b = N1.disconnect_child("N2");
 	BOOST_TEST(N2_b == &N2);
-	BOOST_CHECK(N2.parent() == false);
+	BOOST_CHECK(N2.parent() == NULL);
 	BOOST_TEST(N2.children().size() == 2);
 }
 
