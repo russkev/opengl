@@ -9,7 +9,7 @@ struct BufferTestContext
 {
 	BufferTestContext()
 	{
-		m_buffer.append(m_mesh.vertices());
+		m_buffer.append(*m_mesh.vertices());
 	}
 
 	GLint check_buffer_binding(GLuint id)
@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(Destructor)
 	GLuint old_id = 0;
 	{
 		glen::Buffer buffer{ m_target, 0 };
-		buffer.append(m_mesh.vertices());
+		buffer.append(*m_mesh.vertices());
 
 		old_id = buffer.buffer_id();
 

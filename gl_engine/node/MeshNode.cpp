@@ -17,8 +17,8 @@ namespace glen
 	MeshNode::MeshNode(const std::string name, Mesh* mesh, Material* material) :
 		Node(name), m_mesh(mesh), m_material(material)
 	{
-		m_vertex_buffer.append(m_mesh->vertices());
-		m_index_buffer.append(m_mesh->indices());
+		m_vertex_buffer.append(*m_mesh->vertices());
+		m_index_buffer.append(*m_mesh->indices());
 
 		// // Upload the VAO information
 		m_vao.generate_VAO(m_vertex_buffer, 0, MESH_VAO_INFO.data(), MESH_VAO_INFO.data() + MESH_VAO_INFO.size(), POSITION_ATTR);

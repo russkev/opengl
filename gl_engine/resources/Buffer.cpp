@@ -53,7 +53,7 @@ namespace glen
 	}
 
 	// // ----- GENERAL METHODS ----- // //
-	void Buffer::upload(std::size_t offset, std::size_t size, void* data) {
+	void Buffer::upload(std::size_t offset, std::size_t size, const void* data) {
 		assert(offset + size <= m_capacity);
 		void * dest = map_buffer(size, offset);
 		std::memcpy(dest, data, size);
@@ -97,7 +97,7 @@ namespace glen
 		glUnmapBuffer(m_target);
 	}
 
-	std::uint32_t Buffer::append(std::size_t size, void* data) {
+	std::uint32_t Buffer::append(std::size_t size, const void* data) {
 		std::size_t offset = m_size;
 		resize(offset + size);
 		upload(offset, size, data);

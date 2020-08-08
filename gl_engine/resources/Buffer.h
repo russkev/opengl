@@ -29,10 +29,10 @@ namespace glen
 		// // ----- GENERAL METHODS ----- // //
 		std::uint32_t generate_buffer(std::size_t size);
 		void read_buffer(void* dest);
-		void upload(std::size_t offset, std::size_t size, void* data);
+		void upload(std::size_t offset, std::size_t size, const void* data);
 		void* map_buffer(std::size_t size, std::size_t offset = 0u);
 		void unmap();
-		std::uint32_t append(std::size_t size, void* data);
+		std::uint32_t append(std::size_t size, const void* data);
 		void resize(std::size_t new_size);
 		void reserve(std::size_t new_capacity); //!!! Is this useful?
 		void bind() const;
@@ -41,19 +41,19 @@ namespace glen
 
 		// // INPUTTING WITH VECTORS // //
 		template<typename T>
-		auto append(std::vector<std::vector<T>> data)
+		auto append(const std::vector<std::vector<T>>& data)
 		{
 			std::size_t numElements = 0;
 			for (auto & i : data) { numElements += i.size(); }
 			return append(numElements * sizeof(T), data.data());
 		}
 		template<typename T>
-		auto append(std::vector<T> data)
+		auto append(const std::vector<T>& data)
 		{
 			return append(data.size() * sizeof(T), data.data());
 		}
 		template<typename T>
-		auto upload(std::vector<T> data)
+		auto upload(const std::vector<T>& data)
 		{
 			return upload(0, data.size() * sizeof(T), data.data());
 		}

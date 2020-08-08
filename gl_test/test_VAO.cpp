@@ -14,7 +14,7 @@ struct VAOTestContext
 {
 	VAOTestContext()
 	{
-		m_buffer.append(m_cube.vertices());
+		m_buffer.append(*m_cube.vertices());
 		const std::array<glen::member_info_type, 7> mesh_vao_info = glen::gl_introspect_tuple<std::tuple<glm::vec3, glm::vec3, glm::vec3, glm::vec2, GLint, glm::vec3, glm::vec3>>::get();
 		m_vao.generate_VAO(m_buffer, 0, mesh_vao_info.data(), mesh_vao_info.data() + mesh_vao_info.size(), 0);
 	}

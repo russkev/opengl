@@ -5,14 +5,14 @@ namespace glen
 {
 	// // ----- CONSTRUCTORS ----- // //
 	Mesh::Mesh() :
-		m_vertices(vertices_type{}),
-		m_indices(index_type{}),
+		m_vertices(std::make_shared<vertices_type>()),
+		m_indices(std::make_shared<indices_type>()),
 		m_id(0u)
 	{};
 
-	Mesh::Mesh(const vertices_type s_vertices, const indices_type s_indices) :
-		m_vertices(s_vertices),
-		m_indices(s_indices)
+	Mesh::Mesh(std::shared_ptr<vertices_type> s_vertices, std::shared_ptr<indices_type> s_indices) :
+		m_vertices(std::move(s_vertices)),
+		m_indices(std::move(s_indices))
 	{};
 
 	//// // ----- Move Constructor ----- // //
@@ -35,9 +35,9 @@ namespace glen
 		auto currentNumVertices = (index_type)num_vertices();
 		for (std::size_t i = 0u; i < other.num_indices(); ++i)
 		{
-			m_indices.push_back(other.m_indices.at(i) + currentNumVertices);
+			m_indices->push_back(other.m_indices->at(i) + currentNumVertices);
 		}
-		m_vertices.insert(m_vertices.end(), other.m_vertices.begin(), other.m_vertices.end());
+		m_vertices->insert(m_vertices->end(), other.m_vertices->begin(), other.m_vertices->end());
 		update_ids();
 		return *this;
 	}
@@ -45,19 +45,19 @@ namespace glen
 	// // ----- APPEND ----- // //
 	void Mesh::append_vertex(const Vertex vertex)
 	{
-		m_vertices.push_back(vertex);
+		m_vertices->push_back(vertex);
 	}
 
 	void Mesh::append_triangle(const Vertex vertex_1, const Vertex vertex_2, const Vertex vertex_3)
 	{
-		m_vertices.push_back(vertex_1);
-		m_vertices.push_back(vertex_2);
-		m_vertices.push_back(vertex_3);
+		m_vertices->push_back(vertex_1);
+		m_vertices->push_back(vertex_2);
+		m_vertices->push_back(vertex_3);
 	}
 
 	void Mesh::append_index(const GLushort pos)
 	{
-		m_indices.push_back(pos);
+		m_indices->push_back(pos);
 	}
 
 	// ----- TRANSFORM ----- // //
@@ -66,11 +66,11 @@ namespace glen
 		transform(m_vertices, transformMatrix);
 	}
 
-	void Mesh::transform(Mesh::vertices_type& inVertices, const glm::mat4 transformMatrix)
+	void Mesh::transform(std::shared_ptr<Mesh::vertices_type> inVertices, const glm::mat4 transformMatrix)
 	{
 
-		assert(inVertices.size() > 0);
-		for (auto & vertex : inVertices)
+		assert(inVertices->size() > 0);
+		for (auto & vertex : *inVertices)
 		{
 			// Transform the vertex
 			auto position = transformMatrix * glm::vec4(vertex.position(), 1);
@@ -90,7 +90,7 @@ namespace glen
 	void Mesh::scale_uvs(const GLfloat amount)
 	{
 		glm::mat2 scale_matrix{ amount, 0, 0, amount };
-		for (Vertex & vertex : m_vertices)
+		for (Vertex & vertex : *m_vertices)
 		{
 			glm::vec2 curent_uv = vertex.uv();
 			glm::vec2 new_uv = scale_matrix * vertex.uv();
@@ -103,7 +103,7 @@ namespace glen
 	{
 		if (num_vertices() > 0)
 		{
-			for (auto & vertex : m_vertices)
+			for (auto & vertex : *m_vertices)
 			{
 				vertex.set_id(m_id);
 			}
@@ -115,23 +115,23 @@ namespace glen
 	void Mesh::make_indices_smooth()
 	{
 		make_indices_faceted();
-		vertices_type newVertices;
-		indices_type newIndices;
+		std::shared_ptr<vertices_type> newVertices = std::make_shared<vertices_type>();
+		std::shared_ptr<indices_type> newIndices = std::make_shared<indices_type>();
 		std::map<Vertex, index_type> vertexMap;
 
-		for (int i = 0; i < m_vertices.size(); i++)
+		for (int i = 0; i < m_vertices->size(); i++)
 		{
 			int existingIndex = find_similar_vertex(i, vertexMap);
 			if (existingIndex >= 0)
 			{
-				newIndices.push_back((index_type)existingIndex);
+				newIndices->push_back((index_type)existingIndex);
 			}
 			else
 			{
-				newVertices.push_back(m_vertices.at(i));
-				index_type newIndex = (index_type)newVertices.size() - 1;
-				newIndices.push_back(newIndex);
-				vertexMap[m_vertices.at(i)] = newIndex;
+				newVertices->push_back(m_vertices->at(i));
+				index_type newIndex = (index_type)newVertices->size() - 1;
+				newIndices->push_back(newIndex);
+				vertexMap[m_vertices->at(i)] = newIndex;
 			}
 		}
 		std::swap(newVertices, m_vertices);
@@ -140,15 +140,15 @@ namespace glen
 
 	void Mesh::make_indices_faceted()
 	{
-		for (auto i = 0; i < m_vertices.size(); i++)
+		for (auto i = 0; i < m_vertices->size(); i++)
 		{
-			m_indices.push_back((index_type)i);
+			m_indices->push_back((index_type)i);
 		}
 	}
 
 	int Mesh::find_similar_vertex(const index_type s_currentVertIndex, const std::map<Vertex, index_type>& s_vertexMap)
 	{
-		auto iterator = s_vertexMap.find(m_vertices.at(s_currentVertIndex));
+		auto iterator = s_vertexMap.find(m_vertices->at(s_currentVertIndex));
 		if (iterator == s_vertexMap.end())
 		{
 			return -1;
@@ -162,28 +162,28 @@ namespace glen
 	void Mesh::set_index(std::size_t loc, const index_type& data)
 	{
 		assert(num_indices() >= loc);
-		m_indices.at(loc) = data;
+		m_indices->at(loc) = data;
 	}
 
 	// // ----- TANGENTS AND BITANGENTS ----- // //
 	void Mesh::make_tangents()
 	{
-		assert(m_vertices.size() > 0);
-		assert(m_indices.size() > 0);
+		assert(m_vertices->size() > 0);
+		assert(m_indices->size() > 0);
 		std::vector<index_type> existingIndices;
 
 		// Cycle through sets of three indices
-		for (auto i = 0; i < m_indices.size(); i += 3)
+		for (auto i = 0; i < m_indices->size(); i += 3)
 		{
 			// Get vertices
-			const glm::vec3& v0 = m_vertices.at(m_indices.at(i + 0)).position();
-			const glm::vec3& v1 = m_vertices.at(m_indices.at(i + 1)).position();
-			const glm::vec3& v2 = m_vertices.at(m_indices.at(i + 2)).position();
+			const glm::vec3& v0 = m_vertices->at(m_indices->at(i + 0)).position();
+			const glm::vec3& v1 = m_vertices->at(m_indices->at(i + 1)).position();
+			const glm::vec3& v2 = m_vertices->at(m_indices->at(i + 2)).position();
 
 			// Get UVs
-			const glm::vec2& uv0 = m_vertices.at(m_indices.at(i + 0)).uv();
-			const glm::vec2& uv1 = m_vertices.at(m_indices.at(i + 1)).uv();
-			const glm::vec2& uv2 = m_vertices.at(m_indices.at(i + 2)).uv();
+			const glm::vec2& uv0 = m_vertices->at(m_indices->at(i + 0)).uv();
+			const glm::vec2& uv1 = m_vertices->at(m_indices->at(i + 1)).uv();
+			const glm::vec2& uv2 = m_vertices->at(m_indices->at(i + 2)).uv();
 
 			// Edges of the triangle, position delta
 			glm::vec3 deltaPos1 = v1 - v0;
@@ -200,28 +200,28 @@ namespace glen
 
 			// If tangent and bitangents exist, calculate the average of the current and the new tangents, otherwise just set the new tangent
 			for (auto j = 0; j < 3; ++j) {
-				if (std::find(existingIndices.begin(), existingIndices.end(), m_indices.at(i + j)) != existingIndices.end()) {
+				if (std::find(existingIndices.begin(), existingIndices.end(), m_indices->at(i + j)) != existingIndices.end()) {
 
 					// Get existing tangents
-					glm::vec3 existingTangent = m_vertices.at(m_indices.at(i + j)).tangent();
-					glm::vec3 existingBitangent = m_vertices.at(m_indices.at(i + j)).bitangent();
+					glm::vec3 existingTangent = m_vertices->at(m_indices->at(i + j)).tangent();
+					glm::vec3 existingBitangent = m_vertices->at(m_indices->at(i + j)).bitangent();
 
 					// Calculate and set the average of the tangents. Good for them to be non-normalised here.
-					m_vertices.at(m_indices.at(i + j)).set_tangent((existingTangent + newTangent) / 2.0f);
-					m_vertices.at(m_indices.at(i + j)).set_bitangent((existingBitangent + newBitangent) / 2.0f);
+					m_vertices->at(m_indices->at(i + j)).set_tangent((existingTangent + newTangent) / 2.0f);
+					m_vertices->at(m_indices->at(i + j)).set_bitangent((existingBitangent + newBitangent) / 2.0f);
 
 				}
 				else {
 					// Set the new tangents
-					m_vertices.at(m_indices.at(i + j)).set_tangent(newTangent);
-					m_vertices.at(m_indices.at(i + j)).set_bitangent(newBitangent);
+					m_vertices->at(m_indices->at(i + j)).set_tangent(newTangent);
+					m_vertices->at(m_indices->at(i + j)).set_bitangent(newBitangent);
 				}
 
 			}
 
 			// Register used indices
 			for (auto j = 0; j < 3; ++j) {
-				existingIndices.push_back(m_indices.at(i + j));
+				existingIndices.push_back(m_indices->at(i + j));
 			}
 		}
 	}
@@ -230,7 +230,7 @@ namespace glen
 	{
 		if (num_vertices() > 0)
 		{
-			for (auto & vertex : m_vertices)
+			for (auto & vertex : *m_vertices)
 			{
 				vertex.set_id(id);
 			}
@@ -242,13 +242,13 @@ namespace glen
 	Vertex* Mesh::get_vertex(std::size_t pos)
 	{
 		assert(num_vertices() >= pos);
-		return &m_vertices.at(pos);
+		return &m_vertices->at(pos);
 	}
 
 	Mesh::index_type Mesh::get_index(std::size_t pos)
 	{
 		assert(num_indices() >= pos);
-		return m_indices.at(pos);
+		return m_indices->at(pos);
 	}
 
 	const GLuint Mesh::id() const
@@ -261,14 +261,14 @@ namespace glen
 	{
 		assert(num_vertices() >= pos);
 
-		m_vertices.at(pos) = std::move(vertex);
+		m_vertices->at(pos) = std::move(vertex);
 	}
 
 	void Mesh::set_vertex_position(GLuint pos, glm::vec3 position)
 	{
 		assert(num_vertices() >= pos);
 
-		m_vertices.at(pos).set_position(position);
+		m_vertices->at(pos).set_position(position);
 	}
 
 
