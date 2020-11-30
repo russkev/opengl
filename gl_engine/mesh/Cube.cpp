@@ -8,59 +8,59 @@ namespace glen
 	// // ----- MAIN ----- // //
 	Mesh Cube::create_cube()
 	{
-		return create_cube(1.0f);
+		return create_cube(1.0f, true);
 	}
 
-	Mesh Cube::create_cube(const float width)
+	Mesh Cube::create_cube(const float width, const bool is_default)
 	{
-		float halfWidth = width / 2.0f;
+		float half_width = is_default ? 1.0f : width / 2.0f;
 		Mesh newCube;
 
 
 		Mesh up_face = create_cube_face(
-			glm::vec3(-halfWidth, width, +halfWidth),
-			glm::vec3(+halfWidth, width, +halfWidth),
-			glm::vec3(-halfWidth, width, -halfWidth),
-			glm::vec3(+halfWidth, width, -halfWidth)
+			glm::vec3(-half_width, half_width * 2, +half_width),
+			glm::vec3(+half_width, half_width * 2, +half_width),
+			glm::vec3(-half_width, half_width * 2, -half_width),
+			glm::vec3(+half_width, half_width * 2, -half_width)
 		);
 
 		Mesh bottom_face = create_cube_face(
-			glm::vec3(+halfWidth, 0, +halfWidth),
-			glm::vec3(-halfWidth, 0, +halfWidth),
-			glm::vec3(+halfWidth, 0, -halfWidth),
-			glm::vec3(-halfWidth, 0, -halfWidth)
+			glm::vec3(+half_width, 0, +half_width),
+			glm::vec3(-half_width, 0, +half_width),
+			glm::vec3(+half_width, 0, -half_width),
+			glm::vec3(-half_width, 0, -half_width)
 		);
 		newCube += bottom_face;
 
 		Mesh right_face = create_cube_face(
-			glm::vec3(+halfWidth, width, -halfWidth),
-			glm::vec3(+halfWidth, width, +halfWidth),
-			glm::vec3(+halfWidth, 0, -halfWidth),
-			glm::vec3(+halfWidth, 0, +halfWidth)
+			glm::vec3(+half_width, half_width * 2, -half_width),
+			glm::vec3(+half_width, half_width * 2, +half_width),
+			glm::vec3(+half_width, 0, -half_width),
+			glm::vec3(+half_width, 0, +half_width)
 		);
 		newCube += right_face;
 
 		Mesh left_face = create_cube_face(
-			glm::vec3(-halfWidth, width, +halfWidth),
-			glm::vec3(-halfWidth, width, -halfWidth),
-			glm::vec3(-halfWidth, 0, +halfWidth),
-			glm::vec3(-halfWidth, 0, -halfWidth)
+			glm::vec3(-half_width, half_width * 2, +half_width),
+			glm::vec3(-half_width, half_width * 2, -half_width),
+			glm::vec3(-half_width, 0, +half_width),
+			glm::vec3(-half_width, 0, -half_width)
 		);
 		newCube += left_face;
 
 		Mesh front_face = create_cube_face(
-			glm::vec3(-halfWidth, width, -halfWidth),
-			glm::vec3(+halfWidth, width, -halfWidth),
-			glm::vec3(-halfWidth, 0, -halfWidth),
-			glm::vec3(+halfWidth, 0, -halfWidth)
+			glm::vec3(-half_width, half_width * 2, -half_width),
+			glm::vec3(+half_width, half_width * 2, -half_width),
+			glm::vec3(-half_width, 0, -half_width),
+			glm::vec3(+half_width, 0, -half_width)
 		);
 		newCube += front_face;
 
 		Mesh back_face = create_cube_face(
-			glm::vec3(+halfWidth, width, +halfWidth),
-			glm::vec3(-halfWidth, width, +halfWidth),
-			glm::vec3(+halfWidth, 0, +halfWidth),
-			glm::vec3(-halfWidth, 0, +halfWidth)
+			glm::vec3(+half_width, half_width * 2, +half_width),
+			glm::vec3(-half_width, half_width * 2, +half_width),
+			glm::vec3(+half_width, 0, +half_width),
+			glm::vec3(-half_width, 0, +half_width)
 		);
 		newCube += back_face;
 

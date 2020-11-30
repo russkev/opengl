@@ -236,26 +236,32 @@ namespace glen
 		for (GLuint i = 0; i < 6; ++i)
 		{
 			auto surface = IMG_Load(face_paths.at(i));
-			if (m_surface == NULL)
+			void* data;
+			GLsizei img_width{ 0 };
+			GLsizei img_height{ 0 };
+
+			if (surface == NULL)
 			{
 				printf("WARNING: Loading \"%s\" failed. (%s)", face_paths.at(i), IMG_GetError());
 				return;
 			}
 			else
 			{
-				auto data = surface->pixels;
+				data = surface->pixels;
+				img_width = surface->w;
+				img_height = surface->h;
 			}
 
 			glTexImage2D(
 				GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
 				m_level,
 				m_internal_format,
-				m_width,
-				m_height,
+				img_width,
+				img_height,
 				m_border,
 				m_format,
 				m_type,
-				m_data);
+				data);
 
 		}
 	}
@@ -536,13 +542,23 @@ namespace glen
 		return texture;
 	}
 
-	Texture create_cubemap_texture(const std::vector<const char*> face_paths, const glm::uvec2& dimensions)
+	Texture Texture::create_cubemap_texture(const std::vector<const char*> face_paths)
 	{
 		Texture texture{GL_TEXTURE_CUBE_MAP};
 		texture.set_name("Cube Map Texture");
-		texture.set_width((GLsizei)dimensions.x);
-		texture.set_height((GLsizei)dimensions.y);
-		texture
+		texture.set_internal_format(GL_RGB);
+		texture.set_format(GL_RGB);
+		texture.set_type(GL_UNSIGNED_BYTE);
+		texture.set_min_filter(GL_LINEAR);
+		texture.set_mag_filter(GL_LINEAR);
+		texture.set_mipmap(false);
+		texture.set_st_wrap(GL_CLAMP_TO_EDGE);
+
+		texture.bind();
+		texture.process_cube_map(face_paths);
+		texture.unbind();
+
+		return texture;
 	}
 
 

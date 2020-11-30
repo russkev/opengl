@@ -338,6 +338,28 @@ namespace glen
 		set_sampler_value(k_layer_1, 0.0f);
 	}
 
+	// CUBE MAP
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	CubeMapMaterial::CubeMapMaterial() :
+		CubeMapMaterial("Cube Map Material")
+	{}
+
+	CubeMapMaterial::CubeMapMaterial(const std::string& name) :
+		Material(name, "Skybox.vert", "Skybox.frag")
+	{
+		init();
+	}
+
+	void CubeMapMaterial::init()
+	{
+		set_uniform("skybox", 0);
+	}
+
+	void CubeMapMaterial::update_view(const CameraNode* camera_node, const Node* model_node)
+	{
+		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * model_node->world_to_node());
+	}
+
 	// DEPTH
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 	DepthMaterial::DepthMaterial() :
@@ -359,6 +381,7 @@ namespace glen
 	{
 		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * mesh_node->world_to_node());
 	}
+
 
 	// DEPTH CUBE
 	//------------------------------------------------------------------------------------------------------------------------------------------//

@@ -97,6 +97,21 @@ namespace glen
 			vertex.set_uv(new_uv);
 		}
 	}
+	// // ----- Triangles ----- // //
+	void Mesh::reverse_triangles()
+	{
+		auto length = m_vertices->size();
+		if (length % 3 != 0) 
+		{
+			printf("Mesh: %d does not appear to be triangles. Unable to reverse.", m_id);
+		}
+		for (auto i = 0; i < length; i+=3) 
+		{
+			auto temp = m_vertices->at(i+2);
+			m_vertices->at(i + 2) = m_vertices->at(i + 3);
+			m_vertices->at(i + 3) = temp;
+		}
+	}
 
 	// // ------ IDs ----- // //
 	void Mesh::update_ids()

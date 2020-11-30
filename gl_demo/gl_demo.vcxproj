@@ -172,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="scenes\DeferredRenderDemo.h" />
     <ClInclude Include="scenes\ShaderBallHD.h" />
+    <ClInclude Include="scenes\SkyBoxDemo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -68,6 +68,7 @@ namespace glen
 		// // ----- SETTERS ----- // //
 	public:
 		void add_node(Node* node);
+
 		void enable_post_effects();
 		void disable_post_effects();
 		void enable_deferred_render();
