@@ -18,6 +18,8 @@ namespace glen
 	struct SpotLight;
 
 
+	// AO
+	//------------------------------------------------------------------------------------------------------------------------------------------//
 	struct AO_BlurMaterial : public Material
 	{
 		inline static const std::string k_ao_input = "ao_input";
@@ -69,6 +71,8 @@ namespace glen
 		void update_view(const CameraNode* camera_node, const Node* model_node) override;
 	};
 
+	// BLINN
+	//------------------------------------------------------------------------------------------------------------------------------------------//
 	struct BlinnMaterial : public Material
 	{
 		inline static GLuint k_num_point_lights			= 2;
@@ -190,6 +194,21 @@ namespace glen
 		void init();
 	};
 
+	// CUBE MAP
+	//------------------------------------------------------------------------------------------------------------------------------------------//
+	struct CubeMapMaterial : public Material
+	{
+		inline static const std::string k_transform_model_to_projection = "transform.model_to_projection";
+		inline static const std::string k_skybox = "skybox";
+
+		CubeMapMaterial();
+		CubeMapMaterial(const std::string& name);
+
+	private:
+		void init();
+	public:
+		void update_view(const CameraNode* camera_node, const Node* model_node);
+	};
 
 	// DEPTH
 	//------------------------------------------------------------------------------------------------------------------------------------------//	
@@ -206,6 +225,7 @@ namespace glen
 		void update_view(const CameraNode* camera_node, const Node* model_node) override;
 	};
 
+	
 	// DEPTH CUBE
 	//------------------------------------------------------------------------------------------------------------------------------------------//	
 	struct DepthCubeMaterial : public Material

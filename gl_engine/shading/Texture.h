@@ -76,7 +76,7 @@ namespace glen
 		static Texture create_bw_null_texture(const GLenum target, const glm::uvec2& dimensions);
 		static Texture create_bw_null_texture(const std::string& name, const GLenum target, const glm::uvec2& dimensions);
 
-		static Texture create_cubemap_texture(const std::vector<std::string> face_paths, const glm::uvec2& dimensions);
+		static Texture create_cubemap_texture(const std::vector<const char*> face_paths);
 
 		// // ----- GETTERS ----- // //
 	public:

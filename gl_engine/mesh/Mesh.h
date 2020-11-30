@@ -62,6 +62,9 @@ namespace glen
 		// // ----- UVs ----- // //
 		void scale_uvs(const GLfloat amount);
 
+		// // ----- TRIANGLES ----- // //
+		void reverse_triangles();
+
 		// // ----- IDs ----- // //
 		void update_ids();
 

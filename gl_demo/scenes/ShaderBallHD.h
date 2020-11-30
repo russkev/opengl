@@ -38,6 +38,8 @@ namespace gl_demo
 
 		void demo_07();
 
+		void demo_08();
+
 
 	private:
 		glen::Window m_window{ "GL_Engine", k_width, k_height };
@@ -54,11 +56,13 @@ namespace gl_demo
 		glen::Texture m_grid_texture{ "grey_grid.tga" };
 		glen::Texture m_checker_texture{ "checker_02.tga" };
 
+
 		glen::Mesh m_ball_mesh{ glen::OBJ_Loader::load_obj("shaderball_hd_ball.obj") };
 		glen::Mesh m_ball_inside_mesh{ glen::OBJ_Loader::load_obj("shaderball_hd_ball_inside.obj") };
 		glen::Mesh m_ball_trim_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_ball_trim.obj");
 		glen::Mesh m_base_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_base.obj");
 		glen::Mesh m_cyc_mesh = glen::OBJ_Loader::load_obj("shaderball_hd_cyc.obj");
+
 
 		glen::MeshNode m_ball_node{ "Ball Node", &m_ball_mesh, &m_white_blinn_material };
 		glen::MeshNode m_ball_inside_node{ "Ball Inside Node", &m_ball_inside_mesh, &m_white_diffuse_material };

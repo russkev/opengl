@@ -17,7 +17,7 @@ namespace glen
 	{
 		// // ----- MAIN ----- // //
 		static Mesh create_cube();
-		static Mesh create_cube(const float width);
+		static Mesh create_cube(const float width, const bool is_default = false);
 
 		// // ----- HELPER ----- // //
 	private:

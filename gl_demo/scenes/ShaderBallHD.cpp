@@ -26,6 +26,7 @@ namespace gl_demo
 
 		m_grid_material.set_texture(m_grid_material.k_material_diffuse, &m_grid_texture);
 
+
 		m_spot_light_key.set_brightness(200.0f);
 		m_spot_light_key.set_color(glm::vec3(0.6, 0.7, 1.0));
 		m_spot_light_key.set_inner_angle(20.0f);
@@ -373,5 +374,44 @@ namespace gl_demo
 			render.update(&m_window, &m_timer);
 		}
 
+	}
+
+	void ShaderBallHD::demo_08()
+	{
+		reset_materials();
+
+		glen::BlinnMaterial dirt_material{ "Dirt Material" };
+		glen::Texture dirt_diffuse{ "dirt_08_diffuse.tga", true };
+		glen::Texture dirt_height{ "dirt_08_height.tga" };
+		glen::Texture dirt_normal{ "dirt_08_normal.tga" };
+		glen::Texture dirt_glossiness{ "dirt_08_glossiness.tga" };
+
+		dirt_material.set_texture(dirt_material.k_material_diffuse, &dirt_diffuse);
+
+		dirt_material.set_texture(dirt_material.k_material_normal, &dirt_normal);
+		dirt_material.set_uniform(dirt_material.k_material_normal_directx_mode, false);
+
+		dirt_material.set_sampler_value(dirt_material.k_material_specular, 1.0f);
+		dirt_material.set_uniform(dirt_material.k_material_specular_amount, 1.0f);
+		dirt_material.set_texture(dirt_material.k_material_glossiness, &dirt_glossiness);
+
+		dirt_material.set_uniform(dirt_material.k_material_displacement_enabled, true);
+		dirt_material.set_uniform(dirt_material.k_material_displacement_amount, 0.001f);
+		dirt_material.set_texture(dirt_material.k_material_displacement, &dirt_height);
+
+
+		m_base_node.set_material(&dirt_material);
+		m_ball_node.set_material(&dirt_material);
+
+
+
+		glen::Renderer render{ &m_target_cam_node, glm::uvec2{ m_window.width(), m_window.height() } };
+		add_member_nodes_to_renderer(render);
+
+		while (render.poll_events())
+		{
+
+			render.update(&m_window, &m_timer);
+		}
 	}
 }

@@ -367,5 +367,11 @@
     <None Include="..\data\Composite.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="..\data\Skybox.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\data\Skybox.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

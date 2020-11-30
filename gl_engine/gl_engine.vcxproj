@@ -268,6 +268,8 @@
     <None Include="..\data\Light.frag" />
     <None Include="..\data\Light.vert" />
     <None Include="..\data\ScreenPassthrough.vert" />
+    <None Include="..\data\Skybox.frag" />
+    <None Include="..\data\Skybox.vert" />
     <None Include="..\data\Text2D.frag" />
     <None Include="..\data\Text2D.vert" />
     <None Include="packages.config" />
