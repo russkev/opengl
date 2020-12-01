@@ -352,12 +352,16 @@ namespace glen
 
 	void CubeMapMaterial::init()
 	{
-		set_uniform("skybox", 0);
+		//set_uniform("skybox", 0);
 	}
 
 	void CubeMapMaterial::update_view(const CameraNode* camera_node, const Node* model_node)
 	{
-		set_uniform(k_transform_model_to_projection, camera_node->world_to_projection() * model_node->world_to_node());
+		auto view = camera_node->world_to_cam();
+		auto projection = camera_node->camera()->cam_to_projection();
+		view = glm::mat4(glm::mat3(view));
+		//p_matrix = glm::mat4(glm::mat3(p_matrix));
+		set_uniform(k_transform_model_to_projection, projection * view);	
 	}
 
 	// DEPTH
@@ -374,7 +378,7 @@ namespace glen
 
 	void DepthMaterial::init()
 	{
-		set_uniform(k_transform_model_to_projection, glm::mat4{ 1.0f });
+		//
 	}
 
 	void DepthMaterial::update_view(const CameraNode* camera_node, const Node* mesh_node)

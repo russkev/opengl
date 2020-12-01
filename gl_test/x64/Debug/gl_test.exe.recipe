@@ -1,7 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
-  <ProjectOutputs>E:\DOCS\PROGRAMMING\17-02_GL_Engine\repos\opengl\x64\Debug\gl_test.exe</ProjectOutputs>
-  <ContentFiles></ContentFiles>
-  <SatelliteDlls></SatelliteDlls>
-  <NonRecipeFileRefs>E:\DOCS\PROGRAMMING\17-02_GL_Engine\repos\opengl\gl_engine\gl_engine.vcxproj</NonRecipeFileRefs>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>E:\DOCS\PROGRAMMING\17-02_GL_Engine\repos\opengl\x64\Debug\gl_test.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs>
+    <NonRecipeFileRef>
+      <FullPath>E:\DOCS\PROGRAMMING\17-02_GL_Engine\repos\opengl\gl_engine\gl_engine.vcxproj</FullPath>
+    </NonRecipeFileRef>
+  </NonRecipeFileRefs>
 </Project>
