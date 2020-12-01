@@ -41,6 +41,8 @@ namespace glen
 		Texture& operator = (const Texture& other) = delete;
 		Texture& operator = (Texture&& other) noexcept;
 		~Texture();
+
+
 		
 		// // ----- GENERAL ----- // //
 		void process();
@@ -52,7 +54,7 @@ namespace glen
 		void process_uniform_2d();
 		void process_uniform_2d_array();
 		void process_cube_map();
-		void process_cube_map(const std::vector<const char*> face_paths);
+		void process_textured_cube_map();
 		void flip_surface();
 
 		// // ----- FACTORY ----- // //
@@ -99,10 +101,10 @@ namespace glen
 		const GLenum wrap_r() const;
 
 		const SDL_Surface* surface() const;
+		const std::vector<SDL_Surface*> surfaces() const;
 		const glm::tvec4<GLubyte> color() const;
 
 		bool has_alpha();
-		void* data();
 
 		// // ----- SETTERS ----- // //
 		void set_name(const std::string& name);
@@ -119,13 +121,14 @@ namespace glen
 		void set_st_wrap(const GLenum wrap);
 		void set_mipmap(const bool value);
 		void set_border_color(const GLfloat r, const GLfloat g, const GLfloat b, const GLfloat a);
+		void add_surface(SDL_Surface* surface);
 		void resize(const GLsizei width, const GLsizei height);
 
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
-		std::string			m_name;
-		SDL_Surface*		m_surface = NULL;
-		glm::tvec4<GLubyte>	m_color{ 0, 0, 0, 0 };
+		std::string					m_name;
+		std::vector<SDL_Surface*>	m_surfaces;
+		glm::tvec4<GLubyte>			m_color{ 0, 0, 0, 0 };
 
 		GLuint			m_id = 0;
 		GLsizei			m_width = 0;
@@ -138,6 +141,9 @@ namespace glen
 		GLenum			m_format = GL_RGB;			// Format of the pixel data
 		GLenum			m_type = GL_UNSIGNED_BYTE;	// The data type of each pixel
 		void*			m_data = NULL;				// Pointer to the actual data
+													//		If multiple surfaces are loaded, this will
+													//		point to only the data in the front of the
+													//		vector of surfaces
 
 		GLenum			m_min_filter = GL_LINEAR_MIPMAP_LINEAR;
 		GLenum			m_mag_filter = GL_LINEAR;

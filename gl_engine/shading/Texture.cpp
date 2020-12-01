@@ -25,9 +25,9 @@ namespace glen
 
 	Texture::Texture(const char* filepath, const bool is_srgb) :
 		m_name{ filepath },
-		m_surface{ IMG_Load(filepath) },
-		m_width{ m_surface->w },
-		m_height{ m_surface->h }
+		m_surfaces{ {IMG_Load(filepath)} },
+		m_width{  m_surfaces.front()->w },
+		m_height{ m_surfaces.front()->h }
 
 	{
 		if (has_alpha())
@@ -56,14 +56,14 @@ namespace glen
 		}
 
 		glGenTextures(1, &m_id);
-		if (m_surface == NULL)
+		if (m_surfaces.size() == 0)
 		{
 			printf("WARNING: Loading \"%s\" failed. (%s)", filepath, IMG_GetError());
 		}
 		else
 		{
 			flip_surface();
-			m_data = m_surface->pixels;
+			m_data = m_surfaces.front()->pixels;
 		}
 	}
 
@@ -104,7 +104,7 @@ namespace glen
 
 	Texture::Texture(Texture&& other) noexcept:
 		m_name{ std::exchange(other.m_name, "") },
-		m_surface{ other.m_surface },
+		m_surfaces{ other.m_surfaces },
 		m_color{ other.m_color },
 		m_id{ std::exchange(other.m_id, 0) },
 		m_width{ std::exchange(other.m_width, 0) },
@@ -124,7 +124,7 @@ namespace glen
 		m_border_color{ other.m_border_color[0], other.m_border_color[1], other.m_border_color[2], other.m_border_color[3] },
 		m_generate_mipmap{ std::exchange(other.m_generate_mipmap, false) }
 	{
-		other.m_surface = NULL;
+		other.m_surfaces = {};
 		other.m_data = NULL;
 	}
 
@@ -140,14 +140,12 @@ namespace glen
 		{
 			glDeleteTextures(1, &m_id);
 		}
-		if (m_surface)
-		{
-			SDL_FreeSurface(m_surface);
+		for (auto& surf : m_surfaces) {
+			SDL_FreeSurface(surf);
 		}
-		m_surface = NULL;
+		m_surfaces.clear();
 		m_id = 0;
 	}
-
 
 	// // ----- GENERAL METHODS ----- // //
 	void Texture::process()
@@ -165,6 +163,10 @@ namespace glen
 		else if (m_target == GL_TEXTURE_CUBE_MAP)
 		{
 			process_cube_map();
+		}
+		else if (m_target == GL_TEXTURE_CUBE_MAP_POSITIVE_X)
+		{
+			process_textured_cube_map();
 		}
 
 		glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, m_min_filter);
@@ -231,26 +233,17 @@ namespace glen
 		}
 	}
 
-	void Texture::process_cube_map(const std::vector<const char*> face_paths)
+	void Texture::process_textured_cube_map()
 	{
-		for (GLuint i = 0; i < 6; ++i)
+		if (m_surfaces.size() != 6) {
+			printf("Warning: m_surfaces has %d instead of 6 elements. Unable to process cube map\n", m_surfaces.size());
+		}
+		for (GLuint i = 0; i < m_surfaces.size(); ++i)
 		{
-			auto surface = IMG_Load(face_paths.at(i));
-			void* data;
-			GLsizei img_width{ 0 };
-			GLsizei img_height{ 0 };
-
-			if (surface == NULL)
-			{
-				printf("WARNING: Loading \"%s\" failed. (%s)", face_paths.at(i), IMG_GetError());
-				return;
-			}
-			else
-			{
-				data = surface->pixels;
-				img_width = surface->w;
-				img_height = surface->h;
-			}
+			auto surface = m_surfaces.at(i);
+			auto data = surface->pixels;
+			auto img_width = surface->w;
+			auto img_height = surface->h;
 
 			glTexImage2D(
 				GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
@@ -270,30 +263,31 @@ namespace glen
 	{
 		// Algorithm thanks to GitHub user wduminy
 		// https://gist.github.com/wduminy/5859474
+		for (auto& surf : m_surfaces) {
+			SDL_Surface* result = SDL_CreateRGBSurface(
+				surf->flags,
+				surf->w,
+				surf->h,
+				surf->format->BytesPerPixel * 8,
+				surf->format->Rmask,
+				surf->format->Gmask,
+				surf->format->Bmask,
+				surf->format->Amask);
 
-		SDL_Surface* result = SDL_CreateRGBSurface(
-			m_surface->flags,
-			m_surface->w,
-			m_surface->h,
-			m_surface->format->BytesPerPixel * 8,
-			m_surface->format->Rmask,
-			m_surface->format->Gmask,
-			m_surface->format->Bmask,
-			m_surface->format->Amask);
+			const auto pitch = surf->pitch;
+			const auto pixel_length = pitch * (surf->h - 1);
 
-		const auto pitch = m_surface->pitch;
-		const auto pixel_length = pitch * (m_surface->h - 1);
-		
-		auto input_pixels = static_cast<unsigned char*>(m_surface->pixels) + pixel_length;
-		auto result_pixels = static_cast<unsigned char*>(result->pixels);
+			auto input_pixels = static_cast<unsigned char*>(surf->pixels) + pixel_length;
+			auto result_pixels = static_cast<unsigned char*>(result->pixels);
 
-		for (auto line = 0; line < m_surface->h; ++line)
-		{
-			memcpy(result_pixels, input_pixels, pitch);
-			input_pixels -= pitch;
-			result_pixels += pitch;
+			for (auto line = 0; line < surf->h; ++line)
+			{
+				memcpy(result_pixels, input_pixels, pitch);
+				input_pixels -= pitch;
+				result_pixels += pitch;
+			}
+			std::swap(surf, result);
 		}
-		std::swap(m_surface, result);
 	}
 
 	void Texture::bind(GLuint texture_unit)
@@ -544,7 +538,20 @@ namespace glen
 
 	Texture Texture::create_cubemap_texture(const std::vector<const char*> face_paths)
 	{
-		Texture texture{GL_TEXTURE_CUBE_MAP};
+		Texture texture{ GL_TEXTURE_CUBE_MAP_POSITIVE_X };
+		
+		for (auto& face_path : face_paths) {
+			auto surface = IMG_Load(face_path);
+			if (surface == NULL)
+			{
+				printf("WARNING: Loading \"%s\" failed. (%s)", face_path, IMG_GetError());
+			}
+			else 
+			{
+				texture.add_surface(surface);
+			}
+		}
+		//Texture texture{ face_paths.at(0), true};
 		texture.set_name("Cube Map Texture");
 		texture.set_internal_format(GL_RGB);
 		texture.set_format(GL_RGB);
@@ -552,10 +559,12 @@ namespace glen
 		texture.set_min_filter(GL_LINEAR);
 		texture.set_mag_filter(GL_LINEAR);
 		texture.set_mipmap(false);
+		//texture.set_mipmap(true);
 		texture.set_st_wrap(GL_CLAMP_TO_EDGE);
 
 		texture.bind();
-		texture.process_cube_map(face_paths);
+		//texture.process_cube_map(face_paths);
+		texture.process();
 		texture.unbind();
 
 		return texture;
@@ -636,7 +645,12 @@ namespace glen
 
 	const SDL_Surface* Texture::surface() const
 	{
-		return m_surface;
+		return m_surfaces.front();
+	}
+
+	const std::vector<SDL_Surface*> Texture::surfaces() const
+	{
+		return m_surfaces;
 	}
 
 	const glm::tvec4<GLubyte> Texture::color() const
@@ -651,20 +665,11 @@ namespace glen
 
 	bool Texture::has_alpha()
 	{
-		if (m_surface)
+		if (m_surfaces.size() > 0)
 		{
-			return m_surface->format->BytesPerPixel == 4;
+			return m_surfaces.front()->format->BytesPerPixel == 4;
 		}
 		return false;
-	}
-
-	void* Texture::data()
-	{
-		if (m_surface)
-		{
-			return m_surface->pixels;
-		}
-		return (void*)false;
 	}
 
 	// // ----- SETTERS ----- // //
@@ -744,6 +749,10 @@ namespace glen
 		m_border_color[3] = a;
 	}
 
+	void Texture::add_surface(SDL_Surface* surface)
+	{
+		m_surfaces.push_back(surface);
+	}
 
 	void Texture::resize(const GLsizei width, const GLsizei height)
 	{

@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE(normalSecond, * utf::tolerance(0.01))
 	BOOST_TEST(timer.delta_time_s() == 1.0);
 }
 
-BOOST_AUTO_TEST_CASE(nonNormalSpeed, * utf::tolerance(0.01))
+BOOST_AUTO_TEST_CASE(nonNormalSpeed, * utf::tolerance(0.1))
 {
 	glen::Timer timer(0.1);
 	Sleep(1000);
@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE(nonNormalSpeed, * utf::tolerance(0.01))
 	BOOST_TEST(timer.delta_time_s() == 10.0);
 }
 
-BOOST_AUTO_TEST_CASE(totalTime, * utf::tolerance(0.01))
+BOOST_AUTO_TEST_CASE(totalTime, * utf::tolerance(0.05))
 {
 	glen::Timer timer;
 	Sleep(500);
@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(totalTime, * utf::tolerance(0.01))
 	BOOST_TEST(timer.total_time_s() == 2.0);
 }
 
-BOOST_AUTO_TEST_CASE(fps, *utf::tolerance(0.01))
+BOOST_AUTO_TEST_CASE(fps, * utf::tolerance(0.2))
 {
 	glen::Timer timer;
 	Sleep(100);

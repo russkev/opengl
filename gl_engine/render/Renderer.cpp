@@ -229,6 +229,8 @@ namespace glen
 	{
 		clear_screen();
 
+		//glDepthMask(false);
+
 		m_camera_node->update();
 
 		for (Material* material : m_materials)
