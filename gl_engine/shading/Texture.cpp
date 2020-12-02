@@ -160,13 +160,13 @@ namespace glen
 		{
 			process_uniform_2d_array();
 		}
+		else if (m_target == GL_TEXTURE_CUBE_MAP && m_surfaces.size() > 1)
+		{
+			process_textured_cube_map();
+		}
 		else if (m_target == GL_TEXTURE_CUBE_MAP)
 		{
 			process_cube_map();
-		}
-		else if (m_target == GL_TEXTURE_CUBE_MAP_POSITIVE_X)
-		{
-			process_textured_cube_map();
 		}
 
 		glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, m_min_filter);
@@ -538,7 +538,7 @@ namespace glen
 
 	Texture Texture::create_cubemap_texture(const std::vector<const char*> face_paths)
 	{
-		Texture texture{ GL_TEXTURE_CUBE_MAP_POSITIVE_X };
+		Texture texture{ GL_TEXTURE_CUBE_MAP };
 		
 		for (auto& face_path : face_paths) {
 			auto surface = IMG_Load(face_path);
@@ -553,19 +553,22 @@ namespace glen
 		}
 		//Texture texture{ face_paths.at(0), true};
 		texture.set_name("Cube Map Texture");
+		texture.set_width(texture.surface()->w);
+		texture.set_height(texture.surface()->h);
 		texture.set_internal_format(GL_RGB);
-		texture.set_format(GL_RGB);
+		texture.set_format(GL_BGR);
 		texture.set_type(GL_UNSIGNED_BYTE);
+		texture.set_data(texture.surface()->pixels);
 		texture.set_min_filter(GL_LINEAR);
 		texture.set_mag_filter(GL_LINEAR);
 		texture.set_mipmap(false);
 		//texture.set_mipmap(true);
 		texture.set_st_wrap(GL_CLAMP_TO_EDGE);
 
-		texture.bind();
-		//texture.process_cube_map(face_paths);
-		texture.process();
-		texture.unbind();
+		//texture.bind();
+		////texture.process_cube_map(face_paths);
+		//texture.process();
+		//texture.unbind();
 
 		return texture;
 	}
