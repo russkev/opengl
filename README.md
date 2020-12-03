@@ -64,7 +64,10 @@ If they don't, click `Tools` -> `NuGet Package Manager` -> `Manage NuGet Package
 You should get a warning saying that some packages are missing. Click `Restore`.
 
 
- - [Follow these instructions](https://docs.microsoft.com/en-us/cpp/build/vcpkg?view=msvc-160) to install vcpkg
+ - [Follow these instructions](https://docs.microsoft.com/en-us/cpp/build/vcpkg?view=msvc-160) to download and install a fresh version of vcpkg
+ - Install Boost Test with the command `.\vcpkg install boost-test`
+ - Type `.\vcpkg integrate project` to create a NuGet package
+
 
 
 

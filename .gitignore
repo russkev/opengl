@@ -1,8 +1,7 @@
-﻿/.vs
-/artifacts
-/packages
-x64
-x86
+﻿/.vs/
+/artifacts/
+/packages/
+
 *.VC.VC.opendb
 *.VC.db
 *.db
