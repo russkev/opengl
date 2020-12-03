@@ -200,10 +200,10 @@ namespace gl_demo
 		reset_materials();
 
 		glen::BlinnMaterial dirt_material{ "Dirt Material" };
-		glen::Texture dirt_diffuse{ "dirt_08_diffuse.tga", true };
-		glen::Texture dirt_height{ "dirt_08_height.tga" };
-		glen::Texture dirt_normal{ "dirt_08_normal.tga" };
-		glen::Texture dirt_glossiness{ "dirt_08_glossiness.tga" };
+		glen::Texture dirt_diffuse{ "textures/dirt/dirt_08_diffuse.tga", true };
+		glen::Texture dirt_height{ "textures/dirt/dirt_08_height.tga" };
+		glen::Texture dirt_normal{ "textures/dirt/dirt_08_normal.tga" };
+		glen::Texture dirt_glossiness{ "textures/dirt/dirt_08_glossiness.tga" };
 
 		dirt_material.set_texture(dirt_material.k_material_diffuse, &dirt_diffuse);
 
@@ -239,9 +239,9 @@ namespace gl_demo
 		reset_materials();
 
 		glen::BlinnMaterial tiles_material{ "Tiles Material" };
-		glen::Texture tiles_diffuse{ "tiles_06_diffuse_ao.tga", true };
-		glen::Texture tiles_normal{ "tiles_06_normal.tga" };
-		glen::Texture tiles_glossiness{ "tiles_06_glossiness.tga" };
+		glen::Texture tiles_diffuse{ "textures/tiles/tiles_06_diffuse_ao.tga", true };
+		glen::Texture tiles_normal{ "textures/tiles/tiles_06_normal.tga" };
+		glen::Texture tiles_glossiness{ "textures/tiles/tiles_06_glossiness.tga" };
 
 		tiles_material.set_texture(tiles_material.k_material_diffuse, &tiles_diffuse);
 
@@ -273,9 +273,9 @@ namespace gl_demo
 		reset_materials();
 
 		glen::BlinnMaterial bricks_material{ "Bricks Material" };
-		glen::Texture bricks_diffuse{ "bricks_diffuse.tga", true };
-		glen::Texture bricks_normal{ "bricks_normal.tga" };
-		glen::Texture bricks_displacement{ "bricks_displacement.tga" };
+		glen::Texture bricks_diffuse{ "textures/bricks/bricks_diffuse.tga", true };
+		glen::Texture bricks_normal{ "textures/bricks/bricks_normal.tga" };
+		glen::Texture bricks_displacement{ "textures/bricks/bricks_displacement.tga" };
 
 		bricks_material.set_texture(bricks_material.k_material_diffuse, &bricks_diffuse);
 
@@ -307,9 +307,9 @@ namespace gl_demo
 		reset_materials();
 
 		glen::BlinnMaterial leather_material{ "Leather Material" };
-		glen::Texture leather_diffuse{ "leather_09_diffuse.tga", true };
-		glen::Texture leather_normal{ "leather_09_normal.tga" };
-		glen::Texture leather_glossiness{ "leather_09_glossiness.tga" };
+		glen::Texture leather_diffuse{ "textures/leather/leather_09_diffuse.tga", true };
+		glen::Texture leather_normal{ "textures/leather/leather_09_normal.tga" };
+		glen::Texture leather_glossiness{ "textures/leather/leather_09_glossiness.tga" };
 
 		leather_material.set_texture(leather_material.k_material_diffuse, &leather_diffuse);
 
@@ -381,10 +381,10 @@ namespace gl_demo
 		reset_materials();
 
 		glen::BlinnMaterial dirt_material{ "Dirt Material" };
-		glen::Texture dirt_diffuse{ "dirt_08_diffuse.tga", true };
-		glen::Texture dirt_height{ "dirt_08_height.tga" };
-		glen::Texture dirt_normal{ "dirt_08_normal.tga" };
-		glen::Texture dirt_glossiness{ "dirt_08_glossiness.tga" };
+		glen::Texture dirt_diffuse{ "textures/dirt/dirt_08_diffuse.tga", true };
+		glen::Texture dirt_height{ "textures/dirt/dirt_08_height.tga" };
+		glen::Texture dirt_normal{ "textures/dirt/dirt_08_normal.tga" };
+		glen::Texture dirt_glossiness{ "textures/dirt/dirt_08_glossiness.tga" };
 
 		dirt_material.set_texture(dirt_material.k_material_diffuse, &dirt_diffuse);
 

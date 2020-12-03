@@ -22,15 +22,15 @@ namespace gl_demo
 		targetCam.set_clip_far(1000.0f);
 
 		// Shader ball mesh
-		glen::Mesh shaderBall = glen::OBJ_Loader::load_obj("shaderball_lowpoly.obj");
+		glen::Mesh shaderBall = glen::OBJ_Loader::load_obj("models/shaderball_lowpoly.obj");
 
 		// GBuffer material
 		glen::GBufferMaterial g_buffer_material{};
 
 
 		// Textures
-		glen::Texture uv_template_texture{ "uv_template.tga" };
-		glen::Texture grid_texture{ "grey_grid.tga" };
+		glen::Texture uv_template_texture{ "textures/utility/uv_template.tga" };
+		glen::Texture grid_texture{ "textures/utility/grey_grid.tga" };
 
 		g_buffer_material.set_texture(glen::GBufferMaterial::k_material_diffuse, &uv_template_texture);
 		g_buffer_material.set_texture(glen::GBufferMaterial::k_material_specular, &grid_texture);
@@ -51,6 +51,9 @@ namespace gl_demo
 		pointLight.set_radius(0.1f);
 		glen::LightNode pointLight_node{ "Point Light 1", &pointLight };
 		pointLight_node.set_position({ -4.0f, 1.2f, 0.0f });
+
+		glen::BlinnDeferredMaterial material;
+
 
 		// Renderer
 		glen::Renderer render{ &targetCam_node, glm::uvec2(window.width(), window.height()) };

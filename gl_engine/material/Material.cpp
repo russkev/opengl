@@ -10,9 +10,26 @@
 
 #include <glm/glm.hpp>
 
+#define STRINGIFY(x) #x
+#define EXPAND(x) STRINGIFY(x)
+
 namespace glen
 {
 	// // ----- CONSTRUCTORS ----- // //
+	Material::Material(const std::string& name, const std::string& vertex_shader, const std::string& fragment_shader) :
+		m_name{ name },
+		m_program_id{ LoadShaders::load(vertex_shader.c_str(), fragment_shader.c_str())}
+	{
+		init();
+	}
+
+	Material::Material(const std::string& name, const std::string& vertex_shader, const std::string& geometry_shader, const std::string& fragment_shader) :
+		m_name{ name },
+		m_program_id{ LoadShaders::load(vertex_shader.c_str(), geometry_shader.c_str(), fragment_shader.c_str()) }
+	{
+		init();
+	}
+
 	Material::Material(const std::string& name, const char* vertex_shader, const char* fragment_shader) :
 		m_name{ name },
 		m_program_id{ LoadShaders::load(vertex_shader, fragment_shader) }
@@ -54,6 +71,17 @@ namespace glen
 	}
 
 	// // ----- GENERAL METHODS ----- // //
+
+	// Get the absolute path of the assets directory.
+	// This is defined in:
+	//		project Properties -> Configuration -> C/C++ -> Preprocessor
+	//
+	// Ensures shader paths work with unit tests.
+	std::string Material::shaders_dir() 
+	{
+		std::string assets = EXPAND(ASSETS_DIR);
+		return assets.substr(1, assets.size() - 2) + "\\shaders\\";
+	}
 
 	// Tell opengl to use this shader for upcoming commands
 	void Material::use()

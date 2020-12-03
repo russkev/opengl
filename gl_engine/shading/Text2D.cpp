@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Text2D.h"
+#include "material/Material.h"
 
 namespace glen
 {
@@ -58,7 +59,7 @@ namespace glen
 
 	void Text2D::init_shaders()
 	{
-		m_program_id = LoadShaders::load("Text2d.vert", "Text2D.frag");
+		m_program_id = LoadShaders::load((Material::shaders_dir() + "Text2d.vert").c_str(), (Material::shaders_dir() + "Text2D.frag").c_str());
 		glUseProgram(m_program_id);
 		m_width_uniform_id = glGetUniformLocation(m_program_id, "width");
 		m_height_uniform_id = glGetUniformLocation(m_program_id, "height");

@@ -17,7 +17,6 @@ namespace glen
 	struct DirectionalLight;
 	struct SpotLight;
 
-
 	// AO
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 	struct AO_BlurMaterial : public Material

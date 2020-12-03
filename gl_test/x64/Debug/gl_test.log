@@ -1,2 +1,16 @@
-﻿  test_Timer.cpp
-  gl_test.vcxproj -> E:\DOCS\PROGRAMMING\17-02_GL_Engine\repos\opengl\x64\Debug\gl_test.exe
+﻿  pch.cpp
+  Helper.cpp
+  test_Buffer.cpp
+  test_Deferred.cpp
+  test_FrameBuffer.cpp
+  test_Material.cpp
+  test_Node.cpp
+  test_Overall.cpp
+  test_Texture.cpp
+  test_Timer.cpp
+  test_VAO.cpp
+  test_VectorUtils.cpp
+  Generating Code...
+     Creating library E:\DOCS\PROGRAMMING\17-02_GL_Engine\repos\opengl\build\x64\Debug\gl_test.lib and object E:\DOCS\PROGRAMMING\17-02_GL_Engine\repos\opengl\build\x64\Debug\gl_test.exp
+glew32sd.lib(glew.obj) : warning LNK4099: PDB 'glew_static.pdb' was not found with 'glew32sd.lib(glew.obj)' or at 'E:\DOCS\PROGRAMMING\17-02_GL_Engine\repos\opengl\build\x64\Debug\glew_static.pdb'; linking object as if no debug info
+  gl_test.vcxproj -> E:\DOCS\PROGRAMMING\17-02_GL_Engine\repos\opengl\build\x64\Debug\gl_test.dll

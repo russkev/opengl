@@ -236,7 +236,7 @@ namespace glen
 	void Texture::process_textured_cube_map()
 	{
 		if (m_surfaces.size() != 6) {
-			printf("Warning: m_surfaces has %d instead of 6 elements. Unable to process cube map\n", m_surfaces.size());
+			printf("Warning: m_surfaces has %d instead of 6 elements. Unable to process cube map\n", (int)m_surfaces.size());
 		}
 		for (GLuint i = 0; i < m_surfaces.size(); ++i)
 		{

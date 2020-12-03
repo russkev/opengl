@@ -16,4 +16,4 @@ Textures can be solid colours or files.
   However, if multiple image files are required (in the case of a skybox
   for example), `m_data` will only point to the first image. If more are needed, 
   it is better to cycle through the vector m_surface and access the data from
-  each element using `m_surface.at(i)->data`.
+  each element using `m_surface.at(i)->pixels`.

@@ -18,9 +18,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="scenes\DeferredRenderDemo.h">
       <Filter>Scenes</Filter>
     </ClInclude>
@@ -30,5 +27,8 @@
     <ClInclude Include="scenes\SkyBoxDemo.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

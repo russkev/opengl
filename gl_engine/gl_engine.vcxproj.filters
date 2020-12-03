@@ -297,81 +297,84 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\assets\shaders\AO.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\AO_Blur.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\AO_GBuffer.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\AO_GBuffer.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\Blinn.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\Blinn.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\BlinnDeferred.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\Bloom.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\Composite.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\Depth.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\Depth.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\DepthCube.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\DepthCube.geom">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\DepthCube.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\GaussianBlur.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\GBuffer.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\GBuffer.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\HDR.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\Light.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\Light.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\Passthrough.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\ScreenPassthrough.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\Skybox.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\Skybox.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\Text2D.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\Text2D.vert">
+      <Filter>Shaders</Filter>
+    </None>
     <None Include="packages.config" />
-    <None Include="..\data\Text2D.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\ScreenPassthrough.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\Light.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\GBuffer.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\DepthCube.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\Depth.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\Blinn.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\Text2D.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\Light.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\HDR.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\GBuffer.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\GaussianBlur.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\DepthCube.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\Depth.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\Bloom.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\BlinnDeferred.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\Blinn.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\AO_GBuffer.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\AO_GBuffer.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\AO.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\Passthrough.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\AO_Blur.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\Composite.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\Skybox.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\data\Skybox.vert">
-      <Filter>Shaders</Filter>
-    </None>
   </ItemGroup>
 </Project>
