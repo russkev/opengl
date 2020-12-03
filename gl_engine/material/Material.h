@@ -49,15 +49,17 @@ namespace glen
 
 		// // ----- CONSTRUCTOR ----- // //
 	public:
+		Material(const std::string& name, const std::string& vertex_shader, const std::string& fragment_shader);
+		Material(const std::string& name, const std::string& vertex_shader, const std::string& geometry_shader, const std::string& fragment_shader);
 		Material(const std::string& name, const char* vertex_shader, const char* fragment_shader);
 		Material(const std::string& name, const char* vertex_shader, const char* geometry_shader, const char* fragment_shader);
 		Material(const Material& other) = delete;
 		Material(Material&& other) noexcept;
-		Material& operator = (const Material& other) = delete;
 		Material& operator = (Material&& other) noexcept;
 		~Material();
 
 		// // ----- GENERAL METHODS ----- // //
+		static std::string shaders_dir();
 		void use();
 		bool contains_uniform(const std::string uniform_name);
 		bool is_uniform(const GLenum type);

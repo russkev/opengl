@@ -19,13 +19,4 @@ namespace Helper
 		}
 		return is_similar;
 	}
-
-
-	//GLint Helper::check_binding(const GLenum target, const GLuint id)
-	//{
-	//	glBindVertexArray(id);
-	//	GLint which_id;
-	//	glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &which_id);
-	//	return which_id;
-	//}
 }

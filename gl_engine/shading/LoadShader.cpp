@@ -7,6 +7,10 @@
 
 #include <GL/glew.h>
 
+#include <Windows.h>
+#include <stdlib.h>
+#include <filesystem>
+
 namespace glen
 {
 	namespace LoadShaders

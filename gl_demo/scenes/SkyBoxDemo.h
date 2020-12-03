@@ -20,16 +20,14 @@ namespace gl_demo
 		targetCam.focus(glm::vec3{ 0.0f, 0.0f, 0.0f });
 		targetCam.set_clip_far(1000.0f);
 
-		//glen::Texture uv_template_texture{ "leather_09_diffuse.tga" };
-
 		glen::CubeMapMaterial skybox_material{ "Skybox Material" };
 		glen::Texture skybox_texture{ glen::Texture::create_cubemap_texture({
-										"pond/posx.tga",
-										"pond/negx.tga",
-										"pond/posy.tga",
-										"pond/negy.tga",
-										"pond/posz.tga",
-										"pond/negz.tga"
+										"textures/pond/posx.tga",
+										"textures/pond/negx.tga",
+										"textures/pond/posy.tga",
+										"textures/pond/negy.tga",
+										"textures/pond/posz.tga",
+										"textures/pond/negz.tga"
 										})};
 		glen::Mesh skybox_mesh = glen::Cube::create_cube();
 		skybox_mesh.reverse_triangles();

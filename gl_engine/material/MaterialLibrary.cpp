@@ -17,7 +17,7 @@ namespace glen
 	{}
 
 	AO_BlurMaterial::AO_BlurMaterial(const std::string& name) :
-		Material{ name, "ScreenPassthrough.vert", "AO_Blur.frag"}
+		Material{ name, Material::shaders_dir() + "ScreenPassthrough.vert", Material::shaders_dir() + "AO_Blur.frag" }
 	{
 		init();
 	}
@@ -35,7 +35,7 @@ namespace glen
 	{}
 
 	AO_GBufferMaterial::AO_GBufferMaterial(const std::string& name) :
-		Material{ name, "AO_GBuffer.vert", "AO_GBuffer.frag" }
+		Material{ name, Material::shaders_dir() + "AO_GBuffer.vert", Material::shaders_dir() + "AO_GBuffer.frag" }
 	{
 		init();
 	}
@@ -63,7 +63,7 @@ namespace glen
 	{}
 
 	AO_Material::AO_Material(const std::string& name) :
-		Material{ name, "ScreenPassthrough.vert", "AO.frag" }
+		Material{ name, Material::shaders_dir() + "ScreenPassthrough.vert", Material::shaders_dir() + "AO.frag" }
 	{
 		init();
 	}
@@ -104,7 +104,7 @@ namespace glen
 	{}
 	
 	BlinnMaterial::BlinnMaterial(const std::string& name) :
-		Material{ name, "Blinn.vert", "Blinn.frag"}
+		Material{ name,Material::shaders_dir() + "Blinn.vert",Material::shaders_dir() + "Blinn.frag" }
 	{
 		init();
 	}
@@ -265,7 +265,7 @@ namespace glen
 	{}
 
 	BlinnDeferredMaterial::BlinnDeferredMaterial(const std::string& name) :
-		Material(name, "ScreenPassthrough.vert", "BlinnDeferred.frag")
+		Material(name, Material::shaders_dir() + "ScreenPassthrough.vert", Material::shaders_dir() + "BlinnDeferred.frag")
 	{
 		init();
 	}
@@ -309,7 +309,7 @@ namespace glen
 	{}
 	
 	BloomMaterial::BloomMaterial(const std::string& name) :
-		Material(name, "ScreenPassthrough.vert", "Bloom.frag")
+		Material(name, Material::shaders_dir() + "ScreenPassthrough.vert", Material::shaders_dir() + "Bloom.frag")
 	{
 		init();
 	}
@@ -327,7 +327,7 @@ namespace glen
 	{}
 
 	CompositeMaterial::CompositeMaterial(const std::string& name) :
-		Material(name, "ScreenPassthrough.vert", "Composite.frag")
+		Material(name, Material::shaders_dir() + "ScreenPassthrough.vert", Material::shaders_dir() + "Composite.frag")
 	{
 		init();
 	}
@@ -345,7 +345,7 @@ namespace glen
 	{}
 
 	CubeMapMaterial::CubeMapMaterial(const std::string& name) :
-		Material(name, "Skybox.vert", "Skybox.frag")
+		Material(name, Material::shaders_dir() + "Skybox.vert", Material::shaders_dir() + "Skybox.frag")
 	{
 		init();
 	}
@@ -371,7 +371,7 @@ namespace glen
 	{}
 	
 	DepthMaterial::DepthMaterial(const std::string& name) :
-		Material{ name, "Depth.vert", "Depth.frag" }
+		Material{ name, Material::shaders_dir() + "Depth.vert", Material::shaders_dir() + "Depth.frag" }
 	{
 		init();
 	}
@@ -394,7 +394,7 @@ namespace glen
 	{}
 	
 	DepthCubeMaterial::DepthCubeMaterial(const std::string& name) :
-		Material(name, "DepthCube.vert", "DepthCube.geom", "DepthCube.frag")
+		Material(name, Material::shaders_dir() + "DepthCube.vert", Material::shaders_dir() + "DepthCube.geom", Material::shaders_dir() + "DepthCube.frag")
 	{
 		init();
 	}
@@ -424,7 +424,7 @@ namespace glen
 	{}
 
 	GaussianBlurMaterial::GaussianBlurMaterial(const std::string& name) :
-		Material{name, "ScreenPassthrough.vert", "GaussianBlur.frag"}
+		Material{name, Material::shaders_dir() + "ScreenPassthrough.vert", Material::shaders_dir() + "GaussianBlur.frag" }
 	{
 		init();
 	}
@@ -442,7 +442,7 @@ namespace glen
 	{}
 
 	GBufferMaterial::GBufferMaterial(const std::string& name) :
-		Material(name, "GBuffer.vert", "GBuffer.frag")
+		Material(name, Material::shaders_dir() + "GBuffer.vert", Material::shaders_dir() + "GBuffer.frag")
 	{
 		init();
 	}
@@ -473,7 +473,7 @@ namespace glen
 	{}
 
 	HDRMaterial::HDRMaterial(const std::string& name) :
-		Material(name, "ScreenPassthrough.vert", "HDR.frag")
+		Material(name, Material::shaders_dir() + "ScreenPassthrough.vert", Material::shaders_dir() + "HDR.frag")
 	{
 		init();
 	}
@@ -493,7 +493,7 @@ namespace glen
 	{}
 
 	LightMaterial::LightMaterial(const std::string& name) :
-		Material{name, "Light.vert", "Light.frag"}
+		Material{name, Material::shaders_dir() + "Light.vert", Material::shaders_dir() + "Light.frag" }
 	{
 		init();
 	}
