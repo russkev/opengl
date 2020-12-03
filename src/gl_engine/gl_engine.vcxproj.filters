@@ -375,5 +375,6 @@
     <None Include="..\assets\shaders\Text2D.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
