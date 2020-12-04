@@ -1,11 +1,9 @@
-﻿/.vs
-/artifacts
-/build
-/packages
-/x64
+﻿/.vs/
+/artifacts/
+/packages/
+
 *.VC.VC.opendb
 *.VC.db
 *.db
 *.VC.opendb
 *.suo
-*.pch
