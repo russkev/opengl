@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "PointLight.h"
 
-#include <algorithm>
-
-
 namespace glen
 {
 	// // ----- CONSTANTS ----- // //

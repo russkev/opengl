@@ -27,6 +27,9 @@
     <ClInclude Include="scenes\SkyBoxDemo.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="scenes\FirstScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

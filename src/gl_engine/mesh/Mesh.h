@@ -1,16 +1,6 @@
 #ifndef GL_ENGINE_MESH_MESH_H
 #define GL_ENGINE_MESH_MESH_H
 
-#include <vector>
-#include <cassert>
-#include <string>
-#include <map>
-#include <cstdlib>
-#include <memory>
-
-#include <GL\glew.h>
-#include <glm/glm.hpp>
-
 #include "utils/VectorUtils.h"
 #include "Vertex.h"
 

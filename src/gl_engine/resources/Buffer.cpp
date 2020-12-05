@@ -1,15 +1,6 @@
 #include "pch.h"
 #include "Buffer.h"
 
-#include <cstddef>
-#include <cstdint>
-#include <iostream>
-#include <cassert>
-#include <GL/glew.h>
-#include <glm/glm.hpp>
-#include <glm/matrix.hpp>
-
-
 namespace glen
 {
 	// // ----- CONSTRUCTORS ----- // //

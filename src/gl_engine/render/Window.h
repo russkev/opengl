@@ -1,15 +1,6 @@
 #ifndef GL_ENGINE_WINDOW_H
 #define GL_ENGINE_WINDOW_H
 
-#include <vector>
-#include <string>
-
-#define SDL_MAIN_HANDLED
-#include <SDL.h>
-#undef main
-#include <GL/glew.h>
-
-
 namespace glen
 {
 	struct OpenGLAttrPair

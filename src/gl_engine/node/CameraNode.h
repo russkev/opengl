@@ -1,8 +1,6 @@
 #ifndef GL_ENGINE_NODE_CAMERA_H
 #define GL_ENGINE_NODE_CAMERA_H
 
-#include <glm/glm.hpp>
-
 #include "Node.h"
 #include "resources/Buffer.h"
 

@@ -2,13 +2,10 @@
 #include "Node.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/matrix_decompose.hpp>
-#include <glm/gtx/euler_angles.hpp>
+
 
 #include "utils/VectorUtils.h"
 #include "CameraNode.h"
-#include <stdexcept>
 
 namespace glen
 {

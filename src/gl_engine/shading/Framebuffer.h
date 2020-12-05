@@ -1,12 +1,6 @@
 #ifndef GL_ENGINE_SHADING_FRAMEBUFFER_H
 #define GL_ENGINE_SHADING_FRAMEBUFFER_H
 
-#include <vector>
-#include <map>
-
-#include <GL/glew.h>
-#include <glm/glm.hpp>
-
 namespace glen
 {
 	// // ----- FORWARD DECLERATION ----- // //

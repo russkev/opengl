@@ -1,8 +1,6 @@
 #ifndef GL_ENGINE_MESH_VERTEX_H
 #define GL_ENGINE_MESH_VERTEX_H
 
-#include <tuple>
-
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 

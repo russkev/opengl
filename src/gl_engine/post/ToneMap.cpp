@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ToneMap.h"
 
-#include "../shading/Framebuffer.h"
+#include "Shading/Framebuffer.h"
 
 namespace glen
 {

@@ -1,13 +1,6 @@
 #ifndef GL_ENGINE_BUFFER_H
 #define GL_ENGINE_BUFFER_H
 
-#include <cstddef>
-#include <cstdint>
-#include <vector>
-
-#include <glm/glm.hpp>
-#include <glm/matrix.hpp>
-
 namespace glen
 {
 	/*

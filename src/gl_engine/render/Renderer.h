@@ -1,10 +1,6 @@
 #ifndef GL_ENGINE_RENDER_RENDERER_H
 #define GL_ENGINE_RENDER_RENDERER_H
 
-#include <map>
-#include <vector>
-#include <glm/glm.hpp>
-#include <GL/glew.h>
 #include "node/CameraNode.h"
 #include "node/MeshNode.h"
 #include "shading/Framebuffer.h"

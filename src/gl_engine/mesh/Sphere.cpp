@@ -1,11 +1,6 @@
 #include "pch.h"
-#define _USE_MATH_DEFINES
+
 #include "Sphere.h"
-
-
-#include <cmath>
-#include <cassert>
-
 #include "Vertex.h"
 
 namespace glen

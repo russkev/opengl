@@ -1,8 +1,6 @@
 #ifndef GL_ENGINE_MESH_SPHERE_H
 #define GL_ENGINE_MESH_SPHERE_H
 
-#include <math.h>
-
 #include "Mesh.h"
 
 namespace glen

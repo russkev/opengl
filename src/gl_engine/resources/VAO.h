@@ -1,8 +1,6 @@
 #ifndef GL_ENGINE_VAO_H
 #define GL_ENGINE_VAO_H
 
-#include <vector>
-
 #include "Buffer.h"
 #include "GL_Tuple_Introspect.h"
 

@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "WindowQuad.h"
 
-#include <glm/glm.hpp>
-
 namespace glen
 {
 	Mesh WindowQuad::create_windowQuad()

@@ -1,17 +1,6 @@
 #ifndef GL_ENGINE_MATERIAL_MATERIAL_H
 #define GL_ENGINE_MATERIAL_MATERIAL_H
 
-#include <map>
-#include <string>
-#include <stdexcept>
-#include <stdio.h>
-#include <set>
-#include <vector>
-#include <list>
-
-#include <GL/glew.h>
-#include <glm/glm.hpp>
-
 #include "ShaderType.h"
 #include "shading/Texture.h"
 
@@ -136,7 +125,7 @@ namespace glen
 		// // ----- MEMBER VARIABLES ----- // //
 	private:
 		std::string m_name;
-		GLuint m_program_id;
+		GLuint m_program_id = 0;
 
 		std::map<std::string, Uniform> m_uniforms;
 		std::map<std::string, Texture*> m_textures;

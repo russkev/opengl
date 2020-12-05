@@ -1,18 +1,6 @@
 #ifndef GL_ENGINE_SHADING_TEXTURE_H
 #define GL_ENGINE_SHADING_TEXTURE_H
 
-#include <vector>
-#include <string>
-
-#define SDL_MAIN_HANDLED
-#include <SDL.h>
-#undef main
-#define SDL_MAIN_HANDLED
-#include <SDL_image.h>
-#undef main
-#include <GL/glew.h>
-#include <glm/glm.hpp>
-
 namespace glen
 {
 	/*

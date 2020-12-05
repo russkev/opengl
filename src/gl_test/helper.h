@@ -1,7 +1,6 @@
 #ifndef GL_ENGINE_TEST_HELPER_H
 #define GL_ENGINE_TEST_HELPER_H
 
-#include <glm/glm.hpp>
 #include "../gl_engine/render/Window.h"
 
 namespace Helper

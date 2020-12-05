@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "ShadowMap.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-
 #include "light/Light.h"
 #include "light/DirectionalLight.h"
 #include "light/PointLight.h"

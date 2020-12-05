@@ -1,12 +1,6 @@
 #ifndef GL_ENGINE_SHADER_TEXT2D_H
 #define GL_ENGINE_SHADER_TEXT2D_H
 
-#include <vector>
-#include <tuple>
-#include <iostream>
-
-#include <glm/glm.hpp>
-
 #include "Texture.h"
 #include "LoadShader.h"
 #include "resources/Buffer.h"

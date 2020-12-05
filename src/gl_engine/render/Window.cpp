@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "Window.h"
 
-#include <iostream>
-#include <cassert>
-
 namespace glen
 {
 	// // ----- CONSTRUCTORS ----- // //
@@ -90,7 +87,6 @@ namespace glen
 			__debugbreak();
 		}
 		assert(m_st_opengl != nullptr);
-
 		SDL_GL_SetSwapInterval(1);
 
 

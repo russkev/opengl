@@ -1,15 +1,6 @@
 #ifndef GL_ENGINE_UTILS_VECTOR_UTILS_H
 #define GL_ENGINE_UTILS_VECTOR_UTILS_H
 
-#include <vector>
-#include <utility>
-#include <math.h>
-#include <string>
-
-#include <GL/glew.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
 namespace glen
 {
 	/*

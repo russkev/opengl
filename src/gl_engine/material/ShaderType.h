@@ -1,10 +1,6 @@
 #ifndef GL_ENGINE_MATERIAL_SHADER_TYPES_H
 #define GL_ENGINE_MATERIAL_SHADER_TYPES_H
 
-#include <map>
-#include <set>
-#include <typeinfo>
-
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 

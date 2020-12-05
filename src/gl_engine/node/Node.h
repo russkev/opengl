@@ -1,11 +1,6 @@
 #ifndef GL_ENGINE_NODE_NODE_H
 #define GL_ENGINE_NODE_NODE_H
 
-#include <string>
-#include <unordered_map>
-
-#include <glm/glm.hpp>
-
 #include "resources/GL_Tuple_Introspect.h"
 
 namespace glen

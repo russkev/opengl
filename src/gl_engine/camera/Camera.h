@@ -1,11 +1,7 @@
 #ifndef GL_ENGINE_CAMERA_CAMERA_H
 #define GL_ENGINE_CAMERA_CAMERA_H
 
-#define SDL_MAIN_HANDLED
-#include <SDL.h>
-#undef main
-#include <GL/glew.h>
-#include <glm/glm.hpp>
+#include "pch.h"
 
 namespace glen
 {
@@ -48,7 +44,7 @@ namespace glen
 	private:
 		glm::uvec2 m_dimensions = { 800u, 600u };
 		GLfloat m_clip_near = 0.1f;
-		GLfloat m_clip_far = 10.0f;
+		GLfloat m_clip_far = 1000.0f;
 
 		glm::mat4 m_default_transform = glm::mat4{ 1.0f };
 		glm::mat4* m_parent_transform = &m_default_transform;

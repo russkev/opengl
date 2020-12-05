@@ -1,12 +1,6 @@
 #ifndef GL_ENGINE_SHADING_SHADOW_MAP
 #define GL_ENGINE_SHADING_SHADOW_MAP
 
-#include <string>
-#include <memory>
-
-#include <GL/glew.h>
-#include <glm/glm.hpp>
-
 #include "material/Material.h"
 #include "Texture.h"
 #include "Framebuffer.h"
@@ -31,7 +25,7 @@ namespace glen
 	{
 		//inline static const glm::uvec2 k_shadow_dimensions = glm::uvec2{ 1024, 1024 };
 		static constexpr GLfloat k_default_clip_near = 0.1f;
-		static constexpr GLfloat k_default_clip_far = 1000.0f;
+		static constexpr GLfloat k_default_clip_far = 100.0f;
 		static constexpr GLfloat k_no_value_float = -1.0f;
 		static constexpr GLint k_no_value_int = -1;
 
@@ -90,9 +84,12 @@ namespace glen
 
 		CameraNode	m_camera_node;
 
-		GLfloat m_bias = k_no_value_float;
-		GLfloat m_radius = k_no_value_float;
-		GLint m_num_samples = k_no_value_int;
+		//GLfloat m_bias = k_no_value_float;
+		//GLfloat m_radius = k_no_value_float;
+		//GLint m_num_samples = k_no_value_int;
+		GLfloat m_bias = 0.1f;
+		GLfloat m_radius = 0.0f;
+		GLint   m_num_samples = 1;
 	};
 }
 

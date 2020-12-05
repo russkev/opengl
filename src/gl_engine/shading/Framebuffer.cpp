@@ -1,9 +1,6 @@
 #include "pch.h"
+
 #include "FrameBuffer.h"
-
-#include <stdio.h>
-#include <vector>
-
 #include "Texture.h"
 
 namespace glen

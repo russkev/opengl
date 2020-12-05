@@ -1,8 +1,6 @@
 #ifndef GL_ENGINE_SHADING_LOAD_SHADER_H
 #define GL_ENGINE_SHADING_LOAD_SHADER_H
 
-#include <GL/glew.h>
-
 namespace glen
 {
 	/*

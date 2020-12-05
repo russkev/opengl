@@ -1,20 +1,18 @@
 #include "pch.h"
 #include "Renderer.h"
 
-#include <stdio.h>
-
-#include "../utils/Timer.h"
-#include "../render/Window.h"
-#include "../node/Node.h"
-#include "../node/MeshNode.h"
-#include "../node/CameraNode.h"
-#include "../node/LightNode.h"
-#include "../camera/Camera.h"
-#include "../light/PointLight.h"
-#include "../light/SpotLight.h"
-#include "../light/DirectionalLight.h"
-#include "../material/Material.h"
-#include "../shading/ShadowMap.h"
+#include "utils/Timer.h"
+#include "render/Window.h"
+#include "node/Node.h"
+#include "node/MeshNode.h"
+#include "node/CameraNode.h"
+#include "node/LightNode.h"
+#include "camera/Camera.h"
+#include "light/PointLight.h"
+#include "light/SpotLight.h"
+#include "light/DirectionalLight.h"
+#include "material/Material.h"
+#include "shading/ShadowMap.h"
 
 namespace glen
 {

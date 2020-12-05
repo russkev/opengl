@@ -8,8 +8,6 @@
 #include "light/Light.h"
 #include "shading/LoadShader.h"
 
-#include <glm/glm.hpp>
-
 #define STRINGIFY(x) #x
 #define EXPAND(x) STRINGIFY(x)
 
@@ -18,7 +16,7 @@ namespace glen
 	// // ----- CONSTRUCTORS ----- // //
 	Material::Material(const std::string& name, const std::string& vertex_shader, const std::string& fragment_shader) :
 		m_name{ name },
-		m_program_id{ LoadShaders::load(vertex_shader.c_str(), fragment_shader.c_str())}
+		m_program_id{ LoadShaders::load(vertex_shader.c_str(), fragment_shader.c_str()) }
 	{
 		init();
 	}

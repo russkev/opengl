@@ -4,8 +4,6 @@
 #include "node/Node.h"
 #include "helper.h"
 
-#include <glm/glm.hpp>
-
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace gl_test

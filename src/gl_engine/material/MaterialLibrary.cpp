@@ -111,6 +111,8 @@ namespace glen
 
 	void BlinnMaterial::init()
 	{
+		assert(Material::program_id());
+
 		glm::vec3 default_normal{ 0.5f, 0.5f, 1.0f };
 
 		set_uniform(k_transform_model_to_projection, glm::mat4{ 1.0f });

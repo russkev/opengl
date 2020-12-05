@@ -1,8 +1,6 @@
 #include "pch.h"
+
 #include "Plane.h"
-
-#include <cassert>
-
 #include "Vertex.h"
 
 namespace glen

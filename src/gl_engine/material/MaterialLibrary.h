@@ -1,14 +1,6 @@
 #ifndef GL_ENGINE_MATERIAL_LIGHT_MATERIAL_H
 #define GL_ENGINE_MATERIAL_LIGHT_MATERIAL_H
 
-#include <string>
-#include <vector>
-#include <map>
-#include <set>
-
-#include <glm/glm.hpp>
-#include <GL/glew.h>
-
 #include "Material.h"
 
 namespace glen

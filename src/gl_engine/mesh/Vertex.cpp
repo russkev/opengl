@@ -1,10 +1,5 @@
 #include "pch.h"
 
-#include <tuple>
-#include <cmath>
-#include <glm/glm.hpp>
-#include <GL/glew.h>
-
 #include "Vertex.h"
 #include "utils/VectorUtils.h"
 

@@ -1,12 +1,6 @@
 #include "pch.h"
 #include "OBJ.h"
 
-#include <stdexcept>
-#include <cassert>
-#include <stdio.h>
-
-#include <glm/matrix.hpp>
-
 #include "Vertex.h"
 
 namespace glen

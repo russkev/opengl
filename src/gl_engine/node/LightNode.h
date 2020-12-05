@@ -1,8 +1,6 @@
 #ifndef GL_ENGINE_NODE_LIGHT_H
 #define GL_ENGINE_NODE_LIGHT_H
 
-#include <memory>
-
 #include "Node.h"
 #include "resources/VAO.h"
 

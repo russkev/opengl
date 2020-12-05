@@ -1,8 +1,5 @@
 #ifndef GL_ENGINE_LIGHT_SPOT_H
 #define GL_ENGINE_LIGHT_SPOT_H
-
-#include <glm/glm.hpp>
-
 #include "Light.h"
 #include "shading/LoadShader.h"
 #include "camera/FreeCamera.h"

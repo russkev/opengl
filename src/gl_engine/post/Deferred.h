@@ -1,13 +1,6 @@
 #ifndef GL_ENGINE_RENDER_DEFERRED_RENDER_H
 #define GL_ENGINE_RENDER_DEFERRED_RENDER_H
 
-#include <unordered_set>
-#include <map>
-#include <random>
-
-#include <glm/glm.hpp>
-#include <GL/glew.h>
-
 #include "PostEffect.h"
 #include "shading/Framebuffer.h"
 #include "shading/Texture.h"

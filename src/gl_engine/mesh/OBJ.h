@@ -1,8 +1,6 @@
 #ifndef GL_ENGINE_MESH_OBJ_H
 #define GL_ENGINE_MESH_OBJ_H
 
-#include <glm/glm.hpp>
-
 #include "Mesh.h"
 
 namespace glen

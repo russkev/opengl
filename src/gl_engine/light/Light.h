@@ -1,12 +1,6 @@
 #ifndef GL_ENGINE_LIGHT_LIGHT_H
 #define GL_ENGINE_LIGHT_LIGHT_H
 
-#include <vector>
-#include <memory>
-
-#include <GL/glew.h>
-#include <glm/glm.hpp>
-
 #include "mesh/Mesh.h"
 #include "material/Material.h"
 #include "material/MaterialLibrary.h"

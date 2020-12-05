@@ -7,9 +7,6 @@
 #ifndef GL_ENGINE_GL_TYPE_TRAITS_H
 #define GL_ENGINE_GL_TYPE_TRAITS_H
 
-#include <GL/glew.h>
-#include <glm/glm.hpp>
-#include <glm/matrix.hpp>
 
 namespace glen
 {

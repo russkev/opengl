@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "SpotLight.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-
 #include "mesh/Cylinder.h"
 
 

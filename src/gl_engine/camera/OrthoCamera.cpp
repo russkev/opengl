@@ -1,9 +1,6 @@
 #include "pch.h"
+
 #include "OrthoCamera.h"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
 #include "utils/VectorUtils.h"
 
 namespace glen

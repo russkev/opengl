@@ -1,16 +1,6 @@
 #include "pch.h"
 #include "LoadShader.h"
 
-#include <string>
-#include <fstream>
-#include <vector>
-
-#include <GL/glew.h>
-
-#include <Windows.h>
-#include <stdlib.h>
-#include <filesystem>
-
 namespace glen
 {
 	namespace LoadShaders
@@ -22,6 +12,9 @@ namespace glen
 		static void check_program(const GLuint program_id);
 
 		GLuint load(const char * vertex_file_path, const char * geometry_file_path, const char* fragment_file_path) {
+
+			// Check for context
+			assert(SDL_GL_GetCurrentContext() && "Context not found, make sure a window has been created");
 
 			// // Create the shaders // //
 			GLuint vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);

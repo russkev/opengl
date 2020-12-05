@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "framework.h"
 
-#include <iostream>
-#include <vector>
-
 #include "mesh/Mesh.h"
 #include "mesh/Cube.h"
 #include "mesh/Cylinder.h"

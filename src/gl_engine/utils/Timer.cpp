@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "Timer.h"
 
-#include <stdio.h>
-
 namespace glen
 {
 	// // ----- CONSTRUCTORS ----- // //

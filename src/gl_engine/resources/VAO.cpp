@@ -1,12 +1,7 @@
 #include "pch.h"
 #include "VAO.h"
 
-#include <iostream>
-#include <cassert>
-#include <GL/glew.h>
-
 #include "Buffer.h"
-#include <algorithm>
 
 namespace glen
 {

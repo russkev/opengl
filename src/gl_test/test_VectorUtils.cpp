@@ -76,6 +76,7 @@ namespace gl_test
 				};
 
 				glm::mat4 expected = glm::make_mat4(result_array);
+				//glm::mat4 expected = glm::make
 
 				Assert::IsTrue(Helper::matrix_is_similar(result4, expected, 0.1f));
 			}

@@ -1,10 +1,6 @@
 #include "pch.h"
 #include "VectorUtils.h"
 
-#include <cmath>
-
-#include <GL/glew.h>
-
 namespace glen
 {
 	// // ----- DISTANCE SQUARED ----- // //

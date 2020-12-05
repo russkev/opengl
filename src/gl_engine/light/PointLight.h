@@ -1,8 +1,6 @@
 #ifndef GL_ENGINE_LIGHT_POINT_H
 #define GL_ENGINE_LIGHT_POINT_H
 						
-#include <glm/glm.hpp>
-
 #include "Light.h"
 #include "mesh/Sphere.h"
 #include "camera/FreeCamera.h"
