@@ -1,4 +1,4 @@
-#version 440 core
+#version 430 core
 #pragma optionNV unroll all
 #extension GL_EXT_texture_array : enable
 #define NUM_LIGHTS 2
@@ -458,7 +458,7 @@ float create_directional_shadow(vec4 lightSpace_position, vec3 tangent_space_lig
 float create_point_shadow(vec3 light_pos, float light_far_plane, samplerCube depth, Shadow shadow_info)
 {
 	int total_samples = shadow_info.num_samples * shadow_info.num_samples;
-	float out_shadow = 1;
+	float out_shadow = 0;
 	vec3 frag_to_light = in_frag.world_space_position - light_pos;
 	float current_depth = length(frag_to_light);
 
