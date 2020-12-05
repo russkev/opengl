@@ -29,7 +29,7 @@ namespace gl_demo
 										"textures/pond/posz.tga",
 										"textures/pond/negz.tga"
 										})};
-		glen::Mesh skybox_mesh = glen::Cube::create_cube();
+		glen::Mesh skybox_mesh{ glen::Cube::create_cube() };
 		skybox_mesh.reverse_triangles();
 		glm::mat4 skybox_transform = glm::translate(glm::mat4{ 1.0f  }, glm::vec3{ 0.0f, -1.0f, 0.0f });
 		skybox_mesh.transform(skybox_transform);
