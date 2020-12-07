@@ -14,9 +14,9 @@ sphinx:
 python:
     version: 3.7
     install:
-      - method: pip
+      # - method: pip
       - requirements: docs/requirements.txt
-        path: docs/
+        # path: docs/
         # extra_requirements:
         #   - docs
     system_packages: true
