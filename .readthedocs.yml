@@ -14,5 +14,10 @@ sphinx:
 #  configuration: mkdocs.yml
 
 python:
-  version: 3.6
-  use_system_site_packages: true
+  version: 3.7
+    - requirements: docs/requirements.txt
+    - method: pip
+      path: .
+      extra_requirements:
+        - docs
+  # system_packages: true
