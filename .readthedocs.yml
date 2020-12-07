@@ -12,3 +12,8 @@ sphinx:
 # Build documentation with MkDocs
 #mkdocs:
 #  configuration: mkdocs.yml
+
+python:
+  version: 3.6
+  setup_py_install: true
+  use_system_site_packages: true
