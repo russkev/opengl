@@ -1,14 +1,6 @@
 #ifndef TEST_PCH_H
 #define TEST_PCH_H
 
-//#include <glm/glm.hpp>
-//#include <SDL.h>
-//#include <vector>
-//#include <string>
-//#include <windows.h> 
-//#include <glm/gtc/type_ptr.hpp>
-
-
 #define _USE_MATH_DEFINES
 #define GLM_ENABLE_EXPERIMENTAL
 

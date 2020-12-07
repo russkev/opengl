@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "Node.h"
 
-#define GLM_ENABLE_EXPERIMENTAL
-
-
 #include "utils/VectorUtils.h"
 #include "CameraNode.h"
 

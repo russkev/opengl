@@ -36,6 +36,11 @@ advanced real time lighting features.
     - Screen space ambient occlusion
     - Glow effect
 
+# Libraries used
+  - [OpenGL Extension Wrangler Library (GLEW)](http://glew.sourceforge.net/) f
+  - [OpenGL Mathematics (GLM)](https://go.grottel.net/nuget-project/glm) for vector and matrix operations.
+  - [SDL2](https://www.libsdl.org/index.php) for input / output operations.
+
 # Screenshots
 ![Demo 01](assets/screenshots/demo_01.jpg)
 ![Demo 02](assets/screenshots/demo_02.jpg)

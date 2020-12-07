@@ -14,6 +14,9 @@ namespace glen
 	{
 	public:
 		// // ----- CONSTRUCTOR ----- // //
+		/*!
+		* Construct a basic camera
+		*/
 		Camera() {};
 
 		// // ----- CAMERA MOVEMENT ----- // //
