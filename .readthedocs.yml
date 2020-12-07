@@ -16,9 +16,9 @@ python:
     install:
       - requirements: docs/requirements.txt
       - method: pip
-        path: .
-        extra_requirements:
-          - docs
+        # path: .
+        # extra_requirements:
+        #   - docs
     system_packages: true
 
 # Build documentation with MkDocs
