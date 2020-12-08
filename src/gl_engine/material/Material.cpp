@@ -70,11 +70,6 @@ namespace glen
 
 	// // ----- GENERAL METHODS ----- // //
 
-	// Get the absolute path of the assets directory.
-	// This is defined in:
-	//		project Properties -> Configuration -> C/C++ -> Preprocessor
-	//
-	// Ensures shader paths work with unit tests.
 	std::string Material::shaders_dir() 
 	{
 		std::string assets = EXPAND(ASSETS_DIR);

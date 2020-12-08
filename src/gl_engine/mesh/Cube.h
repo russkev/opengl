@@ -5,16 +5,25 @@
 
 namespace glen
 {
-	/*
+	/*!
 
-	Basic cube.
-	Can instantiate with an overall size which is the size of each of the edges.
+		Basic cube.
 
 	*/
 	struct Cube
 	{
 		// // ----- MAIN ----- // //
+
+		/*!
+		 * @brief Default cube mesh
+		 * @return A cube that goes from -1 to 1 in x, y and z.
+		*/
 		static Mesh create_cube();
+
+		/*!
+		 * @param width The width of all sides of the cube
+		 * @return A cube mesh that sits on the ground plane
+		*/
 		static Mesh create_cube(const float width, const bool is_default = false);
 
 		// // ----- HELPER ----- // //

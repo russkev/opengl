@@ -14,13 +14,5 @@ sphinx:
 python:
     version: 3.7
     install:
-      # - method: pip
       - requirements: docs/requirements.txt
-        # path: docs/
-        # extra_requirements:
-        #   - docs
     system_packages: true
-
-# Build documentation with MkDocs
-#mkdocs:
-#  configuration: mkdocs.yml

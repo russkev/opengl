@@ -15,7 +15,7 @@ namespace gl_demo
 		glen::TargetCamera targetCam{};
 		glen::CameraNode targetCam_node{ "Target Camera", &targetCam };
 		targetCam.set_position({ 0.0f, 3.0f, 5.0f });
-		targetCam.focus({ 0.0f, 0.0f, 0.0f });
+		targetCam.set_focus_target({ 0.0f, 0.0f, 0.0f });
 
 		// Set up the sphere model
 		glen::Mesh sphere_mesh{ glen::Sphere::create_sphere(1.0f) };

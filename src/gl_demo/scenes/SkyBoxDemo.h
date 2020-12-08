@@ -17,7 +17,7 @@ namespace gl_demo
 		glen::CameraNode targetCam_node{ "Target Camera 1", &targetCam };
 		targetCam.set_position({ 0.0f, 8.0f, 8.0f });
 		targetCam.set_focus_target({ 0.0f, 0.0f, 0.0f });
-		targetCam.focus(glm::vec3{ 0.0f, 0.0f, 0.0f });
+		//targetCam.focus(glm::vec3{ 0.0f, 0.0f, 0.0f });
 		targetCam.set_clip_far(1000.0f);
 
 		glen::CubeMapMaterial skybox_material{ "Skybox Material" };

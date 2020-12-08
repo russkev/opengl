@@ -5,14 +5,18 @@
 
 namespace glen
 {
-	/*
+	/*!
 
-	Mesh for rendering a 2D image directly to the window
+		Mesh for rendering a 2D image directly to the window
 
 	*/
 	struct WindowQuad
 	{
 		// // ------ MAIN ----- // //
+
+		/*!
+		 * @return Window plane mesh
+		*/
 		static Mesh create_windowQuad();
 
 	};

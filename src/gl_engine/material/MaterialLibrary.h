@@ -11,10 +11,18 @@ namespace glen
 
 	// AO
 	//------------------------------------------------------------------------------------------------------------------------------------------//
+	
+	/*!
+	 * @brief Helper material for creating screen space ambient occlusion.
+	*/
 	struct AO_BlurMaterial : public Material
 	{
+		// @cond
+		
 		inline static const std::string k_ao_input = "ao_input";
 		inline static const std::string k_color_input = "color_input";
+
+		// @endcond
 
 		AO_BlurMaterial();
 		AO_BlurMaterial(const std::string& name);
@@ -22,8 +30,13 @@ namespace glen
 		void init();
 	};
 
+	/*!
+	 * @brief Helper material for creating screen space ambient occlusion.
+	*/
 	struct AO_GBufferMaterial : public Material
 	{
+		// @cond 
+
 		inline static const std::string k_g_position	= "g_position";
 		inline static const std::string k_g_normal		= "g_normal";
 		inline static const std::string k_g_diffuse		= "g_diffuse";
@@ -32,6 +45,8 @@ namespace glen
 		inline static const std::string k_transform_world_to_cam		= "transform.world_to_cam";
 		inline static const std::string k_transform_cam_to_projection	= "transform.cam_to_projection";
 		
+		// @endcond
+
 		AO_GBufferMaterial();
 		AO_GBufferMaterial(const std::string& name);
 	private:
@@ -40,8 +55,15 @@ namespace glen
 		void update_view(const CameraNode* camera_node, const Node* model_node) override;
 	};
 
+	/*!
+	 * @brief Ambient Occlusion Material.
+	 * 
+	 * Uses deferred rendering and a post effect to apply ambient occlusion to all objects.
+	*/
 	struct AO_Material : public Material
 	{
+		// @cond
+
 		const static constexpr GLuint k_num_samples = 128;
 
 		inline static const std::string k_g_cam_space_position = "g_cam_space_position";
@@ -53,7 +75,9 @@ namespace glen
 		inline static const std::string k_screen_dimensions = "screen_dimensions";
 		inline static const std::string k_noise_tile_dimensions = "noise_tile_dimensions";
 		inline static const std::string k_cam_to_projection = "cam_to_projection";
-	
+
+		// @endcond
+
 		AO_Material();
 		AO_Material(const std::string& name);
 	private:
@@ -64,8 +88,22 @@ namespace glen
 
 	// BLINN
 	//------------------------------------------------------------------------------------------------------------------------------------------//
+	
+	/*!
+	 * @brief Primary 'uber' material
+	 * 
+	 * Designed to be a versatile material that can be used with any mesh
+	 * Currently allows for:
+	 *   - Diffuse textures
+	 *   - Specular textures
+	 *   - Glossiness textures (black and white)
+	 *   - Normal maps
+	 *   - Displacement maps
+	*/
 	struct BlinnMaterial : public Material
 	{
+		// @cond
+
 		inline static GLuint k_num_point_lights			= 2;
 		inline static GLuint k_num_directional_lights	= 2;
 		inline static GLuint k_num_spot_lights			= 5;
@@ -110,6 +148,8 @@ namespace glen
 		inline static const std::string k_material_displacement_amount	= "material.displacement_amount";
 		inline static const std::string k_material_displacement_enabled = "material.displacement_enabled";
 
+		// @endcond
+
 		BlinnMaterial();
 		BlinnMaterial(const std::string& name);
 
@@ -128,8 +168,17 @@ namespace glen
 
 	// BLINN DEFERRED
 	//------------------------------------------------------------------------------------------------------------------------------------------//
+	
+	/*!
+	 * @brief Primary shader for use in deferred mode
+	 * 
+	 * Currently not as powerful as the `BlinnMaterial` but this can still be useful for scenarios
+	 * where lots of lights are required.
+	*/
 	struct BlinnDeferredMaterial : public Material
 	{
+		// @cond
+		
 		const static constexpr GLuint k_num_lights = 3;
 
 		inline static const std::string k_g_position = "g_position";
@@ -142,6 +191,9 @@ namespace glen
 		inline static const std::string k_color = "color";
 
 		inline static const std::string k_camera_position = "camera.position";
+
+		// @endcond
+
 
 		BlinnDeferredMaterial();
 		BlinnDeferredMaterial(const std::string& name);
@@ -158,10 +210,19 @@ namespace glen
 
 	// BLOOM
 	//------------------------------------------------------------------------------------------------------------------------------------------//
+	
+	/*!
+	 * @brief 2D post effect. Causes very bright parts of the scene to 'glow'. 
+	 * This effect mimics real life cameras.
+	*/
 	struct BloomMaterial : public Material
 	{
+		// @cond
+		
 		inline static const std::string k_color		= "color";
 		inline static const std::string k_bright	= "bright";
+		
+		// @endcond
 
 		BloomMaterial();
 		BloomMaterial(const std::string& name);
@@ -171,26 +232,27 @@ namespace glen
 
 	};
 
-	// COMPOSITE
-	//------------------------------------------------------------------------------------------------------------------------------------------//
-	struct CompositeMaterial : public Material
-	{
-		inline static const std::string k_base = "base";
-		inline static const std::string k_layer_1 = "layer_1";
-
-		CompositeMaterial();
-		CompositeMaterial(const std::string& name);
-
-	private:
-		void init();
-	};
-
 	// CUBE MAP
 	//------------------------------------------------------------------------------------------------------------------------------------------//
+	/*!
+	 * @brief Used for creating textured skyboxes and reflection cubes.
+	 * 
+	 * Requires six textures in the following order:
+	 *   - Positive X (Right)
+	 *   - Negative X (Left)
+	 *   - Positive Y (Top)
+	 *   - Negative Y (Bottom)
+	 *   - Positive Z (Back)
+	 *   - Negative Z (Front)
+	*/
 	struct CubeMapMaterial : public Material
 	{
+		// @cond
+		
 		inline static const std::string k_transform_model_to_projection = "transform.model_to_projection";
 		inline static const std::string k_skybox = "skybox";
+		
+		// @endcond
 
 		CubeMapMaterial();
 		CubeMapMaterial(const std::string& name);
@@ -203,9 +265,17 @@ namespace glen
 
 	// DEPTH
 	//------------------------------------------------------------------------------------------------------------------------------------------//	
+	
+	/*!
+	 * @brief Depth material. Various uses. Main use for this engine is for depth mapped shadows.
+	*/
 	struct DepthMaterial : public Material
 	{
+		// @cond
+		
 		inline static const std::string k_transform_model_to_projection = "transform.model_to_projection";
+		
+		// @endcond
 
 		DepthMaterial();
 		DepthMaterial(const std::string& name);
@@ -219,8 +289,15 @@ namespace glen
 	
 	// DEPTH CUBE
 	//------------------------------------------------------------------------------------------------------------------------------------------//	
+	
+	/*!
+	 * @brief Depth cube material. Various uses. Main use for this engine is to provide depth mapped shadows for spot lights.
+	 * @attention Cube maps are six times as expensive to render as normal depth maps. If given the choice, go for the former.
+	*/
 	struct DepthCubeMaterial : public Material
 	{
+		// @cond
+
 		inline static const GLuint k_num_faces = 6;
 
 		inline static const std::string k_transform_model_to_world = "transform.model_to_world";
@@ -228,7 +305,9 @@ namespace glen
 		inline static const std::string k_transform = "transform";
 		inline static const std::string k_point_light_position = "pointLight.position";
 		inline static const std::string k_point_light_far_plane = "pointLight.far_plane";
-	
+
+		// @endcond
+
 		DepthCubeMaterial();
 		DepthCubeMaterial(const std::string& name);
 
@@ -241,10 +320,18 @@ namespace glen
 
 	// GAUSSIAN BLUR
 	//------------------------------------------------------------------------------------------------------------------------------------------//
+	
+	/*!
+	 * @brief 2D Post effect. Blurs everything on screen. Useful in `Bloom` effect.
+	*/
 	struct GaussianBlurMaterial : public Material
 	{
+		// @cond
+
 		inline static const std::string k_image = "image";
 		inline static const std::string k_is_horizontal = "is_horizontal";
+		
+		// @endcond
 
 		GaussianBlurMaterial();
 		GaussianBlurMaterial(const std::string& name);
@@ -257,8 +344,14 @@ namespace glen
 
 	// G-BUFFER
 	//------------------------------------------------------------------------------------------------------------------------------------------//	
+	
+	/*!
+	 * @brief Intermediate material for use in deferred rendering situations.
+	*/
 	struct GBufferMaterial : public Material
 	{
+		// @cond
+
 		inline static const std::string k_transform = "transform";
 		inline static const std::string k_material = "material";
 
@@ -268,6 +361,8 @@ namespace glen
 		
 		inline static const std::string k_material_diffuse = k_material + ".diffuse";
 		inline static const std::string k_material_specular = k_material + ".specular";
+
+		// @endcond
 
 		GBufferMaterial();
 		GBufferMaterial(const std::string& name);
@@ -280,11 +375,19 @@ namespace glen
 
 	// HDR
 	//------------------------------------------------------------------------------------------------------------------------------------------//
+	
+	/*!
+	 * @brief 2D Post effect. Allows for tone mapping of values outside the usual 0 to 1 range.
+	*/
 	struct HDRMaterial : public Material
 	{
+		// @cond
+
 		inline static const std::string k_hdr_image = "hdr_image";
 		inline static const std::string k_is_hdr = "is_hdr";
 		inline static const std::string k_exposure = "exposure";
+
+		// @endcond
 
 		HDRMaterial();
 		HDRMaterial(const std::string& name);
@@ -296,12 +399,20 @@ namespace glen
 
 	// LIGHT
 	//------------------------------------------------------------------------------------------------------------------------------------------//
+	
+	/*!
+	 * @brief Simple self illuminated shader. Primarily used for display meshes of lights.
+	*/
 	struct LightMaterial : public Material
 	{
+		// @cond
+
 		inline static const std::string k_transform_model_to_projection = "transform.model_to_projection";
 
 		inline static const std::string k_light_brightness	= "light.brightness";
 		inline static const std::string k_light_color		= "light.color";
+
+		// @endcond
 
 		LightMaterial();
 		LightMaterial(const std::string& name);
@@ -310,5 +421,6 @@ namespace glen
 	private:
 		void init();
 	};
+
 }
 #endif

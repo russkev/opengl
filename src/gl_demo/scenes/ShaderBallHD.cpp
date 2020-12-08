@@ -7,7 +7,7 @@ namespace gl_demo
 		glm::vec3 centre_focus{ 0.0f, 110.0f, 0.0f };
 		m_target_cam.set_position({ 0.0f, 320.0f, 600.0f });
 		m_target_cam.set_focus_target(centre_focus);
-		m_target_cam.focus(centre_focus);
+		//m_target_cam.focus(centre_focus);
 		m_target_cam.set_clip_far(6000.0f);
 		m_target_cam.set_angle_of_view(37.8f); //35mm
 
