@@ -17,22 +17,58 @@ from sphinx.builders.html import StandaloneHTMLBuilder
 import subprocess, os
 
 
-# read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
+read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
+if read_the_docs_build:
+    subprocess.call('doxygen Doxyfile.in', shell=True)
 
-# if read_the_docs_build:
+# subprocess.call('doxygen Doxyfile.in', shell=True)
 
-#     subprocess.call('doxygen Doxyfile.in', shell=True)
+# -- Git information -----------------------------------------------------
+def is_git_installed():
+    return command_is_valid('git --version')
 
-subprocess.call('doxygen Doxyfile.in', shell=True)
+def is_git_repository():
+    return command_is_valid('git rev-parse --is-inside-work-tree')
+
+def get_git_version():
+    command = ''
+    if is_git_installed() and is_git_repository():
+        version = command_output('git describe --tags --always --abbrev=0')
+        if version:
+            command = version.decode("utf-8") 
+    return command
+
+def command_output(command):
+    command_output = None
+    try:
+        command_output = subprocess.check_output(command.split())
+    except OSError:
+        pass
+    return command_output
+
+def command_is_valid(command):
+    try:
+        command_return = subprocess.check_call( 
+            # Ensure space seperated arguments are separate elements of an array 
+            # (required for subprocess calls)
+            command.split(),
+            # Ensure error output doesn't get printed to terminal                 
+            stdout = open(os.devnull, 'wb'))    
+
+        return command_return == 0
+    except (subprocess.CalledProcessError, OSError):
+        pass
+
+    return False
 
 # -- Project information -----------------------------------------------------
+
+version = get_git_version()
 
 project = 'GL Engine'
 copyright = '2020, Kevin Russell'
 author = 'Kevin Russell'
-
-# The full version, including alpha/beta/rc tags
-release = 'v0.1'
+release = version
 
 
 # -- General configuration ---------------------------------------------------
@@ -51,7 +87,9 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx_sitemap',
     'sphinx.ext.inheritance_diagram',
-    'breathe'
+    'sphinx_markdown_tables',
+    'breathe',
+    'recommonmark'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -60,9 +98,16 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '#include']
 
 highlight_language = 'c++'
+
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
+
+surpress_warnings = ['toc.circular']
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -83,7 +128,7 @@ html_theme_options = {
     'collapse_navigation': True,
     'sticky_navigation': True,
     'navigation_depth': 4,
-    'includehidden': True,
+    'includehidden': False,
     'titles_only': False
 }
 # html_logo = ''

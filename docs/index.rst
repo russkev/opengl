@@ -6,24 +6,25 @@
 Welcome to GL Engine's documentation!
 =====================================
 
+GL Engine is simple real time rendering engine built with C++ and OpenGL. The 
+aim of the project is to get acquainted with OpenGL and use it to implement some
+advanced real time lighting features.
+
+.. image:: ../assets/screenshots/demo_06.jpg
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
 Table of Contents
 ^^^^^^^^^^^^^^^^^
 
 .. toctree::
-    :maxdepth: 2
-    
-    self
-    api/index
+   :maxdepth: 3
+   
+   self
+   installation
+   first_start
+   api/index
+   documentation
