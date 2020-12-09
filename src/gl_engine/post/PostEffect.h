@@ -9,7 +9,7 @@ namespace glen
 	// // -----FORWARD DECLERATION ----- // //
 	struct Framebuffer;
 
-	/*
+	/*!
 	
 		Abstract post effect struct for doing 2D effects
 	
@@ -17,13 +17,25 @@ namespace glen
 	struct PostEffect
 	{
 		// // ----- CONSTRUCTOR ----- // //
+
+		/*!
+		 * @brief Constructor.
+		*/
 		PostEffect()
 		{}
 
 		// // ----- GENERAL METHODS ----- // //
+		
+		/*!
+		 * @brief Render the effect to screen.
+		*/
 		virtual void draw() {};
 
 		// // ----- GETTERS ----- // //
+
+		/*!
+		 * @return The window quad mesh used to render the effect.
+		*/
 		Mesh* mesh()
 		{
 			return &m_mesh;

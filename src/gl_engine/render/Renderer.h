@@ -29,20 +29,26 @@ namespace glen
 	struct Window;
 	struct Timer;
 
-	/*
-
-		Renderer object for rendering all objects
+	/*!
+		
+		Main entry point for rendering content.
 
 	*/
 	struct Renderer
 	{
 	public:
 		// // ----- CONSTRUCTOR ----- // //
+
+		/*!
+		 * @brief Constructor.
+		 * @param camera The main viewing camera.
+		 * @param dimensions The window dimensions.
+		*/
 		Renderer(CameraNode* camera, const glm::uvec2& dimensions);
 
 		// // ----- RENDER ----- // //
-		void render();
 	private:
+		void render();
 		void clear_screen();
 		void render_shadow_maps();
 		void render_geometry();
@@ -51,7 +57,14 @@ namespace glen
 
 		// // ----- GENERAL METHODS ----- // //
 	public:
+		/*!
+		 * @return False if window has received 'quit' command.
+		*/
 		bool poll_events();
+
+		/*!
+		 * @brief Render a new frame using the `window` and `timer`. 
+		*/
 		void update(Window * window, Timer* timer);
 	private:
 		void init_settings();
@@ -63,13 +76,48 @@ namespace glen
 
 		// // ----- SETTERS ----- // //
 	public:
+
+		/*!
+		 * @brief Add a `Node` to the renderer. 
+		 * 
+		 * Nodes must be added to the renderer in order for them
+		 * to appear in the window.
+		*/
 		void add_node(Node* node);
 
+		/*!
+		 * @brief Enable all post process effects (tone mapping, glow, etc.)
+		*/
 		void enable_post_effects();
+
+		/*!
+		 * @brief Disable all post process effects (tone mapping, glow, etc.)
+		*/
 		void disable_post_effects();
+
+		/*!
+		 * @brief Enable deferred rendering.
+		 * 
+		 * Requires that mesh nodes havea `GBufferMaterial` applied.
+		*/
 		void enable_deferred_render();
+
+		/*!
+		 * @brief Disable deferred rendering
+		*/
 		void disable_deferred_render();
+
+		/*!
+		 * @brief Enable ambient occlusion
+		 * 
+		 * Ambient occlusion is a post processing effect that adds soft 
+		 * contact shadows to the render.
+		*/
 		void enable_ao();
+
+		/*!
+		 * @brief Disable ambient occlusion
+		*/
 		void disable_ao();
 
 	private:

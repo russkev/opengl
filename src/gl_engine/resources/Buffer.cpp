@@ -4,7 +4,6 @@
 namespace glen
 {
 	// // ----- CONSTRUCTORS ----- // //
-	// Default constructor
 	Buffer::Buffer(std::uint32_t target, std::size_t size, std::uint32_t binding) :
 		m_size(0),
 		m_capacity(size),

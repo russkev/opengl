@@ -9,21 +9,41 @@
 
 namespace glen
 {
-	/*
+	/*!
 
-		Tonemap HDR image
+		Tonemap HDR image.
+
+		Used to render information that would usually be outside the usual 0 to 1 range.
 
 	*/
 	struct ToneMap : public PostEffect
 	{
 		// // ----- CONSTRUCTOR ----- // //
+
+		/*!
+		 * @brief Constructor.
+		 * @param backbuffer Simple `Framebuffer` object (e.g. `Framebuffer{ GL_FRAMEBUFFER }).
+		 * @param dimensions The dimensions of the window.
+		*/
 		ToneMap(Framebuffer* backbuffer, const glm::uvec2& dimensions);
 
 		// // ----- GENERAL METHODS ----- // //
+
+		/*!
+		 * @brief Render the effect to screen.
+		*/
 		void draw() override;
 
 		// // ----- GETTERS ----- // //
+		
+		/*!
+		 * @return A texture containing the final beauty render.
+		*/
 		Texture* beauty();
+
+		/*!
+		 * @brief A texture containing the un-tonemapped image. 
+		*/
 		Texture* bright();
 
 		// // ----- MEMBER VARIABLES ----- // //

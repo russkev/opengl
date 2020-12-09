@@ -59,6 +59,7 @@ namespace glen
 
 	void Text2D::init_shaders()
 	{
+		//m_program_id = LoadShaders::load((Material::shaders_dir() + "Text2d.vert").c_str(), (Material::shaders_dir() + "Text2D.frag").c_str());
 		m_program_id = LoadShaders::load((Material::shaders_dir() + "Text2d.vert").c_str(), (Material::shaders_dir() + "Text2D.frag").c_str());
 		glUseProgram(m_program_id);
 		m_width_uniform_id = glGetUniformLocation(m_program_id, "width");
@@ -103,10 +104,5 @@ namespace glen
 			end == false ? m_text_array[i] = letter : m_text_array[i] = space;
 		}
 		return;
-	}
-
-	void Text2D::cleanup()
-	{
-		//
 	}
 }

@@ -3,7 +3,7 @@
 
 namespace glen
 {
-	/*
+	/*!
 
 		Basic high accuracy timer.
 		Gives change in time and total time since initialisation
@@ -14,24 +14,67 @@ namespace glen
 	{
 		// // ----- CONSTRUCTORS ----- // //
 	public:
+		/*!
+		 * @brief Constructor
+		*/
 		Timer();
+
+		/*!
+		 * @brief Constructor
+		 * @param multiplier Set the apparant speed of time. Lower values will slow everything down.
+		*/
 		Timer(const double multiplier);
 
 		// // ----- GENERAL METHODS ----- // //
+		
+		/*!
+		 * @brief Mark the passage of another frame
+		*/
 		void update();
+
+		/*!
+		 * @brief Mark the passage of another frame (with debug info printed to terminal).
+		*/
 		void debug_update();
 
+		
 		// // ----- GETTERS ----- // //
+
+		/*!
+		 * @return The total number of seconds passed since the timer was started.
+		*/
 		const double total_time_s() const;
+
+		/*!
+		 * @return The total number of milliseconds passed since the timer was started.
+		*/
 		const double total_time_ms() const;
 
+		/*!
+		 * @return The number of seconds passed since the last update.
+		*/
 		const double delta_time_s() const;
+
+		/*!
+		 * @return The number of milliseconds passed since the last update.
+		*/
 		const double delta_time_ms() const;
 
+		/*!
+		 * @return The current frame rate.
+		*/
 		const char* fps();
 
 		// // ----- SETTERS ----- // //
+		
+		/*!
+		 * @brief Change the multiplier used to either speed up or slow down time.
+		*/
 		void set_multiplier(const double multiplier);
+
+		/*!
+		 * @brief How frequently (in seconds) to update the frame rate output.
+		*/
 		void set_fps_update_time(const float update_time);
 
 		// // ----- MEMBER VARIABLES ----- // //

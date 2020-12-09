@@ -153,14 +153,14 @@ namespace glen
 		// // ----- GETTERS ----- // //
 
 		/*!
-		 * @return The vertex at index: `pos`.
+		 * @return The vertex at index: `loc`.
 		*/
-		Vertex* get_vertex(std::size_t pos);
+		Vertex* get_vertex(std::size_t loc);
 
 		/*!
-		 * @return Vertex index located at `pos` in index array.
+		 * @return Vertex index located at `loc` in index array.
 		*/
-		index_type get_index(std::size_t pos);
+		index_type get_index(std::size_t loc);
 
 		/*!
 		 * @return The number of indices.
@@ -207,19 +207,19 @@ namespace glen
 		// // ----- SETTERS ----- // //
 
 		/*!
-		 * @brief Set vertex at index `pos` to be `data`.
+		 * @brief Set vertex at index `loc` to be `data`.
 		*/
-		void set_vertex(std::size_t pos, Vertex& data);
+		void set_vertex(std::size_t loc, Vertex& data);
 
 		/*!
-		 * @brief Set vertex's coordinates at index `pos` to `position`.
+		 * @brief Set vertex's coordinates at index `loc` to `position`.
 		*/
-		void set_vertex_position(GLuint pos, glm::vec3 position);
+		void set_vertex_position(GLuint loc, glm::vec3 position);
 
 		/*!
-		 * @brief Set index at index array position `pos` to be `data`.
+		 * @brief Set index at index array position `loc` to be `data`.
 		*/
-		void set_index(std::size_t pos, const index_type& data);
+		void set_index(std::size_t loc, const index_type& data);
 		void set_id(GLuint s_id);
 
 

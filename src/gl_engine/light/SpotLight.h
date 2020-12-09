@@ -6,7 +6,7 @@
 
 namespace glen
 {
-	/*
+	/*!
 
 		Emits light in a cone shape like it's coming from a torch.
 

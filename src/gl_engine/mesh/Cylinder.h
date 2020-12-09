@@ -6,8 +6,8 @@
 namespace glen
 {
 	/*!
-
-	Basic cylinder with cap.
+	
+		Basic cylinder with cap.
 
 	*/
 	struct Cylinder

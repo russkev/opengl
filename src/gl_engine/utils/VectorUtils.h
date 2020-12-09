@@ -11,6 +11,11 @@ namespace glen
 	namespace VectorUtils
 	{
 		// // ----- COMBINE VECTORS ----- // //
+
+		/*!
+		 * @brief Combine multiple `std::vector`s into one.
+		 * @return The combined `std::vector`.
+		*/
 		template<typename T, typename ...Args>
 		std::vector<T> combine_vectors(std::vector<T>& s_first, Args...args)
 		{
@@ -24,6 +29,10 @@ namespace glen
 			return outDistances;
 		}
 
+		/*!
+		 * @brief Combine two `std::vector`s into one.
+		 * @return The combined `std::vector`.
+		*/
 		template<typename T>
 		std::vector<T> combine_vectors(std::vector<T>& s_first, std::vector<T>& s_second)
 		{
@@ -37,6 +46,10 @@ namespace glen
 		}
 
 		// // ----- AVERAGE VECTOR ----- // //
+		
+		/*!
+		 * @return The average vector of the combination of all provided `vec3`s.
+		*/
 		template <typename ... Args>
 		glm::vec3 vector_average(Args... args)
 		{
@@ -58,10 +71,26 @@ namespace glen
 
 
 		//// // ----- DISTANCE SQUARED ----- // //
+
+		/*! 
+		 * @return The square of the distance between two points in 2D space.
+		 * 
+		 * The square is used because this is a faster calculation than finding the actual distance.
+		*/
 		GLfloat distance_squared(glm::vec2, glm::vec2);
+
+		/*!
+		 * @return The square of the distance between two points in 3D space.
+		 *
+		 * The square is used because this is a faster calculation than finding the actual distance.
+		*/
 		GLfloat distance_squared(glm::vec3, glm::vec3);
 
 		// // ----- IS NEAR ----- // //
+
+		/*!
+		 * @return True if `s_point_1` and `s_point_2` are within `threshold` distance of each other.
+		*/
 		template <typename T>
 		bool is_near(T s_point_1, T s_point_2, float threshold)
 		{
@@ -69,11 +98,23 @@ namespace glen
 		}
 
 		// // ----- IS LESS THAN ----- // //
+
+		/*!
+		 * @return True if both the x and y coordinates of the first point are less than those of the second (but not within `threshold` distance).
+		*/
 		bool is_less_than(const glm::vec2&, const glm::vec2&, const float threshold);
+		
+		/*!
+		 * @return True if x, y and z coordinates of the first point are less than those of the second (but not within `threshold` distance).
+		*/
 		bool is_less_than(const glm::vec3&, const glm::vec3&, float threshold);
 
 
 		// // ----- QUICK SORT VECTOR OF PAIRS ----- // //
+
+		/*!
+		 * @brief Sort the `std::vector` of pairs.
+		*/
 		template<typename T1, typename T2>
 		void quick_sort_pair_vector(std::vector<std::pair<T1, T2>>& s_pairs)
 		{
@@ -108,13 +149,18 @@ namespace glen
 			return;
 		}
 
-
+		/*!
+		 * @return 3D position coordinate described by `transform`.
+		*/
 		template<typename T>
 		glm::tvec3<T> extract_position(const glm::tmat4x4<T>& transform)
 		{
 			return glm::tvec3<T>{ transform[3][0], transform[3][1], transform[3][2] };
 		}
 
+		/*!
+		* @brief Modify `transform` so that it specifies coordinate at `position`.
+		*/
 		template<typename T>
 		void set_position(glm::tmat4x4<T>& transform, const glm::tvec3<T>& position)
 		{
@@ -123,6 +169,9 @@ namespace glen
 			transform[3][2] = position[2];
 		}
 
+		/*!
+		 * @brief Add `position` to existing `transfrom`.
+		*/
 		template<typename T>
 		void add_position_to_transform(glm::tmat4x4<T>& transform, const glm::tvec3<T>& position)
 		{
@@ -132,9 +181,10 @@ namespace glen
 
 
 		// // ----- TRANSLATE ROTATE SCALE ----- // //
-		/*
+		/*!
 
 			Creates a 4x4 transform matrix for a 3x3 translate rotate scale matrix
+
 			Input matrix should be of the form {translate vector, rotate vector, scale vector}
 			Optionally take a string specifying the rotate order.
 

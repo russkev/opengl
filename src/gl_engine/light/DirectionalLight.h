@@ -7,7 +7,7 @@
 
 namespace glen
 {
-	/*
+	/*!
 
 		Emits light in a single direction. Rays are parallel like the sun.
 
