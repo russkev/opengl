@@ -5,16 +5,24 @@
 
 namespace glen
 {
-	/*
+	/*!
 
-	Basic arrow shape.
-	Length attribute controls the length of the tail.
+		Basic 3D arrow shape.
 
 	*/
 	struct Arrow
 	{
 		// // ----- MAIN ----- // //
+		
+		/*!
+		 * @return 3D arrow mesh.
+		*/
 		static Mesh create_arrow();
+
+		/*!
+		 * @param length The length of the tail.
+		 * @return 3D arrow mesh.
+		*/
 		static Mesh create_arrow(const float length);
 
 		// // ----- HELPER ----- // //

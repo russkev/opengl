@@ -5,16 +5,28 @@
 
 namespace glen
 {
-	/*
+	/*!
 
-	Basic sphere
+		Basic sphere
 
 	*/
 	struct Sphere
 	{
 		// // ------ MAIN ----- // //
+
+		/*!
+		 * @return Sphere mesh of radius `radius`.
+		*/
 		static Mesh create_sphere(const float radius);
+
+		/*!
+		 * @return Sphere mesh with radius `radius` and `segments` edges around and `segments/2` edges high. This ratio generally looks even.
+		*/
 		static Mesh create_sphere(const float radius, const uint16_t segments);
+
+		/*!
+		 * @return Sphere mesh with radius `radius` and `width_segments` edges around and `height_segments` edges high.
+		*/
 		static Mesh create_sphere(const float radius, const uint16_t width_segments, const uint16_t height_segments);
 	private:
 		// // ------ HELPER ----- // //

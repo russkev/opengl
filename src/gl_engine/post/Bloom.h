@@ -13,16 +13,20 @@ namespace glen
 	// // ----- FORWARD DECLERATION ----- // //
 	struct ToneMap;
 
-	/*
+	/*!
 
-		Create glow in bright areas
+		Create glow in bright areas.
 
 	*/
 	struct Bloom : public PostEffect
 	{
+		// @cond
+
 		// // ----- CONSTANTS ----- // //
 		static constexpr GLuint DIRECTIONS = 2;
 		static constexpr GLuint PASSES = 10;
+
+		// @endcond
 
 		// // ----- CONSTRUCTOR ----- // //
 		Bloom(const glm::uvec2& dimensions, ToneMap* tone_map);

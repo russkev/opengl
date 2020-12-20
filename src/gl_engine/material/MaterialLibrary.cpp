@@ -322,24 +322,6 @@ namespace glen
 		set_sampler_value(k_bright, 0.0f);
 	}
 
-	// COMPOSITE
-	//------------------------------------------------------------------------------------------------------------------------------------------//
-	CompositeMaterial::CompositeMaterial() :
-		CompositeMaterial("Composite Material")
-	{}
-
-	CompositeMaterial::CompositeMaterial(const std::string& name) :
-		Material(name, Material::shaders_dir() + "ScreenPassthrough.vert", Material::shaders_dir() + "Composite.frag")
-	{
-		init();
-	}
-
-	void CompositeMaterial::init()
-	{
-		set_sampler_value(k_base, 0.0f);
-		set_sampler_value(k_layer_1, 0.0f);
-	}
-
 	// CUBE MAP
 	//------------------------------------------------------------------------------------------------------------------------------------------//
 	CubeMapMaterial::CubeMapMaterial() :
@@ -354,7 +336,6 @@ namespace glen
 
 	void CubeMapMaterial::init()
 	{
-		//set_uniform("skybox", 0);
 	}
 
 	void CubeMapMaterial::update_view(const CameraNode* camera_node, const Node* model_node)
@@ -362,7 +343,6 @@ namespace glen
 		auto view = camera_node->world_to_cam();
 		auto projection = camera_node->camera()->cam_to_projection();
 		view = glm::mat4(glm::mat3(view));
-		//p_matrix = glm::mat4(glm::mat3(p_matrix));
 		set_uniform(k_transform_model_to_projection, projection * view);	
 	}
 

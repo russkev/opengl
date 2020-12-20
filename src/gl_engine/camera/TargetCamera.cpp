@@ -87,10 +87,6 @@ namespace glen
 		}
 	}
 
-	void TargetCamera::focus(const glm::vec3& focus_target)
-	{
-		m_look_target = focus_target;
-	}
 
 	// // ----- GETTERS ----- // //
 
@@ -129,9 +125,15 @@ namespace glen
 		m_angle_of_view = angle_of_view;
 	}
 
+	void TargetCamera::focus(const glm::vec3& focus_target)
+	{
+		m_look_target = focus_target;
+	}
+
 	void TargetCamera::set_focus_target(const glm::vec3& target)
 	{
 		m_focus_target = target;
+		focus(m_focus_target);
 	}
 
 	void TargetCamera::set_look_target()

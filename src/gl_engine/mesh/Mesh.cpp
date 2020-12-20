@@ -55,9 +55,9 @@ namespace glen
 		m_vertices->push_back(vertex_3);
 	}
 
-	void Mesh::append_index(const GLushort pos)
+	void Mesh::append_index(const GLushort loc)
 	{
-		m_indices->push_back(pos);
+		m_indices->push_back(loc);
 	}
 
 	// ----- TRANSFORM ----- // //
@@ -254,16 +254,16 @@ namespace glen
 	}
 
 	// // ----- GETTERS ----- // //
-	Vertex* Mesh::get_vertex(std::size_t pos)
+	Vertex* Mesh::get_vertex(std::size_t loc)
 	{
-		assert(num_vertices() >= pos);
-		return &m_vertices->at(pos);
+		assert(num_vertices() >= loc);
+		return &m_vertices->at(loc);
 	}
 
-	Mesh::index_type Mesh::get_index(std::size_t pos)
+	Mesh::index_type Mesh::get_index(std::size_t loc)
 	{
-		assert(num_indices() >= pos);
-		return m_indices->at(pos);
+		assert(num_indices() >= loc);
+		return m_indices->at(loc);
 	}
 
 	const GLuint Mesh::id() const
@@ -272,18 +272,18 @@ namespace glen
 	}
 
 	// // ----- SETTERS ----- // //
-	void Mesh::set_vertex(std::size_t pos, Vertex& vertex)
+	void Mesh::set_vertex(std::size_t loc, Vertex& vertex)
 	{
-		assert(num_vertices() >= pos);
+		assert(num_vertices() >= loc);
 
-		m_vertices->at(pos) = std::move(vertex);
+		m_vertices->at(loc) = std::move(vertex);
 	}
 
-	void Mesh::set_vertex_position(GLuint pos, glm::vec3 position)
+	void Mesh::set_vertex_position(GLuint loc, glm::vec3 position)
 	{
-		assert(num_vertices() >= pos);
+		assert(num_vertices() >= loc);
 
-		m_vertices->at(pos).set_position(position);
+		m_vertices->at(loc).set_position(position);
 	}
 
 

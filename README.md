@@ -1,6 +1,9 @@
 # GL Engine
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+[![Documentation Status](https://readthedocs.org/projects/gl-engine/badge/?version=latest)](https://gl-engine.readthedocs.io/en/latest/?badge=latest) 
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/russkev/opengl?include_prereleases)
+      
 
 GL Engine is simple real time rendering engine built with C++ and OpenGL. The 
 aim of the project is to get acquainted with OpenGL and use it to implement some
@@ -35,6 +38,17 @@ advanced real time lighting features.
     - Deferred rendering
     - Screen space ambient occlusion
     - Glow effect
+
+# Documentation
+  - Full documentation can be found [here](https://gl-engine.readthedocs.io/en/latest/index.html)
+
+# Libraries used
+  - [OpenGL Extension Wrangler Library (GLEW)](http://glew.sourceforge.net/) for OpenGL integration
+  - [OpenGL Mathematics (GLM)](https://go.grottel.net/nuget-project/glm) for vector and matrix operations.
+  - [SDL2](https://www.libsdl.org/index.php) for input / output operations.
+  - [Doxygen](https://www.doxygen.nl/index.html) for automatic documentation.
+
+Note: see `docs/requirements.txt` for libraries to install with pip in order to build the documentation.
 
 # Screenshots
 ![Demo 01](assets/screenshots/demo_01.jpg)
@@ -104,7 +118,7 @@ In this engine, y is up.
 
 ```C++
 targetCam.set_position({ 0.0f, 3.0f, 5.0f });
-targetCam.focus({ 0.0f, 0.0f, 0.0f });
+targetCam.set_focus_target({ 0.0f, 0.0f, 0.0f });
 ```
 
 To move the camera and the focus target together, you'll need to use `set_position` in the `targetCam_node`.
