@@ -5,7 +5,7 @@
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/russkev/opengl?include_prereleases)
       
 
-GL Engine is simple real time rendering engine built with C++ and OpenGL. The 
+GL Engine is a real time rendering engine built with C++ and OpenGL. The 
 aim of the project is to get acquainted with OpenGL and use it to implement some
 advanced real time lighting features.
 
