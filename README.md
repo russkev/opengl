@@ -6,8 +6,7 @@
       
 
 GL Engine is a real time rendering engine built with C++ and OpenGL. The 
-aim of the project is to get acquainted with OpenGL and use it to implement some
-advanced real time lighting features.
+aim of the project is to implement some advanced real time lighting and shading features.
 
 ![Demo 06](assets/screenshots/demo_06.jpg)
 
