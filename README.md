@@ -1,4 +1,9 @@
-# GL Engine
+<div style="display:flex;flex-direction:column" >
+	<img src=assets\logos\glengine_logo_03.svg altText="Logo" style="margin-bottom:30px">
+	<h1 align="center">
+		GL Engine 
+	</h1>
+</div>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 [![Documentation Status](https://readthedocs.org/projects/gl-engine/badge/?version=latest)](https://gl-engine.readthedocs.io/en/latest/?badge=latest) 
